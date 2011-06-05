@@ -33,6 +33,9 @@ Player = (I) ->
 
       return c
 
+    puck: ->
+      false
+
     wipeout: ->
       I.color = Color(PLAYER_COLORS[I.controller]).lighten(0.10)
       I.wipeout = 25
