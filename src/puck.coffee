@@ -15,6 +15,9 @@ Puck = (I) ->
 
       return c
 
+    puck: ->
+      true
+
     wipeout: $.noop
 
   self.bind "update", ->
