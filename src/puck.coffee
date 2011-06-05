@@ -7,6 +7,7 @@ Puck = (I) ->
     x: 512
     y: 384
     velocity: Point()
+    zIndex: 10
 
   self = GameObject(I).extend
     circle: ->
