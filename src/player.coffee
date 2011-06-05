@@ -10,6 +10,7 @@ Player = (I) ->
     height: 32
     x: 192
     y: 128
+    wipeout: 0
     velocity: Point()
 
   PLAYER_COLORS = [
@@ -32,9 +33,15 @@ Player = (I) ->
 
       return c
 
+    wipeout: ->
+      I.color = Color(PLAYER_COLORS[I.controller]).lighten(0.10)
+      I.wipeout = 25
+
+
   self.bind "step", ->
     I.boost = I.boost.approach(0, 1)
     I.boostCooldown = I.boostCooldown.approach(0, 1)
+    I.wipeout = I.wipeout.approach(0, 1)
 
     movement = Point(0, 0)
 
@@ -54,7 +61,11 @@ Player = (I) ->
       I.boost = 10
       movement = movement.scale(I.boost)
 
-    I.velocity = I.velocity.add(movement).scale(0.9)
+    if I.wipeout
+
+    else
+      I.color = PLAYER_COLORS[I.controller]
+      I.velocity = I.velocity.add(movement).scale(0.9)
 
     I.x += I.velocity.x
     I.y += I.velocity.y
