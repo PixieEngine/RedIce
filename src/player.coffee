@@ -25,7 +25,12 @@ Player = (I) ->
   I.color = PLAYER_COLORS[I.controller]
   actionDown = CONTROLLERS[I.controller].actionDown
 
-  self = GameObject(I)
+  self = GameObject(I).extend
+    circle: ->
+      c = self.center()
+      c.radius = I.radius
+
+      return c
 
   self.bind "step", ->
     I.boost = I.boost.approach(0, 1)
