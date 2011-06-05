@@ -12,6 +12,7 @@ Player = (I) ->
     y: 128
     wipeout: 0
     velocity: Point()
+    zIndex: 1
 
   PLAYER_COLORS = [
     "#00F"
@@ -40,9 +41,16 @@ Player = (I) ->
     puck: ->
       false
 
-    wipeout: ->
+    wipeout: (push) ->
       I.color = Color(PLAYER_COLORS[I.controller]).lighten(0.25)
       I.wipeout = 25
+
+      push = push.scale(15)
+
+      engine.add
+        sprite: Sprite.loadByName "blood"
+        x: I.x + push.x
+        y: I.y + push.y
 
   self.bind "step", ->
     I.boost = I.boost.approach(0, 1)
