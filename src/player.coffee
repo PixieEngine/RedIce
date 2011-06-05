@@ -1,12 +1,11 @@
 Player = (I) ->
   $.reverseMerge I,
-    animationName: "player_grey"
     debugAnimation: true
     boost: 0
     boostCooldown: 0
     collisionMargin: Point(2, 2)
     controller: 0
-    includedModules: ["Animated"]
+    radius: 16
     width: 32
     height: 32
     x: 192
@@ -46,8 +45,6 @@ Player = (I) ->
     movement = movement.norm()
 
     if !I.boostCooldown && actionDown "B"
-      self.transition "check"
-
       I.boostCooldown += 20
       I.boost = 10
       movement = movement.scale(I.boost)
