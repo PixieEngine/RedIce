@@ -11,6 +11,13 @@ engine.add
   class: "Player"
   controller: 1
 
+engine.add
+  class: "Player"
+  controller: 2
+  radius: 8
+  width: 16
+  height: 16
+
 engine.bind "update", ->
   # Resolve Collisions
   players = engine.find("Player")
@@ -26,8 +33,16 @@ engine.bind "update", ->
       playerB = players[j]
 
       if Collision.circular(playerA.circle(), playerB.circle())
-        delta = playerB.position().subtract(playerA.position()).norm()
+        delta = playerB.center().subtract(playerA.center()).norm()
 
+        # Knockback
+        pushA = delta.scale(-2)
+        pushB = delta.scale(2)
+
+        playerA.I.velocity = playerA.I.velocity.add(pushA)
+        playerB.I.velocity = playerB.I.velocity.add(pushB)
+
+        # Checking
         projA = playerA.I.velocity.dot(delta)
         projB = -playerB.I.velocity.dot(delta)
 
@@ -35,13 +50,11 @@ engine.bind "update", ->
 
         if max > threshold
           console.log max
-          # winner
-        else
-          pushA = -delta
-          pushB = delta
 
-          playerA.I.velocity = playerA.I.velocity.add(pushA)
-          playerB.I.velocity = playerB.I.velocity.add(pushB)
+          if projA == max
+            playerB.wipeout()
+          else
+            playerA.wipeout()
 
       j += 1
     i += 1
