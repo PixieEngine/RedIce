@@ -32,7 +32,7 @@ engine.bind "update", ->
     while j < players.length
       playerB = players[j]
 
-      if Collision.circular(playerA.circle(), playerB.circle())
+      if !playerA.I.wipeout && !playerB.I.wipeout && Collision.circular(playerA.circle(), playerB.circle())
         delta = playerB.center().subtract(playerA.center()).norm()
 
         # Knockback
