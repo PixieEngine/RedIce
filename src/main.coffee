@@ -16,7 +16,9 @@ engine.add
 
 engine.bind "update", ->
   # Resolve Collisions
-  players = engine.find("Player")
+  players = engine.find("Player").shuffle()
+
+  players.push engine.find("Puck").first()
 
   threshold = 5
 
@@ -32,11 +34,14 @@ engine.bind "update", ->
         delta = playerB.center().subtract(playerA.center()).norm()
 
         # Knockback
-        pushA = delta.scale(-2)
-        pushB = delta.scale(2)
+        if playerB.puck()
+          playerB.I.velocity = delta.scale(playerA.I.velocity.length())
+        else
+          pushA = delta.scale(-2)
+          pushB = delta.scale(2)
 
-        playerA.I.velocity = playerA.I.velocity.add(pushA)
-        playerB.I.velocity = playerB.I.velocity.add(pushB)
+          playerA.I.velocity = playerA.I.velocity.add(pushA) 
+          playerB.I.velocity = playerB.I.velocity.add(pushB)
 
         # Checking
         projA = playerA.I.velocity.dot(delta)
