@@ -71,17 +71,24 @@ engine.bind "update", ->
     i += 1
 
   players.each (player) ->
-    if player.I.x < WALL_LEFT
+    center = player.center()
+    radius = player.I.radius
+
+    if center.x - radius < WALL_LEFT
       player.I.velocity.x = -player.I.velocity.x
+      player.I.x += player.I.velocity.x
 
-    if player.I.x > WALL_RIGHT
+    if center.x + radius > WALL_RIGHT
       player.I.velocity.x = -player.I.velocity.x
+      player.I.x += player.I.velocity.x
 
-    if player.I.y < WALL_TOP
+    if center.y - radius < WALL_TOP
       player.I.velocity.y = -player.I.velocity.y
+      player.I.y += player.I.velocity.y
 
-    if player.I.y > WALL_BOTTOM
+    if center.y + radius > WALL_BOTTOM
       player.I.velocity.y = -player.I.velocity.y
+      player.I.y += player.I.velocity.y
 
 engine.start()
 
