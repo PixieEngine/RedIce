@@ -1,4 +1,4 @@
-Player = (I) ->
+Puck = (I) ->
   $.reverseMerge I,
     color: "black"
     radius: 8
