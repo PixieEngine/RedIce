@@ -12,11 +12,7 @@ engine.add
   controller: 1
 
 engine.add
-  class: "Player"
-  controller: 2
-  radius: 8
-  width: 16
-  height: 16
+  class: "Puck"
 
 engine.bind "update", ->
   # Resolve Collisions
