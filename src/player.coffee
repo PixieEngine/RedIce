@@ -44,7 +44,6 @@ Player = (I) ->
       I.color = Color(PLAYER_COLORS[I.controller]).lighten(0.25)
       I.wipeout = 25
 
-
   self.bind "step", ->
     I.boost = I.boost.approach(0, 1)
     I.boostCooldown = I.boostCooldown.approach(0, 1)
