@@ -37,7 +37,7 @@ Player = (I) ->
       false
 
     wipeout: ->
-      I.color = Color(PLAYER_COLORS[I.controller]).lighten(0.10)
+      I.color = Color(PLAYER_COLORS[I.controller]).lighten(0.25)
       I.wipeout = 25
 
 
