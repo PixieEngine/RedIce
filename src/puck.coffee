@@ -15,6 +15,10 @@ Puck = (I) ->
 
       return c
 
+    draw: (canvas) ->
+      center = self.center()
+      canvas.fillCircle(center.x, center.y, I.radius, I.color)
+
     puck: ->
       true
 
