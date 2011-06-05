@@ -1,3 +1,8 @@
+WALL_LEFT = 128
+WALL_RIGHT = App.width - WALL_LEFT
+WALL_TOP = 128
+WALL_BOTTOM = App.height - WALL_TOP
+
 window.engine = Engine 
   canvas: $("canvas").powerCanvas()
 
@@ -13,6 +18,11 @@ engine.add
 
 engine.add
   class: "Puck"
+
+engine.bind "draw", (canvas) ->
+  canvas.strokeColor("black")
+
+  canvas.strokeRect(WALL_LEFT, WALL_TOP, WALL_RIGHT - WALL_LEFT, WALL_BOTTOM - WALL_TOP)
 
 engine.bind "update", ->
   # Resolve Collisions
@@ -60,6 +70,18 @@ engine.bind "update", ->
       j += 1
     i += 1
 
+  players.each (player) ->
+    if player.I.x < WALL_LEFT
+      player.I.velocity.x = -player.I.velocity.x
+
+    if player.I.x > WALL_RIGHT
+      player.I.velocity.x = -player.I.velocity.x
+
+    if player.I.y < WALL_TOP
+      player.I.velocity.y = -player.I.velocity.y
+
+    if player.I.y > WALL_BOTTOM
+      player.I.velocity.y = -player.I.velocity.y
 
 engine.start()
 
