@@ -36,6 +36,12 @@ engine.bind "update", ->
         if max > threshold
           console.log max
           # winner
+        else
+          pushA = -delta
+          pushB = delta
+
+          playerA.I.velocity = playerA.I.velocity.add(pushA)
+          playerB.I.velocity = playerB.I.velocity.add(pushB)
 
       j += 1
     i += 1
