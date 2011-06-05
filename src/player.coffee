@@ -1,6 +1,7 @@
 Player = (I) ->
   $.reverseMerge I,
     animationName: "player_grey"
+    debugAnimation: true
     boost: 0
     boostCooldown: 0
     collisionMargin: Point(2, 2)
@@ -11,8 +12,6 @@ Player = (I) ->
     x: 192
     y: 128
     velocity: Point()
-    maxSpeed: 6
-    heading: 0
 
   PLAYER_COLORS = [
     "#00F"
