@@ -1,5 +1,7 @@
 Player = (I) ->
   $.reverseMerge I,
+    boost: 0
+    boostCooldown: 0
     collisionMargin: Point(2, 2)
     controller: 0
     width: 32
@@ -26,6 +28,10 @@ Player = (I) ->
   self = GameObject(I)
 
   self.bind "step", ->
+    I.boost = I.boost.approach(0, 1)
+    I.boostCooldown = I.boostCooldown.approach(0, 1)
+
+    movement = Point(0, 0)
 
     if actionDown "left"
       movement = movement.add(Point(-1, 0))
@@ -36,7 +42,14 @@ Player = (I) ->
     if actionDown "down"
       movement = movement.add(Point(0, 1))
 
-    I.velocity = I.velocity.add(movement)
+    movement = movement.norm()
+
+    if !I.boostCooldown && actionDown "B"
+      I.boostCooldown += 20
+      I.boost = 10
+      movement = movement.scale(I.boost)
+
+    I.velocity = I.velocity.add(movement).scale(0.9)
 
     I.x += I.velocity.x
     I.y += I.velocity.y
