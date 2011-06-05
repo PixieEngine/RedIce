@@ -21,6 +21,8 @@ Puck = (I) ->
     wipeout: $.noop
 
   self.bind "update", ->
+    I.velocity = I.velocity.scale(0.95)
+
     I.x += I.velocity.x
     I.y += I.velocity.y
 
