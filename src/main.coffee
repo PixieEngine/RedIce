@@ -5,6 +5,7 @@ WALL_BOTTOM = App.height - WALL_TOP
 
 window.engine = Engine 
   canvas: $("canvas").powerCanvas()
+  zSort: true
 
 engine.add
   sprite: Sprite.loadByName "title"
@@ -63,9 +64,9 @@ engine.bind "update", ->
           console.log max
 
           if projA == max
-            playerB.wipeout()
+            playerB.wipeout(pushB)
           else
-            playerA.wipeout()
+            playerA.wipeout(pushA)
 
       j += 1
     i += 1
