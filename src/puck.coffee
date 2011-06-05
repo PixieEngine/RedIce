@@ -1,9 +1,9 @@
 Puck = (I) ->
   $.reverseMerge I,
     color: "black"
-    radius: 8
+    radius: 4
     width: 16
-    height: 16
+    height: 8
     x: 512
     y: 384
     velocity: Point()
@@ -15,10 +15,6 @@ Puck = (I) ->
       c.radius = I.radius
 
       return c
-
-    draw: (canvas) ->
-      center = self.center()
-      canvas.fillCircle(center.x, center.y, I.radius, I.color)
 
     puck: ->
       true
