@@ -30,7 +30,13 @@ Player = (I) ->
   I.color = PLAYER_COLORS[I.controller]
   actionDown = CONTROLLERS[I.controller].actionDown
 
+  heading = 0
+
   self = GameObject(I).extend
+    bloody: ->
+      I.blood.leftSkate += 10
+      I.blood.rightSkate += 10
+
     circle: ->
       c = self.center()
       c.radius = I.radius
@@ -51,14 +57,46 @@ Player = (I) ->
       push = push.scale(15)
 
       engine.add
+        blood: 1
         sprite: Sprite.loadByName "blood"
         x: I.x + push.x
         y: I.y + push.y
+
+  leftSkatePos = ->
+    p = Point.fromAngle(heading - Math.TAU/4).scale(5)
+
+    self.center().add(p)
+
+  rightSkatePos = ->
+    p = Point.fromAngle(heading + Math.TAU/4).scale(5)
+
+    self.center().add(p)
+
+  lastLeftSkatePos = null
+  lastRightSkatePos = null
+
+  drawBloodStreaks = ->
+    # Skate blood streaks
+    heading = Point.direction(Point(0, 0), I.velocity)
+
+    currentLeftSkatePos = leftSkatePos()
+    currentRightSkatePos = rightSkatePos()
+
+    if lastLeftSkatePos && I.blood.leftSkate
+      bloodCanvas.drawLine(lastLeftSkatePos, currentLeftSkatePos, 2)
+
+    if lastRightSkatePos&& I.blood.rightSkate
+      bloodCanvas.drawLine(lastRightSkatePos, currentRightSkatePos, 2)
+
+    lastLeftSkatePos = currentLeftSkatePos
+    lastRightSkatePos = currentRightSkatePos
 
   self.bind "step", ->
     I.boost = I.boost.approach(0, 1)
     I.boostCooldown = I.boostCooldown.approach(0, 1)
     I.wipeout = I.wipeout.approach(0, 1)
+
+    drawBloodStreaks()
 
     movement = Point(0, 0)
 
@@ -88,4 +126,3 @@ Player = (I) ->
     I.y += I.velocity.y
 
   self
-
