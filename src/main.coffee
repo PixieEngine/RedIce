@@ -3,6 +3,9 @@ WALL_RIGHT = App.width - WALL_LEFT
 WALL_TOP = 128
 WALL_BOTTOM = App.height - WALL_TOP
 
+ARENA_WIDTH = WALL_RIGHT - WALL_LEFT
+ARENA_HEIGHT = WALL_BOTTOM - WALL_TOP
+
 window.engine = Engine 
   canvas: $("canvas").powerCanvas()
   zSort: true
@@ -21,9 +24,21 @@ engine.add
   class: "Puck"
 
 engine.bind "draw", (canvas) ->
-  canvas.strokeColor("black")
 
-  canvas.strokeRect(WALL_LEFT, WALL_TOP, WALL_RIGHT - WALL_LEFT, WALL_BOTTOM - WALL_TOP)
+  # Draw Arena
+  canvas.strokeColor("black")
+  canvas.strokeRect(WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT)
+
+  canvas.strokeColor("blue")
+  x = WALL_LEFT + ARENA_WIDTH/3
+  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 3)
+  x = WALL_LEFT + ARENA_WIDTH*2/3
+  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 3)
+
+  canvas.strokeColor("red")
+  x = WALL_LEFT + ARENA_WIDTH/2
+  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 2)
+
 
 engine.bind "update", ->
   # Resolve Collisions
