@@ -1,10 +1,17 @@
+CANVAS_WIDTH = App.width
+CANVAS_HEIGHT = App.height
+
 WALL_LEFT = 64
-WALL_RIGHT = App.width - WALL_LEFT
+WALL_RIGHT = CANVAS_WIDTH - WALL_LEFT
 WALL_TOP = 128
-WALL_BOTTOM = App.height - WALL_TOP
+WALL_BOTTOM = CANVAS_HEIGHT - WALL_TOP
 
 ARENA_WIDTH = WALL_RIGHT - WALL_LEFT
 ARENA_HEIGHT = WALL_BOTTOM - WALL_TOP
+
+BLOOD_COLOR = "#BA1A19"
+
+window.bloodCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />").powerCanvas()
 
 window.engine = Engine 
   canvas: $("canvas").powerCanvas()
@@ -41,6 +48,8 @@ engine.bind "preDraw", (canvas) ->
   x = WALL_LEFT + ARENA_WIDTH*19/20
   canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 1)
 
+  blood = bloodCanvas.element()
+  canvas.drawImage(blood, 0, 0, blood.width, blood.height, 0, 0, blood.width, blood.height)
 
 engine.bind "update", ->
   # Resolve Collisions
@@ -110,7 +119,14 @@ engine.bind "update", ->
       player.I.y += player.I.velocity.y
 
     # TODO: Blood Collisions
+    splats = engine.find("blood=1")
 
+    splats.each (splat) ->
+      splatCircle = splat.center()
+      splatCircle.radius = 10
+
+      if Collision.circular(player.circle(), splatCircle)
+        player.bloody()
 
 engine.start()
 
