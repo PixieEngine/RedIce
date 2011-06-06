@@ -120,7 +120,7 @@ engine.bind "update", ->
       player.I.y += player.I.velocity.y
 
     # TODO: Blood Collisions
-    splats = engine.find("blood=1")
+    splats = engine.find(".blood=1")
 
     splats.each (splat) ->
       splatCircle = splat.center()
