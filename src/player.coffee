@@ -34,8 +34,8 @@ Player = (I) ->
 
   self = GameObject(I).extend
     bloody: ->
-      I.blood.leftSkate += 10
-      I.blood.rightSkate += 10
+      I.blood.leftSkate += rand(10)
+      I.blood.rightSkate += rand(10)
 
     circle: ->
       c = self.center()
