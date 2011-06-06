@@ -83,10 +83,10 @@ Player = (I) ->
     currentRightSkatePos = rightSkatePos()
 
     if lastLeftSkatePos && (skateBlood = I.blood.leftSkate)
-      bloodCanvas.drawLine(lastLeftSkatePos, currentLeftSkatePos, (skateBlood/5).clamp(1, 4))
+      bloodCanvas.drawLine(lastLeftSkatePos, currentLeftSkatePos, (skateBlood/5).clamp(1, 3))
 
     if lastRightSkatePos && (skateBlood = I.blood.rightSkate)
-      bloodCanvas.drawLine(lastRightSkatePos, currentRightSkatePos, (skateBlood/5).clamp(1, 4))
+      bloodCanvas.drawLine(lastRightSkatePos, currentRightSkatePos, (skateBlood/5).clamp(1, 3))
 
     lastLeftSkatePos = currentLeftSkatePos
     lastRightSkatePos = currentRightSkatePos
