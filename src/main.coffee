@@ -11,9 +11,6 @@ window.engine = Engine
   zSort: true
 
 engine.add
-  sprite: Sprite.loadByName "title"
-
-engine.add
   class: "Player"
 
 engine.add
@@ -23,7 +20,7 @@ engine.add
 engine.add
   class: "Puck"
 
-engine.bind "draw", (canvas) ->
+engine.bind "preDraw", (canvas) ->
 
   # Draw Arena
   canvas.strokeColor("black")
@@ -31,13 +28,18 @@ engine.bind "draw", (canvas) ->
 
   canvas.strokeColor("blue")
   x = WALL_LEFT + ARENA_WIDTH/3
-  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 3)
+  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 4)
   x = WALL_LEFT + ARENA_WIDTH*2/3
-  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 3)
+  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 4)
 
   canvas.strokeColor("red")
   x = WALL_LEFT + ARENA_WIDTH/2
   canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 2)
+
+  x = WALL_LEFT + ARENA_WIDTH/20
+  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 1)
+  x = WALL_LEFT + ARENA_WIDTH*19/20
+  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 1)
 
 
 engine.bind "update", ->
