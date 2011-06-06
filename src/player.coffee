@@ -6,8 +6,8 @@ Player = (I) ->
     collisionMargin: Point(2, 2)
     controller: 0
     blood:
-      leftSkate: 0
-      rightSkate: 0
+      leftSkate: 10
+      rightSkate: 40
     radius: 16
     width: 32
     height: 32
@@ -82,11 +82,11 @@ Player = (I) ->
     currentLeftSkatePos = leftSkatePos()
     currentRightSkatePos = rightSkatePos()
 
-    if lastLeftSkatePos && I.blood.leftSkate
-      bloodCanvas.drawLine(lastLeftSkatePos, currentLeftSkatePos, 2)
+    if lastLeftSkatePos && (skateBlood = I.blood.leftSkate)
+      bloodCanvas.drawLine(lastLeftSkatePos, currentLeftSkatePos, (skateBlood/5).clamp(1, 4))
 
-    if lastRightSkatePos&& I.blood.rightSkate
-      bloodCanvas.drawLine(lastRightSkatePos, currentRightSkatePos, 2)
+    if lastRightSkatePos && (skateBlood = I.blood.rightSkate)
+      bloodCanvas.drawLine(lastRightSkatePos, currentRightSkatePos, (skateBlood/5).clamp(1, 4))
 
     lastLeftSkatePos = currentLeftSkatePos
     lastRightSkatePos = currentRightSkatePos
@@ -95,6 +95,8 @@ Player = (I) ->
     I.boost = I.boost.approach(0, 1)
     I.boostCooldown = I.boostCooldown.approach(0, 1)
     I.wipeout = I.wipeout.approach(0, 1)
+    I.blood.leftSkate = I.blood.leftSkate.approach(0, 1)
+    I.blood.rightSkate = I.blood.rightSkate.approach(0, 1)
 
     drawBloodStreaks()
 
