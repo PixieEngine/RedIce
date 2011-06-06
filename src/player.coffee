@@ -5,6 +5,9 @@ Player = (I) ->
     boostCooldown: 0
     collisionMargin: Point(2, 2)
     controller: 0
+    blood:
+      leftSkate: 0
+      rightSkate: 0
     radius: 16
     width: 32
     height: 32
