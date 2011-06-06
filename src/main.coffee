@@ -1,4 +1,4 @@
-WALL_LEFT = 128
+WALL_LEFT = 64
 WALL_RIGHT = App.width - WALL_LEFT
 WALL_TOP = 128
 WALL_BOTTOM = App.height - WALL_TOP
@@ -75,6 +75,7 @@ engine.bind "update", ->
     center = player.center()
     radius = player.I.radius
 
+    # Wall Collisions
     if center.x - radius < WALL_LEFT
       player.I.velocity.x = -player.I.velocity.x
       player.I.x += player.I.velocity.x
@@ -90,6 +91,9 @@ engine.bind "update", ->
     if center.y + radius > WALL_BOTTOM
       player.I.velocity.y = -player.I.velocity.y
       player.I.y += player.I.velocity.y
+
+    # TODO: Blood Collisions
+
 
 engine.start()
 
