@@ -1,5 +1,6 @@
 Puck = (I) ->
   $.reverseMerge I,
+    blood: 0
     color: "black"
     radius: 4
     width: 16
@@ -10,6 +11,9 @@ Puck = (I) ->
     zIndex: 10
 
   self = GameObject(I).extend
+    bloody: ->
+      I.blood = (I.blood + rand(10)).clamp(0, 40)
+
     circle: ->
       c = self.center()
       c.radius = I.radius
@@ -21,7 +25,25 @@ Puck = (I) ->
 
     wipeout: $.noop
 
-  self.bind "update", ->
+  heading = 0
+  lastPosition = null
+
+  drawBloodStreaks = ->
+    # Skate blood streaks
+    heading = Point.direction(Point(0, 0), I.velocity)
+
+    currentPos = self.center()
+
+    if lastPosition && (blood = I.blood)
+      I.blood -= 1
+
+      bloodCanvas.drawLine(lastPosition, currentPos, (blood/4).clamp(2, 7))
+
+    lastPosition = currentPos
+
+  self.bind "step", ->
+    drawBloodStreaks()
+
     I.velocity = I.velocity.scale(0.95)
 
     I.x += I.velocity.x
