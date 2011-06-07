@@ -18083,10 +18083,10 @@ Player = function(I) {
     currentLeftSkatePos = leftSkatePos();
     currentRightSkatePos = rightSkatePos();
     if (lastLeftSkatePos && (skateBlood = I.blood.leftSkate)) {
-      bloodCanvas.drawLine(lastLeftSkatePos, currentLeftSkatePos, (skateBlood / 5).clamp(1, 4));
+      bloodCanvas.drawLine(lastLeftSkatePos, currentLeftSkatePos, (skateBlood / 5).clamp(1, 3));
     }
     if (lastRightSkatePos && (skateBlood = I.blood.rightSkate)) {
-      bloodCanvas.drawLine(lastRightSkatePos, currentRightSkatePos, (skateBlood / 5).clamp(1, 4));
+      bloodCanvas.drawLine(lastRightSkatePos, currentRightSkatePos, (skateBlood / 5).clamp(1, 3));
     }
     lastLeftSkatePos = currentLeftSkatePos;
     return lastRightSkatePos = currentRightSkatePos;
@@ -18129,8 +18129,9 @@ Player = function(I) {
 };;
 var Puck;
 Puck = function(I) {
-  var self;
+  var drawBloodStreaks, heading, lastPosition, self;
   $.reverseMerge(I, {
+    blood: 0,
     color: "black",
     radius: 4,
     width: 16,
@@ -18141,6 +18142,9 @@ Puck = function(I) {
     zIndex: 10
   });
   self = GameObject(I).extend({
+    bloody: function() {
+      return I.blood = (I.blood + rand(10)).clamp(0, 40);
+    },
     circle: function() {
       var c;
       c = self.center();
@@ -18152,7 +18156,20 @@ Puck = function(I) {
     },
     wipeout: $.noop
   });
-  self.bind("update", function() {
+  heading = 0;
+  lastPosition = null;
+  drawBloodStreaks = function() {
+    var blood, currentPos;
+    heading = Point.direction(Point(0, 0), I.velocity);
+    currentPos = self.center();
+    if (lastPosition && (blood = I.blood)) {
+      I.blood -= 1;
+      bloodCanvas.drawLine(lastPosition, currentPos, (blood / 4).clamp(2, 7));
+    }
+    return lastPosition = currentPos;
+  };
+  self.bind("step", function() {
+    drawBloodStreaks();
     I.velocity = I.velocity.scale(0.95);
     I.x += I.velocity.x;
     return I.y += I.velocity.y;
