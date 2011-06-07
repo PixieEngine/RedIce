@@ -119,7 +119,7 @@ engine.bind "update", ->
       player.I.velocity.y = -player.I.velocity.y
       player.I.y += player.I.velocity.y
 
-    # TODO: Blood Collisions
+    # Blood Collisions
     splats = engine.find(".blood=1")
 
     splats.each (splat) ->
