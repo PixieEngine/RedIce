@@ -6,6 +6,7 @@ Player = (I) ->
     collisionMargin: Point(2, 2)
     controller: 0
     blood:
+      body: 10
       leftSkate: 10
       rightSkate: 40
     radius: 16
@@ -34,8 +35,11 @@ Player = (I) ->
 
   self = GameObject(I).extend
     bloody: ->
-      I.blood.leftSkate += rand(10)
-      I.blood.rightSkate += rand(10)
+      if I.wipeout
+        I.blood.body += rand(3)
+      else
+        I.blood.leftSkate += rand(10)
+        I.blood.rightSkate += rand(10)
 
     circle: ->
       c = self.center()
@@ -75,27 +79,64 @@ Player = (I) ->
   lastRightSkatePos = null
 
   drawBloodStreaks = ->
-    # Skate blood streaks
+
     heading = Point.direction(Point(0, 0), I.velocity)
 
-    currentLeftSkatePos = leftSkatePos()
-    currentRightSkatePos = rightSkatePos()
+    if I.wipeout # Body blood streaks
+      currentPos = self.center().add(Point.fromAngle(Random.angle()).scale(rand()*8))
 
-    if lastLeftSkatePos && (skateBlood = I.blood.leftSkate)
-      bloodCanvas.drawLine(lastLeftSkatePos, currentLeftSkatePos, (skateBlood/5).clamp(1, 3))
+      if (blood = I.blood.body)
+        I.blood.body -= 1
 
-    if lastRightSkatePos && (skateBlood = I.blood.rightSkate)
-      bloodCanvas.drawLine(lastRightSkatePos, currentRightSkatePos, (skateBlood/5).clamp(1, 3))
+        color = Color(BLOOD_COLOR)
+        color.a 0.75
 
-    lastLeftSkatePos = currentLeftSkatePos
-    lastRightSkatePos = currentRightSkatePos
+        bloodCanvas.fillCircle(currentPos.x, currentPos.y, (rand(blood)/2).clamp(2, 13), color)
+
+    else # Skate blood streaks
+      currentLeftSkatePos = leftSkatePos()
+      currentRightSkatePos = rightSkatePos()
+
+      # Skip certain feet
+      cycle = I.age % 30
+      if 1 < cycle < 14
+        lastLeftSkatePos = null
+      if 15 < cycle < 29 
+        lastRightSkatePos = null
+
+      if lastLeftSkatePos
+        if skateBlood = I.blood.leftSkate
+          I.blood.leftSkate -= 1
+
+          color = BLOOD_COLOR
+          thickness = (skateBlood/5).clamp(1, 3)
+        else
+          color = ICE_COLOR
+          thickness = 1
+
+        bloodCanvas.strokeColor(color)
+        bloodCanvas.drawLine(lastLeftSkatePos, currentLeftSkatePos, thickness)
+
+      if lastRightSkatePos 
+        if skateBlood = I.blood.rightSkate
+          I.blood.rightSkate -= 1
+
+          color = BLOOD_COLOR
+          thickness = (skateBlood/5).clamp(1, 3)
+        else
+          color = ICE_COLOR
+          thickness = 1
+
+        bloodCanvas.strokeColor(color)        
+        bloodCanvas.drawLine(lastRightSkatePos, currentRightSkatePos, thickness)
+
+      lastLeftSkatePos = currentLeftSkatePos
+      lastRightSkatePos = currentRightSkatePos
 
   self.bind "step", ->
     I.boost = I.boost.approach(0, 1)
     I.boostCooldown = I.boostCooldown.approach(0, 1)
     I.wipeout = I.wipeout.approach(0, 1)
-    I.blood.leftSkate = I.blood.leftSkate.approach(0, 1)
-    I.blood.rightSkate = I.blood.rightSkate.approach(0, 1)
 
     drawBloodStreaks()
 
@@ -118,7 +159,8 @@ Player = (I) ->
       movement = movement.scale(I.boost)
 
     if I.wipeout
-
+      lastLeftSkatePos = null
+      lastRightSkatePos = null
     else
       I.color = PLAYER_COLORS[I.controller]
       I.velocity = I.velocity.add(movement).scale(0.9)
