@@ -17903,6 +17903,29 @@ draw anything to the screen until the image has been loaded.
 })();;
 ;
 ;$(function(){ undefined });;
+var Blood;
+Blood = function(I) {
+  var self;
+  $.reverseMerge(I, {
+    blood: 1,
+    duration: 300,
+    radius: 2,
+    sprite: Sprite.NONE,
+    width: 32,
+    height: 32
+  });
+  self = GameObject(I).extend({
+    circle: function() {
+      var c;
+      c = self.center();
+      c.radius = I.radius;
+      return c;
+    }
+  });
+  Blood.sprites.rand().draw(bloodCanvas, I.x, I.y);
+  return self;
+};
+Blood.sprites || (Blood.sprites = [Sprite.loadByName("blood")]);;
 var CONTROLLERS, Controller, gameControlData, keyActionNames;
 var __slice = Array.prototype.slice;
 Controller = function(actions) {
@@ -18017,9 +18040,12 @@ Player = function(I) {
     boostCooldown: 0,
     collisionMargin: Point(2, 2),
     controller: 0,
+    falls: 0,
     blood: {
-      leftSkate: 10,
-      rightSkate: 40
+      face: 20,
+      body: 0,
+      leftSkate: 0,
+      rightSkate: 0
     },
     radius: 16,
     width: 32,
@@ -18036,8 +18062,12 @@ Player = function(I) {
   heading = 0;
   self = GameObject(I).extend({
     bloody: function() {
-      I.blood.leftSkate += rand(10);
-      return I.blood.rightSkate += rand(10);
+      if (I.wipeout) {
+        return I.blood.body += rand(5);
+      } else {
+        I.blood.leftSkate += rand(10);
+        return I.blood.rightSkate += rand(10);
+      }
     },
     circle: function() {
       var c;
@@ -18054,8 +18084,10 @@ Player = function(I) {
       return false;
     },
     wipeout: function(push) {
+      I.falls += 1;
       I.color = Color(PLAYER_COLORS[I.controller]).lighten(0.25);
       I.wipeout = 25;
+      I.blood.face += rand(32) + rand(8) + rand(8) + I.falls;
       push = push.scale(15);
       return engine.add({
         "class": "Blood",
@@ -18077,28 +18109,69 @@ Player = function(I) {
   lastLeftSkatePos = null;
   lastRightSkatePos = null;
   drawBloodStreaks = function() {
-    var currentLeftSkatePos, currentRightSkatePos, skateBlood;
+    var blood, color, currentLeftSkatePos, currentPos, currentRightSkatePos, cycle, skateBlood, thickness;
     heading = Point.direction(Point(0, 0), I.velocity);
-    currentLeftSkatePos = leftSkatePos();
-    currentRightSkatePos = rightSkatePos();
-    if (lastLeftSkatePos && (skateBlood = I.blood.leftSkate)) {
-      bloodCanvas.context().lineCap = "round";
-      bloodCanvas.drawLine(lastLeftSkatePos, currentLeftSkatePos, (skateBlood / 5).clamp(1, 3));
+    if (I.blood.face && rand(6) === 0 && (blood = rand(I.blood.face))) {
+      currentPos = self.center().add(Point.fromAngle(Random.angle()).scale(rand() * 8));
+      I.blood.face = (I.blood.face - rand(4) - 1).clamp(0, Infinity);
+      color = Color(BLOOD_COLOR);
+      color.a(0.75);
+      bloodCanvas.fillCircle(currentPos.x, currentPos.y, (blood / 3).clamp(1, 8), color);
     }
-    if (lastRightSkatePos && (skateBlood = I.blood.rightSkate)) {
-      bloodCanvas.context().lineCap = "round";
-      bloodCanvas.drawLine(lastRightSkatePos, currentRightSkatePos, (skateBlood / 5).clamp(1, 3));
+    if (I.wipeout) {
+      currentPos = self.center().add(Point.fromAngle(Random.angle()).scale(rand() * 6));
+      if (I.blood.body) {
+        blood = rand(blood / 2).clamp(4, 10);
+        I.blood.body = (I.blood.body - blood).clamp(0, Infinity);
+        if (rand(2) === 0) {
+          color = Color(BLOOD_COLOR);
+          color.a(0.75);
+          return bloodCanvas.fillCircle(currentPos.x, currentPos.y, blood, color);
+        }
+      }
+    } else {
+      currentLeftSkatePos = leftSkatePos();
+      currentRightSkatePos = rightSkatePos();
+      cycle = I.age % 30;
+      if ((1 < cycle && cycle < 14)) {
+        lastLeftSkatePos = null;
+      }
+      if ((15 < cycle && cycle < 29)) {
+        lastRightSkatePos = null;
+      }
+      if (lastLeftSkatePos) {
+        if (skateBlood = I.blood.leftSkate) {
+          I.blood.leftSkate -= 1;
+          color = BLOOD_COLOR;
+          thickness = (skateBlood / 5).clamp(1, 3);
+        } else {
+          color = ICE_COLOR;
+          thickness = 1;
+        }
+        bloodCanvas.strokeColor(color);
+        bloodCanvas.drawLine(lastLeftSkatePos, currentLeftSkatePos, thickness);
+      }
+      if (lastRightSkatePos) {
+        if (skateBlood = I.blood.rightSkate) {
+          I.blood.rightSkate -= 1;
+          color = BLOOD_COLOR;
+          thickness = (skateBlood / 5).clamp(1, 3);
+        } else {
+          color = ICE_COLOR;
+          thickness = 1;
+        }
+        bloodCanvas.strokeColor(color);
+        bloodCanvas.drawLine(lastRightSkatePos, currentRightSkatePos, thickness);
+      }
+      lastLeftSkatePos = currentLeftSkatePos;
+      return lastRightSkatePos = currentRightSkatePos;
     }
-    lastLeftSkatePos = currentLeftSkatePos;
-    return lastRightSkatePos = currentRightSkatePos;
   };
   self.bind("step", function() {
     var movement;
     I.boost = I.boost.approach(0, 1);
     I.boostCooldown = I.boostCooldown.approach(0, 1);
     I.wipeout = I.wipeout.approach(0, 1);
-    I.blood.leftSkate = I.blood.leftSkate.approach(0, 1);
-    I.blood.rightSkate = I.blood.rightSkate.approach(0, 1);
     drawBloodStreaks();
     movement = Point(0, 0);
     if (actionDown("left")) {
@@ -18119,7 +18192,10 @@ Player = function(I) {
       I.boost = 10;
       movement = movement.scale(I.boost);
     }
-    if (I.wipeout) {} else {
+    if (I.wipeout) {
+      lastLeftSkatePos = null;
+      lastRightSkatePos = null;
+    } else {
       I.color = PLAYER_COLORS[I.controller];
       I.velocity = I.velocity.add(movement).scale(0.9);
     }
@@ -18177,31 +18253,8 @@ Puck = function(I) {
   });
   return self;
 };;
-var Blood;
-Blood = function(I) {
-  var self;
-  $.reverseMerge(I, {
-    blood: 1,
-    duration: 300,
-    radius: 2,
-    sprite: Sprite.NONE,
-    width: 32,
-    height: 32
-  });
-  self = GameObject(I).extend({
-    circle: function() {
-      var c;
-      c = self.center();
-      c.radius = I.radius;
-      return c;
-    }
-  });
-  Blood.sprites.rand().draw(bloodCanvas, I.x, I.y);
-  return self;
-};
-Blood.sprites || (Blood.sprites = [Sprite.loadByName("blood")]);;
 App.entities = {};;
-;$(function(){ var ARENA_HEIGHT, ARENA_WIDTH, BLOOD_COLOR, CANVAS_HEIGHT, CANVAS_WIDTH, WALL_BOTTOM, WALL_LEFT, WALL_RIGHT, WALL_TOP;
+;$(function(){ var ARENA_HEIGHT, ARENA_WIDTH, CANVAS_HEIGHT, CANVAS_WIDTH, WALL_BOTTOM, WALL_LEFT, WALL_RIGHT, WALL_TOP;
 CANVAS_WIDTH = App.width;
 CANVAS_HEIGHT = App.height;
 WALL_LEFT = 64;
@@ -18210,7 +18263,8 @@ WALL_TOP = 128;
 WALL_BOTTOM = CANVAS_HEIGHT - WALL_TOP;
 ARENA_WIDTH = WALL_RIGHT - WALL_LEFT;
 ARENA_HEIGHT = WALL_BOTTOM - WALL_TOP;
-BLOOD_COLOR = "#BA1A19";
+window.BLOOD_COLOR = "#BA1A19";
+window.ICE_COLOR = "rgba(192, 255, 255, 0.2)";
 window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").powerCanvas();
 bloodCanvas.strokeColor(BLOOD_COLOR);
 window.engine = Engine({
