@@ -10,7 +10,7 @@ ARENA_WIDTH = WALL_RIGHT - WALL_LEFT
 ARENA_HEIGHT = WALL_BOTTOM - WALL_TOP
 
 window.BLOOD_COLOR = "#BA1A19"
-window.ICE_COLOR = "rgba(0, 255, 255, 0.1)"
+window.ICE_COLOR = "rgba(192, 255, 255, 0.2)"
 
 window.bloodCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />").powerCanvas()
 bloodCanvas.strokeColor(BLOOD_COLOR)
