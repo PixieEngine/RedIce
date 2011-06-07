@@ -12,7 +12,7 @@ Puck = (I) ->
 
   self = GameObject(I).extend
     bloody: ->
-      I.blood = (I.blood + rand(10)).clamp(0, 40)
+      I.blood = (I.blood + 20).clamp(0, 40)
 
     circle: ->
       c = self.center()
