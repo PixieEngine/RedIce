@@ -18010,41 +18010,95 @@ CONTROLLERS = [];
 parent.gameControlData = gameControlData;;
 var Player;
 Player = function(I) {
-  var PLAYER_COLORS, actionDown, self;
+  var PLAYER_COLORS, actionDown, drawBloodStreaks, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, rightSkatePos, self;
   $.reverseMerge(I, {
     debugAnimation: true,
     boost: 0,
     boostCooldown: 0,
     collisionMargin: Point(2, 2),
     controller: 0,
+    blood: {
+      leftSkate: 10,
+      rightSkate: 40
+    },
     radius: 16,
     width: 32,
     height: 32,
     x: 192,
     y: 128,
     wipeout: 0,
-    velocity: Point()
+    velocity: Point(),
+    zIndex: 1
   });
   PLAYER_COLORS = ["#00F", "#F00", "#0F0", "#FF0", "orange", "#F0F", "#0FF"];
   I.color = PLAYER_COLORS[I.controller];
   actionDown = CONTROLLERS[I.controller].actionDown;
+  heading = 0;
   self = GameObject(I).extend({
+    bloody: function() {
+      I.blood.leftSkate += rand(10);
+      return I.blood.rightSkate += rand(10);
+    },
     circle: function() {
       var c;
       c = self.center();
       c.radius = I.radius;
       return c;
     },
-    wipeout: function() {
-      I.color = Color(PLAYER_COLORS[I.controller]).lighten(0.10);
-      return I.wipeout = 25;
+    draw: function(canvas) {
+      var center;
+      center = self.center();
+      return canvas.fillCircle(center.x, center.y, I.radius, I.color);
+    },
+    puck: function() {
+      return false;
+    },
+    wipeout: function(push) {
+      I.color = Color(PLAYER_COLORS[I.controller]).lighten(0.25);
+      I.wipeout = 25;
+      push = push.scale(15);
+      return engine.add({
+        blood: 1,
+        sprite: Sprite.loadByName("blood"),
+        x: I.x + push.x,
+        y: I.y + push.y
+      });
     }
   });
+  leftSkatePos = function() {
+    var p;
+    p = Point.fromAngle(heading - Math.TAU / 4).scale(5);
+    return self.center().add(p);
+  };
+  rightSkatePos = function() {
+    var p;
+    p = Point.fromAngle(heading + Math.TAU / 4).scale(5);
+    return self.center().add(p);
+  };
+  lastLeftSkatePos = null;
+  lastRightSkatePos = null;
+  drawBloodStreaks = function() {
+    var currentLeftSkatePos, currentRightSkatePos, skateBlood;
+    heading = Point.direction(Point(0, 0), I.velocity);
+    currentLeftSkatePos = leftSkatePos();
+    currentRightSkatePos = rightSkatePos();
+    if (lastLeftSkatePos && (skateBlood = I.blood.leftSkate)) {
+      bloodCanvas.drawLine(lastLeftSkatePos, currentLeftSkatePos, (skateBlood / 5).clamp(1, 4));
+    }
+    if (lastRightSkatePos && (skateBlood = I.blood.rightSkate)) {
+      bloodCanvas.drawLine(lastRightSkatePos, currentRightSkatePos, (skateBlood / 5).clamp(1, 4));
+    }
+    lastLeftSkatePos = currentLeftSkatePos;
+    return lastRightSkatePos = currentRightSkatePos;
+  };
   self.bind("step", function() {
     var movement;
     I.boost = I.boost.approach(0, 1);
     I.boostCooldown = I.boostCooldown.approach(0, 1);
     I.wipeout = I.wipeout.approach(0, 1);
+    I.blood.leftSkate = I.blood.leftSkate.approach(0, 1);
+    I.blood.rightSkate = I.blood.rightSkate.approach(0, 1);
+    drawBloodStreaks();
     movement = Point(0, 0);
     if (actionDown("left")) {
       movement = movement.add(Point(-1, 0));
@@ -18078,12 +18132,13 @@ Puck = function(I) {
   var self;
   $.reverseMerge(I, {
     color: "black",
-    radius: 8,
+    radius: 4,
     width: 16,
-    height: 16,
+    height: 8,
     x: 512,
     y: 384,
-    velocity: Point()
+    velocity: Point(),
+    zIndex: 10
   });
   self = GameObject(I).extend({
     circle: function() {
@@ -18092,20 +18147,34 @@ Puck = function(I) {
       c.radius = I.radius;
       return c;
     },
+    puck: function() {
+      return true;
+    },
     wipeout: $.noop
   });
   self.bind("update", function() {
+    I.velocity = I.velocity.scale(0.95);
     I.x += I.velocity.x;
     return I.y += I.velocity.y;
   });
   return self;
 };;
 App.entities = {};;
-;$(function(){ window.engine = Engine({
-  canvas: $("canvas").powerCanvas()
-});
-engine.add({
-  sprite: Sprite.loadByName("title")
+;$(function(){ var ARENA_HEIGHT, ARENA_WIDTH, BLOOD_COLOR, CANVAS_HEIGHT, CANVAS_WIDTH, WALL_BOTTOM, WALL_LEFT, WALL_RIGHT, WALL_TOP;
+CANVAS_WIDTH = App.width;
+CANVAS_HEIGHT = App.height;
+WALL_LEFT = 64;
+WALL_RIGHT = CANVAS_WIDTH - WALL_LEFT;
+WALL_TOP = 128;
+WALL_BOTTOM = CANVAS_HEIGHT - WALL_TOP;
+ARENA_WIDTH = WALL_RIGHT - WALL_LEFT;
+ARENA_HEIGHT = WALL_BOTTOM - WALL_TOP;
+BLOOD_COLOR = "#BA1A19";
+window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").powerCanvas();
+bloodCanvas.strokeColor(BLOOD_COLOR);
+window.engine = Engine({
+  canvas: $("canvas").powerCanvas(),
+  zSort: true
 });
 engine.add({
   "class": "Player"
@@ -18117,12 +18186,31 @@ engine.add({
 engine.add({
   "class": "Puck"
 });
+engine.bind("preDraw", function(canvas) {
+  var blood, x;
+  canvas.strokeColor("black");
+  canvas.strokeRect(WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT);
+  canvas.strokeColor("blue");
+  x = WALL_LEFT + ARENA_WIDTH / 3;
+  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 4);
+  x = WALL_LEFT + ARENA_WIDTH * 2 / 3;
+  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 4);
+  canvas.strokeColor("red");
+  x = WALL_LEFT + ARENA_WIDTH / 2;
+  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 2);
+  x = WALL_LEFT + ARENA_WIDTH / 20;
+  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 1);
+  x = WALL_LEFT + ARENA_WIDTH * 19 / 20;
+  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 1);
+  blood = bloodCanvas.element();
+  return canvas.drawImage(blood, 0, 0, blood.width, blood.height, 0, 0, blood.width, blood.height);
+});
 engine.bind("update", function() {
-  var delta, i, j, max, playerA, playerB, players, projA, projB, pushA, pushB, threshold, _results;
-  players = engine.find("Player");
+  var delta, i, j, max, playerA, playerB, players, projA, projB, pushA, pushB, threshold;
+  players = engine.find("Player").shuffle();
+  players.push(engine.find("Puck").first());
   threshold = 5;
   i = 0;
-  _results = [];
   while (i < players.length) {
     playerA = players[i];
     j = i + 1;
@@ -18130,26 +18218,59 @@ engine.bind("update", function() {
       playerB = players[j];
       if (!playerA.I.wipeout && !playerB.I.wipeout && Collision.circular(playerA.circle(), playerB.circle())) {
         delta = playerB.center().subtract(playerA.center()).norm();
-        pushA = delta.scale(-2);
-        pushB = delta.scale(2);
-        playerA.I.velocity = playerA.I.velocity.add(pushA);
-        playerB.I.velocity = playerB.I.velocity.add(pushB);
+        if (playerB.puck()) {
+          playerB.I.velocity = delta.scale(playerA.I.velocity.length());
+        } else {
+          pushA = delta.scale(-2);
+          pushB = delta.scale(2);
+          playerA.I.velocity = playerA.I.velocity.add(pushA);
+          playerB.I.velocity = playerB.I.velocity.add(pushB);
+        }
         projA = playerA.I.velocity.dot(delta);
         projB = -playerB.I.velocity.dot(delta);
         max = Math.max(projA, projB);
         if (max > threshold) {
           console.log(max);
           if (projA === max) {
-            playerB.wipeout();
+            playerB.wipeout(pushB);
           } else {
-            playerA.wipeout();
+            playerA.wipeout(pushA);
           }
         }
       }
       j += 1;
     }
-    _results.push(i += 1);
+    i += 1;
   }
-  return _results;
+  return players.each(function(player) {
+    var center, radius, splats;
+    center = player.center();
+    radius = player.I.radius;
+    if (center.x - radius < WALL_LEFT) {
+      player.I.velocity.x = -player.I.velocity.x;
+      player.I.x += player.I.velocity.x;
+    }
+    if (center.x + radius > WALL_RIGHT) {
+      player.I.velocity.x = -player.I.velocity.x;
+      player.I.x += player.I.velocity.x;
+    }
+    if (center.y - radius < WALL_TOP) {
+      player.I.velocity.y = -player.I.velocity.y;
+      player.I.y += player.I.velocity.y;
+    }
+    if (center.y + radius > WALL_BOTTOM) {
+      player.I.velocity.y = -player.I.velocity.y;
+      player.I.y += player.I.velocity.y;
+    }
+    splats = engine.find(".blood=1");
+    return splats.each(function(splat) {
+      var splatCircle;
+      splatCircle = splat.center();
+      splatCircle.radius = 10;
+      if (Collision.circular(player.circle(), splatCircle)) {
+        return player.bloody();
+      }
+    });
+  });
 });
 engine.start(); });
