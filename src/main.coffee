@@ -12,6 +12,8 @@ ARENA_HEIGHT = WALL_BOTTOM - WALL_TOP
 BLOOD_COLOR = "#BA1A19"
 
 window.bloodCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />").powerCanvas()
+# Not sure if this lineCap is working
+bloodCanvas.context().lineCap = "round"
 bloodCanvas.strokeColor(BLOOD_COLOR)
 
 window.engine = Engine 
