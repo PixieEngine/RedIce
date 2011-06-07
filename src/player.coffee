@@ -86,7 +86,7 @@ Player = (I) ->
 
     heading = Point.direction(Point(0, 0), I.velocity)
 
-    if (blood = I.blood.face) && rand(6) == 0 && rand(I.blood.face)
+    if I.blood.face && rand(6) == 0 && (blood = rand(I.blood.face))
       currentPos = self.center().add(Point.fromAngle(Random.angle()).scale(rand()*8))
 
       I.blood.face = (I.blood.face - rand(4) - 1).clamp(0, Infinity)
@@ -94,19 +94,20 @@ Player = (I) ->
       color = Color(BLOOD_COLOR)
       color.a 0.75
 
-      bloodCanvas.fillCircle(currentPos.x, currentPos.y, blood.clamp(2, 8), color)
+      bloodCanvas.fillCircle(currentPos.x, currentPos.y, (blood/3).clamp(1, 8), color)
 
 
     if I.wipeout # Body blood streaks
-      currentPos = self.center().add(Point.fromAngle(Random.angle()).scale(rand()*8))
+      currentPos = self.center().add(Point.fromAngle(Random.angle()).scale(rand()*6))
 
-      if (blood = I.blood.body) && rand(2) == 0
+      if (blood = I.blood.body) 
         I.blood.body -= 1
 
-        color = Color(BLOOD_COLOR)
-        color.a 0.75
+        if rand(2) == 0
+          color = Color(BLOOD_COLOR)
+          color.a 0.75
 
-        bloodCanvas.fillCircle(currentPos.x, currentPos.y, (rand(blood)/2).clamp(2, 13), color)
+          bloodCanvas.fillCircle(currentPos.x, currentPos.y, (rand(blood)/2).clamp(2, 10), color)
 
     else # Skate blood streaks
       currentLeftSkatePos = leftSkatePos()
