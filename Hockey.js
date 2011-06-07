@@ -18058,8 +18058,7 @@ Player = function(I) {
       I.wipeout = 25;
       push = push.scale(15);
       return engine.add({
-        blood: 1,
-        sprite: Sprite.loadByName("blood"),
+        "class": "Blood",
         x: I.x + push.x,
         y: I.y + push.y
       });
@@ -18143,7 +18142,7 @@ Puck = function(I) {
   });
   self = GameObject(I).extend({
     bloody: function() {
-      return I.blood = (I.blood + rand(10)).clamp(0, 40);
+      return I.blood = (I.blood + 30).clamp(0, 120);
     },
     circle: function() {
       var c;
@@ -18164,7 +18163,7 @@ Puck = function(I) {
     currentPos = self.center();
     if (lastPosition && (blood = I.blood)) {
       I.blood -= 1;
-      bloodCanvas.drawLine(lastPosition, currentPos, (blood / 4).clamp(2, 7));
+      bloodCanvas.drawLine(lastPosition, currentPos, (blood / 20).clamp(1, 6));
     }
     return lastPosition = currentPos;
   };
@@ -18176,6 +18175,29 @@ Puck = function(I) {
   });
   return self;
 };;
+var Blood;
+Blood = function(I) {
+  var self;
+  $.reverseMerge(I, {
+    blood: 1,
+    duration: 300,
+    radius: 2,
+    sprite: Sprite.NONE,
+    width: 32,
+    height: 32
+  });
+  self = GameObject(I).extend({
+    circle: function() {
+      var c;
+      c = self.center();
+      c.radius = I.radius;
+      return c;
+    }
+  });
+  Blood.sprites.rand().draw(bloodCanvas, I.x, I.y);
+  return self;
+};
+Blood.sprites || (Blood.sprites = [Sprite.loadByName("blood")]);;
 App.entities = {};;
 ;$(function(){ var ARENA_HEIGHT, ARENA_WIDTH, BLOOD_COLOR, CANVAS_HEIGHT, CANVAS_WIDTH, WALL_BOTTOM, WALL_LEFT, WALL_RIGHT, WALL_TOP;
 CANVAS_WIDTH = App.width;
@@ -18188,6 +18210,7 @@ ARENA_WIDTH = WALL_RIGHT - WALL_LEFT;
 ARENA_HEIGHT = WALL_BOTTOM - WALL_TOP;
 BLOOD_COLOR = "#BA1A19";
 window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").powerCanvas();
+bloodCanvas.context().lineCap = "round";
 bloodCanvas.strokeColor(BLOOD_COLOR);
 window.engine = Engine({
   canvas: $("canvas").powerCanvas(),
@@ -18279,12 +18302,9 @@ engine.bind("update", function() {
       player.I.velocity.y = -player.I.velocity.y;
       player.I.y += player.I.velocity.y;
     }
-    splats = engine.find(".blood=1");
+    splats = engine.find("Blood");
     return splats.each(function(splat) {
-      var splatCircle;
-      splatCircle = splat.center();
-      splatCircle.radius = 10;
-      if (Collision.circular(player.circle(), splatCircle)) {
+      if (Collision.circular(player.circle(), splat.circle())) {
         return player.bloody();
       }
     });
