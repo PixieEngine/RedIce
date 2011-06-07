@@ -12,7 +12,7 @@ Puck = (I) ->
 
   self = GameObject(I).extend
     bloody: ->
-      I.blood = (I.blood + 20).clamp(0, 40)
+      I.blood = (I.blood + 30).clamp(0, 120)
 
     circle: ->
       c = self.center()
@@ -37,7 +37,7 @@ Puck = (I) ->
     if lastPosition && (blood = I.blood)
       I.blood -= 1
 
-      bloodCanvas.drawLine(lastPosition, currentPos, (blood/4).clamp(2, 7))
+      bloodCanvas.drawLine(lastPosition, currentPos, (blood/20).clamp(1, 6))
 
     lastPosition = currentPos
 
