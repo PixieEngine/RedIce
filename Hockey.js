@@ -18082,9 +18082,11 @@ Player = function(I) {
     currentLeftSkatePos = leftSkatePos();
     currentRightSkatePos = rightSkatePos();
     if (lastLeftSkatePos && (skateBlood = I.blood.leftSkate)) {
+      bloodCanvas.context().lineCap = "round";
       bloodCanvas.drawLine(lastLeftSkatePos, currentLeftSkatePos, (skateBlood / 5).clamp(1, 3));
     }
     if (lastRightSkatePos && (skateBlood = I.blood.rightSkate)) {
+      bloodCanvas.context().lineCap = "round";
       bloodCanvas.drawLine(lastRightSkatePos, currentRightSkatePos, (skateBlood / 5).clamp(1, 3));
     }
     lastLeftSkatePos = currentLeftSkatePos;
@@ -18210,7 +18212,6 @@ ARENA_WIDTH = WALL_RIGHT - WALL_LEFT;
 ARENA_HEIGHT = WALL_BOTTOM - WALL_TOP;
 BLOOD_COLOR = "#BA1A19";
 window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").powerCanvas();
-bloodCanvas.context().lineCap = "round";
 bloodCanvas.strokeColor(BLOOD_COLOR);
 window.engine = Engine({
   canvas: $("canvas").powerCanvas(),
