@@ -123,10 +123,7 @@ engine.bind "update", ->
     splats = engine.find(".blood=1")
 
     splats.each (splat) ->
-      splatCircle = splat.center()
-      splatCircle.radius = 10
-
-      if Collision.circular(player.circle(), splatCircle)
+      if Collision.circular(player.circle(), splat.circle())
         player.bloody()
 
 engine.start()
