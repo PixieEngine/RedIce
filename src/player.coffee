@@ -57,8 +57,7 @@ Player = (I) ->
       push = push.scale(15)
 
       engine.add
-        blood: 1
-        sprite: Sprite.loadByName "blood"
+        class: "Blood"
         x: I.x + push.x
         y: I.y + push.y
 
