@@ -5,10 +5,12 @@ Player = (I) ->
     boostCooldown: 0
     collisionMargin: Point(2, 2)
     controller: 0
+    falls: 0
     blood:
-      body: 10
-      leftSkate: 10
-      rightSkate: 40
+      face: 20
+      body: 0
+      leftSkate: 0
+      rightSkate: 0
     radius: 16
     width: 32
     height: 32
@@ -36,7 +38,7 @@ Player = (I) ->
   self = GameObject(I).extend
     bloody: ->
       if I.wipeout
-        I.blood.body += rand(3)
+        I.blood.body += rand(5)
       else
         I.blood.leftSkate += rand(10)
         I.blood.rightSkate += rand(10)
@@ -55,8 +57,10 @@ Player = (I) ->
       false
 
     wipeout: (push) ->
+      I.falls += 1
       I.color = Color(PLAYER_COLORS[I.controller]).lighten(0.25)
       I.wipeout = 25
+      I.blood.face += rand(32) + rand(8) + rand(8) + I.falls
 
       push = push.scale(15)
 
@@ -82,10 +86,21 @@ Player = (I) ->
 
     heading = Point.direction(Point(0, 0), I.velocity)
 
+    if (blood = I.blood.face) && rand(6) == 0 && rand(I.blood.face)
+      currentPos = self.center().add(Point.fromAngle(Random.angle()).scale(rand()*8))
+
+      I.blood.face = (I.blood.face - rand(4) - 1).clamp(0, Infinity)
+
+      color = Color(BLOOD_COLOR)
+      color.a 0.75
+
+      bloodCanvas.fillCircle(currentPos.x, currentPos.y, blood.clamp(2, 8), color)
+
+
     if I.wipeout # Body blood streaks
       currentPos = self.center().add(Point.fromAngle(Random.angle()).scale(rand()*8))
 
-      if (blood = I.blood.body)
+      if (blood = I.blood.body) && rand(2) == 0
         I.blood.body -= 1
 
         color = Color(BLOOD_COLOR)
