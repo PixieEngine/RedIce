@@ -14112,6 +14112,14 @@ var __slice = Array.prototype.slice;
           return context.strokeStyle;
         }
       },
+      strokeCircle: function(x, y, radius, color) {
+        $canvas.strokeColor(color);
+        context.beginPath();
+        context.arc(x, y, radius, 0, Math.TAU, true);
+        context.closePath();
+        context.stroke();
+        return this;
+      },
       strokeRect: function(x, y, width, height) {
         context.strokeRect(x, y, width, height);
         return this;
@@ -15734,7 +15742,7 @@ methods to transition from one animation state to another
 @param {Object} self Reference to including object
 */var Animated;
 Animated = function(I, self) {
-  var advanceFrame, find, loadByName, _name;
+  var advanceFrame, find, loadByName, updateSprite, _name;
   I || (I = {});
   $.reverseMerge(I, {
     animationName: null,
@@ -15760,10 +15768,17 @@ Animated = function(I, self) {
           complete: "",
           interruptible: false,
           speed: "",
+          transform: [
+            {
+              hflip: false,
+              vflip: false
+            }
+          ],
           triggers: {
             "0": ["a trigger"]
           },
-          frames: [0]
+          frames: [0],
+          transform: [void 0]
         }
       ]
     },
@@ -15772,6 +15787,12 @@ Animated = function(I, self) {
       complete: "",
       interruptible: false,
       speed: "",
+      transform: [
+        {
+          hflip: false,
+          vflip: false
+        }
+      ],
       triggers: {
         "0": [""]
       },
@@ -15779,6 +15800,8 @@ Animated = function(I, self) {
     },
     currentFrameIndex: 0,
     debugAnimation: false,
+    hflip: false,
+    vflip: false,
     lastUpdate: new Date().getTime(),
     useTimer: false,
     transform: Matrix.IDENTITY
@@ -15815,7 +15838,7 @@ Animated = function(I, self) {
     throw "No animation data provided. Use animationName to specify an animation to load from the project or pass in raw JSON to the data key.";
   }
   advanceFrame = function() {
-    var frames, nextState, sprite;
+    var frames, nextState, sprite, _ref, _ref2;
     frames = I.activeAnimation.frames;
     if (I.currentFrameIndex === frames.indexOf(frames.last())) {
       self.trigger("Complete");
@@ -15828,9 +15851,9 @@ Animated = function(I, self) {
       I.currentFrameIndex = (I.currentFrameIndex + 1) % frames.length;
     }
     sprite = I.spriteLookup[frames[I.currentFrameIndex]];
-    I.sprite = sprite;
-    I.width = sprite.width;
-    return I.height = sprite.height;
+    updateSprite(sprite);
+    I.hflip = (_ref = I.activeAnimation.transform) != null ? _ref[I.currentFrameIndex].hflip : void 0;
+    return I.vflip = (_ref2 = I.activeAnimation.transform) != null ? _ref2[I.currentFrameIndex].vflip : void 0;
   };
   find = function(name) {
     var nameLower, result;
@@ -15843,6 +15866,11 @@ Animated = function(I, self) {
     });
     return result;
   };
+  updateSprite = function(spriteData) {
+    I.sprite = spriteData;
+    I.width = spriteData.width;
+    return I.height = spriteData.height;
+  };
   return {
     /**
     Transitions to a new active animation. Will not transition if the new state
@@ -15851,7 +15879,7 @@ Animated = function(I, self) {
     @param {String} newState The name of the target state you wish to transition to.
     */
     transition: function(newState) {
-      var firstFrame, firstSprite, nextState;
+      var firstFrame, firstSprite, nextState, _ref, _ref2;
       if (newState === I.activeAnimation.name) {
         return;
       }
@@ -15867,9 +15895,9 @@ Animated = function(I, self) {
         firstFrame = I.activeAnimation.frames.first();
         firstSprite = I.spriteLookup[firstFrame];
         I.currentFrameIndex = 0;
-        I.sprite = firstSprite;
-        I.width = firstSprite.width;
-        return I.height = firstSprite.height;
+        updateSprite(firstSprite);
+        I.hflip = (_ref = I.activeAnimation.transform) != null ? _ref[I.currentFrameIndex].hflip : void 0;
+        return I.vflip = (_ref2 = I.activeAnimation.transform) != null ? _ref2[I.currentFrameIndex].vflip : void 0;
       } else {
         if (I.debugAnimation) {
           return warn("Could not find animation state '" + newState + "'. The current transition will be ignored");
@@ -15881,7 +15909,7 @@ Animated = function(I, self) {
     },
     before: {
       update: function() {
-        var time, triggers, updateFrame, _ref, _ref2;
+        var time, transition, triggers, updateFrame, _ref, _ref2, _ref3;
         if (I.useTimer) {
           time = new Date().getTime();
           if (updateFrame = (time - I.lastUpdate) >= I.activeAnimation.speed) {
@@ -15898,6 +15926,9 @@ Animated = function(I, self) {
             triggers.each(function(event) {
               return self.trigger(event);
             });
+          }
+          if (transition = (_ref3 = I.activeAnimation.transition) != null ? _ref3[I.currentFrameIndex] : void 0) {
+            I.transform = eval(transition);
           }
           return advanceFrame();
         }
@@ -16128,6 +16159,19 @@ Bounded = function(I, self) {
     */
     center: function() {
       return Point(I.x + I.width / 2, I.y + I.height / 2);
+    },
+    /**
+    Return the circular bounds of the object. The circle is
+    centered at the midpoint of the object.
+    
+    @name circle
+    @methodOf Bounded#
+    */
+    circle: function() {
+      var circle;
+      circle = self.center();
+      circle.radius = I.radius || I.width / 2 || I.height / 2;
+      return circle;
     }
   };
 };;
@@ -16266,6 +16310,8 @@ Drawable = function(I, self) {
   I || (I = {});
   $.reverseMerge(I, {
     color: "#196",
+    hflip: false,
+    vflip: false,
     spriteName: null,
     zIndex: 0
   });
@@ -16287,6 +16333,12 @@ Drawable = function(I, self) {
       I.transform = Matrix.translation(center.x, center.y).concat(Matrix.rotation(I.rotation)).concat(Matrix.translation(-I.width / 2, -I.height / 2));
     } else {
       I.transform = Matrix.translation(I.x, I.y);
+    }
+    if (I.hflip) {
+      I.transform = Matrix.translation(center.x, center.y).concat(Matrix.HORIZONTAL_FLIP).concat(Matrix.translation(-I.width / 2, -I.height / 2));
+    }
+    if (I.vflip) {
+      I.transform = Matrix.translation(center.x, center.y).concat(Matrix.VERTICAL_FLIP).concat(Matrix.translation(-I.width / 2, -I.height / 2));
     }
     if (I.sprite) {
       if (I.sprite.draw != null) {
@@ -18338,21 +18390,44 @@ engine.add({
   "class": "Puck"
 });
 engine.bind("preDraw", function(canvas) {
-  var blood, x;
+  var blood, blue, faceOffCircleRadius, faceOffSpotRadius, red, x, y;
+  red = "red";
+  blue = "blue";
+  faceOffSpotRadius = 5;
+  faceOffCircleRadius = 38;
   canvas.strokeColor("black");
   canvas.strokeRect(WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT);
-  canvas.strokeColor("blue");
+  canvas.strokeColor(blue);
   x = WALL_LEFT + ARENA_WIDTH / 3;
   canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 4);
   x = WALL_LEFT + ARENA_WIDTH * 2 / 3;
   canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 4);
-  canvas.strokeColor("red");
+  canvas.strokeColor(red);
   x = WALL_LEFT + ARENA_WIDTH / 2;
   canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 2);
+  x = WALL_LEFT + ARENA_WIDTH / 2;
+  y = WALL_TOP + ARENA_HEIGHT / 2;
+  canvas.fillCircle(x, y, faceOffSpotRadius, blue);
+  canvas.context().lineWidth = 2;
+  canvas.strokeCircle(x, y, faceOffCircleRadius, blue);
+  canvas.strokeColor(red);
   x = WALL_LEFT + ARENA_WIDTH / 20;
   canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 1);
+  canvas.strokeRect(x, WALL_TOP + ARENA_HEIGHT / 2 - 16, 16, 32);
   x = WALL_LEFT + ARENA_WIDTH * 19 / 20;
   canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 1);
+  canvas.strokeRect(x - 16, WALL_TOP + ARENA_HEIGHT / 2 - 16, 16, 32);
+  [1, 3].each(function(verticalQuarter) {
+    y = WALL_TOP + verticalQuarter / 4 * ARENA_HEIGHT;
+    return [3 / 20, 1 / 3 + 1 / 40, 2 / 3 - 1 / 40, 17 / 20].each(function(faceOffX, i) {
+      x = WALL_LEFT + faceOffX * ARENA_WIDTH;
+      canvas.fillCircle(x, y, faceOffSpotRadius, red);
+      if (i === 0 || i === 3) {
+        canvas.context().lineWidth = 2;
+        return canvas.strokeCircle(x, y, faceOffCircleRadius, red);
+      }
+    });
+  });
   blood = bloodCanvas.element();
   return canvas.drawImage(blood, 0, 0, blood.width, blood.height, 0, 0, blood.width, blood.height);
 });
