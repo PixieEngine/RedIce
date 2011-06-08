@@ -38,6 +38,7 @@ engine.bind "preDraw", (canvas) ->
   red = "red"
   blue = "blue"
   faceOffSpotRadius = 5
+  faceOffCircleRadius = 38
 
   # Draw Arena
   canvas.strokeColor("black")
