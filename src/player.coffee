@@ -97,18 +97,6 @@ Player = (I) ->
         bloodCanvas.fillCircle(p.x, p.y, (rand(blood/4)*rand()*rand()).clamp(0, 4), color)
 
     if I.wipeout # Body blood streaks
-      currentPos = self.center().add(Point.fromAngle(Random.angle()).scale(rand()*6))
-
-      if I.blood.body
-        blood = rand(blood/2).clamp(4, 10)
-
-        I.blood.body = (I.blood.body - blood).clamp(0, Infinity)
-
-        if rand(2) == 0
-          color = Color(BLOOD_COLOR)
-          color.a 0.75
-
-          bloodCanvas.fillCircle(currentPos.x, currentPos.y, blood, color)
 
     else # Skate blood streaks
       currentLeftSkatePos = leftSkatePos()
