@@ -94,8 +94,7 @@ Player = (I) ->
       color = Color(BLOOD_COLOR)
       color.a 0.75
 
-      bloodCanvas.fillCircle(currentPos.x, currentPos.y, (blood/3).clamp(1, 8), color)
-
+      bloodCanvas.fillCircle(currentPos.x, currentPos.y, (blood/3).clamp(0, 8), color)
 
     if I.wipeout # Body blood streaks
       currentPos = self.center().add(Point.fromAngle(Random.angle()).scale(rand()*6))
@@ -127,7 +126,7 @@ Player = (I) ->
           I.blood.leftSkate -= 1
 
           color = BLOOD_COLOR
-          thickness = (skateBlood/5).clamp(1, 3)
+          thickness = (skateBlood/15).clamp(0, 2)
         else
           color = ICE_COLOR
           thickness = 1
@@ -140,7 +139,7 @@ Player = (I) ->
           I.blood.rightSkate -= 1
 
           color = BLOOD_COLOR
-          thickness = (skateBlood/5).clamp(1, 3)
+          thickness = (skateBlood/15).clamp(0, 2)
         else
           color = ICE_COLOR
           thickness = 1
