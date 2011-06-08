@@ -60,13 +60,17 @@ engine.bind "preDraw", (canvas) ->
   x = WALL_LEFT + ARENA_WIDTH/2
   y = WALL_TOP + ARENA_HEIGHT/2
   canvas.fillCircle(x, y, faceOffSpotRadius, blue)
+  canvas.context().lineWidth = 2
+  canvas.strokeCircle(x, y, faceOffCircleRadius, blue)
 
   # Goal Lines
   canvas.strokeColor(red)
   x = WALL_LEFT + ARENA_WIDTH/20
   canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 1)
+  canvas.strokeRect(x, WALL_TOP + ARENA_HEIGHT/2 - 16, 16, 32)
   x = WALL_LEFT + ARENA_WIDTH*19/20
   canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 1)
+  canvas.strokeRect(x - 16, WALL_TOP + ARENA_HEIGHT/2 - 16, 16, 32)
 
   [1, 3].each (verticalQuarter) ->
     y = WALL_TOP + verticalQuarter/4 * ARENA_HEIGHT
@@ -75,6 +79,9 @@ engine.bind "preDraw", (canvas) ->
       x = WALL_LEFT + faceOffX * ARENA_WIDTH
 
       canvas.fillCircle(x, y, faceOffSpotRadius, red)
+      if i == 0 || i == 3
+        canvas.context().lineWidth = 2
+        canvas.strokeCircle(x, y, faceOffCircleRadius, red)
 
   blood = bloodCanvas.element()
   canvas.drawImage(blood, 0, 0, blood.width, blood.height, 0, 0, blood.width, blood.height)
