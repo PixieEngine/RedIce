@@ -18168,7 +18168,7 @@ Player = function(I) {
       I.blood.face = (I.blood.face - rand(4) - 1).clamp(0, Infinity);
       color = Color(BLOOD_COLOR);
       color.a(0.75);
-      bloodCanvas.fillCircle(currentPos.x, currentPos.y, (blood / 3).clamp(1, 8), color);
+      bloodCanvas.fillCircle(currentPos.x, currentPos.y, (blood / 3).clamp(0, 8), color);
     }
     if (I.wipeout) {
       currentPos = self.center().add(Point.fromAngle(Random.angle()).scale(rand() * 6));
@@ -18195,7 +18195,7 @@ Player = function(I) {
         if (skateBlood = I.blood.leftSkate) {
           I.blood.leftSkate -= 1;
           color = BLOOD_COLOR;
-          thickness = (skateBlood / 5).clamp(1, 3);
+          thickness = (skateBlood / 15).clamp(0, 2);
         } else {
           color = ICE_COLOR;
           thickness = 1;
@@ -18207,7 +18207,7 @@ Player = function(I) {
         if (skateBlood = I.blood.rightSkate) {
           I.blood.rightSkate -= 1;
           color = BLOOD_COLOR;
-          thickness = (skateBlood / 5).clamp(1, 3);
+          thickness = (skateBlood / 15).clamp(0, 2);
         } else {
           color = ICE_COLOR;
           thickness = 1;
