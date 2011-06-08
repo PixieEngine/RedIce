@@ -18056,7 +18056,7 @@ Player = function(I) {
     velocity: Point(),
     zIndex: 1
   });
-  PLAYER_COLORS = ["#00F", "#F00", "#0F0", "#FF0", "orange", "#F0F", "#0FF"];
+  PLAYER_COLORS = ["#00F", "#F00", "#0F0", "#FF0", "#FFA500", "#F0F", "#0FF"];
   I.color = PLAYER_COLORS[I.controller];
   actionDown = CONTROLLERS[I.controller].actionDown;
   heading = 0;
