@@ -18253,6 +18253,58 @@ Puck = function(I) {
   });
   return self;
 };;
+var Zamboni;
+Zamboni = function(I) {
+  var cleanIce, heading, lastPosition, self;
+  $.reverseMerge(I, {
+    blood: 0,
+    color: "yellow",
+    radius: 16,
+    width: 64,
+    height: 32,
+    x: 512,
+    y: 384,
+    velocity: Point(1, 0),
+    zIndex: 10
+  });
+  self = GameObject(I).extend({
+    bloody: $.noop,
+    circle: function() {
+      var c;
+      c = self.center();
+      c.radius = I.radius;
+      return c;
+    },
+    puck: function() {
+      return false;
+    },
+    wipeout: $.noop
+  });
+  heading = 0;
+  lastPosition = null;
+  cleanIce = function() {
+    var boxPoints, currentPos;
+    currentPos = self.center();
+    boxPoints = [Point(0, 0), Point(32, 0), Point(32, 32), Point(0, 32)].map(function(p) {
+      return I.transform.transformPoint(p);
+    });
+    bloodCanvas.compositeOperation("destination-out");
+    bloodCanvas.globalAlpha(0.5);
+    bloodCanvas.fillColor("#000");
+    bloodCanvas.fillShape.apply(null, boxPoints);
+    bloodCanvas.globalAlpha(1);
+    return bloodCanvas.compositeOperation("source-over");
+  };
+  self.bind("step", function() {
+    I.rotation = heading = Point.direction(Point(0, 0), I.velocity);
+    if (!(I.age < 1)) {
+      cleanIce();
+    }
+    I.x += I.velocity.x;
+    return I.y += I.velocity.y;
+  });
+  return self;
+};;
 App.entities = {};;
 ;$(function(){ var ARENA_HEIGHT, ARENA_WIDTH, CANVAS_HEIGHT, CANVAS_WIDTH, WALL_BOTTOM, WALL_LEFT, WALL_RIGHT, WALL_TOP;
 CANVAS_WIDTH = App.width;
@@ -18271,12 +18323,16 @@ window.engine = Engine({
   canvas: $("canvas").powerCanvas(),
   zSort: true
 });
-engine.add({
-  "class": "Player"
-});
-engine.add({
-  "class": "Player",
-  controller: 1
+(6).times(function(i) {
+  var x, y;
+  y = WALL_TOP + ARENA_HEIGHT * ((i / 2).floor() + 1) / 4;
+  x = WALL_LEFT + ARENA_WIDTH / 2 + ((i % 2) - 0.5) * ARENA_WIDTH / 6;
+  return engine.add({
+    "class": "Player",
+    controller: i,
+    x: x,
+    y: y
+  });
 });
 engine.add({
   "class": "Puck"
