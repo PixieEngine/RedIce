@@ -1,6 +1,5 @@
 Player = (I) ->
   $.reverseMerge I,
-    debugAnimation: true
     boost: 0
     boostCooldown: 0
     collisionMargin: Point(2, 2)
