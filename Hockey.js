@@ -18087,7 +18087,6 @@ var Player;
 Player = function(I) {
   var PLAYER_COLORS, actionDown, drawBloodStreaks, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, rightSkatePos, self;
   $.reverseMerge(I, {
-    debugAnimation: true,
     boost: 0,
     boostCooldown: 0,
     collisionMargin: Point(2, 2),
@@ -18459,7 +18458,6 @@ engine.bind("update", function() {
         projB = -playerB.I.velocity.dot(delta);
         max = Math.max(projA, projB);
         if (max > threshold) {
-          console.log(max);
           if (projA === max) {
             playerB.wipeout(pushB);
           } else {
