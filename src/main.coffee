@@ -19,18 +19,20 @@ window.engine = Engine
   canvas: $("canvas").powerCanvas()
   zSort: true
 
-engine.add
-  class: "Player"
-
-engine.add
-  class: "Player"
-  controller: 1
+6.times (i) ->
+  y = WALL_TOP + ARENA_HEIGHT*((i/2).floor() + 1)/4
+  x = WALL_LEFT + ARENA_WIDTH/2 + ((i%2) - 0.5) * ARENA_WIDTH / 6
+  engine.add
+    class: "Player"
+    controller: i
+    x: x
+    y: y
 
 engine.add
   class: "Puck"
 
-engine.add
-  class: "Zamboni"
+#engine.add
+#  class: "Zamboni"
 
 engine.bind "preDraw", (canvas) ->
 
