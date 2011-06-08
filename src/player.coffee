@@ -25,7 +25,7 @@ Player = (I) ->
     "#F00"
     "#0F0"
     "#FF0"
-    "orange"
+    "#FFA500"
     "#F0F"
     "#0FF"
   ]
