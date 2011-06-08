@@ -122,8 +122,6 @@ engine.bind "update", ->
         max = Math.max(projA, projB)
 
         if max > threshold
-          console.log max
-
           if projA == max
             playerB.wipeout(pushB)
           else
