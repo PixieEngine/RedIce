@@ -29,6 +29,9 @@ engine.add
 engine.add
   class: "Puck"
 
+engine.add
+  class: "Zamboni"
+
 engine.bind "preDraw", (canvas) ->
 
   # Draw Arena
