@@ -18094,7 +18094,7 @@ Player = function(I) {
     controller: 0,
     falls: 0,
     blood: {
-      face: 20,
+      face: 0,
       body: 0,
       leftSkate: 0,
       rightSkate: 0
@@ -18139,7 +18139,7 @@ Player = function(I) {
       I.falls += 1;
       I.color = Color(PLAYER_COLORS[I.controller]).lighten(0.25);
       I.wipeout = 25;
-      I.blood.face += rand(32) + rand(8) + rand(8) + I.falls;
+      I.blood.face += rand(20) + rand(20) + rand(20) + I.falls * 3;
       push = push.scale(15);
       return engine.add({
         "class": "Blood",
@@ -18163,12 +18163,15 @@ Player = function(I) {
   drawBloodStreaks = function() {
     var blood, color, currentLeftSkatePos, currentPos, currentRightSkatePos, cycle, skateBlood, thickness;
     heading = Point.direction(Point(0, 0), I.velocity);
-    if (I.blood.face && rand(6) === 0 && (blood = rand(I.blood.face))) {
-      currentPos = self.center().add(Point.fromAngle(Random.angle()).scale(rand() * 8));
-      I.blood.face = (I.blood.face - rand(4) - 1).clamp(0, Infinity);
+    if ((blood = I.blood.face) && rand(2) === 0) {
+      I.blood.face -= 1;
       color = Color(BLOOD_COLOR);
-      color.a(0.75);
-      bloodCanvas.fillCircle(currentPos.x, currentPos.y, (blood / 3).clamp(0, 8), color);
+      currentPos = self.center();
+      (rand(I.blood.face) / 3).floor().clamp(1, 8).times(function() {
+        var p;
+        p = currentPos.add(Point.fromAngle(Random.angle()).scale(rand() * rand() * 16));
+        return bloodCanvas.fillCircle(p.x, p.y, (rand(blood / 4) * rand() * rand()).clamp(0, 4), color);
+      });
     }
     if (I.wipeout) {
       currentPos = self.center().add(Point.fromAngle(Random.angle()).scale(rand() * 6));
