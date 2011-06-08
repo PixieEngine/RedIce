@@ -35,25 +35,45 @@ engine.add
 #  class: "Zamboni"
 
 engine.bind "preDraw", (canvas) ->
+  red = "red"
+  blue = "blue"
+  faceOffSpotRadius = 5
 
   # Draw Arena
   canvas.strokeColor("black")
   canvas.strokeRect(WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT)
 
-  canvas.strokeColor("blue")
+  # Blue Lines
+  canvas.strokeColor(blue)
   x = WALL_LEFT + ARENA_WIDTH/3
   canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 4)
   x = WALL_LEFT + ARENA_WIDTH*2/3
   canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 4)
 
-  canvas.strokeColor("red")
+  # Center Line
+  canvas.strokeColor(red)
   x = WALL_LEFT + ARENA_WIDTH/2
   canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 2)
 
+  # Center Circle
+  x = WALL_LEFT + ARENA_WIDTH/2
+  y = WALL_TOP + ARENA_HEIGHT/2
+  canvas.fillCircle(x, y, faceOffSpotRadius, blue)
+
+  # Goal Lines
+  canvas.strokeColor(red)
   x = WALL_LEFT + ARENA_WIDTH/20
   canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 1)
   x = WALL_LEFT + ARENA_WIDTH*19/20
   canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 1)
+
+  [1, 3].each (verticalQuarter) ->
+    y = WALL_TOP + verticalQuarter/4 * ARENA_HEIGHT
+
+    [3/20, 1/3 + 1/40, 2/3 - 1/40, 17/20].each (faceOffX, i) ->
+      x = WALL_LEFT + faceOffX * ARENA_WIDTH
+
+      canvas.fillCircle(x, y, faceOffSpotRadius, red)
 
   blood = bloodCanvas.element()
   canvas.drawImage(blood, 0, 0, blood.width, blood.height, 0, 0, blood.width, blood.height)
