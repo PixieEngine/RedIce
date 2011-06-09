@@ -1,5 +1,5 @@
-CANVAS_WIDTH = App.width
-CANVAS_HEIGHT = App.height
+window.CANVAS_WIDTH = App.width
+window.CANVAS_HEIGHT = App.height
 
 WALL_LEFT = 64
 WALL_RIGHT = CANVAS_WIDTH - WALL_LEFT
