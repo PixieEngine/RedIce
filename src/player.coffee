@@ -20,13 +20,13 @@ Player = (I) ->
     zIndex: 1
 
   PLAYER_COLORS = [
-    "#00F"
-    "#F00"
-    "#0F0"
-    "#FFA500"
-    "#F0F"
-    "#0FF"
-    "#FF0"
+    "#0246E3" # Blue
+    "#EB070E" # Red
+    "#388326" # Green
+    "#F69508" # Orange
+    "#563495" # Purple
+    "#58C4F5" # Cyan
+    "#FFDE49" # Yellow
   ]
 
   playerColor = I.color = PLAYER_COLORS[I.controller]
