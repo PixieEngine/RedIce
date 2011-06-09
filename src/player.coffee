@@ -23,16 +23,42 @@ Player = (I) ->
     "#00F"
     "#F00"
     "#0F0"
-    "#FF0"
     "#FFA500"
     "#F0F"
     "#0FF"
+    "#FF0"
   ]
 
-  I.color = PLAYER_COLORS[I.controller]
+  playerColor = I.color = PLAYER_COLORS[I.controller]
   actionDown = CONTROLLERS[I.controller].actionDown
 
+  I.name ||= "Player #{I.controller + 1}"
+
   heading = 0
+
+  drawFloatingNameTag = (canvas) ->
+    canvas.font("bold 16px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
+
+    padding = 6
+    lineHeight = 16
+    textWidth = canvas.measureText(I.name)
+
+    backgroundColor = Color(playerColor)
+    backgroundColor.a "0.5"
+
+    yOffset = 32
+
+    center = self.center()
+
+    topLeft = center.subtract(Point(textWidth/2 + padding, lineHeight/2 + padding + yOffset))
+    rectWidth = textWidth + 2*padding
+    rectHeight = lineHeight + 2*padding
+
+    canvas.fillColor(backgroundColor)
+    canvas.fillRoundRect(topLeft.x, topLeft.y, rectWidth, rectHeight, 4)
+
+    canvas.fillColor("#FFF")
+    canvas.fillText(I.name, topLeft.x + padding, topLeft.y + lineHeight + padding/2)
 
   self = GameObject(I).extend
     bloody: ->
@@ -52,12 +78,14 @@ Player = (I) ->
       center = self.center()
       canvas.fillCircle(center.x, center.y, I.radius, I.color)
 
+      drawFloatingNameTag(canvas)
+
     puck: ->
       false
 
     wipeout: (push) ->
       I.falls += 1
-      I.color = Color(PLAYER_COLORS[I.controller]).lighten(0.25)
+      I.color = Color(playerColor).lighten(0.25)
       I.wipeout = 25
       I.blood.face += rand(20) + rand(20) + rand(20) + I.falls * 3
 
