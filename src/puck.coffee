@@ -49,5 +49,7 @@ Puck = (I) ->
     I.x += I.velocity.x
     I.y += I.velocity.y
 
+    I.zIndex = 1 + (I.y + I.height)/CANVAS_HEIGHT
+
   self
 
