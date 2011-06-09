@@ -18172,6 +18172,8 @@ Player = function(I) {
       I.wipeout = 25;
       I.blood.face += rand(20) + rand(20) + rand(20) + I.falls * 3;
       push = push.scale(15);
+      Sound.play("hit0");
+      Sound.play("crowd" + (rand(2)));
       return engine.add({
         "class": "Blood",
         x: I.x + push.x,
