@@ -18097,7 +18097,7 @@ CONTROLLERS = [];
 parent.gameControlData = gameControlData;;
 var Player;
 Player = function(I) {
-  var PLAYER_COLORS, actionDown, drawBloodStreaks, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, rightSkatePos, self;
+  var PLAYER_COLORS, actionDown, drawBloodStreaks, drawFloatingNameTag, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, playerColor, rightSkatePos, self;
   $.reverseMerge(I, {
     boost: 0,
     boostCooldown: 0,
@@ -18119,10 +18119,29 @@ Player = function(I) {
     velocity: Point(),
     zIndex: 1
   });
-  PLAYER_COLORS = ["#00F", "#F00", "#0F0", "#FF0", "#FFA500", "#F0F", "#0FF"];
-  I.color = PLAYER_COLORS[I.controller];
+  PLAYER_COLORS = ["#0246E3", "#EB070E", "#388326", "#F69508", "#563495", "#58C4F5", "#FFDE49"];
+  playerColor = I.color = PLAYER_COLORS[I.controller];
   actionDown = CONTROLLERS[I.controller].actionDown;
+  I.name || (I.name = "Player " + (I.controller + 1));
   heading = 0;
+  drawFloatingNameTag = function(canvas) {
+    var backgroundColor, center, lineHeight, padding, rectHeight, rectWidth, textWidth, topLeft, yOffset;
+    canvas.font("bold 16px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
+    padding = 6;
+    lineHeight = 16;
+    textWidth = canvas.measureText(I.name);
+    backgroundColor = Color(playerColor);
+    backgroundColor.a("0.5");
+    yOffset = 32;
+    center = self.center();
+    topLeft = center.subtract(Point(textWidth / 2 + padding, lineHeight / 2 + padding + yOffset));
+    rectWidth = textWidth + 2 * padding;
+    rectHeight = lineHeight + 2 * padding;
+    canvas.fillColor(backgroundColor);
+    canvas.fillRoundRect(topLeft.x, topLeft.y, rectWidth, rectHeight, 4);
+    canvas.fillColor("#FFF");
+    return canvas.fillText(I.name, topLeft.x + padding, topLeft.y + lineHeight + padding / 2);
+  };
   self = GameObject(I).extend({
     bloody: function() {
       if (I.wipeout) {
@@ -18141,14 +18160,15 @@ Player = function(I) {
     draw: function(canvas) {
       var center;
       center = self.center();
-      return canvas.fillCircle(center.x, center.y, I.radius, I.color);
+      canvas.fillCircle(center.x, center.y, I.radius, I.color);
+      return drawFloatingNameTag(canvas);
     },
     puck: function() {
       return false;
     },
     wipeout: function(push) {
       I.falls += 1;
-      I.color = Color(PLAYER_COLORS[I.controller]).lighten(0.25);
+      I.color = Color(playerColor).lighten(0.25);
       I.wipeout = 25;
       I.blood.face += rand(20) + rand(20) + rand(20) + I.falls * 3;
       push = push.scale(15);
@@ -18257,7 +18277,8 @@ Player = function(I) {
       I.velocity = I.velocity.add(movement).scale(0.9);
     }
     I.x += I.velocity.x;
-    return I.y += I.velocity.y;
+    I.y += I.velocity.y;
+    return I.zIndex = 1 + (I.y + I.height) / CANVAS_HEIGHT;
   });
   return self;
 };;
@@ -18306,7 +18327,8 @@ Puck = function(I) {
     drawBloodStreaks();
     I.velocity = I.velocity.scale(0.95);
     I.x += I.velocity.x;
-    return I.y += I.velocity.y;
+    I.y += I.velocity.y;
+    return I.zIndex = 1 + (I.y + I.height) / CANVAS_HEIGHT;
   });
   return self;
 };;
@@ -18358,14 +18380,15 @@ Zamboni = function(I) {
       cleanIce();
     }
     I.x += I.velocity.x;
-    return I.y += I.velocity.y;
+    I.y += I.velocity.y;
+    return I.zIndex = 1 + (I.y + I.height) / CANVAS_HEIGHT;
   });
   return self;
 };;
 App.entities = {};;
-;$(function(){ var ARENA_HEIGHT, ARENA_WIDTH, CANVAS_HEIGHT, CANVAS_WIDTH, WALL_BOTTOM, WALL_LEFT, WALL_RIGHT, WALL_TOP;
-CANVAS_WIDTH = App.width;
-CANVAS_HEIGHT = App.height;
+;$(function(){ var ARENA_HEIGHT, ARENA_WIDTH, WALL_BOTTOM, WALL_LEFT, WALL_RIGHT, WALL_TOP, scoreboard, time;
+window.CANVAS_WIDTH = App.width;
+window.CANVAS_HEIGHT = App.height;
 WALL_LEFT = 64;
 WALL_RIGHT = CANVAS_WIDTH - WALL_LEFT;
 WALL_TOP = 128;
@@ -18394,8 +18417,10 @@ window.engine = Engine({
 engine.add({
   "class": "Puck"
 });
+time = 2 * 60 * 30;
+scoreboard = Sprite.loadByName("scoreboard");
 engine.bind("preDraw", function(canvas) {
-  var blood, blue, faceOffCircleRadius, faceOffSpotRadius, red, x, y;
+  var blood, blue, faceOffCircleRadius, faceOffSpotRadius, minutes, red, seconds, x, y;
   red = "red";
   blue = "blue";
   faceOffSpotRadius = 5;
@@ -18434,10 +18459,23 @@ engine.bind("preDraw", function(canvas) {
     });
   });
   blood = bloodCanvas.element();
-  return canvas.drawImage(blood, 0, 0, blood.width, blood.height, 0, 0, blood.width, blood.height);
+  canvas.drawImage(blood, 0, 0, blood.width, blood.height, 0, 0, blood.width, blood.height);
+  scoreboard.draw(canvas, WALL_LEFT + (ARENA_WIDTH - scoreboard.width) / 2, 16);
+  minutes = (time / 30 / 60).floor();
+  seconds = ((time / 30).floor() % 60).toString();
+  if (seconds.length === 1) {
+    seconds = "0" + seconds;
+  }
+  canvas.fillColor("red");
+  canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
+  return canvas.fillText("" + minutes + ":" + seconds, WALL_LEFT + ARENA_WIDTH / 2 - 22, 46);
 });
 engine.bind("update", function() {
   var delta, i, j, max, playerA, playerB, players, projA, projB, pushA, pushB, threshold;
+  time -= 1;
+  if (time <= 0) {
+    time = 0;
+  }
   players = engine.find("Player").shuffle();
   players.push(engine.find("Puck").first());
   threshold = 5;
