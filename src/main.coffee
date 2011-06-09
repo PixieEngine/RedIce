@@ -34,6 +34,9 @@ engine.add
 #engine.add
 #  class: "Zamboni"
 
+time = 2 * 60 * 30
+scoreboard = Sprite.loadByName("scoreboard")
+
 engine.bind "preDraw", (canvas) ->
   red = "red"
   blue = "blue"
@@ -86,7 +89,25 @@ engine.bind "preDraw", (canvas) ->
   blood = bloodCanvas.element()
   canvas.drawImage(blood, 0, 0, blood.width, blood.height, 0, 0, blood.width, blood.height)
 
+  # Scoreboard
+  scoreboard.draw(canvas, WALL_LEFT + (ARENA_WIDTH - scoreboard.width)/2, 16)
+  minutes = (time / 30 / 60).floor()
+  seconds = ((time / 30).floor() % 60).toString()
+
+  if seconds.length == 1
+    seconds = "0" + seconds
+
+  canvas.fillColor("red")
+  canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
+  canvas.fillText("#{minutes}:#{seconds}", WALL_LEFT + ARENA_WIDTH/2 - 22, 46)
+
 engine.bind "update", ->
+  time -= 1
+
+  if time <= 0
+    #TODO: End Period
+    time = 0
+
   # Resolve Collisions
   players = engine.find("Player").shuffle()
 
