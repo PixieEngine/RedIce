@@ -6,24 +6,24 @@ Zamboni = (I) ->
     width: 64
     height: 32
     x: 0
-    y: ARENA_HEIGHT/2 + ARENA_TOP
+    y: ARENA_HEIGHT/2 + WALL_TOP
     velocity: Point(1, 0)
     zIndex: 10
 
-  SWEEPER_SIZE
+  SWEEPER_SIZE = 32
 
   path = []
 
   generatePath = () ->
-    ARENA_WIDTH / SWEEPER_SIZE = horizontalPoints
-    ARENA_HEIGHT / SWEEPER_SIZE = verticalPoints
+    horizontalPoints = ARENA_WIDTH / SWEEPER_SIZE 
+    verticalPoints = ARENA_HEIGHT / SWEEPER_SIZE 
 
     # Start at middle
     path.push Point(0, verticalPoints/2)
 
     (horizontalPoints/2).floor().times (x) ->
       (verticalPoints/2).floor().times (y) ->
-        xEnd = horizontalPoints -1 - x
+        xEnd = horizontalPoints - 1 - x
         yEnd = verticalPoints - 1 - y
 
         path.push Point(x, y)
@@ -33,6 +33,8 @@ Zamboni = (I) ->
 
     # End at middle
     path.push Point(0, verticalPoints/2)
+
+  generatePath()
 
   self = Base(I).extend
     wipeout: ->
@@ -65,7 +67,18 @@ Zamboni = (I) ->
 
 
   self.bind "step", ->
+    nextTarget = path[pathIndex].scale(SWEEPER_SIZE).add(Point(WALL_LEFT, WALL_TOP))
+    nextTarget.radius = 0
+
+    console.log nextTarget
+    debugger
+
+    I.velocity = nextTarget.subtract(self.center()).norm().scale(2)
+
     I.rotation = heading = Point.direction(Point(0, 0), I.velocity)
+
+    if Collision.circular(self.circle(), nextTarget)
+      pathIndex += 1
 
     cleanIce() unless I.age < 1
 
@@ -75,3 +88,4 @@ Zamboni = (I) ->
     I.zIndex = 1 + (I.y + I.height)/CANVAS_HEIGHT
 
   self
+
