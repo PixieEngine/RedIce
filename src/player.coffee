@@ -68,12 +68,6 @@ Player = (I) ->
         I.blood.leftSkate += rand(10)
         I.blood.rightSkate += rand(10)
 
-    circle: ->
-      c = self.center()
-      c.radius = I.radius
-
-      return c
-
     draw: (canvas) ->
       center = self.center()
       canvas.fillCircle(center.x, center.y, I.radius, I.color)
