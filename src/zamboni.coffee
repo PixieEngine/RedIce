@@ -5,8 +5,8 @@ Zamboni = (I) ->
     radius: 16
     width: 64
     height: 32
-    x: 512
-    y: 384
+    x: 0
+    y: ARENA_HEIGHT/2 + ARENA_TOP
     velocity: Point(1, 0)
     zIndex: 10
 
@@ -18,17 +18,30 @@ Zamboni = (I) ->
     ARENA_WIDTH / SWEEPER_SIZE = horizontalPoints
     ARENA_HEIGHT / SWEEPER_SIZE = verticalPoints
 
-    horizontalPoints.times (x) ->
-      verticalPoints.times (y) ->
+    # Start at middle
+    path.push Point(0, verticalPoints/2)
+
+    (horizontalPoints/2).floor().times (x) ->
+      (verticalPoints/2).floor().times (y) ->
+        xEnd = horizontalPoints -1 - x
+        yEnd = verticalPoints - 1 - y
+
         path.push Point(x, y)
-        path.push Point(horizontalPoints - x - 1, y)
+        path.push Point(xEnd, y)
+        path.push Point(xEnd, yEnd)
+        path.push Point(x, yEnd)
 
+    # End at middle
+    path.push Point(0, verticalPoints/2)
 
-  self = Bose(I).extend
-    wipeout: $.noop
+  self = Base(I).extend
+    wipeout: ->
+      #TODO Careen into boards and explode
+      Sound.play "explosion"
 
   heading = 0
   lastPosition = null
+  pathIndex = 0
 
   cleanIce = ->
     currentPos = self.center()
