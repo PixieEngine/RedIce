@@ -91,8 +91,8 @@ Player = (I) ->
 
       push = push.scale(15)
 
-      Sound.play("hit0")
-      Sound.play("crowd#{rand(2)}")
+      Sound.play("hit#{rand(4)}")
+      Sound.play("crowd#{rand(3)}")
 
       engine.add
         class: "Blood"
