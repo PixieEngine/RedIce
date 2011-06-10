@@ -22,7 +22,9 @@ Zamboni = (I) ->
     path.push Point(0, verticalPoints/2)
 
     (horizontalPoints/2).floor().times (x) ->
+      x += 0.5
       (verticalPoints/2).floor().times (y) ->
+        y += 0.5
         xEnd = horizontalPoints - 1 - x
         yEnd = verticalPoints - 1 - y
 
