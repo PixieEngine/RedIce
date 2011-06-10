@@ -36,6 +36,7 @@ Zamboni = (I) ->
 
     # End at middle
     path.push Point(0, verticalPoints/2)
+    path.push Point(-10, verticalPoints/2)
 
   generatePath()
 
