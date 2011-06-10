@@ -3,14 +3,14 @@ Zamboni = (I) ->
     blood: 0
     color: "yellow"
     radius: 16
-    width: 64
-    height: 32
+    width: 96
+    height: 48
     x: 0
     y: ARENA_HEIGHT/2 + WALL_TOP
     velocity: Point(1, 0)
     zIndex: 10
 
-  SWEEPER_SIZE = 32
+  SWEEPER_SIZE = 48
 
   path = []
 
@@ -52,9 +52,9 @@ Zamboni = (I) ->
 
     boxPoints = [
       Point(0, 0)
-      Point(32, 0)
-      Point(32, 32)
-      Point(0, 32)
+      Point(SWEEPER_SIZE, 0)
+      Point(SWEEPER_SIZE, SWEEPER_SIZE)
+      Point(0, SWEEPER_SIZE)
     ].map (p) ->
       I.transform.transformPoint(p)
 
