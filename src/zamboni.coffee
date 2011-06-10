@@ -5,6 +5,7 @@ Zamboni = (I) ->
     radius: 16
     width: 96
     height: 48
+    speed: 10
     x: 0
     y: ARENA_HEIGHT/2 + WALL_TOP
     velocity: Point(1, 0)
@@ -21,17 +22,17 @@ Zamboni = (I) ->
     # Start at middle
     path.push Point(0, verticalPoints/2)
 
-    (horizontalPoints/2).floor().times (x) ->
+    (horizontalPoints/2 - 1).floor().times (x) ->
       x += 0.5
-      (verticalPoints/2).floor().times (y) ->
-        y += 0.5
-        xEnd = horizontalPoints - 1 - x
-        yEnd = verticalPoints - 1 - y
+      y = 3/4 * x + 0.5
+      xEnd = horizontalPoints - x
+      yEnd = verticalPoints - y
 
-        path.push Point(x, y)
-        path.push Point(xEnd, y)
-        path.push Point(xEnd, yEnd)
-        path.push Point(x, yEnd)
+      path.push Point(x, y)
+      path.push Point(xEnd, y)
+      path.push Point(xEnd, yEnd)
+      path.push Point(x, yEnd)
+      path.push Point(x, y + 3/4)
 
     # End at middle
     path.push Point(0, verticalPoints/2)
@@ -51,10 +52,10 @@ Zamboni = (I) ->
     currentPos = self.center()
 
     boxPoints = [
-      Point(0, 0)
+      Point(SWEEPER_SIZE/2, 0)
       Point(SWEEPER_SIZE, 0)
       Point(SWEEPER_SIZE, SWEEPER_SIZE)
-      Point(0, SWEEPER_SIZE)
+      Point(SWEEPER_SIZE/2, SWEEPER_SIZE)
     ].map (p) ->
       I.transform.transformPoint(p)
 
@@ -62,6 +63,7 @@ Zamboni = (I) ->
     bloodCanvas.globalAlpha 0.25
 
     bloodCanvas.fillColor("#000")
+    bloodCanvas.fillCircle(currentPos.x, currentPos.y, SWEEPER_SIZE/2, "#000")
     bloodCanvas.fillShape.apply(null, boxPoints)
 
     bloodCanvas.globalAlpha 1
@@ -72,10 +74,7 @@ Zamboni = (I) ->
     nextTarget = path[pathIndex].scale(SWEEPER_SIZE).add(Point(WALL_LEFT, WALL_TOP))
     nextTarget.radius = 0
 
-    console.log nextTarget
-    debugger
-
-    I.velocity = nextTarget.subtract(self.center()).norm().scale(2)
+    I.velocity = nextTarget.subtract(self.center()).norm().scale(I.speed)
 
     I.rotation = heading = Point.direction(Point(0, 0), I.velocity)
 
