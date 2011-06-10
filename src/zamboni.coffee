@@ -10,18 +10,21 @@ Zamboni = (I) ->
     velocity: Point(1, 0)
     zIndex: 10
 
-  self = GameObject(I).extend
-    bloody: $.noop
+  SWEEPER_SIZE
 
-    circle: ->
-      c = self.center()
-      c.radius = I.radius
+  path = []
 
-      return c
+  generatePath = () ->
+    ARENA_WIDTH / SWEEPER_SIZE = horizontalPoints
+    ARENA_HEIGHT / SWEEPER_SIZE = verticalPoints
 
-    puck: ->
-      false
+    horizontalPoints.times (x) ->
+      verticalPoints.times (y) ->
+        path.push Point(x, y)
+        path.push Point(horizontalPoints - x - 1, y)
 
+
+  self = Bose(I).extend
     wipeout: $.noop
 
   heading = 0
@@ -39,7 +42,7 @@ Zamboni = (I) ->
       I.transform.transformPoint(p)
 
     bloodCanvas.compositeOperation "destination-out"
-    bloodCanvas.globalAlpha 0.5
+    bloodCanvas.globalAlpha 0.25
 
     bloodCanvas.fillColor("#000")
     bloodCanvas.fillShape.apply(null, boxPoints)
