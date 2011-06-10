@@ -69,17 +69,22 @@ Zamboni = (I) ->
     bloodCanvas.globalAlpha 1
     bloodCanvas.compositeOperation "source-over"
 
+  pathfind = ->
+    if path[pathIndex]
+      nextTarget = path[pathIndex].scale(SWEEPER_SIZE).add(Point(WALL_LEFT, WALL_TOP))
+      nextTarget.radius = 0
+      center = self.center()
+      center.radius = 5
+
+      if Collision.circular(center, nextTarget)
+        pathIndex += 1
+
+      I.velocity = nextTarget.subtract(center).norm().scale(I.speed)
 
   self.bind "step", ->
-    nextTarget = path[pathIndex].scale(SWEEPER_SIZE).add(Point(WALL_LEFT, WALL_TOP))
-    nextTarget.radius = 0
-
-    I.velocity = nextTarget.subtract(self.center()).norm().scale(I.speed)
+    pathfind()
 
     I.rotation = heading = Point.direction(Point(0, 0), I.velocity)
-
-    if Collision.circular(self.circle(), nextTarget)
-      pathIndex += 1
 
     cleanIce() unless I.age < 1
 
