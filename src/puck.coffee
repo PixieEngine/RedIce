@@ -14,12 +14,6 @@ Puck = (I) ->
     bloody: ->
       I.blood = (I.blood + 30).clamp(0, 120)
 
-    circle: ->
-      c = self.center()
-      c.radius = I.radius
-
-      return c
-
     puck: ->
       true
 
