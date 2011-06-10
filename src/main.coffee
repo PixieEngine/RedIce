@@ -36,8 +36,6 @@ time = 2 * 60 * 30
 scoreboard = Sprite.loadByName("scoreboard")
 
 intermission = () ->
-  window.INTERMISSION = true
-
   engine.add
     class: "Zamboni"
 
