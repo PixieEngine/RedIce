@@ -7,6 +7,7 @@ App = {
     "data": "data",
     "entities": "entities",
     "lib": "lib",
+    "animations": "animations",
     "images": "images",
     "sounds": "sounds",
     "test": "test",
@@ -17967,6 +17968,19 @@ draw anything to the screen until the image has been loaded.
 })();;
 ;
 ;$(function(){ undefined });;
+var Base;
+Base = function(I) {
+  var self;
+  I || (I = {});
+  self = GameObject(I).extend({
+    bloody: $.noop,
+    puck: function() {
+      return false;
+    },
+    wipeout: $.noop
+  });
+  return self;
+};;
 var Blood;
 Blood = function(I) {
   var self;
@@ -18172,8 +18186,8 @@ Player = function(I) {
       I.wipeout = 25;
       I.blood.face += rand(20) + rand(20) + rand(20) + I.falls * 3;
       push = push.scale(15);
-      Sound.play("hit0");
-      Sound.play("crowd" + (rand(2)));
+      Sound.play("hit" + (rand(4)));
+      Sound.play("crowd" + (rand(3)));
       return engine.add({
         "class": "Blood",
         x: I.x + push.x,
@@ -18336,47 +18350,78 @@ Puck = function(I) {
 };;
 var Zamboni;
 Zamboni = function(I) {
-  var cleanIce, heading, lastPosition, self;
+  var SWEEPER_SIZE, cleanIce, generatePath, heading, lastPosition, path, pathIndex, pathfind, self;
   $.reverseMerge(I, {
     blood: 0,
     color: "yellow",
     radius: 16,
-    width: 64,
-    height: 32,
-    x: 512,
-    y: 384,
+    width: 96,
+    height: 48,
+    speed: 10,
+    x: 0,
+    y: ARENA_HEIGHT / 2 + WALL_TOP,
     velocity: Point(1, 0),
     zIndex: 10
   });
-  self = GameObject(I).extend({
-    bloody: $.noop,
-    circle: function() {
-      var c;
-      c = self.center();
-      c.radius = I.radius;
-      return c;
-    },
-    puck: function() {
-      return false;
-    },
-    wipeout: $.noop
+  SWEEPER_SIZE = 48;
+  path = [];
+  generatePath = function() {
+    var horizontalPoints, verticalPoints;
+    horizontalPoints = ARENA_WIDTH / SWEEPER_SIZE;
+    verticalPoints = ARENA_HEIGHT / SWEEPER_SIZE;
+    path.push(Point(0, verticalPoints / 2));
+    (horizontalPoints / 2 - 1).floor().times(function(x) {
+      var xEnd, y, yEnd;
+      x += 0.5;
+      y = 3 / 4 * x + 0.5;
+      xEnd = horizontalPoints - x;
+      yEnd = verticalPoints - y;
+      path.push(Point(x, y));
+      path.push(Point(xEnd, y));
+      path.push(Point(xEnd, yEnd));
+      path.push(Point(x, yEnd));
+      return path.push(Point(x, y + 3 / 4));
+    });
+    return path.push(Point(0, verticalPoints / 2));
+  };
+  generatePath();
+  self = Base(I).extend({
+    wipeout: function() {
+      return Sound.play("explosion");
+    }
   });
   heading = 0;
   lastPosition = null;
+  pathIndex = 0;
   cleanIce = function() {
     var boxPoints, currentPos;
     currentPos = self.center();
-    boxPoints = [Point(0, 0), Point(32, 0), Point(32, 32), Point(0, 32)].map(function(p) {
+    boxPoints = [Point(SWEEPER_SIZE / 2, 0), Point(SWEEPER_SIZE, 0), Point(SWEEPER_SIZE, SWEEPER_SIZE), Point(SWEEPER_SIZE / 2, SWEEPER_SIZE)].map(function(p) {
       return I.transform.transformPoint(p);
     });
     bloodCanvas.compositeOperation("destination-out");
-    bloodCanvas.globalAlpha(0.5);
+    bloodCanvas.globalAlpha(0.25);
     bloodCanvas.fillColor("#000");
+    bloodCanvas.fillCircle(currentPos.x, currentPos.y, SWEEPER_SIZE / 2, "#000");
     bloodCanvas.fillShape.apply(null, boxPoints);
     bloodCanvas.globalAlpha(1);
     return bloodCanvas.compositeOperation("source-over");
   };
+  pathfind = function() {
+    var center, nextTarget;
+    if (path[pathIndex]) {
+      nextTarget = path[pathIndex].scale(SWEEPER_SIZE).add(Point(WALL_LEFT, WALL_TOP));
+      nextTarget.radius = 0;
+      center = self.center();
+      center.radius = 5;
+      if (Collision.circular(center, nextTarget)) {
+        pathIndex += 1;
+      }
+      return I.velocity = nextTarget.subtract(center).norm().scale(I.speed);
+    }
+  };
   self.bind("step", function() {
+    pathfind();
     I.rotation = heading = Point.direction(Point(0, 0), I.velocity);
     if (!(I.age < 1)) {
       cleanIce();
@@ -18388,15 +18433,15 @@ Zamboni = function(I) {
   return self;
 };;
 App.entities = {};;
-;$(function(){ var ARENA_HEIGHT, ARENA_WIDTH, WALL_BOTTOM, WALL_LEFT, WALL_RIGHT, WALL_TOP, scoreboard, time;
+;$(function(){ var GAME_OVER, INTERMISSION, awayScore, homeScore, intermission, intermissionTime, nextPeriod, period, periodTime, scoreboard, time;
 window.CANVAS_WIDTH = App.width;
 window.CANVAS_HEIGHT = App.height;
-WALL_LEFT = 64;
-WALL_RIGHT = CANVAS_WIDTH - WALL_LEFT;
-WALL_TOP = 128;
-WALL_BOTTOM = CANVAS_HEIGHT - WALL_TOP;
-ARENA_WIDTH = WALL_RIGHT - WALL_LEFT;
-ARENA_HEIGHT = WALL_BOTTOM - WALL_TOP;
+window.WALL_LEFT = 64;
+window.WALL_RIGHT = CANVAS_WIDTH - WALL_LEFT;
+window.WALL_TOP = 128;
+window.WALL_BOTTOM = CANVAS_HEIGHT - WALL_TOP;
+window.ARENA_WIDTH = WALL_RIGHT - WALL_LEFT;
+window.ARENA_HEIGHT = WALL_BOTTOM - WALL_TOP;
 window.BLOOD_COLOR = "#BA1A19";
 window.ICE_COLOR = "rgba(192, 255, 255, 0.2)";
 window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").powerCanvas();
@@ -18419,8 +18464,31 @@ window.engine = Engine({
 engine.add({
   "class": "Puck"
 });
-time = 2 * 60 * 30;
+periodTime = 2 * 60 * 30;
+intermissionTime = 30 * 30;
+period = 0;
+time = 0;
+homeScore = 0;
+awayScore = 0;
 scoreboard = Sprite.loadByName("scoreboard");
+GAME_OVER = false;
+INTERMISSION = false;
+intermission = function() {
+  INTERMISSION = true;
+  time = intermissionTime;
+  return engine.add({
+    "class": "Zamboni"
+  });
+};
+nextPeriod = function() {
+  time = periodTime;
+  INTERMISSION = false;
+  period += 1;
+  if (period === 4) {
+    return GAME_OVER = true;
+  }
+};
+nextPeriod();
 engine.bind("preDraw", function(canvas) {
   var blood, blue, faceOffCircleRadius, faceOffSpotRadius, minutes, red, seconds, x, y;
   red = "red";
@@ -18470,13 +18538,31 @@ engine.bind("preDraw", function(canvas) {
   }
   canvas.fillColor("red");
   canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
-  return canvas.fillText("" + minutes + ":" + seconds, WALL_LEFT + ARENA_WIDTH / 2 - 22, 46);
+  canvas.fillText("" + minutes + ":" + seconds, WALL_LEFT + ARENA_WIDTH / 2 - 22, 46);
+  canvas.fillText(period, WALL_LEFT + ARENA_WIDTH / 2 + 18, 84);
+  canvas.fillText(homeScore, WALL_LEFT + ARENA_WIDTH / 2 - 72, 60);
+  return canvas.fillText(awayScore, WALL_LEFT + ARENA_WIDTH / 2 + 90, 60);
+});
+engine.bind("draw", function(canvas) {
+  if (GAME_OVER) {
+    canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
+    canvas.fillColor("#000");
+    return canvas.centerText("GAME OVER", 384);
+  }
 });
 engine.bind("update", function() {
   var delta, i, j, max, playerA, playerB, players, projA, projB, pushA, pushB, threshold;
   time -= 1;
-  if (time <= 0) {
+  if (INTERMISSION) {
+    if (time === 0) {
+      nextPeriod();
+    }
+  } else if (GAME_OVER) {
     time = 0;
+  } else {
+    if (time === 0) {
+      intermission();
+    }
   }
   players = engine.find("Player").shuffle();
   players.push(engine.find("Puck").first());
