@@ -37,8 +37,11 @@ intermissionTime = 30 * 30
 
 period = 0
 time = 0
+homeScore = 0
+awayScore = 0
 scoreboard = Sprite.loadByName("scoreboard")
 
+GAME_OVER = false
 INTERMISSION = false
 intermission = () ->
   INTERMISSION = true
@@ -53,7 +56,8 @@ nextPeriod = () ->
   period += 1
 
   if period == 4
-    ;# check team scores and choose winner
+    GAME_OVER = true
+    #TODO check team scores and choose winner
 
 nextPeriod()
 
@@ -122,12 +126,23 @@ engine.bind "preDraw", (canvas) ->
   canvas.fillText("#{minutes}:#{seconds}", WALL_LEFT + ARENA_WIDTH/2 - 22, 46)
   canvas.fillText(period, WALL_LEFT + ARENA_WIDTH/2 + 18, 84)
 
+  canvas.fillText(homeScore, WALL_LEFT + ARENA_WIDTH/2 - 72, 60)
+  canvas.fillText(awayScore, WALL_LEFT + ARENA_WIDTH/2 + 90, 60)
+
+engine.bind "draw", (canvas) ->
+  if GAME_OVER
+    canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
+    canvas.fillColor("#000")
+    canvas.centerText("GAME OVER", 384)
+
 engine.bind "update", ->
   time -= 1
 
   if INTERMISSION
     if time == 0
       nextPeriod()
+  else if GAME_OVER
+    time = 0
   else # Regular play
     if time == 0
       intermission()
