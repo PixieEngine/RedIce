@@ -18382,7 +18382,8 @@ Zamboni = function(I) {
       path.push(Point(x, yEnd));
       return path.push(Point(x, y + 3 / 4));
     });
-    return path.push(Point(0, verticalPoints / 2));
+    path.push(Point(0, verticalPoints / 2));
+    return path.push(Point(-10, verticalPoints / 2));
   };
   generatePath();
   self = Base(I).extend({
