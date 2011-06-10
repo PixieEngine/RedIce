@@ -1,13 +1,13 @@
 window.CANVAS_WIDTH = App.width
 window.CANVAS_HEIGHT = App.height
 
-WALL_LEFT = 64
-WALL_RIGHT = CANVAS_WIDTH - WALL_LEFT
-WALL_TOP = 128
-WALL_BOTTOM = CANVAS_HEIGHT - WALL_TOP
+window.WALL_LEFT = 64
+window.WALL_RIGHT = CANVAS_WIDTH - WALL_LEFT
+window.WALL_TOP = 128
+window.WALL_BOTTOM = CANVAS_HEIGHT - WALL_TOP
 
-ARENA_WIDTH = WALL_RIGHT - WALL_LEFT
-ARENA_HEIGHT = WALL_BOTTOM - WALL_TOP
+window.ARENA_WIDTH = WALL_RIGHT - WALL_LEFT
+window.ARENA_HEIGHT = WALL_BOTTOM - WALL_TOP
 
 window.BLOOD_COLOR = "#BA1A19"
 window.ICE_COLOR = "rgba(192, 255, 255, 0.2)"
@@ -31,8 +31,8 @@ window.engine = Engine
 engine.add
   class: "Puck"
 
-#engine.add
-#  class: "Zamboni"
+engine.add
+  class: "Zamboni"
 
 time = 2 * 60 * 30
 scoreboard = Sprite.loadByName("scoreboard")
