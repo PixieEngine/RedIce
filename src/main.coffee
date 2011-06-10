@@ -52,6 +52,9 @@ nextPeriod = () ->
   INTERMISSION = false
   period += 1
 
+  if period == 4
+    ;# check team scores and choose winner
+
 nextPeriod()
 
 engine.bind "preDraw", (canvas) ->
