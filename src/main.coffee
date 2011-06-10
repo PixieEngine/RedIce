@@ -117,6 +117,7 @@ engine.bind "preDraw", (canvas) ->
   canvas.fillColor("red")
   canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
   canvas.fillText("#{minutes}:#{seconds}", WALL_LEFT + ARENA_WIDTH/2 - 22, 46)
+  canvas.fillText(period, WALL_LEFT + ARENA_WIDTH/2 + 18, 84)
 
 engine.bind "update", ->
   time -= 1
