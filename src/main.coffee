@@ -14,7 +14,7 @@ window.ICE_COLOR = "rgba(192, 255, 255, 0.2)"
 
 window.bloodCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />").powerCanvas()
 bloodCanvas.strokeColor(BLOOD_COLOR)
-bloodCanvas.fill(BLOOD_COLOR)
+# bloodCanvas.fill(BLOOD_COLOR) # For zamboni testing 
 
 window.engine = Engine 
   canvas: $("canvas").powerCanvas()
@@ -32,12 +32,27 @@ window.engine = Engine
 engine.add
   class: "Puck"
 
-time = 2 * 60 * 30
+periodTime = 2 * 60 * 30
+intermissionTime = 30 * 30
+
+period = 0
+time = 0
 scoreboard = Sprite.loadByName("scoreboard")
 
+INTERMISSION = false
 intermission = () ->
+  INTERMISSION = true
+  time = intermissionTime
+
   engine.add
     class: "Zamboni"
+
+nextPeriod = () ->
+  time = periodTime
+  INTERMISSION = false
+  period += 1
+
+nextPeriod()
 
 engine.bind "preDraw", (canvas) ->
   red = "red"
@@ -106,8 +121,12 @@ engine.bind "preDraw", (canvas) ->
 engine.bind "update", ->
   time -= 1
 
-  if time <= 0
-    intermission()
+  if INTERMISSION
+    if time == 0
+      nextPeriod()
+  else # Regular play
+    if time == 0
+      intermission()
 
   # Resolve Collisions
   players = engine.find("Player").shuffle()
