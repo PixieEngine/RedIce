@@ -68,7 +68,7 @@ Player = (I) ->
 
     canvas.fillCircle(circle.x, circle.y, circle.radius, color)
 
-  self = GameObject(I).extend
+  self = Base(I).extend
     bloody: ->
       if I.wipeout
         I.blood.body += rand(5)
