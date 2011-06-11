@@ -60,6 +60,14 @@ Player = (I) ->
     canvas.fillColor("#FFF")
     canvas.fillText(I.name, topLeft.x + padding, topLeft.y + lineHeight + padding/2)
 
+  drawControlCircle = (canvas) ->
+    color = Color(playerColor).lighten(0.10)
+    color.a "0.25"
+
+    circle = self.controlCircle()
+
+    canvas.fillCircle(circle.x, circle.y, circle.radius, color)
+
   self = GameObject(I).extend
     bloody: ->
       if I.wipeout
@@ -68,10 +76,29 @@ Player = (I) ->
         I.blood.leftSkate += rand(10)
         I.blood.rightSkate += rand(10)
 
+    controlCircle: ->
+      p = Point.fromAngle(heading).scale(16)
+
+      c = self.center().add(p)
+      c.radius = 16
+
+      return c
+
+    controlPuck: (puck) ->
+      p = Point.fromAngle(heading).scale(32)
+      targetPuckPosition = self.center().add(p)
+
+      puckVelocity = puck.I.velocity
+
+      positionDelta = targetPuckPosition.subtract(puck.center().add(puckVelocity))
+
+      puck.I.velocity = puck.I.velocity.add(positionDelta)
+
     draw: (canvas) ->
       center = self.center()
       canvas.fillCircle(center.x, center.y, I.radius, I.color)
 
+      drawControlCircle(canvas)
       drawFloatingNameTag(canvas)
 
     puck: ->
@@ -107,9 +134,6 @@ Player = (I) ->
   lastRightSkatePos = null
 
   drawBloodStreaks = ->
-
-    heading = Point.direction(Point(0, 0), I.velocity)
-
     if (blood = I.blood.face) && rand(2) == 0
       I.blood.face -= 1
 
@@ -167,6 +191,8 @@ Player = (I) ->
     I.boost = I.boost.approach(0, 1)
     I.boostCooldown = I.boostCooldown.approach(0, 1)
     I.wipeout = I.wipeout.approach(0, 1)
+
+    heading = Point.direction(Point(0, 0), I.velocity)
 
     drawBloodStreaks()
 
