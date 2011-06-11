@@ -5,8 +5,8 @@ Puck = (I) ->
     radius: 4
     width: 16
     height: 8
-    x: 512
-    y: 384
+    x: 512 - 8
+    y: 384 - 4
     velocity: Point()
     zIndex: 10
 
