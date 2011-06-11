@@ -24,10 +24,12 @@ Goal = (I) ->
     if puck && withinGoal(puck.circle())
       puck.destroy()
 
+      Sound.play("crowd#{rand(3)}")
+
       engine.add
         class: "Puck"
 
-      self.trigger "scored"
+      self.trigger "score"
 
   return self
 
