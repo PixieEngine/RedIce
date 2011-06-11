@@ -32,6 +32,13 @@ window.engine = Engine
 engine.add
   class: "Puck"
 
+engine.add
+  class: "Goal"
+
+engine.add
+  class: "Goal"
+  x: WALL_LEFT + ARENA_WIDTH*19/20
+
 periodTime = 2 * 60 * 30
 intermissionTime = 30 * 30
 
