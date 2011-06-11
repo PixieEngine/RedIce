@@ -10,7 +10,7 @@ Puck = (I) ->
     velocity: Point()
     zIndex: 10
 
-  self = GameObject(I).extend
+  self = Base(I).extend
     bloody: ->
       I.blood = (I.blood + 30).clamp(0, 120)
 
