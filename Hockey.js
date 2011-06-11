@@ -17977,7 +17977,16 @@ Base = function(I) {
     puck: function() {
       return false;
     },
-    wipeout: $.noop
+    wipeout: $.noop,
+    center: function(newCenter) {
+      if (newCenter != null) {
+        I.x = newCenter.x - I.width / 2;
+        I.y = newCenter.y - I.height / 2;
+        return self;
+      } else {
+        return Point(I.x + I.width / 2, I.y + I.height / 2);
+      }
+    }
   });
   return self;
 };;
@@ -18111,7 +18120,7 @@ CONTROLLERS = [];
 parent.gameControlData = gameControlData;;
 var Player;
 Player = function(I) {
-  var PLAYER_COLORS, actionDown, drawBloodStreaks, drawFloatingNameTag, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, playerColor, rightSkatePos, self;
+  var PLAYER_COLORS, actionDown, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, playerColor, rightSkatePos, self, shootPuck;
   $.reverseMerge(I, {
     boost: 0,
     boostCooldown: 0,
@@ -18129,6 +18138,8 @@ Player = function(I) {
     height: 32,
     x: 192,
     y: 128,
+    shootCooldown: 0,
+    shootPower: 0,
     wipeout: 0,
     velocity: Point(),
     zIndex: 1
@@ -18136,6 +18147,7 @@ Player = function(I) {
   PLAYER_COLORS = ["#0246E3", "#EB070E", "#388326", "#F69508", "#563495", "#58C4F5", "#FFDE49"];
   playerColor = I.color = PLAYER_COLORS[I.controller];
   actionDown = CONTROLLERS[I.controller].actionDown;
+  maxShotPower = 20;
   I.name || (I.name = "Player " + (I.controller + 1));
   heading = 0;
   drawFloatingNameTag = function(canvas) {
@@ -18156,7 +18168,14 @@ Player = function(I) {
     canvas.fillColor("#FFF");
     return canvas.fillText(I.name, topLeft.x + padding, topLeft.y + lineHeight + padding / 2);
   };
-  self = GameObject(I).extend({
+  drawControlCircle = function(canvas) {
+    var circle, color;
+    color = Color(playerColor).lighten(0.10);
+    color.a("0.25");
+    circle = self.controlCircle();
+    return canvas.fillCircle(circle.x, circle.y, circle.radius, color);
+  };
+  self = Base(I).extend({
     bloody: function() {
       if (I.wipeout) {
         return I.blood.body += rand(5);
@@ -18165,16 +18184,29 @@ Player = function(I) {
         return I.blood.rightSkate += rand(10);
       }
     },
-    circle: function() {
-      var c;
-      c = self.center();
-      c.radius = I.radius;
+    controlCircle: function() {
+      var c, p;
+      p = Point.fromAngle(heading).scale(16);
+      c = self.center().add(p);
+      c.radius = 16;
       return c;
+    },
+    controlPuck: function(puck) {
+      var p, positionDelta, puckVelocity, targetPuckPosition;
+      if (I.shootCooldown) {
+        return;
+      }
+      p = Point.fromAngle(heading).scale(32);
+      targetPuckPosition = self.center().add(p);
+      puckVelocity = puck.I.velocity;
+      positionDelta = targetPuckPosition.subtract(puck.center().add(puckVelocity));
+      return puck.I.velocity = puck.I.velocity.add(positionDelta);
     },
     draw: function(canvas) {
       var center;
       center = self.center();
       canvas.fillCircle(center.x, center.y, I.radius, I.color);
+      drawControlCircle(canvas);
       return drawFloatingNameTag(canvas);
     },
     puck: function() {
@@ -18205,11 +18237,19 @@ Player = function(I) {
     p = Point.fromAngle(heading + Math.TAU / 4).scale(5);
     return self.center().add(p);
   };
+  shootPuck = function() {
+    var p, puck;
+    puck = engine.find("Puck").first();
+    if (Collision.circular(self.controlCircle(), puck.circle())) {
+      p = Point.fromAngle(heading).scale(I.shootPower * 2);
+      puck.I.velocity = puck.I.velocity.add(p);
+    }
+    return I.shootPower = 0;
+  };
   lastLeftSkatePos = null;
   lastRightSkatePos = null;
   drawBloodStreaks = function() {
     var blood, color, currentLeftSkatePos, currentPos, currentRightSkatePos, cycle, skateBlood, thickness;
-    heading = Point.direction(Point(0, 0), I.velocity);
     if ((blood = I.blood.face) && rand(2) === 0) {
       I.blood.face -= 1;
       color = Color(BLOOD_COLOR);
@@ -18261,10 +18301,12 @@ Player = function(I) {
     }
   };
   self.bind("step", function() {
-    var movement;
+    var chargePhase, movement;
     I.boost = I.boost.approach(0, 1);
     I.boostCooldown = I.boostCooldown.approach(0, 1);
     I.wipeout = I.wipeout.approach(0, 1);
+    I.shootCooldown = I.shootCooldown.approach(0, 1);
+    heading = Point.direction(Point(0, 0), I.velocity);
     drawBloodStreaks();
     movement = Point(0, 0);
     if (actionDown("left")) {
@@ -18280,18 +18322,29 @@ Player = function(I) {
       movement = movement.add(Point(0, 1));
     }
     movement = movement.norm();
-    if (!I.boostCooldown && actionDown("B")) {
-      I.boostCooldown += 20;
-      I.boost = 10;
-      movement = movement.scale(I.boost);
-    }
     if (I.wipeout) {
       lastLeftSkatePos = null;
       lastRightSkatePos = null;
     } else {
-      I.color = PLAYER_COLORS[I.controller];
-      I.velocity = I.velocity.add(movement).scale(0.9);
+      I.color = playerColor;
+      if (!I.shootCooldown && actionDown("A")) {
+        I.shootPower += 1;
+        chargePhase = Math.sin(Math.TAU / 4 * I.age) * 0.2 * I.shootPower / maxShotPower;
+        I.color = Color(playerColor).lighten(chargePhase);
+        if (I.shootPower === maxShotPower) {
+          I.shootCooldown = 5;
+        }
+      } else if (I.shootPower) {
+        I.shootCooldown = 4;
+        shootPuck();
+      } else if (!I.boostCooldown && actionDown("B")) {
+        I.boostCooldown += 20;
+        I.boost = 10;
+        movement = movement.scale(I.boost);
+      }
+      I.velocity = I.velocity.add(movement);
     }
+    I.velocity = I.velocity.scale(0.9);
     I.x += I.velocity.x;
     I.y += I.velocity.y;
     return I.zIndex = 1 + (I.y + I.height) / CANVAS_HEIGHT;
@@ -18312,15 +18365,9 @@ Puck = function(I) {
     velocity: Point(),
     zIndex: 10
   });
-  self = GameObject(I).extend({
+  self = Base(I).extend({
     bloody: function() {
       return I.blood = (I.blood + 30).clamp(0, 120);
-    },
-    circle: function() {
-      var c;
-      c = self.center();
-      c.radius = I.radius;
-      return c;
     },
     puck: function() {
       return true;
@@ -18574,7 +18621,11 @@ engine.bind("update", function() {
     j = i + 1;
     while (j < players.length) {
       playerB = players[j];
-      if (!playerA.I.wipeout && !playerB.I.wipeout && Collision.circular(playerA.circle(), playerB.circle())) {
+      j += 1;
+      if (playerA.I.wipeout || playerB.I.wipeout) {
+        continue;
+      }
+      if (Collision.circular(playerA.circle(), playerB.circle())) {
         delta = playerB.center().subtract(playerA.center()).norm();
         if (playerB.puck()) {
           playerB.I.velocity = delta.scale(playerA.I.velocity.length());
@@ -18595,29 +18646,40 @@ engine.bind("update", function() {
           }
         }
       }
-      j += 1;
+      if (playerB.puck() && Collision.circular(playerA.controlCircle(), playerB.circle())) {
+        playerA.controlPuck(playerB);
+      }
     }
     i += 1;
   }
   return players.each(function(player) {
-    var center, radius, splats;
+    var center, radius, splats, velocity;
     center = player.center();
     radius = player.I.radius;
+    velocity = player.I.velocity;
     if (center.x - radius < WALL_LEFT) {
-      player.I.velocity.x = -player.I.velocity.x;
-      player.I.x += player.I.velocity.x;
+      if (velocity.x < 0) {
+        velocity.x = -velocity.x;
+      }
+      player.I.x = WALL_LEFT;
     }
     if (center.x + radius > WALL_RIGHT) {
-      player.I.velocity.x = -player.I.velocity.x;
-      player.I.x += player.I.velocity.x;
+      if (velocity.x > 0) {
+        velocity.x = -velocity.x;
+      }
+      player.I.x = WALL_RIGHT - 2 * radius;
     }
     if (center.y - radius < WALL_TOP) {
-      player.I.velocity.y = -player.I.velocity.y;
-      player.I.y += player.I.velocity.y;
+      if (velocity.y < 0) {
+        velocity.y = -velocity.y;
+      }
+      player.I.y = WALL_TOP;
     }
     if (center.y + radius > WALL_BOTTOM) {
-      player.I.velocity.y = -player.I.velocity.y;
-      player.I.y += player.I.velocity.y;
+      if (velocity.y > 0) {
+        velocity.y = -velocity.y;
+      }
+      player.I.y = WALL_BOTTOM - 2 * radius;
     }
     splats = engine.find("Blood");
     return splats.each(function(splat) {
