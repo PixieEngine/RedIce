@@ -162,7 +162,11 @@ engine.bind "update", ->
     while j < players.length
       playerB = players[j]
 
-      if !playerA.I.wipeout && !playerB.I.wipeout && Collision.circular(playerA.circle(), playerB.circle())
+      j += 1
+
+      continue if playerA.I.wipeout || playerB.I.wipeout
+
+      if Collision.circular(playerA.circle(), playerB.circle())
         delta = playerB.center().subtract(playerA.center()).norm()
 
         # Knockback
@@ -187,7 +191,6 @@ engine.bind "update", ->
           else
             playerA.wipeout(pushA)
 
-      j += 1
     i += 1
 
   players.each (player) ->
