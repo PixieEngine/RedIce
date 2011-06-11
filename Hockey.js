@@ -18360,8 +18360,8 @@ Puck = function(I) {
     radius: 4,
     width: 16,
     height: 8,
-    x: 512,
-    y: 384,
+    x: 512 - 8,
+    y: 384 - 4,
     velocity: Point(),
     zIndex: 10
   });
@@ -18480,8 +18480,42 @@ Zamboni = function(I) {
   });
   return self;
 };;
+var Goal;
+Goal = function(I) {
+  var self, withinGoal;
+  I || (I = {});
+  $.reverseMerge(I, {
+    color: "green",
+    height: 32,
+    width: 12,
+    x: WALL_LEFT + ARENA_WIDTH / 20 - 12,
+    y: WALL_TOP + ARENA_HEIGHT / 2 - 16
+  });
+  self = GameObject(I);
+  withinGoal = function(circle) {
+    if (circle.x + circle.radius > I.x && circle.x - circle.radius < I.x + I.width) {
+      if (circle.y + circle.radius > I.y && circle.y - circle.radius < I.y + I.height) {
+        return true;
+      }
+    }
+    return false;
+  };
+  self.bind("step", function() {
+    var puck;
+    puck = engine.find("Puck.active").first();
+    if (puck && withinGoal(puck.circle())) {
+      puck.destroy();
+      Sound.play("crowd" + (rand(3)));
+      engine.add({
+        "class": "Puck"
+      });
+      return self.trigger("score");
+    }
+  });
+  return self;
+};;
 App.entities = {};;
-;$(function(){ var GAME_OVER, INTERMISSION, awayScore, homeScore, intermission, intermissionTime, nextPeriod, period, periodTime, scoreboard, time;
+;$(function(){ var GAME_OVER, INTERMISSION, awayScore, homeScore, intermission, intermissionTime, leftGoal, nextPeriod, period, periodTime, rightGoal, scoreboard, time;
 window.CANVAS_WIDTH = App.width;
 window.CANVAS_HEIGHT = App.height;
 window.WALL_LEFT = 64;
@@ -18494,6 +18528,15 @@ window.BLOOD_COLOR = "#BA1A19";
 window.ICE_COLOR = "rgba(192, 255, 255, 0.2)";
 window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").powerCanvas();
 bloodCanvas.strokeColor(BLOOD_COLOR);
+periodTime = 2 * 60 * 30;
+intermissionTime = 30 * 30;
+period = 0;
+time = 0;
+homeScore = 0;
+awayScore = 0;
+scoreboard = Sprite.loadByName("scoreboard");
+GAME_OVER = false;
+INTERMISSION = false;
 window.engine = Engine({
   canvas: $("canvas").powerCanvas(),
   zSort: true
@@ -18512,15 +18555,19 @@ window.engine = Engine({
 engine.add({
   "class": "Puck"
 });
-periodTime = 2 * 60 * 30;
-intermissionTime = 30 * 30;
-period = 0;
-time = 0;
-homeScore = 0;
-awayScore = 0;
-scoreboard = Sprite.loadByName("scoreboard");
-GAME_OVER = false;
-INTERMISSION = false;
+leftGoal = engine.add({
+  "class": "Goal"
+});
+leftGoal.bind("score", function() {
+  return awayScore += 1;
+});
+rightGoal = engine.add({
+  "class": "Goal",
+  x: WALL_LEFT + ARENA_WIDTH * 19 / 20
+});
+rightGoal.bind("score", function() {
+  return homeScore += 1;
+});
 intermission = function() {
   INTERMISSION = true;
   time = intermissionTime;
