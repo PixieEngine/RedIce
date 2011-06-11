@@ -15,6 +15,8 @@ Player = (I) ->
     height: 32
     x: 192
     y: 128
+    shootCooldown: 0
+    shootPower: 0
     wipeout: 0
     velocity: Point()
     zIndex: 1
@@ -31,6 +33,8 @@ Player = (I) ->
 
   playerColor = I.color = PLAYER_COLORS[I.controller]
   actionDown = CONTROLLERS[I.controller].actionDown
+
+  maxShotPower = 20
 
   I.name ||= "Player #{I.controller + 1}"
 
@@ -85,6 +89,8 @@ Player = (I) ->
       return c
 
     controlPuck: (puck) ->
+      return if I.shootCooldown
+
       p = Point.fromAngle(heading).scale(32)
       targetPuckPosition = self.center().add(p)
 
@@ -129,6 +135,15 @@ Player = (I) ->
     p = Point.fromAngle(heading + Math.TAU/4).scale(5)
 
     self.center().add(p)
+
+  shootPuck = ->
+    puck = engine.find("Puck").first()
+
+    if Collision.circular(self.controlCircle(), puck.circle())
+      p = Point.fromAngle(heading).scale(I.shootPower * 2)
+      puck.I.velocity = puck.I.velocity.add(p)
+
+    I.shootPower = 0
 
   lastLeftSkatePos = null
   lastRightSkatePos = null
@@ -191,6 +206,7 @@ Player = (I) ->
     I.boost = I.boost.approach(0, 1)
     I.boostCooldown = I.boostCooldown.approach(0, 1)
     I.wipeout = I.wipeout.approach(0, 1)
+    I.shootCooldown = I.shootCooldown.approach(0, 1)
 
     heading = Point.direction(Point(0, 0), I.velocity)
 
@@ -209,21 +225,37 @@ Player = (I) ->
 
     movement = movement.norm()
 
-    if !I.boostCooldown && actionDown "B"
-      I.boostCooldown += 20
-      I.boost = 10
-      movement = movement.scale(I.boost)
-
     if I.wipeout
       lastLeftSkatePos = null
       lastRightSkatePos = null
     else
-      I.color = PLAYER_COLORS[I.controller]
-      I.velocity = I.velocity.add(movement).scale(0.9)
+      I.color = playerColor
 
+      if !I.shootCooldown && actionDown "A"
+        I.shootPower += 1
+
+        chargePhase = Math.sin(Math.TAU/4 * I.age) * 0.2 * I.shootPower / maxShotPower
+
+        I.color = Color(playerColor).lighten(chargePhase)
+
+        if I.shootPower == maxShotPower
+          I.shootCooldown = 5
+      else if I.shootPower
+        I.shootCooldown = 4
+
+        shootPuck()
+      else if !I.boostCooldown && actionDown "B"
+        I.boostCooldown += 20
+        I.boost = 10
+        movement = movement.scale(I.boost)
+
+      I.velocity = I.velocity.add(movement)
+
+    I.velocity = I.velocity.scale(0.9)
     I.x += I.velocity.x
     I.y += I.velocity.y
 
     I.zIndex = 1 + (I.y + I.height)/CANVAS_HEIGHT
 
   self
+
