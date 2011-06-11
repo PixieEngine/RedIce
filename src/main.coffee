@@ -200,23 +200,32 @@ engine.bind "update", ->
   players.each (player) ->
     center = player.center()
     radius = player.I.radius
+    velocity = player.I.velocity
 
     # Wall Collisions
     if center.x - radius < WALL_LEFT
-      player.I.velocity.x = -player.I.velocity.x
-      player.I.x += player.I.velocity.x
+      if velocity.x < 0
+       velocity.x = -velocity.x
+
+      player.I.x = WALL_LEFT
 
     if center.x + radius > WALL_RIGHT
-      player.I.velocity.x = -player.I.velocity.x
-      player.I.x += player.I.velocity.x
+      if velocity.x > 0
+        velocity.x = -velocity.x
+
+      player.I.x = WALL_RIGHT - 2 * radius
 
     if center.y - radius < WALL_TOP
-      player.I.velocity.y = -player.I.velocity.y
-      player.I.y += player.I.velocity.y
+      if velocity.y < 0
+        velocity.y = -velocity.y
+
+      player.I.y = WALL_TOP
 
     if center.y + radius > WALL_BOTTOM
-      player.I.velocity.y = -player.I.velocity.y
-      player.I.y += player.I.velocity.y
+      if velocity.y > 0
+        velocity.y = -velocity.y
+
+      player.I.y = WALL_BOTTOM - 2 * radius
 
     # Blood Collisions
     splats = engine.find("Blood")
