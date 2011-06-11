@@ -31,7 +31,8 @@ Player = (I) ->
     "#FFDE49" # Yellow
   ]
 
-  playerColor = I.color = PLAYER_COLORS[I.controller]
+  playerColor = PLAYER_COLORS[I.controller]
+  teamColor = I.color = PLAYER_COLORS[I.controller % 2]
   actionDown = CONTROLLERS[I.controller].actionDown
 
   maxShotPower = 20
@@ -112,7 +113,7 @@ Player = (I) ->
 
     wipeout: (push) ->
       I.falls += 1
-      I.color = Color(playerColor).lighten(0.25)
+      I.color = Color(teamColor).lighten(0.25)
       I.wipeout = 25
       I.blood.face += rand(20) + rand(20) + rand(20) + I.falls * 3
 
@@ -229,14 +230,14 @@ Player = (I) ->
       lastLeftSkatePos = null
       lastRightSkatePos = null
     else
-      I.color = playerColor
+      I.color = teamColor
 
       if !I.shootCooldown && actionDown "A"
         I.shootPower += 1
 
         chargePhase = Math.sin(Math.TAU/4 * I.age) * 0.2 * I.shootPower / maxShotPower
 
-        I.color = Color(playerColor).lighten(chargePhase)
+        I.color = Color(teamColor).lighten(chargePhase)
 
         if I.shootPower == maxShotPower
           I.shootCooldown = 5
