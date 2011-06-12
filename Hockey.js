@@ -18118,9 +18118,43 @@ CONTROLLERS = [];
   return CONTROLLERS[i] = Controller(actions);
 });
 parent.gameControlData = gameControlData;;
+var Goal;
+Goal = function(I) {
+  var self, withinGoal;
+  I || (I = {});
+  $.reverseMerge(I, {
+    color: "green",
+    height: 32,
+    width: 12,
+    x: WALL_LEFT + ARENA_WIDTH / 20 - 12,
+    y: WALL_TOP + ARENA_HEIGHT / 2 - 16
+  });
+  self = GameObject(I);
+  withinGoal = function(circle) {
+    if (circle.x + circle.radius > I.x && circle.x - circle.radius < I.x + I.width) {
+      if (circle.y + circle.radius > I.y && circle.y - circle.radius < I.y + I.height) {
+        return true;
+      }
+    }
+    return false;
+  };
+  self.bind("step", function() {
+    var puck;
+    puck = engine.find("Puck.active").first();
+    if (puck && withinGoal(puck.circle())) {
+      puck.destroy();
+      Sound.play("crowd" + (rand(3)));
+      engine.add({
+        "class": "Puck"
+      });
+      return self.trigger("score");
+    }
+  });
+  return self;
+};;
 var Player;
 Player = function(I) {
-  var PLAYER_COLORS, actionDown, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, playerColor, rightSkatePos, self, shootPuck;
+  var PLAYER_COLORS, actionDown, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, playerColor, rightSkatePos, self, shootPuck, teamColor;
   $.reverseMerge(I, {
     boost: 0,
     boostCooldown: 0,
@@ -18145,7 +18179,8 @@ Player = function(I) {
     zIndex: 1
   });
   PLAYER_COLORS = ["#0246E3", "#EB070E", "#388326", "#F69508", "#563495", "#58C4F5", "#FFDE49"];
-  playerColor = I.color = PLAYER_COLORS[I.controller];
+  playerColor = PLAYER_COLORS[I.controller];
+  teamColor = I.color = PLAYER_COLORS[I.controller % 2];
   actionDown = CONTROLLERS[I.controller].actionDown;
   maxShotPower = 20;
   I.name || (I.name = "Player " + (I.controller + 1));
@@ -18214,7 +18249,7 @@ Player = function(I) {
     },
     wipeout: function(push) {
       I.falls += 1;
-      I.color = Color(playerColor).lighten(0.25);
+      I.color = Color(teamColor).lighten(0.25);
       I.wipeout = 25;
       I.blood.face += rand(20) + rand(20) + rand(20) + I.falls * 3;
       push = push.scale(15);
@@ -18326,11 +18361,11 @@ Player = function(I) {
       lastLeftSkatePos = null;
       lastRightSkatePos = null;
     } else {
-      I.color = playerColor;
+      I.color = teamColor;
       if (!I.shootCooldown && actionDown("A")) {
         I.shootPower += 1;
         chargePhase = Math.sin(Math.TAU / 4 * I.age) * 0.2 * I.shootPower / maxShotPower;
-        I.color = Color(playerColor).lighten(chargePhase);
+        I.color = Color(teamColor).lighten(chargePhase);
         if (I.shootPower === maxShotPower) {
           I.shootCooldown = 5;
         }
@@ -18434,8 +18469,13 @@ Zamboni = function(I) {
   };
   generatePath();
   self = Base(I).extend({
+    controlCircle: function() {
+      return self.circle();
+    },
+    controlPuck: $.noop,
     wipeout: function() {
-      return Sound.play("explosion");
+      Sound.play("explosion");
+      return self.destroy();
     }
   });
   heading = 0;
@@ -18477,40 +18517,6 @@ Zamboni = function(I) {
     I.x += I.velocity.x;
     I.y += I.velocity.y;
     return I.zIndex = 1 + (I.y + I.height) / CANVAS_HEIGHT;
-  });
-  return self;
-};;
-var Goal;
-Goal = function(I) {
-  var self, withinGoal;
-  I || (I = {});
-  $.reverseMerge(I, {
-    color: "green",
-    height: 32,
-    width: 12,
-    x: WALL_LEFT + ARENA_WIDTH / 20 - 12,
-    y: WALL_TOP + ARENA_HEIGHT / 2 - 16
-  });
-  self = GameObject(I);
-  withinGoal = function(circle) {
-    if (circle.x + circle.radius > I.x && circle.x - circle.radius < I.x + I.width) {
-      if (circle.y + circle.radius > I.y && circle.y - circle.radius < I.y + I.height) {
-        return true;
-      }
-    }
-    return false;
-  };
-  self.bind("step", function() {
-    var puck;
-    puck = engine.find("Puck.active").first();
-    if (puck && withinGoal(puck.circle())) {
-      puck.destroy();
-      Sound.play("crowd" + (rand(3)));
-      engine.add({
-        "class": "Puck"
-      });
-      return self.trigger("score");
-    }
   });
   return self;
 };;
@@ -18660,6 +18666,7 @@ engine.bind("update", function() {
     }
   }
   players = engine.find("Player").shuffle();
+  players = players.concat(engine.find("Zamboni"));
   players.push(engine.find("Puck").first());
   threshold = 5;
   i = 0;
@@ -18701,6 +18708,9 @@ engine.bind("update", function() {
   }
   return players.each(function(player) {
     var center, radius, splats, velocity;
+    if (player.I["class"] === "Zamboni") {
+      return;
+    }
     center = player.center();
     radius = player.I.radius;
     velocity = player.I.velocity;
