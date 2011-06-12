@@ -164,6 +164,8 @@ engine.bind "update", ->
   # Resolve Collisions
   players = engine.find("Player").shuffle()
 
+  players = players.concat engine.find("Zamboni")
+
   players.push engine.find("Puck").first()
 
   threshold = 5
@@ -212,6 +214,9 @@ engine.bind "update", ->
     i += 1
 
   players.each (player) ->
+    # Zamboni doesn't care about walls
+    return if player.I.class == "Zamboni"
+
     center = player.center()
     radius = player.I.radius
     velocity = player.I.velocity
