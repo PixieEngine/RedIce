@@ -41,9 +41,14 @@ Zamboni = (I) ->
   generatePath()
 
   self = Base(I).extend
+    controlCircle: ->
+      self.circle()
+    controlPuck: $.noop
     wipeout: ->
       #TODO Careen into boards and explode
       Sound.play "explosion"
+
+      self.destroy()
 
   heading = 0
   lastPosition = null
