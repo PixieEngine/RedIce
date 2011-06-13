@@ -18,5 +18,8 @@ Base = (I) ->
       else
         Point(I.x + I.width/2, I.y + I.height/2)
 
+  if I.velocity? && I.velocity.x? && I.velocity.y? 
+    I.velocity = Point(I.velocity.x, I.velocity.y)
+
   self
 
