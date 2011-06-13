@@ -17988,6 +17988,9 @@ Base = function(I) {
       }
     }
   });
+  if ((I.velocity != null) && (I.velocity.x != null) && (I.velocity.y != null)) {
+    I.velocity = Point(I.velocity.x, I.velocity.y);
+  }
   return self;
 };;
 var Blood;
@@ -18220,21 +18223,26 @@ Player = function(I) {
       }
     },
     controlCircle: function() {
-      var c, p;
+      var c, p, speed;
       p = Point.fromAngle(heading).scale(16);
       c = self.center().add(p);
-      c.radius = 16;
+      speed = I.velocity.magnitude();
+      c.radius = 8 + ((100 - speed * speed) / 100 * 8).clamp(-7, 8);
       return c;
     },
     controlPuck: function(puck) {
-      var p, positionDelta, puckVelocity, targetPuckPosition;
+      var p, positionDelta, puckControl, puckVelocity, targetPuckPosition;
       if (I.shootCooldown) {
         return;
       }
+      puckControl = 2;
       p = Point.fromAngle(heading).scale(32);
       targetPuckPosition = self.center().add(p);
       puckVelocity = puck.I.velocity;
       positionDelta = targetPuckPosition.subtract(puck.center().add(puckVelocity));
+      if (positionDelta.magnitude() > puckControl) {
+        positionDelta = positionDelta.norm().scale(puckControl);
+      }
       return puck.I.velocity = puck.I.velocity.add(positionDelta);
     },
     draw: function(canvas) {
@@ -18273,11 +18281,22 @@ Player = function(I) {
     return self.center().add(p);
   };
   shootPuck = function() {
-    var p, puck;
+    var circle, p, power, puck, stealPower;
     puck = engine.find("Puck").first();
-    if (Collision.circular(self.controlCircle(), puck.circle())) {
-      p = Point.fromAngle(heading).scale(I.shootPower * 2);
-      puck.I.velocity = puck.I.velocity.add(p);
+    power = I.shootPower;
+    stealPower = 10;
+    circle = self.controlCircle();
+    if (power < 5) {
+      circle.radius *= 1.5;
+      if (Collision.circular(circle, puck.circle())) {
+        p = Point.fromAngle(Random.angle()).scale(stealPower);
+        puck.I.velocity = puck.I.velocity.add(p);
+      }
+    } else {
+      if (Collision.circular(circle, puck.circle())) {
+        p = Point.fromAngle(heading).scale(power * 2);
+        puck.I.velocity = puck.I.velocity.add(p);
+      }
     }
     return I.shootPower = 0;
   };
