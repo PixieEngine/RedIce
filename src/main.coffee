@@ -209,7 +209,7 @@ engine.bind "update", ->
             playerA.wipeout(pushA)
 
       # Puck handling
-      if playerB.puck() && Collision.circular(playerA.controlCircle(), playerB.circle())
+      if playerB.I.class == "Puck" && Collision.circular(playerA.controlCircle(), playerB.circle())
         playerA.controlPuck(playerB)
 
     i += 1
