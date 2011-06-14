@@ -1,12 +1,17 @@
 Goal = (I) ->
   I ||= {}
 
+  DEBUG_DRAW = false
+  WALL_RADIUS = 2
+  WIDTH = 12
+  HEIGHT = 32
+
   $.reverseMerge I,
     color: "green"
-    height: 32
-    width: 12
-    x: WALL_LEFT + ARENA_WIDTH/20 - 12
-    y: WALL_TOP + ARENA_HEIGHT/2 - 16
+    height: HEIGHT
+    width: WIDTH
+    x: WALL_LEFT + ARENA_WIDTH/20 - WIDTH
+    y: WALL_TOP + ARENA_HEIGHT/2 - HEIGHT/2
 
   self = GameObject(I)
 
@@ -14,22 +19,22 @@ Goal = (I) ->
     walls = [{
       center: Point(I.x + I.width/2, I.y)
       halfWidth: I.width/2
-      halfHeight: 2
+      halfHeight: WALL_RADIUS
     }, {
       center: Point(I.x + I.width/2, I.y + I.height)
       halfWidth: I.width/2
-      halfHeight: 2
+      halfHeight: WALL_RADIUS
     }]
 
     if I.right
       walls.push
         center: Point(I.x + I.width, I.y + I.height/2)
-        halfWidth: 2
+        halfWidth: WALL_RADIUS
         halfHeight: I.height/2
     else
       walls.push
         center: Point(I.x, I.y + I.height/2)
-        halfWidth: 2
+        halfWidth: WALL_RADIUS
         halfHeight: I.height/2
 
     return walls
@@ -52,20 +57,22 @@ Goal = (I) ->
     return overlapX(wall, circle) && overlapY(wall, circle)
 
   self.bind "draw", (canvas) ->
-    if puck = engine.find("Puck.active").first()
-      velocity = puck.I.velocity
+    if DEBUG_DRAW
+      # Draw Puck Normals
+      if puck = engine.find("Puck.active").first()
+        velocity = puck.I.velocity
 
-      wallSegments().each (wall) ->
-        normal = puck.center().subtract(wall.center).norm()
+        wallSegments().each (wall) ->
+          normal = puck.center().subtract(wall.center).norm()
 
-        deltaCenter = wall.center.subtract(I)
+          deltaCenter = wall.center.subtract(I)
 
-        velocityProjection = velocity.dot(normal)
+          velocityProjection = velocity.dot(normal)
 
-        normal = normal.scale(16)
+          normal = normal.scale(16)
 
-        canvas.strokeColor("blue")
-        canvas.drawLine(deltaCenter.x, deltaCenter.y, deltaCenter.x + normal.x, deltaCenter.y + normal.y)
+          canvas.strokeColor("blue")
+          canvas.drawLine(deltaCenter.x, deltaCenter.y, deltaCenter.x + normal.x, deltaCenter.y + normal.y)
 
   self.bind "step", ->
     if puck = engine.find("Puck.active").first()
@@ -80,8 +87,6 @@ Goal = (I) ->
           normal = puck.center().subtract(velocity).subtract(wall.center).norm()
 
           velocityProjection = velocity.dot(normal)
-
-          debugger
 
           # Heading towards wall
           if velocityProjection < 0
