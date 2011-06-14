@@ -51,6 +51,22 @@ Goal = (I) ->
   overlap = (wall, circle) ->
     return overlapX(wall, circle) && overlapY(wall, circle)
 
+  self.bind "draw", (canvas) ->
+    if puck = engine.find("Puck.active").first()
+      velocity = puck.I.velocity
+
+      wallSegments().each (wall) ->
+        normal = puck.center().subtract(wall.center).norm()
+
+        deltaCenter = wall.center.subtract(I)
+
+        velocityProjection = velocity.dot(normal)
+
+        normal = normal.scale(16)
+
+        canvas.strokeColor("blue")
+        canvas.drawLine(deltaCenter.x, deltaCenter.y, deltaCenter.x + normal.x, deltaCenter.y + normal.y)
+
   self.bind "step", ->
     if puck = engine.find("Puck.active").first()
       circle = puck.circle()
