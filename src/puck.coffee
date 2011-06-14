@@ -35,6 +35,15 @@ Puck = (I) ->
 
     lastPosition = currentPos
 
+  self.bind "draw", (canvas) ->
+    x = I.width/2
+    y = I.height/2
+
+    scaledVelocity = I.velocity.scale(10)
+
+    canvas.strokeColor("orange")
+    canvas.drawLine(x, y, x + scaledVelocity.x, y + .y)
+
   self.bind "step", ->
     drawBloodStreaks()
 
