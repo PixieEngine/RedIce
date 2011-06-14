@@ -1,4 +1,6 @@
 Puck = (I) ->
+  DEBUG_DRAW = false
+
   $.reverseMerge I,
     blood: 0
     color: "black"
@@ -36,13 +38,15 @@ Puck = (I) ->
     lastPosition = currentPos
 
   self.bind "draw", (canvas) ->
-    x = I.width/2
-    y = I.height/2
+    if DEBUG_DRAW
+      # Draw velocity vector
+      x = I.width/2
+      y = I.height/2
 
-    scaledVelocity = I.velocity.scale(10)
+      scaledVelocity = I.velocity.scale(10)
 
-    canvas.strokeColor("orange")
-    canvas.drawLine(x, y, x + scaledVelocity.x, y + scaledVelocity.y)
+      canvas.strokeColor("orange")
+      canvas.drawLine(x, y, x + scaledVelocity.x, y + scaledVelocity.y)
 
   self.bind "step", ->
     drawBloodStreaks()
