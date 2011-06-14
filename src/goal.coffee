@@ -14,22 +14,22 @@ Goal = (I) ->
     walls = [{
       center: Point(I.x + I.width/2, I.y)
       halfWidth: I.width/2
-      halfHeight: 0
+      halfHeight: 2
     }, {
       center: Point(I.x + I.width/2, I.y + I.height)
       halfWidth: I.width/2
-      halfHeight: 0
+      halfHeight: 2
     }]
 
     if I.right
       walls.push
         center: Point(I.x + I.width, I.y + I.height/2)
-        halfWidth: 0
+        halfWidth: 1
         halfHeight: I.height/2
     else
       walls.push
         center: Point(I.x, I.y + I.height/2)
-        halfWidth: 0
+        halfWidth: 1
         halfHeight: I.height/2
 
     return walls
