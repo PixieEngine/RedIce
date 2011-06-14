@@ -2,6 +2,7 @@ Zamboni = (I) ->
   $.reverseMerge I,
     blood: 0
     color: "yellow"
+    strength: 5
     radius: 16
     width: 96
     height: 48
