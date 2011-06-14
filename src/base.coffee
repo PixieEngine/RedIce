@@ -8,7 +8,15 @@ Base = (I) ->
   self = GameObject(I).extend
     bloody: $.noop
 
+    puck: ->
+      I.class == "Puck"
+
     wipeout: $.noop
+
+    # The "Power Rating" for determining who gets wrecked during collisions
+    # Fundamentally: I.velocity.dot(normal)
+    collisionPower: (normal) ->
+      I.velocity.dot(normal)
 
     center: (newCenter) ->
       if newCenter?
