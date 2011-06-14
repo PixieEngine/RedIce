@@ -9,7 +9,7 @@ Puck = (I) ->
     height: 8
     x: 512 - 8
     y: 384 - 4
-    velocity: Point()
+    friction: 0.05
     zIndex: 10
 
   self = Base(I).extend
@@ -50,8 +50,6 @@ Puck = (I) ->
 
   self.bind "step", ->
     drawBloodStreaks()
-
-    I.velocity = I.velocity.scale(0.95)
 
   self
 
