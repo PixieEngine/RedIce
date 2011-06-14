@@ -10,6 +10,17 @@ Goal = (I) ->
 
   self = GameObject(I)
 
+  wallSegments = ->
+    [{
+      center: Point(I.x + I.width/2, I.y)
+      halfWidth: I.width/2
+      halfHeight: 0
+    }, {
+      center: Point(I.x + I.width/2, I.y + I.height)
+      halfWidth: I.width/2
+      halfHeight: 0
+    }]
+
   withinGoal = (circle) ->
 
     if circle.x + circle.radius > I.x && circle.x - circle.radius < I.x + I.width
@@ -19,17 +30,19 @@ Goal = (I) ->
     return false
 
   self.bind "step", ->
-    puck = engine.find("Puck.active").first()
+    if puck = engine.find("Puck.active").first()
 
-    if puck && withinGoal(puck.circle())
-      puck.destroy()
+      # Goal wall puck collisions
 
-      Sound.play("crowd#{rand(3)}")
+      if withinGoal(puck.circle())
+        puck.destroy()
 
-      engine.add
-        class: "Puck"
+        Sound.play("crowd#{rand(3)}")
 
-      self.trigger "score"
+        engine.add
+          class: "Puck"
+
+        self.trigger "score"
 
   return self
 
