@@ -24,12 +24,12 @@ Goal = (I) ->
     if I.right
       walls.push
         center: Point(I.x + I.width, I.y + I.height/2)
-        halfWidth: 1
+        halfWidth: 2
         halfHeight: I.height/2
     else
       walls.push
         center: Point(I.x, I.y + I.height/2)
-        halfWidth: 1
+        halfWidth: 2
         halfHeight: I.height/2
 
     return walls
@@ -71,6 +71,7 @@ Goal = (I) ->
     if puck = engine.find("Puck.active").first()
       circle = puck.circle()
       velocity = puck.I.velocity
+      netReflection = velocity
 
       # Goal wall puck collisions
       collided = false
@@ -85,14 +86,14 @@ Goal = (I) ->
           # Heading towards wall
           if velocityProjection < 0
             # Reflection Vector
-            velocity = velocity.subtract(normal.scale(2 * velocityProjection))
+            netReflection = netReflection.subtract(normal.scale(2 * velocityProjection))
 
             collided = true
 
       if collided
-        puck.I.velocity = velocity
-        puck.I.x += velocity.x
-        puck.I.y += velocity.y
+        puck.I.velocity = netReflection
+        puck.I.x += puck.I.velocity.x
+        puck.I.y += puck.I.velocity.y
 
         # Refresh puck circle
         circle = puck.circle()
