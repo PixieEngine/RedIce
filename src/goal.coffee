@@ -47,11 +47,6 @@ Goal = (I) ->
       # Goal wall puck collisions
       collided = false
       wallSegments().each (wall) ->
-        if overlapY(wall, circle)
-          I.color = "green"
-        else
-          I.color = "orange"
-
         if overlap(wall, circle)
           normal = circle.center().subtract(wall.center).norm()
 
