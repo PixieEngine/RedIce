@@ -94,6 +94,9 @@ Goal = (I) ->
         puck.I.x += velocity.x
         puck.I.y += velocity.y
 
+        # Refresh puck circle
+        circle = puck.circle()
+
       if withinGoal(circle)
         puck.destroy()
 
