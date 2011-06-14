@@ -4,6 +4,7 @@ Puck = (I) ->
   $.reverseMerge I,
     blood: 0
     color: "black"
+    strength: 0.5
     radius: 4
     width: 16
     height: 8
