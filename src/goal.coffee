@@ -33,7 +33,6 @@ Goal = (I) ->
     (circle.x - wall.center.x).abs() < wall.halfWidth + circle.radius 
 
   overlapY = (wall, circle) ->
-    debugger
     (circle.y - wall.center.y).abs() < wall.halfHeight + circle.radius
 
   overlap = (wall, circle) ->
@@ -48,9 +47,11 @@ Goal = (I) ->
       collided = false
       wallSegments().each (wall) ->
         if overlap(wall, circle)
-          normal = circle.center().subtract(wall.center).norm()
+          normal = puck.center().subtract(wall.center).norm()
 
           velocityProjection = velocity.dot(normal)
+
+          debugger
 
           # Heading towards wall
           if velocityProjection < 0
