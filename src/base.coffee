@@ -1,6 +1,10 @@
 Base = (I) ->
   I ||= {}
 
+  $.reverseMerge I,
+    friction: 0
+    velocity: Point(0, 0)
+
   self = GameObject(I).extend
     bloody: $.noop
 
@@ -22,6 +26,8 @@ Base = (I) ->
     I.velocity = Point(I.velocity.x, I.velocity.y)
 
   self.bind "update", ->
+    I.velocity = I.velocity.scale(1 - I.friction)
+
     I.x += I.velocity.x
     I.y += I.velocity.y
 
