@@ -94,10 +94,5 @@ Zamboni = (I) ->
 
     cleanIce() unless I.age < 1
 
-    I.x += I.velocity.x
-    I.y += I.velocity.y
-
-    I.zIndex = 1 + (I.y + I.height)/CANVAS_HEIGHT
-
   self
 
