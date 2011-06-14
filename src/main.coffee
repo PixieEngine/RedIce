@@ -187,29 +187,29 @@ engine.bind "update", ->
         delta = playerB.center().subtract(playerA.center()).norm()
 
         # Knockback
-        if playerB.puck()
-          playerB.I.velocity = delta.scale(playerA.I.velocity.length())
-        else
-          pushA = delta.scale(-2)
-          pushB = delta.scale(2)
+        #if playerB.puck()
+        #  playerB.I.velocity = delta.scale(playerA.I.velocity.length())
+        #else
+        pushA = delta.scale(-2)
+        pushB = delta.scale(2)
 
-          playerA.I.velocity = playerA.I.velocity.add(pushA) 
-          playerB.I.velocity = playerB.I.velocity.add(pushB)
+        playerA.I.velocity = playerA.I.velocity.add(pushA) 
+        playerB.I.velocity = playerB.I.velocity.add(pushB)
 
         # Checking
-        projA = playerA.I.velocity.dot(delta)
-        projB = -playerB.I.velocity.dot(delta)
+        powA = playerA.collisionPower(delta)
+        powB = -playerB.collisionPower(delta)
 
-        max = Math.max(projA, projB)
+        max = Math.max(powA, powB)
 
         if max > threshold
-          if projA == max
+          if powA == max
             playerB.wipeout(pushB)
           else
             playerA.wipeout(pushA)
 
       # Puck handling
-      if playerB.I.class == "Puck" && Collision.circular(playerA.controlCircle(), playerB.circle())
+      if playerB.puck() && Collision.circular(playerA.controlCircle(), playerB.circle())
         playerA.controlPuck(playerB)
 
     i += 1
