@@ -18123,16 +18123,48 @@ CONTROLLERS = [];
 parent.gameControlData = gameControlData;;
 var Goal;
 Goal = function(I) {
-  var self, withinGoal;
+  var DEBUG_DRAW, HEIGHT, WALL_RADIUS, WIDTH, overlap, overlapX, overlapY, self, wallSegments, withinGoal;
   I || (I = {});
+  DEBUG_DRAW = false;
+  WALL_RADIUS = 2;
+  WIDTH = 12;
+  HEIGHT = 32;
   $.reverseMerge(I, {
     color: "green",
-    height: 32,
-    width: 12,
-    x: WALL_LEFT + ARENA_WIDTH / 20 - 12,
-    y: WALL_TOP + ARENA_HEIGHT / 2 - 16
+    height: HEIGHT,
+    width: WIDTH,
+    x: WALL_LEFT + ARENA_WIDTH / 20 - WIDTH,
+    y: WALL_TOP + ARENA_HEIGHT / 2 - HEIGHT / 2
   });
   self = GameObject(I);
+  wallSegments = function() {
+    var walls;
+    walls = [
+      {
+        center: Point(I.x + I.width / 2, I.y),
+        halfWidth: I.width / 2,
+        halfHeight: WALL_RADIUS
+      }, {
+        center: Point(I.x + I.width / 2, I.y + I.height),
+        halfWidth: I.width / 2,
+        halfHeight: WALL_RADIUS
+      }
+    ];
+    if (I.right) {
+      walls.push({
+        center: Point(I.x + I.width, I.y + I.height / 2),
+        halfWidth: WALL_RADIUS,
+        halfHeight: I.height / 2
+      });
+    } else {
+      walls.push({
+        center: Point(I.x, I.y + I.height / 2),
+        halfWidth: WALL_RADIUS,
+        halfHeight: I.height / 2
+      });
+    }
+    return walls;
+  };
   withinGoal = function(circle) {
     if (circle.x + circle.radius > I.x && circle.x - circle.radius < I.x + I.width) {
       if (circle.y + circle.radius > I.y && circle.y - circle.radius < I.y + I.height) {
@@ -18141,16 +18173,64 @@ Goal = function(I) {
     }
     return false;
   };
+  overlapX = function(wall, circle) {
+    return (circle.x - wall.center.x).abs() < wall.halfWidth + circle.radius;
+  };
+  overlapY = function(wall, circle) {
+    return (circle.y - wall.center.y).abs() < wall.halfHeight + circle.radius;
+  };
+  overlap = function(wall, circle) {
+    return overlapX(wall, circle) && overlapY(wall, circle);
+  };
+  self.bind("draw", function(canvas) {
+    var puck, velocity;
+    if (DEBUG_DRAW) {
+      if (puck = engine.find("Puck.active").first()) {
+        velocity = puck.I.velocity;
+        return wallSegments().each(function(wall) {
+          var deltaCenter, normal, velocityProjection;
+          normal = puck.center().subtract(wall.center).norm();
+          deltaCenter = wall.center.subtract(I);
+          velocityProjection = velocity.dot(normal);
+          normal = normal.scale(16);
+          canvas.strokeColor("blue");
+          return canvas.drawLine(deltaCenter.x, deltaCenter.y, deltaCenter.x + normal.x, deltaCenter.y + normal.y);
+        });
+      }
+    }
+  });
   self.bind("step", function() {
-    var puck;
-    puck = engine.find("Puck.active").first();
-    if (puck && withinGoal(puck.circle())) {
-      puck.destroy();
-      Sound.play("crowd" + (rand(3)));
-      engine.add({
-        "class": "Puck"
+    var circle, collided, netReflection, puck, velocity;
+    if (puck = engine.find("Puck.active").first()) {
+      circle = puck.circle();
+      velocity = puck.I.velocity;
+      netReflection = velocity;
+      collided = false;
+      wallSegments().each(function(wall) {
+        var normal, velocityProjection;
+        if (overlap(wall, circle)) {
+          normal = puck.center().subtract(velocity).subtract(wall.center).norm();
+          velocityProjection = velocity.dot(normal);
+          if (velocityProjection < 0) {
+            netReflection = netReflection.subtract(normal.scale(2 * velocityProjection));
+            return collided = true;
+          }
+        }
       });
-      return self.trigger("score");
+      if (collided) {
+        puck.I.velocity = netReflection;
+        puck.I.x += puck.I.velocity.x;
+        puck.I.y += puck.I.velocity.y;
+        circle = puck.circle();
+      }
+      if (withinGoal(circle)) {
+        puck.destroy();
+        Sound.play("crowd" + (rand(3)));
+        engine.add({
+          "class": "Puck"
+        });
+        return self.trigger("score");
+      }
     }
   });
   return self;
@@ -18440,6 +18520,14 @@ Puck = function(I) {
     }
     return lastPosition = currentPos;
   };
+  self.bind("draw", function(canvas) {
+    var scaledVelocity, x, y;
+    x = I.width / 2;
+    y = I.height / 2;
+    scaledVelocity = I.velocity.scale(10);
+    canvas.strokeColor("orange");
+    return canvas.drawLine(x, y, x + scaledVelocity.x, y + scaledVelocity.y);
+  });
   self.bind("step", function() {
     drawBloodStreaks();
     I.velocity = I.velocity.scale(0.95);
@@ -18588,6 +18676,7 @@ leftGoal.bind("score", function() {
 });
 rightGoal = engine.add({
   "class": "Goal",
+  right: true,
   x: WALL_LEFT + ARENA_WIDTH * 19 / 20
 });
 rightGoal.bind("score", function() {
@@ -18726,36 +18815,44 @@ engine.bind("update", function() {
     i += 1;
   }
   return players.each(function(player) {
-    var center, radius, splats, velocity;
+    var center, collided, radius, splats, velocity, walls;
     if (player.I["class"] === "Zamboni") {
       return;
     }
     center = player.center();
     radius = player.I.radius;
     velocity = player.I.velocity;
-    if (center.x - radius < WALL_LEFT) {
-      if (velocity.x < 0) {
-        velocity.x = -velocity.x;
+    walls = [
+      {
+        normal: Point(1, 0),
+        position: WALL_LEFT
+      }, {
+        normal: Point(-1, 0),
+        position: -WALL_RIGHT
+      }, {
+        normal: Point(0, 1),
+        position: WALL_TOP
+      }, {
+        normal: Point(0, -1),
+        position: -WALL_BOTTOM
       }
-      player.I.x = WALL_LEFT;
-    }
-    if (center.x + radius > WALL_RIGHT) {
-      if (velocity.x > 0) {
-        velocity.x = -velocity.x;
+    ];
+    collided = false;
+    walls.each(function(wall) {
+      var normal, position, velocityProjection;
+      position = wall.position, normal = wall.normal;
+      if (center.dot(normal) < radius + position) {
+        velocityProjection = velocity.dot(normal);
+        if (velocityProjection < 0) {
+          velocity = velocity.subtract(normal.scale(2 * velocityProjection));
+          return collided = true;
+        }
       }
-      player.I.x = WALL_RIGHT - 2 * radius;
-    }
-    if (center.y - radius < WALL_TOP) {
-      if (velocity.y < 0) {
-        velocity.y = -velocity.y;
-      }
-      player.I.y = WALL_TOP;
-    }
-    if (center.y + radius > WALL_BOTTOM) {
-      if (velocity.y > 0) {
-        velocity.y = -velocity.y;
-      }
-      player.I.y = WALL_BOTTOM - 2 * radius;
+    });
+    if (collided) {
+      player.I.velocity = velocity;
+      player.I.x += velocity.x;
+      player.I.y += velocity.y;
     }
     splats = engine.find("Blood");
     return splats.each(function(splat) {
