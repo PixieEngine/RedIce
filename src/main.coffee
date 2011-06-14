@@ -221,30 +221,40 @@ engine.bind "update", ->
     radius = player.I.radius
     velocity = player.I.velocity
 
+    walls = [{
+        normal: Point(1, 0)
+        position: -WALL_LEFT
+      }, {
+        normal: Point(-1, 0)
+        position: WALL_RIGHT
+      }, {
+        normal: Point(0, 1)
+        position: -WALL_TOP
+      }, {
+        normal: Point(0, -1)
+        position: WALL_BOTTOM
+    }]
+
     # Wall Collisions
-    if center.x - radius < WALL_LEFT
-      if velocity.x < 0
-       velocity.x = -velocity.x
+    collided = false
+    walls.each (wall) ->
+      {position, normal} = wall
 
-      player.I.x = WALL_LEFT
+      # Penetration Vector
+      if center.dot(normal) + position < radius
+        velocityProjection = velocity.dot(normal)
+        # Heading towards wall
+        if velocityProjection < 0
+          # Reflection Vector
+          velocity = velocity.subtract(normal.scale(2 * velocityProjection))
 
-    if center.x + radius > WALL_RIGHT
-      if velocity.x > 0
-        velocity.x = -velocity.x
+          collided = true
 
-      player.I.x = WALL_RIGHT - 2 * radius
-
-    if center.y - radius < WALL_TOP
-      if velocity.y < 0
-        velocity.y = -velocity.y
-
-      player.I.y = WALL_TOP
-
-    if center.y + radius > WALL_BOTTOM
-      if velocity.y > 0
-        velocity.y = -velocity.y
-
-      player.I.y = WALL_BOTTOM - 2 * radius
+    if collided
+      # Adjust velocity and move to (hopefully) non-penetrating position
+      player.I.velocity = velocity
+      player.I.x += velocity.x
+      player.I.y += velocity.y
 
     # Blood Collisions
     splats = engine.find("Blood")
