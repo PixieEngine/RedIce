@@ -52,6 +52,7 @@ leftGoal.bind "score", ->
 
 rightGoal = engine.add
   class: "Goal"
+  right: true
   x: WALL_LEFT + ARENA_WIDTH*19/20
 
 rightGoal.bind "score", ->
