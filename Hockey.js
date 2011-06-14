@@ -18487,7 +18487,8 @@ Player = function(I) {
 };;
 var Puck;
 Puck = function(I) {
-  var drawBloodStreaks, heading, lastPosition, self;
+  var DEBUG_DRAW, drawBloodStreaks, heading, lastPosition, self;
+  DEBUG_DRAW = false;
   $.reverseMerge(I, {
     blood: 0,
     color: "black",
@@ -18522,11 +18523,13 @@ Puck = function(I) {
   };
   self.bind("draw", function(canvas) {
     var scaledVelocity, x, y;
-    x = I.width / 2;
-    y = I.height / 2;
-    scaledVelocity = I.velocity.scale(10);
-    canvas.strokeColor("orange");
-    return canvas.drawLine(x, y, x + scaledVelocity.x, y + scaledVelocity.y);
+    if (DEBUG_DRAW) {
+      x = I.width / 2;
+      y = I.height / 2;
+      scaledVelocity = I.velocity.scale(10);
+      canvas.strokeColor("orange");
+      return canvas.drawLine(x, y, x + scaledVelocity.x, y + scaledVelocity.y);
+    }
   });
   self.bind("step", function() {
     drawBloodStreaks();
