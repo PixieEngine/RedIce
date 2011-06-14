@@ -8,9 +8,6 @@ Base = (I) ->
   self = GameObject(I).extend
     bloody: $.noop
 
-    puck: ->
-      false
-
     wipeout: $.noop
 
     center: (newCenter) ->
@@ -22,7 +19,7 @@ Base = (I) ->
       else
         Point(I.x + I.width/2, I.y + I.height/2)
 
-  if I.velocity? && I.velocity.x? && I.velocity.y? 
+  if I.velocity? && I.velocity.x? && I.velocity.y?
     I.velocity = Point(I.velocity.x, I.velocity.y)
 
   self.bind "update", ->
