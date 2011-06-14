@@ -29,11 +29,15 @@ Goal = (I) ->
 
     return false
 
-  overlap = (wall, circle) ->
-    overlapX = (circle.x - wall.center.x).abs() < wall.halfWidth + circle.radius
-    overlapY = (circle.y - wall.center.y).abs() < wall.halfHeight + circle.radius
+  overlapX = (wall, circle) ->
+    (circle.x - wall.center.x).abs() < wall.halfWidth + circle.radius 
 
-    return overlapX && overlapY
+  overlapY = (wall, circle) ->
+    debugger
+    (circle.y - wall.center.y).abs() < wall.halfHeight + circle.radius
+
+  overlap = (wall, circle) ->
+    return overlapX(wall, circle) && overlapY(wall, circle)
 
   self.bind "step", ->
     if puck = engine.find("Puck.active").first()
@@ -42,11 +46,19 @@ Goal = (I) ->
 
       # Goal wall puck collisions
       collided = false
-      wallSegments().each (wall, circle) ->
+      wallSegments().each (wall) ->
+        if overlapY(wall, circle)
+          I.color = "green"
+        else
+          I.color = "orange"
+
         if overlap(wall, circle)
           normal = circle.center().subtract(wall.center).norm()
 
           velocityProjection = velocity.dot(normal)
+
+          debugger
+
           # Heading towards wall
           if velocityProjection < 0
             # Reflection Vector
