@@ -21,5 +21,11 @@ Base = (I) ->
   if I.velocity? && I.velocity.x? && I.velocity.y? 
     I.velocity = Point(I.velocity.x, I.velocity.y)
 
+  self.bind "update", ->
+    I.x += I.velocity.x
+    I.y += I.velocity.y
+
+    I.zIndex = 1 + (I.y + I.height)/CANVAS_HEIGHT
+
   self
 
