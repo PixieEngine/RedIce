@@ -16,9 +16,6 @@ Puck = (I) ->
     bloody: ->
       I.blood = (I.blood + 30).clamp(0, 120)
 
-    puck: ->
-      true
-
     wipeout: $.noop
 
   heading = 0
