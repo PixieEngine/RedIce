@@ -87,7 +87,7 @@ Player = (I) ->
 
       c = self.center().add(p)
       speed = I.velocity.magnitude()
-      c.radius = 8 + ((100 - speed * speed)/100 * 8).clamp(-7, 8)
+      c.radius = 12 + ((100 - speed * speed)/100 * 8).clamp(-7, 8)
 
       return c
 
