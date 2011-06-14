@@ -76,7 +76,7 @@ Goal = (I) ->
       collided = false
       wallSegments().each (wall) ->
         if overlap(wall, circle)
-          normal = puck.center().subtract(wall.center).norm()
+          normal = puck.center().subtract(velocity).subtract(wall.center).norm()
 
           velocityProjection = velocity.dot(normal)
 
