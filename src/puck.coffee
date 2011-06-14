@@ -42,7 +42,7 @@ Puck = (I) ->
     scaledVelocity = I.velocity.scale(10)
 
     canvas.strokeColor("orange")
-    canvas.drawLine(x, y, x + scaledVelocity.x, y + y)
+    canvas.drawLine(x, y, x + scaledVelocity.x, y + scaledVelocity.y)
 
   self.bind "step", ->
     drawBloodStreaks()
