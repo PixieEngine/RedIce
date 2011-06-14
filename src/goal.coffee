@@ -29,12 +29,37 @@ Goal = (I) ->
 
     return false
 
+  overlap = (wall, circle) ->
+    overlapX = (circle.x - wall.center.x).abs() < wall.halfWidth + circle.radius
+    overlapY = (circle.y - wall.center.y).abs() < wall.halfHeight + circle.radius
+
+    return overlapX && overlapY
+
   self.bind "step", ->
     if puck = engine.find("Puck.active").first()
+      circle = puck.circle()
+      velocity = puck.I.velocity
 
       # Goal wall puck collisions
+      collided = false
+      wallSegments().each (wall, circle) ->
+        if overlap(wall, circle)
+          normal = circle.center().subtract(wall.center).norm()
 
-      if withinGoal(puck.circle())
+          velocityProjection = velocity.dot(normal)
+          # Heading towards wall
+          if velocityProjection < 0
+            # Reflection Vector
+            velocity = velocity.subtract(normal.scale(2 * velocityProjection))
+
+            collided = true
+
+      if collided
+        puck.I.velocity = velocity
+        puck.I.x += velocity.x
+        puck.I.y += velocity.y
+
+      if withinGoal(circle)
         puck.destroy()
 
         Sound.play("crowd#{rand(3)}")
