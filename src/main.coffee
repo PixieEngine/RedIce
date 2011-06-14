@@ -223,16 +223,16 @@ engine.bind "update", ->
 
     walls = [{
         normal: Point(1, 0)
-        position: -WALL_LEFT
+        position: WALL_LEFT
       }, {
         normal: Point(-1, 0)
-        position: WALL_RIGHT
+        position: -WALL_RIGHT
       }, {
         normal: Point(0, 1)
-        position: -WALL_TOP
+        position: WALL_TOP
       }, {
         normal: Point(0, -1)
-        position: WALL_BOTTOM
+        position: -WALL_BOTTOM
     }]
 
     # Wall Collisions
@@ -241,7 +241,7 @@ engine.bind "update", ->
       {position, normal} = wall
 
       # Penetration Vector
-      if center.dot(normal) + position < radius
+      if center.dot(normal) < radius + position
         velocityProjection = velocity.dot(normal)
         # Heading towards wall
         if velocityProjection < 0
