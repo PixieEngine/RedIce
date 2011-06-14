@@ -5,6 +5,7 @@ Player = (I) ->
     collisionMargin: Point(2, 2)
     controller: 0
     falls: 0
+    friction: 0.1
     blood:
       face: 0
       body: 0
@@ -273,8 +274,6 @@ Player = (I) ->
         movement = movement.scale(I.boost)
 
       I.velocity = I.velocity.add(movement)
-
-    I.velocity = I.velocity.scale(0.9)
 
   self
 
