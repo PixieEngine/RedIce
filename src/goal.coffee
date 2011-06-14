@@ -52,8 +52,6 @@ Goal = (I) ->
 
           velocityProjection = velocity.dot(normal)
 
-          debugger
-
           # Heading towards wall
           if velocityProjection < 0
             # Reflection Vector
