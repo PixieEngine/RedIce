@@ -79,8 +79,8 @@ Player = (I) ->
       if I.wipeout
         I.blood.body += rand(5)
       else
-        I.blood.leftSkate += rand(10)
-        I.blood.rightSkate += rand(10)
+        I.blood.leftSkate = (I.blood.leftSkate + rand(10)).clamp(0, 60)
+        I.blood.rightSkate = (I.blood.rightSkate + rand(10)).clamp(0, 60)
 
     controlCircle: ->
       p = Point.fromAngle(heading).scale(16)
