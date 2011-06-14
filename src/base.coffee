@@ -2,7 +2,9 @@ Base = (I) ->
   I ||= {}
 
   $.reverseMerge I,
+    fortitude: 1
     friction: 0
+    strength: 1
     velocity: Point(0, 0)
 
   self = GameObject(I).extend
@@ -16,7 +18,7 @@ Base = (I) ->
     # The "Power Rating" for determining who gets wrecked during collisions
     # Fundamentally: I.velocity.dot(normal)
     collisionPower: (normal) ->
-      I.velocity.dot(normal)
+      (I.velocity.dot(normal) + I.fortitude) * I.strength
 
     center: (newCenter) ->
       if newCenter?
