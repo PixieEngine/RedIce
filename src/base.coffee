@@ -5,6 +5,7 @@ Base = (I) ->
     fortitude: 1
     friction: 0
     strength: 1
+    mass: 1
     velocity: Point(0, 0)
 
   self = GameObject(I).extend
@@ -39,6 +40,8 @@ Base = (I) ->
     I.y += I.velocity.y
 
     I.zIndex = 1 + (I.y + I.height)/CANVAS_HEIGHT
+
+  self.attrReader "mass"
 
   self
 
