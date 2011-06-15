@@ -261,6 +261,8 @@ engine.bind "update", ->
       player.I.x += velocity.x
       player.I.y += velocity.y
 
+      Sound.play "thud0" if player.puck()
+
     # Blood Collisions
     splats = engine.find("Blood")
 
