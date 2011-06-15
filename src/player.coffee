@@ -122,7 +122,7 @@ Player = (I) ->
       I.falls += 1
       I.color = Color(teamColor).lighten(0.25)
       I.wipeout = 25
-      I.blood.face += rand(20) + rand(20) + rand(20) + I.falls * 3
+      I.blood.face += rand(20) + rand(20) + rand(20) + I.falls
 
       push = push.norm().scale(30)
 
@@ -174,15 +174,14 @@ Player = (I) ->
 
   drawBloodStreaks = ->
     if (blood = I.blood.face) && rand(2) == 0
-      I.blood.face -= 1
-
       color = Color(BLOOD_COLOR)
 
       currentPos = self.center()
       (rand(I.blood.face)/3).floor().clamp(1, 8).times ->
+        I.blood.face -= 1
         p = currentPos.add(Point.fromAngle(Random.angle()).scale(rand()*rand()*16))
 
-        bloodCanvas.fillCircle(p.x, p.y, (rand(blood/4)*rand()*rand()).clamp(0, 4), color)
+        bloodCanvas.fillCircle(p.x, p.y, (rand(blood/4)*rand()*rand()).clamp(0, 3), color)
 
     if I.wipeout # Body blood streaks
 
