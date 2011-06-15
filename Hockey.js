@@ -18239,6 +18239,7 @@ Goal = function(I) {
         puck.I.x += puck.I.velocity.x;
         puck.I.y += puck.I.velocity.y;
         circle = puck.circle();
+        Sound.play("clink0");
       }
       if (withinGoal(circle)) {
         puck.destroy();
@@ -18357,7 +18358,7 @@ Player = function(I) {
       I.falls += 1;
       I.color = Color(teamColor).lighten(0.25);
       I.wipeout = 25;
-      I.blood.face += rand(20) + rand(20) + rand(20) + I.falls * 3;
+      I.blood.face += rand(20) + rand(20) + rand(20) + I.falls;
       push = push.norm().scale(30);
       Sound.play("hit" + (rand(4)));
       Sound.play("crowd" + (rand(3)));
@@ -18403,13 +18404,13 @@ Player = function(I) {
   drawBloodStreaks = function() {
     var blood, color, currentLeftSkatePos, currentPos, currentRightSkatePos, cycle, skateBlood, thickness;
     if ((blood = I.blood.face) && rand(2) === 0) {
-      I.blood.face -= 1;
       color = Color(BLOOD_COLOR);
       currentPos = self.center();
       (rand(I.blood.face) / 3).floor().clamp(1, 8).times(function() {
         var p;
+        I.blood.face -= 1;
         p = currentPos.add(Point.fromAngle(Random.angle()).scale(rand() * rand() * 16));
-        return bloodCanvas.fillCircle(p.x, p.y, (rand(blood / 4) * rand() * rand()).clamp(0, 4), color);
+        return bloodCanvas.fillCircle(p.x, p.y, (rand(blood / 4) * rand() * rand()).clamp(0, 3), color);
       });
     }
     if (I.wipeout) {
@@ -18638,7 +18639,7 @@ Zamboni = function(I) {
   return self;
 };;
 App.entities = {};;
-;$(function(){ var GAME_OVER, INTERMISSION, awayScore, homeScore, intermission, intermissionTime, leftGoal, nextPeriod, period, periodTime, rightGoal, scoreboard, time;
+;$(function(){ var GAME_OVER, INTERMISSION, awayScore, bgMusic, homeScore, intermission, intermissionTime, leftGoal, nextPeriod, period, periodTime, rightGoal, scoreboard, time;
 window.CANVAS_WIDTH = App.width;
 window.CANVAS_HEIGHT = App.height;
 window.WALL_LEFT = 64;
@@ -18863,6 +18864,9 @@ engine.bind("update", function() {
       player.I.velocity = velocity;
       player.I.x += velocity.x;
       player.I.y += velocity.y;
+      if (player.puck()) {
+        Sound.play("thud0");
+      }
     }
     splats = engine.find("Blood");
     return splats.each(function(splat) {
@@ -18872,4 +18876,10 @@ engine.bind("update", function() {
     });
   });
 });
-engine.start(); });
+engine.start();
+bgMusic = $("<audio />", {
+  src: BASE_URL + "/sounds/music1.mp3",
+  loop: "loop"
+}).appendTo('body').get(0);
+bgMusic.volume = 0.40;
+bgMusic.play(); });
