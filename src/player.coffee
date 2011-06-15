@@ -124,7 +124,7 @@ Player = (I) ->
       I.wipeout = 25
       I.blood.face += rand(20) + rand(20) + rand(20) + I.falls * 3
 
-      push = push.scale(15)
+      push = push.norm().scale(30)
 
       Sound.play("hit#{rand(4)}")
       Sound.play("crowd#{rand(3)}")
