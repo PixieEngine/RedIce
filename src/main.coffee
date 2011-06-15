@@ -185,20 +185,28 @@ engine.bind "update", ->
 
       if Collision.circular(playerA.circle(), playerB.circle())
         delta = playerB.center().subtract(playerA.center()).norm()
+        # penetrationDepth = playerB.I.radius + playerA.I.radius - Point.distance(playerA.center(), playerB.center())
+
+        # Checking
+        powA = playerA.collisionPower(delta)
+        powB = -playerB.collisionPower(delta)
 
         # Knockback
         #if playerB.puck()
         #  playerB.I.velocity = delta.scale(playerA.I.velocity.length())
         #else
-        pushA = delta.scale(-2)
-        pushB = delta.scale(2)
+        relativeVelocity = playerA.I.velocity.subtract(playerB.I.velocity)
 
-        playerA.I.velocity = playerA.I.velocity.add(pushA) 
+        massA = playerA.mass()
+        massB = playerB.mass()
+
+        totalMass = massA + massB
+
+        pushA = delta.scale(-2 * (relativeVelocity.dot(delta) * (massB / totalMass) + 1))
+        pushB = delta.scale(+2 * (relativeVelocity.dot(delta) * (massA / totalMass) + 1))
+
+        playerA.I.velocity = playerA.I.velocity.add(pushA)
         playerB.I.velocity = playerB.I.velocity.add(pushB)
-
-        # Checking
-        powA = playerA.collisionPower(delta)
-        powB = -playerB.collisionPower(delta)
 
         max = Math.max(powA, powB)
 
