@@ -11,6 +11,7 @@ Puck = (I) ->
     x: 512 - 8
     y: 384 - 4
     friction: 0.05
+    mass: 0.01
     zIndex: 10
 
   self = Base(I).extend
