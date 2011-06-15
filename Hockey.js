@@ -17972,12 +17972,22 @@ var Base;
 Base = function(I) {
   var self;
   I || (I = {});
+  $.reverseMerge(I, {
+    fortitude: 1,
+    friction: 0,
+    strength: 1,
+    mass: 1,
+    velocity: Point(0, 0)
+  });
   self = GameObject(I).extend({
     bloody: $.noop,
     puck: function() {
-      return false;
+      return I["class"] === "Puck";
     },
     wipeout: $.noop,
+    collisionPower: function(normal) {
+      return (I.velocity.dot(normal) + I.fortitude) * I.strength;
+    },
     center: function(newCenter) {
       if (newCenter != null) {
         I.x = newCenter.x - I.width / 2;
@@ -17991,6 +18001,13 @@ Base = function(I) {
   if ((I.velocity != null) && (I.velocity.x != null) && (I.velocity.y != null)) {
     I.velocity = Point(I.velocity.x, I.velocity.y);
   }
+  self.bind("update", function() {
+    I.velocity = I.velocity.scale(1 - I.friction);
+    I.x += I.velocity.x;
+    I.y += I.velocity.y;
+    return I.zIndex = 1 + (I.y + I.height) / CANVAS_HEIGHT;
+  });
+  self.attrReader("mass");
   return self;
 };;
 var Blood;
@@ -18244,6 +18261,7 @@ Player = function(I) {
     collisionMargin: Point(2, 2),
     controller: 0,
     falls: 0,
+    friction: 0.1,
     blood: {
       face: 0,
       body: 0,
@@ -18298,8 +18316,8 @@ Player = function(I) {
       if (I.wipeout) {
         return I.blood.body += rand(5);
       } else {
-        I.blood.leftSkate += rand(10);
-        return I.blood.rightSkate += rand(10);
+        I.blood.leftSkate = (I.blood.leftSkate + rand(10)).clamp(0, 60);
+        return I.blood.rightSkate = (I.blood.rightSkate + rand(10)).clamp(0, 60);
       }
     },
     controlCircle: function() {
@@ -18307,7 +18325,7 @@ Player = function(I) {
       p = Point.fromAngle(heading).scale(16);
       c = self.center().add(p);
       speed = I.velocity.magnitude();
-      c.radius = 8 + ((100 - speed * speed) / 100 * 8).clamp(-7, 8);
+      c.radius = 12 + ((100 - speed * speed) / 100 * 8).clamp(-7, 8);
       return c;
     },
     controlPuck: function(puck) {
@@ -18315,7 +18333,7 @@ Player = function(I) {
       if (I.shootCooldown) {
         return;
       }
-      puckControl = 2;
+      puckControl = 4;
       p = Point.fromAngle(heading).scale(32);
       targetPuckPosition = self.center().add(p);
       puckVelocity = puck.I.velocity;
@@ -18340,7 +18358,7 @@ Player = function(I) {
       I.color = Color(teamColor).lighten(0.25);
       I.wipeout = 25;
       I.blood.face += rand(20) + rand(20) + rand(20) + I.falls * 3;
-      push = push.scale(15);
+      push = push.norm().scale(30);
       Sound.play("hit" + (rand(4)));
       Sound.play("crowd" + (rand(3)));
       return engine.add({
@@ -18458,7 +18476,7 @@ Player = function(I) {
     movement = movement.norm();
     if (I.wipeout) {
       lastLeftSkatePos = null;
-      lastRightSkatePos = null;
+      return lastRightSkatePos = null;
     } else {
       I.color = teamColor;
       if (!I.shootCooldown && actionDown("A")) {
@@ -18476,12 +18494,8 @@ Player = function(I) {
         I.boost = 10;
         movement = movement.scale(I.boost);
       }
-      I.velocity = I.velocity.add(movement);
+      return I.velocity = I.velocity.add(movement);
     }
-    I.velocity = I.velocity.scale(0.9);
-    I.x += I.velocity.x;
-    I.y += I.velocity.y;
-    return I.zIndex = 1 + (I.y + I.height) / CANVAS_HEIGHT;
   });
   return self;
 };;
@@ -18492,20 +18506,19 @@ Puck = function(I) {
   $.reverseMerge(I, {
     blood: 0,
     color: "black",
+    strength: 0.5,
     radius: 4,
     width: 16,
     height: 8,
     x: 512 - 8,
     y: 384 - 4,
-    velocity: Point(),
+    friction: 0.05,
+    mass: 0.01,
     zIndex: 10
   });
   self = Base(I).extend({
     bloody: function() {
       return I.blood = (I.blood + 30).clamp(0, 120);
-    },
-    puck: function() {
-      return true;
     },
     wipeout: $.noop
   });
@@ -18532,11 +18545,7 @@ Puck = function(I) {
     }
   });
   self.bind("step", function() {
-    drawBloodStreaks();
-    I.velocity = I.velocity.scale(0.95);
-    I.x += I.velocity.x;
-    I.y += I.velocity.y;
-    return I.zIndex = 1 + (I.y + I.height) / CANVAS_HEIGHT;
+    return drawBloodStreaks();
   });
   return self;
 };;
@@ -18546,6 +18555,7 @@ Zamboni = function(I) {
   $.reverseMerge(I, {
     blood: 0,
     color: "yellow",
+    strength: 5,
     radius: 16,
     width: 96,
     height: 48,
@@ -18622,11 +18632,8 @@ Zamboni = function(I) {
     pathfind();
     I.rotation = heading = Point.direction(Point(0, 0), I.velocity);
     if (!(I.age < 1)) {
-      cleanIce();
+      return cleanIce();
     }
-    I.x += I.velocity.x;
-    I.y += I.velocity.y;
-    return I.zIndex = 1 + (I.y + I.height) / CANVAS_HEIGHT;
   });
   return self;
 };;
@@ -18763,7 +18770,7 @@ engine.bind("draw", function(canvas) {
   }
 });
 engine.bind("update", function() {
-  var delta, i, j, max, playerA, playerB, players, projA, projB, pushA, pushB, threshold;
+  var delta, i, j, massA, massB, max, playerA, playerB, players, powA, powB, pushA, pushB, relativeVelocity, threshold, totalMass;
   time -= 1;
   if (INTERMISSION) {
     if (time === 0) {
@@ -18792,19 +18799,19 @@ engine.bind("update", function() {
       }
       if (Collision.circular(playerA.circle(), playerB.circle())) {
         delta = playerB.center().subtract(playerA.center()).norm();
-        if (playerB.puck()) {
-          playerB.I.velocity = delta.scale(playerA.I.velocity.length());
-        } else {
-          pushA = delta.scale(-2);
-          pushB = delta.scale(2);
-          playerA.I.velocity = playerA.I.velocity.add(pushA);
-          playerB.I.velocity = playerB.I.velocity.add(pushB);
-        }
-        projA = playerA.I.velocity.dot(delta);
-        projB = -playerB.I.velocity.dot(delta);
-        max = Math.max(projA, projB);
+        powA = playerA.collisionPower(delta);
+        powB = -playerB.collisionPower(delta);
+        relativeVelocity = playerA.I.velocity.subtract(playerB.I.velocity);
+        massA = playerA.mass();
+        massB = playerB.mass();
+        totalMass = massA + massB;
+        pushA = delta.scale(-2 * (relativeVelocity.dot(delta) * (massB / totalMass) + 1));
+        pushB = delta.scale(+2 * (relativeVelocity.dot(delta) * (massA / totalMass) + 1));
+        playerA.I.velocity = playerA.I.velocity.add(pushA);
+        playerB.I.velocity = playerB.I.velocity.add(pushB);
+        max = Math.max(powA, powB);
         if (max > threshold) {
-          if (projA === max) {
+          if (powA === max) {
             playerB.wipeout(pushB);
           } else {
             playerA.wipeout(pushA);
