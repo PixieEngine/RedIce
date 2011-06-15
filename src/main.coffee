@@ -191,10 +191,6 @@ engine.bind "update", ->
         powA = playerA.collisionPower(delta)
         powB = -playerB.collisionPower(delta)
 
-        # Knockback
-        #if playerB.puck()
-        #  playerB.I.velocity = delta.scale(playerA.I.velocity.length())
-        #else
         relativeVelocity = playerA.I.velocity.subtract(playerB.I.velocity)
 
         massA = playerA.mass()
