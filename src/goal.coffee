@@ -103,6 +103,8 @@ Goal = (I) ->
         # Refresh puck circle
         circle = puck.circle()
 
+        Sound.play "clink0"
+
       if withinGoal(circle)
         puck.destroy()
 
