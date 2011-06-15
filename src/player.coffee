@@ -94,7 +94,7 @@ Player = (I) ->
     controlPuck: (puck) ->
       return if I.shootCooldown
 
-      puckControl = 2
+      puckControl = 4
 
       p = Point.fromAngle(heading).scale(32)
       targetPuckPosition = self.center().add(p)
