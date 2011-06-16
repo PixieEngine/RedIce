@@ -18138,18 +18138,14 @@ layouts = {
       down: "down",
       left: "left",
       A: "'",
-      B: ";",
-      C: "",
-      D: ""
+      B: ";"
     }, {
       up: "w",
       right: "d",
       down: "s",
       left: "a",
       A: "b",
-      B: "space",
-      C: "",
-      D: ""
+      B: "space"
     }, {}, {}, {}, {}, {}
   ]
 };
