@@ -98,8 +98,6 @@ layouts = {
     left: "left"
     A: "'"
     B: ";"
-    C: ""
-    D: ""
   }, {
     up: "w"
     right: "d"
@@ -107,8 +105,6 @@ layouts = {
     left: "a"
     A: "b"
     B: "space"
-    C: ""
-    D: ""
   }, {}, {}, {}, {}, {}]
 }
 
