@@ -1,4 +1,3 @@
-BASE_URL = "/production/projects/166";
 var App;
 App = {
   "name": "Hockey",
@@ -18033,7 +18032,7 @@ Blood = function(I) {
   return self;
 };
 Blood.sprites || (Blood.sprites = [Sprite.loadByName("blood")]);;
-var CONTROLLERS, Controller, gameControlData, keyActionNames;
+var CONTROLLERS, Controller, gameControlData, keyActionNames, layouts, selectedLayout;
 var __slice = Array.prototype.slice;
 Controller = function(actions) {
   actions || (actions = {
@@ -18059,77 +18058,102 @@ Controller = function(actions) {
 gameControlData = {};
 keyActionNames = {
   A: "SHOOT",
-  B: "GO",
+  B: "BOOST",
   C: "?",
   D: "??"
 };
 CONTROLLERS = [];
-[
-  {
-    up: "up",
-    right: "right",
-    down: "down",
-    left: "left",
-    A: "end",
-    B: "home",
-    C: "pagedown",
-    D: "pageup"
-  }, {
-    up: "o",
-    right: "q",
-    down: ";",
-    left: "a",
-    A: "2",
-    B: "1",
-    C: ",",
-    D: "'"
-  }, {
-    up: "u",
-    right: "k",
-    down: "j",
-    left: "e",
-    A: "4",
-    B: "3",
-    C: "p",
-    D: "."
-  }, {
-    up: "d",
-    right: "b",
-    down: "x",
-    left: "i",
-    A: "6",
-    B: "5",
-    C: "f",
-    D: "y"
-  }, {
-    up: "t",
-    right: "w",
-    down: "m",
-    left: "h",
-    A: "8",
-    B: "7",
-    C: "c",
-    D: "g"
-  }, {
-    up: "s",
-    right: "z",
-    down: "v",
-    left: "n",
-    A: "0",
-    B: "9",
-    C: "l",
-    D: "r"
-  }, {
-    up: "=",
-    right: "return",
-    down: "-",
-    left: "/",
-    A: "]",
-    B: "[",
-    C: "\\",
-    D: "backspace"
-  }
-].each(function(actions, i) {
+selectedLayout = Local.get("controls") || "qwerty_keyboard";
+layouts = {
+  dvorak_wiimotes: [
+    {
+      up: "up",
+      right: "right",
+      down: "down",
+      left: "left",
+      A: "end",
+      B: "home",
+      C: "pagedown",
+      D: "pageup"
+    }, {
+      up: "o",
+      right: "q",
+      down: ";",
+      left: "a",
+      A: "2",
+      B: "1",
+      C: ",",
+      D: "'"
+    }, {
+      up: "u",
+      right: "k",
+      down: "j",
+      left: "e",
+      A: "4",
+      B: "3",
+      C: "p",
+      D: "."
+    }, {
+      up: "d",
+      right: "b",
+      down: "x",
+      left: "i",
+      A: "6",
+      B: "5",
+      C: "f",
+      D: "y"
+    }, {
+      up: "t",
+      right: "w",
+      down: "m",
+      left: "h",
+      A: "8",
+      B: "7",
+      C: "c",
+      D: "g"
+    }, {
+      up: "s",
+      right: "z",
+      down: "v",
+      left: "n",
+      A: "0",
+      B: "9",
+      C: "l",
+      D: "r"
+    }, {
+      up: "=",
+      right: "return",
+      down: "-",
+      left: "/",
+      A: "]",
+      B: "[",
+      C: "\\",
+      D: "backspace"
+    }
+  ],
+  qwerty_keyboard: [
+    {
+      up: "up",
+      right: "right",
+      down: "down",
+      left: "left",
+      A: "'",
+      B: ";",
+      C: "",
+      D: ""
+    }, {
+      up: "w",
+      right: "d",
+      down: "s",
+      left: "a",
+      A: "b",
+      B: "space",
+      C: "",
+      D: ""
+    }, {}, {}, {}, {}, {}
+  ]
+};
+layouts[selectedLayout].each(function(actions, i) {
   var action, key;
   for (action in actions) {
     key = actions[action];
