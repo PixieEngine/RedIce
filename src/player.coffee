@@ -150,8 +150,9 @@ Player = (I) ->
     power = I.shootPower
     stealPower = 10
     circle = self.controlCircle()
+    baseShotPower = 15
 
-    if power < 5
+    if power < 3
       # Steal Attempt
       circle.radius *= 1.5
 
@@ -164,7 +165,7 @@ Player = (I) ->
       # Shot or pass
       if Collision.circular(circle, puck.circle())
 
-        p = Point.fromAngle(heading).scale(power * 2)
+        p = Point.fromAngle(heading).scale(baseShotPower + power * 2)
         puck.I.velocity = puck.I.velocity.add(p)
 
     I.shootPower = 0
