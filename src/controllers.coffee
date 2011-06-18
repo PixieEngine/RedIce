@@ -24,7 +24,7 @@ keyActionNames = {
 CONTROLLERS = []
 
 
-selectedLayout = Local.get("controls") || "qwerty_keyboard"
+selectedLayout = "dvorak_wiimotes" #Local.get("controls") || "qwerty_keyboard"
 
 layouts = {
   dvorak_wiimotes:[{
