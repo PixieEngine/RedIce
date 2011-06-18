@@ -14,6 +14,9 @@ Zamboni = (I) ->
 
   SWEEPER_SIZE = 48
 
+  if I.reverse
+    I.x = App.width
+
   path = []
 
   generatePath = () ->
@@ -79,6 +82,10 @@ Zamboni = (I) ->
   pathfind = ->
     if path[pathIndex]
       nextTarget = path[pathIndex].scale(SWEEPER_SIZE).add(Point(WALL_LEFT, WALL_TOP))
+
+      if I.reverse
+        nextTarget = Matrix.scale(-1, 1, Point(WALL_LEFT + ARENA_WIDTH/2, WALL_TOP + ARENA_HEIGHT/2)).transformPoint(nextTarget)
+
       nextTarget.radius = 0
       center = self.center()
       center.radius = 5
