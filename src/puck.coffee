@@ -32,6 +32,8 @@ Puck = (I) ->
     if lastPosition && (blood = I.blood)
       I.blood -= 1
 
+      color = Color(BLOOD_COLOR)
+      bloodCanvas.strokeColor(color)
       bloodCanvas.drawLine(lastPosition, currentPos, (blood/20).clamp(1, 6))
 
     lastPosition = currentPos
