@@ -18063,7 +18063,7 @@ keyActionNames = {
   D: "??"
 };
 CONTROLLERS = [];
-selectedLayout = Local.get("controls") || "qwerty_keyboard";
+selectedLayout = "dvorak_wiimotes";
 layouts = {
   dvorak_wiimotes: [
     {
@@ -18400,12 +18400,13 @@ Player = function(I) {
     return self.center().add(p);
   };
   shootPuck = function() {
-    var circle, p, power, puck, stealPower;
+    var baseShotPower, circle, p, power, puck, stealPower;
     puck = engine.find("Puck").first();
     power = I.shootPower;
     stealPower = 10;
     circle = self.controlCircle();
-    if (power < 5) {
+    baseShotPower = 15;
+    if (power < 3) {
       circle.radius *= 1.5;
       if (Collision.circular(circle, puck.circle())) {
         p = Point.fromAngle(Random.angle()).scale(stealPower);
@@ -18413,7 +18414,7 @@ Player = function(I) {
       }
     } else {
       if (Collision.circular(circle, puck.circle())) {
-        p = Point.fromAngle(heading).scale(power * 2);
+        p = Point.fromAngle(heading).scale(baseShotPower + power * 2);
         puck.I.velocity = puck.I.velocity.add(p);
       }
     }
@@ -18546,11 +18547,13 @@ Puck = function(I) {
   heading = 0;
   lastPosition = null;
   drawBloodStreaks = function() {
-    var blood, currentPos;
+    var blood, color, currentPos;
     heading = Point.direction(Point(0, 0), I.velocity);
     currentPos = self.center();
     if (lastPosition && (blood = I.blood)) {
       I.blood -= 1;
+      color = Color(BLOOD_COLOR);
+      bloodCanvas.strokeColor(color);
       bloodCanvas.drawLine(lastPosition, currentPos, (blood / 20).clamp(1, 6));
     }
     return lastPosition = currentPos;
@@ -18587,6 +18590,9 @@ Zamboni = function(I) {
     zIndex: 10
   });
   SWEEPER_SIZE = 48;
+  if (I.reverse) {
+    I.x = App.width;
+  }
   path = [];
   generatePath = function() {
     var horizontalPoints, verticalPoints;
@@ -18640,6 +18646,9 @@ Zamboni = function(I) {
     var center, nextTarget;
     if (path[pathIndex]) {
       nextTarget = path[pathIndex].scale(SWEEPER_SIZE).add(Point(WALL_LEFT, WALL_TOP));
+      if (I.reverse) {
+        nextTarget = Matrix.scale(-1, 1, Point(WALL_LEFT + ARENA_WIDTH / 2, WALL_TOP + ARENA_HEIGHT / 2)).transformPoint(nextTarget);
+      }
       nextTarget.radius = 0;
       center = self.center();
       center.radius = 5;
@@ -18672,7 +18681,7 @@ window.BLOOD_COLOR = "#BA1A19";
 window.ICE_COLOR = "rgba(192, 255, 255, 0.2)";
 window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").powerCanvas();
 bloodCanvas.strokeColor(BLOOD_COLOR);
-periodTime = 1 * 60 * 30;
+periodTime = 1 * 15 * 30;
 intermissionTime = 1 * 30;
 period = 0;
 time = 0;
@@ -18717,7 +18726,8 @@ intermission = function() {
   INTERMISSION = true;
   time = intermissionTime;
   return engine.add({
-    "class": "Zamboni"
+    "class": "Zamboni",
+    reverse: period % 2
   });
 };
 nextPeriod = function() {
