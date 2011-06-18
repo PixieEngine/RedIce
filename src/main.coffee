@@ -16,7 +16,7 @@ window.bloodCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />
 bloodCanvas.strokeColor(BLOOD_COLOR)
 # bloodCanvas.fill(BLOOD_COLOR) # For zamboni testing
 
-periodTime = 1 * 60 * 30
+periodTime = 1 * 15 * 30
 intermissionTime = 1 * 30
 
 period = 0
@@ -64,6 +64,7 @@ intermission = () ->
 
   engine.add
     class: "Zamboni"
+    reverse: period % 2
 
 nextPeriod = () ->
   time = periodTime
