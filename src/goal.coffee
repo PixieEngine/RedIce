@@ -89,7 +89,7 @@ Goal = (I) ->
           puckPrev = puck.center().subtract(velocity)
           puckToWall = puckPrev.subtract(wall.center)
 
-          if puckToWall.x.sign() == wall.killSide
+          if puckToWall.x.sign() == wall.killSide && velocity.x.sign == wall.killSide
             debugger
             normal = Point(wall.killSide, 0)
             velocityProjection = velocity.dot(normal)
