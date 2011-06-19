@@ -31,11 +31,13 @@ Goal = (I) ->
         center: Point(I.x + I.width, I.y + I.height/2)
         halfWidth: WALL_RADIUS
         halfHeight: I.height/2
+        killSide: -1
     else
       walls.push
         center: Point(I.x, I.y + I.height/2)
         halfWidth: WALL_RADIUS
         halfHeight: I.height/2
+        killSide: 1
 
     return walls
 
@@ -84,16 +86,28 @@ Goal = (I) ->
       collided = false
       wallSegments().each (wall) ->
         if overlap(wall, circle)
-          normal = puck.center().subtract(velocity).subtract(wall.center).norm()
+          puckPrev = puck.center().subtract(velocity)
+          puckToWall = puckPrev.subtract(wall.center)
 
-          velocityProjection = velocity.dot(normal)
+          if puckToWall.x.sign() == wall.killSide
+            normal = Point(wall.killSide, 0)
 
-          # Heading towards wall
-          if velocityProjection < 0
-            # Reflection Vector
-            netReflection = netReflection.subtract(normal.scale(2 * velocityProjection))
+            netReflection = netReflection.subtract(normal.scale(1 * velocityProjection))
 
             collided = true
+
+
+          else
+            normal = puckToWall.norm()
+
+            velocityProjection = velocity.dot(normal)
+
+            # Heading towards wall
+            if velocityProjection < 0
+              # Reflection Vector
+              netReflection = netReflection.subtract(normal.scale(2 * velocityProjection))
+
+              collided = true
 
       if collided
         puck.I.velocity = netReflection
