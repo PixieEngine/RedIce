@@ -272,12 +272,26 @@ Player = (I) ->
 
   self.bind "update", ->
     cycle = (I.age/4).floor() % 2
+    I.hflip = false
+
+    if -Math.TAU/8 <= heading <= Math.TAU/8
+      facingOffset = 0
+    else if -3*Math.TAU/8 <= heading <= -Math.TAU/8
+      facingOffset = 4
+    else if Math.TAU/8 < heading <= 3*Math.TAU/8
+      facingOffset = 2      
+    else
+      facingOffset = 0
+      I.hflip = true
+
+    spriteIndex = cycle + facingOffset
 
     I.sprite = sprites[cycle + 2]
 
   self.bind "draw", (canvas) ->
-    drawControlCircle(canvas)
-    drawFloatingNameTag(canvas)
+    canvas.withTransform Matrix.translate(-I.x, -I.y), ->
+      drawControlCircle(canvas)
+      drawFloatingNameTag(canvas)
 
   self
 
