@@ -82,6 +82,9 @@ Player = (I) ->
         I.blood.leftSkate = (I.blood.leftSkate + rand(10)).clamp(0, 60)
         I.blood.rightSkate = (I.blood.rightSkate + rand(10)).clamp(0, 60)
 
+    #center: ->
+    #  Point(I.x + I.width/2, I.y + I.height/2 + 16)
+
     controlCircle: ->
       p = Point.fromAngle(heading).scale(16)
 
@@ -279,14 +282,14 @@ Player = (I) ->
     else if -3*Math.TAU/8 <= heading <= -Math.TAU/8
       facingOffset = 4
     else if Math.TAU/8 < heading <= 3*Math.TAU/8
-      facingOffset = 2      
+      facingOffset = 2
     else
       facingOffset = 0
       I.hflip = true
 
     spriteIndex = cycle + facingOffset
 
-    I.sprite = sprites[cycle + 2]
+    I.sprite = sprites[spriteIndex]
 
   self.bind "drawHUD", (canvas) ->
     center = self.center()
