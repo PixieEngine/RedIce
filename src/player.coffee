@@ -288,10 +288,11 @@ Player = (I) ->
 
     I.sprite = sprites[cycle + 2]
 
-  self.bind "draw", (canvas) ->
-    canvas.withTransform Matrix.translate(-I.x, -I.y), ->
-      drawControlCircle(canvas)
-      drawFloatingNameTag(canvas)
+  self.bind "drawHUD", (canvas) ->
+    center = self.center()
+
+    drawControlCircle(canvas)
+    drawFloatingNameTag(canvas)
 
   self
 
