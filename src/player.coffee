@@ -87,7 +87,7 @@ Player = (I) ->
 
       c = self.center().add(p)
       speed = I.velocity.magnitude()
-      c.radius = 12 + ((100 - speed * speed)/100 * 8).clamp(-7, 8)
+      c.radius = 20 + ((100 - speed * speed)/100 * 8).clamp(-7, 8)
 
       return c
 
@@ -278,6 +278,8 @@ Player = (I) ->
         I.boostCooldown += 20
         I.boost = 10
         movement = movement.scale(I.boost)
+
+      movement = movement.scale(0.75)
 
       I.velocity = I.velocity.add(movement)
 
