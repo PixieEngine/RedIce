@@ -15,7 +15,7 @@ Sprite.loadSheet = (name, tileWidth, tileHeight) ->
 
   return sprites
 
-window.player_sprites = Sprite.loadSheet("sprites", 32, 48)
+window.sprites = Sprite.loadSheet("sprites", 32, 48)
 
 window.CANVAS_WIDTH = App.width
 window.CANVAS_HEIGHT = App.height
