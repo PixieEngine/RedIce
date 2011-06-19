@@ -48,7 +48,7 @@ Zamboni = (I) ->
     controlCircle: ->
       self.circle()
     crush: (other) ->
-      I.blood = (I.blood + 1).clamp(0, 2) unless other.puck()
+      I.blood = (I.blood + 1).clamp(0, 6) unless other.puck()
     controlPuck: $.noop
     wipeout: ->
       #TODO Careen into boards and explode
@@ -106,7 +106,7 @@ Zamboni = (I) ->
 
     I.hflip = (heading > 2*Math.TAU/8 || heading < -2*Math.TAU/8)
 
-    I.sprite = wideSprites[16 + 8*I.blood]
+    I.sprite = wideSprites[16 + 8*(I.blood/3).floor()]
 
   self
 
