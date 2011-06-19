@@ -16275,7 +16275,7 @@ Drawable = function(I, self) {
     var center;
     center = self.center();
     if (I.rotation) {
-      I.transform = Matrix.translation(center.x, center.y);
+      I.transform = Matrix.translation(center.x.round(), center.y.round());
       I.transform = I.transform.concat(Matrix.rotation(I.rotation));
       if (I.hflip) {
         I.transform = I.transform.concat(Matrix.HORIZONTAL_FLIP);
@@ -16285,9 +16285,9 @@ Drawable = function(I, self) {
       }
       I.transform = I.transform.concat(Matrix.translation(-I.width / 2, -I.height / 2));
     } else {
-      I.transform = Matrix.translation(I.x, I.y);
+      I.transform = Matrix.translation(I.x.round(), I.y.round());
       if (I.hflip || I.vflip) {
-        I.transform = Matrix.translation(center.x, center.y);
+        I.transform = Matrix.translation(center.x.round(), center.y.round());
         if (I.hflip) {
           I.transform = I.transform.concat(Matrix.HORIZONTAL_FLIP);
         }
@@ -16295,6 +16295,9 @@ Drawable = function(I, self) {
           I.transform = I.transform.concat(Matrix.VERTICAL_FLIP);
         }
         I.transform = I.transform.concat(Matrix.translation(-I.width / 2, -I.height / 2));
+      }
+      if (I.spriteOffset) {
+        I.transform = I.transform.concat(Matrix.translation(I.spriteOffset.x, I.spriteOffset.y));
       }
     }
     if (I.sprite) {
@@ -18165,7 +18168,8 @@ Goal = function(I) {
     height: HEIGHT,
     width: WIDTH,
     x: WALL_LEFT + ARENA_WIDTH / 20 - WIDTH,
-    y: WALL_TOP + ARENA_HEIGHT / 2 - HEIGHT / 2
+    y: WALL_TOP + ARENA_HEIGHT / 2 - HEIGHT / 2,
+    spriteOffset: Point(0, -48)
   });
   self = GameObject(I);
   wallSegments = function() {
@@ -18185,13 +18189,15 @@ Goal = function(I) {
       walls.push({
         center: Point(I.x + I.width, I.y + I.height / 2),
         halfWidth: WALL_RADIUS,
-        halfHeight: I.height / 2
+        halfHeight: I.height / 2,
+        killSide: -1
       });
     } else {
       walls.push({
         center: Point(I.x, I.y + I.height / 2),
         halfWidth: WALL_RADIUS,
-        halfHeight: I.height / 2
+        halfHeight: I.height / 2,
+        killSide: 1
       });
     }
     return walls;
@@ -18231,31 +18237,54 @@ Goal = function(I) {
     }
   });
   self.bind("step", function() {
-    var circle, collided, netReflection, puck, velocity;
+    var circle, dt, isGoal, netReflection, puck, steps, velocity;
+    if (I.right) {
+      I.sprite = tallSprites[7];
+    } else {
+      I.sprite = tallSprites[6];
+      I.spriteOffset = Point(-18, -48);
+    }
     if (puck = engine.find("Puck.active").first()) {
-      circle = puck.circle();
       velocity = puck.I.velocity;
       netReflection = velocity;
-      collided = false;
-      wallSegments().each(function(wall) {
-        var normal, velocityProjection;
-        if (overlap(wall, circle)) {
-          normal = puck.center().subtract(velocity).subtract(wall.center).norm();
-          velocityProjection = velocity.dot(normal);
-          if (velocityProjection < 0) {
-            netReflection = netReflection.subtract(normal.scale(2 * velocityProjection));
-            return collided = true;
+      isGoal = false;
+      circle = puck.circle();
+      steps = (velocity.magnitude() / circle.radius).clamp(1, 5);
+      dt = 1 / steps;
+      steps.times(function(step) {
+        var collided, puckPrev, timeSteppedVelocity;
+        puckPrev = puck.center().subtract(velocity.scale(1 - dt * step));
+        collided = false;
+        wallSegments().each(function(wall) {
+          var normal, puckToWall, velocityProjection;
+          if (overlap(wall, circle)) {
+            puckToWall = puckPrev.subtract(wall.center);
+            if (puckToWall.x.sign() === wall.killSide) {
+              normal = Point(wall.killSide, 0);
+              velocityProjection = velocity.dot(normal);
+              if (velocityProjection.sign() === wall.killSide) {
+                return isGoal = true;
+              }
+            } else {
+              normal = puckToWall.norm();
+              velocityProjection = velocity.dot(normal);
+              if (velocityProjection < 0) {
+                netReflection = netReflection.subtract(normal.scale(2 * velocityProjection));
+                return collided = true;
+              }
+            }
           }
+        });
+        if (collided) {
+          puck.I.velocity = netReflection;
+          timeSteppedVelocity = netReflection.scale(dt);
+          puck.I.x += timeSteppedVelocity.x;
+          puck.I.y += timeSteppedVelocity.y;
+          circle = puck.circle();
+          return Sound.play("clink0");
         }
       });
-      if (collided) {
-        puck.I.velocity = netReflection;
-        puck.I.x += puck.I.velocity.x;
-        puck.I.y += puck.I.velocity.y;
-        circle = puck.circle();
-        Sound.play("clink0");
-      }
-      if (withinGoal(circle)) {
+      if (isGoal || withinGoal(circle)) {
         puck.destroy();
         Sound.play("crowd" + (rand(3)));
         engine.add({
@@ -18269,7 +18298,7 @@ Goal = function(I) {
 };;
 var Player;
 Player = function(I) {
-  var PLAYER_COLORS, actionDown, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, playerColor, rightSkatePos, self, shootPuck, teamColor;
+  var PLAYER_COLORS, actionDown, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, playerColor, redTeam, rightSkatePos, self, shootPuck, teamColor;
   $.reverseMerge(I, {
     boost: 0,
     boostCooldown: 0,
@@ -18288,6 +18317,7 @@ Player = function(I) {
     height: 32,
     x: 192,
     y: 128,
+    spriteOffset: Point(0, -16),
     shootCooldown: 0,
     shootPower: 0,
     wipeout: 0,
@@ -18296,7 +18326,8 @@ Player = function(I) {
   });
   PLAYER_COLORS = ["#0246E3", "#EB070E", "#388326", "#F69508", "#563495", "#58C4F5", "#FFDE49"];
   playerColor = PLAYER_COLORS[I.controller];
-  teamColor = I.color = PLAYER_COLORS[I.controller % 2];
+  redTeam = I.controller % 2;
+  teamColor = I.color = PLAYER_COLORS[redTeam];
   actionDown = CONTROLLERS[I.controller].actionDown;
   maxShotPower = 20;
   I.name || (I.name = "Player " + (I.controller + 1));
@@ -18358,23 +18389,11 @@ Player = function(I) {
       }
       return puck.I.velocity = puck.I.velocity.add(positionDelta);
     },
-    draw: function(canvas) {
-      var center, cycle, sprite;
-      center = self.center();
-      cycle = (I.age / 4).floor() % 2;
-      sprite = player_sprites[cycle + 2];
-      if (sprite != null) {
-        sprite.draw(canvas, I.x, I.y - 16);
-      }
-      drawControlCircle(canvas);
-      return drawFloatingNameTag(canvas);
-    },
     puck: function() {
       return false;
     },
     wipeout: function(push) {
       I.falls += 1;
-      I.color = Color(teamColor).lighten(0.25);
       I.wipeout = 25;
       I.blood.face += rand(20) + rand(20) + rand(20) + I.falls;
       push = push.norm().scale(30);
@@ -18498,11 +18517,9 @@ Player = function(I) {
       lastLeftSkatePos = null;
       return lastRightSkatePos = null;
     } else {
-      I.color = teamColor;
       if (!I.shootCooldown && actionDown("A")) {
         I.shootPower += 1;
         chargePhase = Math.sin(Math.TAU / 4 * I.age) * 0.2 * I.shootPower / maxShotPower;
-        I.color = Color(teamColor).lighten(chargePhase);
         if (I.shootPower === maxShotPower) {
           I.shootCooldown = 5;
         }
@@ -18517,6 +18534,35 @@ Player = function(I) {
       movement = movement.scale(0.75);
       return I.velocity = I.velocity.add(movement);
     }
+  });
+  self.bind("update", function() {
+    var cycle, facingOffset, spriteIndex;
+    I.hflip = heading > 2 * Math.TAU / 8 || heading < -2 * Math.TAU / 8;
+    if (I.wipeout) {
+      if (redTeam) {
+        spriteIndex = 3 + 32;
+      } else {
+        spriteIndex = 5 + 32;
+      }
+    } else {
+      cycle = (I.age / 4).floor() % 2;
+      if ((-Math.TAU / 8 <= heading && heading <= Math.TAU / 8)) {
+        facingOffset = 0;
+      } else if ((-3 * Math.TAU / 8 <= heading && heading <= -Math.TAU / 8)) {
+        facingOffset = 4;
+      } else if ((Math.TAU / 8 < heading && heading <= 3 * Math.TAU / 8)) {
+        facingOffset = 2;
+      } else {
+        facingOffset = 0;
+      }
+      teamColor = redTeam * 16;
+      spriteIndex = cycle + facingOffset + teamColor;
+    }
+    return I.sprite = sprites[spriteIndex];
+  });
+  self.bind("drawHUD", function(canvas) {
+    drawControlCircle(canvas);
+    return drawFloatingNameTag(canvas);
   });
   return self;
 };;
@@ -18535,7 +18581,8 @@ Puck = function(I) {
     y: 384 - 4,
     friction: 0.05,
     mass: 0.01,
-    zIndex: 10
+    zIndex: 10,
+    spriteOffset: Point(-10, -32)
   });
   self = Base(I).extend({
     bloody: function() {
@@ -18569,6 +18616,9 @@ Puck = function(I) {
   });
   self.bind("step", function() {
     return drawBloodStreaks();
+  });
+  self.bind("update", function() {
+    return I.sprite = sprites[39];
   });
   return self;
 };;
@@ -18659,10 +18709,12 @@ Zamboni = function(I) {
   };
   self.bind("step", function() {
     pathfind();
-    I.rotation = heading = Point.direction(Point(0, 0), I.velocity);
+    heading = Point.direction(Point(0, 0), I.velocity);
     if (!(I.age < 1)) {
-      return cleanIce();
+      cleanIce();
     }
+    I.hflip = heading > 2 * Math.TAU / 8 || heading < -2 * Math.TAU / 8;
+    return I.sprite = wideSprites[16];
   });
   return self;
 };;
@@ -18684,7 +18736,9 @@ Sprite.loadSheet = function(name, tileWidth, tileHeight) {
   image.src = url;
   return sprites;
 };
-window.player_sprites = Sprite.loadSheet("player_blue", 32, 48);
+window.sprites = Sprite.loadSheet("sprites", 32, 48);
+window.wideSprites = Sprite.loadSheet("sprites", 64, 48);
+window.tallSprites = Sprite.loadSheet("sprites", 32, 96);
 window.CANVAS_WIDTH = App.width;
 window.CANVAS_HEIGHT = App.height;
 window.WALL_LEFT = 64;
@@ -18697,7 +18751,7 @@ window.BLOOD_COLOR = "#BA1A19";
 window.ICE_COLOR = "rgba(192, 255, 255, 0.2)";
 window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").powerCanvas();
 bloodCanvas.strokeColor(BLOOD_COLOR);
-periodTime = 1 * 60 * 30;
+periodTime = 1 * 1 * 30;
 intermissionTime = 1 * 30;
 period = 0;
 time = 0;
