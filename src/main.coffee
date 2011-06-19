@@ -230,8 +230,10 @@ engine.bind "update", ->
 
         if max > threshold
           if powA == max
+            playerA.crush()
             playerB.wipeout(pushB)
           else
+            playerB.crush()
             playerA.wipeout(pushA)
 
       # Puck handling
