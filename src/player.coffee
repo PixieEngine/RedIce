@@ -145,25 +145,14 @@ Player = (I) ->
     puck = engine.find("Puck").first()
 
     power = I.shootPower
-    stealPower = 10
     circle = self.controlCircle()
     baseShotPower = 15
 
-    if power < 3
-      # Steal Attempt
-      circle.radius *= 1.5
+    # Shot or pass
+    if Collision.circular(circle, puck.circle())
 
-      if Collision.circular(circle, puck.circle())
-        p = Point.fromAngle(Random.angle()).scale(stealPower)
-
-        puck.I.velocity = puck.I.velocity.add(p)
-
-    else
-      # Shot or pass
-      if Collision.circular(circle, puck.circle())
-
-        p = Point.fromAngle(heading).scale(baseShotPower + power * 2)
-        puck.I.velocity = puck.I.velocity.add(p)
+      p = Point.fromAngle(heading).scale(baseShotPower + power * 2)
+      puck.I.velocity = puck.I.velocity.add(p)
 
     I.shootPower = 0
 
