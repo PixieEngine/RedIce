@@ -16,6 +16,7 @@ Player = (I) ->
     height: 32
     x: 192
     y: 128
+    spriteOffset: Point(0, -16)
     shootCooldown: 0
     shootPower: 0
     wipeout: 0
