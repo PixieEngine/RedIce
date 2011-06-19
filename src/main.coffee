@@ -1,3 +1,22 @@
+Sprite.loadSheet = (name, tileWidth, tileHeight) ->
+  directory = App?.directories?.images || "images"
+
+  url = "#{BASE_URL}/#{directory}/#{name}.png"
+
+  sprites = []
+  image = new Image()
+
+  image.onload = ->
+    (image.height / tileHeight).times (row) ->
+      (image.width / tileWidth).times (col) ->
+        sprites.push(Sprite(image, col * tileWidth, row * tileHeight, tileWidth, tileHeight))
+
+  image.src = url
+
+  return sprites
+
+window.player_sprites = Sprite.loadSheet("player_blue", 32, 48)
+
 window.CANVAS_WIDTH = App.width
 window.CANVAS_HEIGHT = App.height
 
