@@ -81,6 +81,7 @@ Goal = (I) ->
       circle = puck.circle()
       velocity = puck.I.velocity
       netReflection = velocity
+      isGoal = false
 
       # Goal wall puck collisions
       collided = false
@@ -89,14 +90,13 @@ Goal = (I) ->
           puckPrev = puck.center().subtract(velocity)
           puckToWall = puckPrev.subtract(wall.center)
 
-          if puckToWall.x.sign() == wall.killSide && velocity.x.sign == wall.killSide
-            debugger
+          if puckToWall.x.sign() == wall.killSide
             normal = Point(wall.killSide, 0)
             velocityProjection = velocity.dot(normal)
-            netReflection = netReflection.subtract(normal.scale(1 * velocityProjection))
 
-            collided = true
-
+            if velocityProjection.sign() == wall.killSide
+              # Hit the back of the net, that's a goal to me!
+              isGoal = true
 
           else
             normal = puckToWall.norm()
@@ -120,7 +120,7 @@ Goal = (I) ->
 
         Sound.play "clink0"
 
-      if withinGoal(circle)
+      if isGoal || withinGoal(circle)
         puck.destroy()
 
         Sound.play("crowd#{rand(3)}")
