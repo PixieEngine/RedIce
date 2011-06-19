@@ -116,7 +116,7 @@ Player = (I) ->
 
       sprite = player_sprites[cycle + 2]
 
-      sprite?.draw(canvas, I.x, I.y)
+      sprite?.draw(canvas, I.x, I.y - 16)
 
       drawControlCircle(canvas)
       drawFloatingNameTag(canvas)
