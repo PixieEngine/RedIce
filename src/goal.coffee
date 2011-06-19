@@ -12,6 +12,7 @@ Goal = (I) ->
     width: WIDTH
     x: WALL_LEFT + ARENA_WIDTH/20 - WIDTH
     y: WALL_TOP + ARENA_HEIGHT/2 - HEIGHT/2
+    spriteOffset: Point(0, -48)
 
   self = GameObject(I)
 
@@ -77,6 +78,12 @@ Goal = (I) ->
           canvas.drawLine(deltaCenter.x, deltaCenter.y, deltaCenter.x + normal.x, deltaCenter.y + normal.y)
 
   self.bind "step", ->
+    if I.right
+      I.sprite = tallSprites[7]      
+    else
+      I.sprite = tallSprites[6]
+      I.spriteOffset = Point(-18, -48)
+
     if puck = engine.find("Puck.active").first()
       velocity = puck.I.velocity
       netReflection = velocity
