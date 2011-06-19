@@ -108,19 +108,6 @@ Player = (I) ->
 
       puck.I.velocity = puck.I.velocity.add(positionDelta)
 
-    draw: (canvas) ->
-      center = self.center()
-      # canvas.fillCircle(center.x, center.y, I.radius, I.color)
-
-      cycle = (I.age/4).floor() % 2
-
-      sprite = player_sprites[cycle + 2]
-
-      sprite?.draw(canvas, I.x, I.y - 16)
-
-      drawControlCircle(canvas)
-      drawFloatingNameTag(canvas)
-
     puck: ->
       false
 
@@ -282,6 +269,15 @@ Player = (I) ->
       movement = movement.scale(0.75)
 
       I.velocity = I.velocity.add(movement)
+
+  self.bind "update", ->
+    cycle = (I.age/4).floor() % 2
+
+    I.sprite = sprites[cycle + 2]
+
+  self.bind "draw", (canvas) ->
+    drawControlCircle(canvas)
+    drawFloatingNameTag(canvas)
 
   self
 
