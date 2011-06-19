@@ -287,7 +287,9 @@ Player = (I) ->
       facingOffset = 0
       I.hflip = true
 
-    spriteIndex = cycle + facingOffset
+    teamColor = (I.controller % 2) * 16
+
+    spriteIndex = cycle + facingOffset + teamColor
 
     I.sprite = sprites[spriteIndex]
 
