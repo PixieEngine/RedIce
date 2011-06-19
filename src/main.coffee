@@ -16,6 +16,8 @@ Sprite.loadSheet = (name, tileWidth, tileHeight) ->
   return sprites
 
 window.sprites = Sprite.loadSheet("sprites", 32, 48)
+window.wideSprites = Sprite.loadSheet("sprites", 64, 48)
+window.tallSprites = Sprite.loadSheet("sprites", 32, 96)
 
 window.CANVAS_WIDTH = App.width
 window.CANVAS_HEIGHT = App.height
@@ -35,7 +37,7 @@ window.bloodCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />
 bloodCanvas.strokeColor(BLOOD_COLOR)
 # bloodCanvas.fill(BLOOD_COLOR) # For zamboni testing
 
-periodTime = 1 * 60 * 30
+periodTime = 1 * 1 * 30
 intermissionTime = 1 * 30
 
 period = 0
