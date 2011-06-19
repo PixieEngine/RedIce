@@ -90,8 +90,9 @@ Goal = (I) ->
           puckToWall = puckPrev.subtract(wall.center)
 
           if puckToWall.x.sign() == wall.killSide
+            debugger
             normal = Point(wall.killSide, 0)
-
+            velocityProjection = velocity.dot(normal)
             netReflection = netReflection.subtract(normal.scale(1 * velocityProjection))
 
             collided = true
