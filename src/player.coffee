@@ -34,7 +34,8 @@ Player = (I) ->
   ]
 
   playerColor = PLAYER_COLORS[I.controller]
-  teamColor = I.color = PLAYER_COLORS[I.controller % 2]
+  redTeam = I.controller % 2
+  teamColor = I.color = PLAYER_COLORS[redTeam]
   actionDown = CONTROLLERS[I.controller].actionDown
 
   maxShotPower = 20
@@ -117,7 +118,6 @@ Player = (I) ->
 
     wipeout: (push) ->
       I.falls += 1
-      I.color = Color(teamColor).lighten(0.25)
       I.wipeout = 25
       I.blood.face += rand(20) + rand(20) + rand(20) + I.falls
 
@@ -250,14 +250,13 @@ Player = (I) ->
       lastLeftSkatePos = null
       lastRightSkatePos = null
     else
-      I.color = teamColor
-
       if !I.shootCooldown && actionDown "A"
         I.shootPower += 1
 
         chargePhase = Math.sin(Math.TAU/4 * I.age) * 0.2 * I.shootPower / maxShotPower
 
-        I.color = Color(teamColor).lighten(chargePhase)
+        # TODO: Set Shoot animation
+        # I.color = Color(teamColor).lighten(chargePhase)
 
         if I.shootPower == maxShotPower
           I.shootCooldown = 5
@@ -275,28 +274,37 @@ Player = (I) ->
       I.velocity = I.velocity.add(movement)
 
   self.bind "update", ->
-    cycle = (I.age/4).floor() % 2
-    I.hflip = false
 
-    if -Math.TAU/8 <= heading <= Math.TAU/8
-      facingOffset = 0
-    else if -3*Math.TAU/8 <= heading <= -Math.TAU/8
-      facingOffset = 4
-    else if Math.TAU/8 < heading <= 3*Math.TAU/8
-      facingOffset = 2
+    I.hflip = (heading > 2*Math.TAU/8 || heading < -2*Math.TAU/8)
+
+    if I.wipeout
+      if redTeam
+        spriteIndex = 3+32
+      else
+        spriteIndex = 5+32
     else
-      facingOffset = 0
-      I.hflip = true
+      cycle = (I.age/4).floor() % 2
+      if -Math.TAU/8 <= heading <= Math.TAU/8
+        facingOffset = 0
+      else if -3*Math.TAU/8 <= heading <= -Math.TAU/8
+        facingOffset = 4
+      else if Math.TAU/8 < heading <= 3*Math.TAU/8
+        facingOffset = 2
+      else
+        facingOffset = 0
 
-    teamColor = (I.controller % 2) * 16
+      teamColor = (redTeam) * 16
 
-    spriteIndex = cycle + facingOffset + teamColor
+      spriteIndex = cycle + facingOffset + teamColor
 
     I.sprite = sprites[spriteIndex]
 
-  self.bind "drawHUD", (canvas) ->
-    center = self.center()
+  # Draw shadow
+  #self.bind "draw", (canvas) ->
+  #  canvas.fillCircle(I.width/2, I.height/2 + 24, 8, "rgba(0, 0, 0, 0.5)")
+  # TODO: bind before
 
+  self.bind "drawHUD", (canvas) ->
     drawControlCircle(canvas)
     drawFloatingNameTag(canvas)
 
