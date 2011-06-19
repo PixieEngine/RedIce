@@ -3,16 +3,13 @@ Sprite.loadSheet = (name, tileWidth, tileHeight) ->
 
   url = "#{BASE_URL}/#{directory}/#{name}.png"
 
-  console.log url
-
   sprites = []
   image = new Image()
 
   image.onload = ->
-    imgElement = this
     (image.height / tileHeight).times (row) ->
       (image.width / tileWidth).times (col) ->
-        sprites.push(Sprite.create(imgElement, col * tileWidth, row * tileHeight, tileWidth, tileHeight))
+        sprites.push(Sprite.create(image, col * tileWidth, row * tileHeight, tileWidth, tileHeight))
 
   image.src = url
 
