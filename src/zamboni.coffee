@@ -47,8 +47,8 @@ Zamboni = (I) ->
   self = Base(I).extend
     controlCircle: ->
       self.circle()
-    crush: ->
-      I.blood = (I.blood + 1).clamp(0, 2)
+    crush: (other) ->
+      I.blood = (I.blood + 1).clamp(0, 2) unless other.puck()
     controlPuck: $.noop
     wipeout: ->
       #TODO Careen into boards and explode
