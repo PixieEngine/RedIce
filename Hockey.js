@@ -13065,41 +13065,6 @@ jQuery.extend({
   }
 });;
 $(function() {
-  /**
-  The global keydown property lets your query the status of keys.
-  
-  <pre>
-  # Examples:
-  
-  if keydown.left
-    moveLeft()
-  
-  if keydown.a or keydown.space
-    attack()
-  
-  if keydown.return
-    confirm()
-  
-  if keydown.esc
-    cancel()
-  
-  </pre>
-  
-  @name keydown
-  @namespace
-  */  var keyName;
-  window.keydown = {};
-  keyName = function(event) {
-    return jQuery.hotkeys.specialKeys[event.which] || String.fromCharCode(event.which).toLowerCase();
-  };
-  $(document).bind("keydown", function(event) {
-    return keydown[keyName(event)] = true;
-  });
-  return $(document).bind("keyup", function(event) {
-    return keydown[keyName(event)] = false;
-  });
-});;
-$(function() {
   return ["log", "info", "warn", "error"].each(function(name) {
     if (typeof console !== "undefined") {
       return window[name] = function(message) {
@@ -14356,6 +14321,14 @@ String.prototype.titleize = function() {
   return this.split(/[- ]/).map(function(word) {
     return word.capitalize();
   }).join(' ');
+};
+/**
+Underscore a word, changing camelCased with under_scored.
+@name underscore
+@methodOf String#
+*/
+String.prototype.underscore = function() {
+  return this.replace(/([A-Z]+)([A-Z][a-z])/g, '$1_$2').replace(/([a-z\d])([A-Z])/g, '$1_$2').replace(/-/g, '_').toLowerCase();
 };
 /**
 Assumes the string is something like a file name and returns the 
@@ -15742,10 +15715,10 @@ methods to transition from one animation state to another
 @param {Object} self Reference to including object
 */var Animated;
 Animated = function(I, self) {
-  var advanceFrame, find, loadByName, updateSprite, _name;
+  var advanceFrame, find, initializeState, loadByName, updateSprite, _name, _ref;
   I || (I = {});
   $.reverseMerge(I, {
-    animationName: null,
+    animationName: (_ref = I["class"]) != null ? _ref.underscore() : void 0,
     data: {
       version: "",
       tileset: [
@@ -15808,42 +15781,43 @@ Animated = function(I, self) {
   });
   loadByName = function(name, callback) {
     var url;
-    url = "" + BASE_URL + "/data/" + name + ".animation?" + (new Date().getTime());
+    url = "" + BASE_URL + "/animations/" + name + ".animation?" + (new Date().getTime());
     $.getJSON(url, function(data) {
       I.data = data;
       return typeof callback === "function" ? callback(data) : void 0;
     });
     return I.data;
   };
+  initializeState = function() {
+    I.activeAnimation = I.data.animations.first();
+    return I.spriteLookup = I.data.tileset.map(function(spriteData) {
+      return Sprite.fromURL(spriteData.src);
+    });
+  };
   window[_name = "" + I.animationName + "SpriteLookup"] || (window[_name] = []);
   if (!window["" + I.animationName + "SpriteLookup"].length) {
-    I.data.tileset.each(function(spriteData, i) {
-      return window["" + I.animationName + "SpriteLookup"][i] = Sprite.fromURL(spriteData.src);
+    window["" + I.animationName + "SpriteLookup"] = I.data.tileset.map(function(spriteData) {
+      return Sprite.fromURL(spriteData.src);
     });
   }
   I.spriteLookup = window["" + I.animationName + "SpriteLookup"];
   if (I.data.animations.first().name !== "") {
-    I.activeAnimation = I.data.animations.first();
-    I.data.tileset.each(function(spriteData, i) {
-      return I.spriteLookup[i] = Sprite.fromURL(spriteData.src);
-    });
+    initializeState();
   } else if (I.animationName) {
     loadByName(I.animationName, function() {
-      I.activeAnimation = I.data.animations.first();
-      return I.data.tileset.each(function(spriteData, i) {
-        return I.spriteLookup[i] = Sprite.fromURL(spriteData.src);
-      });
+      return initializeState();
     });
   } else {
     throw "No animation data provided. Use animationName to specify an animation to load from the project or pass in raw JSON to the data key.";
   }
   advanceFrame = function() {
-    var frames, nextState, sprite, _ref, _ref2, _ref3, _ref4;
+    var frames, nextState, sprite, _ref2, _ref3, _ref4, _ref5;
     frames = I.activeAnimation.frames;
+    I.hflip = (_ref2 = I.activeAnimation.transform) != null ? (_ref3 = _ref2[I.currentFrameIndex]) != null ? _ref3.hflip : void 0 : void 0;
+    I.vflip = (_ref4 = I.activeAnimation.transform) != null ? (_ref5 = _ref4[I.currentFrameIndex]) != null ? _ref5.vflip : void 0 : void 0;
     if (I.currentFrameIndex === frames.indexOf(frames.last())) {
       self.trigger("Complete");
-      nextState = I.activeAnimation.complete;
-      if (nextState) {
+      if (nextState = I.activeAnimation.complete) {
         I.activeAnimation = find(nextState) || I.activeAnimation;
         I.currentFrameIndex = 0;
       }
@@ -15851,9 +15825,7 @@ Animated = function(I, self) {
       I.currentFrameIndex = (I.currentFrameIndex + 1) % frames.length;
     }
     sprite = I.spriteLookup[frames[I.currentFrameIndex]];
-    updateSprite(sprite);
-    I.hflip = (_ref = I.activeAnimation.transform) != null ? (_ref2 = _ref[I.currentFrameIndex]) != null ? _ref2.hflip : void 0 : void 0;
-    return I.vflip = (_ref3 = I.activeAnimation.transform) != null ? (_ref4 = _ref3[I.currentFrameIndex]) != null ? _ref4.vflip : void 0 : void 0;
+    return updateSprite(sprite);
   };
   find = function(name) {
     var nameLower, result;
@@ -15878,30 +15850,37 @@ Animated = function(I, self) {
     
     @param {String} newState The name of the target state you wish to transition to.
     */
-    transition: function(newState) {
-      var firstFrame, firstSprite, nextState, _ref, _ref2, _ref3, _ref4;
+    transition: function(newState, force) {
+      var toNextState;
       if (newState === I.activeAnimation.name) {
         return;
       }
-      if (!I.activeAnimation.interruptible) {
-        if (I.debugAnimation) {
-          warn("Cannot transition to '" + newState + "' because '" + I.activeAnimation.name + "' is locked");
+      toNextState = function(state) {
+        var firstFrame, firstSprite, nextState, _ref2, _ref3, _ref4, _ref5;
+        if (nextState = find(state)) {
+          I.activeAnimation = nextState;
+          firstFrame = I.activeAnimation.frames.first();
+          firstSprite = I.spriteLookup[firstFrame];
+          I.currentFrameIndex = 0;
+          updateSprite(firstSprite);
+          I.hflip = (_ref2 = I.activeAnimation.transform) != null ? (_ref3 = _ref2[I.currentFrameIndex]) != null ? _ref3.hflip : void 0 : void 0;
+          return I.vflip = (_ref4 = I.activeAnimation.transform) != null ? (_ref5 = _ref4[I.currentFrameIndex]) != null ? _ref5.vflip : void 0 : void 0;
+        } else {
+          if (I.debugAnimation) {
+            return warn("Could not find animation state '" + newState + "'. The current transition will be ignored");
+          }
         }
-        return;
-      }
-      nextState = find(newState);
-      if (nextState) {
-        I.activeAnimation = nextState;
-        firstFrame = I.activeAnimation.frames.first();
-        firstSprite = I.spriteLookup[firstFrame];
-        I.currentFrameIndex = 0;
-        updateSprite(firstSprite);
-        I.hflip = (_ref = I.activeAnimation.transform) != null ? (_ref2 = _ref[I.currentFrameIndex]) != null ? _ref2.hflip : void 0 : void 0;
-        return I.vflip = (_ref3 = I.activeAnimation.transform) != null ? (_ref4 = _ref3[I.currentFrameIndex]) != null ? _ref4.vflip : void 0 : void 0;
+      };
+      if (force) {
+        return toNextState(newState);
       } else {
-        if (I.debugAnimation) {
-          return warn("Could not find animation state '" + newState + "'. The current transition will be ignored");
+        if (!I.activeAnimation.interruptible) {
+          if (I.debugAnimation) {
+            warn("Cannot transition to '" + newState + "' because '" + I.activeAnimation.name + "' is locked");
+          }
+          return;
         }
+        return toNextState(newState);
       }
     },
     transform: function() {
@@ -15909,12 +15888,12 @@ Animated = function(I, self) {
     },
     before: {
       update: function() {
-        var time, transition, triggers, updateFrame, _ref, _ref2, _ref3;
+        var time, triggers, updateFrame, _ref2, _ref3;
         if (I.useTimer) {
           time = new Date().getTime();
           if (updateFrame = (time - I.lastUpdate) >= I.activeAnimation.speed) {
             I.lastUpdate = time;
-            if (triggers = (_ref = I.activeAnimation.triggers) != null ? _ref[I.currentFrameIndex] : void 0) {
+            if (triggers = (_ref2 = I.activeAnimation.triggers) != null ? _ref2[I.currentFrameIndex] : void 0) {
               triggers.each(function(event) {
                 return self.trigger(event);
               });
@@ -15922,13 +15901,10 @@ Animated = function(I, self) {
             return advanceFrame();
           }
         } else {
-          if (triggers = (_ref2 = I.activeAnimation.triggers) != null ? _ref2[I.currentFrameIndex] : void 0) {
+          if (triggers = (_ref3 = I.activeAnimation.triggers) != null ? _ref3[I.currentFrameIndex] : void 0) {
             triggers.each(function(event) {
               return self.trigger(event);
             });
-          }
-          if (transition = (_ref3 = I.activeAnimation.transition) != null ? _ref3[I.currentFrameIndex] : void 0) {
-            I.transform = eval(transition);
           }
           return advanceFrame();
         }
@@ -16172,37 +16148,6 @@ Bounded = function(I, self) {
       circle = self.center();
       circle.radius = I.radius || I.width / 2 || I.height / 2;
       return circle;
-    }
-  };
-};;
-var Collidable;
-Collidable = function(I) {
-  I || (I = {});
-  return {
-    solid_collision: function(other) {
-      if (other.solid && other.bounds) {
-        if (Collision.rectangular(self, other)) {
-          self.trigger('collision');
-          return other.trigger('collision');
-        }
-      }
-    },
-    collides_with: function(other) {
-      var nearby, quadTree;
-      if (other.solid && other.bounds) {
-        if (Object.isArray(other)) {
-          quadTree = QuadTree();
-          other.each(function(collidable) {
-            return quadTree.insert(collidable);
-          });
-          nearby = quadTree.retrieve(self);
-          return nearby.each(function(close_collider) {
-            return self.solid_collision(close_collider);
-          });
-        } else {
-          return solid_collision(other);
-        }
-      }
     }
   };
 };;
@@ -16578,6 +16523,7 @@ Emitterable = function(I, self) {
     };
     update = function() {
       var toRemove, _ref;
+      window.updateKeys();
       self.trigger("update");
       _ref = I.objects.partition(function(object) {
         return object.update();
@@ -17525,36 +17471,64 @@ GameUtil = {
     return img.src = data;
   }
 };;
-var Heavy;
-Heavy = function(I) {
-  I || (I = {});
-  $.reverseMerge(I, {
-    gravity: 0.2,
-    maxSpeed: 5
+$(function() {
+  /**
+  The global keydown property lets your query the status of keys.
+  
+  <pre>
+  # Examples:
+  
+  if keydown.left
+    moveLeft()
+  
+  if keydown.a or keydown.space
+    attack()
+  
+  if keydown.return
+    confirm()
+  
+  if keydown.esc
+    cancel()
+  
+  </pre>
+  
+  @name keydown
+  @namespace
+  */  var keyName, prevKeysDown;
+  window.keydown = {};
+  window.justPressed = {};
+  prevKeysDown = {};
+  keyName = function(event) {
+    return jQuery.hotkeys.specialKeys[event.which] || String.fromCharCode(event.which).toLowerCase();
+  };
+  $(document).bind("keydown", function(event) {
+    var key;
+    key = keyName(event);
+    return keydown[key] = true;
   });
-  return {
-    before: {
-      update: function() {
-        return I.velocity = I.velocity.add(Point(0, I.gravity));
+  $(document).bind("keyup", function(event) {
+    var key;
+    key = keyName(event);
+    return keydown[key] = false;
+  });
+  return window.updateKeys = function() {
+    var key, value, _results;
+    window.justPressed = {};
+    for (key in keydown) {
+      value = keydown[key];
+      if (!prevKeysDown[key]) {
+        justPressed[key] = value;
       }
     }
-  };
-};;
-var Hittable;
-Hittable = function(I, self) {
-  I || (I = {});
-  $.reverseMerge(I, {
-    health: 25
-  });
-  return {
-    hit: function() {
-      I.health--;
-      if (I.health < 0) {
-        return self.destroy();
-      }
+    prevKeysDown = {};
+    _results = [];
+    for (key in keydown) {
+      value = keydown[key];
+      _results.push(prevKeysDown[key] = value);
     }
+    return _results;
   };
-};;
+});;
 /**
 The Movable module automatically updates the position and velocity of
 GameObjects based on the velocity and acceleration. It does not check
@@ -17779,6 +17753,25 @@ draw anything to the screen until the image has been loaded.
       height: height
     };
   };
+  Sprite.loadSheet = function(name, tileWidth, tileHeight) {
+    var directory, image, sprites, url, _ref;
+    directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.images : void 0 : void 0) || "images";
+    url = "" + BASE_URL + "/" + directory + "/" + name + ".png";
+    console.log(url);
+    sprites = [];
+    image = new Image();
+    image.onload = function() {
+      var imgElement;
+      imgElement = this;
+      return (image.height / tileHeight).times(function(row) {
+        return (image.width / tileWidth).times(function(col) {
+          return sprites.push(Sprite(imgElement, col * tileWidth, row * tileHeight, tileWidth, tileHeight));
+        });
+      });
+    };
+    image.src = url;
+    return sprites;
+  };
   Sprite.load = function(url, loadedCallback) {
     var img, proxy;
     img = new Image();
@@ -17863,12 +17856,13 @@ draw anything to the screen until the image has been loaded.
   
   @type Sprite
   */
-  return window.Sprite.loadByName = function(name, callback) {
+  window.Sprite.loadByName = function(name, callback) {
     var directory, url, _ref;
     directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.images : void 0 : void 0) || "images";
     url = "" + BASE_URL + "/" + directory + "/" + name + ".png";
     return Sprite.load(url, callback);
   };
+  return window.Sprite.create = Sprite;
 })();;
 (function() {
   var Map, fromPixieId, loadByName;
@@ -18346,7 +18340,7 @@ Player = function(I) {
       p = Point.fromAngle(heading).scale(16);
       c = self.center().add(p);
       speed = I.velocity.magnitude();
-      c.radius = 12 + ((100 - speed * speed) / 100 * 8).clamp(-7, 8);
+      c.radius = 20 + ((100 - speed * speed) / 100 * 8).clamp(-7, 8);
       return c;
     },
     controlPuck: function(puck) {
@@ -18365,9 +18359,13 @@ Player = function(I) {
       return puck.I.velocity = puck.I.velocity.add(positionDelta);
     },
     draw: function(canvas) {
-      var center;
+      var center, cycle, sprite;
       center = self.center();
-      canvas.fillCircle(center.x, center.y, I.radius, I.color);
+      cycle = (I.age / 4).floor() % 2;
+      sprite = player_sprites[cycle + 2];
+      if (sprite != null) {
+        sprite.draw(canvas, I.x, I.y - 16);
+      }
       drawControlCircle(canvas);
       return drawFloatingNameTag(canvas);
     },
@@ -18516,6 +18514,7 @@ Player = function(I) {
         I.boost = 10;
         movement = movement.scale(I.boost);
       }
+      movement = movement.scale(0.75);
       return I.velocity = I.velocity.add(movement);
     }
   });
@@ -18669,6 +18668,23 @@ Zamboni = function(I) {
 };;
 App.entities = {};;
 ;$(function(){ var GAME_OVER, INTERMISSION, awayScore, bgMusic, homeScore, intermission, intermissionTime, leftGoal, nextPeriod, period, periodTime, rightGoal, scoreboard, time;
+Sprite.loadSheet = function(name, tileWidth, tileHeight) {
+  var directory, image, sprites, url, _ref;
+  directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.images : void 0 : void 0) || "images";
+  url = "" + BASE_URL + "/" + directory + "/" + name + ".png";
+  sprites = [];
+  image = new Image();
+  image.onload = function() {
+    return (image.height / tileHeight).times(function(row) {
+      return (image.width / tileWidth).times(function(col) {
+        return sprites.push(Sprite.create(image, col * tileWidth, row * tileHeight, tileWidth, tileHeight));
+      });
+    });
+  };
+  image.src = url;
+  return sprites;
+};
+window.player_sprites = Sprite.loadSheet("player_blue", 32, 48);
 window.CANVAS_WIDTH = App.width;
 window.CANVAS_HEIGHT = App.height;
 window.WALL_LEFT = 64;
