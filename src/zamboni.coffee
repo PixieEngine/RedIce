@@ -98,9 +98,13 @@ Zamboni = (I) ->
   self.bind "step", ->
     pathfind()
 
-    I.rotation = heading = Point.direction(Point(0, 0), I.velocity)
+    heading = Point.direction(Point(0, 0), I.velocity)
 
     cleanIce() unless I.age < 1
+
+    I.hflip = (heading > 2*Math.TAU/8 || heading < -2*Math.TAU/8)
+
+    I.sprite = wideSprites[16]
 
   self
 
