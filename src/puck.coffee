@@ -13,6 +13,7 @@ Puck = (I) ->
     friction: 0.05
     mass: 0.01
     zIndex: 10
+    spriteOffset: Point(-10, -32)
 
   self = Base(I).extend
     bloody: ->
@@ -51,6 +52,9 @@ Puck = (I) ->
 
   self.bind "step", ->
     drawBloodStreaks()
+
+  self.bind "update", ->
+    I.sprite = sprites[39]
 
   self
 
