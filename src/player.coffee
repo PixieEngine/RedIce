@@ -110,7 +110,13 @@ Player = (I) ->
 
     draw: (canvas) ->
       center = self.center()
-      canvas.fillCircle(center.x, center.y, I.radius, I.color)
+      # canvas.fillCircle(center.x, center.y, I.radius, I.color)
+
+      cycle = (I.age/4).floor() % 2
+
+      sprite = player_sprites[cycle + 2]
+
+      sprite?.draw(canvas, I.x, I.y)
 
       drawControlCircle(canvas)
       drawFloatingNameTag(canvas)
