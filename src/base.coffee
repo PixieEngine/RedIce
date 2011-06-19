@@ -11,6 +11,8 @@ Base = (I) ->
   self = GameObject(I).extend
     bloody: $.noop
 
+    crush: $.noop
+
     puck: ->
       I.class == "Puck"
 
