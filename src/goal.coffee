@@ -78,47 +78,56 @@ Goal = (I) ->
 
   self.bind "step", ->
     if puck = engine.find("Puck.active").first()
-      circle = puck.circle()
       velocity = puck.I.velocity
       netReflection = velocity
       isGoal = false
+      circle = puck.circle()
 
-      # Goal wall puck collisions
-      collided = false
-      wallSegments().each (wall) ->
-        if overlap(wall, circle)
-          puckPrev = puck.center().subtract(velocity)
-          puckToWall = puckPrev.subtract(wall.center)
+      steps = (velocity.magnitude() / circle.radius).clamp(1, 5)
 
-          if puckToWall.x.sign() == wall.killSide
-            normal = Point(wall.killSide, 0)
-            velocityProjection = velocity.dot(normal)
+      dt = 1 / steps
 
-            if velocityProjection.sign() == wall.killSide
-              # Hit the back of the net, that's a goal to me!
-              isGoal = true
+      steps.times (step) ->
+        puckPrev = puck.center().subtract(velocity.scale(1 - dt * step))
 
-          else
-            normal = puckToWall.norm()
+        # Goal wall puck collisions
+        collided = false
+        wallSegments().each (wall) ->
+          if overlap(wall, circle)
 
-            velocityProjection = velocity.dot(normal)
+            puckToWall = puckPrev.subtract(wall.center)
 
-            # Heading towards wall
-            if velocityProjection < 0
-              # Reflection Vector
-              netReflection = netReflection.subtract(normal.scale(2 * velocityProjection))
+            if puckToWall.x.sign() == wall.killSide
+              normal = Point(wall.killSide, 0)
+              velocityProjection = velocity.dot(normal)
 
-              collided = true
+              if velocityProjection.sign() == wall.killSide
+                # Hit the back of the net, that's a goal to me!
+                isGoal = true
 
-      if collided
-        puck.I.velocity = netReflection
-        puck.I.x += puck.I.velocity.x
-        puck.I.y += puck.I.velocity.y
+            else
+              normal = puckToWall.norm()
 
-        # Refresh puck circle
-        circle = puck.circle()
+              velocityProjection = velocity.dot(normal)
 
-        Sound.play "clink0"
+              # Heading towards wall
+              if velocityProjection < 0
+                # Reflection Vector
+                netReflection = netReflection.subtract(normal.scale(2 * velocityProjection))
+
+                collided = true
+
+        if collided
+          puck.I.velocity = netReflection
+          timeSteppedVelocity = netReflection.scale(dt)
+
+          puck.I.x += timeSteppedVelocity.x
+          puck.I.y += timeSteppedVelocity.y
+
+          # Refresh puck circle
+          circle = puck.circle()
+
+          Sound.play "clink0"
 
       if isGoal || withinGoal(circle)
         puck.destroy()
