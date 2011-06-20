@@ -10,6 +10,7 @@ Zamboni = (I) ->
     x: 0
     y: ARENA_HEIGHT/2 + WALL_TOP
     velocity: Point(1, 0)
+    mass: 10
     zIndex: 10
 
   SWEEPER_SIZE = 48
