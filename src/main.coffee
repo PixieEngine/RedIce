@@ -194,13 +194,16 @@ engine.bind "update", ->
 
   playersAndPuck = players.concat puck
 
-  Physics.resolveCollisions(objects)
+  # Puck handling
+  players.each (player) ->
+    return if player.I.wipeout
 
-  playersAndPuck.each (player) ->
-    # Puck handling
     if Collision.circular(player.controlCircle(), puck.circle())
       player.controlPuck(puck)
 
+  Physics.resolveCollisions(objects)
+
+  playersAndPuck.each (player) ->
     center = player.center()
     radius = player.I.radius
     velocity = player.I.velocity
