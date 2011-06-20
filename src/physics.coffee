@@ -38,5 +38,48 @@ Physics = (->
       if Collision.circular(a.circle(), b.circle())
         resolveCollision(a, b)
 
+  wallCollisions: (objects) ->
+    walls = [{
+        normal: Point(1, 0)
+        position: WALL_LEFT
+      }, {
+        normal: Point(-1, 0)
+        position: -WALL_RIGHT
+      }, {
+        normal: Point(0, 1)
+        position: WALL_TOP
+      }, {
+        normal: Point(0, -1)
+        position: -WALL_BOTTOM
+    }]
+
+    objects.each (object) ->
+      center = object.center()
+      radius = object.I.radius
+      velocity = object.I.velocity
+
+      # Wall Collisions
+      collided = false
+      walls.each (wall) ->
+        {position, normal} = wall
+
+        # Penetration Vector
+        if center.dot(normal) < radius + position
+          velocityProjection = velocity.dot(normal)
+          # Heading towards wall
+          if velocityProjection < 0
+            # Reflection Vector
+            velocity = velocity.subtract(normal.scale(2 * velocityProjection))
+
+            collided = true
+
+      if collided
+        # Adjust velocity and move to (hopefully) non-penetrating position
+        object.I.velocity = velocity
+        object.I.x += velocity.x
+        object.I.y += velocity.y
+
+        Sound.play "thud0" if object.puck()
+
 )()
 
