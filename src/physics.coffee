@@ -1,4 +1,13 @@
 Physics = (->
+  overlapX = (wall, circle) ->
+    (circle.x - wall.center.x).abs() < wall.halfWidth + circle.radius 
+
+  overlapY = (wall, circle) ->
+    (circle.y - wall.center.y).abs() < wall.halfHeight + circle.radius
+
+  rectangularOverlap = (wall, circle) ->
+    return overlapX(wall, circle) && overlapY(wall, circle)
+
   threshold = 5
 
   resolveCollision = (A, B) ->
@@ -32,14 +41,15 @@ Physics = (->
     A.I.velocity = A.I.velocity.add(pushA)
     B.I.velocity = B.I.velocity.add(pushB)
 
-  resolveCollisions: (objects) ->
+  resolveCollisions = (objects) ->
     objects.eachPair (a, b) ->
       return unless a.collides() && b.collides()
 
       if Collision.circular(a.circle(), b.circle())
         resolveCollision(a, b)
 
-  wallCollisions: (objects) ->
+  wallCollisions = (objects) ->
+    # Arena walls
     walls = [{
         normal: Point(1, 0)
         position: WALL_LEFT
@@ -53,6 +63,42 @@ Physics = (->
         normal: Point(0, -1)
         position: -WALL_BOTTOM
     }]
+
+    # Goal wall segments
+    wallSegments = engine.find("Goal").map (goal) ->
+      goal.walls()
+    .flatten()
+
+    objects.each (object) ->
+      center = circle = object.circle()
+      radius = circle.radius
+      velocity = object.I.velocity
+
+      collided = false
+      wallSegments.each (wall) ->
+        wallToObject = center.subtract(wall.center)
+
+        if rectangularOverlap(wall, circle)
+          if wall.horizontal
+            normal = Point(0, wallToObject.y.sign())
+          else
+            normal = Point(wallToObject.x.sign(), 0)
+
+          velocityProjection = velocity.dot(normal)
+          # Heading towards wall
+          if velocityProjection < 0
+            # Reflection Vector
+            velocity = velocity.subtract(normal.scale(2 * velocityProjection))
+
+            collided = true
+
+      if collided
+        # Adjust velocity and move to (hopefully) non-penetrating position
+        object.I.velocity = velocity
+        object.I.x += velocity.x
+        object.I.y += velocity.y
+
+        Sound.play "clink0" if object.puck()
 
     objects.each (object) ->
       center = object.center()
@@ -81,6 +127,17 @@ Physics = (->
         object.I.y += velocity.y
 
         Sound.play "thud0" if object.puck()
+
+  process: (objects) ->
+    steps = 5
+
+    dt = 1/steps
+
+    steps.times ->
+      objects.invoke "updatePosition", dt
+
+      resolveCollisions(objects)
+      wallCollisions(objects)
 
 )()
 
