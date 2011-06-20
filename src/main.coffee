@@ -184,67 +184,22 @@ engine.bind "update", ->
     if time == 0
       intermission()
 
-  # Resolve Collisions
+  puck = engine.find("Puck").first()
+
   players = engine.find("Player").shuffle()
+  zambonis = engine.find("Zamboni")
 
-  players = players.concat engine.find("Zamboni")
+  objects = players.concat zambonis
+  objects.push puck
 
-  players.push engine.find("Puck").first()
+  playersAndPuck = players.concat puck
 
-  threshold = 5
+  Physics.resolveCollisions(objects)
 
-  i = 0
-  while i < players.length
-    playerA = players[i]
-
-    j = i + 1
-    while j < players.length
-      playerB = players[j]
-
-      j += 1
-
-      continue if playerA.I.wipeout || playerB.I.wipeout
-
-      if Collision.circular(playerA.circle(), playerB.circle())
-        normal = playerB.center().subtract(playerA.center()).norm()
-        # penetrationDepth = playerB.I.radius + playerA.I.radius - Point.distance(playerA.center(), playerB.center())
-
-        # Checking
-        powA = playerA.collisionPower(normal)
-        powB = -playerB.collisionPower(normal)
-
-        relativeVelocity = playerA.I.velocity.subtract(playerB.I.velocity)
-
-        massA = playerA.mass()
-        massB = playerB.mass()
-
-        totalMass = massA + massB
-
-        pushA = normal.scale(-2 * (relativeVelocity.dot(normal) * (massB / totalMass) + 1))
-        pushB = normal.scale(+2 * (relativeVelocity.dot(normal) * (massA / totalMass) + 1))
-
-        playerA.I.velocity = playerA.I.velocity.add(pushA)
-        playerB.I.velocity = playerB.I.velocity.add(pushB)
-
-        max = Math.max(powA, powB)
-
-        if max > threshold
-          if powA == max
-            playerA.crush(playerB)
-            playerB.wipeout(pushB)
-          else
-            playerB.crush(playerA)
-            playerA.wipeout(pushA)
-
-      # Puck handling
-      if playerB.puck() && Collision.circular(playerA.controlCircle(), playerB.circle())
-        playerA.controlPuck(playerB)
-
-    i += 1
-
-  players.each (player) ->
-    # Zamboni doesn't care about walls
-    return if player.I.class == "Zamboni"
+  playersAndPuck.each (player) ->
+    # Puck handling
+    if Collision.circular(player.controlCircle(), puck.circle())
+      player.controlPuck(puck)
 
     center = player.center()
     radius = player.I.radius
