@@ -5,7 +5,7 @@ Puck = (I) ->
     blood: 0
     color: "black"
     strength: 0.5
-    radius: 4
+    radius: 8
     width: 16
     height: 8
     x: 512 - 8
@@ -39,16 +39,16 @@ Puck = (I) ->
 
     lastPosition = currentPos
 
-  self.bind "draw", (canvas) ->
-    if DEBUG_DRAW
-      # Draw velocity vector
-      x = I.width/2
-      y = I.height/2
+  self.bind "drawDebug", (canvas) ->
+    center = self.center()
+    x = center.x
+    y = center.y
 
-      scaledVelocity = I.velocity.scale(10)
+    # Draw velocity vector
+    scaledVelocity = I.velocity.scale(10)
 
-      canvas.strokeColor("orange")
-      canvas.drawLine(x, y, x + scaledVelocity.x, y + scaledVelocity.y)
+    canvas.strokeColor("orange")
+    canvas.drawLine(x, y, x + scaledVelocity.x, y + scaledVelocity.y)
 
   self.bind "step", ->
     drawBloodStreaks()
