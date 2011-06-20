@@ -14,8 +14,6 @@ Goal = (I) ->
     y: WALL_TOP + ARENA_HEIGHT/2 - HEIGHT/2
     spriteOffset: Point(0, -(HEIGHT-2))
 
-  self = GameObject(I)
-
   wallSegments = ->
     walls = [{
       center: Point(I.x + I.width/2, I.y)
@@ -67,6 +65,9 @@ Goal = (I) ->
       2 * wall.halfWidth,
       2 * wall.halfHeight
     )
+
+  self = GameObject(I).extend
+    walls: wallSegments
 
   self.bind "drawDebug", (canvas) ->
     # Draw goal area
