@@ -223,5 +223,5 @@ bgMusic = $ "<audio />",
   loop: "loop"
 .appendTo('body').get(0)
 
-bgMusic.volume = 0.00
+bgMusic.volume = 0.40
 bgMusic.play()
