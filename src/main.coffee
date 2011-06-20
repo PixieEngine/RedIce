@@ -167,6 +167,9 @@ engine.bind "preDraw", (canvas) ->
   canvas.fillText(awayScore, WALL_LEFT + ARENA_WIDTH/2 + 90, 60)
 
 engine.bind "draw", (canvas) ->
+  engine.find("Player, Puck").each (puck) ->
+    puck.trigger("drawDebug", canvas)
+
   if GAME_OVER
     canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
     canvas.fillColor("#000")
