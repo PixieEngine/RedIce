@@ -205,9 +205,7 @@ engine.bind "update", ->
     if Collision.circular(player.controlCircle(), puck.circle())
       player.controlPuck(puck)
 
-  Physics.resolveCollisions(objects)
-
-  Physics.wallCollisions(playersAndPuck)
+  Physics.process(objects)
 
   playersAndPuck.each (player) ->
     # Blood Collisions
