@@ -203,48 +203,9 @@ engine.bind "update", ->
 
   Physics.resolveCollisions(objects)
 
+  Physics.wallCollisions(playersAndPuck)
+
   playersAndPuck.each (player) ->
-    center = player.center()
-    radius = player.I.radius
-    velocity = player.I.velocity
-
-    walls = [{
-        normal: Point(1, 0)
-        position: WALL_LEFT
-      }, {
-        normal: Point(-1, 0)
-        position: -WALL_RIGHT
-      }, {
-        normal: Point(0, 1)
-        position: WALL_TOP
-      }, {
-        normal: Point(0, -1)
-        position: -WALL_BOTTOM
-    }]
-
-    # Wall Collisions
-    collided = false
-    walls.each (wall) ->
-      {position, normal} = wall
-
-      # Penetration Vector
-      if center.dot(normal) < radius + position
-        velocityProjection = velocity.dot(normal)
-        # Heading towards wall
-        if velocityProjection < 0
-          # Reflection Vector
-          velocity = velocity.subtract(normal.scale(2 * velocityProjection))
-
-          collided = true
-
-    if collided
-      # Adjust velocity and move to (hopefully) non-penetrating position
-      player.I.velocity = velocity
-      player.I.x += velocity.x
-      player.I.y += velocity.y
-
-      Sound.play "thud0" if player.puck()
-
     # Blood Collisions
     splats = engine.find("Blood")
 
