@@ -32,21 +32,11 @@ Physics = (->
         A.wipeout(pushA)
 
   resolveCollisions: (objects) ->
+    objects.eachPair (a, b) ->
+      return unless a.collides() && b.collides()
 
-    i = 0
-    while i < objects.length
-      A = objects[i]
-      j = i + 1
-      i += 1
-
-      while j < objects.length
-        B = objects[j]
-        j += 1
-
-        continue unless A.collides() && B.collides()
-
-        if Collision.circular(A.circle(), B.circle())
-          resolveCollision(A, B)
+      if Collision.circular(a.circle(), b.circle())
+        resolveCollision(a, b)
 
 )()
 
