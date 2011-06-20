@@ -42,7 +42,7 @@ Base = (I) ->
         Point(I.x + I.width/2, I.y + I.height/2)
 
     updatePosition: (dt) ->
-      I.velocity = I.velocity.scale((1 - I.friction) * dt)
+      I.velocity = I.velocity.scale((1 - I.friction * dt))
 
       I.x += I.velocity.x * dt
       I.y += I.velocity.y * dt
