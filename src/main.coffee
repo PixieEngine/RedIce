@@ -206,12 +206,12 @@ engine.bind "update", ->
       continue if playerA.I.wipeout || playerB.I.wipeout
 
       if Collision.circular(playerA.circle(), playerB.circle())
-        delta = playerB.center().subtract(playerA.center()).norm()
+        normal = playerB.center().subtract(playerA.center()).norm()
         # penetrationDepth = playerB.I.radius + playerA.I.radius - Point.distance(playerA.center(), playerB.center())
 
         # Checking
-        powA = playerA.collisionPower(delta)
-        powB = -playerB.collisionPower(delta)
+        powA = playerA.collisionPower(normal)
+        powB = -playerB.collisionPower(normal)
 
         relativeVelocity = playerA.I.velocity.subtract(playerB.I.velocity)
 
@@ -220,8 +220,8 @@ engine.bind "update", ->
 
         totalMass = massA + massB
 
-        pushA = delta.scale(-2 * (relativeVelocity.dot(delta) * (massB / totalMass) + 1))
-        pushB = delta.scale(+2 * (relativeVelocity.dot(delta) * (massA / totalMass) + 1))
+        pushA = normal.scale(-2 * (relativeVelocity.dot(normal) * (massB / totalMass) + 1))
+        pushB = normal.scale(+2 * (relativeVelocity.dot(normal) * (massA / totalMass) + 1))
 
         playerA.I.velocity = playerA.I.velocity.add(pushA)
         playerB.I.velocity = playerB.I.velocity.add(pushB)
