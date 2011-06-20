@@ -22,7 +22,7 @@ window.tallSprites = Sprite.loadSheet("sprites", 32, 96)
 window.CANVAS_WIDTH = App.width
 window.CANVAS_HEIGHT = App.height
 
-window.WALL_LEFT = 64
+window.WALL_LEFT = 32
 window.WALL_RIGHT = CANVAS_WIDTH - WALL_LEFT
 window.WALL_TOP = 128
 window.WALL_BOTTOM = CANVAS_HEIGHT - WALL_TOP
@@ -67,6 +67,7 @@ engine.add
 
 leftGoal = engine.add
   class: "Goal"
+  x: WALL_LEFT + ARENA_WIDTH/10 - 32
 
 leftGoal.bind "score", ->
   awayScore += 1
@@ -74,7 +75,7 @@ leftGoal.bind "score", ->
 rightGoal = engine.add
   class: "Goal"
   right: true
-  x: WALL_LEFT + ARENA_WIDTH*19/20
+  x: WALL_LEFT + ARENA_WIDTH*9/10
 
 rightGoal.bind "score", ->
   homeScore += 1
@@ -129,10 +130,10 @@ engine.bind "preDraw", (canvas) ->
 
   # Goal Lines
   canvas.strokeColor(red)
-  x = WALL_LEFT + ARENA_WIDTH/20
+  x = WALL_LEFT + ARENA_WIDTH/10
   canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 1)
   canvas.strokeRect(x, WALL_TOP + ARENA_HEIGHT/2 - 16, 16, 32)
-  x = WALL_LEFT + ARENA_WIDTH*19/20
+  x = WALL_LEFT + ARENA_WIDTH*9/10
   canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 1)
   canvas.strokeRect(x - 16, WALL_TOP + ARENA_HEIGHT/2 - 16, 16, 32)
 
@@ -223,5 +224,5 @@ bgMusic = $ "<audio />",
   loop: "loop"
 .appendTo('body').get(0)
 
-bgMusic.volume = 0.40
+bgMusic.volume = 0.00
 bgMusic.play()
