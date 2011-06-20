@@ -40,7 +40,7 @@ Puck = (I) ->
     lastPosition = currentPos
 
     # Tunneling debug
-    # bloodCanvas.fillCircle(currentPos.x, currentPos.y, I.radius, "rgba(0, 255, 0, 0.5)")
+    bloodCanvas.fillCircle(currentPos.x, currentPos.y, I.radius, "rgba(0, 255, 0, 0.5)")
 
   self.bind "drawDebug", (canvas) ->
     center = self.center()
