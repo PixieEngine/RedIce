@@ -3,8 +3,8 @@ Goal = (I) ->
 
   DEBUG_DRAW = false
   WALL_RADIUS = 2
-  WIDTH = 12
-  HEIGHT = 32
+  WIDTH = 32
+  HEIGHT = 48
 
   $.reverseMerge I,
     color: "green"
@@ -12,7 +12,7 @@ Goal = (I) ->
     width: WIDTH
     x: WALL_LEFT + ARENA_WIDTH/20 - WIDTH
     y: WALL_TOP + ARENA_HEIGHT/2 - HEIGHT/2
-    spriteOffset: Point(0, -48)
+    spriteOffset: Point(0, -(HEIGHT-2))
 
   self = GameObject(I)
 
@@ -59,30 +59,24 @@ Goal = (I) ->
   overlap = (wall, circle) ->
     return overlapX(wall, circle) && overlapY(wall, circle)
 
-  self.bind "draw", (canvas) ->
-    if DEBUG_DRAW
-      # Draw Puck Normals
-      if puck = engine.find("Puck.active").first()
-        velocity = puck.I.velocity
+  drawWall = (wall, canvas) ->
+    canvas.fillColor("#0F0")
+    canvas.fillRect(
+      wall.center.x - wall.halfWidth, 
+      wall.center.y - wall.halfHeight,
+      2 * wall.halfWidth,
+      2 * wall.halfHeight
+    )
 
-        wallSegments().each (wall) ->
-          normal = puck.center().subtract(wall.center).norm()
-
-          deltaCenter = wall.center.subtract(I)
-
-          velocityProjection = velocity.dot(normal)
-
-          normal = normal.scale(16)
-
-          canvas.strokeColor("blue")
-          canvas.drawLine(deltaCenter.x, deltaCenter.y, deltaCenter.x + normal.x, deltaCenter.y + normal.y)
+  self.bind "drawDebug", (canvas) ->
+    wallSegments().each (wall) ->
+      drawWall(wall, canvas)
 
   self.bind "step", ->
     if I.right
       I.sprite = tallSprites[7]      
     else
       I.sprite = tallSprites[6]
-      I.spriteOffset = Point(-18, -48)
 
   return self
 
