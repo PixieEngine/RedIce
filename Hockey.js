@@ -12073,6 +12073,19 @@ Array.prototype.clear = function() {
   return this;
 };
 /**
+Flatten out an array of arrays into a single array of elements.
+
+@name flatten
+@methodOf Array#
+@type Array
+@returns A new array with all the sub-arrays flattened to the top.
+*/
+Array.prototype.flatten = function() {
+  return this.inject([], function(a, b) {
+    return a.concat(b);
+  });
+};
+/**
 Invoke the named method on each element in the array
 and return a new array containing the results of the invocation.
 
@@ -12168,6 +12181,46 @@ Array.prototype.each = function(iterator, context) {
     }
   }
   return this;
+};
+/**
+Call the given iterator once for each pair of objects in the array.
+
+Ex. [1, 2, 3, 4].eachPair (a, b) ->
+  # 1, 2
+  # 1, 3
+  # 1, 4
+  # 2, 3
+  # 2, 4
+  # 3, 4 
+
+@name eachPair
+@methodOf Array#
+@param {Function} iterator Function to be called once for 
+each pair of elements in the array.
+@param {Object} [context] Optional context parameter to be 
+used as `this` when calling the iterator function.
+*/
+Array.prototype.eachPair = function(iterator, context) {
+  var a, b, i, j, length, _results;
+  length = this.length;
+  i = 0;
+  _results = [];
+  while (i < length) {
+    a = this[i];
+    j = i + 1;
+    i += 1;
+    _results.push((function() {
+      var _results2;
+      _results2 = [];
+      while (j < length) {
+        b = this[j];
+        j += 1;
+        _results2.push(iterator.call(context, a, b));
+      }
+      return _results2;
+    }).call(this));
+  }
+  return _results;
 };
 /**
 Call the given iterator once for each element in the array,
@@ -17982,6 +18035,17 @@ Base = function(I) {
       return I["class"] === "Puck";
     },
     wipeout: $.noop,
+    controlPuck: $.noop,
+    controlCircle: function() {
+      return {
+        x: 0,
+        y: 0,
+        radius: 0
+      };
+    },
+    collides: function() {
+      return !I.wipeout;
+    },
     collisionPower: function(normal) {
       return (I.velocity.dot(normal) + I.fortitude) * I.strength;
     },
@@ -17993,16 +18057,27 @@ Base = function(I) {
       } else {
         return Point(I.x + I.width / 2, I.y + I.height / 2);
       }
+    },
+    updatePosition: function(dt) {
+      I.velocity = I.velocity.scale(1 - I.friction * dt);
+      I.x += I.velocity.x * dt;
+      return I.y += I.velocity.y * dt;
     }
   });
   if ((I.velocity != null) && (I.velocity.x != null) && (I.velocity.y != null)) {
     I.velocity = Point(I.velocity.x, I.velocity.y);
   }
   self.bind("update", function() {
-    I.velocity = I.velocity.scale(1 - I.friction);
-    I.x += I.velocity.x;
-    I.y += I.velocity.y;
     return I.zIndex = 1 + (I.y + I.height) / CANVAS_HEIGHT;
+  });
+  self.bind("drawDebug", function(canvas) {
+    var center, x, y;
+    if (I.radius) {
+      center = self.center();
+      x = center.x;
+      y = center.y;
+      return canvas.fillCircle(x, y, I.radius, "rgba(255, 0, 255, 0.5)");
+    }
   });
   self.attrReader("mass");
   return self;
@@ -18158,32 +18233,33 @@ layouts[selectedLayout].each(function(actions, i) {
 parent.gameControlData = gameControlData;;
 var Goal;
 Goal = function(I) {
-  var DEBUG_DRAW, HEIGHT, WALL_RADIUS, WIDTH, overlap, overlapX, overlapY, self, wallSegments, withinGoal;
+  var DEBUG_DRAW, HEIGHT, WALL_RADIUS, WIDTH, drawWall, overlap, overlapX, overlapY, self, wallSegments, withinGoal;
   I || (I = {});
   DEBUG_DRAW = false;
   WALL_RADIUS = 2;
-  WIDTH = 12;
-  HEIGHT = 32;
+  WIDTH = 32;
+  HEIGHT = 48;
   $.reverseMerge(I, {
     color: "green",
     height: HEIGHT,
     width: WIDTH,
     x: WALL_LEFT + ARENA_WIDTH / 20 - WIDTH,
     y: WALL_TOP + ARENA_HEIGHT / 2 - HEIGHT / 2,
-    spriteOffset: Point(0, -48)
+    spriteOffset: Point(0, -(HEIGHT - 2))
   });
-  self = GameObject(I);
   wallSegments = function() {
     var walls;
     walls = [
       {
         center: Point(I.x + I.width / 2, I.y),
         halfWidth: I.width / 2,
-        halfHeight: WALL_RADIUS
+        halfHeight: WALL_RADIUS,
+        horizontal: true
       }, {
         center: Point(I.x + I.width / 2, I.y + I.height),
         halfWidth: I.width / 2,
-        halfHeight: WALL_RADIUS
+        halfHeight: WALL_RADIUS,
+        horizontal: true
       }
     ];
     if (I.right) {
@@ -18220,83 +18296,167 @@ Goal = function(I) {
   overlap = function(wall, circle) {
     return overlapX(wall, circle) && overlapY(wall, circle);
   };
-  self.bind("draw", function(canvas) {
-    var puck, velocity;
-    if (DEBUG_DRAW) {
-      if (puck = engine.find("Puck.active").first()) {
-        velocity = puck.I.velocity;
-        return wallSegments().each(function(wall) {
-          var deltaCenter, normal, velocityProjection;
-          normal = puck.center().subtract(wall.center).norm();
-          deltaCenter = wall.center.subtract(I);
-          velocityProjection = velocity.dot(normal);
-          normal = normal.scale(16);
-          canvas.strokeColor("blue");
-          return canvas.drawLine(deltaCenter.x, deltaCenter.y, deltaCenter.x + normal.x, deltaCenter.y + normal.y);
-        });
-      }
-    }
+  drawWall = function(wall, canvas) {
+    canvas.fillColor("#0F0");
+    return canvas.fillRect(wall.center.x - wall.halfWidth, wall.center.y - wall.halfHeight, 2 * wall.halfWidth, 2 * wall.halfHeight);
+  };
+  self = GameObject(I).extend({
+    walls: wallSegments
+  });
+  self.bind("drawDebug", function(canvas) {
+    canvas.fillColor("rgba(255, 0, 255, 0.5)");
+    canvas.fillRect(I.x, I.y, I.width, I.height);
+    return wallSegments().each(function(wall) {
+      return drawWall(wall, canvas);
+    });
   });
   self.bind("step", function() {
-    var circle, dt, isGoal, netReflection, puck, steps, velocity;
     if (I.right) {
-      I.sprite = tallSprites[7];
+      return I.sprite = tallSprites[7];
     } else {
-      I.sprite = tallSprites[6];
-      I.spriteOffset = Point(-18, -48);
-    }
-    if (puck = engine.find("Puck.active").first()) {
-      velocity = puck.I.velocity;
-      netReflection = velocity;
-      isGoal = false;
-      circle = puck.circle();
-      steps = (velocity.magnitude() / circle.radius).clamp(1, 5);
-      dt = 1 / steps;
-      steps.times(function(step) {
-        var collided, puckPrev, timeSteppedVelocity;
-        puckPrev = puck.center().subtract(velocity.scale(1 - dt * step));
-        collided = false;
-        wallSegments().each(function(wall) {
-          var normal, puckToWall, velocityProjection;
-          if (overlap(wall, circle)) {
-            puckToWall = puckPrev.subtract(wall.center);
-            if (puckToWall.x.sign() === wall.killSide) {
-              normal = Point(wall.killSide, 0);
-              velocityProjection = velocity.dot(normal);
-              if (velocityProjection.sign() === wall.killSide) {
-                return isGoal = true;
-              }
-            } else {
-              normal = puckToWall.norm();
-              velocityProjection = velocity.dot(normal);
-              if (velocityProjection < 0) {
-                netReflection = netReflection.subtract(normal.scale(2 * velocityProjection));
-                return collided = true;
-              }
-            }
-          }
-        });
-        if (collided) {
-          puck.I.velocity = netReflection;
-          timeSteppedVelocity = netReflection.scale(dt);
-          puck.I.x += timeSteppedVelocity.x;
-          puck.I.y += timeSteppedVelocity.y;
-          circle = puck.circle();
-          return Sound.play("clink0");
-        }
-      });
-      if (isGoal || withinGoal(circle)) {
-        puck.destroy();
-        Sound.play("crowd" + (rand(3)));
-        engine.add({
-          "class": "Puck"
-        });
-        return self.trigger("score");
-      }
+      return I.sprite = tallSprites[6];
     }
   });
   return self;
 };;
+var Physics;
+Physics = (function() {
+  var overlapX, overlapY, rectangularOverlap, resolveCollision, resolveCollisions, threshold, wallCollisions;
+  overlapX = function(wall, circle) {
+    return (circle.x - wall.center.x).abs() < wall.halfWidth + circle.radius;
+  };
+  overlapY = function(wall, circle) {
+    return (circle.y - wall.center.y).abs() < wall.halfHeight + circle.radius;
+  };
+  rectangularOverlap = function(wall, circle) {
+    return overlapX(wall, circle) && overlapY(wall, circle);
+  };
+  threshold = 5;
+  resolveCollision = function(A, B) {
+    var massA, massB, max, normal, powA, powB, pushA, pushB, relativeVelocity, totalMass;
+    normal = B.center().subtract(A.center()).norm();
+    powA = A.collisionPower(normal);
+    powB = -B.collisionPower(normal);
+    max = Math.max(powA, powB);
+    if (max > threshold) {
+      if (powA === max) {
+        A.crush(B);
+        B.wipeout(normal);
+      } else {
+        B.crush(A);
+        A.wipeout(normal.scale(-1));
+      }
+    }
+    relativeVelocity = A.I.velocity.subtract(B.I.velocity);
+    massA = A.mass();
+    massB = B.mass();
+    totalMass = massA + massB;
+    pushA = normal.scale(-2 * (relativeVelocity.dot(normal) * (massB / totalMass) + 1));
+    pushB = normal.scale(+2 * (relativeVelocity.dot(normal) * (massA / totalMass) + 1));
+    A.I.velocity = A.I.velocity.add(pushA);
+    return B.I.velocity = B.I.velocity.add(pushB);
+  };
+  resolveCollisions = function(objects) {
+    return objects.eachPair(function(a, b) {
+      if (!(a.collides() && b.collides())) {
+        return;
+      }
+      if (Collision.circular(a.circle(), b.circle())) {
+        return resolveCollision(a, b);
+      }
+    });
+  };
+  wallCollisions = function(objects) {
+    var wallSegments, walls;
+    walls = [
+      {
+        normal: Point(1, 0),
+        position: WALL_LEFT
+      }, {
+        normal: Point(-1, 0),
+        position: -WALL_RIGHT
+      }, {
+        normal: Point(0, 1),
+        position: WALL_TOP
+      }, {
+        normal: Point(0, -1),
+        position: -WALL_BOTTOM
+      }
+    ];
+    wallSegments = engine.find("Goal").map(function(goal) {
+      return goal.walls();
+    }).flatten();
+    objects.each(function(object) {
+      var center, circle, collided, radius, velocity;
+      center = circle = object.circle();
+      radius = circle.radius;
+      velocity = object.I.velocity;
+      collided = false;
+      wallSegments.each(function(wall) {
+        var normal, velocityProjection, wallToObject;
+        wallToObject = center.subtract(wall.center);
+        if (rectangularOverlap(wall, circle)) {
+          if (wall.horizontal) {
+            normal = Point(0, wallToObject.y.sign());
+          } else {
+            normal = Point(wallToObject.x.sign(), 0);
+          }
+          velocityProjection = velocity.dot(normal);
+          if (velocityProjection < 0) {
+            velocity = velocity.subtract(normal.scale(2 * velocityProjection));
+            return collided = true;
+          }
+        }
+      });
+      if (collided) {
+        object.I.velocity = velocity;
+        object.I.x += velocity.x;
+        object.I.y += velocity.y;
+        if (object.puck()) {
+          return Sound.play("clink0");
+        }
+      }
+    });
+    return objects.each(function(object) {
+      var center, collided, radius, velocity;
+      center = object.center();
+      radius = object.I.radius;
+      velocity = object.I.velocity;
+      collided = false;
+      walls.each(function(wall) {
+        var normal, position, velocityProjection;
+        position = wall.position, normal = wall.normal;
+        if (center.dot(normal) < radius + position) {
+          velocityProjection = velocity.dot(normal);
+          if (velocityProjection < 0) {
+            velocity = velocity.subtract(normal.scale(2 * velocityProjection));
+            return collided = true;
+          }
+        }
+      });
+      if (collided) {
+        object.I.velocity = velocity;
+        object.I.x += velocity.x;
+        object.I.y += velocity.y;
+        if (object.puck()) {
+          return Sound.play("thud0");
+        }
+      }
+    });
+  };
+  return {
+    process: function(objects) {
+      var dt, steps;
+      steps = 5;
+      dt = 1 / steps;
+      return steps.times(function() {
+        objects.invoke("updatePosition", dt);
+        resolveCollisions(objects);
+        return wallCollisions(objects);
+      });
+    }
+  };
+})();;
 var Player;
 Player = function(I) {
   var PLAYER_COLORS, actionDown, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, playerColor, redTeam, rightSkatePos, self, shootPuck, teamColor;
@@ -18566,7 +18726,7 @@ Puck = function(I) {
     blood: 0,
     color: "black",
     strength: 0.5,
-    radius: 4,
+    radius: 8,
     width: 16,
     height: 8,
     x: 512 - 8,
@@ -18594,17 +18754,17 @@ Puck = function(I) {
       bloodCanvas.strokeColor(color);
       bloodCanvas.drawLine(lastPosition, currentPos, (blood / 20).clamp(1, 6));
     }
-    return lastPosition = currentPos;
+    lastPosition = currentPos;
+    return bloodCanvas.fillCircle(currentPos.x, currentPos.y, I.radius, "rgba(0, 255, 0, 0.5)");
   };
-  self.bind("draw", function(canvas) {
-    var scaledVelocity, x, y;
-    if (DEBUG_DRAW) {
-      x = I.width / 2;
-      y = I.height / 2;
-      scaledVelocity = I.velocity.scale(10);
-      canvas.strokeColor("orange");
-      return canvas.drawLine(x, y, x + scaledVelocity.x, y + scaledVelocity.y);
-    }
+  self.bind("drawDebug", function(canvas) {
+    var center, scaledVelocity, x, y;
+    center = self.center();
+    x = center.x;
+    y = center.y;
+    scaledVelocity = I.velocity.scale(10);
+    canvas.strokeColor("orange");
+    return canvas.drawLine(x, y, x + scaledVelocity.x, y + scaledVelocity.y);
   });
   self.bind("step", function() {
     return drawBloodStreaks();
@@ -18628,6 +18788,7 @@ Zamboni = function(I) {
     x: 0,
     y: ARENA_HEIGHT / 2 + WALL_TOP,
     velocity: Point(1, 0),
+    mass: 10,
     zIndex: 10
   });
   SWEEPER_SIZE = 48;
@@ -18738,7 +18899,7 @@ window.wideSprites = Sprite.loadSheet("sprites", 64, 48);
 window.tallSprites = Sprite.loadSheet("sprites", 32, 96);
 window.CANVAS_WIDTH = App.width;
 window.CANVAS_HEIGHT = App.height;
-window.WALL_LEFT = 64;
+window.WALL_LEFT = 32;
 window.WALL_RIGHT = CANVAS_WIDTH - WALL_LEFT;
 window.WALL_TOP = 128;
 window.WALL_BOTTOM = CANVAS_HEIGHT - WALL_TOP;
@@ -18776,7 +18937,8 @@ engine.add({
   "class": "Puck"
 });
 leftGoal = engine.add({
-  "class": "Goal"
+  "class": "Goal",
+  x: WALL_LEFT + ARENA_WIDTH / 10 - 32
 });
 leftGoal.bind("score", function() {
   return awayScore += 1;
@@ -18784,7 +18946,7 @@ leftGoal.bind("score", function() {
 rightGoal = engine.add({
   "class": "Goal",
   right: true,
-  x: WALL_LEFT + ARENA_WIDTH * 19 / 20
+  x: WALL_LEFT + ARENA_WIDTH * 9 / 10
 });
 rightGoal.bind("score", function() {
   return homeScore += 1;
@@ -18828,10 +18990,10 @@ engine.bind("preDraw", function(canvas) {
   canvas.context().lineWidth = 2;
   canvas.strokeCircle(x, y, faceOffCircleRadius, blue);
   canvas.strokeColor(red);
-  x = WALL_LEFT + ARENA_WIDTH / 20;
+  x = WALL_LEFT + ARENA_WIDTH / 10;
   canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 1);
   canvas.strokeRect(x, WALL_TOP + ARENA_HEIGHT / 2 - 16, 16, 32);
-  x = WALL_LEFT + ARENA_WIDTH * 19 / 20;
+  x = WALL_LEFT + ARENA_WIDTH * 9 / 10;
   canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 1);
   canvas.strokeRect(x - 16, WALL_TOP + ARENA_HEIGHT / 2 - 16, 16, 32);
   [1, 3].each(function(verticalQuarter) {
@@ -18861,6 +19023,9 @@ engine.bind("preDraw", function(canvas) {
   return canvas.fillText(awayScore, WALL_LEFT + ARENA_WIDTH / 2 + 90, 60);
 });
 engine.bind("draw", function(canvas) {
+  engine.find("Player, Puck, Goal").each(function(puck) {
+    return puck.trigger("drawDebug", canvas);
+  });
   if (GAME_OVER) {
     canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
     canvas.fillColor("#000");
@@ -18868,7 +19033,7 @@ engine.bind("draw", function(canvas) {
   }
 });
 engine.bind("update", function() {
-  var i, j, massA, massB, max, normal, playerA, playerB, players, powA, powB, pushA, pushB, relativeVelocity, threshold, totalMass;
+  var objects, players, playersAndPuck, puck, zambonis;
   time -= 1;
   if (INTERMISSION) {
     if (time === 0) {
@@ -18881,92 +19046,23 @@ engine.bind("update", function() {
       intermission();
     }
   }
+  puck = engine.find("Puck").first();
   players = engine.find("Player").shuffle();
-  players = players.concat(engine.find("Zamboni"));
-  players.push(engine.find("Puck").first());
-  threshold = 5;
-  i = 0;
-  while (i < players.length) {
-    playerA = players[i];
-    j = i + 1;
-    while (j < players.length) {
-      playerB = players[j];
-      j += 1;
-      if (playerA.I.wipeout || playerB.I.wipeout) {
-        continue;
-      }
-      if (Collision.circular(playerA.circle(), playerB.circle())) {
-        normal = playerB.center().subtract(playerA.center()).norm();
-        powA = playerA.collisionPower(normal);
-        powB = -playerB.collisionPower(normal);
-        relativeVelocity = playerA.I.velocity.subtract(playerB.I.velocity);
-        massA = playerA.mass();
-        massB = playerB.mass();
-        totalMass = massA + massB;
-        pushA = normal.scale(-2 * (relativeVelocity.dot(normal) * (massB / totalMass) + 1));
-        pushB = normal.scale(+2 * (relativeVelocity.dot(normal) * (massA / totalMass) + 1));
-        playerA.I.velocity = playerA.I.velocity.add(pushA);
-        playerB.I.velocity = playerB.I.velocity.add(pushB);
-        max = Math.max(powA, powB);
-        if (max > threshold) {
-          if (powA === max) {
-            playerA.crush(playerB);
-            playerB.wipeout(pushB);
-          } else {
-            playerB.crush(playerA);
-            playerA.wipeout(pushA);
-          }
-        }
-      }
-      if (playerB.puck() && Collision.circular(playerA.controlCircle(), playerB.circle())) {
-        playerA.controlPuck(playerB);
-      }
-    }
-    i += 1;
-  }
-  return players.each(function(player) {
-    var center, collided, radius, splats, velocity, walls;
-    if (player.I["class"] === "Zamboni") {
+  zambonis = engine.find("Zamboni");
+  objects = players.concat(zambonis);
+  objects.push(puck);
+  playersAndPuck = players.concat(puck);
+  players.each(function(player) {
+    if (player.I.wipeout) {
       return;
     }
-    center = player.center();
-    radius = player.I.radius;
-    velocity = player.I.velocity;
-    walls = [
-      {
-        normal: Point(1, 0),
-        position: WALL_LEFT
-      }, {
-        normal: Point(-1, 0),
-        position: -WALL_RIGHT
-      }, {
-        normal: Point(0, 1),
-        position: WALL_TOP
-      }, {
-        normal: Point(0, -1),
-        position: -WALL_BOTTOM
-      }
-    ];
-    collided = false;
-    walls.each(function(wall) {
-      var position, velocityProjection;
-      position = wall.position, normal = wall.normal;
-      if (center.dot(normal) < radius + position) {
-        velocityProjection = velocity.dot(normal);
-        if (velocityProjection < 0) {
-          velocity = velocity.subtract(normal.scale(2 * velocityProjection));
-          return collided = true;
-        }
-      }
-    });
-    if (collided) {
-      player.I.velocity = velocity;
-      player.I.x += velocity.x;
-      player.I.y += velocity.y;
-      if (player.puck()) {
-        Sound.play("thud0");
-      }
+    if (Collision.circular(player.controlCircle(), puck.circle())) {
+      return player.controlPuck(puck);
     }
+  });
+  Physics.process(objects);
+  return playersAndPuck.each(function(player) {
+    var splats;
     splats = engine.find("Blood");
     return splats.each(function(splat) {
       if (Collision.circular(player.circle(), splat.circle())) {
@@ -18980,5 +19076,5 @@ bgMusic = $("<audio />", {
   src: BASE_URL + "/sounds/music1.mp3",
   loop: "loop"
 }).appendTo('body').get(0);
-bgMusic.volume = 0.40;
+bgMusic.volume = 0.00;
 bgMusic.play(); });
