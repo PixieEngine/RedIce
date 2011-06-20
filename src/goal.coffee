@@ -19,10 +19,12 @@ Goal = (I) ->
       center: Point(I.x + I.width/2, I.y)
       halfWidth: I.width/2
       halfHeight: WALL_RADIUS
+      horizontal: true
     }, {
       center: Point(I.x + I.width/2, I.y + I.height)
       halfWidth: I.width/2
       halfHeight: WALL_RADIUS
+      horizontal: true
     }]
 
     if I.right
