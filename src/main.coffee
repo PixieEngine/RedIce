@@ -167,7 +167,7 @@ engine.bind "preDraw", (canvas) ->
   canvas.fillText(awayScore, WALL_LEFT + ARENA_WIDTH/2 + 90, 60)
 
 engine.bind "draw", (canvas) ->
-  engine.find("Player, Puck").each (puck) ->
+  engine.find("Player, Puck, Goal").each (puck) ->
     puck.trigger("drawDebug", canvas)
 
   if GAME_OVER
@@ -223,5 +223,5 @@ bgMusic = $ "<audio />",
   loop: "loop"
 .appendTo('body').get(0)
 
-bgMusic.volume = 0.40
+bgMusic.volume = 0.00
 bgMusic.play()
