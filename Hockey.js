@@ -17977,6 +17977,7 @@ Base = function(I) {
   });
   self = GameObject(I).extend({
     bloody: $.noop,
+    crush: $.noop,
     puck: function() {
       return I["class"] === "Puck";
     },
@@ -18417,23 +18418,14 @@ Player = function(I) {
     return self.center().add(p);
   };
   shootPuck = function() {
-    var baseShotPower, circle, p, power, puck, stealPower;
+    var baseShotPower, circle, p, power, puck;
     puck = engine.find("Puck").first();
     power = I.shootPower;
-    stealPower = 10;
     circle = self.controlCircle();
     baseShotPower = 15;
-    if (power < 3) {
-      circle.radius *= 1.5;
-      if (Collision.circular(circle, puck.circle())) {
-        p = Point.fromAngle(Random.angle()).scale(stealPower);
-        puck.I.velocity = puck.I.velocity.add(p);
-      }
-    } else {
-      if (Collision.circular(circle, puck.circle())) {
-        p = Point.fromAngle(heading).scale(baseShotPower + power * 2);
-        puck.I.velocity = puck.I.velocity.add(p);
-      }
+    if (Collision.circular(circle, puck.circle())) {
+      p = Point.fromAngle(heading).scale(baseShotPower + power * 2);
+      puck.I.velocity = puck.I.velocity.add(p);
     }
     return I.shootPower = 0;
   };
@@ -18668,6 +18660,11 @@ Zamboni = function(I) {
     controlCircle: function() {
       return self.circle();
     },
+    crush: function(other) {
+      if (!other.puck()) {
+        return I.blood = (I.blood + 1).clamp(0, 6);
+      }
+    },
     controlPuck: $.noop,
     wipeout: function() {
       Sound.play("explosion");
@@ -18714,7 +18711,7 @@ Zamboni = function(I) {
       cleanIce();
     }
     I.hflip = heading > 2 * Math.TAU / 8 || heading < -2 * Math.TAU / 8;
-    return I.sprite = wideSprites[16];
+    return I.sprite = wideSprites[16 + 8 * (I.blood / 3).floor()];
   });
   return self;
 };;
@@ -18871,7 +18868,7 @@ engine.bind("draw", function(canvas) {
   }
 });
 engine.bind("update", function() {
-  var delta, i, j, massA, massB, max, playerA, playerB, players, powA, powB, pushA, pushB, relativeVelocity, threshold, totalMass;
+  var i, j, massA, massB, max, normal, playerA, playerB, players, powA, powB, pushA, pushB, relativeVelocity, threshold, totalMass;
   time -= 1;
   if (INTERMISSION) {
     if (time === 0) {
@@ -18899,22 +18896,24 @@ engine.bind("update", function() {
         continue;
       }
       if (Collision.circular(playerA.circle(), playerB.circle())) {
-        delta = playerB.center().subtract(playerA.center()).norm();
-        powA = playerA.collisionPower(delta);
-        powB = -playerB.collisionPower(delta);
+        normal = playerB.center().subtract(playerA.center()).norm();
+        powA = playerA.collisionPower(normal);
+        powB = -playerB.collisionPower(normal);
         relativeVelocity = playerA.I.velocity.subtract(playerB.I.velocity);
         massA = playerA.mass();
         massB = playerB.mass();
         totalMass = massA + massB;
-        pushA = delta.scale(-2 * (relativeVelocity.dot(delta) * (massB / totalMass) + 1));
-        pushB = delta.scale(+2 * (relativeVelocity.dot(delta) * (massA / totalMass) + 1));
+        pushA = normal.scale(-2 * (relativeVelocity.dot(normal) * (massB / totalMass) + 1));
+        pushB = normal.scale(+2 * (relativeVelocity.dot(normal) * (massA / totalMass) + 1));
         playerA.I.velocity = playerA.I.velocity.add(pushA);
         playerB.I.velocity = playerB.I.velocity.add(pushB);
         max = Math.max(powA, powB);
         if (max > threshold) {
           if (powA === max) {
+            playerA.crush(playerB);
             playerB.wipeout(pushB);
           } else {
+            playerB.crush(playerA);
             playerA.wipeout(pushA);
           }
         }
@@ -18950,7 +18949,7 @@ engine.bind("update", function() {
     ];
     collided = false;
     walls.each(function(wall) {
-      var normal, position, velocityProjection;
+      var position, velocityProjection;
       position = wall.position, normal = wall.normal;
       if (center.dot(normal) < radius + position) {
         velocityProjection = velocity.dot(normal);
