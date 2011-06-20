@@ -39,6 +39,8 @@ Puck = (I) ->
 
     lastPosition = currentPos
 
+    bloodCanvas.fillCircle(currentPos.x, currentPos.y, I.radius, "rgba(0, 255, 0, 0.5)")
+
   self.bind "drawDebug", (canvas) ->
     center = self.center()
     x = center.x
