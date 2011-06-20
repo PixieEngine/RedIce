@@ -69,6 +69,11 @@ Goal = (I) ->
     )
 
   self.bind "drawDebug", (canvas) ->
+    # Draw goal area
+    canvas.fillColor("rgba(255, 0, 255, 0.5)")
+    canvas.fillRect(I.x, I.y, I.width, I.height)
+
+    # Draw walls
     wallSegments().each (wall) ->
       drawWall(wall, canvas)
 
