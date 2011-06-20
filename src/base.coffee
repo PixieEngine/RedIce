@@ -41,15 +41,16 @@ Base = (I) ->
       else
         Point(I.x + I.width/2, I.y + I.height/2)
 
+    updatePosition: (dt) ->
+      I.velocity = I.velocity.scale((1 - I.friction) * dt)
+
+      I.x += I.velocity.x * dt
+      I.y += I.velocity.y * dt
+
   if I.velocity? && I.velocity.x? && I.velocity.y?
     I.velocity = Point(I.velocity.x, I.velocity.y)
 
   self.bind "update", ->
-    I.velocity = I.velocity.scale(1 - I.friction)
-
-    I.x += I.velocity.x
-    I.y += I.velocity.y
-
     I.zIndex = 1 + (I.y + I.height)/CANVAS_HEIGHT
 
   self.bind "drawDebug", (canvas) ->
