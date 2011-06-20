@@ -18,6 +18,15 @@ Base = (I) ->
 
     wipeout: $.noop
 
+    controlPuck: $.noop
+    controlCircle: ->
+      x: 0
+      y: 0
+      radius: 0
+
+    collides: ->
+      !I.wipeout
+
     # The "Power Rating" for determining who gets wrecked during collisions
     # Fundamentally: I.velocity.dot(normal)
     collisionPower: (normal) ->
