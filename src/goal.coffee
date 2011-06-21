@@ -55,8 +55,8 @@ Goal = (I) ->
     walls: wallSegments
 
     withinGoal: (circle) ->
-      if circle.x + circle.radius > I.x && circle.x - circle.radius < I.x + I.width
-        if circle.y + circle.radius > I.y && circle.y - circle.radius < I.y + I.height
+      if circle.x - circle.radius > I.x && circle.x + circle.radius < I.x + I.width
+        if circle.y - circle.radius > I.y && circle.y + circle.radius < I.y + I.height
           return true
 
       return false
