@@ -56,6 +56,19 @@ Puck = (I) ->
   self.bind "step", ->
     drawBloodStreaks()
 
+  self.bind "positionUpdated", ->
+    return unless I.active
+
+    circle = self.circle()
+
+    engine.find("Goal").each (goal) ->
+      if goal.withinGoal(circle)
+        self.destroy()
+        goal.score()
+
+        engine.add
+          class: "Puck"
+
   self.bind "update", ->
     I.sprite = sprites[39]
 
