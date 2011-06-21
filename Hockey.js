@@ -18500,14 +18500,15 @@ Player = function(I) {
   I.name || (I.name = "Player " + (I.controller + 1));
   heading = 0;
   drawFloatingNameTag = function(canvas) {
-    var backgroundColor, center, lineHeight, padding, rectHeight, rectWidth, textWidth, topLeft, yOffset;
+    var backgroundColor, center, lineHeight, name, padding, rectHeight, rectWidth, textWidth, topLeft, yOffset;
     canvas.font("bold 16px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
+    name = I.controller + 1;
     padding = 6;
     lineHeight = 16;
-    textWidth = canvas.measureText(I.name);
+    textWidth = canvas.measureText(name);
     backgroundColor = Color(playerColor);
     backgroundColor.a("0.5");
-    yOffset = 32;
+    yOffset = 48;
     center = self.center();
     topLeft = center.subtract(Point(textWidth / 2 + padding, lineHeight / 2 + padding + yOffset));
     rectWidth = textWidth + 2 * padding;
@@ -18515,7 +18516,7 @@ Player = function(I) {
     canvas.fillColor(backgroundColor);
     canvas.fillRoundRect(topLeft.x, topLeft.y, rectWidth, rectHeight, 4);
     canvas.fillColor("#FFF");
-    return canvas.fillText(I.name, topLeft.x + padding, topLeft.y + lineHeight + padding / 2);
+    return canvas.fillText(name, topLeft.x + padding, topLeft.y + lineHeight + padding / 2);
   };
   drawControlCircle = function(canvas) {
     var circle, color;
@@ -18556,9 +18557,15 @@ Player = function(I) {
       }
       return puck.I.velocity = puck.I.velocity.add(positionDelta);
     },
-    puck: function() {
-      return false;
+    drawShadow: function(canvas) {
+      var base;
+      base = self.center();
+      base.y += I.height / 2 + 4;
+      return canvas.withTransform(Matrix.scale(1, -0.5, base), function() {
+        return canvas.fillCircle(base.x, base.y + 16, 16, "rgba(0, 0, 0, 0.5)");
+      });
     },
+    drawNameTag: drawFloatingNameTag,
     wipeout: function(push) {
       I.falls += 1;
       I.wipeout = 25;
@@ -18717,10 +18724,6 @@ Player = function(I) {
       spriteIndex = cycle + facingOffset + teamColor;
     }
     return I.sprite = sprites[spriteIndex];
-  });
-  self.bind("drawHUD", function(canvas) {
-    drawControlCircle(canvas);
-    return drawFloatingNameTag(canvas);
   });
   return self;
 };;
@@ -19046,9 +19049,11 @@ engine.bind("preDraw", function(canvas) {
   canvas.fillText("" + minutes + ":" + seconds, WALL_LEFT + ARENA_WIDTH / 2 - 22, 46);
   canvas.fillText(period, WALL_LEFT + ARENA_WIDTH / 2 + 18, 84);
   canvas.fillText(homeScore, WALL_LEFT + ARENA_WIDTH / 2 - 72, 60);
-  return canvas.fillText(awayScore, WALL_LEFT + ARENA_WIDTH / 2 + 90, 60);
+  canvas.fillText(awayScore, WALL_LEFT + ARENA_WIDTH / 2 + 90, 60);
+  return engine.find("Player").invoke("drawShadow", canvas);
 });
 engine.bind("draw", function(canvas) {
+  engine.find("Player").invoke("drawNameTag", canvas);
   if (DEBUG_DRAW) {
     engine.find("Player, Puck, Goal").each(function(puck) {
       return puck.trigger("drawDebug", canvas);
