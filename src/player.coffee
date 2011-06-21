@@ -47,14 +47,16 @@ Player = (I) ->
   drawFloatingNameTag = (canvas) ->
     canvas.font("bold 16px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
 
+    name = I.controller + 1
+
     padding = 6
     lineHeight = 16
-    textWidth = canvas.measureText(I.name)
+    textWidth = canvas.measureText(name)
 
     backgroundColor = Color(playerColor)
     backgroundColor.a "0.5"
 
-    yOffset = 32
+    yOffset = 48
 
     center = self.center()
 
@@ -66,7 +68,7 @@ Player = (I) ->
     canvas.fillRoundRect(topLeft.x, topLeft.y, rectWidth, rectHeight, 4)
 
     canvas.fillColor("#FFF")
-    canvas.fillText(I.name, topLeft.x + padding, topLeft.y + lineHeight + padding/2)
+    canvas.fillText(name, topLeft.x + padding, topLeft.y + lineHeight + padding/2)
 
   drawControlCircle = (canvas) ->
     color = Color(playerColor).lighten(0.10)
@@ -119,6 +121,8 @@ Player = (I) ->
 
       canvas.withTransform Matrix.scale(1, -0.5, base), ->
         canvas.fillCircle(base.x, base.y + 16, 16, "rgba(0, 0, 0, 0.5)")
+
+    drawNameTag: drawFloatingNameTag
 
     wipeout: (push) ->
       I.falls += 1
