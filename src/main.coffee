@@ -168,7 +168,12 @@ engine.bind "preDraw", (canvas) ->
   canvas.fillText(homeScore, WALL_LEFT + ARENA_WIDTH/2 - 72, 60)
   canvas.fillText(awayScore, WALL_LEFT + ARENA_WIDTH/2 + 90, 60)
 
+  # Draw player shadows
+  engine.find("Player").invoke "drawShadow", canvas
+
 engine.bind "draw", (canvas) ->
+  # Draw name tags
+
   if DEBUG_DRAW
     engine.find("Player, Puck, Goal").each (puck) ->
       puck.trigger("drawDebug", canvas)
