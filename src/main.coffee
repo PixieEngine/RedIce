@@ -173,6 +173,7 @@ engine.bind "preDraw", (canvas) ->
 
 engine.bind "draw", (canvas) ->
   # Draw name tags
+  engine.find("Player").invoke "drawNameTag", canvas
 
   if DEBUG_DRAW
     engine.find("Player, Puck, Goal").each (puck) ->
