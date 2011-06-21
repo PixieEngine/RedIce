@@ -42,23 +42,6 @@ Goal = (I) ->
 
     return walls
 
-  withinGoal = (circle) ->
-
-    if circle.x + circle.radius > I.x && circle.x - circle.radius < I.x + I.width
-      if circle.y + circle.radius > I.y && circle.y - circle.radius < I.y + I.height
-        return true
-
-    return false
-
-  overlapX = (wall, circle) ->
-    (circle.x - wall.center.x).abs() < wall.halfWidth + circle.radius 
-
-  overlapY = (wall, circle) ->
-    (circle.y - wall.center.y).abs() < wall.halfHeight + circle.radius
-
-  overlap = (wall, circle) ->
-    return overlapX(wall, circle) && overlapY(wall, circle)
-
   drawWall = (wall, canvas) ->
     canvas.fillColor("#0F0")
     canvas.fillRect(
@@ -70,6 +53,17 @@ Goal = (I) ->
 
   self = GameObject(I).extend
     walls: wallSegments
+
+    withinGoal: (circle) ->
+      if circle.x + circle.radius > I.x && circle.x - circle.radius < I.x + I.width
+        if circle.y + circle.radius > I.y && circle.y - circle.radius < I.y + I.height
+          return true
+
+      return false
+
+    score: ->
+      self.trigger "score"
+      Sound.play("crowd#{rand(3)}")
 
   self.bind "drawDebug", (canvas) ->
     # Draw goal area
