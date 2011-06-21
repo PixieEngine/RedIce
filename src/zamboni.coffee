@@ -51,6 +51,8 @@ Zamboni = (I) ->
     crush: (other) ->
       I.blood = (I.blood + 1).clamp(0, 6) unless other.puck()
     controlPuck: $.noop
+    collidesWithWalls: ->
+      false
     wipeout: ->
       #TODO Careen into boards and explode
       Sound.play "explosion"
