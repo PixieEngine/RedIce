@@ -39,9 +39,6 @@ Puck = (I) ->
 
     lastPosition = currentPos
 
-    # Tunneling debug
-    bloodCanvas.fillCircle(currentPos.x, currentPos.y, I.radius, "rgba(0, 255, 0, 0.5)")
-
   self.bind "drawDebug", (canvas) ->
     center = self.center()
     x = center.x
@@ -52,6 +49,9 @@ Puck = (I) ->
 
     canvas.strokeColor("orange")
     canvas.drawLine(x, y, x + scaledVelocity.x, y + scaledVelocity.y)
+
+    # Tunneling debug
+    bloodCanvas.fillCircle(currentPos.x, currentPos.y, I.radius, "rgba(0, 255, 0, 0.5)")
 
   self.bind "step", ->
     drawBloodStreaks()
