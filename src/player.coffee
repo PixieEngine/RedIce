@@ -113,8 +113,12 @@ Player = (I) ->
 
       puck.I.velocity = puck.I.velocity.add(positionDelta)
 
-    puck: ->
-      false
+    drawShadow: (canvas) ->
+      base = self.center()
+      base.y += I.height/2 + 4
+
+      canvas.withTransform Matrix.scale(1, -0.5, base), ->
+        canvas.fillCircle(base.x, base.y + 16, 16, "rgba(0, 0, 0, 0.5)")
 
     wipeout: (push) ->
       I.falls += 1
@@ -287,15 +291,6 @@ Player = (I) ->
       spriteIndex = cycle + facingOffset + teamColor
 
     I.sprite = sprites[spriteIndex]
-
-  # Draw shadow
-  #self.bind "draw", (canvas) ->
-  #  canvas.fillCircle(I.width/2, I.height/2 + 24, 8, "rgba(0, 0, 0, 0.5)")
-  # TODO: bind before
-
-  self.bind "drawHUD", (canvas) ->
-    drawControlCircle(canvas)
-    drawFloatingNameTag(canvas)
 
   self
 
