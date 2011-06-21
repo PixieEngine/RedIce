@@ -18146,7 +18146,7 @@ keyActionNames = {
   D: "??"
 };
 CONTROLLERS = [];
-selectedLayout = "dvorak_wiimotes";
+selectedLayout = Local.get("controls") || "qwerty_keyboard";
 layouts = {
   dvorak_wiimotes: [
     {
