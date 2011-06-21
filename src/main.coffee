@@ -48,6 +48,7 @@ scoreboard = Sprite.loadByName("scoreboard")
 
 GAME_OVER = false
 INTERMISSION = false
+DEBUG_DRAW = false
 
 window.engine = Engine 
   canvas: $("canvas").powerCanvas()
@@ -168,8 +169,9 @@ engine.bind "preDraw", (canvas) ->
   canvas.fillText(awayScore, WALL_LEFT + ARENA_WIDTH/2 + 90, 60)
 
 engine.bind "draw", (canvas) ->
-  engine.find("Player, Puck, Goal").each (puck) ->
-    puck.trigger("drawDebug", canvas)
+  if DEBUG_DRAW
+    engine.find("Player, Puck, Goal").each (puck) ->
+      puck.trigger("drawDebug", canvas)
 
   if GAME_OVER
     canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
@@ -222,5 +224,5 @@ bgMusic = $ "<audio />",
   loop: "loop"
 .appendTo('body').get(0)
 
-bgMusic.volume = 0.00
+bgMusic.volume = 0.40
 bgMusic.play()
