@@ -18402,11 +18402,16 @@ Physics = (function() {
       velocity = object.I.velocity;
       collided = false;
       wallSegments.each(function(wall) {
-        var normal, velocityProjection, wallToObject;
+        var capCenter, normal, velocityProjection, wallToObject;
         wallToObject = center.subtract(wall.center);
         if (rectangularOverlap(wall, circle)) {
           if (wall.horizontal) {
-            normal = Point(0, wallToObject.y.sign());
+            if (wallToObject.x.abs() < wall.halfWidth) {
+              normal = Point(0, wallToObject.y.sign());
+            } else {
+              capCenter = Point(wallToObject.x.sign() * wall.halfWidth, 0).add(wall.center);
+              normal = center.subtract(capCenter).norm();
+            }
           } else {
             normal = Point(wallToObject.x.sign(), 0);
           }
