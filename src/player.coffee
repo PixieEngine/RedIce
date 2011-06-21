@@ -120,7 +120,10 @@ Player = (I) ->
       base.y += I.height/2 + 4
 
       canvas.withTransform Matrix.scale(1, -0.5, base), ->
-        canvas.fillCircle(base.x, base.y + 16, 16, "rgba(0, 0, 0, 0.5)")
+        shadowColor = "rgba(0, 0, 0, 0.15)"
+        canvas.fillCircle(base.x - 4, base.y + 16, 16, shadowColor)
+        canvas.fillCircle(base.x, base.y + 8, 16, shadowColor)
+        canvas.fillCircle(base.x + 4, base.y + 16, 16, shadowColor)
 
     drawNameTag: drawFloatingNameTag
 
