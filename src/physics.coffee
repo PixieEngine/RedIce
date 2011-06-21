@@ -38,6 +38,7 @@ Physics = (->
     pushA = normal.scale(-2 * (relativeVelocity.dot(normal) * (massB / totalMass) + 1))
     pushB = normal.scale(+2 * (relativeVelocity.dot(normal) * (massA / totalMass) + 1))
 
+    # Adding impulse
     A.I.velocity = A.I.velocity.add(pushA)
     B.I.velocity = B.I.velocity.add(pushB)
 
@@ -48,7 +49,7 @@ Physics = (->
       if Collision.circular(a.circle(), b.circle())
         resolveCollision(a, b)
 
-  wallCollisions = (objects) ->
+  wallCollisions = (objects, dt) ->
     # Arena walls
     walls = [{
         normal: Point(1, 0)
@@ -95,8 +96,8 @@ Physics = (->
       if collided
         # Adjust velocity and move to (hopefully) non-penetrating position
         object.I.velocity = velocity
-        object.I.x += velocity.x
-        object.I.y += velocity.y
+        object.I.x += velocity.x * dt
+        object.I.y += velocity.y * dt
 
         Sound.play "clink0" if object.puck()
 
@@ -123,8 +124,8 @@ Physics = (->
       if collided
         # Adjust velocity and move to (hopefully) non-penetrating position
         object.I.velocity = velocity
-        object.I.x += velocity.x
-        object.I.y += velocity.y
+        object.I.x += velocity.x * dt
+        object.I.y += velocity.y * dt
 
         Sound.play "thud0" if object.puck()
 
@@ -136,8 +137,8 @@ Physics = (->
     steps.times ->
       objects.invoke "updatePosition", dt
 
-      resolveCollisions(objects)
-      wallCollisions(objects)
+      resolveCollisions(objects, dt)
+      wallCollisions(objects, dt)
 
 )()
 
