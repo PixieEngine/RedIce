@@ -16324,35 +16324,39 @@ Drawable = function(I, self) {
       return I.height = sprite.height;
     });
   }
-  self.bind('draw', function(canvas) {
-    var center;
-    center = self.center();
-    if (I.rotation) {
-      I.transform = Matrix.translation(center.x.round(), center.y.round());
-      I.transform = I.transform.concat(Matrix.rotation(I.rotation));
-      if (I.hflip) {
-        I.transform = I.transform.concat(Matrix.HORIZONTAL_FLIP);
-      }
-      if (I.vflip) {
-        I.transform = I.transform.concat(Matrix.VERTICAL_FLIP);
-      }
-      I.transform = I.transform.concat(Matrix.translation(-I.width / 2, -I.height / 2));
-    } else {
-      I.transform = Matrix.translation(I.x.round(), I.y.round());
-      if (I.hflip || I.vflip) {
+  self.extend({
+    getTransform: function() {
+      var center;
+      center = self.center();
+      if (I.rotation) {
         I.transform = Matrix.translation(center.x.round(), center.y.round());
+        I.transform = I.transform.concat(Matrix.rotation(I.rotation));
         if (I.hflip) {
           I.transform = I.transform.concat(Matrix.HORIZONTAL_FLIP);
         }
         if (I.vflip) {
           I.transform = I.transform.concat(Matrix.VERTICAL_FLIP);
         }
-        I.transform = I.transform.concat(Matrix.translation(-I.width / 2, -I.height / 2));
-      }
-      if (I.spriteOffset) {
-        I.transform = I.transform.concat(Matrix.translation(I.spriteOffset.x, I.spriteOffset.y));
+        return I.transform = I.transform.concat(Matrix.translation(-I.width / 2, -I.height / 2));
+      } else {
+        I.transform = Matrix.translation(I.x.round(), I.y.round());
+        if (I.hflip || I.vflip) {
+          I.transform = Matrix.translation(center.x.round(), center.y.round());
+          if (I.hflip) {
+            I.transform = I.transform.concat(Matrix.HORIZONTAL_FLIP);
+          }
+          if (I.vflip) {
+            I.transform = I.transform.concat(Matrix.VERTICAL_FLIP);
+          }
+          I.transform = I.transform.concat(Matrix.translation(-I.width / 2, -I.height / 2));
+        }
+        if (I.spriteOffset) {
+          return I.transform = I.transform.concat(Matrix.translation(I.spriteOffset.x, I.spriteOffset.y));
+        }
       }
     }
+  });
+  self.bind('draw', function(canvas) {
     if (I.sprite) {
       if (I.sprite.draw != null) {
         return I.sprite.draw(canvas, 0, 0);
@@ -16615,6 +16619,7 @@ Emitterable = function(I, self) {
         }
         return draw();
       } catch (e) {
+        debugger;
         return typeof console !== "undefined" && console !== null ? typeof console.error === "function" ? console.error(e) : void 0 : void 0;
       }
     };
@@ -16955,7 +16960,7 @@ the responsibility of the objects drawing on it to manage that themselves.
 @param {Object} self Reference to the engine
 */Engine.HUD = function(I, self) {
   var hudCanvas;
-  hudCanvas = $("<canvas width=640 height=480 />").powerCanvas();
+  hudCanvas = $("<canvas width=" + App.width + " height=" + App.height + " />").powerCanvas();
   hudCanvas.font("bold 9pt consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
   self.bind("draw", function(canvas) {
     var hud;
@@ -17436,8 +17441,9 @@ GameObject = function(I) {
       return I.active;
     },
     draw: function(canvas) {
-      if (I.transform) {
-        return canvas.withTransform(I.transform, function(canvas) {
+      var transform;
+      if ((transform = typeof self.getTransform === "function" ? self.getTransform() : void 0)) {
+        return canvas.withTransform(transform, function(canvas) {
           return self.trigger('draw', canvas);
         });
       } else {
@@ -18772,8 +18778,7 @@ Puck = function(I) {
     y = center.y;
     scaledVelocity = I.velocity.scale(10);
     canvas.strokeColor("orange");
-    canvas.drawLine(x, y, x + scaledVelocity.x, y + scaledVelocity.y);
-    return bloodCanvas.fillCircle(currentPos.x, currentPos.y, I.radius, "rgba(0, 255, 0, 0.5)");
+    return canvas.drawLine(x, y, x + scaledVelocity.x, y + scaledVelocity.y);
   });
   self.bind("step", function() {
     return drawBloodStreaks();
@@ -18784,6 +18789,9 @@ Puck = function(I) {
       return;
     }
     circle = self.circle();
+    if (DEBUG_DRAW) {
+      bloodCanvas.fillCircle(circle.x, circle.y, circle.radius, "rgba(0, 255, 0, 0.1)");
+    }
     return engine.find("Goal").each(function(goal) {
       if (goal.withinGoal(circle)) {
         self.destroy();
