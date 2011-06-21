@@ -80,5 +80,7 @@ Goal = (I) ->
     else
       I.sprite = tallSprites[6]
 
+    I.zIndex = 1 + (I.y + I.height)/CANVAS_HEIGHT
+
   return self
 
