@@ -18573,7 +18573,11 @@ Player = function(I) {
       base = self.center();
       base.y += I.height / 2 + 4;
       return canvas.withTransform(Matrix.scale(1, -0.5, base), function() {
-        return canvas.fillCircle(base.x, base.y + 16, 16, "rgba(0, 0, 0, 0.5)");
+        var shadowColor;
+        shadowColor = "rgba(0, 0, 0, 0.15)";
+        canvas.fillCircle(base.x - 4, base.y + 16, 16, shadowColor);
+        canvas.fillCircle(base.x, base.y + 8, 16, shadowColor);
+        return canvas.fillCircle(base.x + 4, base.y + 16, 16, shadowColor);
       });
     },
     drawNameTag: drawFloatingNameTag,
@@ -19040,7 +19044,7 @@ engine.bind("preDraw", function(canvas) {
   canvas.strokeRect(x - 16, WALL_TOP + ARENA_HEIGHT / 2 - 16, 16, 32);
   [1, 3].each(function(verticalQuarter) {
     y = WALL_TOP + verticalQuarter / 4 * ARENA_HEIGHT;
-    return [3 / 20, 1 / 3 + 1 / 40, 2 / 3 - 1 / 40, 17 / 20].each(function(faceOffX, i) {
+    return [1 / 5, 1 / 3 + 1 / 40, 2 / 3 - 1 / 40, 4 / 5].each(function(faceOffX, i) {
       x = WALL_LEFT + faceOffX * ARENA_WIDTH;
       canvas.fillCircle(x, y, faceOffSpotRadius, red);
       if (i === 0 || i === 3) {
