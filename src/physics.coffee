@@ -83,7 +83,12 @@ Physics = (->
 
         if rectangularOverlap(wall, circle)
           if wall.horizontal
-            normal = Point(0, wallToObject.y.sign())
+            if wallToObject.x.abs() < wall.halfWidth
+              normal = Point(0, wallToObject.y.sign())
+            else # capsule ends
+              capCenter = Point(wallToObject.x.sign() * wall.halfWidth, 0).add(wall.center)
+
+              normal = center.subtract(capCenter).norm()
           else
             normal = Point(wallToObject.x.sign(), 0)
 
