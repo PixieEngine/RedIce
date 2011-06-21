@@ -50,6 +50,8 @@ Base = (I) ->
       I.x += I.velocity.x * dt
       I.y += I.velocity.y * dt
 
+      self.trigger "positionUpdated"
+
   if I.velocity? && I.velocity.x? && I.velocity.y?
     I.velocity = Point(I.velocity.x, I.velocity.y)
 
