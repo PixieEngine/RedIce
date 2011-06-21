@@ -141,7 +141,7 @@ engine.bind "preDraw", (canvas) ->
   [1, 3].each (verticalQuarter) ->
     y = WALL_TOP + verticalQuarter/4 * ARENA_HEIGHT
 
-    [3/20, 1/3 + 1/40, 2/3 - 1/40, 17/20].each (faceOffX, i) ->
+    [1/5, 1/3 + 1/40, 2/3 - 1/40, 4/5].each (faceOffX, i) ->
       x = WALL_LEFT + faceOffX * ARENA_WIDTH
 
       canvas.fillCircle(x, y, faceOffSpotRadius, red)
