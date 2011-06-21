@@ -27,6 +27,9 @@ Base = (I) ->
     collides: ->
       !I.wipeout
 
+    collidesWithWalls: ->
+      true
+
     # The "Power Rating" for determining who gets wrecked during collisions
     # Fundamentally: I.velocity.dot(normal)
     collisionPower: (normal) ->
