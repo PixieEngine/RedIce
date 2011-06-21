@@ -50,9 +50,6 @@ Puck = (I) ->
     canvas.strokeColor("orange")
     canvas.drawLine(x, y, x + scaledVelocity.x, y + scaledVelocity.y)
 
-    # Tunneling debug
-    bloodCanvas.fillCircle(currentPos.x, currentPos.y, I.radius, "rgba(0, 255, 0, 0.5)")
-
   self.bind "step", ->
     drawBloodStreaks()
 
@@ -60,6 +57,10 @@ Puck = (I) ->
     return unless I.active
 
     circle = self.circle()
+
+    # Tunneling debug
+    if DEBUG_DRAW
+      bloodCanvas.fillCircle(circle.x, circle.y, circle.radius, "rgba(0, 255, 0, 0.1)")
 
     engine.find("Goal").each (goal) ->
       if goal.withinGoal(circle)
