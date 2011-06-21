@@ -71,6 +71,8 @@ Physics = (->
     .flatten()
 
     objects.each (object) ->
+      return unless object.collidesWithWalls()
+
       center = circle = object.circle()
       radius = circle.radius
       velocity = object.I.velocity
@@ -102,6 +104,8 @@ Physics = (->
         Sound.play "clink0" if object.puck()
 
     objects.each (object) ->
+      return unless object.collidesWithWalls()
+
       center = object.center()
       radius = object.I.radius
       velocity = object.I.velocity
