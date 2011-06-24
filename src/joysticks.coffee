@@ -19,7 +19,7 @@ Joysticks = ( ->
     actionDown: (buttons...) ->
       if stick = joysticks[i]    
         buttons.inject false, (down, button) ->
-          down || joysticks[i]?.buttons[buttonMapping[button]]
+          down || stick.buttons[buttonMapping[button]]
       else
         false
 
