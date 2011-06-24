@@ -19058,7 +19058,6 @@ window.engine = Engine({
   return engine.add({
     "class": "Player",
     controller: i,
-    joystick: i === 0,
     x: x,
     y: y
   });
