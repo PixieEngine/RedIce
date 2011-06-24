@@ -57,9 +57,11 @@ window.engine = Engine
 6.times (i) ->
   y = WALL_TOP + ARENA_HEIGHT*((i/2).floor() + 1)/4
   x = WALL_LEFT + ARENA_WIDTH/2 + ((i%2) - 0.5) * ARENA_WIDTH / 6
+
   engine.add
     class: "Player"
     controller: i
+    joystick: (i == 0)
     x: x
     y: y
 
