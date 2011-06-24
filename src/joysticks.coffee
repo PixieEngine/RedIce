@@ -4,6 +4,8 @@ Joysticks = ( ->
   AXIS_MAX = 32767
   DEAD_ZONE = 256
 
+  states = []
+
   init: ->
     unless plugin
       plugin = document.createElement("object")
@@ -12,12 +14,6 @@ Joysticks = ( ->
       plugin.height = 0
 
       $("body").append(plugin)
-
-  states: ->
-    plugin?.joysticks
-
-  status: ->
-    plugin?.status
 
   position: (stick) ->
     p = Point(stick.axes[0], stick.axes[1])
@@ -29,6 +25,17 @@ Joysticks = ( ->
     else if magnitude < DEAD_ZONE
       Point(0, 0)
     else
-      p.scale(magnitude / AXIS_MAX)
+      ratio = magnitude / AXIS_MAX
+
+      p.scale(ratio / AXIS_MAX)
+
+  states: ->
+    plugin?.joysticks
+
+  status: ->
+    plugin?.status
+
+  update: ->
+    states = plugin.states
 )()
 
