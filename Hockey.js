@@ -18325,6 +18325,80 @@ Goal = function(I) {
   });
   return self;
 };;
+var Joysticks;
+var __slice = Array.prototype.slice;
+Joysticks = (function() {
+  var AXIS_MAX, DEAD_ZONE, buttonMapping, joysticks, plugin, type;
+  type = "application/x-boomstickjavascriptjoysticksupport";
+  plugin = null;
+  AXIS_MAX = 32767;
+  DEAD_ZONE = 256;
+  joysticks = [];
+  buttonMapping = {
+    "A": 0,
+    "B": 1,
+    "C": 2,
+    "D": 3,
+    "X": 2,
+    "Y": 3
+  };
+  return {
+    getController: function(i) {
+      return {
+        actionDown: function() {
+          var buttons, stick;
+          buttons = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+          if (stick = joysticks[i]) {
+            return buttons.inject(false, function(down, button) {
+              return down || stick.buttons[buttonMapping[button]];
+            });
+          } else {
+            return false;
+          }
+        },
+        position: function() {
+          var stick;
+          if (stick = joysticks[i]) {
+            return Joysticks.position(stick);
+          } else {
+            return Point(0, 0);
+          }
+        }
+      };
+    },
+    init: function() {
+      if (!plugin) {
+        plugin = document.createElement("object");
+        plugin.type = type;
+        plugin.width = 0;
+        plugin.height = 0;
+        return $("body").append(plugin);
+      }
+    },
+    position: function(stick) {
+      var magnitude, p, ratio;
+      p = Point(stick.axes[0], stick.axes[1]);
+      magnitude = p.magnitude();
+      if (magnitude > AXIS_MAX) {
+        return p.norm();
+      } else if (magnitude < DEAD_ZONE) {
+        return Point(0, 0);
+      } else {
+        ratio = magnitude / AXIS_MAX;
+        return p.scale(ratio / AXIS_MAX);
+      }
+    },
+    states: function() {
+      return plugin != null ? plugin.joysticks : void 0;
+    },
+    status: function() {
+      return plugin != null ? plugin.status : void 0;
+    },
+    update: function() {
+      return joysticks = plugin.joysticks;
+    }
+  };
+})();;
 var Physics;
 Physics = (function() {
   var overlapX, overlapY, rectangularOverlap, resolveCollision, resolveCollisions, threshold, wallCollisions;
@@ -18476,7 +18550,7 @@ Physics = (function() {
 })();;
 var Player;
 Player = function(I) {
-  var PLAYER_COLORS, actionDown, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, playerColor, redTeam, rightSkatePos, self, shootPuck, teamColor;
+  var PLAYER_COLORS, actionDown, controller, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, playerColor, redTeam, rightSkatePos, self, shootPuck, teamColor;
   $.reverseMerge(I, {
     boost: 0,
     boostCooldown: 0,
@@ -18506,7 +18580,12 @@ Player = function(I) {
   playerColor = PLAYER_COLORS[I.controller];
   redTeam = I.controller % 2;
   teamColor = I.color = PLAYER_COLORS[redTeam];
-  actionDown = CONTROLLERS[I.controller].actionDown;
+  if (I.joystick) {
+    controller = Joysticks.getController(I.controller);
+    actionDown = controller.actionDown;
+  } else {
+    actionDown = CONTROLLERS[I.controller].actionDown;
+  }
   maxShotPower = 20;
   I.name || (I.name = "Player " + (I.controller + 1));
   heading = 0;
@@ -18680,19 +18759,23 @@ Player = function(I) {
     heading = Point.direction(Point(0, 0), I.velocity);
     drawBloodStreaks();
     movement = Point(0, 0);
-    if (actionDown("left")) {
-      movement = movement.add(Point(-1, 0));
+    if (controller) {
+      movement = controller.position();
+    } else {
+      if (actionDown("left")) {
+        movement = movement.add(Point(-1, 0));
+      }
+      if (actionDown("right")) {
+        movement = movement.add(Point(1, 0));
+      }
+      if (actionDown("up")) {
+        movement = movement.add(Point(0, -1));
+      }
+      if (actionDown("down")) {
+        movement = movement.add(Point(0, 1));
+      }
+      movement = movement.norm();
     }
-    if (actionDown("right")) {
-      movement = movement.add(Point(1, 0));
-    }
-    if (actionDown("up")) {
-      movement = movement.add(Point(0, -1));
-    }
-    if (actionDown("down")) {
-      movement = movement.add(Point(0, 1));
-    }
-    movement = movement.norm();
     if (I.wipeout) {
       lastLeftSkatePos = null;
       return lastRightSkatePos = null;
@@ -18706,7 +18789,7 @@ Player = function(I) {
       } else if (I.shootPower) {
         I.shootCooldown = 4;
         shootPuck();
-      } else if (!I.boostCooldown && actionDown("B")) {
+      } else if (!I.boostCooldown && actionDown("B", "X")) {
         I.boostCooldown += 20;
         I.boost = 10;
         movement = movement.scale(I.boost);
@@ -18975,6 +19058,7 @@ window.engine = Engine({
   return engine.add({
     "class": "Player",
     controller: i,
+    joystick: i === 0,
     x: x,
     y: y
   });
@@ -19084,6 +19168,7 @@ engine.bind("draw", function(canvas) {
 });
 engine.bind("update", function() {
   var objects, players, playersAndPuck, puck, zambonis;
+  Joysticks.update();
   time -= 1;
   if (INTERMISSION) {
     if (time === 0) {
@@ -19127,4 +19212,6 @@ bgMusic = $("<audio />", {
   loop: "loop"
 }).appendTo('body').get(0);
 bgMusic.volume = 0.40;
-bgMusic.play(); });
+bgMusic.play();
+Joysticks.init();
+log(Joysticks.status()); });
