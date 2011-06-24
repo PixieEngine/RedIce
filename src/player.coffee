@@ -244,10 +244,10 @@ Player = (I) ->
     if actionDown "down"
       movement = movement.add(Point(0, 1))
 
+    movement = movement.norm()
+
     if (stick = joysticks[I.controller])
       movement = Joysticks.position(stick)
-
-    # movement = movement.norm()
 
     if I.wipeout
       lastLeftSkatePos = null
