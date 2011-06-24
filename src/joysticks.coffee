@@ -25,7 +25,7 @@ Joysticks = ( ->
 
     position: ->
       if stick = joysticks[i]
-        Joystick.position(stick)
+        Joysticks.position(stick)
       else
         Point(0, 0)
 
