@@ -184,7 +184,9 @@ engine.bind "draw", (canvas) ->
     canvas.fillColor("#000")
     canvas.centerText("GAME OVER", 384)
 
+window.joysticks = []
 engine.bind "update", ->
+  window.joysticks = Joysticks.states()
   time -= 1
 
   if INTERMISSION
@@ -232,3 +234,6 @@ bgMusic = $ "<audio />",
 
 bgMusic.volume = 0.40
 bgMusic.play()
+
+Joysticks.init()
+
