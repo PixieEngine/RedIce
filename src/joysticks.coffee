@@ -4,7 +4,30 @@ Joysticks = ( ->
   AXIS_MAX = 32767
   DEAD_ZONE = 256
 
-  states = []
+  joysticks = []
+
+  buttonMapping =
+    "A": 0
+    "B": 1
+    # X/C, Y/D are interchangeable
+    "C": 2
+    "D": 3
+    "X": 2
+    "Y": 3
+
+  getController: (i) ->
+    actionDown: (buttons...) ->
+      if stick = joysticks[i]    
+        buttons.inject false, (down, button) ->
+          down || joysticks[i]?.buttons[buttonMapping[button]]
+      else
+        false
+
+    position: ->
+      if stick = joysticks[i]
+        Joystick.position(stick)
+      else
+        Point(0, 0)
 
   init: ->
     unless plugin
@@ -36,6 +59,6 @@ Joysticks = ( ->
     plugin?.status
 
   update: ->
-    states = plugin.states
+    joysticks = plugin.joysticks
 )()
 
