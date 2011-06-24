@@ -17,5 +17,8 @@ Joysticks = ( ->
   status: ->
     plugin?.status
 
+  position: (stick) ->
+    Point(stick.axes[0], stick.axes[1])
+
 )()
 
