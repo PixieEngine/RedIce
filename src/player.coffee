@@ -16,7 +16,6 @@ Player = (I) ->
     height: 32
     x: 192
     y: 128
-    spriteOffset: Point(0, -16)
     shootCooldown: 0
     shootPower: 0
     wipeout: 0
@@ -36,6 +35,8 @@ Player = (I) ->
   playerColor = PLAYER_COLORS[I.controller]
   redTeam = I.controller % 2
   teamColor = I.color = PLAYER_COLORS[redTeam]
+  standingOffset = Point(0, -16)
+  flyingOffset = Point(-24, -16)
 
   if I.joystick
     controller = Joysticks.getController(I.controller)
@@ -286,10 +287,12 @@ Player = (I) ->
     I.hflip = (heading > 2*Math.TAU/8 || heading < -2*Math.TAU/8)
 
     if I.wipeout
-      if redTeam
-        spriteIndex = 3+32
-      else
-        spriteIndex = 5+32
+      spriteIndex = 17
+      unless redTeam
+        spriteIndex += 1        
+
+      I.spriteOffset = flyingOffset
+      I.sprite = wideSprites[spriteIndex]
     else
       cycle = (I.age/4).floor() % 2
       if -Math.TAU/8 <= heading <= Math.TAU/8
@@ -305,7 +308,8 @@ Player = (I) ->
 
       spriteIndex = cycle + facingOffset + teamColor
 
-    I.sprite = sprites[spriteIndex]
+      I.spriteOffset = standingOffset
+      I.sprite = sprites[spriteIndex]
 
   self
 
