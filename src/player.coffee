@@ -272,7 +272,7 @@ Player = (I) ->
         I.shootCooldown = 4
 
         shootPuck()
-      else if !I.boostCooldown && actionDown "B"
+      else if !I.boostCooldown && actionDown "B", "X"
         I.boostCooldown += 20
         I.boost = 10
         movement = movement.scale(I.boost)
