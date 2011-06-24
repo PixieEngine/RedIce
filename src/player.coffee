@@ -36,7 +36,12 @@ Player = (I) ->
   playerColor = PLAYER_COLORS[I.controller]
   redTeam = I.controller % 2
   teamColor = I.color = PLAYER_COLORS[redTeam]
-  actionDown = CONTROLLERS[I.controller].actionDown
+
+  if I.joystick
+    controller = Joysticks.getController(I.controller)
+    actionDown = controller.actionDown
+  else
+    actionDown = CONTROLLERS[I.controller].actionDown
 
   maxShotPower = 20
 
@@ -235,19 +240,19 @@ Player = (I) ->
 
     movement = Point(0, 0)
 
-    if actionDown "left"
-      movement = movement.add(Point(-1, 0))
-    if actionDown "right"
-      movement = movement.add(Point(1, 0))
-    if actionDown "up"
-      movement = movement.add(Point(0, -1))
-    if actionDown "down"
-      movement = movement.add(Point(0, 1))
+    if controller
+      movement = controller.position()
+    else
+      if actionDown "left"
+        movement = movement.add(Point(-1, 0))
+      if actionDown "right"
+        movement = movement.add(Point(1, 0))
+      if actionDown "up"
+        movement = movement.add(Point(0, -1))
+      if actionDown "down"
+        movement = movement.add(Point(0, 1))
 
-    movement = movement.norm()
-
-    if (stick = joysticks[I.controller])
-      movement = Joysticks.position(stick)
+      movement = movement.norm()
 
     if I.wipeout
       lastLeftSkatePos = null
