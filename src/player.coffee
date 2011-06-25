@@ -3,6 +3,7 @@ Player = (I) ->
     boost: 0
     cooldown:
       boost: 0
+      shoot: 0
     collisionMargin: Point(2, 2)
     controller: 0
     falls: 0
@@ -17,7 +18,6 @@ Player = (I) ->
     height: 32
     x: 192
     y: 128
-    shootCooldown: 0
     shootPower: 0
     wipeout: 0
     velocity: Point()
@@ -110,7 +110,7 @@ Player = (I) ->
       return c
 
     controlPuck: (puck) ->
-      return if I.shootCooldown
+      return if I.cooldown.shoot
 
       puckControl = 4
 
@@ -243,7 +243,6 @@ Player = (I) ->
   self.bind "step", ->
     I.boost = I.boost.approach(0, 1)
     I.wipeout = I.wipeout.approach(0, 1)
-    I.shootCooldown = I.shootCooldown.approach(0, 1)
 
     heading = Point.direction(Point(0, 0), I.velocity)
 
@@ -269,7 +268,7 @@ Player = (I) ->
       lastLeftSkatePos = null
       lastRightSkatePos = null
     else
-      if !I.shootCooldown && actionDown "A"
+      if !I.cooldown.shoot && actionDown "A"
         I.shootPower += 1
 
         chargePhase = Math.sin(Math.TAU/4 * I.age) * 0.2 * I.shootPower / maxShotPower
@@ -278,9 +277,9 @@ Player = (I) ->
         # I.color = Color(teamColor).lighten(chargePhase)
 
         if I.shootPower == maxShotPower
-          I.shootCooldown = 5
+          I.cooldown.shoot = 5
       else if I.shootPower
-        I.shootCooldown = 4
+        I.cooldown.shoot = 4
 
         shootPuck()
       else if !I.cooldown.boost && actionDown "B", "X"
