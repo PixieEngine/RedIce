@@ -103,10 +103,10 @@ Player = (I) ->
       height = maxHeight * ratio
 
       canvas.fillColor("#000")
-      canvas.fillRoundRect(start.x - padding, start.y - padding, width + 2*padding, maxHeight)
+      canvas.fillRoundRect(start.x - padding, start.y - padding, width + 2*padding, maxHeight, 2)
 
       canvas.fillColor("#00F")
-      canvas.fillRoundRect(start.x, start.y + maxHeight - height, width, height)
+      canvas.fillRoundRect(start.x, start.y + maxHeight - height, width, height, 2)
 
   drawControlCircle = (canvas) ->
     color = Color(playerColor).lighten(0.10)
