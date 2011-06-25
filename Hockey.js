@@ -19118,7 +19118,6 @@ num_players.times(function(i) {
   return engine.add({
     "class": "Player",
     controller: i,
-    joystick: true,
     x: x,
     y: y
   });
