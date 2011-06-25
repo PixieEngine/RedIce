@@ -50,7 +50,7 @@ Player = (I) ->
 
   I.name ||= "Player #{I.controller + 1}"
 
-  heading = 0
+  heading = if redTeam then Math.TAU/2 else 0
 
   drawFloatingNameTag = (canvas) ->
     canvas.font("bold 16px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
@@ -271,7 +271,8 @@ Player = (I) ->
     I.boost = I.boost.approach(0, 1)
     I.wipeout = I.wipeout.approach(0, 1)
 
-    heading = Point.direction(Point(0, 0), I.velocity)
+    unless I.velocity.magnitude() == 0
+      heading = Point.direction(Point(0, 0), I.velocity)
 
     drawBloodStreaks()
 
