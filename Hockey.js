@@ -18550,7 +18550,7 @@ Physics = (function() {
 })();;
 var Player;
 Player = function(I) {
-  var PLAYER_COLORS, actionDown, controller, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, playerColor, redTeam, rightSkatePos, self, shootPuck, teamColor;
+  var PLAYER_COLORS, actionDown, controller, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, flyingOffset, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, playerColor, redTeam, rightSkatePos, self, shootPuck, standingOffset, teamColor;
   $.reverseMerge(I, {
     boost: 0,
     boostCooldown: 0,
@@ -18569,7 +18569,6 @@ Player = function(I) {
     height: 32,
     x: 192,
     y: 128,
-    spriteOffset: Point(0, -16),
     shootCooldown: 0,
     shootPower: 0,
     wipeout: 0,
@@ -18580,6 +18579,8 @@ Player = function(I) {
   playerColor = PLAYER_COLORS[I.controller];
   redTeam = I.controller % 2;
   teamColor = I.color = PLAYER_COLORS[redTeam];
+  standingOffset = Point(0, -16);
+  flyingOffset = Point(-24, -16);
   if (I.joystick) {
     controller = Joysticks.getController(I.controller);
     actionDown = controller.actionDown;
@@ -18802,11 +18803,12 @@ Player = function(I) {
     var cycle, facingOffset, spriteIndex;
     I.hflip = heading > 2 * Math.TAU / 8 || heading < -2 * Math.TAU / 8;
     if (I.wipeout) {
-      if (redTeam) {
-        spriteIndex = 3 + 32;
-      } else {
-        spriteIndex = 5 + 32;
+      spriteIndex = 17;
+      if (!redTeam) {
+        spriteIndex += 1;
       }
+      I.spriteOffset = flyingOffset;
+      return I.sprite = wideSprites[spriteIndex];
     } else {
       cycle = (I.age / 4).floor() % 2;
       if ((-Math.TAU / 8 <= heading && heading <= Math.TAU / 8)) {
@@ -18820,8 +18822,9 @@ Player = function(I) {
       }
       teamColor = redTeam * 16;
       spriteIndex = cycle + facingOffset + teamColor;
+      I.spriteOffset = standingOffset;
+      return I.sprite = sprites[spriteIndex];
     }
-    return I.sprite = sprites[spriteIndex];
   });
   return self;
 };;
@@ -19005,7 +19008,7 @@ Zamboni = function(I) {
   return self;
 };;
 App.entities = {};;
-;$(function(){ var DEBUG_DRAW, GAME_OVER, INTERMISSION, awayScore, bgMusic, homeScore, intermission, intermissionTime, leftGoal, nextPeriod, period, periodTime, rightGoal, scoreboard, time;
+;$(function(){ var DEBUG_DRAW, GAME_OVER, INTERMISSION, awayScore, bgMusic, homeScore, intermission, intermissionTime, leftGoal, nextPeriod, num_players, period, periodTime, rightGoal, scoreboard, time;
 Sprite.loadSheet = function(name, tileWidth, tileHeight) {
   var directory, image, sprites, url, _ref;
   directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.images : void 0 : void 0) || "images";
@@ -19039,6 +19042,7 @@ window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEI
 bloodCanvas.strokeColor(BLOOD_COLOR);
 periodTime = 1 * 60 * 30;
 intermissionTime = 1 * 30;
+num_players = 6;
 period = 0;
 time = 0;
 homeScore = 0;
@@ -19051,13 +19055,14 @@ window.engine = Engine({
   canvas: $("canvas").powerCanvas(),
   zSort: true
 });
-(6).times(function(i) {
+num_players.times(function(i) {
   var x, y;
   y = WALL_TOP + ARENA_HEIGHT * ((i / 2).floor() + 1) / 4;
   x = WALL_LEFT + ARENA_WIDTH / 2 + ((i % 2) - 0.5) * ARENA_WIDTH / 6;
   return engine.add({
     "class": "Player",
     controller: i,
+    joystick: true,
     x: x,
     y: y
   });
