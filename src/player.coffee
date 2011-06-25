@@ -79,7 +79,19 @@ Player = (I) ->
     canvas.fillText(name, topLeft.x + padding, topLeft.y + lineHeight + padding/2)
 
   drawPowerMeters = (canvas) ->
-    ratio = (boostTimeout - I.cooldown.boost)
+    ratio = (boostTimeout - I.cooldown.boost) / boostTimeout
+    start = self.position().add(Point(0, I.height))
+    padding = 1
+    maxWidth = I.width
+    height = 3
+
+    canvas.fillColor("#000")
+    canvas.fillRoundRect(start.x - padding, start.y - padding, maxWidth + 2*padding, height + 2*padding)
+    if ratio == 1
+      canvas.fillColor = "#0F0"
+    else
+      canvas.fillColor = "#080"
+    canvas.fillRoundRect(start.x, start.y, maxWidth * ratio, height)
 
   drawControlCircle = (canvas) ->
     color = Color(playerColor).lighten(0.10)
