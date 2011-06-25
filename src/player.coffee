@@ -45,6 +45,7 @@ Player = (I) ->
     actionDown = CONTROLLERS[I.controller].actionDown
 
   maxShotPower = 20
+  boostTimeout = 20
 
   I.name ||= "Player #{I.controller + 1}"
 
@@ -75,6 +76,9 @@ Player = (I) ->
 
     canvas.fillColor("#FFF")
     canvas.fillText(name, topLeft.x + padding, topLeft.y + lineHeight + padding/2)
+
+  drawPowerMeters = (canvas) ->
+
 
   drawControlCircle = (canvas) ->
     color = Color(playerColor).lighten(0.10)
@@ -131,7 +135,9 @@ Player = (I) ->
         canvas.fillCircle(base.x, base.y + 8, 16, shadowColor)
         canvas.fillCircle(base.x + 4, base.y + 16, 16, shadowColor)
 
-    drawNameTag: drawFloatingNameTag
+    drawOverlays: (canvas) ->
+      drawPowerMeters(canvas)
+      drawFloatingNameTag(canvas)
 
     wipeout: (push) ->
       I.falls += 1
@@ -274,7 +280,7 @@ Player = (I) ->
 
         shootPuck()
       else if !I.boostCooldown && actionDown "B", "X"
-        I.boostCooldown += 20
+        I.boostCooldown += boostTimeout
         I.boost = 10
         movement = movement.scale(I.boost)
 
