@@ -86,12 +86,12 @@ Player = (I) ->
     height = 3
 
     canvas.fillColor("#000")
-    canvas.fillRoundRect(start.x - padding, start.y - padding, maxWidth + 2*padding, height + 2*padding)
+    canvas.fillRoundRect(start.x - padding, start.y - padding, maxWidth + 2*padding, height + 2*padding, 2)
     if ratio == 1
-      canvas.fillColor = "#0F0"
+      canvas.fillColor("#0F0")
     else
-      canvas.fillColor = "#080"
-    canvas.fillRoundRect(start.x, start.y, maxWidth * ratio, height)
+      canvas.fillColor("#080")
+    canvas.fillRoundRect(start.x, start.y, maxWidth * ratio, height, 2)
 
   drawControlCircle = (canvas) ->
     color = Color(playerColor).lighten(0.10)
