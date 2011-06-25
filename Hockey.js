@@ -18603,7 +18603,7 @@ Player = function(I) {
   maxShotPower = 20;
   boostTimeout = 20;
   I.name || (I.name = "Player " + (I.controller + 1));
-  heading = 0;
+  heading = redTeam ? Math.TAU / 2 : 0;
   drawFloatingNameTag = function(canvas) {
     var backgroundColor, center, lineHeight, name, padding, rectHeight, rectWidth, textWidth, topLeft, yOffset;
     canvas.font("bold 16px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
@@ -18811,7 +18811,9 @@ Player = function(I) {
     var chargePhase, movement;
     I.boost = I.boost.approach(0, 1);
     I.wipeout = I.wipeout.approach(0, 1);
-    heading = Point.direction(Point(0, 0), I.velocity);
+    if (I.velocity.magnitude() !== 0) {
+      heading = Point.direction(Point(0, 0), I.velocity);
+    }
     drawBloodStreaks();
     movement = Point(0, 0);
     if (controller) {
@@ -19116,6 +19118,7 @@ num_players.times(function(i) {
   return engine.add({
     "class": "Player",
     controller: i,
+    joystick: true,
     x: x,
     y: y
   });
