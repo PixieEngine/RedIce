@@ -105,7 +105,7 @@ Player = (I) ->
       canvas.fillColor("#000")
       canvas.fillRoundRect(start.x - padding, start.y - padding, width + 2*padding, maxHeight)
 
-      canvas.fillColor("#00A")
+      canvas.fillColor("#00F")
       canvas.fillRoundRect(start.x, start.y + maxHeight - height, width, height)
 
   drawControlCircle = (canvas) ->
