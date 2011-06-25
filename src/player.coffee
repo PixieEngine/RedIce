@@ -80,7 +80,7 @@ Player = (I) ->
 
   drawPowerMeters = (canvas) ->
     ratio = (boostTimeout - I.cooldown.boost) / boostTimeout
-    start = self.position().add(Point(0, I.height))
+    start = self.position().add(Point(0, I.height)).floor()
     padding = 1
     maxWidth = I.width
     height = 3
@@ -92,6 +92,21 @@ Player = (I) ->
     else
       canvas.fillColor("#080")
     canvas.fillRoundRect(start.x, start.y, maxWidth * ratio, height, 2)
+
+    if I.shootPower
+      yExtension = 16
+      ratio = I.shootPower / maxShotPower
+      start = self.position().subtract(Point(0, yExtension)).floor()
+      padding = 1
+      maxHeight = I.height + yExtension
+      width = 3
+      height = maxHeight * ratio
+
+      canvas.fillColor("#000")
+      canvas.fillRoundRect(start.x - padding, start.y - padding, width + 2*padding, maxHeight)
+
+      canvas.fillColor("#00A")
+      canvas.fillRoundRect(start.x, start.y + maxHeight - height, width, height)
 
   drawControlCircle = (canvas) ->
     color = Color(playerColor).lighten(0.10)
