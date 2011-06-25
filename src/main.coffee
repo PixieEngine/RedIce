@@ -40,6 +40,7 @@ bloodCanvas.strokeColor(BLOOD_COLOR)
 periodTime = 1 * 60 * 30
 intermissionTime = 1 * 30
 
+num_players = 6
 period = 0
 time = 0
 homeScore = 0
@@ -54,7 +55,7 @@ window.engine = Engine
   canvas: $("canvas").powerCanvas()
   zSort: true
 
-6.times (i) ->
+num_players.times (i) ->
   y = WALL_TOP + ARENA_HEIGHT*((i/2).floor() + 1)/4
   x = WALL_LEFT + ARENA_WIDTH/2 + ((i%2) - 0.5) * ARENA_WIDTH / 6
 
