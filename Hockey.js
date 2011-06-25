@@ -13215,6 +13215,17 @@ $(function() {
         return Point(this.x * scalar, this.y * scalar);
       },
       /**
+      Floor the x and y values, returning a new point.
+      
+      @name floor
+      @methodOf Point#
+      @returns A new point, with x and y values each floored to the largest previous integer.
+      @type Point
+      */
+      floor: function() {
+        return Point(this.x.floor(), this.y.floor());
+      },
+      /**
        * Determine whether this point is equal to another point.
        * @name equal
        * @methodOf Point#
@@ -18550,10 +18561,13 @@ Physics = (function() {
 })();;
 var Player;
 Player = function(I) {
-  var PLAYER_COLORS, actionDown, controller, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, flyingOffset, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, playerColor, redTeam, rightSkatePos, self, shootPuck, standingOffset, teamColor;
+  var PLAYER_COLORS, actionDown, boostTimeout, controller, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, drawPowerMeters, flyingOffset, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, playerColor, redTeam, rightSkatePos, self, shootPuck, standingOffset, teamColor;
   $.reverseMerge(I, {
     boost: 0,
-    boostCooldown: 0,
+    cooldown: {
+      boost: 0,
+      shoot: 0
+    },
     collisionMargin: Point(2, 2),
     controller: 0,
     falls: 0,
@@ -18569,7 +18583,6 @@ Player = function(I) {
     height: 32,
     x: 192,
     y: 128,
-    shootCooldown: 0,
     shootPower: 0,
     wipeout: 0,
     velocity: Point(),
@@ -18588,6 +18601,7 @@ Player = function(I) {
     actionDown = CONTROLLERS[I.controller].actionDown;
   }
   maxShotPower = 20;
+  boostTimeout = 20;
   I.name || (I.name = "Player " + (I.controller + 1));
   heading = 0;
   drawFloatingNameTag = function(canvas) {
@@ -18608,6 +18622,35 @@ Player = function(I) {
     canvas.fillRoundRect(topLeft.x, topLeft.y, rectWidth, rectHeight, 4);
     canvas.fillColor("#FFF");
     return canvas.fillText(name, topLeft.x + padding, topLeft.y + lineHeight + padding / 2);
+  };
+  drawPowerMeters = function(canvas) {
+    var height, maxHeight, maxWidth, padding, ratio, start, width, yExtension;
+    ratio = (boostTimeout - I.cooldown.boost) / boostTimeout;
+    start = self.position().add(Point(0, I.height)).floor();
+    padding = 1;
+    maxWidth = I.width;
+    height = 3;
+    canvas.fillColor("#000");
+    canvas.fillRoundRect(start.x - padding, start.y - padding, maxWidth + 2 * padding, height + 2 * padding, 2);
+    if (ratio === 1) {
+      canvas.fillColor("#0F0");
+    } else {
+      canvas.fillColor("#080");
+    }
+    canvas.fillRoundRect(start.x, start.y, maxWidth * ratio, height, 2);
+    if (I.shootPower) {
+      yExtension = 16;
+      ratio = I.shootPower / maxShotPower;
+      start = self.position().subtract(Point(0, yExtension)).floor();
+      padding = 1;
+      maxHeight = I.height + yExtension;
+      width = 3;
+      height = maxHeight * ratio;
+      canvas.fillColor("#000");
+      canvas.fillRoundRect(start.x - padding, start.y - padding, width + 2 * padding, maxHeight, 2);
+      canvas.fillColor("#EE0");
+      return canvas.fillRoundRect(start.x, start.y + maxHeight - height, width, height, 2);
+    }
   };
   drawControlCircle = function(canvas) {
     var circle, color;
@@ -18635,7 +18678,7 @@ Player = function(I) {
     },
     controlPuck: function(puck) {
       var p, positionDelta, puckControl, puckVelocity, targetPuckPosition;
-      if (I.shootCooldown) {
+      if (I.cooldown.shoot) {
         return;
       }
       puckControl = 4;
@@ -18660,7 +18703,10 @@ Player = function(I) {
         return canvas.fillCircle(base.x + 4, base.y + 16, 16, shadowColor);
       });
     },
-    drawNameTag: drawFloatingNameTag,
+    drawOverlays: function(canvas) {
+      drawPowerMeters(canvas);
+      return drawFloatingNameTag(canvas);
+    },
     wipeout: function(push) {
       I.falls += 1;
       I.wipeout = 25;
@@ -18752,11 +18798,19 @@ Player = function(I) {
     }
   };
   self.bind("step", function() {
+    var key, value, _ref, _results;
+    _ref = I.cooldown;
+    _results = [];
+    for (key in _ref) {
+      value = _ref[key];
+      _results.push(I.cooldown[key] = value.approach(0, 1));
+    }
+    return _results;
+  });
+  self.bind("step", function() {
     var chargePhase, movement;
     I.boost = I.boost.approach(0, 1);
-    I.boostCooldown = I.boostCooldown.approach(0, 1);
     I.wipeout = I.wipeout.approach(0, 1);
-    I.shootCooldown = I.shootCooldown.approach(0, 1);
     heading = Point.direction(Point(0, 0), I.velocity);
     drawBloodStreaks();
     movement = Point(0, 0);
@@ -18781,17 +18835,17 @@ Player = function(I) {
       lastLeftSkatePos = null;
       return lastRightSkatePos = null;
     } else {
-      if (!I.shootCooldown && actionDown("A")) {
+      if (!I.cooldown.shoot && actionDown("A")) {
         I.shootPower += 1;
         chargePhase = Math.sin(Math.TAU / 4 * I.age) * 0.2 * I.shootPower / maxShotPower;
         if (I.shootPower === maxShotPower) {
-          I.shootCooldown = 5;
+          I.cooldown.shoot = 5;
         }
       } else if (I.shootPower) {
-        I.shootCooldown = 4;
+        I.cooldown.shoot = 4;
         shootPuck();
-      } else if (!I.boostCooldown && actionDown("B", "X")) {
-        I.boostCooldown += 20;
+      } else if (!I.cooldown.boost && actionDown("B", "X")) {
+        I.cooldown.boost += boostTimeout;
         I.boost = 10;
         movement = movement.scale(I.boost);
       }
@@ -19157,7 +19211,7 @@ engine.bind("preDraw", function(canvas) {
   return engine.find("Player").invoke("drawShadow", canvas);
 });
 engine.bind("draw", function(canvas) {
-  engine.find("Player").invoke("drawNameTag", canvas);
+  engine.find("Player").invoke("drawOverlays", canvas);
   if (DEBUG_DRAW) {
     engine.find("Player, Puck, Goal").each(function(puck) {
       return puck.trigger("drawDebug", canvas);
