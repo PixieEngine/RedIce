@@ -1,7 +1,8 @@
 Player = (I) ->
   $.reverseMerge I,
     boost: 0
-    boostCooldown: 0
+    cooldown:
+      boost: 0
     collisionMargin: Point(2, 2)
     controller: 0
     falls: 0
@@ -78,7 +79,7 @@ Player = (I) ->
     canvas.fillText(name, topLeft.x + padding, topLeft.y + lineHeight + padding/2)
 
   drawPowerMeters = (canvas) ->
-
+    ratio = (boostTimeout - I.cooldown.boost)
 
   drawControlCircle = (canvas) ->
     color = Color(playerColor).lighten(0.10)
@@ -236,8 +237,11 @@ Player = (I) ->
       lastRightSkatePos = currentRightSkatePos
 
   self.bind "step", ->
+    for key, value of I.cooldown
+      I.cooldown[key] = value.approach(0, 1)
+
+  self.bind "step", ->
     I.boost = I.boost.approach(0, 1)
-    I.boostCooldown = I.boostCooldown.approach(0, 1)
     I.wipeout = I.wipeout.approach(0, 1)
     I.shootCooldown = I.shootCooldown.approach(0, 1)
 
@@ -279,8 +283,8 @@ Player = (I) ->
         I.shootCooldown = 4
 
         shootPuck()
-      else if !I.boostCooldown && actionDown "B", "X"
-        I.boostCooldown += boostTimeout
+      else if !I.cooldown.boost && actionDown "B", "X"
+        I.cooldown.boost += boostTimeout
         I.boost = 10
         movement = movement.scale(I.boost)
 
