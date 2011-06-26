@@ -7,12 +7,12 @@ Rink = (I) ->
   blue = "blue"
   faceOffSpotRadius = 5
   faceOffCircleRadius = 38
+  rinkCornerRadius = 100
 
   # Draw Arena
   canvas.fillColor("white")
-  canvas.fillRect(WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT)
-  canvas.strokeColor("black")
-  canvas.strokeRect(WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT)
+  canvas.strokeColor("#888")
+  canvas.fillRoundRect(WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT, rinkCornerRadius, 2)
 
   # Blue Lines
   canvas.strokeColor(blue)
