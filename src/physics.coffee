@@ -68,13 +68,13 @@ Physics = (->
     cornerRadius = 100
     corners = [{
         position: Point(WALL_LEFT + cornerRadius, WALL_TOP + cornerRadius)
-        quadrant: 2
+        quadrant: -2
       }, {
         position: Point(WALL_RIGHT - cornerRadius, WALL_TOP + cornerRadius)
         quadrant: 1
       }, {
         position: Point(WALL_LEFT + cornerRadius, WALL_BOTTOM - cornerRadius)
-        quadrant: 3
+        quadrant: -1
       }, {
         position: Point(WALL_RIGHT - cornerRadius, WALL_BOTTOM - cornerRadius)
         quadrant: 0
@@ -131,8 +131,30 @@ Physics = (->
       radius = object.I.radius
       velocity = object.I.velocity
 
+      corners.each (corner) ->
+        {position} = corner
 
+        distanceToCenter = position.subtract(center)
+        normal = distanceToCenter.norm()
 
+        angle = Point.direction(Point(0, 0), normal)
+        quadrant = (4 * angle / Math.TAU).floor()
+
+        if quadrant == corner.quadrant && radius + distanceToCenter.magnitude() > cornerRadius
+          velocityProjection = velocity.dot(normal)
+          # Heading towards wall
+          if velocityProjection < 0
+            # Reflection Vector
+            velocity = velocity.subtract(normal.scale(2 * velocityProjection))
+
+            # Adjust velocity and move to (hopefully) non-penetrating position
+            object.I.velocity = velocity
+            object.I.x += velocity.x * dt
+            object.I.y += velocity.y * dt
+
+            Sound.play "thud0" if object.puck()
+
+    # Rink Walls
     objects.each (object) ->
       return unless object.collidesWithWalls()
 
