@@ -65,6 +65,21 @@ Physics = (->
         position: -WALL_BOTTOM
     }]
 
+    cornerRadius = 100
+    corners = [{
+        position: Point(WALL_LEFT + cornerRadius, WALL_TOP + cornerRadius)
+        quadrant: 2
+      }, {
+        position: Point(WALL_RIGHT - cornerRadius, WALL_TOP + cornerRadius)
+        quadrant: 1
+      }, {
+        position: Point(WALL_LEFT + cornerRadius, WALL_BOTTOM - cornerRadius)
+        quadrant: 3
+      }, {
+        position: Point(WALL_RIGHT - cornerRadius, WALL_BOTTOM - cornerRadius)
+        quadrant: 0
+    }]
+
     # Goal wall segments
     wallSegments = engine.find("Goal").map (goal) ->
       goal.walls()
@@ -107,6 +122,16 @@ Physics = (->
         object.I.y += velocity.y * dt
 
         Sound.play "clink0" if object.puck()
+
+    # Rounded rink collisions
+    objects.each (object) ->
+      return unless object.collidesWithWalls()
+
+      center = object.center()
+      radius = object.I.radius
+      velocity = object.I.velocity
+
+
 
     objects.each (object) ->
       return unless object.collidesWithWalls()
