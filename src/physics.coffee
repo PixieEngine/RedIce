@@ -68,7 +68,7 @@ Physics = (->
     cornerRadius = 100
     corners = [{
         position: Point(WALL_LEFT + cornerRadius, WALL_TOP + cornerRadius)
-        quadrant: -2
+        quadrant: 0
       }, {
         position: Point(WALL_RIGHT - cornerRadius, WALL_TOP + cornerRadius)
         quadrant: 1
@@ -77,7 +77,7 @@ Physics = (->
         quadrant: -1
       }, {
         position: Point(WALL_RIGHT - cornerRadius, WALL_BOTTOM - cornerRadius)
-        quadrant: 0
+        quadrant: -2
     }]
 
     # Goal wall segments
