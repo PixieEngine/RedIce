@@ -18458,7 +18458,7 @@ Physics = (function() {
     });
   };
   wallCollisions = function(objects, dt) {
-    var wallSegments, walls;
+    var cornerRadius, corners, wallSegments, walls;
     walls = [
       {
         normal: Point(1, 0),
@@ -18472,6 +18472,22 @@ Physics = (function() {
       }, {
         normal: Point(0, -1),
         position: -WALL_BOTTOM
+      }
+    ];
+    cornerRadius = 100;
+    corners = [
+      {
+        position: Point(WALL_LEFT + cornerRadius, WALL_TOP + cornerRadius),
+        quadrant: 0
+      }, {
+        position: Point(WALL_RIGHT - cornerRadius, WALL_TOP + cornerRadius),
+        quadrant: 1
+      }, {
+        position: Point(WALL_LEFT + cornerRadius, WALL_BOTTOM - cornerRadius),
+        quadrant: -1
+      }, {
+        position: Point(WALL_RIGHT - cornerRadius, WALL_BOTTOM - cornerRadius),
+        quadrant: -2
       }
     ];
     wallSegments = engine.find("Goal").map(function(goal) {
@@ -18515,6 +18531,35 @@ Physics = (function() {
           return Sound.play("clink0");
         }
       }
+    });
+    objects.each(function(object) {
+      var center, radius, velocity;
+      if (!object.collidesWithWalls()) {
+        return;
+      }
+      center = object.center();
+      radius = object.I.radius;
+      velocity = object.I.velocity;
+      return corners.each(function(corner) {
+        var angle, distanceToCenter, normal, position, quadrant, velocityProjection;
+        position = corner.position;
+        distanceToCenter = position.subtract(center);
+        normal = distanceToCenter.norm();
+        angle = Point.direction(Point(0, 0), normal);
+        quadrant = (4 * angle / Math.TAU).floor();
+        if (quadrant === corner.quadrant && radius + distanceToCenter.magnitude() > cornerRadius) {
+          velocityProjection = velocity.dot(normal);
+          if (velocityProjection < 0) {
+            velocity = velocity.subtract(normal.scale(2 * velocityProjection));
+            object.I.velocity = velocity;
+            object.I.x += velocity.x * dt;
+            object.I.y += velocity.y * dt;
+            if (object.puck()) {
+              return Sound.play("thud0");
+            }
+          }
+        }
+      });
     });
     return objects.each(function(object) {
       var center, collided, radius, velocity;
@@ -18958,6 +19003,58 @@ Puck = function(I) {
   });
   return self;
 };;
+var Rink;
+Rink = function(I) {
+  var blue, canvas, faceOffCircleRadius, faceOffSpotRadius, red, rinkCornerRadius, x, y;
+  I || (I = {});
+  canvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").powerCanvas();
+  red = "red";
+  blue = "blue";
+  faceOffSpotRadius = 5;
+  faceOffCircleRadius = 38;
+  rinkCornerRadius = 100;
+  canvas.fillColor("white");
+  canvas.strokeColor("#888");
+  canvas.fillRoundRect(WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT, rinkCornerRadius, 2);
+  canvas.strokeColor(blue);
+  x = WALL_LEFT + ARENA_WIDTH / 3;
+  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 4);
+  x = WALL_LEFT + ARENA_WIDTH * 2 / 3;
+  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 4);
+  canvas.strokeColor(red);
+  x = WALL_LEFT + ARENA_WIDTH / 2;
+  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 2);
+  x = WALL_LEFT + ARENA_WIDTH / 2;
+  y = WALL_TOP + ARENA_HEIGHT / 2;
+  canvas.fillCircle(x, y, faceOffSpotRadius, blue);
+  canvas.context().lineWidth = 2;
+  canvas.strokeCircle(x, y, faceOffCircleRadius, blue);
+  canvas.strokeColor(red);
+  x = WALL_LEFT + ARENA_WIDTH / 10;
+  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 1);
+  canvas.strokeRect(x, WALL_TOP + ARENA_HEIGHT / 2 - 16, 16, 32);
+  x = WALL_LEFT + ARENA_WIDTH * 9 / 10;
+  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 1);
+  canvas.strokeRect(x - 16, WALL_TOP + ARENA_HEIGHT / 2 - 16, 16, 32);
+  [1, 3].each(function(verticalQuarter) {
+    y = WALL_TOP + verticalQuarter / 4 * ARENA_HEIGHT;
+    return [1 / 5, 1 / 3 + 1 / 40, 2 / 3 - 1 / 40, 4 / 5].each(function(faceOffX, i) {
+      x = WALL_LEFT + faceOffX * ARENA_WIDTH;
+      canvas.fillCircle(x, y, faceOffSpotRadius, red);
+      if (i === 0 || i === 3) {
+        canvas.context().lineWidth = 2;
+        return canvas.strokeCircle(x, y, faceOffCircleRadius, red);
+      }
+    });
+  });
+  return {
+    draw: function(screenCanvas) {
+      var rink;
+      rink = canvas.element();
+      return screenCanvas.drawImage(rink, 0, 0, rink.width, rink.height, 0, 0, rink.width, rink.height);
+    }
+  };
+};;
 var Zamboni;
 Zamboni = function(I) {
   var SWEEPER_SIZE, cleanIce, generatePath, heading, lastPosition, path, pathIndex, pathfind, self;
@@ -19064,7 +19161,7 @@ Zamboni = function(I) {
   return self;
 };;
 App.entities = {};;
-;$(function(){ var DEBUG_DRAW, GAME_OVER, INTERMISSION, awayScore, bgMusic, homeScore, intermission, intermissionTime, leftGoal, nextPeriod, num_players, period, periodTime, rightGoal, scoreboard, time;
+;$(function(){ var DEBUG_DRAW, GAME_OVER, INTERMISSION, awayScore, bgMusic, homeScore, intermission, intermissionTime, leftGoal, nextPeriod, num_players, period, periodTime, rightGoal, rink, scoreboard, time;
 Sprite.loadSheet = function(name, tileWidth, tileHeight) {
   var directory, image, sprites, url, _ref;
   directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.images : void 0 : void 0) || "images";
@@ -19094,6 +19191,7 @@ window.ARENA_WIDTH = WALL_RIGHT - WALL_LEFT;
 window.ARENA_HEIGHT = WALL_BOTTOM - WALL_TOP;
 window.BLOOD_COLOR = "#BA1A19";
 window.ICE_COLOR = "rgba(192, 255, 255, 0.2)";
+rink = Rink();
 window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").powerCanvas();
 bloodCanvas.strokeColor(BLOOD_COLOR);
 periodTime = 1 * 60 * 30;
@@ -19108,7 +19206,9 @@ GAME_OVER = false;
 INTERMISSION = false;
 DEBUG_DRAW = false;
 window.engine = Engine({
+  backgroundColor: "#000",
   canvas: $("canvas").powerCanvas(),
+  showFPS: true,
   zSort: true
 });
 num_players.times(function(i) {
@@ -19118,6 +19218,7 @@ num_players.times(function(i) {
   return engine.add({
     "class": "Player",
     controller: i,
+    joystick: true,
     x: x,
     y: y
   });
@@ -19158,44 +19259,8 @@ nextPeriod = function() {
 };
 nextPeriod();
 engine.bind("preDraw", function(canvas) {
-  var blood, blue, faceOffCircleRadius, faceOffSpotRadius, minutes, red, seconds, x, y;
-  red = "red";
-  blue = "blue";
-  faceOffSpotRadius = 5;
-  faceOffCircleRadius = 38;
-  canvas.strokeColor("black");
-  canvas.strokeRect(WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT);
-  canvas.strokeColor(blue);
-  x = WALL_LEFT + ARENA_WIDTH / 3;
-  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 4);
-  x = WALL_LEFT + ARENA_WIDTH * 2 / 3;
-  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 4);
-  canvas.strokeColor(red);
-  x = WALL_LEFT + ARENA_WIDTH / 2;
-  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 2);
-  x = WALL_LEFT + ARENA_WIDTH / 2;
-  y = WALL_TOP + ARENA_HEIGHT / 2;
-  canvas.fillCircle(x, y, faceOffSpotRadius, blue);
-  canvas.context().lineWidth = 2;
-  canvas.strokeCircle(x, y, faceOffCircleRadius, blue);
-  canvas.strokeColor(red);
-  x = WALL_LEFT + ARENA_WIDTH / 10;
-  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 1);
-  canvas.strokeRect(x, WALL_TOP + ARENA_HEIGHT / 2 - 16, 16, 32);
-  x = WALL_LEFT + ARENA_WIDTH * 9 / 10;
-  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 1);
-  canvas.strokeRect(x - 16, WALL_TOP + ARENA_HEIGHT / 2 - 16, 16, 32);
-  [1, 3].each(function(verticalQuarter) {
-    y = WALL_TOP + verticalQuarter / 4 * ARENA_HEIGHT;
-    return [1 / 5, 1 / 3 + 1 / 40, 2 / 3 - 1 / 40, 4 / 5].each(function(faceOffX, i) {
-      x = WALL_LEFT + faceOffX * ARENA_WIDTH;
-      canvas.fillCircle(x, y, faceOffSpotRadius, red);
-      if (i === 0 || i === 3) {
-        canvas.context().lineWidth = 2;
-        return canvas.strokeCircle(x, y, faceOffCircleRadius, red);
-      }
-    });
-  });
+  var blood, minutes, seconds;
+  rink.draw(canvas);
   blood = bloodCanvas.element();
   canvas.drawImage(blood, 0, 0, blood.width, blood.height, 0, 0, blood.width, blood.height);
   scoreboard.draw(canvas, WALL_LEFT + (ARENA_WIDTH - scoreboard.width) / 2, 16);
