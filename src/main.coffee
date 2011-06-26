@@ -66,7 +66,7 @@ num_players.times (i) ->
   engine.add
     class: "Player"
     controller: i
-    # joystick: true
+    joystick: true
     x: x
     y: y
 
