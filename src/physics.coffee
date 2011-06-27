@@ -1,4 +1,4 @@
-Physics = (->
+Physics = ->
   overlapX = (wall, circle) ->
     (circle.x - wall.center.x).abs() < wall.halfWidth + circle.radius 
 
@@ -7,6 +7,36 @@ Physics = (->
 
   rectangularOverlap = (wall, circle) ->
     return overlapX(wall, circle) && overlapY(wall, circle)
+
+  # Arena walls
+  walls = [{
+      normal: Point(1, 0)
+      position: WALL_LEFT
+    }, {
+      normal: Point(-1, 0)
+      position: -WALL_RIGHT
+    }, {
+      normal: Point(0, 1)
+      position: WALL_TOP
+    }, {
+      normal: Point(0, -1)
+      position: -WALL_BOTTOM
+  }]
+
+  cornerRadius = 100
+  corners = [{
+      position: Point(WALL_LEFT + cornerRadius, WALL_TOP + cornerRadius)
+      quadrant: 0
+    }, {
+      position: Point(WALL_RIGHT - cornerRadius, WALL_TOP + cornerRadius)
+      quadrant: 1
+    }, {
+      position: Point(WALL_LEFT + cornerRadius, WALL_BOTTOM - cornerRadius)
+      quadrant: -1
+    }, {
+      position: Point(WALL_RIGHT - cornerRadius, WALL_BOTTOM - cornerRadius)
+      quadrant: -2
+  }]
 
   threshold = 5
 
@@ -50,36 +80,6 @@ Physics = (->
         resolveCollision(a, b)
 
   wallCollisions = (objects, dt) ->
-    # Arena walls
-    walls = [{
-        normal: Point(1, 0)
-        position: WALL_LEFT
-      }, {
-        normal: Point(-1, 0)
-        position: -WALL_RIGHT
-      }, {
-        normal: Point(0, 1)
-        position: WALL_TOP
-      }, {
-        normal: Point(0, -1)
-        position: -WALL_BOTTOM
-    }]
-
-    cornerRadius = 100
-    corners = [{
-        position: Point(WALL_LEFT + cornerRadius, WALL_TOP + cornerRadius)
-        quadrant: 0
-      }, {
-        position: Point(WALL_RIGHT - cornerRadius, WALL_TOP + cornerRadius)
-        quadrant: 1
-      }, {
-        position: Point(WALL_LEFT + cornerRadius, WALL_BOTTOM - cornerRadius)
-        quadrant: -1
-      }, {
-        position: Point(WALL_RIGHT - cornerRadius, WALL_BOTTOM - cornerRadius)
-        quadrant: -2
-    }]
-
     # Goal wall segments
     wallSegments = engine.find("Goal").map (goal) ->
       goal.walls()
@@ -195,6 +195,4 @@ Physics = (->
 
       resolveCollisions(objects, dt)
       wallCollisions(objects, dt)
-
-)()
 
