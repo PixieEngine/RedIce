@@ -19228,7 +19228,7 @@ GAME_OVER = false;
 INTERMISSION = false;
 DEBUG_DRAW = false;
 window.engine = Engine({
-  backgroundColor: "#000",
+  backgroundColor: "#00010D",
   canvas: $("canvas").powerCanvas(),
   excludedModules: ["HUD"],
   showFPS: true,
