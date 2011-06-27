@@ -34,6 +34,7 @@ window.BLOOD_COLOR = "#BA1A19"
 window.ICE_COLOR = "rgba(192, 255, 255, 0.2)"
 
 rink = Rink()
+physics = Physics()
 
 window.bloodCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />").powerCanvas()
 bloodCanvas.strokeColor(BLOOD_COLOR)
@@ -176,7 +177,7 @@ engine.bind "update", ->
     if Collision.circular(player.controlCircle(), puck.circle())
       player.controlPuck(puck)
 
-  Physics.process(objects)
+  physics.process(objects)
 
   playersAndPuck.each (player) ->
     # Blood Collisions
