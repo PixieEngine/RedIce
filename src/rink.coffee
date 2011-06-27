@@ -55,5 +55,5 @@ Rink = (I) ->
 
   draw: (screenCanvas) ->
     rink = canvas.element()
-    screenCanvas.drawImage(rink, 0, 0, rink.width, rink.height, 0, 0, rink.width, rink.height)
+    screenCanvas.drawImage(rink, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT)
 
