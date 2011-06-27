@@ -19072,7 +19072,7 @@ Rink = function(I) {
     draw: function(screenCanvas) {
       var rink;
       rink = canvas.element();
-      return screenCanvas.drawImage(rink, 0, 0, rink.width, rink.height, 0, 0, rink.width, rink.height);
+      return screenCanvas.drawImage(rink, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT);
     }
   };
 };;
