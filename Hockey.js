@@ -19230,6 +19230,7 @@ DEBUG_DRAW = false;
 window.engine = Engine({
   backgroundColor: "#000",
   canvas: $("canvas").powerCanvas(),
+  excludedModules: ["HUD"],
   showFPS: true,
   zSort: true
 });
