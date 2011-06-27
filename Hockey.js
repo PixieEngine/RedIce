@@ -18411,8 +18411,8 @@ Joysticks = (function() {
   };
 })();;
 var Physics;
-Physics = (function() {
-  var overlapX, overlapY, rectangularOverlap, resolveCollision, resolveCollisions, threshold, wallCollisions;
+Physics = function() {
+  var cornerRadius, corners, overlapX, overlapY, rectangularOverlap, resolveCollision, resolveCollisions, threshold, wallCollisions, walls;
   overlapX = function(wall, circle) {
     return (circle.x - wall.center.x).abs() < wall.halfWidth + circle.radius;
   };
@@ -18422,6 +18422,37 @@ Physics = (function() {
   rectangularOverlap = function(wall, circle) {
     return overlapX(wall, circle) && overlapY(wall, circle);
   };
+  walls = [
+    {
+      normal: Point(1, 0),
+      position: WALL_LEFT
+    }, {
+      normal: Point(-1, 0),
+      position: -WALL_RIGHT
+    }, {
+      normal: Point(0, 1),
+      position: WALL_TOP
+    }, {
+      normal: Point(0, -1),
+      position: -WALL_BOTTOM
+    }
+  ];
+  cornerRadius = 100;
+  corners = [
+    {
+      position: Point(WALL_LEFT + cornerRadius, WALL_TOP + cornerRadius),
+      quadrant: 0
+    }, {
+      position: Point(WALL_RIGHT - cornerRadius, WALL_TOP + cornerRadius),
+      quadrant: 1
+    }, {
+      position: Point(WALL_LEFT + cornerRadius, WALL_BOTTOM - cornerRadius),
+      quadrant: -1
+    }, {
+      position: Point(WALL_RIGHT - cornerRadius, WALL_BOTTOM - cornerRadius),
+      quadrant: -2
+    }
+  ];
   threshold = 5;
   resolveCollision = function(A, B) {
     var massA, massB, max, normal, powA, powB, pushA, pushB, relativeVelocity, totalMass;
@@ -18458,38 +18489,7 @@ Physics = (function() {
     });
   };
   wallCollisions = function(objects, dt) {
-    var cornerRadius, corners, wallSegments, walls;
-    walls = [
-      {
-        normal: Point(1, 0),
-        position: WALL_LEFT
-      }, {
-        normal: Point(-1, 0),
-        position: -WALL_RIGHT
-      }, {
-        normal: Point(0, 1),
-        position: WALL_TOP
-      }, {
-        normal: Point(0, -1),
-        position: -WALL_BOTTOM
-      }
-    ];
-    cornerRadius = 100;
-    corners = [
-      {
-        position: Point(WALL_LEFT + cornerRadius, WALL_TOP + cornerRadius),
-        quadrant: 0
-      }, {
-        position: Point(WALL_RIGHT - cornerRadius, WALL_TOP + cornerRadius),
-        quadrant: 1
-      }, {
-        position: Point(WALL_LEFT + cornerRadius, WALL_BOTTOM - cornerRadius),
-        quadrant: -1
-      }, {
-        position: Point(WALL_RIGHT - cornerRadius, WALL_BOTTOM - cornerRadius),
-        quadrant: -2
-      }
-    ];
+    var wallSegments;
     wallSegments = engine.find("Goal").map(function(goal) {
       return goal.walls();
     }).flatten();
@@ -18504,8 +18504,8 @@ Physics = (function() {
       collided = false;
       wallSegments.each(function(wall) {
         var capCenter, normal, velocityProjection, wallToObject;
-        wallToObject = center.subtract(wall.center);
         if (rectangularOverlap(wall, circle)) {
+          wallToObject = center.subtract(wall.center);
           if (wall.horizontal) {
             if (wallToObject.x.abs() < wall.halfWidth) {
               normal = Point(0, wallToObject.y.sign());
@@ -18603,7 +18603,7 @@ Physics = (function() {
       });
     }
   };
-})();;
+};;
 var Player;
 Player = function(I) {
   var PLAYER_COLORS, actionDown, boostTimeout, controller, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, drawPowerMeters, flyingOffset, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, playerColor, redTeam, rightSkatePos, self, shootPuck, standingOffset, teamColor;
@@ -19161,7 +19161,7 @@ Zamboni = function(I) {
   return self;
 };;
 App.entities = {};;
-;$(function(){ var DEBUG_DRAW, GAME_OVER, INTERMISSION, awayScore, bgMusic, homeScore, intermission, intermissionTime, leftGoal, nextPeriod, num_players, period, periodTime, rightGoal, rink, scoreboard, time;
+;$(function(){ var DEBUG_DRAW, GAME_OVER, INTERMISSION, awayScore, bgMusic, homeScore, intermission, intermissionTime, leftGoal, nextPeriod, num_players, period, periodTime, physics, rightGoal, rink, scoreboard, time;
 Sprite.loadSheet = function(name, tileWidth, tileHeight) {
   var directory, image, sprites, url, _ref;
   directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.images : void 0 : void 0) || "images";
@@ -19192,6 +19192,7 @@ window.ARENA_HEIGHT = WALL_BOTTOM - WALL_TOP;
 window.BLOOD_COLOR = "#BA1A19";
 window.ICE_COLOR = "rgba(192, 255, 255, 0.2)";
 rink = Rink();
+physics = Physics();
 window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").powerCanvas();
 bloodCanvas.strokeColor(BLOOD_COLOR);
 periodTime = 1 * 60 * 30;
@@ -19319,7 +19320,7 @@ engine.bind("update", function() {
       return player.controlPuck(puck);
     }
   });
-  Physics.process(objects);
+  physics.process(objects);
   return playersAndPuck.each(function(player) {
     var splats;
     splats = engine.find("Blood");
