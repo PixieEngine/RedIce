@@ -18528,7 +18528,7 @@ Physics = function() {
         object.I.x += velocity.x * dt;
         object.I.y += velocity.y * dt;
         if (object.puck()) {
-          return Sound.play("clink0");
+          Sound.play("clink0");
         }
       }
     });
@@ -18540,14 +18540,35 @@ Physics = function() {
       center = object.center();
       radius = object.I.radius;
       velocity = object.I.velocity;
-      return corners.each(function(corner) {
+      corners.each(function(corner) {
         var angle, distanceToCenter, normal, position, quadrant, velocityProjection;
         position = corner.position;
+        switch (corner.quadrant) {
+          case 0:
+            if (!(center.x < position.x && center.y < position.y)) {
+              return;
+            }
+            break;
+          case 1:
+            if (!(center.x > position.x && center.y < position.y)) {
+              return;
+            }
+            break;
+          case -1:
+            if (!(center.x < position.x && center.y > position.y)) {
+              return;
+            }
+            break;
+          case -2:
+            if (!(center.x > position.x && center.y > position.y)) {
+              return;
+            }
+        }
         distanceToCenter = position.subtract(center);
         normal = distanceToCenter.norm();
         angle = Point.direction(Point(0, 0), normal);
         quadrant = (4 * angle / Math.TAU).floor();
-        if (quadrant === corner.quadrant && radius + distanceToCenter.magnitude() > cornerRadius) {
+        if (quadrant === corner.quadrant && radius * radius + distanceToCenter.dot(distanceToCenter) > cornerRadius * cornerRadius) {
           velocityProjection = velocity.dot(normal);
           if (velocityProjection < 0) {
             velocity = velocity.subtract(normal.scale(2 * velocityProjection));
@@ -18586,7 +18607,7 @@ Physics = function() {
         object.I.x += velocity.x * dt;
         object.I.y += velocity.y * dt;
         if (object.puck()) {
-          return Sound.play("thud0");
+          Sound.play("thud0");
         }
       }
     });
