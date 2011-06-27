@@ -94,9 +94,9 @@ Physics = ->
 
       collided = false
       wallSegments.each (wall) ->
-        wallToObject = center.subtract(wall.center)
-
         if rectangularOverlap(wall, circle)
+          wallToObject = center.subtract(wall.center)
+
           if wall.horizontal
             if wallToObject.x.abs() < wall.halfWidth
               normal = Point(0, wallToObject.y.sign())
