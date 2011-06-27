@@ -18346,12 +18346,12 @@ Joysticks = (function() {
   DEAD_ZONE = 256;
   joysticks = [];
   buttonMapping = {
-    "A": 0,
-    "B": 1,
-    "C": 2,
-    "D": 3,
-    "X": 2,
-    "Y": 3
+    "A": 1,
+    "B": 2,
+    "C": 4,
+    "D": 8,
+    "X": 4,
+    "Y": 8
   };
   return {
     getController: function(i) {
@@ -18361,7 +18361,7 @@ Joysticks = (function() {
           buttons = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
           if (stick = joysticks[i]) {
             return buttons.inject(false, function(down, button) {
-              return down || stick.buttons[buttonMapping[button]];
+              return down || stick.buttons & buttonMapping[button];
             });
           } else {
             return false;
