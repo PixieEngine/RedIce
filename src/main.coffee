@@ -112,7 +112,7 @@ engine.bind "preDraw", (canvas) ->
   rink.draw(canvas)
 
   blood = bloodCanvas.element()
-  canvas.drawImage(blood, 0, 0, blood.width, blood.height, 0, 0, blood.width, blood.height)
+  canvas.drawImage(blood, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT)
 
   # Scoreboard
   scoreboard.draw(canvas, WALL_LEFT + (ARENA_WIDTH - scoreboard.width)/2, 16)
