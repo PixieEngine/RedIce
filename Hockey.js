@@ -19241,6 +19241,7 @@ num_players.times(function(i) {
   return engine.add({
     "class": "Player",
     controller: i,
+    joystick: true,
     x: x,
     y: y
   });
@@ -19314,6 +19315,7 @@ engine.bind("draw", function(canvas) {
 });
 engine.bind("update", function() {
   var objects, players, playersAndPuck, puck, zambonis;
+  Joysticks.update();
   time -= 1;
   if (INTERMISSION) {
     if (time === 0) {
