@@ -123,6 +123,8 @@ Physics = ->
 
         Sound.play "clink0" if object.puck()
 
+      return
+
     # Rounded rink collisions
     objects.each (object) ->
       return unless object.collidesWithWalls()
@@ -134,13 +136,24 @@ Physics = ->
       corners.each (corner) ->
         {position} = corner
 
+        # Coarse Checks
+        switch corner.quadrant
+          when 0
+            return unless center.x < position.x && center.y < position.y
+          when 1 
+            return unless center.x > position.x && center.y < position.y
+          when -1
+            return unless center.x < position.x && center.y > position.y
+          when -2
+            return unless center.x > position.x && center.y > position.y
+
         distanceToCenter = position.subtract(center)
         normal = distanceToCenter.norm()
 
         angle = Point.direction(Point(0, 0), normal)
         quadrant = (4 * angle / Math.TAU).floor()
 
-        if quadrant == corner.quadrant && radius + distanceToCenter.magnitude() > cornerRadius
+        if quadrant == corner.quadrant && radius * radius + distanceToCenter.dot(distanceToCenter) > cornerRadius * cornerRadius
           velocityProjection = velocity.dot(normal)
           # Heading towards wall
           if velocityProjection < 0
@@ -153,6 +166,8 @@ Physics = ->
             object.I.y += velocity.y * dt
 
             Sound.play "thud0" if object.puck()
+
+      return
 
     # Rink Walls
     objects.each (object) ->
@@ -184,6 +199,8 @@ Physics = ->
         object.I.y += velocity.y * dt
 
         Sound.play "thud0" if object.puck()
+
+      return
 
   process: (objects) ->
     steps = 5
