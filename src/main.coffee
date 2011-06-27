@@ -68,7 +68,7 @@ num_players.times (i) ->
   engine.add
     class: "Player"
     controller: i
-    # joystick: true
+    joystick: true
     x: x
     y: y
 
@@ -148,7 +148,7 @@ engine.bind "draw", (canvas) ->
     canvas.centerText("GAME OVER", 384)
 
 engine.bind "update", ->
-  # Joysticks.update()
+  Joysticks.update()
 
   time -= 1
 
