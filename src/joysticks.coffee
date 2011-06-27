@@ -7,19 +7,20 @@ Joysticks = ( ->
   joysticks = []
 
   buttonMapping =
-    "A": 0
-    "B": 1
+    "A": 1
+    "B": 2
+
     # X/C, Y/D are interchangeable
-    "C": 2
-    "D": 3
-    "X": 2
-    "Y": 3
+    "C": 4
+    "D": 8
+    "X": 4
+    "Y": 8
 
   getController: (i) ->
     actionDown: (buttons...) ->
       if stick = joysticks[i]    
         buttons.inject false, (down, button) ->
-          down || stick.buttons[buttonMapping[button]]
+          down || stick.buttons & buttonMapping[button]
       else
         false
 
