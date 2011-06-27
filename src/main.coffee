@@ -35,6 +35,7 @@ window.ICE_COLOR = "rgba(192, 255, 255, 0.2)"
 
 rink = Rink()
 physics = Physics()
+useJoysticks = false
 
 window.bloodCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />").powerCanvas()
 bloodCanvas.strokeColor(BLOOD_COLOR)
@@ -68,7 +69,7 @@ num_players.times (i) ->
   engine.add
     class: "Player"
     controller: i
-    joystick: true
+    joystick: useJoysticks
     x: x
     y: y
 
@@ -148,7 +149,7 @@ engine.bind "draw", (canvas) ->
     canvas.centerText("GAME OVER", 384)
 
 engine.bind "update", ->
-  Joysticks.update()
+  Joysticks.update() if useJoysticks
 
   time -= 1
 
