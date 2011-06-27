@@ -19283,7 +19283,7 @@ engine.bind("preDraw", function(canvas) {
   var blood, minutes, seconds;
   rink.draw(canvas);
   blood = bloodCanvas.element();
-  canvas.drawImage(blood, 0, 0, blood.width, blood.height, 0, 0, blood.width, blood.height);
+  canvas.drawImage(blood, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT);
   scoreboard.draw(canvas, WALL_LEFT + (ARENA_WIDTH - scoreboard.width) / 2, 16);
   minutes = (time / 30 / 60).floor();
   seconds = ((time / 30).floor() % 60).toString();
