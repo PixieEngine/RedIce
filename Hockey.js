@@ -19182,7 +19182,7 @@ Zamboni = function(I) {
   return self;
 };;
 App.entities = {};;
-;$(function(){ var DEBUG_DRAW, GAME_OVER, INTERMISSION, awayScore, bgMusic, homeScore, intermission, intermissionTime, leftGoal, nextPeriod, num_players, period, periodTime, physics, rightGoal, rink, scoreboard, time;
+;$(function(){ var DEBUG_DRAW, GAME_OVER, INTERMISSION, awayScore, bgMusic, homeScore, intermission, intermissionTime, leftGoal, nextPeriod, num_players, period, periodTime, physics, rightGoal, rink, scoreboard, time, useJoysticks;
 Sprite.loadSheet = function(name, tileWidth, tileHeight) {
   var directory, image, sprites, url, _ref;
   directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.images : void 0 : void 0) || "images";
@@ -19214,6 +19214,7 @@ window.BLOOD_COLOR = "#BA1A19";
 window.ICE_COLOR = "rgba(192, 255, 255, 0.2)";
 rink = Rink();
 physics = Physics();
+useJoysticks = false;
 window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").powerCanvas();
 bloodCanvas.strokeColor(BLOOD_COLOR);
 periodTime = 1 * 60 * 30;
@@ -19241,7 +19242,7 @@ num_players.times(function(i) {
   return engine.add({
     "class": "Player",
     controller: i,
-    joystick: true,
+    joystick: useJoysticks,
     x: x,
     y: y
   });
@@ -19315,7 +19316,9 @@ engine.bind("draw", function(canvas) {
 });
 engine.bind("update", function() {
   var objects, players, playersAndPuck, puck, zambonis;
-  Joysticks.update();
+  if (useJoysticks) {
+    Joysticks.update();
+  }
   time -= 1;
   if (INTERMISSION) {
     if (time === 0) {
