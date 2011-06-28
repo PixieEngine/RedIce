@@ -48,8 +48,8 @@ fansSprite = Sprite.loadByName("fans")
 DEBUG_DRAW = false
 
 window.engine = Engine
-  backgroundColor: "#00010D"
   canvas: $("canvas").powerCanvas()
+  clear: true
   excludedModules: ["HUD"]
   showFPS: true
   zSort: true
@@ -108,6 +108,7 @@ engine.bind "preDraw", (canvas) ->
   # Fans
   fansSprite.fill(canvas, 0, 0, App.width, WALL_TOP)
 
+  #TODO Move rink and blood to lower layers and don't redraw them each frame
   rink.draw(canvas)
 
   blood = bloodCanvas.element()
