@@ -1,5 +1,9 @@
 Scoreboard = (I) ->
   $.reverseMerge I,
+    score: {
+      home: 0
+      away: 0
+    }
     period: 1
     sprite: Sprite.loadByName("scoreboard")
     time: 0
@@ -22,8 +26,8 @@ Scoreboard = (I) ->
       canvas.fillText("#{minutes}:#{seconds}", WALL_LEFT + ARENA_WIDTH/2 - 22, 46)
       canvas.fillText(I.period, WALL_LEFT + ARENA_WIDTH/2 + 18, 84)
 
-      # canvas.fillText(homeScore, WALL_LEFT + ARENA_WIDTH/2 - 72, 60)
-      # canvas.fillText(awayScore, WALL_LEFT + ARENA_WIDTH/2 + 90, 60)
+      canvas.fillText(I.score.home, WALL_LEFT + ARENA_WIDTH/2 - 72, 60)
+      canvas.fillText(I.score.away, WALL_LEFT + ARENA_WIDTH/2 + 90, 60)
 
 
   self.bind "update", ->
