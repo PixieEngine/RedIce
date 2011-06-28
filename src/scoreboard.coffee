@@ -5,6 +5,7 @@ Scoreboard = (I) ->
     time: 0
     x: rand(App.width).snap(32)
     y: rand(WALL_TOP).snap(32)
+    zIndex: 1
 
   self = GameObject(I).extend
     draw: (canvas) ->
