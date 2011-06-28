@@ -1,7 +1,14 @@
 Rink = (I) ->
   I ||= {}
 
-  canvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />").powerCanvas()
+  canvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />")
+    .appendTo("body")
+    .css
+      position: "absolute"
+      top: 0
+      left: 0
+      zIndex: "-2"
+    .powerCanvas()
 
   red = "red"
   blue = "blue"
@@ -53,8 +60,8 @@ Rink = (I) ->
         canvas.context().lineWidth = 2
         canvas.strokeCircle(x, y, faceOffCircleRadius, red)
 
-  draw: (screenCanvas) ->
-    rink = canvas.element()
-    screenCanvas.drawImage(rink, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT)
+  fansSprite = Sprite.loadByName "fans", ->
+    fansSprite.fill(canvas, 0, 0, App.width, WALL_TOP)
 
 Rink.CORNER_RADIUS = 96
+
