@@ -18126,6 +18126,23 @@ Blood = function(I) {
   return self;
 };
 Blood.sprites || (Blood.sprites = [Sprite.loadByName("blood")]);;
+var Boards;
+Boards = function(I) {
+  var self;
+  $.reverseMerge(I, {
+    width: ARENA_WIDTH - 192,
+    height: 48,
+    x: WALL_LEFT + 96
+  });
+  self = GameObject(I).extend({
+    draw: function(canvas) {
+      return canvas.withTransform(Matrix.translation(I.x, I.y), function() {
+        return I.sprite.fill(canvas, 0, 0, I.width, I.height);
+      });
+    }
+  });
+  return self;
+};;
 var CONTROLLERS, Controller, gameControlData, keyActionNames, layouts, selectedLayout;
 var __slice = Array.prototype.slice;
 Controller = function(actions) {
@@ -18252,6 +18269,21 @@ layouts[selectedLayout].each(function(actions, i) {
   return CONTROLLERS[i] = Controller(actions);
 });
 parent.gameControlData = gameControlData;;
+var Fan;
+Fan = function(I) {
+  var self;
+  $.reverseMerge(I, {
+    duration: 16 + rand(64),
+    sprite: Fan.sprites.rand(),
+    width: 32,
+    height: 32,
+    x: rand(App.width).snap(32),
+    y: rand(WALL_TOP).snap(32)
+  });
+  self = GameObject(I);
+  return self;
+};
+Fan.sprites || (Fan.sprites = [Sprite.loadByName("fans_active")]);;
 var Goal;
 Goal = function(I) {
   var DEBUG_DRAW, HEIGHT, WALL_RADIUS, WIDTH, drawWall, self, walls;
@@ -18435,7 +18467,7 @@ Physics = function() {
       position: -WALL_BOTTOM
     }
   ];
-  cornerRadius = 100;
+  cornerRadius = Rink.CORNER_RADIUS;
   corners = [
     {
       position: Point(WALL_LEFT + cornerRadius, WALL_TOP + cornerRadius),
@@ -18965,7 +18997,7 @@ Puck = function(I) {
     width: 16,
     height: 8,
     x: 512 - 8,
-    y: 384 - 4,
+    y: (WALL_BOTTOM + WALL_TOP) / 2 - 4,
     friction: 0.05,
     mass: 0.01,
     zIndex: 10,
@@ -19036,7 +19068,7 @@ Rink = function(I) {
   blue = "blue";
   faceOffSpotRadius = 5;
   faceOffCircleRadius = 38;
-  rinkCornerRadius = 100;
+  rinkCornerRadius = Rink.CORNER_RADIUS;
   canvas.fillColor("white");
   canvas.strokeColor("#888");
   canvas.fillRoundRect(WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT, rinkCornerRadius, 2);
@@ -19078,6 +19110,74 @@ Rink = function(I) {
       return screenCanvas.drawImage(rink, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT);
     }
   };
+};
+Rink.CORNER_RADIUS = 96;;
+var Scoreboard;
+Scoreboard = function(I) {
+  var nextPeriod, self;
+  $.reverseMerge(I, {
+    gameOver: false,
+    score: {
+      home: 0,
+      away: 0
+    },
+    period: 0,
+    periodTime: 1 * 60 * 30,
+    sprite: Sprite.loadByName("scoreboard"),
+    time: 0,
+    x: rand(App.width).snap(32),
+    y: rand(WALL_TOP).snap(32),
+    zIndex: 10
+  });
+  nextPeriod = function() {
+    I.time = I.periodTime;
+    I.period += 1;
+    if (I.period === 4) {
+      return I.gameOver = true;
+    } else if (I.period > 1) {
+      return engine.add({
+        "class": "Zamboni",
+        reverse: I.period % 2
+      });
+    }
+  };
+  nextPeriod();
+  self = GameObject(I).extend({
+    draw: function(canvas) {
+      var minutes, seconds;
+      I.sprite.draw(canvas, WALL_LEFT + (ARENA_WIDTH - I.sprite.width) / 2, 16);
+      minutes = (I.time / 30 / 60).floor();
+      seconds = ((I.time / 30).floor() % 60).toString();
+      if (seconds.length === 1) {
+        seconds = "0" + seconds;
+      }
+      canvas.fillColor("red");
+      canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
+      canvas.fillText("" + minutes + ":" + seconds, WALL_LEFT + ARENA_WIDTH / 2 - 22, 46);
+      canvas.fillText(I.period, WALL_LEFT + ARENA_WIDTH / 2 + 18, 84);
+      canvas.fillText(I.score.home, WALL_LEFT + ARENA_WIDTH / 2 - 72, 60);
+      canvas.fillText(I.score.away, WALL_LEFT + ARENA_WIDTH / 2 + 90, 60);
+      if (I.gameOver) {
+        canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
+        canvas.fillColor("#000");
+        return canvas.centerText("GAME OVER", 384);
+      }
+    },
+    score: function(team) {
+      return I.score[team] += 1;
+    }
+  });
+  self.bind("update", function() {
+    I.time -= 1;
+    if (I.gameOver) {
+      return I.time = 0;
+    } else {
+      if (I.time === 0) {
+        return nextPeriod();
+      }
+    }
+  });
+  return self;
 };;
 var Zamboni;
 Zamboni = function(I) {
@@ -19184,104 +19284,6 @@ Zamboni = function(I) {
   });
   return self;
 };;
-var Fan;
-Fan = function(I) {
-  var self;
-  $.reverseMerge(I, {
-    duration: 16 + rand(64),
-    sprite: Fan.sprites.rand(),
-    width: 32,
-    height: 32,
-    x: rand(App.width).snap(32),
-    y: rand(WALL_TOP).snap(32)
-  });
-  self = GameObject(I);
-  return self;
-};
-Fan.sprites || (Fan.sprites = [Sprite.loadByName("fans_active")]);;
-var Scoreboard;
-Scoreboard = function(I) {
-  var nextPeriod, self;
-  $.reverseMerge(I, {
-    gameOver: false,
-    score: {
-      home: 0,
-      away: 0
-    },
-    period: 0,
-    periodTime: 1 * 60 * 30,
-    sprite: Sprite.loadByName("scoreboard"),
-    time: 0,
-    x: rand(App.width).snap(32),
-    y: rand(WALL_TOP).snap(32),
-    zIndex: 10
-  });
-  nextPeriod = function() {
-    I.time = I.periodTime;
-    I.period += 1;
-    if (I.period === 4) {
-      return I.gameOver = true;
-    } else if (I.period > 1) {
-      return engine.add({
-        "class": "Zamboni",
-        reverse: I.period % 2
-      });
-    }
-  };
-  nextPeriod();
-  self = GameObject(I).extend({
-    draw: function(canvas) {
-      var minutes, seconds;
-      I.sprite.draw(canvas, WALL_LEFT + (ARENA_WIDTH - I.sprite.width) / 2, 16);
-      minutes = (I.time / 30 / 60).floor();
-      seconds = ((I.time / 30).floor() % 60).toString();
-      if (seconds.length === 1) {
-        seconds = "0" + seconds;
-      }
-      canvas.fillColor("red");
-      canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
-      canvas.fillText("" + minutes + ":" + seconds, WALL_LEFT + ARENA_WIDTH / 2 - 22, 46);
-      canvas.fillText(I.period, WALL_LEFT + ARENA_WIDTH / 2 + 18, 84);
-      canvas.fillText(I.score.home, WALL_LEFT + ARENA_WIDTH / 2 - 72, 60);
-      canvas.fillText(I.score.away, WALL_LEFT + ARENA_WIDTH / 2 + 90, 60);
-      if (I.gameOver) {
-        canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
-        canvas.fillColor("#000");
-        return canvas.centerText("GAME OVER", 384);
-      }
-    },
-    score: function(team) {
-      return I.score[team] += 1;
-    }
-  });
-  self.bind("update", function() {
-    I.time -= 1;
-    if (I.gameOver) {
-      return I.time = 0;
-    } else {
-      if (I.time === 0) {
-        return nextPeriod();
-      }
-    }
-  });
-  return self;
-};;
-var Boards;
-Boards = function(I) {
-  var self;
-  $.reverseMerge(I, {
-    width: ARENA_WIDTH - 192,
-    height: 48
-  });
-  self = GameObject(I).extend({
-    draw: function(canvas) {
-      return canvas.withTransform(Matrix.translation(I.x, I.y), function() {
-        return I.sprite.fill(canvas, 0, 0, I.width, I.height);
-      });
-    }
-  });
-  return self;
-};;
 App.entities = {};;
 ;$(function(){ var DEBUG_DRAW, bgMusic, fansSprite, leftGoal, num_players, physics, rightGoal, rink, scoreboard, useJoysticks;
 Sprite.loadSheet = function(name, tileWidth, tileHeight) {
@@ -19332,18 +19334,20 @@ scoreboard = engine.add({
   "class": "Scoreboard"
 });
 engine.add({
+  sprite: Sprite.loadByName("corner_left"),
+  x: 0,
+  y: WALL_TOP - 48,
+  zIndex: 1
+});
+engine.add({
   "class": "Boards",
   sprite: Sprite.loadByName("boards_front"),
-  width: ARENA_WIDTH - 192,
-  x: WALL_LEFT + 96,
   y: WALL_TOP - 48,
   zIndex: 1
 });
 engine.add({
   "class": "Boards",
   sprite: Sprite.loadByName("boards_back"),
-  width: ARENA_WIDTH - 128,
-  x: WALL_LEFT + 64,
   y: WALL_BOTTOM - 48,
   zIndex: 10
 });
