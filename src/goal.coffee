@@ -14,33 +14,30 @@ Goal = (I) ->
     y: WALL_TOP + ARENA_HEIGHT/2 - HEIGHT/2
     spriteOffset: Point(0, -(HEIGHT-2))
 
-  wallSegments = ->
-    walls = [{
-      center: Point(I.x + I.width/2, I.y)
-      halfWidth: I.width/2
-      halfHeight: WALL_RADIUS
-      horizontal: true
-    }, {
-      center: Point(I.x + I.width/2, I.y + I.height)
-      halfWidth: I.width/2
-      halfHeight: WALL_RADIUS
-      horizontal: true
-    }]
+  walls = [{
+    center: Point(I.x + I.width/2, I.y)
+    halfWidth: I.width/2
+    halfHeight: WALL_RADIUS
+    horizontal: true
+  }, {
+    center: Point(I.x + I.width/2, I.y + I.height)
+    halfWidth: I.width/2
+    halfHeight: WALL_RADIUS
+    horizontal: true
+  }]
 
-    if I.right
-      walls.push
-        center: Point(I.x + I.width, I.y + I.height/2)
-        halfWidth: WALL_RADIUS
-        halfHeight: I.height/2
-        killSide: -1
-    else
-      walls.push
-        center: Point(I.x, I.y + I.height/2)
-        halfWidth: WALL_RADIUS
-        halfHeight: I.height/2
-        killSide: 1
-
-    return walls
+  if I.right
+    walls.push
+      center: Point(I.x + I.width, I.y + I.height/2)
+      halfWidth: WALL_RADIUS
+      halfHeight: I.height/2
+      killSide: -1
+  else
+    walls.push
+      center: Point(I.x, I.y + I.height/2)
+      halfWidth: WALL_RADIUS
+      halfHeight: I.height/2
+      killSide: 1
 
   drawWall = (wall, canvas) ->
     canvas.fillColor("#0F0")
@@ -52,7 +49,8 @@ Goal = (I) ->
     )
 
   self = GameObject(I).extend
-    walls: wallSegments
+    walls: ->
+      walls
 
     withinGoal: (circle) ->
       if circle.x - circle.radius > I.x && circle.x + circle.radius < I.x + I.width
@@ -71,7 +69,7 @@ Goal = (I) ->
     canvas.fillRect(I.x, I.y, I.width, I.height)
 
     # Draw walls
-    wallSegments().each (wall) ->
+    walls.each (wall) ->
       drawWall(wall, canvas)
 
   self.bind "step", ->
