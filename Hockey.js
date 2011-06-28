@@ -19089,7 +19089,7 @@ Rink = function(I) {
   rinkCornerRadius = Rink.CORNER_RADIUS;
   canvas.fillColor("white");
   canvas.strokeColor("#888");
-  canvas.fillRoundRect(WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT, rinkCornerRadius, 2);
+  canvas.fillRoundRect(WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT, rinkCornerRadius);
   canvas.strokeColor(blue);
   x = WALL_LEFT + ARENA_WIDTH / 3;
   canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 4);
