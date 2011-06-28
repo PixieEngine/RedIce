@@ -60,16 +60,12 @@ scoreboard = engine.add
 engine.add
   class: "Boards"
   sprite: Sprite.loadByName("boards_front")
-  width: ARENA_WIDTH - 192
-  x: WALL_LEFT + 96
   y: WALL_TOP - 48
   zIndex: 1
 
 engine.add
   class: "Boards"
   sprite: Sprite.loadByName("boards_back")
-  width: ARENA_WIDTH - 128
-  x: WALL_LEFT + 64
   y: WALL_BOTTOM - 48
   zIndex: 10
 
