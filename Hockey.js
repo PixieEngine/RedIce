@@ -18254,7 +18254,7 @@ layouts[selectedLayout].each(function(actions, i) {
 parent.gameControlData = gameControlData;;
 var Goal;
 Goal = function(I) {
-  var DEBUG_DRAW, HEIGHT, WALL_RADIUS, WIDTH, drawWall, self, wallSegments;
+  var DEBUG_DRAW, HEIGHT, WALL_RADIUS, WIDTH, drawWall, self, walls;
   I || (I = {});
   DEBUG_DRAW = false;
   WALL_RADIUS = 2;
@@ -18268,44 +18268,42 @@ Goal = function(I) {
     y: WALL_TOP + ARENA_HEIGHT / 2 - HEIGHT / 2,
     spriteOffset: Point(0, -(HEIGHT - 2))
   });
-  wallSegments = function() {
-    var walls;
-    walls = [
-      {
-        center: Point(I.x + I.width / 2, I.y),
-        halfWidth: I.width / 2,
-        halfHeight: WALL_RADIUS,
-        horizontal: true
-      }, {
-        center: Point(I.x + I.width / 2, I.y + I.height),
-        halfWidth: I.width / 2,
-        halfHeight: WALL_RADIUS,
-        horizontal: true
-      }
-    ];
-    if (I.right) {
-      walls.push({
-        center: Point(I.x + I.width, I.y + I.height / 2),
-        halfWidth: WALL_RADIUS,
-        halfHeight: I.height / 2,
-        killSide: -1
-      });
-    } else {
-      walls.push({
-        center: Point(I.x, I.y + I.height / 2),
-        halfWidth: WALL_RADIUS,
-        halfHeight: I.height / 2,
-        killSide: 1
-      });
+  walls = [
+    {
+      center: Point(I.x + I.width / 2, I.y),
+      halfWidth: I.width / 2,
+      halfHeight: WALL_RADIUS,
+      horizontal: true
+    }, {
+      center: Point(I.x + I.width / 2, I.y + I.height),
+      halfWidth: I.width / 2,
+      halfHeight: WALL_RADIUS,
+      horizontal: true
     }
-    return walls;
-  };
+  ];
+  if (I.right) {
+    walls.push({
+      center: Point(I.x + I.width, I.y + I.height / 2),
+      halfWidth: WALL_RADIUS,
+      halfHeight: I.height / 2,
+      killSide: -1
+    });
+  } else {
+    walls.push({
+      center: Point(I.x, I.y + I.height / 2),
+      halfWidth: WALL_RADIUS,
+      halfHeight: I.height / 2,
+      killSide: 1
+    });
+  }
   drawWall = function(wall, canvas) {
     canvas.fillColor("#0F0");
     return canvas.fillRect(wall.center.x - wall.halfWidth, wall.center.y - wall.halfHeight, 2 * wall.halfWidth, 2 * wall.halfHeight);
   };
   self = GameObject(I).extend({
-    walls: wallSegments,
+    walls: function() {
+      return walls;
+    },
     withinGoal: function(circle) {
       if (circle.x - circle.radius > I.x && circle.x + circle.radius < I.x + I.width) {
         if (circle.y - circle.radius > I.y && circle.y + circle.radius < I.y + I.height) {
@@ -18322,7 +18320,7 @@ Goal = function(I) {
   self.bind("drawDebug", function(canvas) {
     canvas.fillColor("rgba(255, 0, 255, 0.5)");
     canvas.fillRect(I.x, I.y, I.width, I.height);
-    return wallSegments().each(function(wall) {
+    return walls.each(function(wall) {
       return drawWall(wall, canvas);
     });
   });
