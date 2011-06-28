@@ -20,6 +20,7 @@ Scoreboard = (I) ->
     if I.period == 4
       I.gameOver = true
       #TODO check team scores and choose winner
+      #TODO handle ties
     else if I.period > 1
       engine.add
         class: "Zamboni"
@@ -51,7 +52,7 @@ Scoreboard = (I) ->
         canvas.centerText("GAME OVER", 384)
 
     score: (team) ->
-      I.score[team] += 1
+      I.score[team] += 1 unless I.gameOver
 
   self.bind "update", ->
     I.time -= 1
