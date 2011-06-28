@@ -18780,6 +18780,11 @@ Player = function(I) {
       push = push.norm().scale(30);
       Sound.play("hit" + (rand(4)));
       Sound.play("crowd" + (rand(3)));
+      (rand(6) + 3).times(function() {
+        return engine.add({
+          "class": "Fan"
+        });
+      });
       return engine.add({
         "class": "Blood",
         x: I.x + push.x,
@@ -19181,8 +19186,106 @@ Zamboni = function(I) {
   });
   return self;
 };;
+var Fan;
+Fan = function(I) {
+  var self;
+  $.reverseMerge(I, {
+    duration: 16 + rand(64),
+    sprite: Fan.sprites.rand(),
+    width: 32,
+    height: 32,
+    x: rand(App.width).snap(32),
+    y: rand(WALL_TOP).snap(32)
+  });
+  self = GameObject(I);
+  return self;
+};
+Fan.sprites || (Fan.sprites = [Sprite.loadByName("fans_active")]);;
+var Scoreboard;
+Scoreboard = function(I) {
+  var nextPeriod, self;
+  $.reverseMerge(I, {
+    gameOver: false,
+    score: {
+      home: 0,
+      away: 0
+    },
+    period: 0,
+    periodTime: 1 * 60 * 30,
+    sprite: Sprite.loadByName("scoreboard"),
+    time: 0,
+    x: rand(App.width).snap(32),
+    y: rand(WALL_TOP).snap(32),
+    zIndex: 10
+  });
+  nextPeriod = function() {
+    I.time = I.periodTime;
+    I.period += 1;
+    if (I.period === 4) {
+      return I.gameOver = true;
+    } else if (I.period > 1) {
+      return engine.add({
+        "class": "Zamboni",
+        reverse: I.period % 2
+      });
+    }
+  };
+  nextPeriod();
+  self = GameObject(I).extend({
+    draw: function(canvas) {
+      var minutes, seconds;
+      I.sprite.draw(canvas, WALL_LEFT + (ARENA_WIDTH - I.sprite.width) / 2, 16);
+      minutes = (I.time / 30 / 60).floor();
+      seconds = ((I.time / 30).floor() % 60).toString();
+      if (seconds.length === 1) {
+        seconds = "0" + seconds;
+      }
+      canvas.fillColor("red");
+      canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
+      canvas.fillText("" + minutes + ":" + seconds, WALL_LEFT + ARENA_WIDTH / 2 - 22, 46);
+      canvas.fillText(I.period, WALL_LEFT + ARENA_WIDTH / 2 + 18, 84);
+      canvas.fillText(I.score.home, WALL_LEFT + ARENA_WIDTH / 2 - 72, 60);
+      canvas.fillText(I.score.away, WALL_LEFT + ARENA_WIDTH / 2 + 90, 60);
+      if (I.gameOver) {
+        canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
+        canvas.fillColor("#000");
+        return canvas.centerText("GAME OVER", 384);
+      }
+    },
+    score: function(team) {
+      return I.score[team] += 1;
+    }
+  });
+  self.bind("update", function() {
+    I.time -= 1;
+    if (I.gameOver) {
+      return I.time = 0;
+    } else {
+      if (I.time === 0) {
+        return nextPeriod();
+      }
+    }
+  });
+  return self;
+};;
+var Boards;
+Boards = function(I) {
+  var self;
+  $.reverseMerge(I, {
+    width: ARENA_WIDTH - 192,
+    height: 48
+  });
+  self = GameObject(I).extend({
+    draw: function(canvas) {
+      return canvas.withTransform(Matrix.translation(I.x, I.y), function() {
+        return I.sprite.fill(canvas, 0, 0, I.width, I.height);
+      });
+    }
+  });
+  return self;
+};;
 App.entities = {};;
-;$(function(){ var DEBUG_DRAW, GAME_OVER, INTERMISSION, awayScore, bgMusic, boardsBackSprite, boardsFrontSprite, fansSprite, homeScore, intermission, intermissionTime, leftGoal, nextPeriod, num_players, period, periodTime, physics, rightGoal, rink, scoreboard, time, useJoysticks;
+;$(function(){ var DEBUG_DRAW, bgMusic, fansSprite, leftGoal, num_players, physics, rightGoal, rink, scoreboard, useJoysticks;
 Sprite.loadSheet = function(name, tileWidth, tileHeight) {
   var directory, image, sprites, url, _ref;
   directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.images : void 0 : void 0) || "images";
@@ -19217,19 +19320,8 @@ physics = Physics();
 useJoysticks = false;
 window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").powerCanvas();
 bloodCanvas.strokeColor(BLOOD_COLOR);
-periodTime = 1 * 60 * 30;
-intermissionTime = 1 * 30;
 num_players = 6;
-period = 0;
-time = 0;
-homeScore = 0;
-awayScore = 0;
-scoreboard = Sprite.loadByName("scoreboard");
-boardsBackSprite = Sprite.loadByName("boards_back");
-boardsFrontSprite = Sprite.loadByName("boards_front");
 fansSprite = Sprite.loadByName("fans");
-GAME_OVER = false;
-INTERMISSION = false;
 DEBUG_DRAW = false;
 window.engine = Engine({
   backgroundColor: "#00010D",
@@ -19237,6 +19329,25 @@ window.engine = Engine({
   excludedModules: ["HUD"],
   showFPS: true,
   zSort: true
+});
+scoreboard = engine.add({
+  "class": "Scoreboard"
+});
+engine.add({
+  "class": "Boards",
+  sprite: Sprite.loadByName("boards_front"),
+  width: ARENA_WIDTH - 192,
+  x: WALL_LEFT + 96,
+  y: WALL_TOP - 48,
+  zIndex: 1
+});
+engine.add({
+  "class": "Boards",
+  sprite: Sprite.loadByName("boards_back"),
+  width: ARENA_WIDTH - 128,
+  x: WALL_LEFT + 64,
+  y: WALL_BOTTOM - 48,
+  zIndex: 10
 });
 num_players.times(function(i) {
   var x, y;
@@ -19258,7 +19369,7 @@ leftGoal = engine.add({
   x: WALL_LEFT + ARENA_WIDTH / 10 - 32
 });
 leftGoal.bind("score", function() {
-  return awayScore += 1;
+  return scoreboard.score("away");
 });
 rightGoal = engine.add({
   "class": "Goal",
@@ -19266,80 +19377,28 @@ rightGoal = engine.add({
   x: WALL_LEFT + ARENA_WIDTH * 9 / 10
 });
 rightGoal.bind("score", function() {
-  return homeScore += 1;
+  return scoreboard.score("home");
 });
-intermission = function() {
-  INTERMISSION = true;
-  time = intermissionTime;
-  return engine.add({
-    "class": "Zamboni",
-    reverse: period % 2
-  });
-};
-nextPeriod = function() {
-  time = periodTime;
-  INTERMISSION = false;
-  period += 1;
-  if (period === 4) {
-    return GAME_OVER = true;
-  }
-};
-nextPeriod();
 engine.bind("preDraw", function(canvas) {
-  var blood, minutes, seconds;
+  var blood;
   fansSprite.fill(canvas, 0, 0, App.width, WALL_TOP);
-  canvas.withTransform(Matrix.translation(WALL_LEFT + 96, WALL_TOP - 48), function() {
-    return boardsFrontSprite.fill(canvas, 0, 0, ARENA_WIDTH - 192, 48);
-  });
   rink.draw(canvas);
   blood = bloodCanvas.element();
   canvas.drawImage(blood, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT);
-  scoreboard.draw(canvas, WALL_LEFT + (ARENA_WIDTH - scoreboard.width) / 2, 16);
-  minutes = (time / 30 / 60).floor();
-  seconds = ((time / 30).floor() % 60).toString();
-  if (seconds.length === 1) {
-    seconds = "0" + seconds;
-  }
-  canvas.fillColor("red");
-  canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
-  canvas.fillText("" + minutes + ":" + seconds, WALL_LEFT + ARENA_WIDTH / 2 - 22, 46);
-  canvas.fillText(period, WALL_LEFT + ARENA_WIDTH / 2 + 18, 84);
-  canvas.fillText(homeScore, WALL_LEFT + ARENA_WIDTH / 2 - 72, 60);
-  canvas.fillText(awayScore, WALL_LEFT + ARENA_WIDTH / 2 + 90, 60);
   return engine.find("Player").invoke("drawShadow", canvas);
 });
 engine.bind("draw", function(canvas) {
   engine.find("Player").invoke("drawOverlays", canvas);
-  canvas.withTransform(Matrix.translation(WALL_LEFT + 64, WALL_BOTTOM - 48), function() {
-    return boardsBackSprite.fill(canvas, 0, 0, ARENA_WIDTH - 128, 48);
-  });
   if (DEBUG_DRAW) {
-    engine.find("Player, Puck, Goal").each(function(puck) {
+    return engine.find("Player, Puck, Goal").each(function(puck) {
       return puck.trigger("drawDebug", canvas);
     });
-  }
-  if (GAME_OVER) {
-    canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
-    canvas.fillColor("#000");
-    return canvas.centerText("GAME OVER", 384);
   }
 });
 engine.bind("update", function() {
   var objects, players, playersAndPuck, puck, zambonis;
   if (useJoysticks) {
     Joysticks.update();
-  }
-  time -= 1;
-  if (INTERMISSION) {
-    if (time === 0) {
-      nextPeriod();
-    }
-  } else if (GAME_OVER) {
-    time = 0;
-  } else {
-    if (time === 0) {
-      intermission();
-    }
   }
   puck = engine.find("Puck").first();
   players = engine.find("Player").shuffle();
@@ -19374,4 +19433,7 @@ bgMusic = $("<audio />", {
 bgMusic.volume = 0.40;
 bgMusic.play();
 Joysticks.init();
-log(Joysticks.status()); });
+log(Joysticks.status());
+$(document).bind("keydown", "0", function() {
+  return DEBUG_DRAW = !DEBUG_DRAW;
+}); });
