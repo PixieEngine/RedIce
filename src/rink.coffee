@@ -7,7 +7,7 @@ Rink = (I) ->
   blue = "blue"
   faceOffSpotRadius = 5
   faceOffCircleRadius = 38
-  rinkCornerRadius = 128
+  rinkCornerRadius = 96
 
   # Draw Arena
   canvas.fillColor("white")
