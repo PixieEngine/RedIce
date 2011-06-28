@@ -50,6 +50,8 @@ time = 0
 homeScore = 0
 awayScore = 0
 scoreboard = Sprite.loadByName("scoreboard")
+boardsBackSprite = Sprite.loadByName("boards_back")
+boardsFrontSprite = Sprite.loadByName("boards_front")
 
 GAME_OVER = false
 INTERMISSION = false
@@ -111,6 +113,10 @@ nextPeriod = () ->
 nextPeriod()
 
 engine.bind "preDraw", (canvas) ->
+  # Draw boards
+  canvas.withTransform Matrix.translation(WALL_LEFT + 128, WALL_TOP - 48), ->
+    boardsFrontSprite.fill(canvas, 0, 0, ARENA_WIDTH - 256, 48)
+
   rink.draw(canvas)
 
   blood = bloodCanvas.element()
@@ -138,6 +144,10 @@ engine.bind "preDraw", (canvas) ->
 engine.bind "draw", (canvas) ->
   # Draw name tags
   engine.find("Player").invoke "drawOverlays", canvas
+
+  # Draw boards
+  canvas.withTransform Matrix.translation(WALL_LEFT + 64, WALL_BOTTOM - 48), ->
+    boardsBackSprite.fill(canvas, 0, 0, ARENA_WIDTH - 128, 48)
 
   if DEBUG_DRAW
     engine.find("Player, Puck, Goal").each (puck) ->
