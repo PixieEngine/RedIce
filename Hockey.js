@@ -16507,7 +16507,7 @@ Emitterable = function(I, self) {
     FPS: 30,
     age: 0,
     ambientLight: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#00010D",
     cameraTransform: Matrix.IDENTITY,
     excludedModules: [],
     includedModules: [],
@@ -16630,7 +16630,9 @@ Emitterable = function(I, self) {
     draw = function() {
       canvas.withTransform(I.cameraTransform, function(canvas) {
         var drawObjects;
-        if (I.backgroundColor) {
+        if (I.clear) {
+          canvas.clear();
+        } else if (I.backgroundColor) {
           canvas.fill(I.backgroundColor);
         }
         self.trigger("preDraw", canvas);
@@ -19072,9 +19074,14 @@ Puck = function(I) {
 };;
 var Rink;
 Rink = function(I) {
-  var blue, canvas, faceOffCircleRadius, faceOffSpotRadius, red, rinkCornerRadius, x, y;
+  var blue, canvas, faceOffCircleRadius, faceOffSpotRadius, fansSprite, red, rinkCornerRadius, x, y;
   I || (I = {});
-  canvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").powerCanvas();
+  canvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").appendTo("body").css({
+    position: "absolute",
+    top: 0,
+    left: 0,
+    zIndex: "-2"
+  }).powerCanvas();
   red = "red";
   blue = "blue";
   faceOffSpotRadius = 5;
@@ -19114,13 +19121,9 @@ Rink = function(I) {
       }
     });
   });
-  return {
-    draw: function(screenCanvas) {
-      var rink;
-      rink = canvas.element();
-      return screenCanvas.drawImage(rink, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT);
-    }
-  };
+  return fansSprite = Sprite.loadByName("fans", function() {
+    return fansSprite.fill(canvas, 0, 0, App.width, WALL_TOP);
+  });
 };
 Rink.CORNER_RADIUS = 96;;
 var Scoreboard;
@@ -19298,7 +19301,7 @@ Zamboni = function(I) {
   return self;
 };;
 App.entities = {};;
-;$(function(){ var DEBUG_DRAW, bgMusic, fansSprite, leftGoal, num_players, physics, rightGoal, rink, scoreboard, useJoysticks;
+;$(function(){ var DEBUG_DRAW, bgMusic, leftGoal, num_players, physics, rightGoal, rink, scoreboard, useJoysticks;
 Sprite.loadSheet = function(name, tileWidth, tileHeight) {
   var directory, image, sprites, url, _ref;
   directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.images : void 0 : void 0) || "images";
@@ -19331,14 +19334,18 @@ window.ICE_COLOR = "rgba(192, 255, 255, 0.2)";
 rink = Rink();
 physics = Physics();
 useJoysticks = false;
-window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").powerCanvas();
+window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").appendTo("body").css({
+  position: "absolute",
+  top: 0,
+  left: 0,
+  zIndex: "-1"
+}).powerCanvas();
 bloodCanvas.strokeColor(BLOOD_COLOR);
 num_players = 6;
-fansSprite = Sprite.loadByName("fans");
 DEBUG_DRAW = false;
 window.engine = Engine({
-  backgroundColor: "#00010D",
   canvas: $("canvas").powerCanvas(),
+  clear: true,
   excludedModules: ["HUD"],
   showFPS: true,
   zSort: true
@@ -19395,11 +19402,6 @@ rightGoal.bind("score", function() {
   return scoreboard.score("home");
 });
 engine.bind("preDraw", function(canvas) {
-  var blood;
-  fansSprite.fill(canvas, 0, 0, App.width, WALL_TOP);
-  rink.draw(canvas);
-  blood = bloodCanvas.element();
-  canvas.drawImage(blood, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT);
   return engine.find("Player").invoke("drawShadow", canvas);
 });
 engine.bind("draw", function(canvas) {
