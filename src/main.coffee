@@ -58,6 +58,12 @@ scoreboard = engine.add
   class: "Scoreboard"
 
 engine.add
+  sprite: Sprite.loadByName("corner_left")
+  x: 0
+  y: WALL_TOP - 48
+  zIndex: 1
+
+engine.add
   class: "Boards"
   sprite: Sprite.loadByName("boards_front")
   y: WALL_TOP - 48
