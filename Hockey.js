@@ -19182,7 +19182,7 @@ Zamboni = function(I) {
   return self;
 };;
 App.entities = {};;
-;$(function(){ var DEBUG_DRAW, GAME_OVER, INTERMISSION, awayScore, bgMusic, homeScore, intermission, intermissionTime, leftGoal, nextPeriod, num_players, period, periodTime, physics, rightGoal, rink, scoreboard, time, useJoysticks;
+;$(function(){ var DEBUG_DRAW, GAME_OVER, INTERMISSION, awayScore, bgMusic, boardsBackSprite, boardsFrontSprite, fansSprite, homeScore, intermission, intermissionTime, leftGoal, nextPeriod, num_players, period, periodTime, physics, rightGoal, rink, scoreboard, time, useJoysticks;
 Sprite.loadSheet = function(name, tileWidth, tileHeight) {
   var directory, image, sprites, url, _ref;
   directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.images : void 0 : void 0) || "images";
@@ -19206,8 +19206,8 @@ window.CANVAS_WIDTH = App.width;
 window.CANVAS_HEIGHT = App.height;
 window.WALL_LEFT = 32;
 window.WALL_RIGHT = CANVAS_WIDTH - WALL_LEFT;
-window.WALL_TOP = 128;
-window.WALL_BOTTOM = CANVAS_HEIGHT - WALL_TOP;
+window.WALL_TOP = 192;
+window.WALL_BOTTOM = CANVAS_HEIGHT - (WALL_TOP - 128);
 window.ARENA_WIDTH = WALL_RIGHT - WALL_LEFT;
 window.ARENA_HEIGHT = WALL_BOTTOM - WALL_TOP;
 window.BLOOD_COLOR = "#BA1A19";
@@ -19225,6 +19225,9 @@ time = 0;
 homeScore = 0;
 awayScore = 0;
 scoreboard = Sprite.loadByName("scoreboard");
+boardsBackSprite = Sprite.loadByName("boards_back");
+boardsFrontSprite = Sprite.loadByName("boards_front");
+fansSprite = Sprite.loadByName("fans");
 GAME_OVER = false;
 INTERMISSION = false;
 DEBUG_DRAW = false;
@@ -19284,6 +19287,10 @@ nextPeriod = function() {
 nextPeriod();
 engine.bind("preDraw", function(canvas) {
   var blood, minutes, seconds;
+  fansSprite.fill(canvas, 0, 0, App.width, WALL_TOP);
+  canvas.withTransform(Matrix.translation(WALL_LEFT + 96, WALL_TOP - 48), function() {
+    return boardsFrontSprite.fill(canvas, 0, 0, ARENA_WIDTH - 192, 48);
+  });
   rink.draw(canvas);
   blood = bloodCanvas.element();
   canvas.drawImage(blood, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT);
@@ -19303,6 +19310,9 @@ engine.bind("preDraw", function(canvas) {
 });
 engine.bind("draw", function(canvas) {
   engine.find("Player").invoke("drawOverlays", canvas);
+  canvas.withTransform(Matrix.translation(WALL_LEFT + 64, WALL_BOTTOM - 48), function() {
+    return boardsBackSprite.fill(canvas, 0, 0, ARENA_WIDTH - 128, 48);
+  });
   if (DEBUG_DRAW) {
     engine.find("Player, Puck, Goal").each(function(puck) {
       return puck.trigger("drawDebug", canvas);
