@@ -163,10 +163,6 @@ Player = (I) ->
         canvas.fillCircle(base.x, base.y + 8, 16, shadowColor)
         canvas.fillCircle(base.x + 4, base.y + 16, 16, shadowColor)
 
-    drawOverlays: (canvas) ->
-      drawPowerMeters(canvas)
-      drawFloatingNameTag(canvas)
-
     wipeout: (push) ->
       I.falls += 1
       I.wipeout = 25
@@ -322,6 +318,10 @@ Player = (I) ->
       movement = movement.scale(0.75)
 
       I.velocity = I.velocity.add(movement)
+
+  self.bind 'after_transform', (canvas) ->
+    drawPowerMeters(canvas)
+    drawFloatingNameTag(canvas)
 
   self.bind "update", ->
 
