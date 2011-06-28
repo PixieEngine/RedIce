@@ -119,8 +119,8 @@ engine.bind "preDraw", (canvas) ->
   fansSprite.fill(canvas, 0, 0, App.width, WALL_TOP)
 
   # Draw boards
-  canvas.withTransform Matrix.translation(WALL_LEFT + 128, WALL_TOP - 48), ->
-    boardsFrontSprite.fill(canvas, 0, 0, ARENA_WIDTH - 256, 48)
+  canvas.withTransform Matrix.translation(WALL_LEFT + 96, WALL_TOP - 48), ->
+    boardsFrontSprite.fill(canvas, 0, 0, ARENA_WIDTH - 192, 48)
 
   rink.draw(canvas)
 
