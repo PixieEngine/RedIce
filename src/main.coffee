@@ -165,3 +165,6 @@ bgMusic.play()
 Joysticks.init()
 log Joysticks.status()
 
+$(document).bind "keydown", "0", ->
+  DEBUG_DRAW = !DEBUG_DRAW
+
