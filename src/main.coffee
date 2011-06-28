@@ -43,8 +43,6 @@ bloodCanvas.strokeColor(BLOOD_COLOR)
 
 num_players = 6
 
-boardsBackSprite = Sprite.loadByName("boards_back")
-boardsFrontSprite = 
 fansSprite = Sprite.loadByName("fans")
 
 DEBUG_DRAW = false
