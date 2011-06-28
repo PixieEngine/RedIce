@@ -23,7 +23,7 @@ Scoreboard = (I) ->
     else if I.period > 1
       engine.add
         class: "Zamboni"
-        reverse: period % 2
+        reverse: I.period % 2
 
   nextPeriod()
 
