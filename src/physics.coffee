@@ -23,7 +23,7 @@ Physics = ->
       position: -WALL_BOTTOM
   }]
 
-  cornerRadius = 100
+  cornerRadius = Rink.CORNER_RADIUS
   corners = [{
       position: Point(WALL_LEFT + cornerRadius, WALL_TOP + cornerRadius)
       quadrant: 0
