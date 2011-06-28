@@ -7,7 +7,7 @@ Rink = (I) ->
   blue = "blue"
   faceOffSpotRadius = 5
   faceOffCircleRadius = 38
-  rinkCornerRadius = 96
+  rinkCornerRadius = Rink.CORNER_RADIUS
 
   # Draw Arena
   canvas.fillColor("white")
@@ -57,3 +57,4 @@ Rink = (I) ->
     rink = canvas.element()
     screenCanvas.drawImage(rink, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT)
 
+Rink.CORNER_RADIUS = 96
