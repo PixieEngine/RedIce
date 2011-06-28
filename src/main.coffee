@@ -37,13 +37,19 @@ rink = Rink()
 physics = Physics()
 useJoysticks = false
 
-window.bloodCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />").powerCanvas()
+window.bloodCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />")
+  .appendTo("body")
+  .css
+    position: "absolute"
+    top: 0
+    left: 0
+    zIndex: "-1"
+  .powerCanvas()
+
 bloodCanvas.strokeColor(BLOOD_COLOR)
 # bloodCanvas.fill(BLOOD_COLOR) # For zamboni testing
 
 num_players = 6
-
-fansSprite = Sprite.loadByName("fans")
 
 DEBUG_DRAW = false
 
@@ -102,18 +108,9 @@ rightGoal = engine.add
   x: WALL_LEFT + ARENA_WIDTH*9/10
 
 rightGoal.bind "score", ->
-    scoreboard.score "home"
+  scoreboard.score "home"
 
 engine.bind "preDraw", (canvas) ->
-  # Fans
-  fansSprite.fill(canvas, 0, 0, App.width, WALL_TOP)
-
-  #TODO Move rink and blood to lower layers and don't redraw them each frame
-  rink.draw(canvas)
-
-  blood = bloodCanvas.element()
-  canvas.drawImage(blood, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT)
-
   # Draw player shadows
   engine.find("Player").invoke "drawShadow", canvas
 
