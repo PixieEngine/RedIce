@@ -44,11 +44,9 @@ bloodCanvas.strokeColor(BLOOD_COLOR)
 num_players = 6
 
 boardsBackSprite = Sprite.loadByName("boards_back")
-boardsFrontSprite = Sprite.loadByName("boards_front")
+boardsFrontSprite = 
 fansSprite = Sprite.loadByName("fans")
 
-GAME_OVER = false
-INTERMISSION = false
 DEBUG_DRAW = false
 
 window.engine = Engine
@@ -60,6 +58,22 @@ window.engine = Engine
 
 scoreboard = engine.add
   class: "Scoreboard"
+
+engine.add
+  class: "Boards"
+  sprite: Sprite.loadByName("boards_front")
+  width: ARENA_WIDTH - 192
+  x: WALL_LEFT + 96
+  y: WALL_TOP - 48
+  zIndex: 1
+
+engine.add
+  class: "Boards"
+  sprite: Sprite.loadByName("boards_back")
+  width: ARENA_WIDTH - 128
+  x: WALL_LEFT + 64
+  y: WALL_BOTTOM - 48
+  zIndex: 10
 
 num_players.times (i) ->
   y = WALL_TOP + ARENA_HEIGHT*((i/2).floor() + 1)/4
@@ -94,10 +108,6 @@ engine.bind "preDraw", (canvas) ->
   # Fans
   fansSprite.fill(canvas, 0, 0, App.width, WALL_TOP)
 
-  # Draw boards
-  canvas.withTransform Matrix.translation(WALL_LEFT + 96, WALL_TOP - 48), ->
-    boardsFrontSprite.fill(canvas, 0, 0, ARENA_WIDTH - 192, 48)
-
   rink.draw(canvas)
 
   blood = bloodCanvas.element()
@@ -109,10 +119,6 @@ engine.bind "preDraw", (canvas) ->
 engine.bind "draw", (canvas) ->
   # Draw name tags
   engine.find("Player").invoke "drawOverlays", canvas
-
-  # Draw boards
-  canvas.withTransform Matrix.translation(WALL_LEFT + 64, WALL_BOTTOM - 48), ->
-    boardsBackSprite.fill(canvas, 0, 0, ARENA_WIDTH - 128, 48)
 
   if DEBUG_DRAW
     engine.find("Player, Puck, Goal").each (puck) ->
