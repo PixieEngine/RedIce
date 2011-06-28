@@ -19333,7 +19333,7 @@ window.BLOOD_COLOR = "#BA1A19";
 window.ICE_COLOR = "rgba(192, 255, 255, 0.2)";
 rink = Rink();
 physics = Physics();
-useJoysticks = false;
+useJoysticks = true;
 window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").appendTo("body").css({
   position: "absolute",
   top: 0,
