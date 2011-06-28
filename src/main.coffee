@@ -49,9 +49,11 @@ period = 0
 time = 0
 homeScore = 0
 awayScore = 0
+
 scoreboard = Sprite.loadByName("scoreboard")
 boardsBackSprite = Sprite.loadByName("boards_back")
 boardsFrontSprite = Sprite.loadByName("boards_front")
+fansSprite = Sprite.loadByName("fans")
 
 GAME_OVER = false
 INTERMISSION = false
@@ -113,6 +115,9 @@ nextPeriod = () ->
 nextPeriod()
 
 engine.bind "preDraw", (canvas) ->
+  # Fans
+  fansSprite.fill(canvas, 0, 0, App.width, WALL_TOP)
+
   # Draw boards
   canvas.withTransform Matrix.translation(WALL_LEFT + 128, WALL_TOP - 48), ->
     boardsFrontSprite.fill(canvas, 0, 0, ARENA_WIDTH - 256, 48)
