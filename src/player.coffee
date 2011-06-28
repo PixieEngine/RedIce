@@ -177,6 +177,10 @@ Player = (I) ->
       Sound.play("hit#{rand(4)}")
       Sound.play("crowd#{rand(3)}")
 
+      (rand(6) + 3).times ->
+        engine.add
+          class: "Fan"
+
       engine.add
         class: "Blood"
         x: I.x + push.x
