@@ -41,16 +41,8 @@ window.bloodCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />
 bloodCanvas.strokeColor(BLOOD_COLOR)
 # bloodCanvas.fill(BLOOD_COLOR) # For zamboni testing
 
-periodTime = 1 * 60 * 30
-intermissionTime = 1 * 30
-
 num_players = 6
-period = 0
-time = 0
-homeScore = 0
-awayScore = 0
 
-scoreboard = Sprite.loadByName("scoreboard")
 boardsBackSprite = Sprite.loadByName("boards_back")
 boardsFrontSprite = Sprite.loadByName("boards_front")
 fansSprite = Sprite.loadByName("fans")
@@ -65,6 +57,9 @@ window.engine = Engine
   excludedModules: ["HUD"]
   showFPS: true
   zSort: true
+
+scoreboard = engine.add
+  class: "Scoreboard"
 
 num_players.times (i) ->
   y = WALL_TOP + ARENA_HEIGHT*((i/2).floor() + 1)/4
@@ -85,7 +80,7 @@ leftGoal = engine.add
   x: WALL_LEFT + ARENA_WIDTH/10 - 32
 
 leftGoal.bind "score", ->
-  awayScore += 1
+  scoreboard.score "away"
 
 rightGoal = engine.add
   class: "Goal"
@@ -93,26 +88,7 @@ rightGoal = engine.add
   x: WALL_LEFT + ARENA_WIDTH*9/10
 
 rightGoal.bind "score", ->
-  homeScore += 1
-
-intermission = () ->
-  INTERMISSION = true
-  time = intermissionTime
-
-  engine.add
-    class: "Zamboni"
-    reverse: period % 2
-
-nextPeriod = () ->
-  time = periodTime
-  INTERMISSION = false
-  period += 1
-
-  if period == 4
-    GAME_OVER = true
-    #TODO check team scores and choose winner
-
-nextPeriod()
+    scoreboard.score "home"
 
 engine.bind "preDraw", (canvas) ->
   # Fans
@@ -126,22 +102,6 @@ engine.bind "preDraw", (canvas) ->
 
   blood = bloodCanvas.element()
   canvas.drawImage(blood, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT, WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT)
-
-  # Scoreboard
-  scoreboard.draw(canvas, WALL_LEFT + (ARENA_WIDTH - scoreboard.width)/2, 16)
-  minutes = (time / 30 / 60).floor()
-  seconds = ((time / 30).floor() % 60).toString()
-
-  if seconds.length == 1
-    seconds = "0" + seconds
-
-  canvas.fillColor("red")
-  canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
-  canvas.fillText("#{minutes}:#{seconds}", WALL_LEFT + ARENA_WIDTH/2 - 22, 46)
-  canvas.fillText(period, WALL_LEFT + ARENA_WIDTH/2 + 18, 84)
-
-  canvas.fillText(homeScore, WALL_LEFT + ARENA_WIDTH/2 - 72, 60)
-  canvas.fillText(awayScore, WALL_LEFT + ARENA_WIDTH/2 + 90, 60)
 
   # Draw player shadows
   engine.find("Player").invoke "drawShadow", canvas
@@ -158,24 +118,8 @@ engine.bind "draw", (canvas) ->
     engine.find("Player, Puck, Goal").each (puck) ->
       puck.trigger("drawDebug", canvas)
 
-  if GAME_OVER
-    canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
-    canvas.fillColor("#000")
-    canvas.centerText("GAME OVER", 384)
-
 engine.bind "update", ->
   Joysticks.update() if useJoysticks
-
-  time -= 1
-
-  if INTERMISSION
-    if time == 0
-      nextPeriod()
-  else if GAME_OVER
-    time = 0
-  else # Regular play
-    if time == 0
-      intermission()
 
   puck = engine.find("Puck").first()
 
