@@ -61,101 +61,103 @@ window.engine = Engine
   showFPS: true
   zSort: true
 
-scoreboard = engine.add
-  class: "Scoreboard"
+TitleScreen
+  callback: ->
+    scoreboard = engine.add
+      class: "Scoreboard"
 
-engine.add
-  sprite: Sprite.loadByName("corner_left")
-  x: 0
-  y: WALL_TOP - 48
-  zIndex: 1
+    engine.add
+      sprite: Sprite.loadByName("corner_left")
+      x: 0
+      y: WALL_TOP - 48
+      zIndex: 1
 
-engine.add
-  class: "Boards"
-  sprite: Sprite.loadByName("boards_front")
-  y: WALL_TOP - 48
-  zIndex: 1
+    engine.add
+      class: "Boards"
+      sprite: Sprite.loadByName("boards_front")
+      y: WALL_TOP - 48
+      zIndex: 1
 
-engine.add
-  class: "Boards"
-  sprite: Sprite.loadByName("boards_back")
-  y: WALL_BOTTOM - 48
-  zIndex: 10
+    engine.add
+      class: "Boards"
+      sprite: Sprite.loadByName("boards_back")
+      y: WALL_BOTTOM - 48
+      zIndex: 10
 
-config.players.times (i) ->
-  y = WALL_TOP + ARENA_HEIGHT*((i/2).floor() + 1)/4
-  x = WALL_LEFT + ARENA_WIDTH/2 + ((i%2) - 0.5) * ARENA_WIDTH / 6
+    config.players.times (i) ->
+      y = WALL_TOP + ARENA_HEIGHT*((i/2).floor() + 1)/4
+      x = WALL_LEFT + ARENA_WIDTH/2 + ((i%2) - 0.5) * ARENA_WIDTH / 6
 
-  engine.add
-    class: "Player"
-    controller: i
-    joystick: config.joysticks
-    x: x
-    y: y
+      engine.add
+        class: "Player"
+        controller: i
+        joystick: config.joysticks
+        x: x
+        y: y
 
-engine.add
-  class: "Puck"
+    engine.add
+      class: "Puck"
 
-leftGoal = engine.add
-  class: "Goal"
-  x: WALL_LEFT + ARENA_WIDTH/10 - 32
+    leftGoal = engine.add
+      class: "Goal"
+      x: WALL_LEFT + ARENA_WIDTH/10 - 32
 
-leftGoal.bind "score", ->
-  scoreboard.score "away"
+    leftGoal.bind "score", ->
+      scoreboard.score "away"
 
-rightGoal = engine.add
-  class: "Goal"
-  right: true
-  x: WALL_LEFT + ARENA_WIDTH*9/10
+    rightGoal = engine.add
+      class: "Goal"
+      right: true
+      x: WALL_LEFT + ARENA_WIDTH*9/10
 
-rightGoal.bind "score", ->
-  scoreboard.score "home"
+    rightGoal.bind "score", ->
+      scoreboard.score "home"
 
-engine.bind "preDraw", (canvas) ->
-  # Draw player shadows
-  engine.find("Player").invoke "drawShadow", canvas
+    engine.bind "preDraw", (canvas) ->
+      # Draw player shadows
+      engine.find("Player").invoke "drawShadow", canvas
 
-engine.bind "draw", (canvas) ->
-  if DEBUG_DRAW
-    engine.find("Player, Puck, Goal").each (puck) ->
-      puck.trigger("drawDebug", canvas)
+    engine.bind "draw", (canvas) ->
+      if DEBUG_DRAW
+        engine.find("Player, Puck, Goal").each (puck) ->
+          puck.trigger("drawDebug", canvas)
 
-engine.bind "update", ->
-  Joysticks.update() if config.joysticks
+    engine.bind "update", ->
+      Joysticks.update() if config.joysticks
 
-  puck = engine.find("Puck").first()
+      puck = engine.find("Puck").first()
 
-  players = engine.find("Player").shuffle()
-  zambonis = engine.find("Zamboni")
+      players = engine.find("Player").shuffle()
+      zambonis = engine.find("Zamboni")
 
-  objects = players.concat zambonis
-  objects.push puck
+      objects = players.concat zambonis
+      objects.push puck
 
-  playersAndPuck = players.concat puck
+      playersAndPuck = players.concat puck
 
-  # Puck handling
-  players.each (player) ->
-    return if player.I.wipeout
+      # Puck handling
+      players.each (player) ->
+        return if player.I.wipeout
 
-    if Collision.circular(player.controlCircle(), puck.circle())
-      player.controlPuck(puck)
+        if Collision.circular(player.controlCircle(), puck.circle())
+          player.controlPuck(puck)
 
-  physics.process(objects)
+      physics.process(objects)
 
-  playersAndPuck.each (player) ->
-    # Blood Collisions
-    splats = engine.find("Blood")
+      playersAndPuck.each (player) ->
+        # Blood Collisions
+        splats = engine.find("Blood")
 
-    splats.each (splat) ->
-      if Collision.circular(player.circle(), splat.circle())
-        player.bloody()
+        splats.each (splat) ->
+          if Collision.circular(player.circle(), splat.circle())
+            player.bloody()
 
-engine.start()
+    engine.start()
+
+    Music.play "music1"
 
 Joysticks.init()
 log Joysticks.status()
-
-Music.play "music1"
 
 $(document).bind "keydown", "0", ->
   DEBUG_DRAW = !DEBUG_DRAW
