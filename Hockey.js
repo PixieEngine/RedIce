@@ -18463,13 +18463,20 @@ Joysticks = (function() {
     }
   };
 })();;
-var bgMusic;
-bgMusic = $("<audio />", {
-  src: BASE_URL + "/sounds/music1.mp3",
-  loop: "loop"
-}).appendTo('body').get(0);
-bgMusic.volume = 0.40;
-bgMusic.play();;
+var Music;
+Music = (function() {
+  var track;
+  track = $("<audio />", {
+    loop: "loop"
+  }).appendTo('body').get(0);
+  track.volume = 0.40;
+  return {
+    play: function(name) {
+      track.src = "" + BASE_URL + "/sounds/" + name + ".mp3";
+      return track.play();
+    }
+  };
+})();;
 var Physics;
 Physics = function() {
   var cornerRadius, corners, overlapX, overlapY, rectangularOverlap, resolveCollision, resolveCollisions, threshold, wallCollisions, walls;
@@ -19313,8 +19320,29 @@ Zamboni = function(I) {
   });
   return self;
 };;
+var TitleScreen;
+TitleScreen = function(I) {
+  var directory, titleScreen, _ref;
+  directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.images : void 0 : void 0) || "images";
+  titleScreen = $("<img />", {
+    css: {
+      left: 0,
+      margin: "auto",
+      position: "absolute",
+      top: 0,
+      zIndex: 1000
+    },
+    height: App.height,
+    src: "" + BASE_URL + "/" + directory + "/title.png",
+    width: App.width
+  }).appendTo("body");
+  return $(document).one("keydown", function() {
+    titleScreen.remove();
+    return I.callback();
+  });
+};;
 App.entities = {};;
-;$(function(){ var DEBUG_DRAW, config, leftGoal, physics, rightGoal, rink, scoreboard;
+;$(function(){ var DEBUG_DRAW, config, physics, rink;
 Sprite.loadSheet = function(name, tileWidth, tileHeight) {
   var directory, image, sprites, url, _ref;
   directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.images : void 0 : void 0) || "images";
@@ -19365,98 +19393,104 @@ window.engine = Engine({
   showFPS: true,
   zSort: true
 });
-scoreboard = engine.add({
-  "class": "Scoreboard"
-});
-engine.add({
-  sprite: Sprite.loadByName("corner_left"),
-  x: 0,
-  y: WALL_TOP - 48,
-  zIndex: 1
-});
-engine.add({
-  "class": "Boards",
-  sprite: Sprite.loadByName("boards_front"),
-  y: WALL_TOP - 48,
-  zIndex: 1
-});
-engine.add({
-  "class": "Boards",
-  sprite: Sprite.loadByName("boards_back"),
-  y: WALL_BOTTOM - 48,
-  zIndex: 10
-});
-config.players.times(function(i) {
-  var x, y;
-  y = WALL_TOP + ARENA_HEIGHT * ((i / 2).floor() + 1) / 4;
-  x = WALL_LEFT + ARENA_WIDTH / 2 + ((i % 2) - 0.5) * ARENA_WIDTH / 6;
-  return engine.add({
-    "class": "Player",
-    controller: i,
-    joystick: config.joysticks,
-    x: x,
-    y: y
-  });
-});
-engine.add({
-  "class": "Puck"
-});
-leftGoal = engine.add({
-  "class": "Goal",
-  x: WALL_LEFT + ARENA_WIDTH / 10 - 32
-});
-leftGoal.bind("score", function() {
-  return scoreboard.score("away");
-});
-rightGoal = engine.add({
-  "class": "Goal",
-  right: true,
-  x: WALL_LEFT + ARENA_WIDTH * 9 / 10
-});
-rightGoal.bind("score", function() {
-  return scoreboard.score("home");
-});
-engine.bind("preDraw", function(canvas) {
-  return engine.find("Player").invoke("drawShadow", canvas);
-});
-engine.bind("draw", function(canvas) {
-  if (DEBUG_DRAW) {
-    return engine.find("Player, Puck, Goal").each(function(puck) {
-      return puck.trigger("drawDebug", canvas);
+TitleScreen({
+  callback: function() {
+    var leftGoal, rightGoal, scoreboard;
+    scoreboard = engine.add({
+      "class": "Scoreboard"
     });
-  }
-});
-engine.bind("update", function() {
-  var objects, players, playersAndPuck, puck, zambonis;
-  if (config.joysticks) {
-    Joysticks.update();
-  }
-  puck = engine.find("Puck").first();
-  players = engine.find("Player").shuffle();
-  zambonis = engine.find("Zamboni");
-  objects = players.concat(zambonis);
-  objects.push(puck);
-  playersAndPuck = players.concat(puck);
-  players.each(function(player) {
-    if (player.I.wipeout) {
-      return;
-    }
-    if (Collision.circular(player.controlCircle(), puck.circle())) {
-      return player.controlPuck(puck);
-    }
-  });
-  physics.process(objects);
-  return playersAndPuck.each(function(player) {
-    var splats;
-    splats = engine.find("Blood");
-    return splats.each(function(splat) {
-      if (Collision.circular(player.circle(), splat.circle())) {
-        return player.bloody();
+    engine.add({
+      sprite: Sprite.loadByName("corner_left"),
+      x: 0,
+      y: WALL_TOP - 48,
+      zIndex: 1
+    });
+    engine.add({
+      "class": "Boards",
+      sprite: Sprite.loadByName("boards_front"),
+      y: WALL_TOP - 48,
+      zIndex: 1
+    });
+    engine.add({
+      "class": "Boards",
+      sprite: Sprite.loadByName("boards_back"),
+      y: WALL_BOTTOM - 48,
+      zIndex: 10
+    });
+    config.players.times(function(i) {
+      var x, y;
+      y = WALL_TOP + ARENA_HEIGHT * ((i / 2).floor() + 1) / 4;
+      x = WALL_LEFT + ARENA_WIDTH / 2 + ((i % 2) - 0.5) * ARENA_WIDTH / 6;
+      return engine.add({
+        "class": "Player",
+        controller: i,
+        joystick: config.joysticks,
+        x: x,
+        y: y
+      });
+    });
+    engine.add({
+      "class": "Puck"
+    });
+    leftGoal = engine.add({
+      "class": "Goal",
+      x: WALL_LEFT + ARENA_WIDTH / 10 - 32
+    });
+    leftGoal.bind("score", function() {
+      return scoreboard.score("away");
+    });
+    rightGoal = engine.add({
+      "class": "Goal",
+      right: true,
+      x: WALL_LEFT + ARENA_WIDTH * 9 / 10
+    });
+    rightGoal.bind("score", function() {
+      return scoreboard.score("home");
+    });
+    engine.bind("preDraw", function(canvas) {
+      return engine.find("Player").invoke("drawShadow", canvas);
+    });
+    engine.bind("draw", function(canvas) {
+      if (DEBUG_DRAW) {
+        return engine.find("Player, Puck, Goal").each(function(puck) {
+          return puck.trigger("drawDebug", canvas);
+        });
       }
     });
-  });
+    engine.bind("update", function() {
+      var objects, players, playersAndPuck, puck, zambonis;
+      if (config.joysticks) {
+        Joysticks.update();
+      }
+      puck = engine.find("Puck").first();
+      players = engine.find("Player").shuffle();
+      zambonis = engine.find("Zamboni");
+      objects = players.concat(zambonis);
+      objects.push(puck);
+      playersAndPuck = players.concat(puck);
+      players.each(function(player) {
+        if (player.I.wipeout) {
+          return;
+        }
+        if (Collision.circular(player.controlCircle(), puck.circle())) {
+          return player.controlPuck(puck);
+        }
+      });
+      physics.process(objects);
+      return playersAndPuck.each(function(player) {
+        var splats;
+        splats = engine.find("Blood");
+        return splats.each(function(splat) {
+          if (Collision.circular(player.circle(), splat.circle())) {
+            return player.bloody();
+          }
+        });
+      });
+    });
+    engine.start();
+    return Music.play("music1");
+  }
 });
-engine.start();
 Joysticks.init();
 log(Joysticks.status());
 $(document).bind("keydown", "0", function() {
