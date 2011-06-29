@@ -18463,6 +18463,13 @@ Joysticks = (function() {
     }
   };
 })();;
+var bgMusic;
+bgMusic = $("<audio />", {
+  src: BASE_URL + "/sounds/music1.mp3",
+  loop: "loop"
+}).appendTo('body').get(0);
+bgMusic.volume = 0.40;
+bgMusic.play();;
 var Physics;
 Physics = function() {
   var cornerRadius, corners, overlapX, overlapY, rectangularOverlap, resolveCollision, resolveCollisions, threshold, wallCollisions, walls;
@@ -19306,13 +19313,6 @@ Zamboni = function(I) {
   });
   return self;
 };;
-var bgMusic;
-bgMusic = $("<audio />", {
-  src: BASE_URL + "/sounds/music1.mp3",
-  loop: "loop"
-}).appendTo('body').get(0);
-bgMusic.volume = 0.40;
-bgMusic.play();;
 App.entities = {};;
 ;$(function(){ var DEBUG_DRAW, config, leftGoal, physics, rightGoal, rink, scoreboard;
 Sprite.loadSheet = function(name, tileWidth, tileHeight) {
@@ -19346,7 +19346,7 @@ window.BLOOD_COLOR = "#BA1A19";
 window.ICE_COLOR = "rgba(192, 255, 255, 0.2)";
 config = {
   players: 6,
-  joysticks: true
+  joysticks: false
 };
 rink = Rink();
 physics = Physics();
