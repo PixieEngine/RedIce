@@ -35,7 +35,7 @@ window.ICE_COLOR = "rgba(192, 255, 255, 0.2)"
 
 rink = Rink()
 physics = Physics()
-useJoysticks = false
+useJoysticks = true
 
 window.bloodCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />")
   .appendTo("body")
