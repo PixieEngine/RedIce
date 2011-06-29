@@ -118,8 +118,7 @@ Physics = ->
       if collided
         # Adjust velocity and move to (hopefully) non-penetrating position
         object.I.velocity = velocity
-        object.I.x += velocity.x * dt
-        object.I.y += velocity.y * dt
+        object.updatePosition(dt, true)
 
         Sound.play "clink0" if object.puck()
 
@@ -162,8 +161,7 @@ Physics = ->
 
             # Adjust velocity and move to (hopefully) non-penetrating position
             object.I.velocity = velocity
-            object.I.x += velocity.x * dt
-            object.I.y += velocity.y * dt
+            object.updatePosition(dt, true)
 
             Sound.play "thud0" if object.puck()
 
@@ -195,8 +193,7 @@ Physics = ->
       if collided
         # Adjust velocity and move to (hopefully) non-penetrating position
         object.I.velocity = velocity
-        object.I.x += velocity.x * dt
-        object.I.y += velocity.y * dt
+        object.updatePosition(dt, true)
 
         Sound.play "thud0" if object.puck()
 
