@@ -19333,7 +19333,7 @@ window.BLOOD_COLOR = "#BA1A19";
 window.ICE_COLOR = "rgba(192, 255, 255, 0.2)";
 config = {
   players: 6,
-  joysticks: true
+  joysticks: false
 };
 rink = Rink();
 physics = Physics();
