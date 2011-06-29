@@ -61,6 +61,8 @@ window.engine = Engine
   showFPS: true
   zSort: true
 
+Music.play "title_screen"
+
 TitleScreen
   callback: ->
     scoreboard = engine.add
