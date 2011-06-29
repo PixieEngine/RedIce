@@ -19306,8 +19306,15 @@ Zamboni = function(I) {
   });
   return self;
 };;
+var bgMusic;
+bgMusic = $("<audio />", {
+  src: BASE_URL + "/sounds/music1.mp3",
+  loop: "loop"
+}).appendTo('body').get(0);
+bgMusic.volume = 0.40;
+bgMusic.play();;
 App.entities = {};;
-;$(function(){ var DEBUG_DRAW, bgMusic, config, leftGoal, physics, rightGoal, rink, scoreboard;
+;$(function(){ var DEBUG_DRAW, config, leftGoal, physics, rightGoal, rink, scoreboard;
 Sprite.loadSheet = function(name, tileWidth, tileHeight) {
   var directory, image, sprites, url, _ref;
   directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.images : void 0 : void 0) || "images";
@@ -19450,12 +19457,6 @@ engine.bind("update", function() {
   });
 });
 engine.start();
-bgMusic = $("<audio />", {
-  src: BASE_URL + "/sounds/music1.mp3",
-  loop: "loop"
-}).appendTo('body').get(0);
-bgMusic.volume = 0.40;
-bgMusic.play();
 Joysticks.init();
 log(Joysticks.status());
 $(document).bind("keydown", "0", function() {
