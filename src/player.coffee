@@ -154,8 +154,7 @@ Player = (I) ->
       puck.I.velocity = puck.I.velocity.add(positionDelta)
 
     drawShadow: (canvas) ->
-      base = self.center()
-      base.y += I.height/2 + 4
+      base = self.center().add(0, I.height/2 + 4)
 
       canvas.withTransform Matrix.scale(1, -0.5, base), ->
         shadowColor = "rgba(0, 0, 0, 0.15)"
