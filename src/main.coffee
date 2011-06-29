@@ -35,7 +35,7 @@ window.ICE_COLOR = "rgba(192, 255, 255, 0.2)"
 
 config =
   players: 6
-  joysticks: false
+  joysticks: true
 
 rink = Rink()
 physics = Physics()
