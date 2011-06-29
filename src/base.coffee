@@ -40,9 +40,11 @@ Base = (I) ->
         I.x = newCenter.x - I.width/2
         I.y = newCenter.y - I.height/2
 
+        I.center = newCenter
+
         self
       else
-        Point(I.x + I.width/2, I.y + I.height/2)
+        I.center
 
     updatePosition: (dt, noFriction) ->
       if noFriction then friction = 0 else friction = I.friction
@@ -51,6 +53,9 @@ Base = (I) ->
 
       I.x += I.velocity.x * dt
       I.y += I.velocity.y * dt
+
+      I.center.x = I.x + I.width/2
+      I.center.y = I.y + I.height/2
 
       self.trigger "positionUpdated"
 
