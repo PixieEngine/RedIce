@@ -155,6 +155,8 @@ engine.start()
 Joysticks.init()
 log Joysticks.status()
 
+Music.play "music1"
+
 $(document).bind "keydown", "0", ->
   DEBUG_DRAW = !DEBUG_DRAW
 
