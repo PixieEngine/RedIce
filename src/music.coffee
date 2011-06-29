@@ -1,8 +1,12 @@
-bgMusic = $ "<audio />",
-  src: BASE_URL + "/sounds/music1.mp3"
-  loop: "loop"
-.appendTo('body').get(0)
+Music = (->
+  track = $ "<audio />",
+    loop: "loop"
+  .appendTo('body').get(0)
 
-bgMusic.volume = 0.40
-bgMusic.play()
+  track.volume = 0.40
+
+  play: (name) ->
+    track.src = "#{BASE_URL}/sounds/#{name}.mp3"
+    track.play()
+)()
 
