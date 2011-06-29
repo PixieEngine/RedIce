@@ -18086,15 +18086,24 @@ Base = function(I) {
       if (newCenter != null) {
         I.x = newCenter.x - I.width / 2;
         I.y = newCenter.y - I.height / 2;
+        I.center = newCenter;
         return self;
       } else {
-        return Point(I.x + I.width / 2, I.y + I.height / 2);
+        return I.center;
       }
     },
-    updatePosition: function(dt) {
-      I.velocity = I.velocity.scale(1 - I.friction * dt);
+    updatePosition: function(dt, noFriction) {
+      var friction;
+      if (noFriction) {
+        friction = 0;
+      } else {
+        friction = I.friction;
+      }
+      I.velocity = I.velocity.scale(1 - friction * dt);
       I.x += I.velocity.x * dt;
       I.y += I.velocity.y * dt;
+      I.center.x = I.x + I.width / 2;
+      I.center.y = I.y + I.height / 2;
       return self.trigger("positionUpdated");
     }
   });
@@ -18114,6 +18123,7 @@ Base = function(I) {
     }
   });
   self.attrReader("mass");
+  I.center = Point(I.x + I.width / 2, I.y + I.height / 2);
   return self;
 };;
 var Blood;
@@ -18568,8 +18578,7 @@ Physics = function() {
       });
       if (collided) {
         object.I.velocity = velocity;
-        object.I.x += velocity.x * dt;
-        object.I.y += velocity.y * dt;
+        object.updatePosition(dt, true);
         if (object.puck()) {
           Sound.play("clink0");
         }
@@ -18616,8 +18625,7 @@ Physics = function() {
           if (velocityProjection < 0) {
             velocity = velocity.subtract(normal.scale(2 * velocityProjection));
             object.I.velocity = velocity;
-            object.I.x += velocity.x * dt;
-            object.I.y += velocity.y * dt;
+            object.updatePosition(dt, true);
             if (object.puck()) {
               return Sound.play("thud0");
             }
@@ -18647,8 +18655,7 @@ Physics = function() {
       });
       if (collided) {
         object.I.velocity = velocity;
-        object.I.x += velocity.x * dt;
-        object.I.y += velocity.y * dt;
+        object.updatePosition(dt, true);
         if (object.puck()) {
           Sound.play("thud0");
         }
@@ -18802,8 +18809,7 @@ Player = function(I) {
     },
     drawShadow: function(canvas) {
       var base;
-      base = self.center();
-      base.y += I.height / 2 + 4;
+      base = self.center().add(0, I.height / 2 + 4);
       return canvas.withTransform(Matrix.scale(1, -0.5, base), function() {
         var shadowColor;
         shadowColor = "rgba(0, 0, 0, 0.15)";
