@@ -19424,6 +19424,7 @@ window.engine = Engine({
   showFPS: true,
   zSort: true
 });
+Music.play("title_screen");
 TitleScreen({
   callback: function() {
     var leftGoal, rightGoal, scoreboard;
