@@ -296,7 +296,7 @@ Player = (I) ->
       lastLeftSkatePos = null
       lastRightSkatePos = null
     else
-      if !I.cooldown.shoot && actionDown "A"
+      if !I.cooldown.shoot && actionDown "A", "Y"
         I.shootPower += 1
 
         chargePhase = Math.sin(Math.TAU/4 * I.age) * 0.2 * I.shootPower / maxShotPower
