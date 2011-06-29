@@ -40,15 +40,22 @@ Base = (I) ->
         I.x = newCenter.x - I.width/2
         I.y = newCenter.y - I.height/2
 
+        I.center.x = newCenter.x
+        I.center.y = newCenter.y
+
         self
       else
-        Point(I.x + I.width/2, I.y + I.height/2)
+        I.center
 
     updatePosition: (dt) ->
       I.velocity = I.velocity.scale((1 - I.friction * dt))
 
       I.x += I.velocity.x * dt
       I.y += I.velocity.y * dt
+
+      # Cached center for GC optimization 
+      I.center.x = I.x + I.width/2
+      I.ceter.y = I.y + I.height/2
 
       self.trigger "positionUpdated"
 
@@ -67,6 +74,8 @@ Base = (I) ->
       canvas.fillCircle(x, y, I.radius, "rgba(255, 0, 255, 0.5)")
 
   self.attrReader "mass"
+
+  I.center = Point(I.x + I.width/2, I.y + I.height/2)
 
   self
 
