@@ -18947,7 +18947,7 @@ Player = function(I) {
       lastLeftSkatePos = null;
       return lastRightSkatePos = null;
     } else {
-      if (!I.cooldown.shoot && actionDown("A")) {
+      if (!I.cooldown.shoot && actionDown("A", "Y")) {
         I.shootPower += 1;
         chargePhase = Math.sin(Math.TAU / 4 * I.age) * 0.2 * I.shootPower / maxShotPower;
         if (I.shootPower === maxShotPower) {
@@ -19301,7 +19301,7 @@ Zamboni = function(I) {
   return self;
 };;
 App.entities = {};;
-;$(function(){ var DEBUG_DRAW, bgMusic, leftGoal, num_players, physics, rightGoal, rink, scoreboard, useJoysticks;
+;$(function(){ var DEBUG_DRAW, bgMusic, config, leftGoal, physics, rightGoal, rink, scoreboard;
 Sprite.loadSheet = function(name, tileWidth, tileHeight) {
   var directory, image, sprites, url, _ref;
   directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.images : void 0 : void 0) || "images";
@@ -19331,9 +19331,12 @@ window.ARENA_WIDTH = WALL_RIGHT - WALL_LEFT;
 window.ARENA_HEIGHT = WALL_BOTTOM - WALL_TOP;
 window.BLOOD_COLOR = "#BA1A19";
 window.ICE_COLOR = "rgba(192, 255, 255, 0.2)";
+config = {
+  players: 6,
+  joysticks: true
+};
 rink = Rink();
 physics = Physics();
-useJoysticks = false;
 window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").appendTo("body").css({
   position: "absolute",
   top: 0,
@@ -19341,7 +19344,6 @@ window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEI
   zIndex: "-1"
 }).powerCanvas();
 bloodCanvas.strokeColor(BLOOD_COLOR);
-num_players = 6;
 DEBUG_DRAW = false;
 window.engine = Engine({
   canvas: $("canvas").powerCanvas(),
@@ -19371,14 +19373,14 @@ engine.add({
   y: WALL_BOTTOM - 48,
   zIndex: 10
 });
-num_players.times(function(i) {
+config.players.times(function(i) {
   var x, y;
   y = WALL_TOP + ARENA_HEIGHT * ((i / 2).floor() + 1) / 4;
   x = WALL_LEFT + ARENA_WIDTH / 2 + ((i % 2) - 0.5) * ARENA_WIDTH / 6;
   return engine.add({
     "class": "Player",
     controller: i,
-    joystick: useJoysticks,
+    joystick: config.joysticks,
     x: x,
     y: y
   });
@@ -19413,7 +19415,7 @@ engine.bind("draw", function(canvas) {
 });
 engine.bind("update", function() {
   var objects, players, playersAndPuck, puck, zambonis;
-  if (useJoysticks) {
+  if (config.joysticks) {
     Joysticks.update();
   }
   puck = engine.find("Puck").first();
