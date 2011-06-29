@@ -33,9 +33,12 @@ window.ARENA_HEIGHT = WALL_BOTTOM - WALL_TOP
 window.BLOOD_COLOR = "#BA1A19"
 window.ICE_COLOR = "rgba(192, 255, 255, 0.2)"
 
+config =
+  players: 6
+  joysticks: true
+
 rink = Rink()
 physics = Physics()
-useJoysticks = true
 
 window.bloodCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />")
   .appendTo("body")
@@ -48,8 +51,6 @@ window.bloodCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />
 
 bloodCanvas.strokeColor(BLOOD_COLOR)
 # bloodCanvas.fill(BLOOD_COLOR) # For zamboni testing
-
-num_players = 6
 
 DEBUG_DRAW = false
 
@@ -81,14 +82,14 @@ engine.add
   y: WALL_BOTTOM - 48
   zIndex: 10
 
-num_players.times (i) ->
+config.players.times (i) ->
   y = WALL_TOP + ARENA_HEIGHT*((i/2).floor() + 1)/4
   x = WALL_LEFT + ARENA_WIDTH/2 + ((i%2) - 0.5) * ARENA_WIDTH / 6
 
   engine.add
     class: "Player"
     controller: i
-    joystick: useJoysticks
+    joystick: config.joysticks
     x: x
     y: y
 
@@ -120,7 +121,7 @@ engine.bind "draw", (canvas) ->
       puck.trigger("drawDebug", canvas)
 
 engine.bind "update", ->
-  Joysticks.update() if useJoysticks
+  Joysticks.update() if config.joysticks
 
   puck = engine.find("Puck").first()
 
