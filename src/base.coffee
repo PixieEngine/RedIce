@@ -44,8 +44,10 @@ Base = (I) ->
       else
         Point(I.x + I.width/2, I.y + I.height/2)
 
-    updatePosition: (dt) ->
-      I.velocity = I.velocity.scale((1 - I.friction * dt))
+    updatePosition: (dt, noFriction) ->
+      if noFriction then friction = 0 else friction = I.friction
+
+      I.velocity = I.velocity.scale((1 - friction * dt))
 
       I.x += I.velocity.x * dt
       I.y += I.velocity.y * dt
