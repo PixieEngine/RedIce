@@ -68,5 +68,7 @@ Base = (I) ->
 
   self.attrReader "mass"
 
+  I.center = Point(I.x + I.width/2, I.y + I.height/2)
+
   self
 
