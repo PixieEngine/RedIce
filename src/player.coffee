@@ -150,6 +150,8 @@ Player = (I) ->
       if positionDelta.magnitude() > puckControl
         positionDelta = positionDelta.norm().scale(puckControl)
 
+      I.hasPuck = true
+
       puck.I.velocity = puck.I.velocity.add(positionDelta)
 
     drawShadow: (canvas) ->
@@ -313,6 +315,8 @@ Player = (I) ->
         movement = movement.scale(I.boost)
 
       movement = movement.scale(0.75)
+
+      I.hasPuck = false
 
       I.velocity = I.velocity.add(movement)
 
