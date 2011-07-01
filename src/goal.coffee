@@ -26,7 +26,7 @@ Goal = (I) ->
     horizontal: true
   }]
 
-  if I.right
+  if I.team
     walls.push
       center: Point(I.x + I.width, I.y + I.height/2)
       halfWidth: WALL_RADIUS
@@ -73,7 +73,7 @@ Goal = (I) ->
       drawWall(wall, canvas)
 
   self.bind "step", ->
-    if I.right
+    if I.team
       I.sprite = tallSprites[7]      
     else
       I.sprite = tallSprites[6]
