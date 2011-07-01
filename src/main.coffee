@@ -112,6 +112,7 @@ TitleScreen
 
     leftGoal = engine.add
       class: "Goal"
+      team: 0
       x: WALL_LEFT + ARENA_WIDTH/10 - 32
 
     leftGoal.bind "score", ->
@@ -119,7 +120,7 @@ TitleScreen
 
     rightGoal = engine.add
       class: "Goal"
-      right: true
+      team: 1
       x: WALL_LEFT + ARENA_WIDTH*9/10
 
     rightGoal.bind "score", ->
