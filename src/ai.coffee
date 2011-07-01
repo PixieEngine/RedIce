@@ -8,7 +8,7 @@ AI = (I, self) ->
   computeDirection: ->
     if I.hasPuck
       targetPosition = engine.find("Goal").select (goal) ->
-        goal.team != I.team
+        goal.team() != I.team
       .first().center()
 
     else
