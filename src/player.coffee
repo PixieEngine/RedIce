@@ -39,7 +39,9 @@ Player = (I) ->
   standingOffset = Point(0, -16)
   flyingOffset = Point(-24, -16)
 
-  if I.joystick
+  if I.cpu
+
+  else if I.joystick
     controller = Joysticks.getController(I.controller)
     actionDown = controller.actionDown
   else
@@ -277,7 +279,9 @@ Player = (I) ->
 
     movement = Point(0, 0)
 
-    if controller
+    if I.cpu
+      movement = self.computeDirection()
+    else if controller
       movement = controller.position()
     else
       if actionDown "left"
