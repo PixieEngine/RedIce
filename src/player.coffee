@@ -34,13 +34,15 @@ Player = (I) ->
   ]
 
   playerColor = PLAYER_COLORS[I.controller]
-  redTeam = I.controller % 2
-  teamColor = I.color = PLAYER_COLORS[redTeam]
+  redTeam = I.team = I.controller % 2
   standingOffset = Point(0, -16)
   flyingOffset = Point(-24, -16)
 
   if I.cpu
-
+    if I.includedModules
+      I.includedModules = I.includedModules.concat ["AI"]
+    else
+      I.includedModules = ["AI"]
   else if I.joystick
     controller = Joysticks.getController(I.controller)
     actionDown = controller.actionDown
@@ -303,9 +305,6 @@ Player = (I) ->
         I.shootPower += 1
 
         chargePhase = Math.sin(Math.TAU/4 * I.age) * 0.2 * I.shootPower / maxShotPower
-
-        # TODO: Set Shoot animation
-        # I.color = Color(teamColor).lighten(chargePhase)
 
         if I.shootPower == maxShotPower
           I.cooldown.shoot = 5
