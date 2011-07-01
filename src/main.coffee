@@ -72,6 +72,15 @@ TitleScreen
       sprite: Sprite.loadByName("corner_left")
       x: 0
       y: WALL_TOP - 48
+      width: 128
+      zIndex: 1
+
+    engine.add
+      sprite: Sprite.loadByName("corner_left")
+      hflip: true
+      x: WALL_RIGHT - 96
+      y: WALL_TOP - 48
+      width: 128
       zIndex: 1
 
     engine.add
