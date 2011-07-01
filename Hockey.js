@@ -6,12 +6,12 @@ App = {
     "data": "data",
     "entities": "entities",
     "lib": "lib",
-    "animations": "animations",
     "images": "images",
+    "animations": "animations",
     "sounds": "sounds",
     "test": "test",
-    "tilemaps": "tilemaps",
-    "source": "src"
+    "source": "src",
+    "tilemaps": "tilemaps"
   },
   "wrapMain": true,
   "library": false,
@@ -19215,6 +19215,58 @@ Scoreboard = function(I) {
   });
   return self;
 };;
+var TitleScreen;
+TitleScreen = function(I) {
+  var directory, loadingText, titleScreen, titleScreenImage, titleScreenText, _ref;
+  $.reverseMerge(I, {
+    backgroundColor: "#00010D",
+    callback: $.noop
+  });
+  directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.images : void 0 : void 0) || "images";
+  titleScreen = $("<div />", {
+    css: {
+      backgroundColor: I.backgroundColor,
+      fontFamily: "monospace",
+      fontSize: "20px",
+      fontWeight: "bold",
+      left: 0,
+      margin: "auto",
+      position: "absolute",
+      textAlign: "center",
+      top: 0,
+      zIndex: 1000
+    }
+  }).appendTo("body");
+  titleScreenImage = $("<img />", {
+    height: App.height,
+    src: "" + BASE_URL + "/" + directory + "/title.png",
+    width: App.width
+  }).appendTo(titleScreen);
+  loadingText = $("<div />", {
+    text: "Loading...",
+    css: {
+      bottom: "40%",
+      color: "#FFF",
+      position: "absolute",
+      width: "100%",
+      zIndex: -1
+    }
+  }).appendTo(titleScreen);
+  titleScreenText = $("<div />", {
+    text: "Press any key to begin",
+    css: {
+      bottom: "12.5%",
+      color: "#00010D",
+      position: "absolute",
+      width: "100%",
+      zIndex: 1
+    }
+  }).appendTo(titleScreen);
+  return $(document).one("keydown", function() {
+    titleScreen.remove();
+    return I.callback();
+  });
+};;
 var Zamboni;
 Zamboni = function(I) {
   var SWEEPER_SIZE, cleanIce, generatePath, heading, lastPosition, path, pathIndex, pathfind, self;
@@ -19320,58 +19372,6 @@ Zamboni = function(I) {
   });
   return self;
 };;
-var TitleScreen;
-TitleScreen = function(I) {
-  var directory, loadingText, titleScreen, titleScreenImage, titleScreenText, _ref;
-  $.reverseMerge(I, {
-    backgroundColor: "#00010D",
-    callback: $.noop
-  });
-  directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.images : void 0 : void 0) || "images";
-  titleScreen = $("<div />", {
-    css: {
-      backgroundColor: I.backgroundColor,
-      fontFamily: "monospace",
-      fontSize: "20px",
-      fontWeight: "bold",
-      left: 0,
-      margin: "auto",
-      position: "absolute",
-      textAlign: "center",
-      top: 0,
-      zIndex: 1000
-    }
-  }).appendTo("body");
-  titleScreenImage = $("<img />", {
-    height: App.height,
-    src: "" + BASE_URL + "/" + directory + "/title.png",
-    width: App.width
-  }).appendTo(titleScreen);
-  loadingText = $("<div />", {
-    text: "Loading...",
-    css: {
-      bottom: "40%",
-      color: "#FFF",
-      position: "absolute",
-      width: "100%",
-      zIndex: -1
-    }
-  }).appendTo(titleScreen);
-  titleScreenText = $("<div />", {
-    text: "Press any key to begin",
-    css: {
-      bottom: "12.5%",
-      color: "#00010D",
-      position: "absolute",
-      width: "100%",
-      zIndex: 1
-    }
-  }).appendTo(titleScreen);
-  return $(document).one("keydown", function() {
-    titleScreen.remove();
-    return I.callback();
-  });
-};;
 App.entities = {};;
 ;$(function(){ var DEBUG_DRAW, config, physics, rink;
 Sprite.loadSheet = function(name, tileWidth, tileHeight) {
@@ -19435,6 +19435,15 @@ TitleScreen({
       sprite: Sprite.loadByName("corner_left"),
       x: 0,
       y: WALL_TOP - 48,
+      width: 128,
+      zIndex: 1
+    });
+    engine.add({
+      sprite: Sprite.loadByName("corner_left"),
+      hflip: true,
+      x: WALL_RIGHT - 96,
+      y: WALL_TOP - 48,
+      width: 128,
       zIndex: 1
     });
     engine.add({
