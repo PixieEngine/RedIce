@@ -80,5 +80,7 @@ Goal = (I) ->
 
     I.zIndex = 1 + (I.y + I.height)/CANVAS_HEIGHT
 
+  self.attrReader "team"
+
   return self
 
