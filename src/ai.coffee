@@ -12,7 +12,7 @@ AI = (I, self) ->
       targetPosition = engine.find("Puck").first().center()
 
     if targetPosition
-      targetPosition.subtract(I).norm()
+      targetPosition.subtract(self.center()).norm()
     else
       Point(0, 0)
 
