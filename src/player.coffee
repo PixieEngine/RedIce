@@ -38,12 +38,7 @@ Player = (I) ->
   standingOffset = Point(0, -16)
   flyingOffset = Point(-24, -16)
 
-  if I.cpu
-    if I.includedModules
-      I.includedModules = I.includedModules.concat ["AI"]
-    else
-      I.includedModules = ["AI"]
-  else if I.joystick
+  if I.joystick
     controller = Joysticks.getController(I.controller)
     actionDown = controller.actionDown
   else
@@ -332,7 +327,7 @@ Player = (I) ->
     if I.wipeout
       spriteIndex = 17
       unless redTeam
-        spriteIndex += 1        
+        spriteIndex += 1
 
       I.spriteOffset = flyingOffset
       I.sprite = wideSprites[spriteIndex]
@@ -353,6 +348,9 @@ Player = (I) ->
 
       I.spriteOffset = standingOffset
       I.sprite = sprites[spriteIndex]
+
+  if I.cpu
+    self.include AI
 
   self
 
