@@ -34,7 +34,8 @@ Player = (I) ->
   ]
 
   playerColor = PLAYER_COLORS[I.controller]
-  redTeam = I.team = I.controller % 2
+  I.team = I.controller % 2
+  redTeam = I.team
   standingOffset = Point(0, -16)
   flyingOffset = Point(-24, -16)
 
