@@ -3,12 +3,16 @@ AI = (I, self) ->
   $.reverseMerge I,
     role: "goalie"
 
-  arenaCenter = Point(WALL_LEFT + WALL_RIGHT, WALL_TOP + WALL_BOTTOM).scale(2)
+  arenaCenter = Point(WALL_LEFT + WALL_RIGHT, WALL_TOP + WALL_BOTTOM).scale(0.5)
 
   computeDirection: ->
-    targetPosition = arenaCenter
+    if I.hasPuck
+      targetPosition = arenaCenter
+    else
+      targetPosition = engine.find("Puck").first().center()
 
-    direction = targetPosition.subtract(I)
-
-    return direction.norm()
+    if targetPosition
+      targetPosition.subtract(I).norm()
+    else
+      Point(0, 0)
 
