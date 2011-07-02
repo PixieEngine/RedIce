@@ -9,17 +9,13 @@ AI = (I, self) ->
 
   directionAI = 
     goalie: ->
-      debugger
-
       targetPosition = engine.find("Goal").select (goal) ->
-        goal.team() != I.team
+        goal.team() == I.team
       .first().center()
 
       targetPosition.subtract(self.center()).norm()
 
     youth: ->
-      debugger
-
       if I.hasPuck
         targetPosition = engine.find("Goal").select (goal) ->
           goal.team() != I.team
