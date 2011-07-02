@@ -5,6 +5,26 @@ OptionsScreen = (I) ->
 
   directory = App?.directories?.images || "images"
 
+  createSelect = (name, options) ->
+    label = $ "<label />"
+
+    select = $ "<select />"
+
+    options.each (option) ->
+      optionElement = $"<option />",
+        val: option
+        text: option
+
+      select.append optionElement
+
+    heading = $ "<h2 />"
+      text: name
+
+    label.append heading
+    label.append select
+
+    return label
+
   optionsScreen = $ "<div />",
     css:
       backgroundColor: I.backgroundColor
@@ -44,7 +64,7 @@ OptionsScreen = (I) ->
   .appendTo(optionsScreen)
 
   $(document).one "keydown", ->
-    options.remove()
+    optionsScreen.remove()
 
     I.callback()
 
