@@ -1,22 +1,22 @@
 var App;
 App = {
   "name": "Hockey",
-  "hotSwap": true,
   "directories": {
     "data": "data",
     "entities": "entities",
     "lib": "lib",
-    "images": "images",
     "animations": "animations",
+    "images": "images",
     "sounds": "sounds",
     "test": "test",
-    "source": "src",
-    "tilemaps": "tilemaps"
+    "tilemaps": "tilemaps",
+    "source": "src"
   },
+  "hotSwap": true,
   "wrapMain": true,
-  "library": false,
   "height": 768,
   "main": "main",
+  "library": false,
   "width": 1024,
   "author": "STRd6",
   "libs": {
@@ -19523,7 +19523,8 @@ window.BLOOD_COLOR = "#BA1A19";
 window.ICE_COLOR = "rgba(192, 255, 255, 0.2)";
 config = {
   players: 6,
-  joysticks: false
+  humanPlayers: 2,
+  joysticks: true
 };
 rink = Rink();
 physics = Physics();
@@ -19583,7 +19584,6 @@ TitleScreen({
       return engine.add({
         "class": "Player",
         controller: i,
-        cpu: 1,
         joystick: config.joysticks,
         x: x,
         y: y
