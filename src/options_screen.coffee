@@ -25,7 +25,7 @@ OptionsScreen = (I) ->
     width: App.width
   .appendTo(optionsScreen)
 
-  loadingText = $ "<div />",
+  $ "<div />",
     text: "Loading..."
     css:
       bottom: "40%"
