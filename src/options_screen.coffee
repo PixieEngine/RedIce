@@ -5,6 +5,12 @@ OptionsScreen = (I) ->
 
   directory = App?.directories?.images || "images"
 
+  resourceURL = (directory, name, type) ->
+    directory = App?.directories?[directory] || directory
+
+    # TODO Add mtime
+    "#{BASE_URL}/#{directory}/#{name}.#{type}"
+
   createSelect = (name, options) ->
     label = $ "<label />"
 
