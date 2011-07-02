@@ -3,8 +3,8 @@ AI = (I, self) ->
 
   roles = [
     "youth"
-    "youth"
     "goalie"
+    "youth"
   ]
 
   directionAI = 
