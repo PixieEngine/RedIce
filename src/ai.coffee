@@ -9,6 +9,8 @@ AI = (I, self) ->
 
   directionAI = 
     goalie: ->
+      debugger
+
       targetPosition = engine.find("Goal").select (goal) ->
         goal.team() != I.team
       .first().center()
@@ -16,6 +18,8 @@ AI = (I, self) ->
       targetPosition.subtract(self.center()).norm()
 
     youth: ->
+      debugger
+
       if I.hasPuck
         targetPosition = engine.find("Goal").select (goal) ->
           goal.team() != I.team
@@ -29,7 +33,7 @@ AI = (I, self) ->
       else
         Point(0, 0)
 
-  I.role = [(I.controller / 2).floor()]
+  I.role = roles[(I.controller / 2).floor()]
 
   computeDirection: ->
     directionAI[I.role]()
