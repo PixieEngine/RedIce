@@ -36,6 +36,12 @@ OptionsScreen = (I) ->
   .appendTo(optionsScreen)
 
   # TODO: Add options
+  optionsPanel = $ "<div />",
+    css:
+      margin: auto
+      width: "75%"
+      zIndex: 1
+  .appendTo(optionsScreen)
 
   $(document).one "keydown", ->
     options.remove()
