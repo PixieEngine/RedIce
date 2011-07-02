@@ -13,6 +13,8 @@ AI = (I, self) ->
         goal.team() == I.team
       .first().center()
 
+      targetPosition = targetPosition.add((arenaCenter.subtract(targetPosition)).norm().scale(16))
+
       targetPosition.subtract(self.center()).norm()
 
     youth: ->
