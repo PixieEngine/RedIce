@@ -17,7 +17,7 @@ OptionsScreen = (I) ->
     select = $ "<select />"
 
     options.each (option) ->
-      optionElement = $"<option />",
+      optionElement = $ "<option />",
         val: option
         text: option
 
