@@ -18047,6 +18047,43 @@ draw anything to the screen until the image has been loaded.
 })();;
 ;
 ;$(function(){ undefined });;
+var AI;
+AI = function(I, self) {
+  var arenaCenter, directionAI, roles;
+  arenaCenter = Point(WALL_LEFT + WALL_RIGHT, WALL_TOP + WALL_BOTTOM).scale(0.5);
+  roles = ["youth", "goalie", "youth"];
+  directionAI = {
+    goalie: function() {
+      var targetPosition;
+      targetPosition = engine.find("Goal").select(function(goal) {
+        return goal.team() === I.team;
+      }).first().center();
+      targetPosition = targetPosition.add((arenaCenter.subtract(targetPosition)).norm().scale(16));
+      return targetPosition.subtract(self.center()).norm();
+    },
+    youth: function() {
+      var targetPosition;
+      if (I.hasPuck) {
+        targetPosition = engine.find("Goal").select(function(goal) {
+          return goal.team() !== I.team;
+        }).first().center();
+      } else {
+        targetPosition = engine.find("Puck").first().center();
+      }
+      if (targetPosition) {
+        return targetPosition.subtract(self.center()).norm();
+      } else {
+        return Point(0, 0);
+      }
+    }
+  };
+  I.role = roles[(I.controller / 2).floor()];
+  return {
+    computeDirection: function() {
+      return directionAI[I.role]();
+    }
+  };
+};;
 var Base;
 Base = function(I) {
   var self;
@@ -18336,7 +18373,7 @@ Goal = function(I) {
       horizontal: true
     }
   ];
-  if (I.right) {
+  if (I.team) {
     walls.push({
       center: Point(I.x + I.width, I.y + I.height / 2),
       halfWidth: WALL_RADIUS,
@@ -18380,13 +18417,14 @@ Goal = function(I) {
     });
   });
   self.bind("step", function() {
-    if (I.right) {
+    if (I.team) {
       I.sprite = tallSprites[7];
     } else {
       I.sprite = tallSprites[6];
     }
     return I.zIndex = 1 + (I.y + I.height) / CANVAS_HEIGHT;
   });
+  self.attrReader("team");
   return self;
 };;
 var Joysticks;
@@ -18477,6 +18515,79 @@ Music = (function() {
     }
   };
 })();;
+var OptionsScreen;
+OptionsScreen = function(I) {
+  var createSelect, directory, optionsPanel, optionsScreen, resourceURL, _ref;
+  $.reverseMerge(I, {
+    backgroundColor: "#00010D",
+    callback: $.noop
+  });
+  directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.images : void 0 : void 0) || "images";
+  resourceURL = function(directory, name, type) {
+    var _ref2;
+    directory = (typeof App !== "undefined" && App !== null ? (_ref2 = App.directories) != null ? _ref2[directory] : void 0 : void 0) || directory;
+    return "" + BASE_URL + "/" + directory + "/" + name + "." + type;
+  };
+  createSelect = function(name, options) {
+    var heading, label, select;
+    label = $("<label />");
+    select = $("<select />");
+    options.each(function(option) {
+      var optionElement;
+      optionElement = $("<option />", {
+        val: option,
+        text: option
+      });
+      return select.append(optionElement);
+    });
+    heading = $("<h2 />", {
+      text: name
+    });
+    label.append(heading);
+    label.append(select);
+    return label;
+  };
+  optionsScreen = $("<div />", {
+    css: {
+      backgroundColor: I.backgroundColor,
+      fontFamily: "monospace",
+      fontSize: "20px",
+      fontWeight: "bold",
+      left: 0,
+      margin: "auto",
+      position: "absolute",
+      textAlign: "center",
+      top: 0,
+      zIndex: 1001
+    }
+  }).appendTo("body");
+  $("<img />", {
+    height: App.height,
+    src: "" + BASE_URL + "/" + directory + "/title.png",
+    width: App.width
+  }).appendTo(optionsScreen);
+  $("<div />", {
+    text: "Loading...",
+    css: {
+      bottom: "40%",
+      color: "#FFF",
+      position: "absolute",
+      width: "100%",
+      zIndex: -1
+    }
+  }).appendTo(optionsScreen);
+  optionsPanel = $("<div />", {
+    css: {
+      margin: auto,
+      width: "75%",
+      zIndex: 1
+    }
+  }).appendTo(optionsScreen);
+  return $(document).one("keydown", function() {
+    optionsScreen.remove();
+    return I.callback();
+  });
+};;
 var Physics;
 Physics = function() {
   var cornerRadius, corners, overlapX, overlapY, rectangularOverlap, resolveCollision, resolveCollisions, threshold, wallCollisions, walls;
@@ -18691,7 +18802,7 @@ Physics = function() {
 };;
 var Player;
 Player = function(I) {
-  var PLAYER_COLORS, actionDown, boostTimeout, controller, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, drawPowerMeters, flyingOffset, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, playerColor, redTeam, rightSkatePos, self, shootPuck, standingOffset, teamColor;
+  var PLAYER_COLORS, actionDown, boostTimeout, controller, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, drawPowerMeters, flyingOffset, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, playerColor, redTeam, rightSkatePos, self, shootPuck, standingOffset;
   $.reverseMerge(I, {
     boost: 0,
     cooldown: {
@@ -18720,8 +18831,8 @@ Player = function(I) {
   });
   PLAYER_COLORS = ["#0246E3", "#EB070E", "#388326", "#F69508", "#563495", "#58C4F5", "#FFDE49"];
   playerColor = PLAYER_COLORS[I.controller];
-  redTeam = I.controller % 2;
-  teamColor = I.color = PLAYER_COLORS[redTeam];
+  I.team = I.controller % 2;
+  redTeam = I.team;
   standingOffset = Point(0, -16);
   flyingOffset = Point(-24, -16);
   if (I.joystick) {
@@ -18819,6 +18930,7 @@ Player = function(I) {
       if (positionDelta.magnitude() > puckControl) {
         positionDelta = positionDelta.norm().scale(puckControl);
       }
+      I.hasPuck = true;
       return puck.I.velocity = puck.I.velocity.add(positionDelta);
     },
     drawShadow: function(canvas) {
@@ -18946,7 +19058,9 @@ Player = function(I) {
     }
     drawBloodStreaks();
     movement = Point(0, 0);
-    if (controller) {
+    if (I.cpu) {
+      movement = self.computeDirection();
+    } else if (controller) {
       movement = controller.position();
     } else {
       if (actionDown("left")) {
@@ -18982,6 +19096,7 @@ Player = function(I) {
         movement = movement.scale(I.boost);
       }
       movement = movement.scale(0.75);
+      I.hasPuck = false;
       return I.velocity = I.velocity.add(movement);
     }
   });
@@ -18990,7 +19105,7 @@ Player = function(I) {
     return drawFloatingNameTag(canvas);
   });
   self.bind("update", function() {
-    var cycle, facingOffset, spriteIndex;
+    var cycle, facingOffset, spriteIndex, teamColor;
     I.hflip = heading > 2 * Math.TAU / 8 || heading < -2 * Math.TAU / 8;
     if (I.wipeout) {
       spriteIndex = 17;
@@ -19016,6 +19131,9 @@ Player = function(I) {
       return I.sprite = sprites[spriteIndex];
     }
   });
+  if (I.cpu) {
+    self.include(AI);
+  }
   return self;
 };;
 var Puck;
@@ -19465,6 +19583,7 @@ TitleScreen({
       return engine.add({
         "class": "Player",
         controller: i,
+        cpu: 1,
         joystick: config.joysticks,
         x: x,
         y: y
@@ -19475,6 +19594,7 @@ TitleScreen({
     });
     leftGoal = engine.add({
       "class": "Goal",
+      team: 0,
       x: WALL_LEFT + ARENA_WIDTH / 10 - 32
     });
     leftGoal.bind("score", function() {
@@ -19482,7 +19602,7 @@ TitleScreen({
     });
     rightGoal = engine.add({
       "class": "Goal",
-      right: true,
+      team: 1,
       x: WALL_LEFT + ARENA_WIDTH * 9 / 10
     });
     rightGoal.bind("score", function() {
