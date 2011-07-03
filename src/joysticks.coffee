@@ -18,7 +18,7 @@ Joysticks = ( ->
 
   getController: (i) ->
     actionDown: (buttons...) ->
-      if stick = joysticks?[i]    
+      if stick = joysticks?[i]
         buttons.inject false, (down, button) ->
           down || stick.buttons & buttonMapping[button]
       else
