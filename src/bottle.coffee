@@ -7,7 +7,7 @@ Bottle = (I) ->
     zVelocity: 6
     gravity: 0.125
 
-  self = GameObject.extend
+  self = GameObject(I).extend
     draw: (canvas) ->
       canvas.fillCircle(I.x + I.radius, I.y + I.radius - I.z, I.radius, I.color)
 
