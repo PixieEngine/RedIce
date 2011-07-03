@@ -107,7 +107,7 @@ TitleScreen
 
       engine.add
         class: "Player"
-        controller: i
+        controller: controller
         # cpu: 1
         joystick: config.joysticks && i != 3
         x: x
