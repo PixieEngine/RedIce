@@ -19619,6 +19619,7 @@ TitleScreen({
       return engine.add({
         "class": "Player",
         controller: controller,
+        cpu: i > 4,
         joystick: config.joysticks && i !== 3,
         x: x,
         y: y
