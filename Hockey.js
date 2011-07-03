@@ -18861,7 +18861,7 @@ Player = function(I) {
   });
   PLAYER_COLORS = ["#0246E3", "#EB070E", "#388326", "#F69508", "#563495", "#58C4F5", "#FFDE49"];
   playerColor = PLAYER_COLORS[I.controller];
-  I.team = I.controller % 2;
+  I.team || (I.team = I.controller % 2);
   redTeam = I.team;
   standingOffset = Point(0, -16);
   flyingOffset = Point(-24, -16);
@@ -19619,7 +19619,7 @@ TitleScreen({
       return engine.add({
         "class": "Player",
         controller: controller,
-        cpu: i > 4,
+        team: i % 2,
         joystick: config.joysticks && i !== 3,
         x: x,
         y: y
