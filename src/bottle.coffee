@@ -4,7 +4,7 @@ Bottle = (I) ->
     radius: 8
     velocity: Point(2, 4)
     z: 48
-    zVelocity: 2
+    zVelocity: 4
     gravity: -0.125
 
   self = GameObject(I).extend
