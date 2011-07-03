@@ -144,12 +144,6 @@ TitleScreen
     engine.bind "update", ->
       Joysticks.update() if config.joysticks
 
-      # Throw bottles
-      engine.add
-        class: "Bottle"
-        x: rand(App.width)
-        y: 0
-
       puck = engine.find("Puck").first()
 
       players = engine.find("Player").shuffle()
