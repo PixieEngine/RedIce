@@ -109,7 +109,7 @@ TitleScreen
         class: "Player"
         controller: controller
         team: i % 2
-        cpu: i > 4
+        # cpu: i > 4
         joystick: config.joysticks && i != 3
         x: x
         y: y
