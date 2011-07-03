@@ -100,11 +100,16 @@ TitleScreen
       y = WALL_TOP + ARENA_HEIGHT*((i/2).floor() + 1)/4
       x = WALL_LEFT + ARENA_WIDTH/2 + ((i%2) - 0.5) * ARENA_WIDTH / 6
 
+      if i == 3
+        controller = 0
+      else
+        controller = i
+
       engine.add
         class: "Player"
         controller: i
         # cpu: 1
-        joystick: config.joysticks
+        joystick: config.joysticks && i != 3
         x: x
         y: y
 
