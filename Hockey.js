@@ -18203,6 +18203,36 @@ Boards = function(I) {
   });
   return self;
 };;
+var Bottle;
+Bottle = function(I) {
+  var self;
+  $.reverseMerge(I, {
+    color: "#800",
+    radius: 8,
+    velocity: Point(2, 4),
+    z: 48,
+    zVelocity: 2,
+    gravity: -0.125
+  });
+  self = GameObject(I).extend({
+    draw: function(canvas) {
+      var shadowColor;
+      shadowColor = "rgba(0, 0, 0, 0.15)";
+      canvas.fillCircle(I.x + I.radius, I.y + I.radius, I.radius, shadowColor);
+      return canvas.fillCircle(I.x + I.radius, I.y + I.radius - I.z, I.radius, I.color);
+    }
+  });
+  self.bind("step", function() {
+    I.x += I.velocity.x;
+    I.y += I.velocity.y;
+    I.z += I.zVelocity;
+    I.zVelocity += I.gravity;
+    if (I.z < 0) {
+      return I.active = false;
+    }
+  });
+  return self;
+};;
 var CONTROLLERS, Controller, gameControlData, keyActionNames, layouts, selectedLayout;
 var __slice = Array.prototype.slice;
 Controller = function(actions) {
@@ -18450,7 +18480,7 @@ Joysticks = (function() {
         actionDown: function() {
           var buttons, stick;
           buttons = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-          if (stick = joysticks[i]) {
+          if (stick = joysticks != null ? joysticks[i] : void 0) {
             return buttons.inject(false, function(down, button) {
               return down || stick.buttons & buttonMapping[button];
             });
@@ -18460,7 +18490,7 @@ Joysticks = (function() {
         },
         position: function() {
           var stick;
-          if (stick = joysticks[i]) {
+          if (stick = joysticks != null ? joysticks[i] : void 0) {
             return Joysticks.position(stick);
           } else {
             return Point(0, 0);
@@ -19578,13 +19608,18 @@ TitleScreen({
       zIndex: 10
     });
     config.players.times(function(i) {
-      var x, y;
+      var controller, x, y;
       y = WALL_TOP + ARENA_HEIGHT * ((i / 2).floor() + 1) / 4;
       x = WALL_LEFT + ARENA_WIDTH / 2 + ((i % 2) - 0.5) * ARENA_WIDTH / 6;
+      if (i === 3) {
+        controller = 0;
+      } else {
+        controller = i;
+      }
       return engine.add({
         "class": "Player",
         controller: i,
-        joystick: config.joysticks,
+        joystick: config.joysticks && i !== 3,
         x: x,
         y: y
       });
