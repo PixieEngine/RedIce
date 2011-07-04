@@ -1,5 +1,4 @@
 Bottle = (I) ->
-
   $.reverseMerge I,
     color: "#800"
     radius: 8
