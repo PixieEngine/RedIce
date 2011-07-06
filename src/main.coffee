@@ -190,7 +190,7 @@ throwBottles = ->
   engine.add
     class: "Bottle"
     x: rand App.width
-    y: 0
+    y: rand WALL_TOP
 
 $(document).bind "keydown", "0", ->
   DEBUG_DRAW = !DEBUG_DRAW
