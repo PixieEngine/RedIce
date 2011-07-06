@@ -36,6 +36,8 @@ window.ICE_COLOR = "rgba(192, 255, 255, 0.2)"
 config =
   players: 6
   humanPlayers: 2
+  keyboardPlayers: 2
+  joystickPlayers: 4
   joysticks: true
 
 rink = Rink()
@@ -100,17 +102,20 @@ TitleScreen
       y = WALL_TOP + ARENA_HEIGHT*((i/2).floor() + 1)/4
       x = WALL_LEFT + ARENA_WIDTH/2 + ((i%2) - 0.5) * ARENA_WIDTH / 6
 
-      if i == 3
-        controller = 0
-      else
+      if i < config.keyboardPlayers
+        joystick = false
         controller = i
+      else
+        joystick = true
+        controller = i - config.keyboardPlayers
 
       engine.add
         class: "Player"
         controller: controller
+        id: i
         team: i % 2
-        # cpu: i > 4
-        joystick: config.joysticks && i != 3
+        cpu: i >= config.humanPlayers
+        joystick: joystick
         x: x
         y: y
 
