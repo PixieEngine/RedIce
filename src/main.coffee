@@ -187,10 +187,11 @@ Joysticks.init()
 log Joysticks.status()
 
 throwBottles = ->
-  engine.add
-    class: "Bottle"
-    x: rand App.width
-    y: rand WALL_TOP
+  if !rand(20)
+    engine.add
+      class: "Bottle"
+      x: rand App.width
+      y: rand WALL_TOP
 
 $(document).bind "keydown", "0", ->
   DEBUG_DRAW = !DEBUG_DRAW
