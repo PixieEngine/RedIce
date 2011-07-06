@@ -1,23 +1,23 @@
 var App;
 App = {
-  "name": "Hockey",
   "directories": {
+    "animations": "animations",
     "data": "data",
     "entities": "entities",
-    "lib": "lib",
-    "animations": "animations",
     "images": "images",
+    "lib": "lib",
     "sounds": "sounds",
+    "source": "src",
     "test": "test",
-    "tilemaps": "tilemaps",
-    "source": "src"
+    "tilemaps": "tilemaps"
   },
-  "hotSwap": true,
-  "wrapMain": true,
-  "height": 768,
-  "main": "main",
-  "library": false,
   "width": 1024,
+  "height": 768,
+  "library": false,
+  "main": "main",
+  "wrapMain": true,
+  "hotSwap": true,
+  "name": "Hockey",
   "author": "STRd6",
   "libs": {
     "gamelib.js": "https://github.com/STRd6/gamelib/raw/pixie/gamelib.js"
@@ -18211,7 +18211,7 @@ Bottle = function(I) {
     radius: 8,
     velocity: Point(2, 4),
     z: 48,
-    zVelocity: 2,
+    zVelocity: 4,
     gravity: -0.125
   });
   self = GameObject(I).extend({
@@ -18860,7 +18860,7 @@ Player = function(I) {
     zIndex: 1
   });
   PLAYER_COLORS = ["#0246E3", "#EB070E", "#388326", "#F69508", "#563495", "#58C4F5", "#FFDE49"];
-  playerColor = PLAYER_COLORS[I.controller];
+  playerColor = PLAYER_COLORS[I.id];
   I.team || (I.team = I.controller % 2);
   redTeam = I.team;
   standingOffset = Point(0, -16);
@@ -18873,12 +18873,15 @@ Player = function(I) {
   }
   maxShotPower = 20;
   boostTimeout = 20;
-  I.name || (I.name = "Player " + (I.controller + 1));
   heading = redTeam ? Math.TAU / 2 : 0;
   drawFloatingNameTag = function(canvas) {
     var backgroundColor, center, lineHeight, name, padding, rectHeight, rectWidth, textWidth, topLeft, yOffset;
     canvas.font("bold 16px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
-    name = I.controller + 1;
+    if (I.cpu) {
+      name = "CPU";
+    } else {
+      name = "P" + (I.id + 1);
+    }
     padding = 6;
     lineHeight = 16;
     textWidth = canvas.measureText(name);
@@ -19554,6 +19557,8 @@ window.ICE_COLOR = "rgba(192, 255, 255, 0.2)";
 config = {
   players: 6,
   humanPlayers: 2,
+  keyboardPlayers: 2,
+  joystickPlayers: 4,
   joysticks: true
 };
 rink = Rink();
@@ -19608,19 +19613,23 @@ TitleScreen({
       zIndex: 10
     });
     config.players.times(function(i) {
-      var controller, x, y;
+      var controller, joystick, x, y;
       y = WALL_TOP + ARENA_HEIGHT * ((i / 2).floor() + 1) / 4;
       x = WALL_LEFT + ARENA_WIDTH / 2 + ((i % 2) - 0.5) * ARENA_WIDTH / 6;
-      if (i === 3) {
-        controller = 0;
-      } else {
+      if (i < config.keyboardPlayers) {
+        joystick = false;
         controller = i;
+      } else {
+        joystick = true;
+        controller = i - config.keyboardPlayers;
       }
       return engine.add({
         "class": "Player",
         controller: controller,
+        id: i,
         team: i % 2,
-        joystick: config.joysticks && i !== 3,
+        cpu: i >= config.humanPlayers,
+        joystick: joystick,
         x: x,
         y: y
       });
