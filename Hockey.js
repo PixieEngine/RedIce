@@ -19710,11 +19710,13 @@ TitleScreen({
 Joysticks.init();
 log(Joysticks.status());
 throwBottles = function() {
-  return engine.add({
-    "class": "Bottle",
-    x: rand(App.width),
-    y: rand(WALL_TOP)
-  });
+  if (!rand(20)) {
+    return engine.add({
+      "class": "Bottle",
+      x: rand(App.width),
+      y: rand(WALL_TOP)
+    });
+  }
 };
 $(document).bind("keydown", "0", function() {
   return DEBUG_DRAW = !DEBUG_DRAW;
