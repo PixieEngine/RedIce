@@ -18209,9 +18209,9 @@ Bottle = function(I) {
   $.reverseMerge(I, {
     color: "#A00",
     radius: 8,
-    velocity: Point(rand(5) - 2, 2 + rand(4)),
+    velocity: Point(rand(5) - 2, 2 + rand(4) + rand(4)),
     z: 48,
-    zVelocity: 4,
+    zVelocity: 4 + rand(6),
     gravity: -0.25
   });
   self = Base(I).extend({
