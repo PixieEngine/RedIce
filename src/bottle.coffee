@@ -5,7 +5,7 @@ Bottle = (I) ->
     velocity: Point(rand(5) - 2, 2 + rand(4))
     z: 48
     zVelocity: 4
-    gravity: -0.125
+    gravity: -0.25
 
   self = Base(I).extend
     draw: (canvas) ->
@@ -15,8 +15,7 @@ Bottle = (I) ->
       canvas.fillCircle(I.x + I.radius, I.y + I.radius - I.z, I.radius, I.color)
 
   self.bind "step", ->
-    I.x += I.velocity.x
-    I.y += I.velocity.y
+    self.updatePosition(1)
 
     I.z += I.zVelocity
     I.zVelocity += I.gravity
