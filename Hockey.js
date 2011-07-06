@@ -19564,6 +19564,7 @@ window.ARENA_HEIGHT = WALL_BOTTOM - WALL_TOP;
 window.BLOOD_COLOR = "#BA1A19";
 window.ICE_COLOR = "rgba(192, 255, 255, 0.2)";
 config = {
+  throwBottles: true,
   players: 6,
   humanPlayers: 2,
   keyboardPlayers: 2,
@@ -19677,7 +19678,9 @@ TitleScreen({
       if (config.joysticks) {
         Joysticks.update();
       }
-      throwBottles();
+      if (config.throwBottles) {
+        throwBottles();
+      }
       puck = engine.find("Puck").first();
       players = engine.find("Player").shuffle();
       zambonis = engine.find("Zamboni");
