@@ -7,7 +7,7 @@ Bottle = (I) ->
     zVelocity: 4
     gravity: -0.125
 
-  self = GameObject(I).extend
+  self = Base(I).extend
     draw: (canvas) ->
       shadowColor = "rgba(0, 0, 0, 0.15)"
       canvas.fillCircle(I.x + I.radius, I.y + I.radius, I.radius, shadowColor)
