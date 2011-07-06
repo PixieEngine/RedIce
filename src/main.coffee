@@ -144,7 +144,7 @@ TitleScreen
 
     engine.bind "draw", (canvas) ->
       if DEBUG_DRAW
-        engine.find("Player, Puck, Goal").each (puck) ->
+        engine.find("Player, Puck, Goal, Bottle").each (puck) ->
           puck.trigger("drawDebug", canvas)
 
     engine.bind "update", ->
