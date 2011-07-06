@@ -21,6 +21,14 @@ Bottle = (I) ->
     I.z += I.zVelocity
     I.zVelocity += I.gravity
 
+    if I.z < 48
+      players = Engine.find("Player")
+
+      players.each (player) ->
+        if Collision.circular(player.circle(), self.circle())
+          player.wipeout(player.center().subtract(self.center()))
+          I.active = false
+
     if I.z < 0
       I.active = false
 
