@@ -88,6 +88,19 @@ TitleScreen
       zIndex: 1
 
     engine.add
+      spriteName: "corner_back_right"
+      hflip: true
+      x: 32
+      y: WALL_BOTTOM - 128
+      zIndex: 2
+
+    engine.add
+      spriteName: "corner_back_right"
+      x: WALL_RIGHT - 96
+      y: WALL_BOTTOM - 128
+      zIndex: 2
+
+    engine.add
       class: "Boards"
       sprite: Sprite.loadByName("boards_front")
       y: WALL_TOP - 48
