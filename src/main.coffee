@@ -34,6 +34,7 @@ window.BLOOD_COLOR = "#BA1A19"
 window.ICE_COLOR = "rgba(192, 255, 255, 0.2)"
 
 config =
+  throwBottles: true
   players: 6
   humanPlayers: 2
   keyboardPlayers: 2
@@ -150,7 +151,7 @@ TitleScreen
     engine.bind "update", ->
       Joysticks.update() if config.joysticks
 
-      throwBottles()
+      throwBottles() if config.throwBottles
 
       puck = engine.find("Puck").first()
 
