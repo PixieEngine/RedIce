@@ -33,7 +33,7 @@ Player = (I) ->
     "#FFDE49" # Yellow
   ]
 
-  playerColor = PLAYER_COLORS[I.controller]
+  playerColor = PLAYER_COLORS[I.id]
   I.team ||= I.controller % 2
   redTeam = I.team
   standingOffset = Point(0, -16)
@@ -48,14 +48,15 @@ Player = (I) ->
   maxShotPower = 20
   boostTimeout = 20
 
-  I.name ||= "Player #{I.controller + 1}"
-
   heading = if redTeam then Math.TAU/2 else 0
 
   drawFloatingNameTag = (canvas) ->
     canvas.font("bold 16px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
 
-    name = I.controller + 1
+    if I.cpu
+      name = "CPU"
+    else
+      name = "P#{(I.id + 1)}"
 
     padding = 6
     lineHeight = 16
