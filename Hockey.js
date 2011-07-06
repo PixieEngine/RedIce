@@ -18207,14 +18207,14 @@ var Bottle;
 Bottle = function(I) {
   var self;
   $.reverseMerge(I, {
-    color: "#800",
+    color: "#A00",
     radius: 8,
-    velocity: Point(2, 4),
+    velocity: Point(rand(5) - 2, 2 + rand(4)),
     z: 48,
     zVelocity: 4,
-    gravity: -0.125
+    gravity: -0.25
   });
-  self = GameObject(I).extend({
+  self = Base(I).extend({
     draw: function(canvas) {
       var shadowColor;
       shadowColor = "rgba(0, 0, 0, 0.15)";
@@ -18223,10 +18223,19 @@ Bottle = function(I) {
     }
   });
   self.bind("step", function() {
-    I.x += I.velocity.x;
-    I.y += I.velocity.y;
+    var players;
+    self.updatePosition(1);
     I.z += I.zVelocity;
     I.zVelocity += I.gravity;
+    if (I.z < 48) {
+      players = engine.find("Player");
+      players.each(function(player) {
+        if (Collision.circular(player.circle(), self.circle())) {
+          player.wipeout(player.center().subtract(self.center()));
+          return I.active = false;
+        }
+      });
+    }
     if (I.z < 0) {
       return I.active = false;
     }
@@ -19524,7 +19533,7 @@ Zamboni = function(I) {
   return self;
 };;
 App.entities = {};;
-;$(function(){ var DEBUG_DRAW, config, physics, rink;
+;$(function(){ var DEBUG_DRAW, config, physics, rink, throwBottles;
 Sprite.loadSheet = function(name, tileWidth, tileHeight) {
   var directory, image, sprites, url, _ref;
   directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.images : void 0 : void 0) || "images";
@@ -19658,7 +19667,7 @@ TitleScreen({
     });
     engine.bind("draw", function(canvas) {
       if (DEBUG_DRAW) {
-        return engine.find("Player, Puck, Goal").each(function(puck) {
+        return engine.find("Player, Puck, Goal, Bottle").each(function(puck) {
           return puck.trigger("drawDebug", canvas);
         });
       }
@@ -19668,6 +19677,7 @@ TitleScreen({
       if (config.joysticks) {
         Joysticks.update();
       }
+      throwBottles();
       puck = engine.find("Puck").first();
       players = engine.find("Player").shuffle();
       zambonis = engine.find("Zamboni");
@@ -19699,6 +19709,13 @@ TitleScreen({
 });
 Joysticks.init();
 log(Joysticks.status());
+throwBottles = function() {
+  return engine.add({
+    "class": "Bottle",
+    x: rand(App.width),
+    y: rand(WALL_TOP)
+  });
+};
 $(document).bind("keydown", "0", function() {
   return DEBUG_DRAW = !DEBUG_DRAW;
 }); });
