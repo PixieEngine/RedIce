@@ -1,7 +1,7 @@
 Sprite.loadSheet = (name, tileWidth, tileHeight) ->
   directory = App?.directories?.images || "images"
 
-  url = "#{BASE_URL}/#{directory}/#{name}.png"
+  url = "#{BASE_URL}/#{directory}/#{name}.png?#{MTIME}"
 
   sprites = []
   image = new Image()
