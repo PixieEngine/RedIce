@@ -150,6 +150,8 @@ TitleScreen
     engine.bind "update", ->
       Joysticks.update() if config.joysticks
 
+      throwBottles()
+
       puck = engine.find("Puck").first()
 
       players = engine.find("Player").shuffle()
@@ -183,6 +185,12 @@ TitleScreen
 
 Joysticks.init()
 log Joysticks.status()
+
+throwBottles = ->
+  engine.add
+    class: "Bottle"
+    x: rand App.width
+    y: 0
 
 $(document).bind "keydown", "0", ->
   DEBUG_DRAW = !DEBUG_DRAW
