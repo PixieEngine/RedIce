@@ -15,7 +15,8 @@ Bottle = (I) ->
       center = self.center()
 
       shadowColor = "rgba(0, 0, 0, 0.15)"
-      canvas.fillCircle(center.x, center.y, I.radius, shadowColor)
+      bonusRadius = (-4 + 256/I.z).clamp(-4, 4)
+      canvas.fillCircle(center.x, center.y, I.radius + bonusRadius, shadowColor)
 
       I.sprite.draw(canvas, I.x, I.y - I.z)
 
