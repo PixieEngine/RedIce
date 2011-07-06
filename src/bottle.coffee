@@ -2,7 +2,7 @@ Bottle = (I) ->
   $.reverseMerge I,
     color: "#800"
     radius: 8
-    velocity: Point(rand(5) - 2, 4)
+    velocity: Point(rand(5) - 2, 2 + rand(4))
     z: 48
     zVelocity: 4
     gravity: -0.125
