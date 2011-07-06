@@ -1,6 +1,6 @@
 Bottle = (I) ->
   $.reverseMerge I,
-    color: "#800"
+    color: "#A00"
     radius: 8
     velocity: Point(rand(5) - 2, 2 + rand(4))
     z: 48
@@ -22,7 +22,7 @@ Bottle = (I) ->
     I.zVelocity += I.gravity
 
     if I.z < 48
-      players = Engine.find("Player")
+      players = engine.find("Player")
 
       players.each (player) ->
         if Collision.circular(player.circle(), self.circle())
