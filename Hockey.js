@@ -13291,8 +13291,11 @@ $(function() {
        * @returns The unit vector pointing in the same direction as this vector.
        * @type Point
       */
-      norm: function() {
-        return this.scale(1.0 / this.length());
+      norm: function(length) {
+        if (length == null) {
+          length = 1.0;
+        }
+        return this.scale(length / this.length());
       },
       /**
        * Computed the length of this point as though it were a vector from (0,0) to (x,y)
@@ -17842,7 +17845,7 @@ draw anything to the screen until the image has been loaded.
   Sprite.loadSheet = function(name, tileWidth, tileHeight) {
     var directory, image, sprites, url, _ref;
     directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.images : void 0 : void 0) || "images";
-    url = "" + BASE_URL + "/" + directory + "/" + name + ".png";
+    url = "" + BASE_URL + "/" + directory + "/" + name + ".png?" + MTIME;
     console.log(url);
     sprites = [];
     image = new Image();
@@ -17945,7 +17948,7 @@ draw anything to the screen until the image has been loaded.
   window.Sprite.loadByName = function(name, callback) {
     var directory, url, _ref;
     directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.images : void 0 : void 0) || "images";
-    url = "" + BASE_URL + "/" + directory + "/" + name + ".png";
+    url = "" + BASE_URL + "/" + directory + "/" + name + ".png?" + MTIME;
     return Sprite.load(url, callback);
   };
   return window.Sprite.create = Sprite;
@@ -18209,17 +18212,21 @@ Bottle = function(I) {
   $.reverseMerge(I, {
     color: "#A00",
     radius: 8,
+    spriteName: "freedomade",
     velocity: Point(rand(5) - 2, 2 + rand(4) + rand(4)),
     z: 48,
     zVelocity: 4 + rand(6),
     gravity: -0.25
   });
+  I.width = I.height = I.radius;
   self = Base(I).extend({
     draw: function(canvas) {
-      var shadowColor;
+      var bonusRadius, center, shadowColor;
+      center = self.center();
       shadowColor = "rgba(0, 0, 0, 0.15)";
-      canvas.fillCircle(I.x + I.radius, I.y + I.radius, I.radius, shadowColor);
-      return canvas.fillCircle(I.x + I.radius, I.y + I.radius - I.z, I.radius, I.color);
+      bonusRadius = (-4 + 256 / I.z).clamp(-4, 4);
+      canvas.fillCircle(center.x, center.y, I.radius + bonusRadius, shadowColor);
+      return I.sprite.draw(canvas, I.x, I.y - I.z);
     }
   });
   self.bind("step", function() {
@@ -19537,7 +19544,7 @@ App.entities = {};;
 Sprite.loadSheet = function(name, tileWidth, tileHeight) {
   var directory, image, sprites, url, _ref;
   directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.images : void 0 : void 0) || "images";
-  url = "" + BASE_URL + "/" + directory + "/" + name + ".png";
+  url = "" + BASE_URL + "/" + directory + "/" + name + ".png?" + MTIME;
   sprites = [];
   image = new Image();
   image.onload = function() {
@@ -19609,6 +19616,19 @@ TitleScreen({
       y: WALL_TOP - 48,
       width: 128,
       zIndex: 1
+    });
+    engine.add({
+      spriteName: "corner_back_right",
+      hflip: true,
+      x: 32,
+      y: WALL_BOTTOM - 128,
+      zIndex: 2
+    });
+    engine.add({
+      spriteName: "corner_back_right",
+      x: WALL_RIGHT - 96,
+      y: WALL_BOTTOM - 128,
+      zIndex: 2
     });
     engine.add({
       "class": "Boards",
