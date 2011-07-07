@@ -1,7 +1,7 @@
 Sprite.loadSheet = (name, tileWidth, tileHeight) ->
   directory = App?.directories?.images || "images"
 
-  url = "#{BASE_URL}/#{directory}/#{name}.png"
+  url = "#{BASE_URL}/#{directory}/#{name}.png?#{MTIME}"
 
   sprites = []
   image = new Image()
@@ -86,6 +86,19 @@ TitleScreen
       y: WALL_TOP - 48
       width: 128
       zIndex: 1
+
+    engine.add
+      spriteName: "corner_back_right"
+      hflip: true
+      x: 32
+      y: WALL_BOTTOM - 128
+      zIndex: 2
+
+    engine.add
+      spriteName: "corner_back_right"
+      x: WALL_RIGHT - 96
+      y: WALL_BOTTOM - 128
+      zIndex: 2
 
     engine.add
       class: "Boards"
