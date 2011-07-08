@@ -2,7 +2,7 @@ Bottle = (I) ->
   $.reverseMerge I,
     color: "#A00"
     radius: 8
-    rotation: Math.TAU/2
+    rotation: rand() * Math.TAU
     rotationalVelocity: (rand() * 2 - 1) * Math.TAU/16
     spriteName: "freedomade"
     velocity: Point(rand(5) - 2, 2 + rand(4) + rand(4))
