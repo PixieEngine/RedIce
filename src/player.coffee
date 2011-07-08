@@ -118,10 +118,10 @@ Player = (I) ->
     canvas.fillCircle(circle.x, circle.y, circle.radius, color)
 
   particleSizes = [4, 3, 2]
-  addBloodParticleEffect = ->
+  addBloodParticleEffect = (push) ->
     engine.add
       class: "Emitter"
-      duration: 15
+      duration: 9
       sprite: Sprite.EMPTY
       velocity: I.velocity
       particleCount: 5
@@ -131,12 +131,12 @@ Player = (I) ->
       zIndex: 1 + (I.y + I.height + 1)/CANVAS_HEIGHT
       generator:
         color: BLOOD_COLOR
-        duration: 14
+        duration: 8
         height: (n) ->
           particleSizes.wrap(n)
         maxSpeed: 50
         velocity: (n) ->
-          Point.fromAngle(Random.angle()).scale(rand(5) + 1).add(I.velocity.scale(1.2))
+          Point.fromAngle(Random.angle()).scale(rand(5) + 1).add(push)
         width: (n) ->
           particleSizes.wrap(n)
 
@@ -198,7 +198,7 @@ Player = (I) ->
       Sound.play("hit#{rand(4)}")
       Sound.play("crowd#{rand(3)}")
 
-      addBloodParticleEffect()
+      addBloodParticleEffect(push)
 
       (rand(6) + 3).times ->
         engine.add
