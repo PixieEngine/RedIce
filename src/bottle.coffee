@@ -21,10 +21,10 @@ Bottle = (I) ->
 
       spriteCenter = center.subtract(0, I.z)
 
-      transform = Matrix.rotation(I.rotation, spriteCenter).concat(Matrix.translation(-I.width/2, -I.height/2))
+      transform = Matrix.translation(spriteCenter.x, spriteCenter.y).concat(Matrix.rotation(I.rotation)).concat(Matrix.translation(-I.width/2, -I.height/2))
 
       canvas.withTransform transform, ->
-        I.sprite.draw(canvas)
+        I.sprite.draw(canvas, 0, 0)
 
   self.bind "step", ->
     self.updatePosition(1)
