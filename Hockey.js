@@ -18987,6 +18987,7 @@ Player = function(I) {
   };
   particleSizes = [4, 3, 2];
   addBloodParticleEffect = function(push) {
+    push = push.norm(15);
     return engine.add({
       "class": "Emitter",
       duration: 9,
@@ -19003,7 +19004,7 @@ Player = function(I) {
         height: function(n) {
           return particleSizes.wrap(n);
         },
-        maxSpeed: 15,
+        maxSpeed: 50,
         velocity: function(n) {
           return Point.fromAngle(Random.angle()).scale(rand(5) + 1).add(push);
         },
