@@ -33,7 +33,7 @@ window.ARENA_HEIGHT = WALL_BOTTOM - WALL_TOP
 window.BLOOD_COLOR = "#BA1A19"
 window.ICE_COLOR = "rgba(192, 255, 255, 0.2)"
 
-config =
+window.config =
   throwBottles: true
   players: 6
   humanPlayers: 2
@@ -201,7 +201,7 @@ Joysticks.init()
 log Joysticks.status()
 
 throwBottles = ->
-  if !rand(300)
+  if !rand(150)
     engine.add
       class: "Bottle"
       x: rand App.width
