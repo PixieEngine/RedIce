@@ -134,7 +134,7 @@ Player = (I) ->
         duration: 8
         height: (n) ->
           particleSizes.wrap(n)
-        maxSpeed: 50
+        maxSpeed: 15
         velocity: (n) ->
           Point.fromAngle(Random.angle()).scale(rand(5) + 1).add(push)
         width: (n) ->
