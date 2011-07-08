@@ -201,7 +201,7 @@ Joysticks.init()
 log Joysticks.status()
 
 throwBottles = ->
-  if !rand(20)
+  if !rand(300)
     engine.add
       class: "Bottle"
       x: rand App.width
