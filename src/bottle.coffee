@@ -22,8 +22,8 @@ Bottle = (I) ->
       velocity: Point(0, 0)
       particleCount: 9
       batchSize: 5
-      x: I.x
-      y: I.y
+      x: I.x + I.width/2
+      y: I.y - I.z
       generator:
         color: Color(0, 255, 0, 0.5)
         duration: 3
@@ -48,10 +48,11 @@ Bottle = (I) ->
       canvas.withTransform transform, ->
         I.sprite.draw(canvas, 0, 0)
 
+  self.bind "destroy", ->
+    addParticleEffect()
+
   self.bind "step", ->
     self.updatePosition(1)
-
-    addParticleEffect()
 
     I.rotation += I.rotationalVelocity
 
@@ -64,10 +65,10 @@ Bottle = (I) ->
       players.each (player) ->
         if Collision.circular(player.circle(), self.circle())
           player.wipeout(player.center().subtract(self.center()))
-          I.active = false
+          self.destroy()
 
     if I.z < 0
-      I.active = false
+      self.destroy()
 
   self
 
