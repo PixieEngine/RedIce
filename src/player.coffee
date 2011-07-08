@@ -128,7 +128,7 @@ Player = (I) ->
       batchSize: 3
       x: I.x + I.width/2
       y: I.y + I.height/2
-      zIndex: 1 + (I.y + I.height)/CANVAS_HEIGHT
+      zIndex: 1 + (I.y + I.height + 1)/CANVAS_HEIGHT
       generator:
         color: BLOOD_COLOR
         duration: 14
