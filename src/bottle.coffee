@@ -12,7 +12,7 @@ Bottle = (I) ->
 
   I.width = I.height = I.radius
 
-  particleSizes = [2, 3, 5]
+  particleSizes = [4, 3, 5]
 
   addParticleEffect = ->
     engine.add
@@ -20,8 +20,8 @@ Bottle = (I) ->
       duration: 10
       sprite: Sprite.EMPTY
       velocity: Point(0, 0)
-      particleCount: 9
-      batchSize: 5
+      particleCount: 12
+      batchSize: 4
       x: I.x + I.width/2
       y: I.y - I.z
       generator:
