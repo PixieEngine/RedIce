@@ -19003,7 +19003,7 @@ Player = function(I) {
         height: function(n) {
           return particleSizes.wrap(n);
         },
-        maxSpeed: 50,
+        maxSpeed: 15,
         velocity: function(n) {
           return Point.fromAngle(Random.angle()).scale(rand(5) + 1).add(push);
         },
