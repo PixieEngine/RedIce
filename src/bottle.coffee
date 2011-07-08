@@ -12,6 +12,29 @@ Bottle = (I) ->
 
   I.width = I.height = I.radius
 
+  particleSizes = [2, 3, 5]
+
+  addParticleEffect = ->
+    engine.add
+      class: "Emitter"
+      duration: 10
+      sprite: Sprite.EMPTY
+      velocity: Point(0, 0)
+      particleCount: 9
+      batchSize: 5
+      x: I.x
+      y: I.y
+      generator:
+        color: Color(0, 255, 0, 0.5)
+        duration: 3
+        height: (n) ->
+          particleSizes.wrap(n)
+        maxSpeed: 5
+        velocity: (n) ->
+          Point.fromAngle(Random.angle()).scale(rand(5) + 1)
+        width: (n) ->
+          particleSizes.wrap(n)
+
   self = Base(I).extend
     draw: (canvas) ->
       center = self.center()
@@ -27,6 +50,8 @@ Bottle = (I) ->
 
   self.bind "step", ->
     self.updatePosition(1)
+
+    addParticleEffect()
 
     I.rotation += I.rotationalVelocity
 
