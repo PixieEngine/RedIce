@@ -127,7 +127,7 @@ Player = (I) ->
       particleCount: 9
       batchSize: 3
       x: I.x + I.width/2
-      y: I.y - I.z
+      y: I.y + I.height/2
       zIndex: 1 + (I.y + I.height)/CANVAS_HEIGHT
       generator:
         color: BLOOD_COLOR
