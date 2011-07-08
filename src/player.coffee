@@ -123,7 +123,7 @@ Player = (I) ->
       class: "Emitter"
       duration: 20
       sprite: Sprite.EMPTY
-      velocity: Point(0, 0)
+      velocity: I.velocity
       particleCount: 9
       batchSize: 3
       x: I.x + I.width/2
@@ -136,7 +136,7 @@ Player = (I) ->
           particleSizes.wrap(n)
         maxSpeed: 5
         velocity: (n) ->
-          Point.fromAngle(Random.angle()).scale(rand(5) + 1)
+          Point.fromAngle(Random.angle()).scale(rand(5) + 1).add(I.velocity)
         width: (n) ->
           particleSizes.wrap(n)
 
