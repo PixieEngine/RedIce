@@ -119,6 +119,8 @@ Player = (I) ->
 
   particleSizes = [4, 3, 2]
   addBloodParticleEffect = (push) ->
+    push = push.norm(15)
+
     engine.add
       class: "Emitter"
       duration: 9
@@ -134,7 +136,7 @@ Player = (I) ->
         duration: 8
         height: (n) ->
           particleSizes.wrap(n)
-        maxSpeed: 15
+        maxSpeed: 50
         velocity: (n) ->
           Point.fromAngle(Random.angle()).scale(rand(5) + 1).add(push)
         width: (n) ->
