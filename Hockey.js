@@ -18212,7 +18212,7 @@ Bottle = function(I) {
   $.reverseMerge(I, {
     color: "#A00",
     radius: 8,
-    rotation: Math.TAU / 2,
+    rotation: rand() * Math.TAU,
     rotationalVelocity: (rand() * 2 - 1) * Math.TAU / 16,
     spriteName: "freedomade",
     velocity: Point(rand(5) - 2, 2 + rand(4) + rand(4)),
@@ -18262,7 +18262,8 @@ Bottle = function(I) {
     }
   });
   self.bind("destroy", function() {
-    return addParticleEffect();
+    addParticleEffect();
+    return Sound.play("bottle_hit");
   });
   self.bind("step", function() {
     var players;
@@ -19799,7 +19800,7 @@ TitleScreen({
 Joysticks.init();
 log(Joysticks.status());
 throwBottles = function() {
-  if (!rand(20)) {
+  if (!rand(300)) {
     return engine.add({
       "class": "Bottle",
       x: rand(App.width),
