@@ -121,11 +121,11 @@ Player = (I) ->
   addBloodParticleEffect = ->
     engine.add
       class: "Emitter"
-      duration: 20
+      duration: 15
       sprite: Sprite.EMPTY
       velocity: I.velocity
-      particleCount: 9
-      batchSize: 3
+      particleCount: 5
+      batchSize: 5
       x: I.x + I.width/2
       y: I.y + I.height/2
       zIndex: 1 + (I.y + I.height + 1)/CANVAS_HEIGHT
@@ -134,9 +134,9 @@ Player = (I) ->
         duration: 14
         height: (n) ->
           particleSizes.wrap(n)
-        maxSpeed: 5
+        maxSpeed: 50
         velocity: (n) ->
-          Point.fromAngle(Random.angle()).scale(rand(5) + 1).add(I.velocity)
+          Point.fromAngle(Random.angle()).scale(rand(5) + 1).add(I.velocity.scale(1.2))
         width: (n) ->
           particleSizes.wrap(n)
 
