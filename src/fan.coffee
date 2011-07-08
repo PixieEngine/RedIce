@@ -9,6 +9,12 @@ Fan = (I) ->
 
   self = GameObject(I)
 
+  if config.throwBottles && !rand(50)
+    engine.add
+      class: "Bottle"
+      x: I.x
+      y: I.y
+
   return self
 
 Fan.sprites ||= [
