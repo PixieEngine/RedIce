@@ -50,6 +50,7 @@ Bottle = (I) ->
 
   self.bind "destroy", ->
     addParticleEffect()
+    Sound.play("bottle_hit")
 
   self.bind "step", ->
     self.updatePosition(1)
