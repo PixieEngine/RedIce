@@ -37,7 +37,7 @@ config =
   throwBottles: true
   players: 6
   humanPlayers: 2
-  keyboardPlayers: 0
+  keyboardPlayers: 2
   joystickPlayers: 4
   joysticks: true
 
