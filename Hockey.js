@@ -18208,10 +18208,12 @@ Boards = function(I) {
 };;
 var Bottle;
 Bottle = function(I) {
-  var self;
+  var addParticleEffect, particleSizes, self;
   $.reverseMerge(I, {
     color: "#A00",
     radius: 8,
+    rotation: Math.TAU / 2,
+    rotationalVelocity: (rand() * 2 - 1) * Math.TAU / 16,
     spriteName: "freedomade",
     velocity: Point(rand(5) - 2, 2 + rand(4) + rand(4)),
     z: 48,
@@ -18219,19 +18221,53 @@ Bottle = function(I) {
     gravity: -0.25
   });
   I.width = I.height = I.radius;
+  particleSizes = [4, 3, 5];
+  addParticleEffect = function() {
+    return engine.add({
+      "class": "Emitter",
+      duration: 10,
+      sprite: Sprite.EMPTY,
+      velocity: Point(0, 0),
+      particleCount: 12,
+      batchSize: 4,
+      x: I.x + I.width / 2,
+      y: I.y - I.z,
+      generator: {
+        color: Color(0, 255, 0, 0.5),
+        duration: 3,
+        height: function(n) {
+          return particleSizes.wrap(n);
+        },
+        maxSpeed: 5,
+        velocity: function(n) {
+          return Point.fromAngle(Random.angle()).scale(rand(5) + 1);
+        },
+        width: function(n) {
+          return particleSizes.wrap(n);
+        }
+      }
+    });
+  };
   self = Base(I).extend({
     draw: function(canvas) {
-      var bonusRadius, center, shadowColor;
+      var bonusRadius, center, shadowColor, transform;
       center = self.center();
       shadowColor = "rgba(0, 0, 0, 0.15)";
       bonusRadius = (-4 + 256 / I.z).clamp(-4, 4);
       canvas.fillCircle(center.x, center.y, I.radius + bonusRadius, shadowColor);
-      return I.sprite.draw(canvas, I.x, I.y - I.z);
+      transform = Matrix.translation(I.x + I.width / 2, I.y + I.height / 2 - I.z).concat(Matrix.rotation(I.rotation)).concat(Matrix.translation(-I.width / 2, -I.height / 2));
+      return canvas.withTransform(transform, function() {
+        return I.sprite.draw(canvas, 0, 0);
+      });
     }
+  });
+  self.bind("destroy", function() {
+    return addParticleEffect();
   });
   self.bind("step", function() {
     var players;
     self.updatePosition(1);
+    I.rotation += I.rotationalVelocity;
     I.z += I.zVelocity;
     I.zVelocity += I.gravity;
     if (I.z < 48) {
@@ -18239,12 +18275,12 @@ Bottle = function(I) {
       players.each(function(player) {
         if (Collision.circular(player.circle(), self.circle())) {
           player.wipeout(player.center().subtract(self.center()));
-          return I.active = false;
+          return self.destroy();
         }
       });
     }
     if (I.z < 0) {
-      return I.active = false;
+      return self.destroy();
     }
   });
   return self;
@@ -18848,7 +18884,7 @@ Physics = function() {
 };;
 var Player;
 Player = function(I) {
-  var PLAYER_COLORS, actionDown, boostTimeout, controller, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, drawPowerMeters, flyingOffset, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, playerColor, redTeam, rightSkatePos, self, shootPuck, standingOffset;
+  var PLAYER_COLORS, actionDown, addBloodParticleEffect, boostTimeout, controller, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, drawPowerMeters, flyingOffset, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, particleSizes, playerColor, redTeam, rightSkatePos, self, shootPuck, standingOffset;
   $.reverseMerge(I, {
     boost: 0,
     cooldown: {
@@ -18949,6 +18985,34 @@ Player = function(I) {
     circle = self.controlCircle();
     return canvas.fillCircle(circle.x, circle.y, circle.radius, color);
   };
+  particleSizes = [4, 3, 2];
+  addBloodParticleEffect = function(push) {
+    return engine.add({
+      "class": "Emitter",
+      duration: 9,
+      sprite: Sprite.EMPTY,
+      velocity: I.velocity,
+      particleCount: 5,
+      batchSize: 5,
+      x: I.x + I.width / 2,
+      y: I.y + I.height / 2,
+      zIndex: 1 + (I.y + I.height + 1) / CANVAS_HEIGHT,
+      generator: {
+        color: BLOOD_COLOR,
+        duration: 8,
+        height: function(n) {
+          return particleSizes.wrap(n);
+        },
+        maxSpeed: 50,
+        velocity: function(n) {
+          return Point.fromAngle(Random.angle()).scale(rand(5) + 1).add(push);
+        },
+        width: function(n) {
+          return particleSizes.wrap(n);
+        }
+      }
+    });
+  };
   self = Base(I).extend({
     bloody: function() {
       if (I.wipeout) {
@@ -19000,6 +19064,7 @@ Player = function(I) {
       push = push.norm().scale(30);
       Sound.play("hit" + (rand(4)));
       Sound.play("crowd" + (rand(3)));
+      addBloodParticleEffect(push);
       (rand(6) + 3).times(function() {
         return engine.add({
           "class": "Fan"
