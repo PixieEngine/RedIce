@@ -195,6 +195,8 @@ Player = (I) ->
       I.wipeout = 25
       I.blood.face += rand(20) + rand(20) + rand(20) + I.falls
 
+      I.shootPower = 0
+
       push = push.norm().scale(30)
 
       Sound.play("hit#{rand(4)}")
@@ -305,6 +307,8 @@ Player = (I) ->
 
     drawBloodStreaks()
 
+    dontMove = false
+
     movement = Point(0, 0)
 
     if I.cpu
@@ -334,6 +338,8 @@ Player = (I) ->
 
         if I.shootPower == maxShotPower
           I.cooldown.shoot = 5
+
+        dontMove = true
       else if I.shootPower
         I.cooldown.shoot = 4
 
@@ -343,11 +349,11 @@ Player = (I) ->
         I.boost = 10
         movement = movement.scale(I.boost)
 
-      movement = movement.scale(0.75)
+      unless dontMove
+        movement = movement.scale(0.75)
+        I.velocity = I.velocity.add(movement)
 
       I.hasPuck = false
-
-      I.velocity = I.velocity.add(movement)
 
   self.bind 'after_transform', (canvas) ->
     drawPowerMeters(canvas)
