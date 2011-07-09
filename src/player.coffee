@@ -128,8 +128,8 @@ Player = (I) ->
       velocity: I.velocity
       particleCount: 5
       batchSize: 5
-      x: I.x + I.width/2
-      y: I.y + I.height/2
+      x: I.x + I.width/2 + push.x
+      y: I.y + I.height/2 + push.y
       zIndex: 1 + (I.y + I.height + 1)/CANVAS_HEIGHT
       generator:
         color: BLOOD_COLOR
