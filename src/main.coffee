@@ -77,7 +77,7 @@ restartMatch = ->
 startMatch = ->
   window.scoreboard = engine.add
     class: "Scoreboard"
-    periodTime: 5
+    # periodTime: 5
 
   engine.add
     sprite: Sprite.loadByName("corner_left")
