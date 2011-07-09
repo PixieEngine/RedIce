@@ -67,8 +67,12 @@ window.engine = Engine
 Music.play "title_screen"
 
 restartMatch = ->
-  engine.I.objects.clear()
-  startMatch()
+  doRestart = ->
+    engine.I.objects.clear()
+    engine.unbind "afterUpdate", doRestart
+    startMatch()
+
+  engine.bind "afterUpdate", doRestart
 
 startMatch = ->
   window.scoreboard = engine.add
@@ -218,7 +222,7 @@ $(document).bind "keydown", "0", ->
   DEBUG_DRAW = !DEBUG_DRAW
 
 6.times (n) ->
-  $(document).bind "keydown", (n + 1), ->
+  $(document).bind "keydown", (n + 1).toString(), ->
     if scoreboard.gameOver()
       window.config.joystickPlayers = n
       restartMatch()
