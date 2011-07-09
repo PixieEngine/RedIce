@@ -66,9 +66,14 @@ window.engine = Engine
 
 Music.play "title_screen"
 
+restartMatch = ->
+  engine.I.objects.clear()
+  startMatch()
+
 startMatch = ->
-  scoreboard = engine.add
+  window.scoreboard = engine.add
     class: "Scoreboard"
+    periodTime: 5
 
   engine.add
     sprite: Sprite.loadByName("corner_left")
@@ -212,3 +217,8 @@ throwBottles = ->
 $(document).bind "keydown", "0", ->
   DEBUG_DRAW = !DEBUG_DRAW
 
+6.times (n) ->
+  $(document).bind "keydown", (n + 1), ->
+    if scoreboard.gameOver()
+      window.config.joystickPlayers = n
+      restartMatch()
