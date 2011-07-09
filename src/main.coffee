@@ -182,13 +182,10 @@ engineUpdate = ->
   throwBottles() if config.throwBottles
 
   pucks = engine.find("Puck")
-
   players = engine.find("Player").shuffle()
   zambonis = engine.find("Zamboni")
 
-  objects = players.concat zambonis
-
-  objects.push pucks
+  objects = players.concat zambonis, pucks
   playersAndPucks = players.concat pucks
 
   # Puck handling
