@@ -151,9 +151,9 @@ startMatch = ->
   rightGoal.bind "score", ->
     scoreboard.score "home"
 
-  engine.start()
-
   Music.play "music1"
+
+  engine.start()
 
 TitleScreen
   callback: startMatch
