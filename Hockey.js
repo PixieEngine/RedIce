@@ -18424,6 +18424,13 @@ Fan = function(I) {
     y: rand(WALL_TOP).snap(32)
   });
   self = GameObject(I);
+  if (config.throwBottles && !rand(50)) {
+    engine.add({
+      "class": "Bottle",
+      x: I.x,
+      y: I.y
+    });
+  }
   return self;
 };
 Fan.sprites || (Fan.sprites = [Sprite.loadByName("fans_active")]);;
@@ -19063,6 +19070,7 @@ Player = function(I) {
       I.falls += 1;
       I.wipeout = 25;
       I.blood.face += rand(20) + rand(20) + rand(20) + I.falls;
+      I.shootPower = 0;
       push = push.norm().scale(30);
       Sound.play("hit" + (rand(4)));
       Sound.play("crowd" + (rand(3)));
@@ -19166,13 +19174,14 @@ Player = function(I) {
     return _results;
   });
   self.bind("step", function() {
-    var chargePhase, movement;
+    var chargePhase, dontMove, movement;
     I.boost = I.boost.approach(0, 1);
     I.wipeout = I.wipeout.approach(0, 1);
     if (I.velocity.magnitude() !== 0) {
       heading = Point.direction(Point(0, 0), I.velocity);
     }
     drawBloodStreaks();
+    dontMove = false;
     movement = Point(0, 0);
     if (I.cpu) {
       movement = self.computeDirection();
@@ -19203,6 +19212,7 @@ Player = function(I) {
         if (I.shootPower === maxShotPower) {
           I.cooldown.shoot = 5;
         }
+        dontMove = true;
       } else if (I.shootPower) {
         I.cooldown.shoot = 4;
         shootPuck();
@@ -19211,9 +19221,11 @@ Player = function(I) {
         I.boost = 10;
         movement = movement.scale(I.boost);
       }
-      movement = movement.scale(0.75);
-      I.hasPuck = false;
-      return I.velocity = I.velocity.add(movement);
+      if (!dontMove) {
+        movement = movement.scale(0.75);
+        I.velocity = I.velocity.add(movement);
+      }
+      return I.hasPuck = false;
     }
   });
   self.bind('after_transform', function(canvas) {
@@ -19607,7 +19619,7 @@ Zamboni = function(I) {
   return self;
 };;
 App.entities = {};;
-;$(function(){ var DEBUG_DRAW, config, physics, rink, throwBottles;
+;$(function(){ var DEBUG_DRAW, physics, rink, throwBottles;
 Sprite.loadSheet = function(name, tileWidth, tileHeight) {
   var directory, image, sprites, url, _ref;
   directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.images : void 0 : void 0) || "images";
@@ -19637,7 +19649,7 @@ window.ARENA_WIDTH = WALL_RIGHT - WALL_LEFT;
 window.ARENA_HEIGHT = WALL_BOTTOM - WALL_TOP;
 window.BLOOD_COLOR = "#BA1A19";
 window.ICE_COLOR = "rgba(192, 255, 255, 0.2)";
-config = {
+window.config = {
   throwBottles: true,
   players: 6,
   humanPlayers: 2,
@@ -19800,7 +19812,7 @@ TitleScreen({
 Joysticks.init();
 log(Joysticks.status());
 throwBottles = function() {
-  if (!rand(300)) {
+  if (!rand(150)) {
     return engine.add({
       "class": "Bottle",
       x: rand(App.width),
