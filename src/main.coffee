@@ -176,7 +176,7 @@ engine.bind "draw", (canvas) ->
     engine.find("Player, Puck, Goal, Bottle").each (puck) ->
       puck.trigger("drawDebug", canvas)
 
-engine.bind "update", ->
+engineUpdate = ->
   Joysticks.update() if config.joysticks
 
   throwBottles() if config.throwBottles
@@ -208,6 +208,8 @@ engine.bind "update", ->
     splats.each (splat) ->
       if Collision.circular(player.circle(), splat.circle())
         player.bloody()
+
+engine.bind "update", engineUpdate
 
 Joysticks.init()
 log Joysticks.status()
