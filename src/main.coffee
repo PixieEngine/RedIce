@@ -36,7 +36,7 @@ window.ICE_COLOR = "rgba(192, 255, 255, 0.2)"
 window.config =
   throwBottles: true
   players: 6
-  humanPlayers: 2
+  humanPlayers: 6
   keyboardPlayers: 2
   joystickPlayers: 4
   joysticks: true
