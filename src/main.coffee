@@ -221,8 +221,10 @@ throwBottles = ->
 $(document).bind "keydown", "0", ->
   DEBUG_DRAW = !DEBUG_DRAW
 
-6.times (n) ->
-  $(document).bind "keydown", (n + 1).toString(), ->
+6.times (i) ->
+  n = i + 1
+  $(document).bind "keydown", n.toString(), ->
     if scoreboard.gameOver()
       window.config.joystickPlayers = n
       restartMatch()
+
