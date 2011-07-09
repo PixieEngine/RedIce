@@ -12,6 +12,13 @@ Bottle = (I) ->
 
   I.width = I.height = I.radius
 
+  fluidColor = Color(0, 255, 0, 0.5)
+
+  drawSplat = ->
+    3.times ->
+      radius = rand(6) + 3
+      bloodCanvas.fillCircle(I.x + I.width/2, I.y + I.height/2, radius, fluidColor)
+
   particleSizes = [4, 3, 5]
 
   addParticleEffect = ->
@@ -25,7 +32,7 @@ Bottle = (I) ->
       x: I.x + I.width/2
       y: I.y - I.z
       generator:
-        color: Color(0, 255, 0, 0.5)
+        color: fluidColor
         duration: 3
         height: (n) ->
           particleSizes.wrap(n)
@@ -50,6 +57,7 @@ Bottle = (I) ->
 
   self.bind "destroy", ->
     addParticleEffect()
+    drawSplat()
     Sound.play("bottle_hit")
 
   self.bind "step", ->
