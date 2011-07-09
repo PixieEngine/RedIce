@@ -16,8 +16,8 @@ Bottle = (I) ->
 
   drawSplat = ->
     3.times ->
-      radius = rand(6) + 3
-      bloodCanvas.fillCircle(I.x + I.width/2, I.y + I.height/2, radius, fluidColor)
+      radius = rand()*6 + 3
+      bloodCanvas.fillCircle(I.x + I.width/2 + rand * 6, I.y + I.height/2 + rand() * 6, radius, fluidColor)
 
   particleSizes = [4, 3, 5]
 
