@@ -307,7 +307,7 @@ Player = (I) ->
 
     drawBloodStreaks()
 
-    dontMove = false
+    movementScale = 0.75
 
     movement = Point(0, 0)
 
@@ -339,7 +339,7 @@ Player = (I) ->
         if I.shootPower == maxShotPower
           I.cooldown.shoot = 5
 
-        dontMove = true
+        movementScale = 0.1
       else if I.shootPower
         I.cooldown.shoot = 4
 
@@ -349,9 +349,8 @@ Player = (I) ->
         I.boost = 10
         movement = movement.scale(I.boost)
 
-      unless dontMove
-        movement = movement.scale(0.75)
-        I.velocity = I.velocity.add(movement)
+      movement = movement.scale(movementScale)
+      I.velocity = I.velocity.add(movement)
 
       I.hasPuck = false
 
