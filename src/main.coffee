@@ -187,9 +187,10 @@ engine.bind "update", ->
   zambonis = engine.find("Zamboni")
 
   objects = players.concat zambonis
-  objects.push puck
 
-  playersAndPuck = players.concat puck
+  if puck
+    objects.push puck
+    playersAndPuck = players.concat puck
 
   # Puck handling
   players.each (player) ->
