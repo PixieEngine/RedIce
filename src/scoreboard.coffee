@@ -63,5 +63,7 @@ Scoreboard = (I) ->
       if I.time == 0
         nextPeriod()
 
+  self.attrReader "gameOver"
+
   return self
 
