@@ -14,10 +14,14 @@ Bottle = (I) ->
 
   fluidColor = Color(0, 255, 0, 0.5)
 
+  splatSizes = [1, 1, 3, 3, 6]
+
   drawSplat = ->
-    3.times ->
-      radius = rand()*rand()*8 + 3
-      bloodCanvas.fillCircle(I.x + I.width/2 + rand() * 6, I.y + I.height/2 + rand() * 6, radius, fluidColor)
+    splatSizes.each (radius) ->
+      maxOffset = (6 - radius)
+      maxOffset *= maxOffset
+
+      bloodCanvas.fillCircle(I.x + I.width/2 + (rand() - 0.5) * maxOffset, I.y + I.height/2 + (rand() - 0.5) * maxOffset, radius, fluidColor)
 
   particleSizes = [4, 3, 5]
 
