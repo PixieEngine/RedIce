@@ -19657,7 +19657,7 @@ window.config = {
   throwBottles: true,
   players: 6,
   keyboardPlayers: 0,
-  joystickPlayers: 6,
+  joystickPlayers: 0,
   joysticks: true
 };
 rink = Rink();
