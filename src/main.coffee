@@ -36,9 +36,8 @@ window.ICE_COLOR = "rgba(192, 255, 255, 0.2)"
 window.config =
   throwBottles: true
   players: 6
-  humanPlayers: 6
   keyboardPlayers: 2
-  joystickPlayers: 4
+  joystickPlayers: 0
   joysticks: true
 
 rink = Rink()
@@ -112,6 +111,7 @@ TitleScreen
       y: WALL_BOTTOM - 48
       zIndex: 10
 
+    humanPlayers = config.keyboardPlayers + config.joystickPlayers
     config.players.times (i) ->
       y = WALL_TOP + ARENA_HEIGHT*((i/2).floor() + 1)/4
       x = WALL_LEFT + ARENA_WIDTH/2 + ((i%2) - 0.5) * ARENA_WIDTH / 6
@@ -128,7 +128,7 @@ TitleScreen
         controller: controller
         id: i
         team: i % 2
-        cpu: i >= config.humanPlayers
+        cpu: i >= humanPlayers
         joystick: joystick
         x: x
         y: y
