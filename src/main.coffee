@@ -66,136 +66,138 @@ window.engine = Engine
 
 Music.play "title_screen"
 
+startMatch = ->
+  scoreboard = engine.add
+    class: "Scoreboard"
+
+  engine.add
+    sprite: Sprite.loadByName("corner_left")
+    x: 0
+    y: WALL_TOP - 48
+    width: 128
+    zIndex: 1
+
+  engine.add
+    sprite: Sprite.loadByName("corner_left")
+    hflip: true
+    x: WALL_RIGHT - 96
+    y: WALL_TOP - 48
+    width: 128
+    zIndex: 1
+
+  engine.add
+    spriteName: "corner_back_right"
+    hflip: true
+    x: 32
+    y: WALL_BOTTOM - 128
+    zIndex: 2
+
+  engine.add
+    spriteName: "corner_back_right"
+    x: WALL_RIGHT - 96
+    y: WALL_BOTTOM - 128
+    zIndex: 2
+
+  engine.add
+    class: "Boards"
+    sprite: Sprite.loadByName("boards_front")
+    y: WALL_TOP - 48
+    zIndex: 1
+
+  engine.add
+    class: "Boards"
+    sprite: Sprite.loadByName("boards_back")
+    y: WALL_BOTTOM - 48
+    zIndex: 10
+
+  humanPlayers = config.keyboardPlayers + config.joystickPlayers
+  config.players.times (i) ->
+    y = WALL_TOP + ARENA_HEIGHT*((i/2).floor() + 1)/4
+    x = WALL_LEFT + ARENA_WIDTH/2 + ((i%2) - 0.5) * ARENA_WIDTH / 6
+
+    if i < config.keyboardPlayers
+      joystick = false
+      controller = i
+    else
+      joystick = true
+      controller = i - config.keyboardPlayers
+
+    engine.add
+      class: "Player"
+      controller: controller
+      id: i
+      team: i % 2
+      cpu: i >= humanPlayers
+      joystick: joystick
+      x: x
+      y: y
+
+  engine.add
+    class: "Puck"
+
+  leftGoal = engine.add
+    class: "Goal"
+    team: 0
+    x: WALL_LEFT + ARENA_WIDTH/10 - 32
+
+  leftGoal.bind "score", ->
+    scoreboard.score "away"
+
+  rightGoal = engine.add
+    class: "Goal"
+    team: 1
+    x: WALL_LEFT + ARENA_WIDTH*9/10
+
+  rightGoal.bind "score", ->
+    scoreboard.score "home"
+
+  engine.start()
+
+  Music.play "music1"
+
 TitleScreen
-  callback: ->
-    scoreboard = engine.add
-      class: "Scoreboard"
+  callback: startMatch
 
-    engine.add
-      sprite: Sprite.loadByName("corner_left")
-      x: 0
-      y: WALL_TOP - 48
-      width: 128
-      zIndex: 1
+engine.bind "preDraw", (canvas) ->
+  # Draw player shadows
+  engine.find("Player").invoke "drawShadow", canvas
 
-    engine.add
-      sprite: Sprite.loadByName("corner_left")
-      hflip: true
-      x: WALL_RIGHT - 96
-      y: WALL_TOP - 48
-      width: 128
-      zIndex: 1
+engine.bind "draw", (canvas) ->
+  if DEBUG_DRAW
+    engine.find("Player, Puck, Goal, Bottle").each (puck) ->
+      puck.trigger("drawDebug", canvas)
 
-    engine.add
-      spriteName: "corner_back_right"
-      hflip: true
-      x: 32
-      y: WALL_BOTTOM - 128
-      zIndex: 2
+engine.bind "update", ->
+  Joysticks.update() if config.joysticks
 
-    engine.add
-      spriteName: "corner_back_right"
-      x: WALL_RIGHT - 96
-      y: WALL_BOTTOM - 128
-      zIndex: 2
+  throwBottles() if config.throwBottles
 
-    engine.add
-      class: "Boards"
-      sprite: Sprite.loadByName("boards_front")
-      y: WALL_TOP - 48
-      zIndex: 1
+  puck = engine.find("Puck").first()
 
-    engine.add
-      class: "Boards"
-      sprite: Sprite.loadByName("boards_back")
-      y: WALL_BOTTOM - 48
-      zIndex: 10
+  players = engine.find("Player").shuffle()
+  zambonis = engine.find("Zamboni")
 
-    humanPlayers = config.keyboardPlayers + config.joystickPlayers
-    config.players.times (i) ->
-      y = WALL_TOP + ARENA_HEIGHT*((i/2).floor() + 1)/4
-      x = WALL_LEFT + ARENA_WIDTH/2 + ((i%2) - 0.5) * ARENA_WIDTH / 6
+  objects = players.concat zambonis
+  objects.push puck
 
-      if i < config.keyboardPlayers
-        joystick = false
-        controller = i
-      else
-        joystick = true
-        controller = i - config.keyboardPlayers
+  playersAndPuck = players.concat puck
 
-      engine.add
-        class: "Player"
-        controller: controller
-        id: i
-        team: i % 2
-        cpu: i >= humanPlayers
-        joystick: joystick
-        x: x
-        y: y
+  # Puck handling
+  players.each (player) ->
+    return if player.I.wipeout
 
-    engine.add
-      class: "Puck"
+    if Collision.circular(player.controlCircle(), puck.circle())
+      player.controlPuck(puck)
 
-    leftGoal = engine.add
-      class: "Goal"
-      team: 0
-      x: WALL_LEFT + ARENA_WIDTH/10 - 32
+  physics.process(objects)
 
-    leftGoal.bind "score", ->
-      scoreboard.score "away"
+  playersAndPuck.each (player) ->
+    # Blood Collisions
+    splats = engine.find("Blood")
 
-    rightGoal = engine.add
-      class: "Goal"
-      team: 1
-      x: WALL_LEFT + ARENA_WIDTH*9/10
-
-    rightGoal.bind "score", ->
-      scoreboard.score "home"
-
-    engine.bind "preDraw", (canvas) ->
-      # Draw player shadows
-      engine.find("Player").invoke "drawShadow", canvas
-
-    engine.bind "draw", (canvas) ->
-      if DEBUG_DRAW
-        engine.find("Player, Puck, Goal, Bottle").each (puck) ->
-          puck.trigger("drawDebug", canvas)
-
-    engine.bind "update", ->
-      Joysticks.update() if config.joysticks
-
-      throwBottles() if config.throwBottles
-
-      puck = engine.find("Puck").first()
-
-      players = engine.find("Player").shuffle()
-      zambonis = engine.find("Zamboni")
-
-      objects = players.concat zambonis
-      objects.push puck
-
-      playersAndPuck = players.concat puck
-
-      # Puck handling
-      players.each (player) ->
-        return if player.I.wipeout
-
-        if Collision.circular(player.controlCircle(), puck.circle())
-          player.controlPuck(puck)
-
-      physics.process(objects)
-
-      playersAndPuck.each (player) ->
-        # Blood Collisions
-        splats = engine.find("Blood")
-
-        splats.each (splat) ->
-          if Collision.circular(player.circle(), splat.circle())
-            player.bloody()
-
-    engine.start()
-
-    Music.play "music1"
+    splats.each (splat) ->
+      if Collision.circular(player.circle(), splat.circle())
+        player.bloody()
 
 Joysticks.init()
 log Joysticks.status()
