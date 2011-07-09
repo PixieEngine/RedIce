@@ -223,7 +223,7 @@ Player = (I) ->
 
     self.center().add(p)
 
-  shootPuck = ->
+  shootPuck = (direction) ->
     puck = engine.find("Puck").first()
 
     power = I.shootPower
@@ -233,7 +233,7 @@ Player = (I) ->
     # Shot or pass
     if Collision.circular(circle, puck.circle())
 
-      p = Point.fromAngle(heading).scale(baseShotPower + power * 2)
+      p = Point.fromAngle(direction).scale(baseShotPower + power * 2)
       puck.I.velocity = puck.I.velocity.add(p)
 
     I.shootPower = 0
@@ -343,7 +343,7 @@ Player = (I) ->
       else if I.shootPower
         I.cooldown.shoot = 4
 
-        shootPuck()
+        shootPuck(movement.direction())
       else if !I.cooldown.boost && actionDown "B", "X"
         I.cooldown.boost += boostTimeout
         I.boost = 10
