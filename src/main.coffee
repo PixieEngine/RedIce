@@ -181,27 +181,27 @@ engineUpdate = ->
 
   throwBottles() if config.throwBottles
 
-  puck = engine.find("Puck").first()
+  pucks = engine.find("Puck")
 
   players = engine.find("Player").shuffle()
   zambonis = engine.find("Zamboni")
 
   objects = players.concat zambonis
 
-  if puck
-    objects.push puck
-    playersAndPuck = players.concat puck
+  objects.push pucks
+  playersAndPucks = players.concat pucks
 
   # Puck handling
   players.each (player) ->
     return if player.I.wipeout
 
-    if Collision.circular(player.controlCircle(), puck.circle())
-      player.controlPuck(puck)
+    pucks.each (puck) ->
+      if Collision.circular(player.controlCircle(), puck.circle())
+        player.controlPuck(puck)
 
   physics.process(objects)
 
-  playersAndPuck.each (player) ->
+  playersAndPucks.each (player) ->
     # Blood Collisions
     splats = engine.find("Blood")
 
