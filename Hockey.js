@@ -13244,52 +13244,62 @@ $(function() {
         return this.x === other.x && this.y === other.y;
       },
       /**
-       * Calculate the magnitude of this Point (Vector).
-       * @name magnitude
-       * @methodOf Point#
-       *
-       * @returns The magnitude of this point as if it were a vector from (0, 0) -> (x, y).
-       * @type Number
+      Calculate the magnitude of this Point (Vector).
+      @name magnitude
+      @methodOf Point#
+      
+      @returns The magnitude of this point as if it were a vector from (0, 0) -> (x, y).
+      @type Number
       */
       magnitude: function() {
         return Point.distance(Point(0, 0), this);
       },
       /**
-       * Calculate the dot product of this point and another point (Vector).
-       * @name dot
-       * @methodOf Point#
-       *
-       * @param {Point} other The point to dot with this point.
-       * @returns The dot product of this point dot other as a scalar value.
-       * @type Number
+      Returns the direction in radians of this point from the origin.
+      @name direction
+      @methodOf Point#
+      
+      @type Number
+      */
+      direction: function() {
+        return Math.atan2(this.y, this.x);
+      },
+      /**
+      Calculate the dot product of this point and another point (Vector).
+      @name dot
+      @methodOf Point#
+      
+      @param {Point} other The point to dot with this point.
+      @returns The dot product of this point dot other as a scalar value.
+      @type Number
       */
       dot: function(other) {
         return this.x * other.x + this.y * other.y;
       },
       /**
-       * Calculate the cross product of this point and another point (Vector). 
-       * Usually cross products are thought of as only applying to three dimensional vectors,
-       * but z can be treated as zero. The result of this method is interpreted as the magnitude 
-       * of the vector result of the cross product between [x1, y1, 0] x [x2, y2, 0]
-       * perpendicular to the xy plane.
-       * @name cross
-       * @methodOf Point#
-       *
-       * @param {Point} other The point to cross with this point.
-       * @returns The cross product of this point with the other point as scalar value.
-       * @type Number
+      Calculate the cross product of this point and another point (Vector). 
+      Usually cross products are thought of as only applying to three dimensional vectors,
+      but z can be treated as zero. The result of this method is interpreted as the magnitude 
+      of the vector result of the cross product between [x1, y1, 0] x [x2, y2, 0]
+      perpendicular to the xy plane.
+      @name cross
+      @methodOf Point#
+      
+      @param {Point} other The point to cross with this point.
+      @returns The cross product of this point with the other point as scalar value.
+      @type Number
       */
       cross: function(other) {
         return this.x * other.y - other.x * this.y;
       },
       /**
-       * The norm of a vector is the unit vector pointing in the same direction. This method
-       * treats the point as though it is a vector from the origin to (x, y).
-       * @name norm
-       * @methodOf Point#
-       *
-       * @returns The unit vector pointing in the same direction as this vector.
-       * @type Point
+      The norm of a vector is the unit vector pointing in the same direction. This method
+      treats the point as though it is a vector from the origin to (x, y).
+      @name norm
+      @methodOf Point#
+      
+      @returns The unit vector pointing in the same direction as this vector.
+      @type Point
       */
       norm: function(length) {
         if (length == null) {
@@ -13298,24 +13308,24 @@ $(function() {
         return this.scale(length / this.length());
       },
       /**
-       * Computed the length of this point as though it were a vector from (0,0) to (x,y)
-       * @name length
-       * @methodOf Point#
-       *
-       * @returns The length of the vector from the origin to this point.
-       * @type Number
+      Computed the length of this point as though it were a vector from (0,0) to (x,y)
+      @name length
+      @methodOf Point#
+      
+      @returns The length of the vector from the origin to this point.
+      @type Number
       */
       length: function() {
         return Math.sqrt(this.dot(this));
       },
       /**
-       * Computed the Euclidean between this point and another point.
-       * @name distance
-       * @methodOf Point#
-       *
-       * @param {Point} other The point to compute the distance to.
-       * @returns The distance between this point and another point.
-       * @type Number
+      Computed the Euclidean between this point and another point.
+      @name distance
+      @methodOf Point#
+      
+      @param {Point} other The point to compute the distance to.
+      @returns The distance between this point and another point.
+      @type Number
       */
       distance: function(other) {
         return Point.distance(this, other);
@@ -19097,14 +19107,14 @@ Player = function(I) {
     p = Point.fromAngle(heading + Math.TAU / 4).scale(5);
     return self.center().add(p);
   };
-  shootPuck = function() {
+  shootPuck = function(direction) {
     var baseShotPower, circle, p, power, puck;
     puck = engine.find("Puck").first();
     power = I.shootPower;
     circle = self.controlCircle();
     baseShotPower = 15;
     if (Collision.circular(circle, puck.circle())) {
-      p = Point.fromAngle(heading).scale(baseShotPower + power * 2);
+      p = Point.fromAngle(direction).scale(baseShotPower + power * 2);
       puck.I.velocity = puck.I.velocity.add(p);
     }
     return I.shootPower = 0;
@@ -19174,14 +19184,14 @@ Player = function(I) {
     return _results;
   });
   self.bind("step", function() {
-    var chargePhase, dontMove, movement;
+    var chargePhase, movement, movementScale;
     I.boost = I.boost.approach(0, 1);
     I.wipeout = I.wipeout.approach(0, 1);
     if (I.velocity.magnitude() !== 0) {
       heading = Point.direction(Point(0, 0), I.velocity);
     }
     drawBloodStreaks();
-    dontMove = false;
+    movementScale = 0.75;
     movement = Point(0, 0);
     if (I.cpu) {
       movement = self.computeDirection();
@@ -19212,19 +19222,17 @@ Player = function(I) {
         if (I.shootPower === maxShotPower) {
           I.cooldown.shoot = 5;
         }
-        dontMove = true;
+        movementScale = 0.1;
       } else if (I.shootPower) {
         I.cooldown.shoot = 4;
-        shootPuck();
+        shootPuck(movement.direction());
       } else if (!I.cooldown.boost && actionDown("B", "X")) {
         I.cooldown.boost += boostTimeout;
         I.boost = 10;
         movement = movement.scale(I.boost);
       }
-      if (!dontMove) {
-        movement = movement.scale(0.75);
-        I.velocity = I.velocity.add(movement);
-      }
+      movement = movement.scale(movementScale);
+      I.velocity = I.velocity.add(movement);
       return I.hasPuck = false;
     }
   });
@@ -19652,9 +19660,8 @@ window.ICE_COLOR = "rgba(192, 255, 255, 0.2)";
 window.config = {
   throwBottles: true,
   players: 6,
-  humanPlayers: 2,
   keyboardPlayers: 2,
-  joystickPlayers: 4,
+  joystickPlayers: 0,
   joysticks: true
 };
 rink = Rink();
@@ -19677,7 +19684,7 @@ window.engine = Engine({
 Music.play("title_screen");
 TitleScreen({
   callback: function() {
-    var leftGoal, rightGoal, scoreboard;
+    var humanPlayers, leftGoal, rightGoal, scoreboard;
     scoreboard = engine.add({
       "class": "Scoreboard"
     });
@@ -19721,6 +19728,7 @@ TitleScreen({
       y: WALL_BOTTOM - 48,
       zIndex: 10
     });
+    humanPlayers = config.keyboardPlayers + config.joystickPlayers;
     config.players.times(function(i) {
       var controller, joystick, x, y;
       y = WALL_TOP + ARENA_HEIGHT * ((i / 2).floor() + 1) / 4;
@@ -19737,7 +19745,7 @@ TitleScreen({
         controller: controller,
         id: i,
         team: i % 2,
-        cpu: i >= config.humanPlayers,
+        cpu: i >= humanPlayers,
         joystick: joystick,
         x: x,
         y: y
