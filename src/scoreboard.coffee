@@ -53,7 +53,7 @@ Scoreboard = (I) ->
 
   self.bind "update", ->
     if I.time % (20 * 30) == 0
-
+      # No Zamboni very second
       unless I.time == I.periodTime && I.period == 1
         I.reverse = !I.reverse
         engine.add
