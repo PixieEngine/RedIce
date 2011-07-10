@@ -19530,7 +19530,7 @@ TitleScreen = function(I) {
 };;
 var Zamboni;
 Zamboni = function(I) {
-  var SWEEPER_SIZE, cleanIce, generatePath, heading, lastPosition, path, pathIndex, pathfind, self;
+  var SWEEPER_SIZE, addParticleEffect, cleanIce, generatePath, heading, lastPosition, particleColors, particleSizes, path, pathIndex, pathfind, self;
   $.reverseMerge(I, {
     blood: 0,
     color: "yellow",
@@ -19571,6 +19571,39 @@ Zamboni = function(I) {
     return path.push(Point(-10, verticalPoints / 2));
   };
   generatePath();
+  particleSizes = [8, 4, 8, 16, 24, 12];
+  particleColors = ["rgba(255, 0, 128, 0.75)", "#333"];
+  addParticleEffect = function() {
+    var v;
+    v = I.velocity.norm(5);
+    return engine.add({
+      "class": "Emitter",
+      duration: 21,
+      sprite: Sprite.EMPTY,
+      velocity: I.velocity,
+      particleCount: 9,
+      batchSize: 5,
+      x: I.x + I.width / 2,
+      y: I.y + I.height / 2,
+      zIndex: 1 + (I.y + I.height + 1) / CANVAS_HEIGHT,
+      generator: {
+        color: function(n) {
+          return particleColors.wrap(n);
+        },
+        duration: 20,
+        height: function(n) {
+          return particleSizes.wrap(n);
+        },
+        maxSpeed: 50,
+        velocity: function(n) {
+          return Point.fromAngle(Random.angle()).scale(5).add(v);
+        },
+        width: function(n) {
+          return particleSizes.wrap(n);
+        }
+      }
+    });
+  };
   self = Base(I).extend({
     controlCircle: function() {
       return self.circle();
@@ -19585,7 +19618,6 @@ Zamboni = function(I) {
       return false;
     },
     wipeout: function() {
-      Sound.play("explosion");
       return self.destroy();
     }
   });
@@ -19631,6 +19663,10 @@ Zamboni = function(I) {
     I.hflip = heading > 2 * Math.TAU / 8 || heading < -2 * Math.TAU / 8;
     return I.sprite = wideSprites[16 + 8 * (I.blood / 3).floor()];
   });
+  self.bind("destroy", function() {
+    Sound.play("explosion");
+    return addParticleEffect();
+  });
   return self;
 };;
 App.entities = {};;
@@ -19667,8 +19703,8 @@ window.ICE_COLOR = "rgba(192, 255, 255, 0.2)";
 window.config = {
   throwBottles: true,
   players: 6,
-  keyboardPlayers: 0,
-  joystickPlayers: 6,
+  keyboardPlayers: 2,
+  joystickPlayers: 4,
   joysticks: true
 };
 rink = Rink();
