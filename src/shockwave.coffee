@@ -53,7 +53,7 @@ Shockwave = (I) ->
       y: I.y
       radius: Math.max(I.radius - 20, 0)
 
-    engine.find("Player").each (player) ->
+    engine.find("Player, Zamboni").each (player) ->
       playerCircle = player.circle()
       if Collision.circular(playerCircle, maxCircle) && !Collision.circular(playerCircle, minCircle)
         player.wipeout(player.center().subtract(I))
