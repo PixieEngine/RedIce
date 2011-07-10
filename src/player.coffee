@@ -104,7 +104,10 @@ Player = (I) ->
         canvas.fillColor("#000")
         canvas.fillRoundRect(-(padding + height)/2, -padding, maxWidth + 2*padding, height, 2)
 
-        canvas.fillColor("#EE0")
+        if I.shootPower >= maxShotPower && (I.age/2).floor() % 2
+          canvas.fillColor("#0EF")
+        else
+          canvas.fillColor("#EE0")
         canvas.fillRoundRect(-height/2, 0, maxWidth * ratio, height, 2)
 
   drawControlCircle = (canvas) ->
@@ -331,8 +334,6 @@ Player = (I) ->
     else
       if !I.cooldown.shoot && actionDown "A", "Y"
         I.shootPower += 1
-
-        chargePhase = Math.sin(Math.TAU/4 * I.age) * 0.2 * I.shootPower / maxShotPower
 
         movementScale = 0.1
       else if I.shootPower
