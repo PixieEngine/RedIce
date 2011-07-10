@@ -53,10 +53,12 @@ Shockwave = (I) ->
       y: I.y
       radius: Math.max(I.radius - 20, 0)
 
-    engine.find("Player, Zamboni").each (player) ->
-      playerCircle = player.circle()
-      if Collision.circular(playerCircle, maxCircle) && !Collision.circular(playerCircle, minCircle)
-        player.wipeout(player.center().subtract(I))
+    engine.find("Player, Zamboni, Puck").each (object) ->
+      objectCircle = object.circle()
+      if Collision.circular(objectCircle, maxCircle) && !Collision.circular(objectCircle, minCircle)
+        shockwaveForce = object.center().subtract(I).norm(10)
+        object.wipeout(shockwaveForce)
+        object.I.velocity = object.I.velocity.add(shockwaveForce)
 
     I.radius += 10
 
