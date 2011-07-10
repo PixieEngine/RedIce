@@ -5,6 +5,7 @@ Shockwave = (I) ->
     radius: 10
     maxRadius: 150
     offsetHeight: -24
+    zIndex: 3
 
   flameStartColor = "rgba(64, 8, 4, 0.5)"
   flameMiddleColor = "rgba(192, 128, 64, 0.9)"
