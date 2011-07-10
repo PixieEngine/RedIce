@@ -4,7 +4,7 @@ Shockwave = (I) ->
   $.reverseMerge I,
     radius: 10
     maxRadius: 150
-    offsetHeight: -24
+    offsetHeight: -12
     zIndex: 3
 
   flameStartColor = "rgba(64, 8, 4, 0.5)"
