@@ -45,24 +45,25 @@ Zamboni = (I) ->
 
   generatePath()
 
-  particleSizes = [16, 12, 8, 4, 4, 8]
-  particleColor = "rgba(255, 255, 0, 0.5)"
+  particleSizes = [8, 4, 8, 16, 24, 12]
+  particleColors = ["rgba(255, 0, 128, 0.75)", "#333"]
   addParticleEffect = ->
     v = I.velocity.norm(5)
 
     engine.add
       class: "Emitter"
-      duration: 9
+      duration: 21
       sprite: Sprite.EMPTY
       velocity: I.velocity
-      particleCount: 6
-      batchSize: 3
+      particleCount: 9
+      batchSize: 5
       x: I.x + I.width/2
       y: I.y + I.height/2
       zIndex: 1 + (I.y + I.height + 1)/CANVAS_HEIGHT
       generator:
-        color: particleColor
-        duration: 8
+        color: (n) ->
+          particleColors.wrap(n)
+        duration: 20
         height: (n) ->
           particleSizes.wrap(n)
         maxSpeed: 50
