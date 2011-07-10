@@ -19476,6 +19476,81 @@ Scoreboard = function(I) {
   self.attrReader("gameOver");
   return self;
 };;
+var Shockwave;
+Shockwave = function(I) {
+  var constructGradient, flameEndColor, flameMiddleColor, flameStartColor, self, shadowColor, transparentColor;
+  I || (I = {});
+  $.reverseMerge(I, {
+    radius: 10,
+    maxRadius: 150,
+    offsetHeight: -12,
+    zIndex: 3
+  });
+  flameStartColor = "rgba(64, 8, 4, 0.5)";
+  flameMiddleColor = "rgba(192, 128, 64, 0.9)";
+  flameEndColor = "rgba(192, 32, 16, 1)";
+  transparentColor = "rgba(0, 0, 0, 0)";
+  shadowColor = "rgba(0, 0, 0, 0.5)";
+  constructGradient = function(context, min, max, shadow) {
+    var radialGradient, y;
+    if (shadow == null) {
+      shadow = false;
+    }
+    if (shadow) {
+      y = I.y;
+    } else {
+      y = I.y + I.offsetHeight;
+    }
+    radialGradient = context.createRadialGradient(I.x, y, 0, I.x, y, max);
+    if (min > 0) {
+      radialGradient.addColorStop(0, transparentColor);
+      radialGradient.addColorStop((min - 1) / max, transparentColor);
+    }
+    if (shadow) {
+      radialGradient.addColorStop(min / max, shadowColor);
+      radialGradient.addColorStop(1, shadowColor);
+    } else {
+      radialGradient.addColorStop(min / max, flameStartColor);
+      radialGradient.addColorStop((min + max) / (2 * max), flameMiddleColor);
+      radialGradient.addColorStop(1, flameEndColor);
+    }
+    return radialGradient;
+  };
+  self = GameObject(I).extend({
+    draw: function(canvas) {
+      var g, max, min;
+      min = Math.max(I.radius - 20, 0);
+      max = I.radius;
+      g = constructGradient(canvas.context(), min, max, true);
+      canvas.fillCircle(I.x, I.y, max, g);
+      g = constructGradient(canvas.context(), min, max);
+      return canvas.fillCircle(I.x, I.y + I.offsetHeight, max, g);
+    }
+  });
+  self.bind("step", function() {
+    var maxCircle, minCircle;
+    maxCircle = I;
+    minCircle = {
+      x: I.x,
+      y: I.y,
+      radius: Math.max(I.radius - 20, 0)
+    };
+    engine.find("Player, Zamboni, Puck").each(function(object) {
+      var objectCircle, shockwaveForce;
+      objectCircle = object.circle();
+      if (Collision.circular(objectCircle, maxCircle) && !Collision.circular(objectCircle, minCircle)) {
+        shockwaveForce = object.center().subtract(I).norm(20);
+        object.wipeout(shockwaveForce);
+        return object.I.velocity = object.I.velocity.add(shockwaveForce);
+      }
+    });
+    I.radius += 10;
+    if (I.radius > I.maxRadius) {
+      return self.destroy();
+    }
+  });
+  return self;
+};;
 var TitleScreen;
 TitleScreen = function(I) {
   var directory, loadingText, titleScreen, titleScreenImage, titleScreenText, _ref;
@@ -19533,9 +19608,12 @@ Zamboni = function(I) {
   var SWEEPER_SIZE, addParticleEffect, cleanIce, generatePath, heading, lastPosition, particleColors, particleSizes, path, pathIndex, pathfind, self;
   $.reverseMerge(I, {
     blood: 0,
+    careening: false,
     color: "yellow",
+    fuse: 30,
     strength: 5,
     radius: 16,
+    rotation: 0,
     width: 96,
     height: 48,
     speed: 10,
@@ -19615,10 +19693,14 @@ Zamboni = function(I) {
     },
     controlPuck: $.noop,
     collidesWithWalls: function() {
-      return false;
+      return I.careening;
     },
     wipeout: function() {
-      return self.destroy();
+      if (I.careening) {
+        return self.destroy();
+      } else {
+        return I.careening = true;
+      }
     }
   });
   heading = 0;
@@ -19655,17 +19737,30 @@ Zamboni = function(I) {
     }
   };
   self.bind("step", function() {
-    pathfind();
-    heading = Point.direction(Point(0, 0), I.velocity);
-    if (!(I.age < 1)) {
-      cleanIce();
+    if (I.careening) {
+      I.rotation += Math.TAU / 10;
+      I.fuse -= 1;
+      if (I.fuse <= 0) {
+        self.destroy();
+      }
+    } else {
+      pathfind();
+      heading = Point.direction(Point(0, 0), I.velocity);
+      if (!(I.age < 1)) {
+        cleanIce();
+      }
+      I.hflip = heading > 2 * Math.TAU / 8 || heading < -2 * Math.TAU / 8;
     }
-    I.hflip = heading > 2 * Math.TAU / 8 || heading < -2 * Math.TAU / 8;
     return I.sprite = wideSprites[16 + 8 * (I.blood / 3).floor()];
   });
   self.bind("destroy", function() {
     Sound.play("explosion");
-    return addParticleEffect();
+    addParticleEffect();
+    return engine.add({
+      "class": "Shockwave",
+      x: I.x + I.width / 2,
+      y: I.y + I.height / 2
+    });
   });
   return self;
 };;
