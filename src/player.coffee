@@ -96,9 +96,10 @@ Player = (I) ->
     canvas.fillRoundRect(start.x, start.y, maxWidth * ratio, height, 2)
 
     if I.shootPower
+      maxWidth = 40
       height = 5
       ratio = Math.min(I.shootPower / maxShotPower, 1)
-      center = self.center()
+      center = self.center().floor()
       canvas.withTransform Matrix.translation(center.x, center.y).concat(Matrix.rotation(movementDirection)), ->
         canvas.fillColor("#000")
         canvas.fillRoundRect(-(padding + height)/2, -padding, maxWidth + 2*padding, height, 2)
@@ -220,7 +221,7 @@ Player = (I) ->
   shootPuck = (direction) ->
     puck = engine.find("Puck").first()
 
-    power = I.shootPower
+    power = Math.min(I.shootPower, maxShotPower)
     circle = self.controlCircle()
     baseShotPower = 15
 
@@ -332,9 +333,6 @@ Player = (I) ->
         I.shootPower += 1
 
         chargePhase = Math.sin(Math.TAU/4 * I.age) * 0.2 * I.shootPower / maxShotPower
-
-        if I.shootPower == maxShotPower
-          I.cooldown.shoot = 5
 
         movementScale = 0.1
       else if I.shootPower
