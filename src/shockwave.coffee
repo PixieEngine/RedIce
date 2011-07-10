@@ -14,13 +14,12 @@ Shockwave = (I) ->
 
     if min > 0
       radialGradient.addColorStop(0, transparentColor)
-      radialGradient.addColorStop(min - 1, transparentColor)
+      radialGradient.addColorStop((min - 1)/max, transparentColor)
 
-    radialGradient.addColorStop(min, flameStartColor)
-    radialGradient.addColorStop(max, flameEndColor)
+    radialGradient.addColorStop(min / max, flameStartColor)
+    radialGradient.addColorStop(1, flameEndColor)
 
     return radialGradient
-
 
   self = GameObject(I).extend
     draw: (canvas) ->
