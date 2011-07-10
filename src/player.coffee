@@ -146,9 +146,6 @@ Player = (I) ->
         I.blood.leftSkate = (I.blood.leftSkate + rand(10)).clamp(0, 60)
         I.blood.rightSkate = (I.blood.rightSkate + rand(10)).clamp(0, 60)
 
-    #center: ->
-    #  Point(I.x + I.width/2, I.y + I.height/2 + 16)
-
     controlCircle: ->
       p = Point.fromAngle(heading).scale(16)
 
