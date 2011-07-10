@@ -96,14 +96,15 @@ Player = (I) ->
     canvas.fillRoundRect(start.x, start.y, maxWidth * ratio, height, 2)
 
     if I.shootPower
+      height = 5
       ratio = Math.min(I.shootPower / maxShotPower, 1)
       center = self.center()
       canvas.withTransform Matrix.translation(center.x, center.y).concat(Matrix.rotation(movementDirection)), ->
         canvas.fillColor("#000")
-        canvas.fillRoundRect(-padding, -padding, maxWidth + 2*padding, height, 2)
+        canvas.fillRoundRect(-(padding + height)/2, -padding, maxWidth + 2*padding, height, 2)
 
         canvas.fillColor("#EE0")
-        canvas.fillRoundRect(0, 0, maxWidth * ratio, height, 2)
+        canvas.fillRoundRect(-height/2, 0, maxWidth * ratio, height, 2)
 
   drawControlCircle = (canvas) ->
     color = Color(playerColor).lighten(0.10)
