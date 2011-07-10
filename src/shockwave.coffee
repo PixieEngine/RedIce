@@ -4,7 +4,7 @@ Shockwave = (I) ->
   $.reverseMerge I,
     radius: 10
     maxRadius: 150
-    offsetHeight: 24
+    offsetHeight: -24
 
   flameStartColor = "rgba(64, 8, 4, 0.5)"
   flameMiddleColor = "rgba(192, 128, 64, 0.9)"
@@ -14,9 +14,9 @@ Shockwave = (I) ->
 
   constructGradient = (context, min, max, shadow=false) ->
     if shadow
-      y = I.y + I.offsetHeight
-    else
       y = I.y
+    else
+      y = I.y + I.offsetHeight
 
     radialGradient = context.createRadialGradient(I.x, y, 0, I.x, y, max)
 
