@@ -19605,7 +19605,7 @@ TitleScreen = function(I) {
 };;
 var Zamboni;
 Zamboni = function(I) {
-  var SWEEPER_SIZE, addParticleEffect, cleanIce, generatePath, heading, lastPosition, particleColors, particleSizes, path, pathIndex, pathfind, self;
+  var SWEEPER_SIZE, addParticleEffect, cleanIce, drawScorch, generatePath, heading, lastPosition, particleColors, particleSizes, path, pathIndex, pathfind, self;
   $.reverseMerge(I, {
     blood: 0,
     careening: false,
@@ -19682,6 +19682,13 @@ Zamboni = function(I) {
       }
     });
   };
+  drawScorch = function() {
+    var scorch;
+    scorch = Zamboni.scorchSprite;
+    return bloodCanvas.withTransform(Matrix.translation(I.x + I.width / 2 - scorch.width / 2, I.y + I.height / 2 - scorch.height / 2), function() {
+      return scorch.fill(bloodCanvas, 0, 0, scorch.width, scorch.height);
+    });
+  };
   self = Base(I).extend({
     controlCircle: function() {
       return self.circle();
@@ -19756,6 +19763,7 @@ Zamboni = function(I) {
   self.bind("destroy", function() {
     Sound.play("explosion");
     addParticleEffect();
+    drawScorch();
     return engine.add({
       "class": "Shockwave",
       x: I.x + I.width / 2,
@@ -19763,7 +19771,8 @@ Zamboni = function(I) {
     });
   });
   return self;
-};;
+};
+Zamboni.scorchSprite = Sprite.loadByName("scorch");;
 App.entities = {};;
 ;$(function(){ var DEBUG_DRAW, engineUpdate, physics, restartMatch, rink, startMatch, throwBottles;
 Sprite.loadSheet = function(name, tileWidth, tileHeight) {
