@@ -45,6 +45,32 @@ Zamboni = (I) ->
 
   generatePath()
 
+  particleSizes = [16, 12, 8, 4, 4, 8]
+  particleColor = "rgba(255, 255, 0, 0.5)"
+  addParticleEffect = ->
+    v = I.velocity.norm(5)
+
+    engine.add
+      class: "Emitter"
+      duration: 9
+      sprite: Sprite.EMPTY
+      velocity: I.velocity
+      particleCount: 6
+      batchSize: 3
+      x: I.x + I.width/2
+      y: I.y + I.height/2
+      zIndex: 1 + (I.y + I.height + 1)/CANVAS_HEIGHT
+      generator:
+        color: particleColor
+        duration: 8
+        height: (n) ->
+          particleSizes.wrap(n)
+        maxSpeed: 50
+        velocity: (n) ->
+          Point.fromAngle(Random.angle()).scale(5).add(v)
+        width: (n) ->
+          particleSizes.wrap(n)
+
   self = Base(I).extend
     controlCircle: ->
       self.circle()
@@ -54,9 +80,7 @@ Zamboni = (I) ->
     collidesWithWalls: ->
       false
     wipeout: ->
-      #TODO Careen into boards and explode
-      Sound.play "explosion"
-
+      #TODO Careen into boards and THEN explode
       self.destroy()
 
   heading = 0
@@ -110,6 +134,10 @@ Zamboni = (I) ->
     I.hflip = (heading > 2*Math.TAU/8 || heading < -2*Math.TAU/8)
 
     I.sprite = wideSprites[16 + 8*(I.blood/3).floor()]
+
+  self.bind "destroy", ->
+    Sound.play "explosion"
+    addParticleEffect()
 
   self
 
