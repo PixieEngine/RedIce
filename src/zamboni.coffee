@@ -75,6 +75,12 @@ Zamboni = (I) ->
         width: (n) ->
           particleSizes.wrap(n)
 
+  drawScorch = ->
+    scorch = Zamboni.scorchSprite
+
+    bloodCanvas.withTransform Matrix.translation(I.x + I.width/2 - scorch.width/2, I.y + I.height/2 - scorch.height/2), ->
+      scorch.fill bloodCanvas, 0, 0, scorch.width, scorch.height
+
   self = Base(I).extend
     controlCircle: ->
       self.circle()
@@ -151,6 +157,7 @@ Zamboni = (I) ->
   self.bind "destroy", ->
     Sound.play "explosion"
     addParticleEffect()
+    drawScorch()
 
     engine.add
       class: "Shockwave"
@@ -158,4 +165,6 @@ Zamboni = (I) ->
       y: I.y + I.height/2
 
   self
+
+Zamboni.scorchSprite = Sprite.loadByName("scorch")
 
