@@ -56,7 +56,7 @@ Shockwave = (I) ->
     engine.find("Player, Zamboni, Puck").each (object) ->
       objectCircle = object.circle()
       if Collision.circular(objectCircle, maxCircle) && !Collision.circular(objectCircle, minCircle)
-        shockwaveForce = object.center().subtract(I).norm(10)
+        shockwaveForce = object.center().subtract(I).norm(20)
         object.wipeout(shockwaveForce)
         object.I.velocity = object.I.velocity.add(shockwaveForce)
 
