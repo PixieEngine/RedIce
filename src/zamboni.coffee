@@ -140,5 +140,10 @@ Zamboni = (I) ->
     Sound.play "explosion"
     addParticleEffect()
 
+    engine.add
+      class: "Shockwave"
+      x: I.x + I.width/2
+      y: I.y + I.height/2
+
   self
 
