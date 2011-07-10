@@ -18213,7 +18213,7 @@ Boards = function(I) {
 };;
 var Bottle;
 Bottle = function(I) {
-  var addParticleEffect, particleSizes, self;
+  var addParticleEffect, drawSplat, fluidColor, particleSizes, self, splatSizes;
   $.reverseMerge(I, {
     color: "#A00",
     radius: 8,
@@ -18226,6 +18226,16 @@ Bottle = function(I) {
     gravity: -0.25
   });
   I.width = I.height = I.radius;
+  fluidColor = Color(0, 255, 0, 0.5);
+  splatSizes = [2, 2, 2, 3, 4, 6];
+  drawSplat = function() {
+    return splatSizes.each(function(radius) {
+      var maxOffset;
+      maxOffset = 7 - radius;
+      maxOffset *= maxOffset;
+      return bloodCanvas.fillCircle(I.x + I.width / 2 + (rand() - 0.5) * maxOffset, I.y + I.height / 2 + (rand() - 0.5) * maxOffset, radius, fluidColor);
+    });
+  };
   particleSizes = [4, 3, 5];
   addParticleEffect = function() {
     return engine.add({
@@ -18238,7 +18248,7 @@ Bottle = function(I) {
       x: I.x + I.width / 2,
       y: I.y - I.z,
       generator: {
-        color: Color(0, 255, 0, 0.5),
+        color: fluidColor,
         duration: 3,
         height: function(n) {
           return particleSizes.wrap(n);
@@ -18268,6 +18278,7 @@ Bottle = function(I) {
   });
   self.bind("destroy", function() {
     addParticleEffect();
+    drawSplat();
     return Sound.play("bottle_hit");
   });
   self.bind("step", function() {
