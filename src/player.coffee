@@ -320,7 +320,8 @@ Player = (I) ->
 
       movement = movement.norm()
 
-    movementDirection = movement.direction()
+    if movement.x || movement.y
+      movementDirection = movement.direction()
 
     if I.wipeout
       lastLeftSkatePos = null
