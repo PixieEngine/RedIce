@@ -1,9 +1,11 @@
 Zamboni = (I) ->
   $.reverseMerge I,
     blood: 0
+    careening: false
     color: "yellow"
     strength: 5
     radius: 16
+    rotation: 0
     width: 96
     height: 48
     speed: 10
@@ -79,10 +81,12 @@ Zamboni = (I) ->
       I.blood = (I.blood + 1).clamp(0, 6) unless other.puck()
     controlPuck: $.noop
     collidesWithWalls: ->
-      false
+      I.careening
     wipeout: ->
-      #TODO Careen into boards and THEN explode
-      self.destroy()
+      if I.careening
+        self.destroy()
+      else
+        I.careening = true
 
   heading = 0
   lastPosition = null
@@ -126,13 +130,16 @@ Zamboni = (I) ->
       I.velocity = nextTarget.subtract(center).norm().scale(I.speed)
 
   self.bind "step", ->
-    pathfind()
+    if I.careening
+      I.rotation += Math.TAU/10
+    else
+      pathfind()
 
-    heading = Point.direction(Point(0, 0), I.velocity)
+      heading = Point.direction(Point(0, 0), I.velocity)
 
-    cleanIce() unless I.age < 1
+      cleanIce() unless I.age < 1
 
-    I.hflip = (heading > 2*Math.TAU/8 || heading < -2*Math.TAU/8)
+      I.hflip = (heading > 2*Math.TAU/8 || heading < -2*Math.TAU/8)
 
     I.sprite = wideSprites[16 + 8*(I.blood/3).floor()]
 
