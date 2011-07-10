@@ -14,7 +14,7 @@ Bottle = (I) ->
 
   fluidColor = Color(0, 255, 0, 0.5)
 
-  splatSizes = [2, 2, 3, 4, 6]
+  splatSizes = [2, 2, 2, 3, 4, 6]
 
   drawSplat = ->
     splatSizes.each (radius) ->
