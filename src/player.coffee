@@ -49,6 +49,7 @@ Player = (I) ->
   boostTimeout = 20
 
   heading = if redTeam then Math.TAU/2 else 0
+  movementDirection = 0
 
   drawFloatingNameTag = (canvas) ->
     canvas.font("bold 16px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
@@ -95,19 +96,14 @@ Player = (I) ->
     canvas.fillRoundRect(start.x, start.y, maxWidth * ratio, height, 2)
 
     if I.shootPower
-      yExtension = 16
-      ratio = I.shootPower / maxShotPower
-      start = self.position().subtract(Point(0, yExtension)).floor()
-      padding = 1
-      maxHeight = I.height + yExtension
-      width = 3
-      height = maxHeight * ratio
+      ratio = Math.min(I.shootPower / maxShotPower, 1)
+      center = self.center()
+      canvas.withTransform Matrix.translation(center.x, center.y).concat(Matrix.rotation(movementDirection)), ->
+        canvas.fillColor("#000")
+        canvas.fillRoundRect(-padding, -padding, maxWidth + 2*padding, height, 2)
 
-      canvas.fillColor("#000")
-      canvas.fillRoundRect(start.x - padding, start.y - padding, width + 2*padding, maxHeight, 2)
-
-      canvas.fillColor("#EE0")
-      canvas.fillRoundRect(start.x, start.y + maxHeight - height, width, height, 2)
+        canvas.fillColor("#EE0")
+        canvas.fillRoundRect(0, 0, maxWidth * ratio, height, 2)
 
   drawControlCircle = (canvas) ->
     color = Color(playerColor).lighten(0.10)
@@ -327,6 +323,8 @@ Player = (I) ->
 
       movement = movement.norm()
 
+    movementDirection = movement.direction()
+
     if I.wipeout
       lastLeftSkatePos = null
       lastRightSkatePos = null
@@ -343,7 +341,7 @@ Player = (I) ->
       else if I.shootPower
         I.cooldown.shoot = 4
 
-        shootPuck(movement.direction())
+        shootPuck(movementDirection)
       else if !I.cooldown.boost && actionDown "B", "X"
         I.cooldown.boost += boostTimeout
         I.boost = 10
