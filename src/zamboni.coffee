@@ -3,6 +3,7 @@ Zamboni = (I) ->
     blood: 0
     careening: false
     color: "yellow"
+    fuse: 30
     strength: 5
     radius: 16
     rotation: 0
@@ -132,6 +133,10 @@ Zamboni = (I) ->
   self.bind "step", ->
     if I.careening
       I.rotation += Math.TAU/10
+      I.fuse -= 1
+
+      if I.fuse <= 0
+        self.destroy()
     else
       pathfind()
 
