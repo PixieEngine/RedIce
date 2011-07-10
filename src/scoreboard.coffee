@@ -7,6 +7,7 @@ Scoreboard = (I) ->
     }
     period: 0
     periodTime: 1 * 60 * 30
+    reverse: false
     sprite: Sprite.loadByName("scoreboard")
     time: 0
     x: rand(App.width).snap(32)
@@ -21,10 +22,6 @@ Scoreboard = (I) ->
       I.gameOver = true
       #TODO check team scores and choose winner
       #TODO handle ties
-    else if I.period > 1
-      engine.add
-        class: "Zamboni"
-        reverse: I.period % 2
 
   nextPeriod()
 
@@ -55,10 +52,18 @@ Scoreboard = (I) ->
       I.score[team] += 1 unless I.gameOver
 
   self.bind "update", ->
+    if I.time % (20 * 30) == 0
+
+      unless I.time == I.periodTime && I.period == 1
+        I.reverse = !I.reverse
+        engine.add
+          class: "Zamboni"
+          reverse: I.reverse
+
     I.time -= 1
 
     if I.gameOver
-      I.time = 0
+      ; #I.time = 0
     else # Regular play
       if I.time == 0
         nextPeriod()
