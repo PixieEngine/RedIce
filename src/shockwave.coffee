@@ -5,8 +5,8 @@ Shockwave = (I) ->
     radius: 10
     maxRadius: 150
 
-  flameStartColor = "rgba(192, 32, 16, 0.75)"
-  flameEndColor = "rgba(64, 8, 4, 1)"
+  flameStartColor = "rgba(64, 8, 4, 0.5)"
+  flameEndColor = "rgba(192, 32, 16, 1)"
   transparentColor = "rgba(0, 0, 0, 0)"
 
   constructGradient = (context, min, max) ->
@@ -40,7 +40,7 @@ Shockwave = (I) ->
     engine.find("Player").each (player) ->
       playerCircle = player.circle()
       if Collision.circular(playerCircle, maxCircle) && !Collision.circular(playerCircle, minCircle)
-        player.wipeout()
+        player.wipeout(player.center().subtract(I))
 
     I.radius += 10
 
