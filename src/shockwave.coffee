@@ -14,10 +14,10 @@ Shockwave = (I) ->
 
     if min > 0
       radialGradient.addColorStop(0, transparentColor)
-      radialGradient.addColorStor(min - 1, transparentColor)
+      radialGradient.addColorStop(min - 1, transparentColor)
 
-    radialGradient.addColorStor(min, flameStartColor)
-    radialGradient.addColorStor(max, flameEndColor)
+    radialGradient.addColorStop(min, flameStartColor)
+    radialGradient.addColorStop(max, flameEndColor)
 
     return radialGradient
 
