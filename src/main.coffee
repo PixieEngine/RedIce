@@ -167,7 +167,7 @@ startMatch = ->
 TitleScreen
   callback: startMatch
 
-engine.bind "preDraw", (canvas) ->
+engine.bind "beforeDraw", (canvas) ->
   # Draw player shadows
   engine.find("Player").invoke "drawShadow", canvas
 
@@ -175,6 +175,8 @@ engine.bind "draw", (canvas) ->
   if DEBUG_DRAW
     engine.find("Player, Puck, Goal, Bottle").each (puck) ->
       puck.trigger("drawDebug", canvas)
+
+  engine.find("Player").invoke "drawFloatingNameTag", canvas
 
 engineUpdate = ->
   Joysticks.update() if config.joysticks
