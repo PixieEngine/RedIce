@@ -49,7 +49,11 @@ Base = (I) ->
     updatePosition: (dt, noFriction) ->
       if noFriction then friction = 0 else friction = I.friction
 
-      I.velocity = I.velocity.scale((1 - friction * dt))
+      # Optimize to not use any point methods because they create
+      # new points and this is a hotspot in the code
+      frictionFactor = (1 - friction * dt)
+      I.velocity.x *= frictionFactor
+      I.velocity.y *= frictionFactor
 
       I.x += I.velocity.x * dt
       I.y += I.velocity.y * dt
