@@ -60,6 +60,6 @@ Joysticks = ( ->
     plugin?.status
 
   update: ->
-    joysticks = plugin.joysticks
+    joysticks = JSON.parse(plugin.joysticksJSON())
 )()
 
