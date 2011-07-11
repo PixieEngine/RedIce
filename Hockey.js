@@ -16382,11 +16382,11 @@ Drawable = function(I, self) {
     @returns self
     */
     draw: function(canvas) {
-      self.trigger('before_transform', canvas);
+      self.trigger('beforeTransform', canvas);
       canvas.withTransform(self.getTransform(), function(canvas) {
         return self.trigger('draw', canvas);
       });
-      self.trigger('after_transform', canvas);
+      self.trigger('afterTransform', canvas);
       return self;
     },
     /**
@@ -16589,7 +16589,7 @@ Emitterable = function(I, self) {
   
   The current camera transform <b>is</b> applied.
   
-  @name preDraw
+  @name beforeDraw
   @methodOf Engine#
   @event
   */
@@ -16648,7 +16648,7 @@ Emitterable = function(I, self) {
         } else if (I.backgroundColor) {
           canvas.fill(I.backgroundColor);
         }
-        self.trigger("preDraw", canvas);
+        self.trigger("beforeDraw", canvas);
         if (I.zSort) {
           drawObjects = I.objects.copy().sort(function(a, b) {
             return a.I.zIndex - b.I.zIndex;
@@ -18138,13 +18138,15 @@ Base = function(I) {
       }
     },
     updatePosition: function(dt, noFriction) {
-      var friction;
+      var friction, frictionFactor;
       if (noFriction) {
         friction = 0;
       } else {
         friction = I.friction;
       }
-      I.velocity = I.velocity.scale(1 - friction * dt);
+      frictionFactor = 1 - friction * dt;
+      I.velocity.x *= frictionFactor;
+      I.velocity.y *= frictionFactor;
       I.x += I.velocity.x * dt;
       I.y += I.velocity.y * dt;
       I.center.x = I.x + I.width / 2;
@@ -18953,7 +18955,6 @@ Player = function(I) {
   movementDirection = 0;
   drawFloatingNameTag = function(canvas) {
     var backgroundColor, center, lineHeight, name, padding, rectHeight, rectWidth, textWidth, topLeft, yOffset;
-    canvas.font("bold 16px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
     if (I.cpu) {
       name = "CPU";
     } else {
@@ -19013,9 +19014,9 @@ Player = function(I) {
     circle = self.controlCircle();
     return canvas.fillCircle(circle.x, circle.y, circle.radius, color);
   };
-  particleSizes = [4, 3, 2];
+  particleSizes = [5, 4, 3];
   addBloodParticleEffect = function(push) {
-    push = push.norm(15);
+    push = push.norm(13);
     return engine.add({
       "class": "Emitter",
       duration: 9,
@@ -19086,6 +19087,7 @@ Player = function(I) {
         return canvas.fillCircle(base.x + 4, base.y + 16, 16, shadowColor);
       });
     },
+    drawFloatingNameTag: drawFloatingNameTag,
     wipeout: function(push) {
       I.falls += 1;
       I.wipeout = 25;
@@ -19245,10 +19247,7 @@ Player = function(I) {
       return I.hasPuck = false;
     }
   });
-  self.bind('after_transform', function(canvas) {
-    drawPowerMeters(canvas);
-    return drawFloatingNameTag(canvas);
-  });
+  self.bind('afterTransform', drawPowerMeters);
   self.bind("update", function() {
     var cycle, facingOffset, spriteIndex, teamColor;
     I.hflip = heading > 2 * Math.TAU / 8 || heading < -2 * Math.TAU / 8;
@@ -19939,15 +19938,17 @@ startMatch = function() {
 TitleScreen({
   callback: startMatch
 });
-engine.bind("preDraw", function(canvas) {
+engine.bind("beforeDraw", function(canvas) {
   return engine.find("Player").invoke("drawShadow", canvas);
 });
 engine.bind("draw", function(canvas) {
   if (DEBUG_DRAW) {
-    return engine.find("Player, Puck, Goal, Bottle").each(function(puck) {
+    engine.find("Player, Puck, Goal, Bottle").each(function(puck) {
       return puck.trigger("drawDebug", canvas);
     });
   }
+  canvas.font("bold 16px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
+  return engine.find("Player").invoke("drawFloatingNameTag", canvas);
 });
 engineUpdate = function() {
   var objects, players, playersAndPucks, pucks, zambonis;
