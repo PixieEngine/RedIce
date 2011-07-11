@@ -116,9 +116,9 @@ Player = (I) ->
 
     canvas.fillCircle(circle.x, circle.y, circle.radius, color)
 
-  particleSizes = [4, 3, 2]
+  particleSizes = [5, 4, 3]
   addBloodParticleEffect = (push) ->
-    push = push.norm(15)
+    push = push.norm(13)
 
     engine.add
       class: "Emitter"
@@ -350,11 +350,9 @@ Player = (I) ->
 
       I.hasPuck = false
 
-  self.bind 'beforeTransform', (canvas) ->
-    drawPowerMeters(canvas)
+  self.bind 'afterTransform', drawPowerMeters
 
   self.bind "update", ->
-
     I.hflip = (heading > 2*Math.TAU/8 || heading < -2*Math.TAU/8)
 
     if I.wipeout
