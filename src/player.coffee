@@ -52,8 +52,6 @@ Player = (I) ->
   movementDirection = 0
 
   drawFloatingNameTag = (canvas) ->
-    canvas.font("bold 16px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
-
     if I.cpu
       name = "CPU"
     else
@@ -187,6 +185,8 @@ Player = (I) ->
         canvas.fillCircle(base.x - 4, base.y + 16, 16, shadowColor)
         canvas.fillCircle(base.x, base.y + 8, 16, shadowColor)
         canvas.fillCircle(base.x + 4, base.y + 16, 16, shadowColor)
+
+    drawFloatingNameTag: drawFloatingNameTag
 
     wipeout: (push) ->
       I.falls += 1
