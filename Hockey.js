@@ -18603,7 +18603,7 @@ Joysticks = (function() {
       return plugin != null ? plugin.status : void 0;
     },
     update: function() {
-      return joysticks = plugin.joysticks;
+      return joysticks = JSON.parse(plugin.joysticksJSON());
     }
   };
 })();;
