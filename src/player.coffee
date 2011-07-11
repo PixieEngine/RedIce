@@ -350,9 +350,8 @@ Player = (I) ->
 
       I.hasPuck = false
 
-  self.bind 'after_transform', (canvas) ->
+  self.bind 'beforeTransform', (canvas) ->
     drawPowerMeters(canvas)
-    drawFloatingNameTag(canvas)
 
   self.bind "update", ->
 
