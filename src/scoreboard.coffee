@@ -29,8 +29,10 @@ Scoreboard = (I) ->
     draw: (canvas) ->
       I.sprite.draw(canvas, WALL_LEFT + (ARENA_WIDTH - I.sprite.width)/2, 16)
 
-      minutes = (I.time / 30 / 60).floor()
-      seconds = ((I.time / 30).floor() % 60).toString()
+      time = Math.max(I.time, 0)
+
+      minutes = (time / 30 / 60).floor()
+      seconds = ((time / 30).floor() % 60).toString()
 
       if seconds.length == 1
         seconds = "0" + seconds
