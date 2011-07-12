@@ -46,7 +46,7 @@ Player = (I) ->
     actionDown = CONTROLLERS[I.controller].actionDown
 
   maxShotPower = 20
-  boostMeter = 64
+  boostMeter = 96
 
   heading = if redTeam then Math.TAU/2 else 0
   movementDirection = 0
@@ -341,7 +341,7 @@ Player = (I) ->
       else if I.cooldown.boost < boostMeter && actionDown "A", "L", "R"
         I.cooldown.boost += 4
 
-        movement = movement.scale(2)
+        movement = movement.scale(4)
 
       movement = movement.scale(movementScale)
       I.velocity = I.velocity.add(movement)
