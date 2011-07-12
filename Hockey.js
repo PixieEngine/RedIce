@@ -18550,7 +18550,13 @@ Joysticks = (function() {
     "C": 4,
     "D": 8,
     "X": 4,
-    "Y": 8
+    "Y": 8,
+    "R": 32,
+    "RB": 32,
+    "R1": 32,
+    "L": 16,
+    "LB": 16,
+    "L1": 16
   };
   return {
     getController: function(i) {
@@ -18910,7 +18916,7 @@ Physics = function() {
 };;
 var Player;
 Player = function(I) {
-  var PLAYER_COLORS, actionDown, addBloodParticleEffect, boostTimeout, controller, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, drawPowerMeters, flyingOffset, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, movementDirection, particleSizes, playerColor, redTeam, rightSkatePos, self, shootPuck, standingOffset;
+  var PLAYER_COLORS, actionDown, addBloodParticleEffect, boostMeter, controller, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, drawPowerMeters, flyingOffset, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, movementDirection, particleSizes, playerColor, redTeam, rightSkatePos, self, shootPuck, standingOffset;
   $.reverseMerge(I, {
     boost: 0,
     cooldown: {
@@ -18950,7 +18956,7 @@ Player = function(I) {
     actionDown = CONTROLLERS[I.controller].actionDown;
   }
   maxShotPower = 20;
-  boostTimeout = 20;
+  boostMeter = 64;
   heading = redTeam ? Math.TAU / 2 : 0;
   movementDirection = 0;
   drawFloatingNameTag = function(canvas) {
@@ -18977,18 +18983,14 @@ Player = function(I) {
   };
   drawPowerMeters = function(canvas) {
     var center, height, maxWidth, padding, ratio, start;
-    ratio = (boostTimeout - I.cooldown.boost) / boostTimeout;
+    ratio = (boostMeter - I.cooldown.boost) / boostMeter;
     start = self.position().add(Point(0, I.height)).floor();
     padding = 1;
     maxWidth = I.width;
     height = 3;
     canvas.fillColor("#000");
     canvas.fillRoundRect(start.x - padding, start.y - padding, maxWidth + 2 * padding, height + 2 * padding, 2);
-    if (ratio === 1) {
-      canvas.fillColor("#0F0");
-    } else {
-      canvas.fillColor("#080");
-    }
+    canvas.fillColor("#0F0");
     canvas.fillRoundRect(start.x, start.y, maxWidth * ratio, height, 2);
     if (I.shootPower) {
       maxWidth = 40;
@@ -19231,16 +19233,15 @@ Player = function(I) {
       lastLeftSkatePos = null;
       return lastRightSkatePos = null;
     } else {
-      if (!I.cooldown.shoot && actionDown("A", "Y")) {
+      if (!I.cooldown.shoot && actionDown("B", "X")) {
         I.shootPower += 1;
         movementScale = 0.1;
       } else if (I.shootPower) {
         I.cooldown.shoot = 4;
         shootPuck(movementDirection);
-      } else if (!I.cooldown.boost && actionDown("B", "X")) {
-        I.cooldown.boost += boostTimeout;
-        I.boost = 10;
-        movement = movement.scale(I.boost);
+      } else if (I.cooldown.boost < boostMeter && actionDown("A", "L", "R")) {
+        I.cooldown.boost += 4;
+        movement = movement.scale(2);
       }
       movement = movement.scale(movementScale);
       I.velocity = I.velocity.add(movement);
