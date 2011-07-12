@@ -16,6 +16,14 @@ Joysticks = ( ->
     "X": 4
     "Y": 8
 
+    "R": 32
+    "RB": 32
+    "R1": 32
+
+    "L": 16
+    "LB": 16
+    "L1": 16
+
   getController: (i) ->
     actionDown: (buttons...) ->
       if stick = joysticks?[i]
