@@ -341,7 +341,7 @@ Player = (I) ->
       else if I.cooldown.boost < boostMeter && actionDown "A", "L", "R"
         I.cooldown.boost += 4
 
-        movement = movement.scale(3)
+        movement = movement.scale(2)
 
       movement = movement.scale(movementScale)
       I.velocity = I.velocity.add(movement)
