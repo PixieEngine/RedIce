@@ -338,8 +338,8 @@ Player = (I) ->
         I.cooldown.shoot = 4
 
         shootPuck(movementDirection)
-      else if I.cooldown.boost > -boostMeter && actionDown "A", "L", "R"
-        I.cooldown.boost -= 4
+      else if I.cooldown.boost < boostMeter && actionDown "A", "L", "R"
+        I.cooldown.boost += 4
 
         movement = movement.scale(2)
 
