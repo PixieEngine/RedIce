@@ -88,7 +88,10 @@ Player = (I) ->
     canvas.fillColor("#000")
     canvas.fillRoundRect(start.x - padding, start.y - padding, maxWidth + 2*padding, height + 2*padding, 2)
 
-    canvas.fillColor("#0F0")
+    if I.cooldown.boost == 0
+      canvas.fillColor("#0F0")
+    else
+      canvas.fillColor("#080")
     canvas.fillRoundRect(start.x, start.y, maxWidth * ratio, height, 2)
 
     if I.shootPower
@@ -339,9 +342,14 @@ Player = (I) ->
 
         shootPuck(movementDirection)
       else if I.cooldown.boost < boostMeter && actionDown "A", "L", "R"
+        if I.cooldown.boost == 0
+          bonus = 10
+        else
+          bonus = 2
+
         I.cooldown.boost += 4
 
-        movement = movement.scale(2)
+        movement = movement.scale(bonus)
 
       movement = movement.scale(movementScale)
       I.velocity = I.velocity.add(movement)
