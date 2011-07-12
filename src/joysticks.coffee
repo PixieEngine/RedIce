@@ -2,7 +2,7 @@ Joysticks = ( ->
   type = "application/x-boomstickjavascriptjoysticksupport"
   plugin = null
   AXIS_MAX = 32767
-  DEAD_ZONE = 256
+  DEAD_ZONE = AXIS_MAX * 0.125
 
   joysticks = []
 
