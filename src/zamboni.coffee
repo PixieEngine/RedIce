@@ -17,6 +17,7 @@ Zamboni = (I) ->
     zIndex: 10
 
   SWEEPER_SIZE = 48
+  bounds = 256
 
   if I.reverse
     I.x = App.width
@@ -137,6 +138,9 @@ Zamboni = (I) ->
       I.velocity = nextTarget.subtract(center).norm().scale(I.speed)
 
   self.bind "step", ->
+    if I.x < -bounds || I.x > App.width + bounds
+      I.active = false
+
     if I.careening
       I.rotation += Math.TAU/10
       I.fuse -= 1
