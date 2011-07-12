@@ -332,7 +332,7 @@ Player = (I) ->
       lastLeftSkatePos = null
       lastRightSkatePos = null
     else
-      if !I.cooldown.shoot && actionDown "A", "Y"
+      if !I.cooldown.shoot && actionDown "B", "X"
         I.shootPower += 1
 
         movementScale = 0.1
@@ -340,7 +340,7 @@ Player = (I) ->
         I.cooldown.shoot = 4
 
         shootPuck(movementDirection)
-      else if !I.cooldown.boost && actionDown "B", "X"
+      else if !I.cooldown.boost && actionDown "A", "L", "R"
         I.cooldown.boost += boostTimeout
         I.boost = 10
         movement = movement.scale(I.boost)
