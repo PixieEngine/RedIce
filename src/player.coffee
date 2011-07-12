@@ -46,7 +46,7 @@ Player = (I) ->
     actionDown = CONTROLLERS[I.controller].actionDown
 
   maxShotPower = 20
-  boostTimeout = 20
+  boostMeter = 64
 
   heading = if redTeam then Math.TAU/2 else 0
   movementDirection = 0
@@ -79,7 +79,7 @@ Player = (I) ->
     canvas.fillText(name, topLeft.x + padding, topLeft.y + lineHeight + padding/2)
 
   drawPowerMeters = (canvas) ->
-    ratio = (boostTimeout - I.cooldown.boost) / boostTimeout
+    ratio = (boostMeter - I.cooldown.boost) / boostMeter
     start = self.position().add(Point(0, I.height)).floor()
     padding = 1
     maxWidth = I.width
@@ -87,10 +87,8 @@ Player = (I) ->
 
     canvas.fillColor("#000")
     canvas.fillRoundRect(start.x - padding, start.y - padding, maxWidth + 2*padding, height + 2*padding, 2)
-    if ratio == 1
-      canvas.fillColor("#0F0")
-    else
-      canvas.fillColor("#080")
+
+    canvas.fillColor("#0F0")
     canvas.fillRoundRect(start.x, start.y, maxWidth * ratio, height, 2)
 
     if I.shootPower
@@ -340,10 +338,10 @@ Player = (I) ->
         I.cooldown.shoot = 4
 
         shootPuck(movementDirection)
-      else if !I.cooldown.boost && actionDown "A", "L", "R"
-        I.cooldown.boost += boostTimeout
-        I.boost = 10
-        movement = movement.scale(I.boost)
+      else if I.cooldown.boost > - && actionDown "A", "L", "R"
+        I.cooldown.boost -= 4
+
+        movement = movement.scale(2)
 
       movement = movement.scale(movementScale)
       I.velocity = I.velocity.add(movement)
