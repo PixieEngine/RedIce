@@ -18990,7 +18990,11 @@ Player = function(I) {
     height = 3;
     canvas.fillColor("#000");
     canvas.fillRoundRect(start.x - padding, start.y - padding, maxWidth + 2 * padding, height + 2 * padding, 2);
-    canvas.fillColor("#0F0");
+    if (I.cooldown.boost === 0) {
+      canvas.fillColor("#0F0");
+    } else {
+      canvas.fillColor("#080");
+    }
     canvas.fillRoundRect(start.x, start.y, maxWidth * ratio, height, 2);
     if (I.shootPower) {
       maxWidth = 40;
@@ -19198,7 +19202,7 @@ Player = function(I) {
     return _results;
   });
   self.bind("step", function() {
-    var movement, movementScale;
+    var bonus, movement, movementScale;
     I.boost = I.boost.approach(0, 1);
     I.wipeout = I.wipeout.approach(0, 1);
     if (I.velocity.magnitude() !== 0) {
@@ -19240,8 +19244,13 @@ Player = function(I) {
         I.cooldown.shoot = 4;
         shootPuck(movementDirection);
       } else if (I.cooldown.boost < boostMeter && actionDown("A", "L", "R")) {
+        if (I.cooldown.boost === 0) {
+          bonus = 10;
+        } else {
+          bonus = 2;
+        }
         I.cooldown.boost += 4;
-        movement = movement.scale(2);
+        movement = movement.scale(bonus);
       }
       movement = movement.scale(movementScale);
       I.velocity = I.velocity.add(movement);
@@ -19613,7 +19622,7 @@ TitleScreen = function(I) {
 };;
 var Zamboni;
 Zamboni = function(I) {
-  var SWEEPER_SIZE, addParticleEffect, cleanIce, drawScorch, generatePath, heading, lastPosition, particleColors, particleSizes, path, pathIndex, pathfind, self;
+  var SWEEPER_SIZE, addParticleEffect, bounds, cleanIce, drawScorch, generatePath, heading, lastPosition, particleColors, particleSizes, path, pathIndex, pathfind, self;
   $.reverseMerge(I, {
     blood: 0,
     careening: false,
@@ -19632,6 +19641,7 @@ Zamboni = function(I) {
     zIndex: 10
   });
   SWEEPER_SIZE = 48;
+  bounds = 256;
   if (I.reverse) {
     I.x = App.width;
   }
@@ -19752,6 +19762,9 @@ Zamboni = function(I) {
     }
   };
   self.bind("step", function() {
+    if (I.x < -bounds || I.x > App.width + bounds) {
+      I.active = false;
+    }
     if (I.careening) {
       I.rotation += Math.TAU / 10;
       I.fuse -= 1;
