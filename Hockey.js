@@ -18579,6 +18579,12 @@ Joysticks = (function() {
           } else {
             return Point(0, 0);
           }
+        },
+        axis: function(n) {
+          var stick;
+          if (stick = joysticks != null ? joysticks[i] : void 0) {
+            return stick.axes[n];
+          }
         }
       };
     },
@@ -18588,7 +18594,8 @@ Joysticks = (function() {
         plugin.type = type;
         plugin.width = 0;
         plugin.height = 0;
-        return $("body").append(plugin);
+        $("body").append(plugin);
+        return plugin.maxAxes = 6;
       }
     },
     position: function(stick) {
@@ -18916,7 +18923,7 @@ Physics = function() {
 };;
 var Player;
 Player = function(I) {
-  var PLAYER_COLORS, actionDown, addBloodParticleEffect, boostMeter, controller, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, drawPowerMeters, flyingOffset, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, movementDirection, particleSizes, playerColor, redTeam, rightSkatePos, self, shootPuck, standingOffset;
+  var PLAYER_COLORS, actionDown, addBloodParticleEffect, axisPosition, boostMeter, controller, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, drawPowerMeters, flyingOffset, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, movementDirection, particleSizes, playerColor, redTeam, rightSkatePos, self, shootPuck, standingOffset;
   $.reverseMerge(I, {
     boost: 0,
     cooldown: {
@@ -18952,8 +18959,10 @@ Player = function(I) {
   if (I.joystick) {
     controller = Joysticks.getController(I.controller);
     actionDown = controller.actionDown;
+    axisPosition = controller.axis;
   } else {
     actionDown = CONTROLLERS[I.controller].actionDown;
+    axisPosition = $.noop;
   }
   maxShotPower = 20;
   boostMeter = 64;
@@ -19243,7 +19252,7 @@ Player = function(I) {
       } else if (I.shootPower) {
         I.cooldown.shoot = 4;
         shootPuck(movementDirection);
-      } else if (I.cooldown.boost < boostMeter && actionDown("A", "L", "R")) {
+      } else if (I.cooldown.boost < boostMeter && (actionDown("A", "L", "R") || (axisPosition(4) > 0) || (axisPosition(5) > 0))) {
         if (I.cooldown.boost === 0) {
           bonus = 10;
         } else {
@@ -19830,9 +19839,9 @@ window.config = {
   throwBottles: true,
   players: 6,
   keyboardPlayers: 2,
-  joystickPlayers: 0,
-  joysticks: false
+  joystickPlayers: 0
 };
+config.joysticks = config.joystickPlayers > 0;
 rink = Rink();
 physics = Physics();
 window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").appendTo("body").css({
