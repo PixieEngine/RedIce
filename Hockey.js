@@ -18542,7 +18542,7 @@ Joysticks = (function() {
   type = "application/x-boomstickjavascriptjoysticksupport";
   plugin = null;
   AXIS_MAX = 32767;
-  DEAD_ZONE = 256;
+  DEAD_ZONE = AXIS_MAX * 0.125;
   joysticks = [];
   buttonMapping = {
     "A": 1,
@@ -19446,10 +19446,11 @@ Scoreboard = function(I) {
   nextPeriod();
   self = GameObject(I).extend({
     draw: function(canvas) {
-      var minutes, seconds;
+      var minutes, seconds, time;
       I.sprite.draw(canvas, WALL_LEFT + (ARENA_WIDTH - I.sprite.width) / 2, 16);
-      minutes = (I.time / 30 / 60).floor();
-      seconds = ((I.time / 30).floor() % 60).toString();
+      time = Math.max(I.time, 0);
+      minutes = (time / 30 / 60).floor();
+      seconds = ((time / 30).floor() % 60).toString();
       if (seconds.length === 1) {
         seconds = "0" + seconds;
       }
@@ -19829,8 +19830,8 @@ window.config = {
   throwBottles: true,
   players: 6,
   keyboardPlayers: 2,
-  joystickPlayers: 6,
-  joysticks: true
+  joystickPlayers: 0,
+  joysticks: false
 };
 rink = Rink();
 physics = Physics();
