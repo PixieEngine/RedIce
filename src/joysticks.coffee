@@ -38,6 +38,10 @@ Joysticks = ( ->
       else
         Point(0, 0)
 
+    axis: (n) ->
+      if stick = joysticks?[i]
+        stick.axes[n]
+
   init: ->
     unless plugin
       plugin = document.createElement("object")
