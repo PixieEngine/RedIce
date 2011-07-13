@@ -51,6 +51,8 @@ Joysticks = ( ->
 
       $("body").append(plugin)
 
+      plugin.maxAxes = 6
+
   position: (stick) ->
     p = Point(stick.axes[0], stick.axes[1])
 
