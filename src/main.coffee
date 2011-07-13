@@ -37,8 +37,8 @@ window.config =
   throwBottles: true
   players: 6
   keyboardPlayers: 2
-  joystickPlayers: 6
-  joysticks: true
+  joystickPlayers: 0
+  joysticks: false
 
 rink = Rink()
 physics = Physics()
