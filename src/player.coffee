@@ -42,8 +42,10 @@ Player = (I) ->
   if I.joystick
     controller = Joysticks.getController(I.controller)
     actionDown = controller.actionDown
+    axisPosition = controller.axis
   else
     actionDown = CONTROLLERS[I.controller].actionDown
+    axisPosition = $.noop
 
   maxShotPower = 20
   boostMeter = 64
@@ -341,7 +343,7 @@ Player = (I) ->
         I.cooldown.shoot = 4
 
         shootPuck(movementDirection)
-      else if I.cooldown.boost < boostMeter && actionDown "A", "L", "R"
+      else if I.cooldown.boost < boostMeter && (actionDown("A", "L", "R") || (axisPosition(4) > 0) || (axisPosition(5) > 0))
         if I.cooldown.boost == 0
           bonus = 10
         else
