@@ -6853,7 +6853,7 @@ Physics = function() {
 };;
 var Player;
 Player = function(I) {
-  var PLAYER_COLORS, actionDown, addBloodParticleEffect, axisPosition, boostMeter, controller, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, drawPowerMeters, flyingOffset, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, movementDirection, particleSizes, playerColor, redTeam, rightSkatePos, self, shootPuck, standingOffset;
+  var PLAYER_COLORS, actionDown, addSprayParticleEffect, axisPosition, boostMeter, controller, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, drawPowerMeters, flyingOffset, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, movementDirection, particleSizes, playerColor, redTeam, rightSkatePos, self, shootPuck, standingOffset;
   $.reverseMerge(I, {
     boost: 0,
     cooldown: {
@@ -6960,7 +6960,10 @@ Player = function(I) {
     return canvas.fillCircle(circle.x, circle.y, circle.radius, color);
   };
   particleSizes = [5, 4, 3];
-  addBloodParticleEffect = function(push) {
+  addSprayParticleEffect = function(push, color) {
+    if (color == null) {
+      color = BLOOD_COLOR;
+    }
     push = push.norm(13);
     return engine.add({
       "class": "Emitter",
@@ -6973,7 +6976,7 @@ Player = function(I) {
       y: I.y + I.height / 2 + push.y,
       zIndex: 1 + (I.y + I.height + 1) / CANVAS_HEIGHT,
       generator: {
-        color: BLOOD_COLOR,
+        color: color,
         duration: 8,
         height: function(n) {
           return particleSizes.wrap(n);
@@ -7041,7 +7044,7 @@ Player = function(I) {
       push = push.norm().scale(30);
       Sound.play("hit" + (rand(4)));
       Sound.play("crowd" + (rand(3)));
-      addBloodParticleEffect(push);
+      addSprayParticleEffect(push);
       (rand(6) + 3).times(function() {
         return engine.add({
           "class": "Fan"
@@ -7083,11 +7086,11 @@ Player = function(I) {
     if ((blood = I.blood.face) && rand(2) === 0) {
       color = Color(BLOOD_COLOR);
       currentPos = self.center();
-      (rand(I.blood.face) / 3).floor().clamp(1, 8).times(function() {
+      (rand(blood) / 3).floor().clamp(0, 2).times(function() {
         var p;
         I.blood.face -= 1;
         p = currentPos.add(Point.fromAngle(Random.angle()).scale(rand() * rand() * 16));
-        return bloodCanvas.fillCircle(p.x, p.y, (rand(blood / 4) * rand() * rand()).clamp(0, 3), color);
+        return bloodCanvas.fillCircle(p.x, p.y, (rand(blood / 4) * rand() * rand()).clamp(0, 2), color);
       });
     }
     if (I.wipeout) {
@@ -7106,7 +7109,7 @@ Player = function(I) {
         if (skateBlood = I.blood.leftSkate) {
           I.blood.leftSkate -= 1;
           color = BLOOD_COLOR;
-          thickness = (skateBlood / 15).clamp(0, 2);
+          thickness = (skateBlood / 30).clamp(0, 1.5);
         } else {
           color = ICE_COLOR;
           thickness = 1;
@@ -7118,7 +7121,7 @@ Player = function(I) {
         if (skateBlood = I.blood.rightSkate) {
           I.blood.rightSkate -= 1;
           color = BLOOD_COLOR;
-          thickness = (skateBlood / 15).clamp(0, 2);
+          thickness = (skateBlood / 30).clamp(0, 1.5);
         } else {
           color = ICE_COLOR;
           thickness = 1;
@@ -7141,14 +7144,14 @@ Player = function(I) {
     return _results;
   });
   self.bind("step", function() {
-    var bonus, movement, movementScale;
+    var bonus, movement, movementLength, movementScale, velocityLength, velocityNorm;
     I.boost = I.boost.approach(0, 1);
     I.wipeout = I.wipeout.approach(0, 1);
     if (I.velocity.magnitude() !== 0) {
       heading = Point.direction(Point(0, 0), I.velocity);
     }
     drawBloodStreaks();
-    movementScale = 0.75;
+    movementScale = 0.625;
     movement = Point(0, 0);
     if (I.cpu) {
       movement = self.computeDirection();
@@ -7191,8 +7194,17 @@ Player = function(I) {
         I.cooldown.boost += 4;
         movement = movement.scale(bonus);
       }
-      movement = movement.scale(movementScale);
-      I.velocity = I.velocity.add(movement);
+      velocityNorm = I.velocity.norm();
+      velocityLength = I.velocity.length();
+      movementLength = movement.length();
+      if ((velocityLength > 5) && (movement.dot(velocityNorm) < (-0.95) * movementLength)) {
+        addSprayParticleEffect(I.velocity, "rgba(128, 202, 255, 1)");
+        I.velocity.x = 0;
+        I.velocity.y = 0;
+      } else {
+        movement = movement.scale(movementScale);
+        I.velocity = I.velocity.add(movement);
+      }
       return I.hasPuck = false;
     }
   });
@@ -7373,6 +7385,7 @@ Scoreboard = function(I) {
     time: 0,
     x: rand(App.width).snap(32),
     y: rand(WALL_TOP).snap(32),
+    zamboniInterval: 30 * 30,
     zIndex: 10
   });
   nextPeriod = function() {
@@ -7412,7 +7425,7 @@ Scoreboard = function(I) {
     }
   });
   self.bind("update", function() {
-    if (I.time % (20 * 30) === 0) {
+    if (I.time % I.zamboniInterval === 0) {
       if (!(I.time === I.periodTime && I.period === 1)) {
         I.reverse = !I.reverse;
         engine.add({
@@ -7573,7 +7586,7 @@ Zamboni = function(I) {
     rotation: 0,
     width: 96,
     height: 48,
-    speed: 10,
+    speed: 8,
     x: 0,
     y: ARENA_HEIGHT / 2 + WALL_TOP,
     velocity: Point(1, 0),
