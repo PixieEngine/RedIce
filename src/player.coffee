@@ -308,7 +308,7 @@ Player = (I) ->
 
     drawBloodStreaks()
 
-    movementScale = 0.75
+    movementScale = 0.625
 
     movement = Point(0, 0)
 
