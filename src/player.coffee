@@ -355,8 +355,10 @@ Player = (I) ->
 
       # Check cutback
       velocityNorm = I.velocity.norm()
+      velocityLength = I.velocity.length()
+      movementLength = movement.length()
 
-      if (I.velocity.length() > 5) && (movement.dot(velocityNorm) < (-0.95) * movement.length())
+      if (velocityLength > 5) && (movement.dot(velocityNorm) < (-0.95) * movementLength)
         addSprayParticleEffect(I.velocity, "rgba(128, 202, 255, 1)")
 
         I.velocity.x = 0 
