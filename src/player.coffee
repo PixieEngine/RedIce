@@ -271,7 +271,7 @@ Player = (I) ->
           I.blood.leftSkate -= 1
 
           color = BLOOD_COLOR
-          thickness = (skateBlood/15).clamp(0, 2)
+          thickness = (skateBlood/30).clamp(0, 1.5)
         else
           color = ICE_COLOR
           thickness = 1
@@ -284,7 +284,7 @@ Player = (I) ->
           I.blood.rightSkate -= 1
 
           color = BLOOD_COLOR
-          thickness = (skateBlood/15).clamp(0, 2)
+          thickness = (skateBlood/30).clamp(0, 1.5)
         else
           color = ICE_COLOR
           thickness = 1
