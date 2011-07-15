@@ -12,6 +12,7 @@ Scoreboard = (I) ->
     time: 0
     x: rand(App.width).snap(32)
     y: rand(WALL_TOP).snap(32)
+    zamboniInterval: 30 * 30
     zIndex: 10
 
   nextPeriod = () ->
@@ -54,7 +55,7 @@ Scoreboard = (I) ->
       I.score[team] += 1 unless I.gameOver
 
   self.bind "update", ->
-    if I.time % (20 * 30) == 0
+    if I.time % I.zamboniInterval == 0
       # No Zamboni very second
       unless I.time == I.periodTime && I.period == 1
         I.reverse = !I.reverse
