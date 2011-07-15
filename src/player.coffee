@@ -120,7 +120,7 @@ Player = (I) ->
     canvas.fillCircle(circle.x, circle.y, circle.radius, color)
 
   particleSizes = [5, 4, 3]
-  addBloodParticleEffect = (push) ->
+  addSprayParticleEffect = (push, color=BLOOD_COLOR) ->
     push = push.norm(13)
 
     engine.add
@@ -134,7 +134,7 @@ Player = (I) ->
       y: I.y + I.height/2 + push.y
       zIndex: 1 + (I.y + I.height + 1)/CANVAS_HEIGHT
       generator:
-        color: BLOOD_COLOR
+        color: color
         duration: 8
         height: (n) ->
           particleSizes.wrap(n)
@@ -203,7 +203,7 @@ Player = (I) ->
       Sound.play("hit#{rand(4)}")
       Sound.play("crowd#{rand(3)}")
 
-      addBloodParticleEffect(push)
+      addSprayParticleEffect(push)
 
       (rand(6) + 3).times ->
         engine.add
@@ -353,8 +353,17 @@ Player = (I) ->
 
         movement = movement.scale(bonus)
 
-      movement = movement.scale(movementScale)
-      I.velocity = I.velocity.add(movement)
+      # Check cutback
+      velocityNorm = I.velocity.norm()
+
+      if (I.velocity.length() > 5) && (movement.dot(velocityNorm) < (-0.95) * movement.length())
+        addSprayParticleEffect(I.velocity, "rgba(128, 202, 255, 1)")
+
+        I.velocity.x = 0 
+        I.velocity.y = 0
+      else
+        movement = movement.scale(movementScale)
+        I.velocity = I.velocity.add(movement)
 
       I.hasPuck = false
 
