@@ -9,7 +9,7 @@ Zamboni = (I) ->
     rotation: 0
     width: 96
     height: 48
-    speed: 10
+    speed: 8
     x: 0
     y: ARENA_HEIGHT/2 + WALL_TOP
     velocity: Point(1, 0)
