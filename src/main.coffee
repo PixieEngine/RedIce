@@ -183,8 +183,6 @@ engine.bind "draw", (canvas) ->
 engineUpdate = ->
   Joysticks.update() if config.joysticks
 
-  throwBottles() if config.throwBottles
-
   pucks = engine.find("Puck")
   players = engine.find("Player").shuffle()
   zambonis = engine.find("Zamboni")
@@ -214,13 +212,6 @@ engine.bind "update", engineUpdate
 
 Joysticks.init()
 log Joysticks.status()
-
-throwBottles = ->
-  if !rand(150)
-    engine.add
-      class: "Bottle"
-      x: rand App.width
-      y: rand WALL_TOP
 
 $(document).bind "keydown", "0", ->
   DEBUG_DRAW = !DEBUG_DRAW
