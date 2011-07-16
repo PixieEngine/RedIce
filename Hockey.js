@@ -7197,7 +7197,7 @@ Player = function(I) {
       velocityNorm = I.velocity.norm();
       velocityLength = I.velocity.length();
       movementLength = movement.length();
-      if ((velocityLength > 5) && (movement.dot(velocityNorm) < (-0.95) * movementLength)) {
+      if ((velocityLength > 4) && (movement.dot(velocityNorm) < (-0.95) * movementLength)) {
         addSprayParticleEffect(I.velocity, "rgba(128, 202, 255, 1)");
         I.velocity.x = 0;
         I.velocity.y = 0;
@@ -7781,8 +7781,8 @@ window.ICE_COLOR = "rgba(192, 255, 255, 0.2)";
 window.config = {
   throwBottles: true,
   players: 6,
-  keyboardPlayers: 2,
-  joystickPlayers: 0
+  keyboardPlayers: 0,
+  joystickPlayers: 6
 };
 config.joysticks = config.joystickPlayers > 0;
 rink = Rink();
