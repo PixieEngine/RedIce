@@ -251,7 +251,7 @@ Player = (I) ->
         I.blood.face -= 1
         p = currentPos.add(Point.fromAngle(Random.angle()).scale(rand()*rand()*16))
 
-        bloodCanvas.fillCircle(p.x, p.y, (rand(blood/4)*rand()*rand()).clamp(0, 2), color)
+        bloodCanvas.fillCircle(p.x, p.y, (rand(5)*rand()*rand()).clamp(0, 3), color)
 
     if I.wipeout # Body blood streaks
 
