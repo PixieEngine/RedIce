@@ -7090,7 +7090,7 @@ Player = function(I) {
         var p;
         I.blood.face -= 1;
         p = currentPos.add(Point.fromAngle(Random.angle()).scale(rand() * rand() * 16));
-        return bloodCanvas.fillCircle(p.x, p.y, (rand(blood / 4) * rand() * rand()).clamp(0, 2), color);
+        return bloodCanvas.fillCircle(p.x, p.y, (rand(5) * rand() * rand()).clamp(0, 3), color);
       });
     }
     if (I.wipeout) {
@@ -7748,7 +7748,7 @@ Zamboni = function(I) {
 };
 Zamboni.scorchSprite = Sprite.loadByName("scorch");;
 App.entities = {};;
-;$(function(){ var DEBUG_DRAW, engineUpdate, physics, restartMatch, rink, startMatch, throwBottles;
+;$(function(){ var DEBUG_DRAW, engineUpdate, physics, restartMatch, rink, startMatch;
 Sprite.loadSheet = function(name, tileWidth, tileHeight) {
   var directory, image, sprites, url, _ref;
   directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.images : void 0 : void 0) || "images";
@@ -7922,9 +7922,6 @@ engineUpdate = function() {
   if (config.joysticks) {
     Joysticks.update();
   }
-  if (config.throwBottles) {
-    throwBottles();
-  }
   pucks = engine.find("Puck");
   players = engine.find("Player").shuffle();
   zambonis = engine.find("Zamboni");
@@ -7954,15 +7951,6 @@ engineUpdate = function() {
 engine.bind("update", engineUpdate);
 Joysticks.init();
 log(Joysticks.status());
-throwBottles = function() {
-  if (!rand(150)) {
-    return engine.add({
-      "class": "Bottle",
-      x: rand(App.width),
-      y: rand(WALL_TOP)
-    });
-  }
-};
 $(document).bind("keydown", "0", function() {
   return DEBUG_DRAW = !DEBUG_DRAW;
 });
