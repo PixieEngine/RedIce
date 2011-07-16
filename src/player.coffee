@@ -358,7 +358,7 @@ Player = (I) ->
       velocityLength = I.velocity.length()
       movementLength = movement.length()
 
-      if (velocityLength > 5) && (movement.dot(velocityNorm) < (-0.95) * movementLength)
+      if (velocityLength > 4) && (movement.dot(velocityNorm) < (-0.95) * movementLength)
         addSprayParticleEffect(I.velocity, "rgba(128, 202, 255, 1)")
 
         I.velocity.x = 0 
