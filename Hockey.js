@@ -7523,7 +7523,7 @@ Shockwave = function(I) {
 };;
 var TitleScreen;
 TitleScreen = function(I) {
-  var directory, loadingText, titleScreen, titleScreenImage, titleScreenText, _ref;
+  var directory, joysticksConfig, joysticksLabel, loadingText, titleScreen, titleScreenImage, titleScreenText, _ref;
   $.reverseMerge(I, {
     backgroundColor: "#00010D",
     callback: $.noop
@@ -7568,7 +7568,24 @@ TitleScreen = function(I) {
       zIndex: 1
     }
   }).appendTo(titleScreen);
+  joysticksLabel = $("<label />", {
+    text: "Joysticks",
+    css: {
+      position: "absolute",
+      bottom: "10px",
+      right: "10px",
+      zIndex: 2
+    }
+  }).appendTo(titleScreen);
+  joysticksConfig = $("<input />", {
+    checked: false,
+    type: "checkbox"
+  }).appendTo(joysticksLabel);
   return $(document).one("keydown", function() {
+    if (config.joysticks = joysticksConfig.attr("checked")) {
+      config.joystickPlayers = config.players;
+      config.keyboardPlayers = 0;
+    }
     titleScreen.remove();
     return I.callback();
   });
@@ -7781,8 +7798,8 @@ window.ICE_COLOR = "rgba(192, 255, 255, 0.2)";
 window.config = {
   throwBottles: true,
   players: 6,
-  keyboardPlayers: 0,
-  joystickPlayers: 6
+  keyboardPlayers: 2,
+  joystickPlayers: 0
 };
 config.joysticks = config.joystickPlayers > 0;
 rink = Rink();
