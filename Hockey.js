@@ -5996,8 +5996,12 @@ AI = function(I, self) {
       targetPosition = engine.find("Goal").select(function(goal) {
         return goal.team() === I.team;
       }).first().center();
-      targetPosition = targetPosition.add((arenaCenter.subtract(targetPosition)).norm().scale(16));
-      return targetPosition.subtract(self.center()).norm();
+      targetPosition = targetPosition.add((arenaCenter.subtract(targetPosition)).norm(24));
+      if (targetPosition.subtract(self.center()).length() < 1) {
+        return self.center();
+      } else {
+        return targetPosition;
+      }
     },
     youth: function() {
       var targetPosition;
@@ -6008,17 +6012,20 @@ AI = function(I, self) {
       } else {
         targetPosition = engine.find("Puck").first().center();
       }
-      if (targetPosition) {
-        return targetPosition.subtract(self.center()).norm();
-      } else {
-        return Point(0, 0);
-      }
+      return targetPosition || self.center();
     }
   };
   I.role = roles[(I.controller / 2).floor()];
   return {
     computeDirection: function() {
-      return directionAI[I.role]();
+      var deltaPosition, targetPosition;
+      I.AI_TARGET = targetPosition = directionAI[I.role]();
+      deltaPosition = targetPosition.subtract(self.center());
+      if (deltaPosition.length() > 1) {
+        return deltaPosition.norm();
+      } else {
+        return deltaPosition;
+      }
     }
   };
 };;
@@ -7209,6 +7216,13 @@ Player = function(I) {
     }
   });
   self.bind('afterTransform', drawPowerMeters);
+  self.bind('drawDebug', function(canvas) {
+    var x, y, _ref;
+    if (I.AI_TARGET) {
+      _ref = I.AI_TARGET, x = _ref.x, y = _ref.y;
+      return canvas.fillCircle(x, y, 3, "rgba(255, 255, 0, 1)");
+    }
+  });
   self.bind("update", function() {
     var cycle, facingOffset, spriteIndex, teamColor;
     I.hflip = heading > 2 * Math.TAU / 8 || heading < -2 * Math.TAU / 8;
@@ -7371,7 +7385,7 @@ Rink = function(I) {
 Rink.CORNER_RADIUS = 96;;
 var Scoreboard;
 Scoreboard = function(I) {
-  var nextPeriod, self;
+  var endGameChecks, nextPeriod, self;
   $.reverseMerge(I, {
     gameOver: false,
     score: {
@@ -7388,12 +7402,23 @@ Scoreboard = function(I) {
     zamboniInterval: 30 * 30,
     zIndex: 10
   });
+  endGameChecks = function() {
+    if (I.period >= 4) {
+      if (I.score.home > I.score.away) {
+        I.winner = "HOME";
+      } else if (I.score.away > I.score.home) {
+        I.winner = "AWAY";
+      }
+      if (I.winner) {
+        I.gameOver = true;
+        return I.time = 0;
+      }
+    }
+  };
   nextPeriod = function() {
     I.time = I.periodTime;
     I.period += 1;
-    if (I.period === 4) {
-      return I.gameOver = true;
-    }
+    return endGameChecks();
   };
   nextPeriod();
   self = GameObject(I).extend({
@@ -7410,18 +7435,29 @@ Scoreboard = function(I) {
       canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
       canvas.fillText("" + minutes + ":" + seconds, WALL_LEFT + ARENA_WIDTH / 2 - 22, 46);
       canvas.fillText(I.period, WALL_LEFT + ARENA_WIDTH / 2 + 18, 84);
-      canvas.fillText(I.score.home, WALL_LEFT + ARENA_WIDTH / 2 - 72, 60);
-      canvas.fillText(I.score.away, WALL_LEFT + ARENA_WIDTH / 2 + 90, 60);
+      canvas.fillText(I.score.away, WALL_LEFT + ARENA_WIDTH / 2 - 72, 60);
+      canvas.fillText(I.score.home, WALL_LEFT + ARENA_WIDTH / 2 + 90, 60);
       if (I.gameOver) {
         canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
         canvas.fillColor("#000");
-        return canvas.centerText("GAME OVER", 384);
+        canvas.centerText("GAME OVER", 384);
+        if (I.winner === "HOME") {
+          canvas.fillColor("#F00");
+        } else {
+          canvas.fillColor("#00F");
+        }
+        return canvas.centerText("" + I.winner + " WINS", 416);
+      } else if (I.period >= 4) {
+        canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
+        canvas.fillColor("#0F0");
+        return canvas.centerText("SUDDEN DEATH", 120);
       }
     },
     score: function(team) {
       if (!I.gameOver) {
-        return I.score[team] += 1;
+        I.score[team] += 1;
       }
+      return endGameChecks();
     }
   });
   self.bind("update", function() {
@@ -7599,7 +7635,7 @@ Zamboni = function(I) {
     color: "yellow",
     fuse: 30,
     strength: 5,
-    radius: 16,
+    radius: 20,
     rotation: 0,
     width: 96,
     height: 48,
@@ -7906,7 +7942,7 @@ startMatch = function() {
     x: WALL_LEFT + ARENA_WIDTH / 10 - 32
   });
   leftGoal.bind("score", function() {
-    return scoreboard.score("away");
+    return scoreboard.score("home");
   });
   rightGoal = engine.add({
     "class": "Goal",
@@ -7914,7 +7950,7 @@ startMatch = function() {
     x: WALL_LEFT + ARENA_WIDTH * 9 / 10
   });
   rightGoal.bind("score", function() {
-    return scoreboard.score("home");
+    return scoreboard.score("away");
   });
   Music.play("music1");
   return engine.start();
@@ -7927,8 +7963,8 @@ engine.bind("beforeDraw", function(canvas) {
 });
 engine.bind("draw", function(canvas) {
   if (DEBUG_DRAW) {
-    engine.find("Player, Puck, Goal, Bottle").each(function(puck) {
-      return puck.trigger("drawDebug", canvas);
+    engine.find("Player, Puck, Goal, Bottle, Zamboni").each(function(object) {
+      return object.trigger("drawDebug", canvas);
     });
   }
   canvas.font("bold 16px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
