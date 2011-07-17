@@ -59,6 +59,13 @@ Scoreboard = (I) ->
         canvas.fillColor("#000")
         canvas.centerText("GAME OVER", 384)
 
+        if I.winner == "HOME"
+          canvas.fillColor("#00F")
+        else
+          canvas.fillColor("#F00")
+
+        canvas.centerText("#{I.winner} WINS", 416)
+
     score: (team) ->
       I.score[team] += 1 unless I.gameOver
 
