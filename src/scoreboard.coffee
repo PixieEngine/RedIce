@@ -15,14 +15,22 @@ Scoreboard = (I) ->
     zamboniInterval: 30 * 30
     zIndex: 10
 
+  endGameChecks = ->
+    if I.period >= 4
+      if I.score.home > I.score.away
+        I.winner = "HOME"
+      else if I.score.away > I.score.home
+        I.winner = "AWAY"
+
+      if I.winner
+        I.gameOver = true
+        I.time = 0
+
   nextPeriod = () ->
     I.time = I.periodTime
     I.period += 1
 
-    if I.period == 4
-      I.gameOver = true
-      #TODO check team scores and choose winner
-      #TODO handle ties
+    endGameChecks()
 
   nextPeriod()
 
@@ -53,6 +61,8 @@ Scoreboard = (I) ->
 
     score: (team) ->
       I.score[team] += 1 unless I.gameOver
+
+      endGameChecks()
 
   self.bind "update", ->
     if I.time % I.zamboniInterval == 0
