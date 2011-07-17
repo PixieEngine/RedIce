@@ -60,15 +60,15 @@ Scoreboard = (I) ->
         canvas.centerText("GAME OVER", 384)
 
         if I.winner == "HOME"
-          canvas.fillColor("#00F")
-        else
           canvas.fillColor("#F00")
+        else
+          canvas.fillColor("#00F")
 
         canvas.centerText("#{I.winner} WINS", 416)
       else if I.period >= 3
         canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
         canvas.fillColor("#0F0")
-        canvas.centerText("SUDDEN DEATH", 280)
+        canvas.centerText("SUDDEN DEATH", 120)
 
     score: (team) ->
       I.score[team] += 1 unless I.gameOver
