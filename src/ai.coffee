@@ -13,7 +13,7 @@ AI = (I, self) ->
         goal.team() == I.team
       .first().center()
 
-      targetPosition.add((arenaCenter.subtract(targetPosition)).norm(-64))
+      targetPosition = targetPosition.add((arenaCenter.subtract(targetPosition)).norm(24))
 
       if targetPosition.subtract(self.center()).length() < 1
         self.center()
