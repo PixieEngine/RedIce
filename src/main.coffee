@@ -174,8 +174,8 @@ engine.bind "beforeDraw", (canvas) ->
 
 engine.bind "draw", (canvas) ->
   if DEBUG_DRAW
-    engine.find("Player, Puck, Goal, Bottle").each (puck) ->
-      puck.trigger("drawDebug", canvas)
+    engine.find("Player, Puck, Goal, Bottle, Zamboni").each (object) ->
+      object.trigger("drawDebug", canvas)
 
   canvas.font("bold 16px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
   engine.find("Player").invoke "drawFloatingNameTag", canvas
