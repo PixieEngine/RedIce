@@ -13,7 +13,12 @@ AI = (I, self) ->
         goal.team() == I.team
       .first().center()
 
-      targetPosition.add((arenaCenter.subtract(targetPosition)).norm().scale(16))
+      targetPosition.add((arenaCenter.subtract(targetPosition)).norm(-64))
+
+      if targetPosition.subtract(self.center()).length() < 1
+        self.center()
+      else
+        targetPosition
 
     youth: ->
       if I.hasPuck
@@ -29,7 +34,7 @@ AI = (I, self) ->
   I.role = roles[(I.controller / 2).floor()]
 
   computeDirection: ->
-    targetPosition = directionAI[I.role]()
+    I.AI_TARGET = targetPosition = directionAI[I.role]()
 
     deltaPosition = targetPosition.subtract(self.center())
 
