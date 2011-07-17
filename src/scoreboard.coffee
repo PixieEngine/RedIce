@@ -51,8 +51,8 @@ Scoreboard = (I) ->
       canvas.fillText("#{minutes}:#{seconds}", WALL_LEFT + ARENA_WIDTH/2 - 22, 46)
       canvas.fillText(I.period, WALL_LEFT + ARENA_WIDTH/2 + 18, 84)
 
-      canvas.fillText(I.score.home, WALL_LEFT + ARENA_WIDTH/2 - 72, 60)
-      canvas.fillText(I.score.away, WALL_LEFT + ARENA_WIDTH/2 + 90, 60)
+      canvas.fillText(I.score.away, WALL_LEFT + ARENA_WIDTH/2 - 72, 60)
+      canvas.fillText(I.score.home, WALL_LEFT + ARENA_WIDTH/2 + 90, 60)
 
       if I.gameOver
         canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
@@ -65,6 +65,10 @@ Scoreboard = (I) ->
           canvas.fillColor("#F00")
 
         canvas.centerText("#{I.winner} WINS", 416)
+      else if I.period >= 3
+        canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
+        canvas.fillColor("#0F0")
+        canvas.centerText("SUDDEN DEATH", 280)
 
     score: (team) ->
       I.score[team] += 1 unless I.gameOver

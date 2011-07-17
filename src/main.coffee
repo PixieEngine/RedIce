@@ -151,7 +151,7 @@ startMatch = ->
     x: WALL_LEFT + ARENA_WIDTH/10 - 32
 
   leftGoal.bind "score", ->
-    scoreboard.score "away"
+    scoreboard.score "home"
 
   rightGoal = engine.add
     class: "Goal"
@@ -159,7 +159,7 @@ startMatch = ->
     x: WALL_LEFT + ARENA_WIDTH*9/10
 
   rightGoal.bind "score", ->
-    scoreboard.score "home"
+    scoreboard.score "away"
 
   Music.play "music1"
 
