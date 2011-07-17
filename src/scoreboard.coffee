@@ -65,7 +65,7 @@ Scoreboard = (I) ->
           canvas.fillColor("#00F")
 
         canvas.centerText("#{I.winner} WINS", 416)
-      else if I.period >= 3
+      else if I.period >= 4
         canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
         canvas.fillColor("#0F0")
         canvas.centerText("SUDDEN DEATH", 120)
