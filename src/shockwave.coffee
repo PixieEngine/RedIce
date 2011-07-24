@@ -68,12 +68,13 @@ Shockwave = (I) ->
 
     return radialGradient
 
-  self = GameObject(I).extend
-    create:
-      Sound.play "explosion"
-      addParticleEffect()
-      drawScorch()
+  #TODO: Get the create binding to be more legit
+  I.create = ->
+    Sound.play "explosion"
+    addParticleEffect()
+    drawScorch()
 
+  self = GameObject(I).extend
     draw: (canvas) ->
       min = Math.max(I.radius - 20, 0)
       max = I.radius
