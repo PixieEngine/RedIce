@@ -13,6 +13,39 @@ Shockwave = (I) ->
   transparentColor = "rgba(0, 0, 0, 0)"
   shadowColor = "rgba(0, 0, 0, 0.5)"
 
+  drawScorch = ->
+    scorch = Shockwave.scorchSprite
+
+    bloodCanvas.withTransform Matrix.translation(I.x - scorch.width/2, I.y - scorch.height/2), ->
+      scorch.fill bloodCanvas, 0, 0, scorch.width, scorch.height
+
+  particleSizes = [8, 4, 8, 16, 24, 12]
+  particleColors = ["rgba(255, 0, 128, 0.75)", "#333"]
+  addParticleEffect = ->
+    v = I.velocity.norm(5)
+
+    engine.add
+      class: "Emitter"
+      duration: 21
+      sprite: Sprite.EMPTY
+      velocity: I.velocity
+      particleCount: 9
+      batchSize: 5
+      x: I.x
+      y: I.y
+      zIndex: 3
+      generator:
+        color: (n) ->
+          particleColors.wrap(n)
+        duration: 20
+        height: (n) ->
+          particleSizes.wrap(n)
+        maxSpeed: 50
+        velocity: (n) ->
+          Point.fromAngle(Random.angle()).scale(5).add(v)
+        width: (n) ->
+          particleSizes.wrap(n)
+
   constructGradient = (context, min, max, shadow=false) ->
     if shadow
       y = I.y
@@ -65,4 +98,12 @@ Shockwave = (I) ->
     if I.radius > I.maxRadius
       self.destroy()
 
+  self.bind "create", ->
+    Sound.play "explosion"
+    addParticleEffect()
+    drawScorch()
+
   self
+
+Shockwave.scorchSprite = Sprite.loadByName("scorch")
+
