@@ -25,6 +25,9 @@ Scoreboard = (I) ->
       if I.winner
         I.gameOver = true
         I.time = 0
+      else if I.period == 4
+        engine.find("Goal").each (goal) ->
+          goal.suddenDeath(true)
 
   nextPeriod = () ->
     I.time = I.periodTime
