@@ -6130,11 +6130,16 @@ AI = function(I, self) {
   roles = ["youth", "goalie", "youth"];
   directionAI = {
     goalie: function() {
-      var targetPosition;
-      targetPosition = engine.find("Goal").select(function(goal) {
+      var ownGoal, targetPosition;
+      ownGoal = engine.find("Goal").select(function(goal) {
         return goal.team() === I.team;
-      }).first().center();
-      targetPosition = targetPosition.add((arenaCenter.subtract(targetPosition)).norm(24));
+      }).first();
+      if (ownGoal) {
+        targetPosition = ownGoal.center();
+        targetPosition = targetPosition.add((arenaCenter.subtract(targetPosition)).norm(24));
+      } else {
+        targetPosition = self.center();
+      }
       if (targetPosition.subtract(self.center()).length() < 1) {
         return self.center();
       } else {
@@ -6142,11 +6147,14 @@ AI = function(I, self) {
       }
     },
     youth: function() {
-      var targetPosition;
+      var opposingGoal, targetPosition;
       if (I.hasPuck) {
-        targetPosition = engine.find("Goal").select(function(goal) {
+        opposingGoal = engine.find("Goal").select(function(goal) {
           return goal.team() !== I.team;
-        }).first().center();
+        }).first();
+        if (opposingGoal) {
+          targetPosition = opposingGoal.center();
+        }
       } else {
         targetPosition = engine.find("Puck").first().center();
       }
@@ -6541,7 +6549,8 @@ Goal = function(I) {
     width: WIDTH,
     x: WALL_LEFT + ARENA_WIDTH / 20 - WIDTH,
     y: WALL_TOP + ARENA_HEIGHT / 2 - HEIGHT / 2,
-    spriteOffset: Point(0, -(HEIGHT - 2))
+    spriteOffset: Point(0, -(HEIGHT - 2)),
+    suddenDeath: false
   });
   walls = [
     {
@@ -6589,8 +6598,19 @@ Goal = function(I) {
     },
     score: function() {
       self.trigger("score");
-      return Sound.play("crowd" + (rand(3)));
+      Sound.play("crowd" + (rand(3)));
+      if (I.suddenDeath) {
+        return self.destroy();
+      }
     }
+  });
+  self.bind("destroy", function() {
+    return engine.add({
+      "class": "Shockwave",
+      x: I.x + I.width / 2,
+      y: I.y + I.height / 2,
+      velocity: Point(0, 1)
+    });
   });
   self.bind("drawDebug", function(canvas) {
     canvas.fillColor("rgba(255, 0, 255, 0.5)");
@@ -6608,6 +6628,7 @@ Goal = function(I) {
     return I.zIndex = 1 + (I.y + I.height) / CANVAS_HEIGHT;
   });
   self.attrReader("team");
+  self.attrAccessor("suddenDeath");
   return self;
 };;
 var Music;
@@ -7463,6 +7484,10 @@ Scoreboard = function(I) {
       if (I.winner) {
         I.gameOver = true;
         return I.time = 0;
+      } else if (I.period === 4) {
+        return engine.find("Goal").each(function(goal) {
+          return goal.suddenDeath(true);
+        });
       }
     }
   };
@@ -7535,7 +7560,7 @@ Scoreboard = function(I) {
 };;
 var Shockwave;
 Shockwave = function(I) {
-  var constructGradient, flameEndColor, flameMiddleColor, flameStartColor, self, shadowColor, transparentColor;
+  var addParticleEffect, constructGradient, drawScorch, flameEndColor, flameMiddleColor, flameStartColor, particleColors, particleSizes, self, shadowColor, transparentColor;
   I || (I = {});
   $.reverseMerge(I, {
     radius: 10,
@@ -7548,6 +7573,46 @@ Shockwave = function(I) {
   flameEndColor = "rgba(192, 32, 16, 1)";
   transparentColor = "rgba(0, 0, 0, 0)";
   shadowColor = "rgba(0, 0, 0, 0.5)";
+  drawScorch = function() {
+    var scorch;
+    scorch = Shockwave.scorchSprite;
+    return bloodCanvas.withTransform(Matrix.translation(I.x - scorch.width / 2, I.y - scorch.height / 2), function() {
+      return scorch.fill(bloodCanvas, 0, 0, scorch.width, scorch.height);
+    });
+  };
+  particleSizes = [8, 4, 8, 16, 24, 12];
+  particleColors = ["rgba(255, 0, 128, 0.75)", "#333"];
+  addParticleEffect = function() {
+    var v;
+    v = I.velocity.norm(5);
+    return engine.add({
+      "class": "Emitter",
+      duration: 21,
+      sprite: Sprite.EMPTY,
+      velocity: I.velocity,
+      particleCount: 9,
+      batchSize: 5,
+      x: I.x,
+      y: I.y,
+      zIndex: 3,
+      generator: {
+        color: function(n) {
+          return particleColors.wrap(n);
+        },
+        duration: 20,
+        height: function(n) {
+          return particleSizes.wrap(n);
+        },
+        maxSpeed: 50,
+        velocity: function(n) {
+          return Point.fromAngle(Random.angle()).scale(5).add(v);
+        },
+        width: function(n) {
+          return particleSizes.wrap(n);
+        }
+      }
+    });
+  };
   constructGradient = function(context, min, max, shadow) {
     var radialGradient, y;
     if (shadow == null) {
@@ -7572,6 +7637,11 @@ Shockwave = function(I) {
       radialGradient.addColorStop(1, flameEndColor);
     }
     return radialGradient;
+  };
+  I.create = function() {
+    Sound.play("explosion");
+    addParticleEffect();
+    return drawScorch();
   };
   self = GameObject(I).extend({
     draw: function(canvas) {
@@ -7607,7 +7677,8 @@ Shockwave = function(I) {
     }
   });
   return self;
-};;
+};
+Shockwave.scorchSprite = Sprite.loadByName("scorch");;
 var TitleScreen;
 TitleScreen = function(I) {
   var directory, joysticksConfig, joysticksLabel, loadingText, titleScreen, titleScreenImage, titleScreenText, _ref;
@@ -7679,7 +7750,7 @@ TitleScreen = function(I) {
 };;
 var Zamboni;
 Zamboni = function(I) {
-  var SWEEPER_SIZE, addParticleEffect, bounds, cleanIce, drawScorch, generatePath, heading, lastPosition, particleColors, particleSizes, path, pathIndex, pathfind, self;
+  var SWEEPER_SIZE, bounds, cleanIce, generatePath, heading, lastPosition, path, pathIndex, pathfind, self;
   $.reverseMerge(I, {
     blood: 0,
     careening: false,
@@ -7724,46 +7795,6 @@ Zamboni = function(I) {
     return path.push(Point(-10, verticalPoints / 2));
   };
   generatePath();
-  particleSizes = [8, 4, 8, 16, 24, 12];
-  particleColors = ["rgba(255, 0, 128, 0.75)", "#333"];
-  addParticleEffect = function() {
-    var v;
-    v = I.velocity.norm(5);
-    return engine.add({
-      "class": "Emitter",
-      duration: 21,
-      sprite: Sprite.EMPTY,
-      velocity: I.velocity,
-      particleCount: 9,
-      batchSize: 5,
-      x: I.x + I.width / 2,
-      y: I.y + I.height / 2,
-      zIndex: 1 + (I.y + I.height + 1) / CANVAS_HEIGHT,
-      generator: {
-        color: function(n) {
-          return particleColors.wrap(n);
-        },
-        duration: 20,
-        height: function(n) {
-          return particleSizes.wrap(n);
-        },
-        maxSpeed: 50,
-        velocity: function(n) {
-          return Point.fromAngle(Random.angle()).scale(5).add(v);
-        },
-        width: function(n) {
-          return particleSizes.wrap(n);
-        }
-      }
-    });
-  };
-  drawScorch = function() {
-    var scorch;
-    scorch = Zamboni.scorchSprite;
-    return bloodCanvas.withTransform(Matrix.translation(I.x + I.width / 2 - scorch.width / 2, I.y + I.height / 2 - scorch.height / 2), function() {
-      return scorch.fill(bloodCanvas, 0, 0, scorch.width, scorch.height);
-    });
-  };
   self = Base(I).extend({
     controlCircle: function() {
       return self.circle();
@@ -7839,18 +7870,15 @@ Zamboni = function(I) {
     return I.sprite = wideSprites[16 + 8 * (I.blood / 3).floor()];
   });
   self.bind("destroy", function() {
-    Sound.play("explosion");
-    addParticleEffect();
-    drawScorch();
     return engine.add({
       "class": "Shockwave",
       x: I.x + I.width / 2,
-      y: I.y + I.height / 2
+      y: I.y + I.height / 2,
+      velocity: I.velocity
     });
   });
   return self;
-};
-Zamboni.scorchSprite = Sprite.loadByName("scorch");;
+};;
 App.entities = {};;
 ;$(function(){ var DEBUG_DRAW, engineUpdate, physics, restartMatch, rink, startMatch;
 Sprite.loadSheet = function(name, tileWidth, tileHeight) {
