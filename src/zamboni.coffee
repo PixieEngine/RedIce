@@ -49,39 +49,6 @@ Zamboni = (I) ->
 
   generatePath()
 
-  particleSizes = [8, 4, 8, 16, 24, 12]
-  particleColors = ["rgba(255, 0, 128, 0.75)", "#333"]
-  addParticleEffect = ->
-    v = I.velocity.norm(5)
-
-    engine.add
-      class: "Emitter"
-      duration: 21
-      sprite: Sprite.EMPTY
-      velocity: I.velocity
-      particleCount: 9
-      batchSize: 5
-      x: I.x + I.width/2
-      y: I.y + I.height/2
-      zIndex: 1 + (I.y + I.height + 1)/CANVAS_HEIGHT
-      generator:
-        color: (n) ->
-          particleColors.wrap(n)
-        duration: 20
-        height: (n) ->
-          particleSizes.wrap(n)
-        maxSpeed: 50
-        velocity: (n) ->
-          Point.fromAngle(Random.angle()).scale(5).add(v)
-        width: (n) ->
-          particleSizes.wrap(n)
-
-  drawScorch = ->
-    scorch = Zamboni.scorchSprite
-
-    bloodCanvas.withTransform Matrix.translation(I.x + I.width/2 - scorch.width/2, I.y + I.height/2 - scorch.height/2), ->
-      scorch.fill bloodCanvas, 0, 0, scorch.width, scorch.height
-
   self = Base(I).extend
     controlCircle: ->
       self.circle()
@@ -159,16 +126,10 @@ Zamboni = (I) ->
     I.sprite = wideSprites[16 + 8*(I.blood/3).floor()]
 
   self.bind "destroy", ->
-    Sound.play "explosion"
-    addParticleEffect()
-    drawScorch()
-
     engine.add
       class: "Shockwave"
       x: I.x + I.width/2
       y: I.y + I.height/2
 
   self
-
-Zamboni.scorchSprite = Sprite.loadByName("scorch")
 
