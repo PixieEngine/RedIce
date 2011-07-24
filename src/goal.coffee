@@ -13,6 +13,7 @@ Goal = (I) ->
     x: WALL_LEFT + ARENA_WIDTH/20 - WIDTH
     y: WALL_TOP + ARENA_HEIGHT/2 - HEIGHT/2
     spriteOffset: Point(0, -(HEIGHT-2))
+    suddenDeath: false
 
   walls = [{
     center: Point(I.x + I.width/2, I.y)
@@ -63,6 +64,16 @@ Goal = (I) ->
       self.trigger "score"
       Sound.play("crowd#{rand(3)}")
 
+      if I.suddenDeath
+        self.destroy()
+
+  self.bind "destroy", ->
+    engine.add
+      class: "Shockwave"
+      x: I.x + I.width/2
+      y: I.y + I.height/2
+      velocity: Point(0, 1)
+
   self.bind "drawDebug", (canvas) ->
     # Draw goal area
     canvas.fillColor("rgba(255, 0, 255, 0.5)")
@@ -81,6 +92,7 @@ Goal = (I) ->
     I.zIndex = 1 + (I.y + I.height)/CANVAS_HEIGHT
 
   self.attrReader "team"
+  self.attrAccessor "suddenDeath"
 
   return self
 
