@@ -130,6 +130,7 @@ Zamboni = (I) ->
       class: "Shockwave"
       x: I.x + I.width/2
       y: I.y + I.height/2
+      velocity: I.velocity
 
   self
 
