@@ -9,11 +9,15 @@ AI = (I, self) ->
 
   directionAI = 
     goalie: ->
-      targetPosition = engine.find("Goal").select (goal) ->
+      ownGoal = engine.find("Goal").select (goal) ->
         goal.team() == I.team
-      .first().center()
+      .first()
 
-      targetPosition = targetPosition.add((arenaCenter.subtract(targetPosition)).norm(24))
+      if ownGoal
+        targetPosition = ownGoal.center()
+        targetPosition = targetPosition.add((arenaCenter.subtract(targetPosition)).norm(24))
+      else
+        targetPosition = self.center()
 
       if targetPosition.subtract(self.center()).length() < 1
         self.center()
@@ -22,9 +26,12 @@ AI = (I, self) ->
 
     youth: ->
       if I.hasPuck
-        targetPosition = engine.find("Goal").select (goal) ->
+        opposingGoal = engine.find("Goal").select (goal) ->
           goal.team() != I.team
-        .first().center()
+        .first()
+
+        if opposingGoal
+          targetPosition = opposingGoal.center()
 
       else
         targetPosition = engine.find("Puck").first().center()
