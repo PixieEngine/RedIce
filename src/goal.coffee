@@ -15,17 +15,7 @@ Goal = (I) ->
     spriteOffset: Point(0, -(HEIGHT-2))
     suddenDeath: false
 
-  walls = [{
-    center: Point(I.x + I.width/2, I.y)
-    halfWidth: I.width/2
-    halfHeight: WALL_RADIUS
-    horizontal: true
-  }, {
-    center: Point(I.x + I.width/2, I.y + I.height)
-    halfWidth: I.width/2
-    halfHeight: WALL_RADIUS
-    horizontal: true
-  }]
+  walls = []
 
   if I.team
     walls.push
@@ -39,6 +29,18 @@ Goal = (I) ->
       halfWidth: WALL_RADIUS
       halfHeight: I.height/2
       killSide: 1
+
+  walls.push {
+    center: Point(I.x + I.width/2, I.y)
+    halfWidth: I.width/2
+    halfHeight: WALL_RADIUS
+    horizontal: true
+  }, {
+    center: Point(I.x + I.width/2, I.y + I.height)
+    halfWidth: I.width/2
+    halfHeight: WALL_RADIUS
+    horizontal: true
+  }
 
   drawWall = (wall, canvas) ->
     canvas.fillColor("#0F0")
