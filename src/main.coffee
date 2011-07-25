@@ -78,7 +78,7 @@ restartMatch = ->
 startMatch = ->
   window.scoreboard = engine.add
     class: "Scoreboard"
-    # periodTime: 1
+    # periodTime: 120
     # period: 3
 
   engine.add
