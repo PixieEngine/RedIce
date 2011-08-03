@@ -5549,7 +5549,7 @@ Joysticks = (function() {
   type = "application/x-boomstickjavascriptjoysticksupport";
   plugin = null;
   AXIS_MAX = 32767;
-  DEAD_ZONE = AXIS_MAX * 0.125;
+  DEAD_ZONE = AXIS_MAX * 0.2;
   joysticks = [];
   buttonMapping = {
     "A": 1,
@@ -6552,19 +6552,7 @@ Goal = function(I) {
     spriteOffset: Point(0, -(HEIGHT - 2)),
     suddenDeath: false
   });
-  walls = [
-    {
-      center: Point(I.x + I.width / 2, I.y),
-      halfWidth: I.width / 2,
-      halfHeight: WALL_RADIUS,
-      horizontal: true
-    }, {
-      center: Point(I.x + I.width / 2, I.y + I.height),
-      halfWidth: I.width / 2,
-      halfHeight: WALL_RADIUS,
-      horizontal: true
-    }
-  ];
+  walls = [];
   if (I.team) {
     walls.push({
       center: Point(I.x + I.width, I.y + I.height / 2),
@@ -6580,6 +6568,17 @@ Goal = function(I) {
       killSide: 1
     });
   }
+  walls.push({
+    center: Point(I.x + I.width / 2, I.y),
+    halfWidth: I.width / 2,
+    halfHeight: WALL_RADIUS,
+    horizontal: true
+  }, {
+    center: Point(I.x + I.width / 2, I.y + I.height),
+    halfWidth: I.width / 2,
+    halfHeight: WALL_RADIUS,
+    horizontal: true
+  });
   drawWall = function(wall, canvas) {
     canvas.fillColor("#0F0");
     return canvas.fillRect(wall.center.x - wall.halfWidth, wall.center.y - wall.halfHeight, 2 * wall.halfWidth, 2 * wall.halfHeight);
