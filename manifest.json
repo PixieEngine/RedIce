@@ -1,12 +1,12 @@
 {
   "name": "Red Ice",
-  "description": "Battle your opponents in this fast-paced 3v3 hockey game. Watch out for rogue ice resurfacing machines and fans throwing bottles! Do you have what it takes to survive?",
+  "description": "Battle your opponents in this fast-paced 3v3 hockey game. Watch out for rogue ice resurfacing machines and fans throwing bottles! Do",
   "app": {
     "launch": {
       "local_path": "webstore/main.html"
     }
   },
-  "version": "0.0.1",
+  "version": "0.0.3",
   "icons": {
     "128": "webstore/images/icon_128.png",
     "96": "webstore/images/icon_96.png",

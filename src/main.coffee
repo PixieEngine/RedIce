@@ -62,6 +62,7 @@ window.engine = Engine
   canvas: $("canvas").powerCanvas()
   clear: true
   excludedModules: ["HUD"]
+  includedModules: ["Joysticks"]
   showFPS: true
   zSort: true
 
@@ -182,8 +183,6 @@ engine.bind "draw", (canvas) ->
   engine.find("Player").invoke "drawFloatingNameTag", canvas
 
 engineUpdate = ->
-  Joysticks.update() if config.joysticks
-
   pucks = engine.find("Puck")
   players = engine.find("Player").shuffle()
   zambonis = engine.find("Zamboni")
@@ -210,9 +209,6 @@ engineUpdate = ->
         player.bloody()
 
 engine.bind "update", engineUpdate
-
-Joysticks.init()
-log Joysticks.status()
 
 $(document).bind "keydown", "0", ->
   DEBUG_DRAW = !DEBUG_DRAW
