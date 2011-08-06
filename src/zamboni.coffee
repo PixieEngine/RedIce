@@ -76,7 +76,7 @@ Zamboni = (I) ->
       Point(SWEEPER_SIZE, SWEEPER_SIZE)
       Point(SWEEPER_SIZE/2, SWEEPER_SIZE)
     ].map (p) ->
-      self.getTransform().transformPoint(p)
+      self.transform().transformPoint(p)
 
     bloodCanvas.compositeOperation "destination-out"
     bloodCanvas.globalAlpha 0.25
