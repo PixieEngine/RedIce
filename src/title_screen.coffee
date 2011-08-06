@@ -3,8 +3,6 @@ TitleScreen = (I) ->
     backgroundColor: "#00010D"
     callback: $.noop
 
-  directory = App?.directories?.images || "images"
-
   titleScreen = $ "<div />",
     css:
       backgroundColor: I.backgroundColor
@@ -21,7 +19,7 @@ TitleScreen = (I) ->
 
   titleScreenImage = $ "<img />",
     height: App.height
-    src: "#{BASE_URL}/#{directory}/title.png"
+    src: ResourceLoader.urlFor("images", "title")
     width: App.width
   .appendTo(titleScreen)
 
