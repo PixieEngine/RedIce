@@ -115,6 +115,7 @@ gameState = titleScreenUpdate = ->
           $.extend config.players[id],
             name: playerConfig.name
             team: if playerConfig.team is -1 then 0 else 1
+            joystick: true
 
         startMatch()
 
