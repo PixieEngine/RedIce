@@ -89,6 +89,11 @@ gameState = titleScreenUpdate = ->
       titleScreen.trigger("next")
       initPlayerData()
 
+      engine.add
+        class: "Configurator"
+        x: 240
+        y: 240
+
 matchSetupUpdate = ->
   controllers.each (controller, i) ->
     if config.players[i].cpu && controller.actionDown "ANY"
