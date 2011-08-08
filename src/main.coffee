@@ -77,7 +77,7 @@ join = (i) ->
       name: name
       cpu: false
 
-titleScreenUpdate = ->
+gameState = titleScreenUpdate = ->
   controllers.each (controller, i) ->
     if controller.actionDown "ANY"
       titleScreen.trigger("next")
@@ -87,6 +87,33 @@ matchSetupUpdate = ->
   controllers.each (controller, i) ->
     if config.players[i].cpu && controller.actionDown "ANY"
       join(i)
+
+matchPlayUpdate = ->
+  pucks = engine.find("Puck")
+  players = engine.find("Player").shuffle()
+  zambonis = engine.find("Zamboni")
+
+  objects = players.concat zambonis, pucks
+  playersAndPucks = players.concat pucks
+
+  # Puck handling
+  players.each (player) ->
+    return if player.I.wipeout
+
+    pucks.each (puck) ->
+      if Collision.circular(player.controlCircle(), puck.circle())
+        player.controlPuck(puck)
+
+  physics.process(objects)
+
+  playersAndPucks.each (player) ->
+    # Blood Collisions
+    splats = engine.find("Blood")
+
+    splats.each (splat) ->
+      if Collision.circular(player.circle(), splat.circle())
+        player.bloody()
+
 
 controllers = []
 MAX_PLAYERS.times (i) ->
@@ -176,8 +203,7 @@ startMatch = ->
   engine.start()
 
 nameEntry = ->
-
-
+  gameState = matchSetupUpdate
 
 titleScreen = TitleScreen
   callback: nameEntry
@@ -196,30 +222,7 @@ engine.bind "draw", (canvas) ->
   engine.find("Player").invoke "drawFloatingNameTag", canvas
 
 engineUpdate = ->
-  pucks = engine.find("Puck")
-  players = engine.find("Player").shuffle()
-  zambonis = engine.find("Zamboni")
-
-  objects = players.concat zambonis, pucks
-  playersAndPucks = players.concat pucks
-
-  # Puck handling
-  players.each (player) ->
-    return if player.I.wipeout
-
-    pucks.each (puck) ->
-      if Collision.circular(player.controlCircle(), puck.circle())
-        player.controlPuck(puck)
-
-  physics.process(objects)
-
-  playersAndPucks.each (player) ->
-    # Blood Collisions
-    splats = engine.find("Blood")
-
-    splats.each (splat) ->
-      if Collision.circular(player.circle(), splat.circle())
-        player.bloody()
+  gameState()
 
 engine.bind "update", engineUpdate
 
@@ -237,9 +240,6 @@ initPlayerData = ->
       y: y
       team: i % 2
       cpu: true
-
-$(document).one "keydown", ->
-  titleScreen.trigger("next")
 
 $(document).bind "keydown", "0", ->
   DEBUG_DRAW = !DEBUG_DRAW
