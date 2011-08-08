@@ -67,6 +67,7 @@ join = (i) ->
 
   nameEntry = engine.add
     class: "NameEntry"
+    color: Player.COLORS[i]
     controller: controllers[i]
     x:  i * (App.width / MAX_PLAYERS)
     y:  20
