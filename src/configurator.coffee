@@ -3,8 +3,8 @@ Configurator = (I) ->
     font: "bold 14px 'Monaco', 'Inconsolata', 'consolas', 'Courier New', 'andale mono', 'lucida console', 'monospace'"
     players: []
     teamColors:
-      "-1": "#0246E3"
-      "1": "#EB070E"
+      "-1": Color("#0246E3")
+      "1": Color("#EB070E")
 
   lineHeight = 11
   verticalPadding = 4
@@ -40,7 +40,7 @@ Configurator = (I) ->
 
   self.bind "step", ->
     6.times (i) ->
-      if player = I.players[i] && player.team
+      if (player = I.players[i]) && player.team
         controller = engine.controller(i)
 
         if controller.actionDown("A")
