@@ -23,16 +23,6 @@ Player = (I) ->
     velocity: Point()
     zIndex: 1
 
-  PLAYER_COLORS = [
-    "#0246E3" # Blue
-    "#EB070E" # Red
-    "#388326" # Green
-    "#F69508" # Orange
-    "#563495" # Purple
-    "#58C4F5" # Cyan
-    "#FFDE49" # Yellow
-  ]
-
   CPU_COLOR = "#888"
 
   if I.cpu
