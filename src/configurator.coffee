@@ -21,7 +21,10 @@ Configurator = (I) ->
 
           nameWidth = canvas.measureText(player.name)
           if color = I.teamColors[player.team]
-            color.a(0.5) if player.ready
+            if player.ready
+              color.a(1)
+            else
+              color.a(0.5)
           else
             color = player.color
 
