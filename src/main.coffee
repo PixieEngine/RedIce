@@ -53,6 +53,7 @@ bloodCanvas.strokeColor(BLOOD_COLOR)
 # bloodCanvas.fill(BLOOD_COLOR) # For zamboni testing
 
 DEBUG_DRAW = false
+MAX_PLAYERS = 6
 
 window.engine = Engine
   canvas: $("canvas").powerCanvas()
@@ -61,6 +62,10 @@ window.engine = Engine
   includedModules: ["Joysticks"]
   showFPS: true
   zSort: true
+
+controllers = []
+MAX_PLAYERS.times (i) ->
+  controller = controllers[i] = engine.controller(i)
 
 Music.play "title_screen"
 
@@ -144,8 +149,14 @@ startMatch = ->
 
   engine.start()
 
-TitleScreen
-  callback: startMatch
+nameEntry = ->
+  MAX_PLAYERS.times (i) ->
+    engine.add
+      class: "NameEntry"
+      controller: controllers[i]
+
+titleScreen = TitleScreen
+  callback: nameEntry
 
 engine.bind "beforeDraw", (canvas) ->
   # Draw player shadows
@@ -188,6 +199,8 @@ engineUpdate = ->
 
 engine.bind "update", engineUpdate
 
+engine.start()
+
 6.times (i) ->
   # Player positioning
   y = WALL_TOP + ARENA_HEIGHT*((i/2).floor() + 1)/4
@@ -199,6 +212,9 @@ engine.bind "update", engineUpdate
     y: y
     team: i % 2
     cpu: true
+
+$(document).one "keydown", ->
+  titleScreen.trigger("next")
 
 $(document).bind "keydown", "0", ->
   DEBUG_DRAW = !DEBUG_DRAW
