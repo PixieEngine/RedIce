@@ -24,7 +24,7 @@ Configurator = (I) ->
           canvas.fillText(player.name, x + horizontalPadding, y + lineHeight + verticalPadding)
 
     addPlayer: (player) ->
-      players.push player
+      I.players.push player
 
   return self
 
