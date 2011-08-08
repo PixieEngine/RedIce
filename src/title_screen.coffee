@@ -43,26 +43,10 @@ TitleScreen = (I) ->
       zIndex: 1
   .appendTo(titleScreen)
 
-  joysticksLabel = $ "<label />",
-    text: "Joysticks"
-    css:
-      position: "absolute"
-      bottom: "10px"
-      right: "10px"
-      zIndex: 2
-  .appendTo(titleScreen)
-
-  joysticksConfig = $ "<input />",
-    checked: false
-    type: "checkbox"
-  .appendTo(joysticksLabel)
-
-  $(document).one "keydown", ->
-    if config.joysticks = joysticksConfig.attr("checked")
-      config.joystickPlayers = config.players
-      config.keyboardPlayers = 0
-
+  titleScreen.one "next", ->
     titleScreen.remove()
 
     I.callback()
+
+  return titleScreen
 
