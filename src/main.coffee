@@ -150,11 +150,13 @@ startMatch = ->
   engine.start()
 
 nameEntry = ->
+  entryHeight = 200
   MAX_PLAYERS.times (i) ->
     engine.add
       class: "NameEntry"
       controller: controllers[i]
       x:  i * (App.width / MAX_PLAYERS)
+      y:  App.height - entryHeight
 
 titleScreen = TitleScreen
   callback: nameEntry
