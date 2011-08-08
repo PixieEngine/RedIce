@@ -274,6 +274,7 @@ initPlayerData = ->
       x: x
       y: y
       team: i % 2
+      joystick: true
       cpu: true
 
 $(document).bind "keydown", "0", ->
