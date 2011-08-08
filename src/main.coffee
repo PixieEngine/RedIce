@@ -154,6 +154,7 @@ nameEntry = ->
     engine.add
       class: "NameEntry"
       controller: controllers[i]
+      x:  i * (App.width / MAX_PLAYERS)
 
 titleScreen = TitleScreen
   callback: nameEntry
