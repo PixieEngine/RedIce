@@ -65,8 +65,11 @@ window.engine = Engine
 join = (i) ->
   config.players[i].cpu = false
 
+  backgroundColor = Color(Player.COLORS[i])
+  backgroundColor.a(0.5)
+
   nameEntry = engine.add
-    backgroundColor: Color(Player.COLORS[i]).transparentize(0.25)
+    backgroundColor: backgroundColor
     class: "NameEntry"
     controller: controllers[i]
     x:  i * (App.width / MAX_PLAYERS)
