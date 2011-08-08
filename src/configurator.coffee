@@ -12,7 +12,7 @@ Configurator = (I) ->
       canvas.font I.font
 
       canvas.withTransform Matrix.translation(I.x, I.y), ->
-        players.each (player, i) ->
+        I.players.each (player, i) ->
           y = i * 40
           x = (player.team + 1) * 150
 
