@@ -68,7 +68,7 @@ join = (i) ->
   backgroundColor = Color(Player.COLORS[i])
   backgroundColor.a(0.5)
 
-  cursorColor = backgroundColor.lighten(0.4)
+  cursorColor = backgroundColor.lighten(0.25)
 
   nameEntry = engine.add
     backgroundColor: backgroundColor
