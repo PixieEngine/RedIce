@@ -57,5 +57,7 @@ Configurator = (I) ->
     if readyPlayers.length == activePlayers && readyPlayers.length > 0
       self.trigger "done"
 
+  self.attrReader "players"
+
   return self
 
