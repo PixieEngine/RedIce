@@ -23,5 +23,8 @@ Configurator = (I) ->
           canvas.fillColor("#FFF")
           canvas.fillText(player.name, x + horizontalPadding, y + lineHeight + verticalPadding)
 
+    addPlayer: (player) ->
+      players.push player
+
   return self
 
