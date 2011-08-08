@@ -35,11 +35,7 @@ window.ICE_COLOR = "rgba(192, 255, 255, 0.2)"
 
 window.config =
   throwBottles: true
-  players: 6
-  keyboardPlayers: 2
-  joystickPlayers: 0
-
-config.joysticks = config.joystickPlayers > 0
+  players: []
 
 rink = Rink()
 physics = Physics()
@@ -122,27 +118,8 @@ startMatch = ->
     y: WALL_BOTTOM - 48
     zIndex: 10
 
-  humanPlayers = config.keyboardPlayers + config.joystickPlayers
-  config.players.times (i) ->
-    y = WALL_TOP + ARENA_HEIGHT*((i/2).floor() + 1)/4
-    x = WALL_LEFT + ARENA_WIDTH/2 + ((i%2) - 0.5) * ARENA_WIDTH / 6
-
-    if i < config.keyboardPlayers
-      joystick = false
-      controller = i
-    else
-      joystick = true
-      controller = i - config.keyboardPlayers
-
-    engine.add
-      class: "Player"
-      controller: controller
-      id: i
-      team: i % 2
-      cpu: i >= humanPlayers
-      joystick: joystick
-      x: x
-      y: y
+  config.players.each (playerData) ->
+    engine.add $.extend(playerData, class: "Player")
 
   engine.add
     class: "Puck"
@@ -172,6 +149,7 @@ TitleScreen
 
 engine.bind "beforeDraw", (canvas) ->
   # Draw player shadows
+  # This needs to be done before draw so that shadows don't appear above sprites
   engine.find("Player").invoke "drawShadow", canvas
 
 engine.bind "draw", (canvas) ->
@@ -209,6 +187,10 @@ engineUpdate = ->
         player.bloody()
 
 engine.bind "update", engineUpdate
+
+# Player positioning
+# y = WALL_TOP + ARENA_HEIGHT*((i/2).floor() + 1)/4
+# x = WALL_LEFT + ARENA_WIDTH/2 + ((i%2) - 0.5) * ARENA_WIDTH / 6
 
 $(document).bind "keydown", "0", ->
   DEBUG_DRAW = !DEBUG_DRAW
