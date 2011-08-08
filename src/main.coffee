@@ -77,6 +77,17 @@ join = (i) ->
       name: name
       cpu: false
 
+titleScreenUpdate = ->
+  controllers.each (controller, i) ->
+    if controller.actionDown "ANY"
+      titleScreen.trigger("next")
+      initPlayerData()
+
+matchSetupUpdate = ->
+  controllers.each (controller, i) ->
+    if config.players[i].cpu && controller.actionDown "ANY"
+      join(i)
+
 controllers = []
 MAX_PLAYERS.times (i) ->
   controller = controllers[i] = engine.controller(i)
@@ -165,7 +176,7 @@ startMatch = ->
   engine.start()
 
 nameEntry = ->
-  MAX_PLAYERS.times (i) ->
+
 
 
 titleScreen = TitleScreen
@@ -214,17 +225,18 @@ engine.bind "update", engineUpdate
 
 engine.start()
 
-6.times (i) ->
-  # Player positioning
-  y = WALL_TOP + ARENA_HEIGHT*((i/2).floor() + 1)/4
-  x = WALL_LEFT + ARENA_WIDTH/2 + ((i%2) - 0.5) * ARENA_WIDTH / 6
+initPlayerData = ->
+  MAX_PLAYERS.times (i) ->
+    # Player positioning
+    y = WALL_TOP + ARENA_HEIGHT*((i/2).floor() + 1)/4
+    x = WALL_LEFT + ARENA_WIDTH/2 + ((i%2) - 0.5) * ARENA_WIDTH / 6
 
-  config.players[i] =
-    id: i
-    x: x
-    y: y
-    team: i % 2
-    cpu: true
+    config.players[i] =
+      id: i
+      x: x
+      y: y
+      team: i % 2
+      cpu: true
 
 $(document).one "keydown", ->
   titleScreen.trigger("next")
@@ -232,7 +244,7 @@ $(document).one "keydown", ->
 $(document).bind "keydown", "0", ->
   DEBUG_DRAW = !DEBUG_DRAW
 
-6.times (i) ->
+MAX_PLAYERS.times (i) ->
   n = i + 1
   $(document).bind "keydown", n.toString(), ->
     if scoreboard.gameOver()
