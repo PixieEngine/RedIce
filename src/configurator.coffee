@@ -32,6 +32,13 @@ Configurator = (I) ->
 
       engine.controller(player.id).bind "tap", (p) ->
         player.team = (player.team + p.x).clamp(-1, 1)
+        player.ready = false if player.team == 0
+
+  self.bind "step", ->
+    readyPlayers = I.players.compact().select((player) -> player.ready)
+
+    if readyPlayers.length == activePlayers && readyPlayers.length > 0
+      ; #TODO Start game
 
   return self
 
