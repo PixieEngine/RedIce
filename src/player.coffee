@@ -33,8 +33,13 @@ Player = (I) ->
     "#FFDE49" # Yellow
   ]
 
-  playerColor = PLAYER_COLORS[I.id]
-  I.team ||= I.controller % 2
+  CPU_COLOR = "#888"
+
+  if I.cpu
+    playerColor = CPU_COLOR
+  else
+    playerColor = PLAYER_COLORS[I.id]
+
   redTeam = I.team
   standingOffset = Point(0, -16)
   flyingOffset = Point(-24, -16)
