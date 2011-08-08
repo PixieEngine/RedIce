@@ -63,9 +63,24 @@ window.engine = Engine
   showFPS: true
   zSort: true
 
+join = (i) ->
+  nameEntry = engine.add
+    class: "NameEntry"
+    controller: controllers[i]
+    x:  i * (App.width / MAX_PLAYERS)
+    y:  0
+
+  nameEntry.bind "done", (name) ->
+    nameEntry.destroy()
+
+    $.extend config.players[i],
+      name: name
+      cpu: false
+
 controllers = []
 MAX_PLAYERS.times (i) ->
   controller = controllers[i] = engine.controller(i)
+  controller.bind()
 
 Music.play "title_screen"
 
@@ -151,11 +166,7 @@ startMatch = ->
 
 nameEntry = ->
   MAX_PLAYERS.times (i) ->
-    engine.add
-      class: "NameEntry"
-      controller: controllers[i]
-      x:  i * (App.width / MAX_PLAYERS)
-      y:  0
+
 
 titleScreen = TitleScreen
   callback: nameEntry
