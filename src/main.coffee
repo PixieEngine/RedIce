@@ -166,7 +166,7 @@ restartMatch = ->
   engine.bind "afterUpdate", doRestart
 
 startMatch = ->
-  gameState = matchPlayUpdate()
+  gameState = matchPlayUpdate
 
   window.scoreboard = engine.add
     class: "Scoreboard"
