@@ -52,7 +52,7 @@ Player = (I) ->
     if I.cpu
       name = "CPU"
     else
-      name = "P#{(I.id + 1)}"
+      name = I.name || "P#{(I.id + 1)}"
 
     padding = 6
     lineHeight = 16
