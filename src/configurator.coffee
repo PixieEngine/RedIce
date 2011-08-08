@@ -55,7 +55,7 @@ Configurator = (I) ->
     readyPlayers = I.players.compact().select((player) -> player.ready)
 
     if readyPlayers.length == activePlayers && readyPlayers.length > 0
-      ; #TODO Start game
+      self.trigger "done"
 
   return self
 
