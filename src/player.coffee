@@ -80,6 +80,15 @@ Player = (I) ->
     canvas.fillColor("#FFF")
     canvas.fillText(name, topLeft.x + padding, topLeft.y + lineHeight + padding/2)
 
+  drawShadow = (canvas) ->
+    base = self.center().add(0, I.height/2 + 4)
+
+    canvas.withTransform Matrix.scale(1, -0.5, base), ->
+      shadowColor = "rgba(0, 0, 0, 0.15)"
+      canvas.fillCircle(base.x - 4, base.y + 16, 16, shadowColor)
+      canvas.fillCircle(base.x, base.y + 8, 16, shadowColor)
+      canvas.fillCircle(base.x + 4, base.y + 16, 16, shadowColor)
+
   drawPowerMeters = (canvas) ->
     ratio = (boostMeter - I.cooldown.boost) / boostMeter
     start = self.position().add(Point(0, I.height)).floor()
@@ -179,15 +188,6 @@ Player = (I) ->
       I.hasPuck = true
 
       puck.I.velocity = puck.I.velocity.add(positionDelta)
-
-    drawShadow: (canvas) ->
-      base = self.center().add(0, I.height/2 + 4)
-
-      canvas.withTransform Matrix.scale(1, -0.5, base), ->
-        shadowColor = "rgba(0, 0, 0, 0.15)"
-        canvas.fillCircle(base.x - 4, base.y + 16, 16, shadowColor)
-        canvas.fillCircle(base.x, base.y + 8, 16, shadowColor)
-        canvas.fillCircle(base.x + 4, base.y + 16, 16, shadowColor)
 
     drawFloatingNameTag: drawFloatingNameTag
 
@@ -369,6 +369,7 @@ Player = (I) ->
 
       I.hasPuck = false
 
+  self.bind 'beforeTransform', drawShadow
   self.bind 'afterTransform', drawPowerMeters
 
   self.bind 'drawDebug', (canvas) ->
