@@ -54,6 +54,7 @@ bloodCanvas.strokeColor(BLOOD_COLOR)
 
 DEBUG_DRAW = false
 MAX_PLAYERS = 6
+window.activePlayers = 0
 
 window.engine = Engine
   canvas: $("canvas").powerCanvas()
@@ -64,6 +65,7 @@ window.engine = Engine
 
 join = (i) ->
   config.players[i].cpu = false
+  window.activePlayers += 1
 
   backgroundColor = Color(Player.COLORS[i])
   backgroundColor.a(0.5)
