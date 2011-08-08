@@ -28,7 +28,7 @@ Player = (I) ->
   if I.cpu
     playerColor = CPU_COLOR
   else
-    playerColor = PLAYER_COLORS[I.id]
+    playerColor = Player.COLORS[I.id]
 
   redTeam = I.team
   standingOffset = Point(0, -16)
@@ -403,4 +403,14 @@ Player = (I) ->
     self.include AI
 
   self
+
+Player.COLORS = [
+  "#0246E3" # Blue
+  "#EB070E" # Red
+  "#388326" # Green
+  "#F69508" # Orange
+  "#563495" # Purple
+  "#58C4F5" # Cyan
+  "#FFDE49" # Yellow
+]
 
