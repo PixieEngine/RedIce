@@ -64,6 +64,8 @@ window.engine = Engine
   zSort: true
 
 join = (i) ->
+  config.players[i].cpu = false
+
   nameEntry = engine.add
     class: "NameEntry"
     controller: controllers[i]
@@ -73,9 +75,7 @@ join = (i) ->
   nameEntry.bind "done", (name) ->
     nameEntry.destroy()
 
-    $.extend config.players[i],
-      name: name
-      cpu: false
+    config.players[i].name = name
 
 gameState = titleScreenUpdate = ->
   controllers.each (controller, i) ->
