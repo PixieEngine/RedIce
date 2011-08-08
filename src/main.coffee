@@ -66,7 +66,7 @@ join = (i) ->
   config.players[i].cpu = false
 
   nameEntry = engine.add
-    backgroundColor: Player.COLORS[i]
+    backgroundColor: Color(Player.COLORS[i]).transparentize(0.25)
     class: "NameEntry"
     controller: controllers[i]
     x:  i * (App.width / MAX_PLAYERS)
