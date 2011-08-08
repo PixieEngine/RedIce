@@ -35,7 +35,7 @@ Player = (I) ->
   flyingOffset = Point(-24, -16)
 
   if I.joystick
-    controller = Joysticks.getController(I.controller)
+    controller = Joysticks.getController(I.id)
     actionDown = controller.actionDown
     axisPosition = controller.axis
   else
