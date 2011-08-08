@@ -68,10 +68,13 @@ join = (i) ->
   backgroundColor = Color(Player.COLORS[i])
   backgroundColor.a(0.5)
 
+  cursorColor = backgroundColor.lighten(0.4)
+
   nameEntry = engine.add
     backgroundColor: backgroundColor
     class: "NameEntry"
     controller: controllers[i]
+    cursorColor: cursorColor
     x:  i * (App.width / MAX_PLAYERS)
     y:  20
 
