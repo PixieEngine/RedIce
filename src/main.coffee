@@ -83,6 +83,12 @@ join = (i) ->
 
     config.players[i].name = name
 
+    engine.find("Configurator").first()?.addPlayer
+      color: backgroundColor
+      name: name
+      team: 0
+      ready: false
+
 gameState = titleScreenUpdate = ->
   controllers.each (controller, i) ->
     if controller.actionDown "ANY"
