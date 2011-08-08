@@ -70,7 +70,7 @@ join = (i) ->
     class: "NameEntry"
     controller: controllers[i]
     x:  i * (App.width / MAX_PLAYERS)
-    y:  0
+    y:  40
 
   nameEntry.bind "done", (name) ->
     nameEntry.destroy()
