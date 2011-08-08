@@ -101,10 +101,22 @@ gameState = titleScreenUpdate = ->
       titleScreen.trigger("next")
       initPlayerData()
 
-      engine.add
+      configurator = engine.add
         class: "Configurator"
         x: 240
         y: 240
+
+      configurator.bind "done", ->
+        configurator.destroy()
+
+        configurator.players().each (playerConfig) ->
+          id = playerConfig.id
+
+          $.extend config.players[id],
+            name: playerConfig.name
+            team: if playerConfig.team is -1 then 0 else 1
+
+        startMatch()
 
 matchSetupUpdate = ->
   controllers.each (controller, i) ->
@@ -154,6 +166,8 @@ restartMatch = ->
   engine.bind "afterUpdate", doRestart
 
 startMatch = ->
+  gameState = matchPlayUpdate()
+
   window.scoreboard = engine.add
     class: "Scoreboard"
     # periodTime: 120
@@ -222,8 +236,6 @@ startMatch = ->
     scoreboard.score "away"
 
   Music.play "music1"
-
-  engine.start()
 
 nameEntry = ->
   gameState = matchSetupUpdate
