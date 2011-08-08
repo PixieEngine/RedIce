@@ -57,7 +57,6 @@ MAX_PLAYERS = 6
 
 window.engine = Engine
   canvas: $("canvas").powerCanvas()
-  clear: true
   excludedModules: ["HUD"]
   includedModules: ["Joysticks"]
   showFPS: true
