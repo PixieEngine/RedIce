@@ -31,7 +31,7 @@ Configurator = (I) ->
       I.players[player.id] = player
 
       engine.controller(player.id).bind "tap", (p) ->
-        I.players.team = (I.players.team + p.x).clamp(-1, 1)
+        player.team = (player.team + p.x).clamp(-1, 1)
 
   return self
 
