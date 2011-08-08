@@ -20,7 +20,11 @@ Configurator = (I) ->
           x = (player.team + 1) * 150
 
           nameWidth = canvas.measureText(player.name)
-          color = I.teamColors[player.team] || player.color
+          if color = I.teamColors[player.team]
+            color.a(0.5) unless player.ready
+          else
+            color = player.color
+
           canvas.fillColor(color)
           canvas.fillRoundRect(x, y, nameWidth + 2 * horizontalPadding, lineHeight + 2 * verticalPadding)
 
@@ -31,10 +35,20 @@ Configurator = (I) ->
       I.players[player.id] = player
 
       engine.controller(player.id).bind "tap", (p) ->
-        player.team = (player.team + p.x).clamp(-1, 1)
-        player.ready = false if player.team == 0
+        unless player.ready
+          player.team = (player.team + p.x).clamp(-1, 1)
 
   self.bind "step", ->
+    6.times (i) ->
+      if player = I.players[i] && player.team
+        controller = engine.controller(i)
+
+        if controller.actionDown("A")
+          player.ready = true
+
+        if controller.actionDown("B")
+          player.ready = false
+
     readyPlayers = I.players.compact().select((player) -> player.ready)
 
     if readyPlayers.length == activePlayers && readyPlayers.length > 0
