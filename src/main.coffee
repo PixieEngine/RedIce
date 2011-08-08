@@ -188,9 +188,17 @@ engineUpdate = ->
 
 engine.bind "update", engineUpdate
 
-# Player positioning
-# y = WALL_TOP + ARENA_HEIGHT*((i/2).floor() + 1)/4
-# x = WALL_LEFT + ARENA_WIDTH/2 + ((i%2) - 0.5) * ARENA_WIDTH / 6
+6.times (i) ->
+  # Player positioning
+  y = WALL_TOP + ARENA_HEIGHT*((i/2).floor() + 1)/4
+  x = WALL_LEFT + ARENA_WIDTH/2 + ((i%2) - 0.5) * ARENA_WIDTH / 6
+
+  config.players[i] =
+    id: i
+    x: x
+    y: y
+    team: i % 2
+    cpu: true
 
 $(document).bind "keydown", "0", ->
   DEBUG_DRAW = !DEBUG_DRAW
