@@ -162,6 +162,10 @@ addPlayersFromConfigs = ->
     blues.push cpus.pop() while cpus.length && reds.length > blues.length
     reds.push cpus.pop() while cpus.length && blues.length > reds.length
 
+  # Repartition now that we've balanced
+  [reds, blues] = config.players.partition (playerData) ->
+    playerData.team
+
   reds.each (red, i) ->
     red.team = 1
 
