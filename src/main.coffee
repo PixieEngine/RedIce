@@ -171,8 +171,8 @@ addPlayersFromConfigs = ->
   blues.each (blue, i) ->
     blue.team = 0
 
-    blue.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (reds.length + 1)
-    blue.x = WALL_LEFT + ARENA_WIDTH/2 + ARENA_WIDTH / 6
+    blue.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (blues.length + 1)
+    blue.x = WALL_LEFT + ARENA_WIDTH/2 - ARENA_WIDTH / 6
 
   config.players.each (playerData) ->
     engine.add $.extend(playerData, class: "Player")
