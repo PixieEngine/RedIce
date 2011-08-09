@@ -173,7 +173,7 @@ startMatch = (config) ->
     y: WALL_BOTTOM - 48
     zIndex: 10
 
-  config.players.each (playerData)
+  config.players.each (playerData) ->
     engine.add playerData
 
   engine.add
