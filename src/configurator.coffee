@@ -82,7 +82,7 @@ Configurator = (I) ->
         if controller.actionDown("B")
           player.ready = false
 
-    readyPlayers = I.confgi.players.select((player) -> player.ready)
+    readyPlayers = I.config.players.select((player) -> player.ready)
 
     if readyPlayers.length == activePlayers && readyPlayers.length > 0
       self.trigger "done", I.config
