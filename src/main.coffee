@@ -150,6 +150,20 @@ matchPlayUpdate = ->
       if Collision.circular(player.circle(), splat.circle())
         player.bloody()
 
+addPlayersFromConfigs = ->
+  [cpus, humans] = config.players.partition (playerData) ->
+    playerData.cpu
+
+  [reds, blues] = humans.partition (playerData) ->
+    playerData.team
+
+  # Rebalance CPU players as needed
+  if cpus.length
+    cpus.unshift().team = 0 while cpus.length && reds.length > blues.length
+    cpus.unshift().team = 1 while cpus.length && blues.length > reds.length
+
+  config.players.each (playerData) ->
+    engine.add $.extend(playerData, class: "Player")
 
 controllers = []
 MAX_PLAYERS.times (i) ->
@@ -214,8 +228,7 @@ startMatch = ->
     y: WALL_BOTTOM - 48
     zIndex: 10
 
-  config.players.each (playerData) ->
-    engine.add $.extend(playerData, class: "Player")
+  addPlayersFromConfigs()
 
   engine.add
     class: "Puck"
