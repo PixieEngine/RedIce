@@ -53,9 +53,7 @@ gameState = titleScreenUpdate = ->
       setUpMatch()
 
 matchSetupUpdate = ->
-  controllers.each (controller, i) ->
-    if config.players[i].cpu && controller.actionDown "ANY"
-      join(i)
+
 
 matchPlayUpdate = ->
   pucks = engine.find("Puck")
