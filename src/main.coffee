@@ -104,6 +104,8 @@ initPlayerData = ->
   return config
 
 setUpMatch = ->
+  engine.clear(false)
+
   configurator = engine.add
     class: "Configurator"
     config: initPlayerData()
