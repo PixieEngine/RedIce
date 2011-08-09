@@ -124,6 +124,7 @@ initPlayerData = ->
 
   MAX_PLAYERS.times (i) ->
     config.players[i] =
+      color: Player.COLORS[i]
       id: i
       name: "P#{i + 1}"
       team: i % 2
