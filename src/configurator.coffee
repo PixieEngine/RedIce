@@ -84,7 +84,7 @@ Configurator = (I) ->
 
     readyPlayers = I.config.players.select((player) -> player.ready)
 
-    if readyPlayers.length == activePlayers && readyPlayers.length > 0
+    if readyPlayers.length == I.activePlayers && readyPlayers.length > 0
       self.trigger "done", I.config
 
   return self
