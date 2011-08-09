@@ -42,7 +42,7 @@ Configurator = (I) ->
 
       engine.controller(id).bind "tap", (p) ->
         unless player.ready
-          player.team = (player.team + p.x/2).clamp(-0.5, 0.5)
+          player.team = (player.team + p.x/2).clamp(0, 1)
 
   self = GameObject(I).extend
     draw: (canvas) ->
