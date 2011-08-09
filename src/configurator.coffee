@@ -18,6 +18,7 @@ Configurator = (I) ->
     return unless player.cpu
 
     player.cpu = false
+    player.ready = false
     player.team = 0.5
     I.activePlayers += 1
 
@@ -69,9 +70,12 @@ Configurator = (I) ->
 
   self.bind "step", ->
     6.times (i) ->
-      if (player = I.players[i]) && (player.team != 0.5)
-        controller = engine.controller(i)
+      controller = engine.controller(i)
 
+      if controller.actionDown "ANY"
+        join(i)
+
+      if (player = I.config.players[i]) && (player.team != 0.5)
         if controller.actionDown("A")
           player.ready = true
 
