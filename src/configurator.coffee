@@ -44,6 +44,37 @@ Configurator = (I) ->
         unless player.ready
           player.team = (player.team + p.x/2).clamp(0, 1)
 
+  finalizeConfig = (config) ->
+    [cpus, humans] = config.players.partition (playerData) ->
+      playerData.cpu
+
+    [reds, blues] = humans.partition (playerData) ->
+      playerData.team
+
+    # Rebalance CPU players as needed
+    #TODO This doesn't balance if the cpu popped is already on the other team
+    if cpus.length
+      blues.push cpus.pop() while cpus.length && reds.length > blues.length
+      reds.push cpus.pop() while cpus.length && blues.length > reds.length
+
+    # Repartition now that we've balanced
+    [reds, blues] = config.players.partition (playerData) ->
+      playerData.team
+
+    reds.each (red, i) ->
+      red.team = 1
+
+      red.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (reds.length + 1)
+      red.x = WALL_LEFT + ARENA_WIDTH/2 + ARENA_WIDTH / 6
+
+    blues.each (blue, i) ->
+      blue.team = 0
+
+      blue.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (blues.length + 1)
+      blue.x = WALL_LEFT + ARENA_WIDTH/2 - ARENA_WIDTH / 6
+
+    return config
+
   self = GameObject(I).extend
     draw: (canvas) ->
       canvas.font I.font
@@ -89,7 +120,7 @@ Configurator = (I) ->
     readyPlayers = I.config.players.select((player) -> player.ready)
 
     if readyPlayers.length == I.activePlayers && readyPlayers.length > 0
-      self.trigger "done", I.config
+      self.trigger "done", finalizeConfig(I.config)
 
   return self
 
