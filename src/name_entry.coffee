@@ -21,6 +21,8 @@ NameEntry = (I) ->
   horizontalPadding = 6
   margin = 6
 
+  controller = engine.controller(I.controller) if I.controller?
+
   cols = ->
     I.cols
 
@@ -146,7 +148,7 @@ NameEntry = (I) ->
         textArea.draw(canvas)
         menuArea.draw(canvas)
 
-  I.controller?.bind "tap", (direction) ->
+  controller?.bind "tap", (direction) ->
     move(direction)
 
   self.bind "step", ->
@@ -165,10 +167,10 @@ NameEntry = (I) ->
     if justPressed.backspace
       I.name = I.name.substring(0, I.name.length - 1)
       
-    if I.controller?.buttonPressed "A"
+    if controller?.buttonPressed "A"
       addCharacter()
 
-    if I.controller?.buttonPressed "B"
+    if controller?.buttonPressed "B"
       I.name = I.name.substring(0, I.name.length - 1)
 
   return self
