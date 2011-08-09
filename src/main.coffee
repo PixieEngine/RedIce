@@ -81,37 +81,6 @@ matchPlayUpdate = ->
       if Collision.circular(player.circle(), splat.circle())
         player.bloody()
 
-addPlayersFromConfigs = ->
-  [cpus, humans] = config.players.partition (playerData) ->
-    playerData.cpu
-
-  [reds, blues] = humans.partition (playerData) ->
-    playerData.team
-
-  # Rebalance CPU players as needed
-  if cpus.length
-    blues.push cpus.pop() while cpus.length && reds.length > blues.length
-    reds.push cpus.pop() while cpus.length && blues.length > reds.length
-
-  # Repartition now that we've balanced
-  [reds, blues] = config.players.partition (playerData) ->
-    playerData.team
-
-  reds.each (red, i) ->
-    red.team = 1
-
-    red.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (reds.length + 1)
-    red.x = WALL_LEFT + ARENA_WIDTH/2 + ARENA_WIDTH / 6
-
-  blues.each (blue, i) ->
-    blue.team = 0
-
-    blue.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (blues.length + 1)
-    blue.x = WALL_LEFT + ARENA_WIDTH/2 - ARENA_WIDTH / 6
-
-  config.players.each (playerData) ->
-    engine.add $.extend(playerData, class: "Player")
-
 controllers = []
 MAX_PLAYERS.times (i) ->
   controller = controllers[i] = engine.controller(i)
@@ -124,6 +93,7 @@ initPlayerData = ->
 
   MAX_PLAYERS.times (i) ->
     config.players[i] =
+      class: "Player"
       color: Player.COLORS[i]
       id: i
       name: "P#{i + 1}"
@@ -203,7 +173,8 @@ startMatch = (config) ->
     y: WALL_BOTTOM - 48
     zIndex: 10
 
-  addPlayersFromConfigs()
+  config.players.each (playerData)
+    engine.add playerData
 
   engine.add
     class: "Puck"
