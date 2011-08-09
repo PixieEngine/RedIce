@@ -2,7 +2,7 @@ Configurator = (I) ->
   $.reverseMerge I,
     activePlayers: 0
     font: "bold 14px 'Monaco', 'Inconsolata', 'consolas', 'Courier New', 'andale mono', 'lucida console', 'monospace'"
-    players: []
+    maxPlayers: 6
     teamColors:
       "0": Color("#0246E3")
       "1": Color("#EB070E")
@@ -30,9 +30,9 @@ Configurator = (I) ->
     nameEntry = engine.add
       backgroundColor: backgroundColor
       class: "NameEntry"
-      controller: controllers[id]
+      controller: id
       cursorColor: cursorColor
-      x:  id * (App.width / MAX_PLAYERS)
+      x:  id * (App.width / I.maxPlayers)
       y:  20
 
     nameEntry.bind "done", (name) ->
@@ -69,7 +69,7 @@ Configurator = (I) ->
           canvas.fillText(player.name, x + horizontalPadding, y + lineHeight + verticalPadding)
 
   self.bind "step", ->
-    6.times (i) ->
+    I.maxPlayers.times (i) ->
       controller = engine.controller(i)
 
       if controller.actionDown "ANY"
