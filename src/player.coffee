@@ -403,14 +403,14 @@ Player = (I) ->
   self
 
 Player.COLORS = [
-  "#0246E3" # Blue
-  "#EB070E" # Red
-  "#388326" # Green
-  "#F69508" # Orange
-  "#563495" # Purple
-  "#58C4F5" # Cyan
-  "#FFDE49" # Yellow
+  Color "#0246E3" # Blue
+  Color "#EB070E" # Red
+  Color "#388326" # Green
+  Color "#F69508" # Orange
+  Color "#563495" # Purple
+  Color "#58C4F5" # Cyan
+  Color "#FFDE49" # Yellow
 ]
 
-Player.CPU_COLOR = "#888"
+Player.CPU_COLOR = Color "#888"
 
