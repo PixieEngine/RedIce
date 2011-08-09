@@ -46,61 +46,22 @@ window.engine = Engine
   showFPS: true
   zSort: true
 
-join = (i) ->
-  config.players[i].cpu = false
-  window.activePlayers += 1
-
-  backgroundColor = Color(Player.COLORS[i])
-  backgroundColor.a(0.5)
-
-  cursorColor = backgroundColor.lighten(0.25)
-
-  nameEntry = engine.add
-    backgroundColor: backgroundColor
-    class: "NameEntry"
-    controller: controllers[i]
-    cursorColor: cursorColor
-    x:  i * (App.width / MAX_PLAYERS)
-    y:  20
-
-  nameEntry.bind "done", (name) ->
-    nameEntry.destroy()
-
-    config.players[i].name = name
-
-    configurator = engine.find("Configurator").first()
-
-    if configurator
-      configurator.addPlayer
-        color: backgroundColor
-        id: i
-        name: name
-        ready: false
-        team: 0
-
 gameState = titleScreenUpdate = ->
   controllers.each (controller, i) ->
     if controller.actionDown "ANY"
-      titleScreen.trigger("next")
+      titleScreen.trigger("done")
       initPlayerData()
 
       configurator = engine.add
         class: "Configurator"
+        config: window.config
         x: 240
         y: 240
 
-      configurator.bind "done", ->
+      configurator.bind "done", (config) ->
         configurator.destroy()
 
-        configurator.players().each (playerConfig) ->
-          id = playerConfig.id
-
-          $.extend config.players[id],
-            name: playerConfig.name
-            team: if playerConfig.team is -1 then 0 else 1
-            joystick: true
-
-        startMatch()
+        startMatch(config)
 
 matchSetupUpdate = ->
   controllers.each (controller, i) ->
@@ -179,7 +140,7 @@ restartMatch = ->
 
   engine.bind "afterUpdate", doRestart
 
-startMatch = ->
+startMatch = (config) ->
   gameState = matchPlayUpdate
 
   engine.clear(true)
