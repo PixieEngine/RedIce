@@ -159,8 +159,14 @@ addPlayersFromConfigs = ->
 
   # Rebalance CPU players as needed
   if cpus.length
-    cpus.unshift().team = 0 while cpus.length && reds.length > blues.length
-    cpus.unshift().team = 1 while cpus.length && blues.length > reds.length
+    blues.push cpus.pop() while cpus.length && reds.length > blues.length
+    reds.push cpus.pop() while cpus.length && blues.length > reds.length
+
+  reds.each (red) ->
+    red.team = 1
+
+  blues.each (blue) ->
+    blue.team = 0
 
   config.players.each (playerData) ->
     engine.add $.extend(playerData, class: "Player")
