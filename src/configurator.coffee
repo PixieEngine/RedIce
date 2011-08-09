@@ -22,7 +22,7 @@ Configurator = (I) ->
     player.team = 0.5
     I.activePlayers += 1
 
-    backgroundColor = Color(Player.COLORS[id])
+    backgroundColor = Color(player.color)
     backgroundColor.a(0.5)
 
     cursorColor = backgroundColor.lighten(0.25)
