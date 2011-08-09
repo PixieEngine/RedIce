@@ -50,18 +50,7 @@ gameState = titleScreenUpdate = ->
   controllers.each (controller, i) ->
     if controller.actionDown "ANY"
       titleScreen.trigger("done")
-      initPlayerData()
-
-      configurator = engine.add
-        class: "Configurator"
-        config: window.config
-        x: 240
-        y: 240
-
-      configurator.bind "done", (config) ->
-        configurator.destroy()
-
-        startMatch(config)
+      setUpMatch()
 
 matchSetupUpdate = ->
   controllers.each (controller, i) ->
@@ -132,11 +121,35 @@ MAX_PLAYERS.times (i) ->
 
 Music.play "title_screen"
 
+initPlayerData = ->
+  #TODO Carry over names / teams
+
+  MAX_PLAYERS.times (i) ->
+    config.players[i] =
+      id: i
+      team: i % 2
+      joystick: true
+      cpu: true
+
+  return config
+
+setUpMatch = ->
+  configurator = engine.add
+    class: "Configurator"
+    config: initPlayerData()
+    x: 240
+    y: 240
+
+  configurator.bind "done", (config) ->
+    configurator.destroy()
+
+    startMatch(config)
+
 restartMatch = ->
   doRestart = ->
     engine.I.objects.clear()
     engine.unbind "afterUpdate", doRestart
-    startMatch()
+    setUpMatch()
 
   engine.bind "afterUpdate", doRestart
 
@@ -238,14 +251,6 @@ engineUpdate = ->
 engine.bind "update", engineUpdate
 
 engine.start()
-
-initPlayerData = ->
-  MAX_PLAYERS.times (i) ->
-    config.players[i] =
-      id: i
-      team: i % 2
-      joystick: true
-      cpu: true
 
 $(document).bind "keydown", "0", ->
   DEBUG_DRAW = !DEBUG_DRAW
