@@ -162,11 +162,17 @@ addPlayersFromConfigs = ->
     blues.push cpus.pop() while cpus.length && reds.length > blues.length
     reds.push cpus.pop() while cpus.length && blues.length > reds.length
 
-  reds.each (red) ->
+  reds.each (red, i) ->
     red.team = 1
 
-  blues.each (blue) ->
+    red.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (reds.length + 1)
+    red.x = WALL_LEFT + ARENA_WIDTH/2 + ARENA_WIDTH / 6
+
+  blues.each (blue, i) ->
     blue.team = 0
+
+    blue.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (reds.length + 1)
+    blue.x = WALL_LEFT + ARENA_WIDTH/2 + ARENA_WIDTH / 6
 
   config.players.each (playerData) ->
     engine.add $.extend(playerData, class: "Player")
@@ -285,14 +291,8 @@ engine.start()
 
 initPlayerData = ->
   MAX_PLAYERS.times (i) ->
-    # Player positioning
-    y = WALL_TOP + ARENA_HEIGHT*((i/2).floor() + 1)/4
-    x = WALL_LEFT + ARENA_WIDTH/2 + ((i%2) - 0.5) * ARENA_WIDTH / 6
-
     config.players[i] =
       id: i
-      x: x
-      y: y
       team: i % 2
       joystick: true
       cpu: true
