@@ -43,7 +43,7 @@ TitleScreen = (I) ->
       zIndex: 1
   .appendTo(titleScreen)
 
-  titleScreen.one "next", ->
+  titleScreen.one "done", ->
     titleScreen.remove()
 
     I.callback()
