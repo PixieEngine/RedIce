@@ -125,6 +125,7 @@ initPlayerData = ->
   MAX_PLAYERS.times (i) ->
     config.players[i] =
       id: i
+      name: "P#{i + 1}"
       team: i % 2
       joystick: true
       cpu: true
