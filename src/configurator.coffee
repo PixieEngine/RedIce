@@ -53,14 +53,18 @@ Configurator = (I) ->
           y = i * 40
           x = (player.team) * 300
 
+          if player.cpu
+            color = Color(Player.CPU_COLOR)
+            name = "CPU"
+          else          
+            color = I.teamColors[player.team] || Color(player.color)
+
+            if player.ready
+              color.a(1)
+            else
+              color.a(0.5)
+
           nameWidth = canvas.measureText(player.name)
-
-          color = I.teamColors[player.team] || Color(player.color)
-
-          if player.ready
-            color.a(1)
-          else
-            color.a(0.5)
 
           canvas.fillColor(color)
           canvas.fillRoundRect(x, y, nameWidth + 2 * horizontalPadding, lineHeight + 2 * verticalPadding)
