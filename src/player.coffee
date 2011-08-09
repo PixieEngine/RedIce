@@ -23,10 +23,8 @@ Player = (I) ->
     velocity: Point()
     zIndex: 1
 
-  CPU_COLOR = "#888"
-
   if I.cpu
-    playerColor = CPU_COLOR
+    playerColor = Player.CPU_COLOR
   else
     playerColor = Player.COLORS[I.id]
 
@@ -413,4 +411,6 @@ Player.COLORS = [
   "#58C4F5" # Cyan
   "#FFDE49" # Yellow
 ]
+
+Player.CPU_COLOR = "#888"
 
