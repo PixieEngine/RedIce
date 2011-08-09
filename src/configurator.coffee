@@ -1,14 +1,47 @@
 Configurator = (I) ->
   $.reverseMerge I,
+    activePlayers: 0
     font: "bold 14px 'Monaco', 'Inconsolata', 'consolas', 'Courier New', 'andale mono', 'lucida console', 'monospace'"
     players: []
     teamColors:
-      "-1": Color("#0246E3")
+      "0": Color("#0246E3")
       "1": Color("#EB070E")
 
   lineHeight = 11
   verticalPadding = 4
   horizontalPadding = 6
+
+  join = (id) ->
+    player = I.config.players[id]
+
+    # Can only join in over existing CPU players
+    return unless player.cpu
+
+    player.cpu = false
+    player.team = 0.5
+    I.activePlayers += 1
+
+    backgroundColor = Color(Player.COLORS[id])
+    backgroundColor.a(0.5)
+
+    cursorColor = backgroundColor.lighten(0.25)
+
+    nameEntry = engine.add
+      backgroundColor: backgroundColor
+      class: "NameEntry"
+      controller: controllers[id]
+      cursorColor: cursorColor
+      x:  id * (App.width / MAX_PLAYERS)
+      y:  20
+
+    nameEntry.bind "done", (name) ->
+      nameEntry.destroy()
+
+      player.name = name
+
+      engine.controller(id).bind "tap", (p) ->
+        unless player.ready
+          player.team = (player.team + p.x/2).clamp(-0.5, 0.5)
 
   self = GameObject(I).extend
     draw: (canvas) ->
@@ -17,7 +50,7 @@ Configurator = (I) ->
       canvas.withTransform Matrix.translation(I.x, I.y), ->
         I.players.compact().each (player, i) ->
           y = i * 40
-          x = (player.team + 1) * 150
+          x = (player.team) * 300
 
           nameWidth = canvas.measureText(player.name)
           if color = I.teamColors[player.team]
@@ -34,16 +67,9 @@ Configurator = (I) ->
           canvas.fillColor("#FFF")
           canvas.fillText(player.name, x + horizontalPadding, y + lineHeight + verticalPadding)
 
-    addPlayer: (player) ->
-      I.players[player.id] = player
-
-      engine.controller(player.id).bind "tap", (p) ->
-        unless player.ready
-          player.team = (player.team + p.x).clamp(-1, 1)
-
   self.bind "step", ->
     6.times (i) ->
-      if (player = I.players[i]) && player.team
+      if (player = I.players[i]) && (player.team != 0.5)
         controller = engine.controller(i)
 
         if controller.actionDown("A")
@@ -55,9 +81,7 @@ Configurator = (I) ->
     readyPlayers = I.players.compact().select((player) -> player.ready)
 
     if readyPlayers.length == activePlayers && readyPlayers.length > 0
-      self.trigger "done"
-
-  self.attrReader "players"
+      self.trigger "done", I.config
 
   return self
 
