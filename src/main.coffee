@@ -199,6 +199,8 @@ restartMatch = ->
 startMatch = ->
   gameState = matchPlayUpdate
 
+  engine.clear(true)
+
   window.scoreboard = engine.add
     class: "Scoreboard"
     # periodTime: 120
