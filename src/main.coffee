@@ -89,8 +89,6 @@ MAX_PLAYERS.times (i) ->
 Music.play "title_screen"
 
 initPlayerData = ->
-  #TODO Carry over names / teams
-
   MAX_PLAYERS.times (i) ->
     $.reverseMerge config.players[i] ||= {},
       class: "Player"
