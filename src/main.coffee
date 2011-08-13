@@ -92,7 +92,7 @@ initPlayerData = ->
   #TODO Carry over names / teams
 
   MAX_PLAYERS.times (i) ->
-    config.players[i] =
+    $.reverseMerge config.players[i] ||= {},
       class: "Player"
       color: Player.COLORS[i]
       id: i
@@ -132,8 +132,8 @@ startMatch = (config) ->
 
   window.scoreboard = engine.add
     class: "Scoreboard"
-    # periodTime: 120
-    # period: 3
+    periodTime: 120
+    period: 3
 
   engine.add
     sprite: Sprite.loadByName("corner_left")
@@ -176,7 +176,7 @@ startMatch = (config) ->
     zIndex: 10
 
   config.players.each (playerData) ->
-    engine.add playerData
+    engine.add $.extend({}, playerData)
 
   engine.add
     class: "Puck"
