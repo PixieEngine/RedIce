@@ -58,10 +58,9 @@ Configurator = (I) ->
       playerData.team
 
     # Rebalance CPU players as needed
-    #TODO This doesn't balance if the cpu popped is already on the other team
     if cpus.length
-      blues.push cpus.pop() while cpus.length && reds.length > blues.length
-      reds.push cpus.pop() while cpus.length && blues.length > reds.length
+      blues.push cpus.pop() while cpus.length && blues.length < (I.maxPlayers / 2)
+      reds.push cpus.pop() while cpus.length && reds.length < (I.maxPlayers / 2)
 
     # Repartition now that we've balanced
     [reds, blues] = config.players.partition (playerData) ->
