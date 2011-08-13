@@ -58,8 +58,11 @@ Configurator = (I) ->
       playerData.team
 
     # Rebalance CPU players as needed
-    blues.push cpus.pop() while cpus.length && (blues.length < (I.maxPlayers / 2))
-    reds.push cpus.pop() while cpus.length && (reds.length < (I.maxPlayers / 2))
+    while (blues.length < 3) && cpus.length
+      blues.push cpus.pop()
+
+    while (reds.length < 3) && cpus.length 
+      reds.push cpus.pop() 
 
     # Repartition now that we've balanced
     [reds, blues] = config.players.partition (playerData) ->
