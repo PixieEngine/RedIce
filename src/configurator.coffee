@@ -90,9 +90,10 @@ Configurator = (I) ->
           x = (player.team) * 300
 
           if player.cpu
-            color = Color(Player.CPU_COLOR)
             name = "CPU"
-          else          
+            color = Color(Player.CPU_COLOR)
+          else
+            name = player.name || "P#{player.id}"
             color = I.teamColors[player.team] || Color(player.color)
 
             if player.ready
@@ -100,13 +101,13 @@ Configurator = (I) ->
             else
               color.a(0.5)
 
-          nameWidth = canvas.measureText(player.name)
+          nameWidth = canvas.measureText(name)
 
           canvas.fillColor(color)
           canvas.fillRoundRect(x, y, nameWidth + 2 * horizontalPadding, lineHeight + 2 * verticalPadding)
 
           canvas.fillColor("#FFF")
-          canvas.fillText(player.name, x + horizontalPadding, y + lineHeight + verticalPadding)
+          canvas.fillText(name, x + horizontalPadding, y + lineHeight + verticalPadding)
 
   self.bind "step", ->
     I.maxPlayers.times (i) ->
