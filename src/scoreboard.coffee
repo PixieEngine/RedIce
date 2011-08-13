@@ -90,7 +90,13 @@ Scoreboard = (I) ->
     I.time -= 1
 
     if I.gameOver
-      ; #I.time = 0
+      # Check for restart
+      MAX_PLAYERS.times (i) ->
+        controller = engine.controller(i)
+
+        if controller.actionDown "START"
+          self.trigger("restart")
+
     else # Regular play
       if I.time == 0
         nextPeriod()
