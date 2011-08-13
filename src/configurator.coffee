@@ -32,6 +32,7 @@ Configurator = (I) ->
       class: "NameEntry"
       controller: id
       cursorColor: cursorColor
+      name: player.name
       x:  id * (App.width / I.maxPlayers)
       y:  20
 
