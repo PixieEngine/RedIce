@@ -94,7 +94,7 @@ Configurator = (I) ->
             name = "CPU"
             color = Color(Player.CPU_COLOR)
           else
-            name = player.name || "P#{player.id}"
+            name = player.name || "P#{(player.id + 1)}"
             color = I.teamColors[player.team] || Color(player.color)
 
             if player.ready
