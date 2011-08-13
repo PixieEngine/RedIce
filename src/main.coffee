@@ -94,6 +94,7 @@ initPlayerData = ->
       class: "Player"
       color: Player.COLORS[i]
       id: i
+      name: ""
       team: i % 2
       joystick: true
       cpu: true
