@@ -39,10 +39,15 @@ Configurator = (I) ->
       nameEntry.destroy()
 
       player.name = name
-
-      engine.controller(id).bind "tap", (p) ->
+      player.tapListener = (p) ->
         unless player.ready
           player.team = (player.team + p.x/2).clamp(0, 1)
+
+      engine.controller(id).bind "tap", player.tapListener
+
+  unbindTapEvents = ->
+    I.config.players.each (player) ->
+      engine.controller(player.id).unbind "tap", player.tapListener
 
   finalizeConfig = (config) ->
     [cpus, humans] = config.players.partition (playerData) ->
@@ -120,6 +125,7 @@ Configurator = (I) ->
     readyPlayers = I.config.players.select((player) -> player.ready)
 
     if readyPlayers.length == I.activePlayers && readyPlayers.length > 0
+      unbindTapEvents()
       self.trigger "done", finalizeConfig(I.config)
 
   return self
