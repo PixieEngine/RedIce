@@ -36,7 +36,7 @@ bloodCanvas.strokeColor(BLOOD_COLOR)
 # bloodCanvas.fill(BLOOD_COLOR) # For zamboni testing
 
 DEBUG_DRAW = false
-MAX_PLAYERS = 6
+window.MAX_PLAYERS = 6
 window.activePlayers = 0
 
 window.engine = Engine
@@ -137,6 +137,9 @@ startMatch = (config) ->
     periodTime: 120
     # period: 3
 
+  scoreboard.bind "restart", ->
+    restartMatch()
+
   engine.add
     sprite: Sprite.loadByName("corner_left")
     x: 0
@@ -230,10 +233,4 @@ engine.start()
 $(document).bind "keydown", "0", ->
   DEBUG_DRAW = !DEBUG_DRAW
 
-MAX_PLAYERS.times (i) ->
-  n = i + 1
-  $(document).bind "keydown", n.toString(), ->
-    if scoreboard.gameOver()
-      window.config.joystickPlayers = n
-      restartMatch()
 
