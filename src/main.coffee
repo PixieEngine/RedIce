@@ -99,6 +99,10 @@ initPlayerData = ->
       joystick: true
       cpu: true
 
+    $.extend config.players[i],
+      ready: false
+      cpu: true
+
   return config
 
 setUpMatch = ->
