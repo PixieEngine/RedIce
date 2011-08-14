@@ -12,7 +12,7 @@ Puck = (I) ->
     y: (WALL_BOTTOM + WALL_TOP)/2 - 4
     friction: 0.05
     mass: 0.01
-    superMassive: false
+    superMassive: true
     zIndex: 10
     spriteOffset: Point(-10, -32)
 
@@ -24,6 +24,31 @@ Puck = (I) ->
 
   heading = 0
   lastPosition = null
+
+  particleSizes = [3, 4, 3]
+  addParticleEffect = (push, color="#EE0") ->
+    push = push.norm(13)
+
+    engine.add
+      class: "Emitter"
+      duration: 9
+      sprite: Sprite.EMPTY
+      velocity: I.velocity
+      particleCount: 3
+      batchSize: 3
+      x: I.x + I.width/2
+      y: I.y + I.height/2
+      zIndex: 1 + (I.y + I.height + 1)/CANVAS_HEIGHT
+      generator:
+        color: color
+        duration: 8
+        height: (n) ->
+          particleSizes.wrap(n)
+        maxSpeed: 50
+        velocity: (n) ->
+          Point.fromAngle(Random.angle()).scale(rand(5) + 1).add(push)
+        width: (n) ->
+          particleSizes.wrap(n)
 
   drawBloodStreaks = ->
     # Skate blood streaks
@@ -53,6 +78,9 @@ Puck = (I) ->
 
   self.bind "step", ->
     drawBloodStreaks()
+
+    if I.superMassive
+      addParticleEffect(I.velocity.scale(-1))
 
   self.bind "positionUpdated", ->
     return unless I.active
