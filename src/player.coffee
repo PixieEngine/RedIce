@@ -237,12 +237,22 @@ Player = (I) ->
 
     # Shot or pass
     if Collision.circular(circle, puck.circle())
-
       if I.shootPower >= 2 * maxShotPower
         puck.trigger "superCharge"
 
       p = Point.fromAngle(direction).scale(baseShotPower + power * 2)
       puck.I.velocity = puck.I.velocity.add(p)
+
+    # Hitting people
+    else
+      engine.find("Player").without(self).each (player) ->
+        if Collision.circular(circle, player.circle())
+          p = Point.fromAngle(direction).scale(power)
+
+          if power > 10
+            player.wipeout(p)
+
+          player.I.velocity = player.I.velocity.add(p)
 
     I.shootPower = 0
 
