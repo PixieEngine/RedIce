@@ -12,6 +12,7 @@ Puck = (I) ->
     y: (WALL_BOTTOM + WALL_TOP)/2 - 4
     friction: 0.05
     mass: 0.01
+    superMassive: false
     zIndex: 10
     spriteOffset: Point(-10, -32)
 
@@ -72,6 +73,12 @@ Puck = (I) ->
 
   self.bind "update", ->
     I.sprite = sprites[39]
+
+  self.mass = ->
+    if I.superMassive
+      9000
+    else
+      I.mass
 
   self
 
