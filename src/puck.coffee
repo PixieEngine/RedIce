@@ -12,7 +12,7 @@ Puck = (I) ->
     y: (WALL_BOTTOM + WALL_TOP)/2 - 4
     friction: 0.05
     mass: 0.01
-    superMassive: false
+    superMassive: true
     zIndex: 10
     spriteOffset: Point(-10, -32)
 
