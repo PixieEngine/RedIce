@@ -157,7 +157,8 @@ Player = (I) ->
     controlPuck: (puck) ->
       return if I.cooldown.shoot
 
-      puckControl = 4
+      puckControl = 0.04
+      maxPuckForce = puckControl / puck.mass()
 
       p = Point.fromAngle(heading).scale(32)
       targetPuckPosition = self.center().add(p)
@@ -166,8 +167,8 @@ Player = (I) ->
 
       positionDelta = targetPuckPosition.subtract(puck.center().add(puckVelocity))
 
-      if positionDelta.magnitude() > puckControl
-        positionDelta = positionDelta.norm().scale(puckControl)
+      if positionDelta.magnitude() > maxPuckForce
+        positionDelta = positionDelta.norm().scale(maxPuckForce)
 
       I.hasPuck = true
 
