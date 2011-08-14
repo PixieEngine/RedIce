@@ -7262,6 +7262,7 @@ Physics = function() {
       if (collided) {
         object.I.velocity = velocity;
         object.updatePosition(dt, true);
+        object.trigger("wallCollision");
         if (object.puck()) {
           Sound.play("clink0");
         }
@@ -7309,6 +7310,7 @@ Physics = function() {
             velocity = velocity.subtract(normal.scale(2 * velocityProjection));
             object.I.velocity = velocity;
             object.updatePosition(dt, true);
+            object.trigger("wallCollision");
             if (object.puck()) {
               return Sound.play("thud0");
             }
@@ -7339,6 +7341,7 @@ Physics = function() {
       if (collided) {
         object.I.velocity = velocity;
         object.updatePosition(dt, true);
+        object.trigger("wallCollision");
         if (object.puck()) {
           Sound.play("thud0");
         }
@@ -7430,7 +7433,7 @@ Player = function(I) {
     return canvas.fillText(name, topLeft.x + padding, topLeft.y + lineHeight + padding / 2);
   };
   drawPowerMeters = function(canvas) {
-    var center, height, maxWidth, padding, ratio, start;
+    var center, height, maxWidth, padding, ratio, start, superChargeRatio;
     ratio = (boostMeter - I.cooldown.boost) / boostMeter;
     start = self.position().add(Point(0, I.height)).floor();
     padding = 1;
@@ -7448,16 +7451,21 @@ Player = function(I) {
       maxWidth = 40;
       height = 5;
       ratio = Math.min(I.shootPower / maxShotPower, 1);
+      superChargeRatio = ((I.shootPower - maxShotPower) / maxShotPower).clamp(0, 1);
       center = self.center().floor();
       return canvas.withTransform(Matrix.translation(center.x, center.y).concat(Matrix.rotation(movementDirection)), function() {
         canvas.fillColor("#000");
         canvas.fillRoundRect(-(padding + height) / 2, -padding, maxWidth + 2 * padding, height, 2);
-        if (I.shootPower >= maxShotPower && (I.age / 2).floor() % 2) {
-          canvas.fillColor("#0EF");
-        } else {
-          canvas.fillColor("#EE0");
+        canvas.fillColor("#EE0");
+        canvas.fillRoundRect(-height / 2, 0, maxWidth * ratio, height, 2);
+        canvas.fillColor("#0EF");
+        if (superChargeRatio === 1) {
+          if ((I.age / 2).floor() % 2) {
+            return canvas.fillRoundRect(-height / 2, 0, maxWidth, height, 2);
+          }
+        } else if (superChargeRatio > 0) {
+          return canvas.fillRoundRect(-height / 2, 0, maxWidth * superChargeRatio, height, 2);
         }
-        return canvas.fillRoundRect(-height / 2, 0, maxWidth * ratio, height, 2);
       });
     }
   };
@@ -7518,17 +7526,18 @@ Player = function(I) {
       return c;
     },
     controlPuck: function(puck) {
-      var p, positionDelta, puckControl, puckVelocity, targetPuckPosition;
+      var maxPuckForce, p, positionDelta, puckControl, puckVelocity, targetPuckPosition;
       if (I.cooldown.shoot) {
         return;
       }
-      puckControl = 4;
+      puckControl = 0.04;
+      maxPuckForce = puckControl / puck.mass();
       p = Point.fromAngle(heading).scale(32);
       targetPuckPosition = self.center().add(p);
       puckVelocity = puck.I.velocity;
       positionDelta = targetPuckPosition.subtract(puck.center().add(puckVelocity));
-      if (positionDelta.magnitude() > puckControl) {
-        positionDelta = positionDelta.norm().scale(puckControl);
+      if (positionDelta.magnitude() > maxPuckForce) {
+        positionDelta = positionDelta.norm().scale(maxPuckForce);
       }
       I.hasPuck = true;
       return puck.I.velocity = puck.I.velocity.add(positionDelta);
@@ -7583,6 +7592,9 @@ Player = function(I) {
     circle = self.controlCircle();
     baseShotPower = 15;
     if (Collision.circular(circle, puck.circle())) {
+      if (I.shootPower >= 2 * maxShotPower) {
+        puck.trigger("superCharge");
+      }
       p = Point.fromAngle(direction).scale(baseShotPower + power * 2);
       puck.I.velocity = puck.I.velocity.add(p);
     }
@@ -7761,7 +7773,7 @@ Player.COLORS = ["#0246E3", "#EB070E", "#388326", "#F69508", "#563495", "#58C4F5
 Player.CPU_COLOR = "#888";;
 var Puck;
 Puck = function(I) {
-  var DEBUG_DRAW, drawBloodStreaks, heading, lastPosition, self;
+  var DEBUG_DRAW, addParticleEffect, drawBloodStreaks, heading, lastPosition, particleSizes, self;
   DEBUG_DRAW = false;
   $.reverseMerge(I, {
     blood: 0,
@@ -7774,6 +7786,7 @@ Puck = function(I) {
     y: (WALL_BOTTOM + WALL_TOP) / 2 - 4,
     friction: 0.05,
     mass: 0.01,
+    superMassive: false,
     zIndex: 10,
     spriteOffset: Point(-10, -32)
   });
@@ -7785,6 +7798,38 @@ Puck = function(I) {
   });
   heading = 0;
   lastPosition = null;
+  particleSizes = [3, 4, 3];
+  addParticleEffect = function(push, color) {
+    if (color == null) {
+      color = "#EE0";
+    }
+    push = push.norm(4);
+    return engine.add({
+      "class": "Emitter",
+      duration: 9,
+      sprite: Sprite.EMPTY,
+      velocity: I.velocity,
+      particleCount: 3,
+      batchSize: 3,
+      x: I.x + I.width / 2,
+      y: I.y + I.height / 2,
+      zIndex: 1 + (I.y + I.height + 1) / CANVAS_HEIGHT,
+      generator: {
+        color: color,
+        duration: 8,
+        height: function(n) {
+          return particleSizes.wrap(n);
+        },
+        maxSpeed: 50,
+        velocity: function(n) {
+          return Point.fromAngle(Random.angle()).scale(rand(5) + 1).add(push);
+        },
+        width: function(n) {
+          return particleSizes.wrap(n);
+        }
+      }
+    });
+  };
   drawBloodStreaks = function() {
     var blood, color, currentPos;
     heading = Point.direction(Point(0, 0), I.velocity);
@@ -7807,7 +7852,10 @@ Puck = function(I) {
     return canvas.drawLine(x, y, x + scaledVelocity.x, y + scaledVelocity.y);
   });
   self.bind("step", function() {
-    return drawBloodStreaks();
+    drawBloodStreaks();
+    if (I.superMassive) {
+      return addParticleEffect(I.velocity.scale(-1));
+    }
   });
   self.bind("positionUpdated", function() {
     var circle;
@@ -7831,6 +7879,19 @@ Puck = function(I) {
   self.bind("update", function() {
     return I.sprite = sprites[39];
   });
+  self.bind("wallCollision", function() {
+    return I.superMassive = false;
+  });
+  self.bind("superCharge", function() {
+    return I.superMassive = true;
+  });
+  self.mass = function() {
+    if (I.superMassive) {
+      return 9000;
+    } else {
+      return I.mass;
+    }
+  };
   return self;
 };;
 var Rink;
@@ -8429,8 +8490,7 @@ startMatch = function(config) {
   gameState = matchPlayUpdate;
   engine.clear(true);
   window.scoreboard = engine.add({
-    "class": "Scoreboard",
-    periodTime: 120
+    "class": "Scoreboard"
   });
   scoreboard.bind("restart", function() {
     return restartMatch();
