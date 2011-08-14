@@ -27,7 +27,7 @@ Puck = (I) ->
 
   particleSizes = [3, 4, 3]
   addParticleEffect = (push, color="#EE0") ->
-    push = push.norm(13)
+    push = push.norm(4)
 
     engine.add
       class: "Emitter"
