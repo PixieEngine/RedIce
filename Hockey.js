@@ -7586,7 +7586,7 @@ Player = function(I) {
     return self.center().add(p);
   };
   shootPuck = function(direction) {
-    var baseShotPower, circle, p, power, puck;
+    var baseShotPower, circle, hit, p, power, puck;
     puck = engine.find("Puck").first();
     power = Math.min(I.shootPower, maxShotPower);
     circle = self.controlCircle();
@@ -7597,6 +7597,21 @@ Player = function(I) {
       }
       p = Point.fromAngle(direction).scale(baseShotPower + power * 2);
       puck.I.velocity = puck.I.velocity.add(p);
+    } else {
+      hit = false;
+      engine.find("Player").without([self]).each(function(player) {
+        if (hit) {
+          return;
+        }
+        if (Collision.circular(circle, player.circle())) {
+          hit = true;
+          p = Point.fromAngle(direction).scale(power);
+          if (power > 10) {
+            player.wipeout(p);
+          }
+          return player.I.velocity = player.I.velocity.add(p);
+        }
+      });
     }
     return I.shootPower = 0;
   };
