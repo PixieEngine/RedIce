@@ -120,6 +120,8 @@ Physics = ->
         object.I.velocity = velocity
         object.updatePosition(dt, true)
 
+        object.trigger "wallCollision"
+
         Sound.play "clink0" if object.puck()
 
       return
@@ -163,6 +165,8 @@ Physics = ->
             object.I.velocity = velocity
             object.updatePosition(dt, true)
 
+            object.trigger "wallCollision"
+
             Sound.play "thud0" if object.puck()
 
       return
@@ -194,6 +198,8 @@ Physics = ->
         # Adjust velocity and move to (hopefully) non-penetrating position
         object.I.velocity = velocity
         object.updatePosition(dt, true)
+
+        object.trigger "wallCollision"
 
         Sound.play "thud0" if object.puck()
 
