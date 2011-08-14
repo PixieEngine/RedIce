@@ -102,6 +102,9 @@ Puck = (I) ->
   self.bind "update", ->
     I.sprite = sprites[39]
 
+  self.bind "wallCollision", ->
+    I.superMassive = false
+
   self.mass = ->
     if I.superMassive
       9000
