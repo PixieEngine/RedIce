@@ -105,6 +105,9 @@ Puck = (I) ->
   self.bind "wallCollision", ->
     I.superMassive = false
 
+  self.bind "superCharge", ->
+    I.superMassive = true
+
   self.mass = ->
     if I.superMassive
       9000
