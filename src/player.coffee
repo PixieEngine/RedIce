@@ -235,6 +235,9 @@ Player = (I) ->
     circle = self.controlCircle()
     baseShotPower = 15
 
+    if I.shootPower >= 2 * maxShotPower
+      puck.trigger "superCharge"
+
     # Shot or pass
     if Collision.circular(circle, puck.circle())
 
