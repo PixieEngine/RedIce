@@ -245,7 +245,6 @@ Player = (I) ->
 
     # Hitting people
     else
-      debugger
       engine.find("Player").without([self]).each (player) ->
         if Collision.circular(circle, player.circle())
           p = Point.fromAngle(direction).scale(power)
