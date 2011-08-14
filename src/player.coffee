@@ -244,7 +244,16 @@ Player = (I) ->
       puck.I.velocity = puck.I.velocity.add(p)
 
     # Hitting people
+    else
+      debugger
+      engine.find("Player").without(self).each (player) ->
+        if Collision.circular(circle, player.circle())
+          p = Point.fromAngle(direction).scale(power)
 
+          if power > 10
+            player.wipeout(p)
+
+          player.I.velocity = player.I.velocity.add(p)
 
     I.shootPower = 0
 
