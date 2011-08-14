@@ -4446,7 +4446,7 @@ Drawable = function(I, self) {
     */
     draw: function(canvas) {
       self.trigger('beforeTransform', canvas);
-      canvas.withTransform(self.getTransform(), function(canvas) {
+      canvas.withTransform(self.transform(), function(canvas) {
         return self.trigger('draw', canvas);
       });
       self.trigger('afterTransform', canvas);
@@ -4455,11 +4455,11 @@ Drawable = function(I, self) {
     /**
     Returns the current transform, with translation, rotation, and flipping applied.
     
-    @name getTransform
+    @name transform
     @methodOf Drawable#
     @type Matrix
     */
-    getTransform: function() {
+    transform: function() {
       var centerX, centerY, transform;
       centerX = (I.x + I.width / 2).floor();
       centerY = (I.y + I.height / 2).floor();
@@ -4586,6 +4586,7 @@ Emitterable = function(I, self) {
     ambientLight: 1,
     backgroundColor: "#00010D",
     cameraTransform: Matrix.IDENTITY,
+    clear: false,
     excludedModules: [],
     includedModules: [],
     paused: false,
@@ -4596,7 +4597,9 @@ Emitterable = function(I, self) {
     return false;
   };
   $(document).bind("keydown", function(event) {
-    return event.preventDefault();
+    if (!$(event.target).is("input")) {
+      return event.preventDefault();
+    }
   });
   /**
   The Engine controls the game world and manages game state. Once you 
@@ -4833,9 +4836,7 @@ Emitterable = function(I, self) {
         return self.start();
       }
     });
-    self.attrAccessor("ambientLight");
-    self.attrAccessor("backgroundColor");
-    self.attrAccessor("cameraTransform");
+    self.attrAccessor("ambientLight", "backgroundColor", "cameraTransform", "clear");
     self.include(Bindable);
     defaultModules = ["Shadows", "HUD", "Developer", "SaveState", "Selector", "Collision", "Tilemap", "FPSCounter"];
     modules = defaultModules.concat(I.includedModules);
@@ -5080,6 +5081,38 @@ the responsibility of the objects drawing on it to manage that themselves.
   });
   return {};
 };;
+(function($) {
+  /**
+  The <code>Joysticks</code> module gives the engine access to joysticks.
+  
+  @name Joysticks
+  @fieldOf Engine
+  @module
+  
+  @param {Object} I Instance variables
+  @param {Object} self Reference to the engine
+  */  return Engine.Joysticks = function(I, self) {
+    Joysticks.init();
+    log(Joysticks.status());
+    self.bind("update", function() {
+      Joysticks.init();
+      return Joysticks.update();
+    });
+    return {
+      /**
+      Get a controller for a given joystick id.
+      
+      @name controller
+      @methodOf Engine.Joysticks#
+      
+      @param {Number} i The joystick id to get the controller of.
+      */
+      controller: function(i) {
+        return Joysticks.getController(i);
+      }
+    };
+  };
+})();;
 /**
 The <code>SaveState</code> module provides methods to save and restore the current engine state.
 
@@ -5545,12 +5578,16 @@ GameUtil = {
 var Joysticks;
 var __slice = Array.prototype.slice;
 Joysticks = (function() {
-  var AXIS_MAX, DEAD_ZONE, buttonMapping, displayInstallPrompt, joysticks, plugin, type;
+  var AXIS_MAX, Controller, DEAD_ZONE, TRIP_HIGH, TRIP_LOW, buttonMapping, controllers, displayInstallPrompt, joysticks, plugin, previousJoysticks, type;
   type = "application/x-boomstickjavascriptjoysticksupport";
   plugin = null;
   AXIS_MAX = 32767;
   DEAD_ZONE = AXIS_MAX * 0.2;
+  TRIP_HIGH = AXIS_MAX * 0.75;
+  TRIP_LOW = AXIS_MAX * 0.5;
+  previousJoysticks = [];
   joysticks = [];
+  controllers = [];
   buttonMapping = {
     "A": 1,
     "B": 2,
@@ -5569,6 +5606,8 @@ Joysticks = (function() {
     "START": 128,
     "HOME": 256,
     "GUIDE": 256,
+    "TL": 512,
+    "TR": 1024,
     "ANY": 0xFFFFFF
   };
   displayInstallPrompt = function(text, url) {
@@ -5592,50 +5631,92 @@ Joysticks = (function() {
       text: text
     }).appendTo("body");
   };
+  Controller = function(i) {
+    var axisTrips, currentState, previousState, self;
+    currentState = function() {
+      return joysticks[i];
+    };
+    previousState = function() {
+      return previousJoysticks[i];
+    };
+    axisTrips = [];
+    return self = Core().include(Bindable).extend({
+      actionDown: function() {
+        var buttons, state;
+        buttons = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        if (state = currentState()) {
+          return buttons.inject(false, function(down, button) {
+            return down || state.buttons & buttonMapping[button];
+          });
+        } else {
+          return false;
+        }
+      },
+      buttonPressed: function(button) {
+        var buttonId;
+        buttonId = buttonMapping[button];
+        return (self.buttons() & buttonId) && !(previousState().buttons & buttonId);
+      },
+      position: function(stick) {
+        var state;
+        if (stick == null) {
+          stick = 0;
+        }
+        if (state = currentState()) {
+          return Joysticks.position(state, stick);
+        } else {
+          return Point(0, 0);
+        }
+      },
+      axis: function(n) {
+        return self.axes()[n] || 0;
+      },
+      axes: function() {
+        var state;
+        if (state = currentState()) {
+          return state.axes;
+        } else {
+          return [];
+        }
+      },
+      buttons: function() {
+        var state;
+        if (state = currentState()) {
+          return state.buttons;
+        }
+      },
+      processEvents: function() {
+        var x, y, _ref;
+        _ref = [0, 1].map(function(n) {
+          if (!axisTrips[n] && self.axis(n).abs() > TRIP_HIGH) {
+            axisTrips[n] = true;
+            return self.axis(n).sign();
+          }
+          if (axisTrips[n] && self.axis(n).abs() < TRIP_LOW) {
+            axisTrips[n] = false;
+          }
+          return 0;
+        }), x = _ref[0], y = _ref[1];
+        if (!x || !y) {
+          return self.trigger("tap", Point(x, y));
+        }
+      },
+      drawDebug: function(canvas) {
+        var axis, i, lineHeight, _len, _ref;
+        lineHeight = 18;
+        canvas.fillColor("#FFF");
+        _ref = self.axes();
+        for (i = 0, _len = _ref.length; i < _len; i++) {
+          axis = _ref[i];
+          canvas.fillText(axis, 0, i * lineHeight);
+        }
+        return canvas.fillText(self.buttons(), 0, i * lineHeight);
+      }
+    });
+  };
   return {
     getController: function(i) {
-      return {
-        actionDown: function() {
-          var buttons, stick;
-          buttons = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-          if (stick = joysticks != null ? joysticks[i] : void 0) {
-            return buttons.inject(false, function(down, button) {
-              return down || stick.buttons & buttonMapping[button];
-            });
-          } else {
-            return false;
-          }
-        },
-        position: function(stick) {
-          var joystick;
-          if (stick == null) {
-            stick = 0;
-          }
-          if (joystick = joysticks != null ? joysticks[i] : void 0) {
-            return Joysticks.position(joystick, stick);
-          } else {
-            return Point(0, 0);
-          }
-        },
-        axis: function(n) {
-          var stick;
-          if (stick = joysticks != null ? joysticks[i] : void 0) {
-            return stick.axes[n];
-          }
-        },
-        axes: function() {
-          var stick;
-          if (stick = joysticks != null ? joysticks[i] : void 0) {
-            return stick.axes;
-          }
-        },
-        buttons: function() {
-          var stick;
-          if (stick = joysticks != null ? joysticks[i] : void 0) {
-            return stick.buttons;
-          }
-        }
-      };
+      return controllers[i] || (controllers[i] = Controller(i));
     },
     init: function() {
       if (!plugin) {
@@ -5666,14 +5747,21 @@ Joysticks = (function() {
         return p.scale(ratio / AXIS_MAX);
       }
     },
-    states: function() {
-      return plugin != null ? plugin.joysticks : void 0;
-    },
     status: function() {
       return plugin != null ? plugin.status : void 0;
     },
     update: function() {
-      return joysticks = JSON.parse(plugin.joysticksJSON());
+      var controller, _i, _len, _results;
+      if (plugin.joysticksJSON) {
+        previousJoysticks = joysticks;
+        joysticks = JSON.parse(plugin.joysticksJSON());
+      }
+      _results = [];
+      for (_i = 0, _len = controllers.length; _i < _len; _i++) {
+        controller = controllers[_i];
+        _results.push(controller != null ? controller.processEvents() : void 0);
+      }
+      return _results;
     },
     joysticks: function() {
       return joysticks;
@@ -5906,7 +5994,9 @@ draw anything to the screen until the image has been loaded.
       },
       fill: function(canvas, x, y, width, height, repeat) {
         var pattern;
-        repeat || (repeat = "repeat");
+        if (repeat == null) {
+          repeat = "repeat";
+        }
         pattern = canvas.createPattern(image, repeat);
         canvas.fillColor(pattern);
         return canvas.fillRect(x, y, width, height);
@@ -6161,7 +6251,7 @@ AI = function(I, self) {
       return targetPosition || self.center();
     }
   };
-  I.role = roles[(I.controller / 2).floor()];
+  I.role = roles[(I.id / 2).floor()];
   return {
     computeDirection: function() {
       var deltaPosition, targetPosition;
@@ -6383,6 +6473,146 @@ Bottle = function(I) {
     }
     if (I.z < 0) {
       return self.destroy();
+    }
+  });
+  return self;
+};;
+var Configurator;
+Configurator = function(I) {
+  var finalizeConfig, horizontalPadding, join, lineHeight, self, unbindTapEvents, verticalPadding;
+  $.reverseMerge(I, {
+    activePlayers: 0,
+    font: "bold 14px 'Monaco', 'Inconsolata', 'consolas', 'Courier New', 'andale mono', 'lucida console', 'monospace'",
+    maxPlayers: 6,
+    teamColors: {
+      "0": Color("#0246E3"),
+      "1": Color("#EB070E")
+    }
+  });
+  lineHeight = 11;
+  verticalPadding = 4;
+  horizontalPadding = 6;
+  join = function(id) {
+    var backgroundColor, cursorColor, nameEntry, player;
+    player = I.config.players[id];
+    if (!player.cpu) {
+      return;
+    }
+    player.cpu = false;
+    player.ready = false;
+    player.team = 0.5;
+    I.activePlayers += 1;
+    backgroundColor = Color(player.color);
+    backgroundColor.a(0.5);
+    cursorColor = backgroundColor.lighten(0.25);
+    nameEntry = engine.add({
+      backgroundColor: backgroundColor,
+      "class": "NameEntry",
+      controller: id,
+      cursorColor: cursorColor,
+      name: player.name,
+      x: id * (App.width / I.maxPlayers),
+      y: 20
+    });
+    return nameEntry.bind("done", function(name) {
+      nameEntry.destroy();
+      player.name = name;
+      player.tapListener = function(p) {
+        if (!player.ready) {
+          return player.team = (player.team + p.x / 2).clamp(0, 1);
+        }
+      };
+      return engine.controller(id).bind("tap", player.tapListener);
+    });
+  };
+  unbindTapEvents = function() {
+    return I.config.players.each(function(player) {
+      return engine.controller(player.id).unbind("tap", player.tapListener);
+    });
+  };
+  finalizeConfig = function(config) {
+    var blues, cpu, cpus, humans, reds, _ref, _ref2, _ref3;
+    _ref = config.players.partition(function(playerData) {
+      return playerData.cpu;
+    }), cpus = _ref[0], humans = _ref[1];
+    _ref2 = humans.partition(function(playerData) {
+      return playerData.team;
+    }), reds = _ref2[0], blues = _ref2[1];
+    while ((blues.length < I.maxPlayers / 2) && cpus.length) {
+      cpu = cpus.pop();
+      cpu.team = 0;
+      blues.push(cpu);
+    }
+    while ((reds.length < I.maxPlayers / 2) && cpus.length) {
+      cpu = cpus.pop();
+      cpu.team = 1;
+      reds.push(cpu);
+    }
+    _ref3 = config.players.partition(function(playerData) {
+      return playerData.team;
+    }), reds = _ref3[0], blues = _ref3[1];
+    reds.each(function(red, i) {
+      red.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (reds.length + 1);
+      return red.x = WALL_LEFT + ARENA_WIDTH / 2 + ARENA_WIDTH / 6;
+    });
+    blues.each(function(blue, i) {
+      blue.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (blues.length + 1);
+      return blue.x = WALL_LEFT + ARENA_WIDTH / 2 - ARENA_WIDTH / 6;
+    });
+    return config;
+  };
+  self = GameObject(I).extend({
+    draw: function(canvas) {
+      canvas.font(I.font);
+      return canvas.withTransform(Matrix.translation(I.x, I.y), function() {
+        return I.config.players.each(function(player, i) {
+          var color, name, nameWidth, x, y;
+          y = i * 40;
+          x = player.team * 300;
+          if (player.cpu) {
+            name = "CPU";
+            color = Color(Player.CPU_COLOR);
+          } else {
+            name = player.name || ("P" + (player.id + 1));
+            color = I.teamColors[player.team] || Color(player.color);
+            if (player.ready) {
+              color.a(1);
+            } else {
+              color.a(0.5);
+            }
+          }
+          nameWidth = canvas.measureText(name);
+          canvas.fillColor(color);
+          canvas.fillRoundRect(x, y, nameWidth + 2 * horizontalPadding, lineHeight + 2 * verticalPadding);
+          canvas.fillColor("#FFF");
+          return canvas.fillText(name, x + horizontalPadding, y + lineHeight + verticalPadding);
+        });
+      });
+    }
+  });
+  self.bind("step", function() {
+    var readyPlayers;
+    I.maxPlayers.times(function(i) {
+      var controller, player;
+      controller = engine.controller(i);
+      if (controller.actionDown("ANY")) {
+        join(i);
+      }
+      if ((player = I.config.players[i]) && (player.team !== 0.5)) {
+        if (controller.actionDown("A")) {
+          player.ready = true;
+        }
+        if (controller.actionDown("B")) {
+          return player.ready = false;
+        }
+      }
+    });
+    readyPlayers = I.config.players.select(function(player) {
+      return player.ready;
+    });
+    if (readyPlayers.length === I.activePlayers && readyPlayers.length > 0) {
+      unbindTapEvents();
+      return self.trigger("done", finalizeConfig(I.config));
     }
   });
   return self;
@@ -6644,6 +6874,205 @@ Music = (function() {
     }
   };
 })();;
+var NameEntry;
+NameEntry = function(I) {
+  var addCharacter, characterAtCursor, cols, controller, horizontalPadding, lineHeight, margin, menuArea, move, nameArea, rows, self, textArea, textAreaHeight, verticalPadding, width;
+  $.reverseMerge(I, {
+    backgroundColor: "rgba(0, 255, 255, 0.5)",
+    characterSet: "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 _-.!?♦♥♣♠★¤$¥£€®™".split(""),
+    cellWidth: 20,
+    cellHeight: 20,
+    textColor: "#FFF",
+    cols: 8,
+    cursorColor: "rgba(0, 255, 0, 0.5)",
+    cursor: {
+      x: 0,
+      y: 0,
+      menu: false
+    },
+    font: "bold 14px 'Monaco', 'Inconsolata', 'consolas', 'Courier New', 'andale mono', 'lucida console', 'monospace'",
+    name: "",
+    maxLength: 8,
+    controller: null
+  });
+  lineHeight = 11;
+  verticalPadding = 4;
+  horizontalPadding = 6;
+  margin = 6;
+  if (I.controller != null) {
+    controller = engine.controller(I.controller);
+  }
+  cols = function() {
+    return I.cols;
+  };
+  rows = function() {
+    return (I.characterSet.length / I.cols).ceil();
+  };
+  width = function() {
+    return cols() * I.cellWidth;
+  };
+  textAreaHeight = function() {
+    return I.cellHeight * rows();
+  };
+  move = function(delta) {
+    var newY, _results, _results2;
+    I.cursor.x = (I.cursor.x + delta.x).mod(cols());
+    newY = I.cursor.y + delta.y;
+    if (I.cursor.menu && newY) {
+      I.cursor.menu = false;
+      if (newY > 0) {
+        newY = 0;
+      }
+      I.cursor.y = newY.mod(rows());
+    } else if ((newY === -1) || (newY === rows())) {
+      I.cursor.menu = true;
+      I.cursor.y = 0;
+    } else {
+      I.cursor.y = newY.mod(rows());
+    }
+    if (!I.cursor.menu && characterAtCursor() === void 0) {
+      if (delta.x > 0) {
+        _results = [];
+        while (characterAtCursor() === void 0) {
+          _results.push(I.cursor.x = (I.cursor.x + 1) % rows());
+        }
+        return _results;
+      } else {
+        _results2 = [];
+        while (characterAtCursor() === void 0) {
+          _results2.push(I.cursor.x = (I.cursor.x - 1) % rows());
+        }
+        return _results2;
+      }
+    }
+  };
+  characterAtCursor = function() {
+    return I.characterSet[I.cursor.x + I.cursor.y * I.cols];
+  };
+  addCharacter = function() {
+    if (I.cursor.menu) {
+      return self.trigger("done", I.name);
+    } else {
+      if (I.name.length < I.maxLength) {
+        I.name += characterAtCursor();
+      }
+      if (I.name.length === I.maxLength) {
+        I.cursor.menu = true;
+        I.cursor.y = 0;
+        return I.cursor.x = 0;
+      }
+    }
+  };
+  nameArea = {
+    draw: function(canvas) {
+      var cursorHeight, cursorWidth, nameAreaWidth;
+      cursorWidth = 10;
+      cursorHeight = 2;
+      nameAreaWidth = canvas.measureText(["M"].wrap(0, I.maxLength).join("")) + 2 * horizontalPadding;
+      return canvas.withTransform(Matrix.translation(this.x, this.y), function() {
+        var nameWidth;
+        canvas.fillColor(I.backgroundColor);
+        canvas.fillRoundRect(0, 0, nameAreaWidth, I.cellHeight);
+        canvas.fillColor(I.textColor);
+        canvas.fillText(I.name, horizontalPadding, lineHeight + verticalPadding);
+        if ((I.age / 20).floor() % 2) {
+          canvas.fillColor(I.cursorColor);
+          if (I.name.length === I.maxLength) {
+            nameWidth = canvas.measureText(I.name.substring(0, I.name.length - 1));
+          } else {
+            nameWidth = canvas.measureText(I.name);
+          }
+          return canvas.fillRect(nameWidth + horizontalPadding, verticalPadding + lineHeight, cursorWidth, cursorHeight);
+        }
+      });
+    },
+    x: 0,
+    y: 0
+  };
+  textArea = {
+    draw: function(canvas) {
+      return canvas.withTransform(Matrix.translation(this.x, this.y), function() {
+        var row;
+        canvas.fillColor(I.backgroundColor);
+        canvas.fillRoundRect(0, 0, width(), textAreaHeight());
+        canvas.fillColor(I.textColor);
+        row = 0;
+        I.characterSet.each(function(c, i) {
+          var col;
+          col = i % I.cols;
+          row = (i / I.cols).floor();
+          return canvas.fillText(c, col * I.cellWidth + horizontalPadding, row * I.cellHeight + lineHeight + verticalPadding);
+        });
+        row += 1;
+        if (!I.cursor.menu) {
+          canvas.fillColor(I.cursorColor);
+          return canvas.fillRoundRect(I.cursor.x * I.cellWidth, I.cursor.y * I.cellHeight, I.cellWidth, I.cellHeight);
+        }
+      });
+    },
+    x: 0,
+    y: I.cellHeight + margin
+  };
+  menuArea = {
+    draw: function(canvas) {
+      return canvas.withTransform(Matrix.translation(this.x, this.y), function() {
+        var option, optionWidth;
+        option = "Done";
+        optionWidth = canvas.measureText(option);
+        canvas.fillColor(I.textColor);
+        canvas.fillText(option, horizontalPadding, lineHeight + verticalPadding);
+        if (I.cursor.menu) {
+          canvas.fillColor(I.cursorColor);
+          return canvas.fillRoundRect(0, 0, optionWidth + 2 * horizontalPadding, I.cellHeight);
+        }
+      });
+    },
+    x: 0,
+    y: I.cellHeight * (rows() + 1) + 2 * margin
+  };
+  self = GameObject(I).extend({
+    draw: function(canvas) {
+      return canvas.withTransform(self.transform(), function(canvas) {
+        canvas.font(I.font);
+        nameArea.draw(canvas);
+        textArea.draw(canvas);
+        return menuArea.draw(canvas);
+      });
+    }
+  });
+  if (controller != null) {
+    controller.bind("tap", function(direction) {
+      return move(direction);
+    });
+  }
+  self.bind("step", function() {
+    if (justPressed.left) {
+      move(Point(-1, 0));
+    }
+    if (justPressed.right) {
+      move(Point(1, 0));
+    }
+    if (justPressed.up) {
+      move(Point(0, -1));
+    }
+    if (justPressed.down) {
+      move(Point(0, 1));
+    }
+    if (justPressed["return"]) {
+      addCharacter();
+    }
+    if (justPressed.backspace) {
+      I.name = I.name.substring(0, I.name.length - 1);
+    }
+    if (controller != null ? controller.buttonPressed("A") : void 0) {
+      addCharacter();
+    }
+    if (controller != null ? controller.buttonPressed("B") : void 0) {
+      return I.name = I.name.substring(0, I.name.length - 1);
+    }
+  });
+  return self;
+};;
 var OptionsScreen;
 OptionsScreen = function(I) {
   var createSelect, directory, optionsPanel, optionsScreen, resourceURL, _ref;
@@ -6931,7 +7360,7 @@ Physics = function() {
 };;
 var Player;
 Player = function(I) {
-  var PLAYER_COLORS, actionDown, addSprayParticleEffect, axisPosition, boostMeter, controller, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, drawPowerMeters, flyingOffset, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, movementDirection, particleSizes, playerColor, redTeam, rightSkatePos, self, shootPuck, standingOffset;
+  var actionDown, addSprayParticleEffect, axisPosition, boostMeter, controller, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, drawPowerMeters, flyingOffset, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, movementDirection, particleSizes, playerColor, redTeam, rightSkatePos, self, shootPuck, standingOffset;
   $.reverseMerge(I, {
     boost: 0,
     cooldown: {
@@ -6958,14 +7387,16 @@ Player = function(I) {
     velocity: Point(),
     zIndex: 1
   });
-  PLAYER_COLORS = ["#0246E3", "#EB070E", "#388326", "#F69508", "#563495", "#58C4F5", "#FFDE49"];
-  playerColor = PLAYER_COLORS[I.id];
-  I.team || (I.team = I.controller % 2);
+  if (I.cpu) {
+    playerColor = Player.CPU_COLOR;
+  } else {
+    playerColor = Player.COLORS[I.id];
+  }
   redTeam = I.team;
   standingOffset = Point(0, -16);
   flyingOffset = Point(-24, -16);
   if (I.joystick) {
-    controller = Joysticks.getController(I.controller);
+    controller = Joysticks.getController(I.id);
     actionDown = controller.actionDown;
     axisPosition = controller.axis;
   } else {
@@ -6981,7 +7412,7 @@ Player = function(I) {
     if (I.cpu) {
       name = "CPU";
     } else {
-      name = "P" + (I.id + 1);
+      name = I.name || ("P" + (I.id + 1));
     }
     padding = 6;
     lineHeight = 16;
@@ -7325,7 +7756,9 @@ Player = function(I) {
     self.include(AI);
   }
   return self;
-};;
+};
+Player.COLORS = ["#0246E3", "#EB070E", "#388326", "#F69508", "#563495", "#58C4F5", "#FFDE49"];
+Player.CPU_COLOR = "#888";;
 var Puck;
 Puck = function(I) {
   var DEBUG_DRAW, drawBloodStreaks, heading, lastPosition, self;
@@ -7547,7 +7980,13 @@ Scoreboard = function(I) {
     }
     I.time -= 1;
     if (I.gameOver) {
-      ;
+      return MAX_PLAYERS.times(function(i) {
+        var controller;
+        controller = engine.controller(i);
+        if (controller.actionDown("START")) {
+          return self.trigger("restart");
+        }
+      });
     } else {
       if (I.time === 0) {
         return nextPeriod();
@@ -7680,12 +8119,11 @@ Shockwave = function(I) {
 Shockwave.scorchSprite = Sprite.loadByName("scorch");;
 var TitleScreen;
 TitleScreen = function(I) {
-  var directory, joysticksConfig, joysticksLabel, loadingText, titleScreen, titleScreenImage, titleScreenText, _ref;
+  var loadingText, titleScreen, titleScreenImage, titleScreenText;
   $.reverseMerge(I, {
     backgroundColor: "#00010D",
     callback: $.noop
   });
-  directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.images : void 0 : void 0) || "images";
   titleScreen = $("<div />", {
     css: {
       backgroundColor: I.backgroundColor,
@@ -7702,7 +8140,7 @@ TitleScreen = function(I) {
   }).appendTo("body");
   titleScreenImage = $("<img />", {
     height: App.height,
-    src: "" + BASE_URL + "/" + directory + "/title.png",
+    src: ResourceLoader.urlFor("images", "title"),
     width: App.width
   }).appendTo(titleScreen);
   loadingText = $("<div />", {
@@ -7725,27 +8163,11 @@ TitleScreen = function(I) {
       zIndex: 1
     }
   }).appendTo(titleScreen);
-  joysticksLabel = $("<label />", {
-    text: "Joysticks",
-    css: {
-      position: "absolute",
-      bottom: "10px",
-      right: "10px",
-      zIndex: 2
-    }
-  }).appendTo(titleScreen);
-  joysticksConfig = $("<input />", {
-    checked: false,
-    type: "checkbox"
-  }).appendTo(joysticksLabel);
-  return $(document).one("keydown", function() {
-    if (config.joysticks = joysticksConfig.attr("checked")) {
-      config.joystickPlayers = config.players;
-      config.keyboardPlayers = 0;
-    }
+  titleScreen.one("done", function() {
     titleScreen.remove();
     return I.callback();
   });
+  return titleScreen;
 };;
 var Zamboni;
 Zamboni = function(I) {
@@ -7822,7 +8244,7 @@ Zamboni = function(I) {
     var boxPoints, currentPos;
     currentPos = self.center();
     boxPoints = [Point(SWEEPER_SIZE / 2, 0), Point(SWEEPER_SIZE, 0), Point(SWEEPER_SIZE, SWEEPER_SIZE), Point(SWEEPER_SIZE / 2, SWEEPER_SIZE)].map(function(p) {
-      return self.getTransform().transformPoint(p);
+      return self.transform().transformPoint(p);
     });
     bloodCanvas.compositeOperation("destination-out");
     bloodCanvas.globalAlpha(0.25);
@@ -7879,26 +8301,10 @@ Zamboni = function(I) {
   return self;
 };;
 App.entities = {};;
-;$(function(){ var DEBUG_DRAW, engineUpdate, physics, restartMatch, rink, startMatch;
-Sprite.loadSheet = function(name, tileWidth, tileHeight) {
-  var directory, image, sprites, url, _ref;
-  directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.images : void 0 : void 0) || "images";
-  url = "" + BASE_URL + "/" + directory + "/" + name + ".png?" + MTIME;
-  sprites = [];
-  image = new Image();
-  image.onload = function() {
-    return (image.height / tileHeight).times(function(row) {
-      return (image.width / tileWidth).times(function(col) {
-        return sprites.push(Sprite.create(image, col * tileWidth, row * tileHeight, tileWidth, tileHeight));
-      });
-    });
-  };
-  image.src = url;
-  return sprites;
-};
-window.sprites = Sprite.loadSheet("sprites", 32, 48);
-window.wideSprites = Sprite.loadSheet("sprites", 64, 48);
-window.tallSprites = Sprite.loadSheet("sprites", 32, 96);
+;$(function(){ var DEBUG_DRAW, controllers, engineUpdate, gameState, initPlayerData, matchPlayUpdate, matchSetupUpdate, nameEntry, physics, restartMatch, rink, setUpMatch, startMatch, titleScreen, titleScreenUpdate;
+window.sprites = Sprite.create.loadSheet("sprites", 32, 48);
+window.wideSprites = Sprite.create.loadSheet("sprites", 64, 48);
+window.tallSprites = Sprite.create.loadSheet("sprites", 32, 96);
 window.CANVAS_WIDTH = App.width;
 window.CANVAS_HEIGHT = App.height;
 window.WALL_LEFT = 32;
@@ -7911,11 +8317,8 @@ window.BLOOD_COLOR = "#BA1A19";
 window.ICE_COLOR = "rgba(192, 255, 255, 0.2)";
 window.config = {
   throwBottles: true,
-  players: 6,
-  keyboardPlayers: 2,
-  joystickPlayers: 0
+  players: []
 };
-config.joysticks = config.joystickPlayers > 0;
 rink = Rink();
 physics = Physics();
 window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").appendTo("body").css({
@@ -7926,27 +8329,111 @@ window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEI
 }).powerCanvas();
 bloodCanvas.strokeColor(BLOOD_COLOR);
 DEBUG_DRAW = false;
+window.MAX_PLAYERS = 6;
+window.activePlayers = 0;
 window.engine = Engine({
   canvas: $("canvas").powerCanvas(),
-  clear: true,
   excludedModules: ["HUD"],
+  includedModules: ["Joysticks"],
   showFPS: true,
   zSort: true
 });
+gameState = titleScreenUpdate = function() {
+  return controllers.each(function(controller, i) {
+    if (controller.actionDown("ANY")) {
+      titleScreen.trigger("done");
+      return setUpMatch();
+    }
+  });
+};
+matchSetupUpdate = function() {};
+matchPlayUpdate = function() {
+  var objects, players, playersAndPucks, pucks, zambonis;
+  pucks = engine.find("Puck");
+  players = engine.find("Player").shuffle();
+  zambonis = engine.find("Zamboni");
+  objects = players.concat(zambonis, pucks);
+  playersAndPucks = players.concat(pucks);
+  players.each(function(player) {
+    if (player.I.wipeout) {
+      return;
+    }
+    return pucks.each(function(puck) {
+      if (Collision.circular(player.controlCircle(), puck.circle())) {
+        return player.controlPuck(puck);
+      }
+    });
+  });
+  physics.process(objects);
+  return playersAndPucks.each(function(player) {
+    var splats;
+    splats = engine.find("Blood");
+    return splats.each(function(splat) {
+      if (Collision.circular(player.circle(), splat.circle())) {
+        return player.bloody();
+      }
+    });
+  });
+};
+controllers = [];
+MAX_PLAYERS.times(function(i) {
+  var controller;
+  controller = controllers[i] = engine.controller(i);
+  return controller.bind();
+});
 Music.play("title_screen");
+initPlayerData = function() {
+  MAX_PLAYERS.times(function(i) {
+    var _base;
+    $.reverseMerge((_base = config.players)[i] || (_base[i] = {}), {
+      "class": "Player",
+      color: Player.COLORS[i],
+      id: i,
+      name: "",
+      team: i % 2,
+      joystick: true,
+      cpu: true
+    });
+    return $.extend(config.players[i], {
+      ready: false,
+      cpu: true
+    });
+  });
+  return config;
+};
+setUpMatch = function() {
+  var configurator;
+  engine.clear(false);
+  configurator = engine.add({
+    "class": "Configurator",
+    config: initPlayerData(),
+    x: 240,
+    y: 240
+  });
+  return configurator.bind("done", function(config) {
+    configurator.destroy();
+    return startMatch(config);
+  });
+};
 restartMatch = function() {
   var doRestart;
   doRestart = function() {
     engine.I.objects.clear();
     engine.unbind("afterUpdate", doRestart);
-    return startMatch();
+    return setUpMatch();
   };
   return engine.bind("afterUpdate", doRestart);
 };
-startMatch = function() {
-  var humanPlayers, leftGoal, rightGoal;
+startMatch = function(config) {
+  var leftGoal, rightGoal;
+  gameState = matchPlayUpdate;
+  engine.clear(true);
   window.scoreboard = engine.add({
-    "class": "Scoreboard"
+    "class": "Scoreboard",
+    periodTime: 120
+  });
+  scoreboard.bind("restart", function() {
+    return restartMatch();
   });
   engine.add({
     sprite: Sprite.loadByName("corner_left"),
@@ -7988,28 +8475,8 @@ startMatch = function() {
     y: WALL_BOTTOM - 48,
     zIndex: 10
   });
-  humanPlayers = config.keyboardPlayers + config.joystickPlayers;
-  config.players.times(function(i) {
-    var controller, joystick, x, y;
-    y = WALL_TOP + ARENA_HEIGHT * ((i / 2).floor() + 1) / 4;
-    x = WALL_LEFT + ARENA_WIDTH / 2 + ((i % 2) - 0.5) * ARENA_WIDTH / 6;
-    if (i < config.keyboardPlayers) {
-      joystick = false;
-      controller = i;
-    } else {
-      joystick = true;
-      controller = i - config.keyboardPlayers;
-    }
-    return engine.add({
-      "class": "Player",
-      controller: controller,
-      id: i,
-      team: i % 2,
-      cpu: i >= humanPlayers,
-      joystick: joystick,
-      x: x,
-      y: y
-    });
+  config.players.each(function(playerData) {
+    return engine.add($.extend({}, playerData));
   });
   engine.add({
     "class": "Puck"
@@ -8030,11 +8497,13 @@ startMatch = function() {
   rightGoal.bind("score", function() {
     return scoreboard.score("away");
   });
-  Music.play("music1");
-  return engine.start();
+  return Music.play("music1");
 };
-TitleScreen({
-  callback: startMatch
+nameEntry = function() {
+  return gameState = matchSetupUpdate;
+};
+titleScreen = TitleScreen({
+  callback: nameEntry
 });
 engine.bind("beforeDraw", function(canvas) {
   return engine.find("Player").invoke("drawShadow", canvas);
@@ -8049,49 +8518,10 @@ engine.bind("draw", function(canvas) {
   return engine.find("Player").invoke("drawFloatingNameTag", canvas);
 });
 engineUpdate = function() {
-  var objects, players, playersAndPucks, pucks, zambonis;
-  if (config.joysticks) {
-    Joysticks.update();
-  }
-  pucks = engine.find("Puck");
-  players = engine.find("Player").shuffle();
-  zambonis = engine.find("Zamboni");
-  objects = players.concat(zambonis, pucks);
-  playersAndPucks = players.concat(pucks);
-  players.each(function(player) {
-    if (player.I.wipeout) {
-      return;
-    }
-    return pucks.each(function(puck) {
-      if (Collision.circular(player.controlCircle(), puck.circle())) {
-        return player.controlPuck(puck);
-      }
-    });
-  });
-  physics.process(objects);
-  return playersAndPucks.each(function(player) {
-    var splats;
-    splats = engine.find("Blood");
-    return splats.each(function(splat) {
-      if (Collision.circular(player.circle(), splat.circle())) {
-        return player.bloody();
-      }
-    });
-  });
+  return gameState();
 };
 engine.bind("update", engineUpdate);
-Joysticks.init();
-log(Joysticks.status());
+engine.start();
 $(document).bind("keydown", "0", function() {
   return DEBUG_DRAW = !DEBUG_DRAW;
-});
-(6).times(function(i) {
-  var n;
-  n = i + 1;
-  return $(document).bind("keydown", n.toString(), function() {
-    if (scoreboard.gameOver()) {
-      window.config.joystickPlayers = n;
-      return restartMatch();
-    }
-  });
 }); });
