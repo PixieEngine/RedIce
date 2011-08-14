@@ -245,8 +245,11 @@ Player = (I) ->
 
     # Hitting people
     else
+      hit = false
       engine.find("Player").without([self]).each (player) ->
+        return if hit
         if Collision.circular(circle, player.circle())
+          hit = true
           p = Point.fromAngle(direction).scale(power)
 
           if power > 10
