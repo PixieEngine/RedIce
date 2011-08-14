@@ -92,17 +92,27 @@ Player = (I) ->
     if I.shootPower
       maxWidth = 40
       height = 5
+
       ratio = Math.min(I.shootPower / maxShotPower, 1)
+      superChargeRatio = ((I.shootPower - maxShotPower) / maxShotPower).clamp(0, 1)
+
       center = self.center().floor()
       canvas.withTransform Matrix.translation(center.x, center.y).concat(Matrix.rotation(movementDirection)), ->
+        # Fill background
         canvas.fillColor("#000")
         canvas.fillRoundRect(-(padding + height)/2, -padding, maxWidth + 2*padding, height, 2)
 
-        if I.shootPower >= maxShotPower && (I.age/2).floor() % 2
-          canvas.fillColor("#0EF")
-        else
-          canvas.fillColor("#EE0")
+        # Fill Power meter
+        canvas.fillColor("#EE0")
         canvas.fillRoundRect(-height/2, 0, maxWidth * ratio, height, 2)
+
+        # Fill Super Meter
+        canvas.fillColor("#0EF")
+        if superChargeRatio == 1
+          if (I.age/2).floor() % 2
+            canvas.fillRoundRect(-height/2, 0, maxWidth, height, 2)
+        else
+          canvas.fillRoundRect(-height/2, 0, maxWidth * superChargeRatio, height, 2)
 
   drawControlCircle = (canvas) ->
     color = Color(playerColor).lighten(0.10)
