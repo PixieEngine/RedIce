@@ -111,7 +111,7 @@ Player = (I) ->
         if superChargeRatio == 1
           if (I.age/2).floor() % 2
             canvas.fillRoundRect(-height/2, 0, maxWidth, height, 2)
-        else
+        else if superChargeRatio > 0
           canvas.fillRoundRect(-height/2, 0, maxWidth * superChargeRatio, height, 2)
 
   drawControlCircle = (canvas) ->
