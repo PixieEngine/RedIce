@@ -2,7 +2,7 @@
   "author": "STRd6",
   "name": "Hockey",
   "libs": {
-    "gamelib.js": "https://github.com/STRd6/gamelib/raw/pixie/gamelib.js",
+    "00_gamelib.js": "https://github.com/STRd6/gamelib/raw/pixie/gamelib.js",
     "browserlib.js": "https://github.com/STRd6/browserlib/raw/pixie/browserlib.js",
     "extralib.js": "https://github.com/STRd6/extralib/raw/pixie/extralib.js"
   },
