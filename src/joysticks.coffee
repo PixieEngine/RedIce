@@ -77,12 +77,12 @@ Joysticks = ( ->
     5: 5
 
   axisMappingOSX =
-    0: 4
-    1: 5
-    2: 0
-    3: 1
-    4: 2
-    5: 3
+    0: 2
+    1: 3
+    2: 4
+    3: 5
+    4: 0
+    5: 1
 
   displayInstallPrompt = (text, url) ->
     $ "<a />",
@@ -139,7 +139,7 @@ Joysticks = ( ->
 
       position: (stick=0) ->
         if state = currentState()
-          p = Point(self.axis(axisMapping[2*stick]), self.axis(axisMapping[2*stick+1]))
+          p = Point(self.axis(2*stick), self.axis(2*stick+1))
 
           magnitude = p.magnitude()
 
@@ -172,8 +172,6 @@ Joysticks = ( ->
 
       processEvents: ->
         [x, y] = [0, 1].map (n) ->
-          n = axisMapping[n]
-
           if !axisTrips[n] && self.axis(n).abs() > TRIP_HIGH
             axisTrips[n] = true
 
