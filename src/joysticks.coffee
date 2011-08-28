@@ -105,6 +105,9 @@ Joysticks = ( ->
     .appendTo("body")
 
   Controller = (i, remapOSX) ->
+    if remapOSX == undefined
+      remapOSX = navigator.platform.match(/^Mac/)
+
     if remapOSX
       buttonMapping = buttonMappingOSX
       axisMapping = axisMappingOSX
