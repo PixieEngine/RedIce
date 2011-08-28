@@ -1,7 +1,8 @@
 Joysticks = ( ->
   type = "application/x-boomstickjavascriptjoysticksupport"
   plugin = null
-  AXIS_MAX = 32767
+  MAX_BUFFER = 2000
+  AXIS_MAX = 32767 - MAX_BUFFER
   DEAD_ZONE = AXIS_MAX * 0.2
   TRIP_HIGH = AXIS_MAX * 0.75
   TRIP_LOW = AXIS_MAX * 0.5
