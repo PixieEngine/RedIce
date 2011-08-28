@@ -172,6 +172,8 @@ Joysticks = ( ->
 
       processEvents: ->
         [x, y] = [0, 1].map (n) ->
+          n = axisMapping[n]
+
           if !axisTrips[n] && self.axis(n).abs() > TRIP_HIGH
             axisTrips[n] = true
 
