@@ -11,6 +11,7 @@ TitleScreen = (I) ->
       fontWeight: "bold"
       left: 0
       margin: "auto"
+      overflow: "hidden"
       position: "absolute"
       textAlign: "center"
       top: 0
