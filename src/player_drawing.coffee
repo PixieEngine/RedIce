@@ -102,7 +102,7 @@ PlayerDrawing = (I, self) ->
     canvas.fillColor("#FFF")
     canvas.fillText(name, topLeft.x + padding, topLeft.y + lineHeight + padding/2)
 
-  drawPowerMeters = (canvas) ->
+  drawPowerMeters: (canvas) ->
     ratio = (boostMeter - I.cooldown.boost) / boostMeter
     start = self.position().add(Point(0, I.height)).floor()
     padding = 1
