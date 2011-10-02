@@ -85,7 +85,7 @@ PlayerDrawing = (I, self) ->
     lineHeight = 16
     textWidth = canvas.measureText(name)
 
-    backgroundColor = Color(playerColor)
+    backgroundColor = self.color()
     backgroundColor.a "0.5"
 
     yOffset = 48
@@ -144,7 +144,7 @@ PlayerDrawing = (I, self) ->
           canvas.fillRoundRect(-height/2, 0, maxWidth * superChargeRatio, height, 2)
 
   drawControlCircle: (canvas) ->
-    color = Color(playerColor).lighten(0.10)
+    color = self.color().lighten(0.10)
     color.a "0.25"
 
     circle = self.controlCircle()
