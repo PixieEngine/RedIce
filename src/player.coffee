@@ -242,11 +242,6 @@ Player = (I) ->
 
       I.hasPuck = false
 
-  self.bind 'drawDebug', (canvas) ->
-    if I.AI_TARGET
-      {x, y} = I.AI_TARGET
-      canvas.fillCircle(x, y, 3, "rgba(255, 255, 0, 1)")
-
   self.bind "update", ->
     I.hflip = (I.heading > 2*Math.TAU/8 || I.heading < -2*Math.TAU/8)
 
