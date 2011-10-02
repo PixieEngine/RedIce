@@ -142,7 +142,7 @@ Player = (I) ->
 
     # Shot or pass
     if Collision.circular(circle, puck.circle())
-      if I.shootPower >= 2 * I.maxShotPowmaxShotPowerer
+      if I.shootPower >= 2 * I.maxShotPower
         puck.trigger "superCharge"
 
       p = Point.fromAngle(direction).scale(baseShotPower + power * 2)
