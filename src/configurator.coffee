@@ -6,10 +6,13 @@ Configurator = (I) ->
     teamColors:
       "0": Color("#0246E3")
       "1": Color("#EB070E")
+    width: 600
+    height: 480
 
   lineHeight = 11
   verticalPadding = 4
   horizontalPadding = 6
+  iceBg = Sprite.loadByName("ice_bg")
 
   join = (id) ->
     player = I.config.players[id]
@@ -88,15 +91,20 @@ Configurator = (I) ->
     draw: (canvas) ->
       canvas.font I.font
 
+      self.trigger "beforeTransform", canvas
+
       canvas.withTransform Matrix.translation(I.x, I.y), ->
+        canvas.fillColor("rgba(0, 0, 0, 0.5)")
+        canvas.fillRoundRect(0, 0, I.width, I.height, 15)
+
         canvas.fillColor(Player.COLORS[0])
-        canvas.fillText("Blue Team", -20, -20)
+        canvas.fillText("Blue Team", 20, 20)
         canvas.fillColor(Player.COLORS[1])
-        canvas.fillText("Red Team", 300 - 20, -20)
+        canvas.fillText("Red Team", 520, 20)
 
         I.config.players.each (player, i) ->
-          y = i * 40
-          x = (player.team) * 300
+          y = i * 60 + 30
+          x = (player.team) * 500 + 30
 
           if player.cpu
             name = "CPU"
@@ -137,6 +145,10 @@ Configurator = (I) ->
     if readyPlayers.length == I.activePlayers && readyPlayers.length > 0
       unbindTapEvents()
       self.trigger "done", finalizeConfig(I.config)
+
+  self.bind "beforeTransform", (canvas) ->
+    iceBg.fill(canvas, 0, 0, canvas.width(), canvas.height())
+    canvas.fill("rgba(0, 0, 0, 0.5)")
 
   return self
 
