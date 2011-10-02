@@ -93,6 +93,7 @@ Configurator = (I) ->
         canvas.fillText("Blue Team", -20, -20)
         canvas.fillColor(Player.COLORS[1])
         canvas.fillText("Red Team", 300 - 20, -20)
+
         I.config.players.each (player, i) ->
           y = i * 40
           x = (player.team) * 300
