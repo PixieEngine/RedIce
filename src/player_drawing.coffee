@@ -103,7 +103,7 @@ PlayerDrawing = (I, self) ->
     canvas.fillText(name, topLeft.x + padding, topLeft.y + lineHeight + padding/2)
 
   drawPowerMeters: (canvas) ->
-    ratio = (boostMeter - I.cooldown.boost) / boostMeter
+    ratio = (I.boostMeter - I.cooldown.boost) / I.boostMeter
     start = self.position().add(Point(0, I.height)).floor()
     padding = 1
     maxWidth = I.width
@@ -122,11 +122,11 @@ PlayerDrawing = (I, self) ->
       maxWidth = 40
       height = 5
 
-      ratio = Math.min(I.shootPower / maxShotPower, 1)
-      superChargeRatio = ((I.shootPower - maxShotPower) / maxShotPower).clamp(0, 1)
+      ratio = Math.min(I.shootPower / I.maxShotPower, 1)
+      superChargeRatio = ((I.shootPower - I.maxShotPower) / I.maxShotPower).clamp(0, 1)
 
       center = self.center().floor()
-      canvas.withTransform Matrix.translation(center.x, center.y).concat(Matrix.rotation(movementDirection)), ->
+      canvas.withTransform Matrix.translation(center.x, center.y).concat(Matrix.rotation(I.movementDirection)), ->
         # Fill background
         canvas.fillColor("#000")
         canvas.fillRoundRect(-(padding + height)/2, -padding, maxWidth + 2*padding, height, 2)
