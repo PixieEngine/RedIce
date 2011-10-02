@@ -8,6 +8,7 @@ Goal = (I) ->
 
   $.reverseMerge I,
     color: "green"
+    lights: 0
     height: HEIGHT
     width: WIDTH
     x: WALL_LEFT + ARENA_WIDTH/20 - WIDTH
@@ -15,6 +16,7 @@ Goal = (I) ->
     spriteOffset: Point(0, -(HEIGHT-2))
     suddenDeath: false
 
+  I.color = Player.COLORS[I.team]
   walls = []
 
   if I.team
@@ -86,7 +88,16 @@ Goal = (I) ->
     walls.each (wall) ->
       drawWall(wall, canvas)
 
+  self.bind "draw", (canvas) ->
+    if I.lights
+      color = Color(I.color)
+      color.a = Math.sin(I.age / (6*Math.TAU)).abs()
+      canvas.fillCircle(0, 0, 50, color)
+
   self.bind "step", ->
+    if I.lights > 0
+      I.lights -= 1
+
     if I.team
       I.sprite = tallSprites[7]      
     else
