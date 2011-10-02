@@ -5,8 +5,8 @@ PlayerDrawing = (I, self) ->
       {x, y} = I.AI_TARGET
       canvas.fillCircle(x, y, 3, "rgba(255, 255, 0, 1)")    
 
-  lastLeftSkatePos = null
-  lastRightSkatePos = null
+  I.lastLeftSkatePos = null
+  I.lastRightSkatePos = null
 
   leftSkatePos: ->
     p = Point.fromAngle(I.heading - Math.TAU/4).scale(5)
@@ -38,11 +38,11 @@ PlayerDrawing = (I, self) ->
       # Skip certain feet
       cycle = I.age % 30
       if 1 < cycle < 14
-        lastLeftSkatePos = null
+        I.lastLeftSkatePos = null
       if 15 < cycle < 29 
-        lastRightSkatePos = null
+        I.lastRightSkatePos = null
 
-      if lastLeftSkatePos
+      if I.lastLeftSkatePos
         if skateBlood = I.blood.leftSkate
           I.blood.leftSkate -= 1
 
@@ -53,9 +53,9 @@ PlayerDrawing = (I, self) ->
           thickness = 1
 
         bloodCanvas.strokeColor(color)
-        bloodCanvas.drawLine(lastLeftSkatePos, currentLeftSkatePos, thickness)
+        bloodCanvas.drawLine(I.lastLeftSkatePos, currentLeftSkatePos, thickness)
 
-      if lastRightSkatePos 
+      if I.lastRightSkatePos 
         if skateBlood = I.blood.rightSkate
           I.blood.rightSkate -= 1
 
@@ -66,10 +66,10 @@ PlayerDrawing = (I, self) ->
           thickness = 1
 
         bloodCanvas.strokeColor(color)        
-        bloodCanvas.drawLine(lastRightSkatePos, currentRightSkatePos, thickness)
+        bloodCanvas.drawLine(I.lastRightSkatePos, currentRightSkatePos, thickness)
 
-      lastLeftSkatePos = currentLeftSkatePos
-      lastRightSkatePos = currentRightSkatePos
+      I.lastLeftSkatePos = currentLeftSkatePos
+      I.lastRightSkatePos = currentRightSkatePos
 
   drawShadow: (canvas) ->
     base = self.center().add(0, I.height/2 + 4)
