@@ -205,8 +205,8 @@ Player = (I) ->
       I.movementDirection = movement.direction()
 
     if I.wipeout
-      lastLeftSkatePos = null
-      lastRightSkatePos = null
+      I.lastLeftSkatePos = null
+      I.lastRightSkatePos = null
     else
       if !I.cooldown.shoot && actionDown "B", "X"
         I.shootPower += 1
