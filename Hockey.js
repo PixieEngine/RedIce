@@ -6500,7 +6500,7 @@ Bottle = function(I) {
 };;
 var Configurator;
 Configurator = function(I) {
-  var finalizeConfig, horizontalPadding, join, lineHeight, self, unbindTapEvents, verticalPadding;
+  var finalizeConfig, horizontalPadding, iceBg, join, lineHeight, self, unbindTapEvents, verticalPadding;
   $.reverseMerge(I, {
     activePlayers: 0,
     font: "bold 14px 'Monaco', 'Inconsolata', 'consolas', 'Courier New', 'andale mono', 'lucida console', 'monospace'",
@@ -6508,11 +6508,14 @@ Configurator = function(I) {
     teamColors: {
       "0": Color("#0246E3"),
       "1": Color("#EB070E")
-    }
+    },
+    width: 600,
+    height: 480
   });
   lineHeight = 11;
   verticalPadding = 4;
   horizontalPadding = 6;
+  iceBg = Sprite.loadByName("ice_bg");
   join = function(id) {
     var backgroundColor, cursorColor, nameEntry, player;
     player = I.config.players[id];
@@ -6585,11 +6588,18 @@ Configurator = function(I) {
   self = GameObject(I).extend({
     draw: function(canvas) {
       canvas.font(I.font);
+      self.trigger("beforeTransform", canvas);
       return canvas.withTransform(Matrix.translation(I.x, I.y), function() {
+        canvas.fillColor("rgba(0, 0, 0, 0.5)");
+        canvas.fillRoundRect(0, 0, I.width, I.height, 15);
+        canvas.fillColor(Player.COLORS[0]);
+        canvas.fillText("Blue Team", 20, 20);
+        canvas.fillColor(Player.COLORS[1]);
+        canvas.fillText("Red Team", 520, 20);
         return I.config.players.each(function(player, i) {
           var color, name, nameWidth, x, y;
-          y = i * 40;
-          x = player.team * 300;
+          y = i * 60 + 30;
+          x = player.team * 500 + 30;
           if (player.cpu) {
             name = "CPU";
             color = Color(Player.CPU_COLOR);
@@ -6635,6 +6645,10 @@ Configurator = function(I) {
       unbindTapEvents();
       return self.trigger("done", finalizeConfig(I.config));
     }
+  });
+  self.bind("beforeTransform", function(canvas) {
+    iceBg.fill(canvas, 0, 0, canvas.width(), canvas.height());
+    return canvas.fill("rgba(0, 0, 0, 0.5)");
   });
   return self;
 };;
@@ -6803,6 +6817,7 @@ Goal = function(I) {
     spriteOffset: Point(0, -(HEIGHT - 2)),
     suddenDeath: false
   });
+  I.color = Player.COLORS[I.team];
   walls = [];
   if (I.team) {
     walls.push({
@@ -6849,6 +6864,7 @@ Goal = function(I) {
     score: function() {
       self.trigger("score");
       Sound.play("crowd" + (rand(3)));
+      Sound.play("siren");
       if (I.suddenDeath) {
         return self.destroy();
       }
@@ -7615,9 +7631,16 @@ Physics = function() {
 };;
 var Player;
 Player = function(I) {
-  var actionDown, addSprayParticleEffect, axisPosition, boostMeter, controller, drawBloodStreaks, drawControlCircle, drawFloatingNameTag, drawPowerMeters, flyingOffset, heading, lastLeftSkatePos, lastRightSkatePos, leftSkatePos, maxShotPower, movementDirection, particleSizes, playerColor, redTeam, rightSkatePos, self, shootPuck, standingOffset;
+  var actionDown, addSprayParticleEffect, axisPosition, controller, flyingOffset, particleSizes, redTeam, self, shootPuck, standingOffset;
   $.reverseMerge(I, {
+    blood: {
+      face: 0,
+      body: 0,
+      leftSkate: 0,
+      rightSkate: 0
+    },
     boost: 0,
+    boostMeter: 64,
     cooldown: {
       boost: 0,
       shoot: 0
@@ -7626,12 +7649,9 @@ Player = function(I) {
     controller: 0,
     falls: 0,
     friction: 0.1,
-    blood: {
-      face: 0,
-      body: 0,
-      leftSkate: 0,
-      rightSkate: 0
-    },
+    heading: 0,
+    maxShotPower: 20,
+    movementDirection: 0,
     radius: 16,
     width: 32,
     height: 32,
@@ -7642,11 +7662,6 @@ Player = function(I) {
     velocity: Point(),
     zIndex: 1
   });
-  if (I.cpu) {
-    playerColor = Player.CPU_COLOR;
-  } else {
-    playerColor = Player.COLORS[I.id];
-  }
   redTeam = I.team;
   standingOffset = Point(0, -16);
   flyingOffset = Point(-24, -16);
@@ -7658,76 +7673,7 @@ Player = function(I) {
     actionDown = CONTROLLERS[I.controller].actionDown;
     axisPosition = $.noop;
   }
-  maxShotPower = 20;
-  boostMeter = 64;
-  heading = redTeam ? Math.TAU / 2 : 0;
-  movementDirection = 0;
-  drawFloatingNameTag = function(canvas) {
-    var backgroundColor, center, lineHeight, name, padding, rectHeight, rectWidth, textWidth, topLeft, yOffset;
-    if (I.cpu) {
-      name = "CPU";
-    } else {
-      name = I.name || ("P" + (I.id + 1));
-    }
-    padding = 6;
-    lineHeight = 16;
-    textWidth = canvas.measureText(name);
-    backgroundColor = Color(playerColor);
-    backgroundColor.a("0.5");
-    yOffset = 48;
-    center = self.center();
-    topLeft = center.subtract(Point(textWidth / 2 + padding, lineHeight / 2 + padding + yOffset));
-    rectWidth = textWidth + 2 * padding;
-    rectHeight = lineHeight + 2 * padding;
-    canvas.fillColor(backgroundColor);
-    canvas.fillRoundRect(topLeft.x, topLeft.y, rectWidth, rectHeight, 4);
-    canvas.fillColor("#FFF");
-    return canvas.fillText(name, topLeft.x + padding, topLeft.y + lineHeight + padding / 2);
-  };
-  drawPowerMeters = function(canvas) {
-    var center, height, maxWidth, padding, ratio, start, superChargeRatio;
-    ratio = (boostMeter - I.cooldown.boost) / boostMeter;
-    start = self.position().add(Point(0, I.height)).floor();
-    padding = 1;
-    maxWidth = I.width;
-    height = 3;
-    canvas.fillColor("#000");
-    canvas.fillRoundRect(start.x - padding, start.y - padding, maxWidth + 2 * padding, height + 2 * padding, 2);
-    if (I.cooldown.boost === 0) {
-      canvas.fillColor("#0F0");
-    } else {
-      canvas.fillColor("#080");
-    }
-    canvas.fillRoundRect(start.x, start.y, maxWidth * ratio, height, 2);
-    if (I.shootPower) {
-      maxWidth = 40;
-      height = 5;
-      ratio = Math.min(I.shootPower / maxShotPower, 1);
-      superChargeRatio = ((I.shootPower - maxShotPower) / maxShotPower).clamp(0, 1);
-      center = self.center().floor();
-      return canvas.withTransform(Matrix.translation(center.x, center.y).concat(Matrix.rotation(movementDirection)), function() {
-        canvas.fillColor("#000");
-        canvas.fillRoundRect(-(padding + height) / 2, -padding, maxWidth + 2 * padding, height, 2);
-        canvas.fillColor("#EE0");
-        canvas.fillRoundRect(-height / 2, 0, maxWidth * ratio, height, 2);
-        canvas.fillColor("#0EF");
-        if (superChargeRatio === 1) {
-          if ((I.age / 2).floor() % 2) {
-            return canvas.fillRoundRect(-height / 2, 0, maxWidth, height, 2);
-          }
-        } else if (superChargeRatio > 0) {
-          return canvas.fillRoundRect(-height / 2, 0, maxWidth * superChargeRatio, height, 2);
-        }
-      });
-    }
-  };
-  drawControlCircle = function(canvas) {
-    var circle, color;
-    color = Color(playerColor).lighten(0.10);
-    color.a("0.25");
-    circle = self.controlCircle();
-    return canvas.fillCircle(circle.x, circle.y, circle.radius, color);
-  };
+  I.heading = redTeam ? Math.TAU / 2 : 0;
   particleSizes = [5, 4, 3];
   addSprayParticleEffect = function(push, color) {
     if (color == null) {
@@ -7769,9 +7715,16 @@ Player = function(I) {
         return I.blood.rightSkate = (I.blood.rightSkate + rand(10)).clamp(0, 60);
       }
     },
+    color: function() {
+      if (I.cpu) {
+        return Color(Player.CPU_COLOR);
+      } else {
+        return Color(Player.COLORS[I.id]);
+      }
+    },
     controlCircle: function() {
       var c, p, speed;
-      p = Point.fromAngle(heading).scale(16);
+      p = Point.fromAngle(I.heading).scale(16);
       c = self.center().add(p);
       speed = I.velocity.magnitude();
       c.radius = 20 + ((100 - speed * speed) / 100 * 8).clamp(-7, 8);
@@ -7784,7 +7737,7 @@ Player = function(I) {
       }
       puckControl = 0.04;
       maxPuckForce = puckControl / puck.mass();
-      p = Point.fromAngle(heading).scale(32);
+      p = Point.fromAngle(I.heading).scale(32);
       targetPuckPosition = self.center().add(p);
       puckVelocity = puck.I.velocity;
       positionDelta = targetPuckPosition.subtract(puck.center().add(puckVelocity));
@@ -7794,18 +7747,6 @@ Player = function(I) {
       I.hasPuck = true;
       return puck.I.velocity = puck.I.velocity.add(positionDelta);
     },
-    drawShadow: function(canvas) {
-      var base;
-      base = self.center().add(0, I.height / 2 + 4);
-      return canvas.withTransform(Matrix.scale(1, -0.5, base), function() {
-        var shadowColor;
-        shadowColor = "rgba(0, 0, 0, 0.15)";
-        canvas.fillCircle(base.x - 4, base.y + 16, 16, shadowColor);
-        canvas.fillCircle(base.x, base.y + 8, 16, shadowColor);
-        return canvas.fillCircle(base.x + 4, base.y + 16, 16, shadowColor);
-      });
-    },
-    drawFloatingNameTag: drawFloatingNameTag,
     wipeout: function(push) {
       I.falls += 1;
       I.wipeout = 25;
@@ -7827,24 +7768,14 @@ Player = function(I) {
       });
     }
   });
-  leftSkatePos = function() {
-    var p;
-    p = Point.fromAngle(heading - Math.TAU / 4).scale(5);
-    return self.center().add(p);
-  };
-  rightSkatePos = function() {
-    var p;
-    p = Point.fromAngle(heading + Math.TAU / 4).scale(5);
-    return self.center().add(p);
-  };
   shootPuck = function(direction) {
     var baseShotPower, circle, hit, p, power, puck;
     puck = engine.find("Puck").first();
-    power = Math.min(I.shootPower, maxShotPower);
+    power = Math.min(I.shootPower, I.maxShotPower);
     circle = self.controlCircle();
     baseShotPower = 15;
     if (Collision.circular(circle, puck.circle())) {
-      if (I.shootPower >= 2 * maxShotPower) {
+      if (I.shootPower >= 2 * I.maxShotPower) {
         puck.trigger("superCharge");
       }
       p = Point.fromAngle(direction).scale(baseShotPower + power * 2);
@@ -7867,60 +7798,6 @@ Player = function(I) {
     }
     return I.shootPower = 0;
   };
-  lastLeftSkatePos = null;
-  lastRightSkatePos = null;
-  drawBloodStreaks = function() {
-    var blood, color, currentLeftSkatePos, currentPos, currentRightSkatePos, cycle, skateBlood, thickness;
-    if ((blood = I.blood.face) && rand(2) === 0) {
-      color = Color(BLOOD_COLOR);
-      currentPos = self.center();
-      (rand(blood) / 3).floor().clamp(0, 2).times(function() {
-        var p;
-        I.blood.face -= 1;
-        p = currentPos.add(Point.fromAngle(Random.angle()).scale(rand() * rand() * 16));
-        return bloodCanvas.fillCircle(p.x, p.y, (rand(5) * rand() * rand()).clamp(0, 3), color);
-      });
-    }
-    if (I.wipeout) {
-      ;
-    } else {
-      currentLeftSkatePos = leftSkatePos();
-      currentRightSkatePos = rightSkatePos();
-      cycle = I.age % 30;
-      if ((1 < cycle && cycle < 14)) {
-        lastLeftSkatePos = null;
-      }
-      if ((15 < cycle && cycle < 29)) {
-        lastRightSkatePos = null;
-      }
-      if (lastLeftSkatePos) {
-        if (skateBlood = I.blood.leftSkate) {
-          I.blood.leftSkate -= 1;
-          color = BLOOD_COLOR;
-          thickness = (skateBlood / 30).clamp(0, 1.5);
-        } else {
-          color = ICE_COLOR;
-          thickness = 1;
-        }
-        bloodCanvas.strokeColor(color);
-        bloodCanvas.drawLine(lastLeftSkatePos, currentLeftSkatePos, thickness);
-      }
-      if (lastRightSkatePos) {
-        if (skateBlood = I.blood.rightSkate) {
-          I.blood.rightSkate -= 1;
-          color = BLOOD_COLOR;
-          thickness = (skateBlood / 30).clamp(0, 1.5);
-        } else {
-          color = ICE_COLOR;
-          thickness = 1;
-        }
-        bloodCanvas.strokeColor(color);
-        bloodCanvas.drawLine(lastRightSkatePos, currentRightSkatePos, thickness);
-      }
-      lastLeftSkatePos = currentLeftSkatePos;
-      return lastRightSkatePos = currentRightSkatePos;
-    }
-  };
   self.bind("step", function() {
     var key, value, _ref, _results;
     _ref = I.cooldown;
@@ -7936,13 +7813,16 @@ Player = function(I) {
     I.boost = I.boost.approach(0, 1);
     I.wipeout = I.wipeout.approach(0, 1);
     if (I.velocity.magnitude() !== 0) {
-      heading = Point.direction(Point(0, 0), I.velocity);
+      I.heading = Point.direction(Point(0, 0), I.velocity);
     }
-    drawBloodStreaks();
+    self.drawBloodStreaks();
     movementScale = 0.625;
     movement = Point(0, 0);
     if (I.cpu) {
       movement = self.computeDirection();
+      if (controller != null ? controller.actionDown("START") : void 0) {
+        I.cpu = false;
+      }
     } else if (controller) {
       movement = controller.position();
     } else {
@@ -7961,19 +7841,19 @@ Player = function(I) {
       movement = movement.norm();
     }
     if (movement.x || movement.y) {
-      movementDirection = movement.direction();
+      I.movementDirection = movement.direction();
     }
     if (I.wipeout) {
-      lastLeftSkatePos = null;
-      return lastRightSkatePos = null;
+      I.lastLeftSkatePos = null;
+      return I.lastRightSkatePos = null;
     } else {
       if (!I.cooldown.shoot && actionDown("B", "X")) {
         I.shootPower += 1;
         movementScale = 0.1;
       } else if (I.shootPower) {
         I.cooldown.shoot = 4;
-        shootPuck(movementDirection);
-      } else if (I.cooldown.boost < boostMeter && (actionDown("A", "L", "R") || (axisPosition(4) > 0) || (axisPosition(5) > 0))) {
+        shootPuck(I.movementDirection);
+      } else if (I.cooldown.boost < I.boostMeter && (actionDown("A", "L", "R") || (axisPosition(4) > 0) || (axisPosition(5) > 0))) {
         if (I.cooldown.boost === 0) {
           bonus = 10;
         } else {
@@ -7996,17 +7876,9 @@ Player = function(I) {
       return I.hasPuck = false;
     }
   });
-  self.bind('afterTransform', drawPowerMeters);
-  self.bind('drawDebug', function(canvas) {
-    var x, y, _ref;
-    if (I.AI_TARGET) {
-      _ref = I.AI_TARGET, x = _ref.x, y = _ref.y;
-      return canvas.fillCircle(x, y, 3, "rgba(255, 255, 0, 1)");
-    }
-  });
   self.bind("update", function() {
-    var cycle, facingOffset, spriteIndex, teamColor;
-    I.hflip = heading > 2 * Math.TAU / 8 || heading < -2 * Math.TAU / 8;
+    var cycle, facingOffset, spriteIndex, teamColor, _ref, _ref2, _ref3;
+    I.hflip = I.heading > 2 * Math.TAU / 8 || I.heading < -2 * Math.TAU / 8;
     if (I.wipeout) {
       spriteIndex = 17;
       if (!redTeam) {
@@ -8016,11 +7888,11 @@ Player = function(I) {
       return I.sprite = wideSprites[spriteIndex];
     } else {
       cycle = (I.age / 4).floor() % 2;
-      if ((-Math.TAU / 8 <= heading && heading <= Math.TAU / 8)) {
+      if ((-Math.TAU / 8 <= (_ref = I.heading) && _ref <= Math.TAU / 8)) {
         facingOffset = 0;
-      } else if ((-3 * Math.TAU / 8 <= heading && heading <= -Math.TAU / 8)) {
+      } else if ((-3 * Math.TAU / 8 <= (_ref2 = I.heading) && _ref2 <= -Math.TAU / 8)) {
         facingOffset = 4;
-      } else if ((Math.TAU / 8 < heading && heading <= 3 * Math.TAU / 8)) {
+      } else if ((Math.TAU / 8 < (_ref3 = I.heading) && _ref3 <= 3 * Math.TAU / 8)) {
         facingOffset = 2;
       } else {
         facingOffset = 0;
@@ -8034,6 +7906,8 @@ Player = function(I) {
   if (I.cpu) {
     self.include(AI);
   }
+  self.include(PlayerDrawing);
+  self.bind('afterTransform', self.drawPowerMeters);
   return self;
 };
 Player.COLORS = ["#0246E3", "#EB070E", "#388326", "#F69508", "#563495", "#58C4F5", "#FFDE49"];
@@ -8150,7 +8024,8 @@ Puck = function(I) {
     return I.superMassive = false;
   });
   self.bind("superCharge", function() {
-    return I.superMassive = true;
+    I.superMassive = true;
+    return Sound.play("super_power");
   });
   self.mass = function() {
     if (I.superMassive) {
@@ -8628,6 +8503,159 @@ Zamboni = function(I) {
     });
   });
   return self;
+};;
+var PlayerDrawing;
+PlayerDrawing = function(I, self) {
+  self.bind('drawDebug', function(canvas) {
+    var x, y, _ref;
+    if (I.AI_TARGET) {
+      _ref = I.AI_TARGET, x = _ref.x, y = _ref.y;
+      return canvas.fillCircle(x, y, 3, "rgba(255, 255, 0, 1)");
+    }
+  });
+  I.lastLeftSkatePos = null;
+  I.lastRightSkatePos = null;
+  return {
+    leftSkatePos: function() {
+      var p;
+      p = Point.fromAngle(I.heading - Math.TAU / 4).scale(5);
+      return self.center().add(p);
+    },
+    rightSkatePos: function() {
+      var p;
+      p = Point.fromAngle(I.heading + Math.TAU / 4).scale(5);
+      return self.center().add(p);
+    },
+    drawBloodStreaks: function() {
+      var blood, color, currentLeftSkatePos, currentPos, currentRightSkatePos, cycle, skateBlood, thickness;
+      if ((blood = I.blood.face) && rand(2) === 0) {
+        color = Color(BLOOD_COLOR);
+        currentPos = self.center();
+        (rand(blood) / 3).floor().clamp(0, 2).times(function() {
+          var p;
+          I.blood.face -= 1;
+          p = currentPos.add(Point.fromAngle(Random.angle()).scale(rand() * rand() * 16));
+          return bloodCanvas.fillCircle(p.x, p.y, (rand(5) * rand() * rand()).clamp(0, 3), color);
+        });
+      }
+      if (I.wipeout) {
+        ;
+      } else {
+        currentLeftSkatePos = self.leftSkatePos();
+        currentRightSkatePos = self.rightSkatePos();
+        cycle = I.age % 30;
+        if ((1 < cycle && cycle < 14)) {
+          I.lastLeftSkatePos = null;
+        }
+        if ((15 < cycle && cycle < 29)) {
+          I.lastRightSkatePos = null;
+        }
+        if (I.lastLeftSkatePos) {
+          if (skateBlood = I.blood.leftSkate) {
+            I.blood.leftSkate -= 1;
+            color = BLOOD_COLOR;
+            thickness = (skateBlood / 30).clamp(0, 1.5);
+          } else {
+            color = ICE_COLOR;
+            thickness = 1;
+          }
+          bloodCanvas.strokeColor(color);
+          bloodCanvas.drawLine(I.lastLeftSkatePos, currentLeftSkatePos, thickness);
+        }
+        if (I.lastRightSkatePos) {
+          if (skateBlood = I.blood.rightSkate) {
+            I.blood.rightSkate -= 1;
+            color = BLOOD_COLOR;
+            thickness = (skateBlood / 30).clamp(0, 1.5);
+          } else {
+            color = ICE_COLOR;
+            thickness = 1;
+          }
+          bloodCanvas.strokeColor(color);
+          bloodCanvas.drawLine(I.lastRightSkatePos, currentRightSkatePos, thickness);
+        }
+        I.lastLeftSkatePos = currentLeftSkatePos;
+        return I.lastRightSkatePos = currentRightSkatePos;
+      }
+    },
+    drawShadow: function(canvas) {
+      var base;
+      base = self.center().add(0, I.height / 2 + 4);
+      return canvas.withTransform(Matrix.scale(1, -0.5, base), function() {
+        var shadowColor;
+        shadowColor = "rgba(0, 0, 0, 0.15)";
+        canvas.fillCircle(base.x - 4, base.y + 16, 16, shadowColor);
+        canvas.fillCircle(base.x, base.y + 8, 16, shadowColor);
+        return canvas.fillCircle(base.x + 4, base.y + 16, 16, shadowColor);
+      });
+    },
+    drawFloatingNameTag: function(canvas) {
+      var backgroundColor, center, lineHeight, name, padding, rectHeight, rectWidth, textWidth, topLeft, yOffset;
+      if (I.cpu) {
+        name = "CPU";
+      } else {
+        name = I.name || ("P" + (I.id + 1));
+      }
+      padding = 6;
+      lineHeight = 16;
+      textWidth = canvas.measureText(name);
+      backgroundColor = self.color();
+      backgroundColor.a("0.5");
+      yOffset = 48;
+      center = self.center();
+      topLeft = center.subtract(Point(textWidth / 2 + padding, lineHeight / 2 + padding + yOffset));
+      rectWidth = textWidth + 2 * padding;
+      rectHeight = lineHeight + 2 * padding;
+      canvas.fillColor(backgroundColor);
+      canvas.fillRoundRect(topLeft.x, topLeft.y, rectWidth, rectHeight, 4);
+      canvas.fillColor("#FFF");
+      return canvas.fillText(name, topLeft.x + padding, topLeft.y + lineHeight + padding / 2);
+    },
+    drawPowerMeters: function(canvas) {
+      var center, height, maxWidth, padding, ratio, start, superChargeRatio;
+      ratio = (I.boostMeter - I.cooldown.boost) / I.boostMeter;
+      start = self.position().add(Point(0, I.height)).floor();
+      padding = 1;
+      maxWidth = I.width;
+      height = 3;
+      canvas.fillColor("#000");
+      canvas.fillRoundRect(start.x - padding, start.y - padding, maxWidth + 2 * padding, height + 2 * padding, 2);
+      if (I.cooldown.boost === 0) {
+        canvas.fillColor("#0F0");
+      } else {
+        canvas.fillColor("#080");
+      }
+      canvas.fillRoundRect(start.x, start.y, maxWidth * ratio, height, 2);
+      if (I.shootPower) {
+        maxWidth = 40;
+        height = 5;
+        ratio = Math.min(I.shootPower / I.maxShotPower, 1);
+        superChargeRatio = ((I.shootPower - I.maxShotPower) / I.maxShotPower).clamp(0, 1);
+        center = self.center().floor();
+        return canvas.withTransform(Matrix.translation(center.x, center.y).concat(Matrix.rotation(I.movementDirection)), function() {
+          canvas.fillColor("#000");
+          canvas.fillRoundRect(-(padding + height) / 2, -padding, maxWidth + 2 * padding, height, 2);
+          canvas.fillColor("#EE0");
+          canvas.fillRoundRect(-height / 2, 0, maxWidth * ratio, height, 2);
+          canvas.fillColor("#0EF");
+          if (superChargeRatio === 1) {
+            if ((I.age / 2).floor() % 2) {
+              return canvas.fillRoundRect(-height / 2, 0, maxWidth, height, 2);
+            }
+          } else if (superChargeRatio > 0) {
+            return canvas.fillRoundRect(-height / 2, 0, maxWidth * superChargeRatio, height, 2);
+          }
+        });
+      }
+    },
+    drawControlCircle: function(canvas) {
+      var circle, color;
+      color = self.color().lighten(0.10);
+      color.a("0.25");
+      circle = self.controlCircle();
+      return canvas.fillCircle(circle.x, circle.y, circle.radius, color);
+    }
+  };
 };;
 App.entities = {};;
 ;$(function(){ var DEBUG_DRAW, controllers, engineUpdate, gameState, initPlayerData, matchPlayUpdate, matchSetupUpdate, nameEntry, physics, restartMatch, rink, setUpMatch, startMatch, titleScreen, titleScreenUpdate;
