@@ -107,6 +107,7 @@ Puck = (I) ->
 
   self.bind "superCharge", ->
     I.superMassive = true
+    Sound.play "super_power"
 
   self.mass = ->
     if I.superMassive
