@@ -143,7 +143,7 @@ PlayerDrawing = (I, self) ->
         else if superChargeRatio > 0
           canvas.fillRoundRect(-height/2, 0, maxWidth * superChargeRatio, height, 2)
 
-  drawControlCircle = (canvas) ->
+  drawControlCircle: (canvas) ->
     color = Color(playerColor).lighten(0.10)
     color.a "0.25"
 
