@@ -136,13 +136,13 @@ Player = (I) ->
   shootPuck = (direction) ->
     puck = engine.find("Puck").first()
 
-    power = Math.min(I.shootPower, maxShotPower)
+    power = Math.min(I.shootPower, I.maxShotPower)
     circle = self.controlCircle()
     baseShotPower = 15
 
     # Shot or pass
     if Collision.circular(circle, puck.circle())
-      if I.shootPower >= 2 * maxShotPower
+      if I.shootPower >= 2 * I.maxShotPower
         puck.trigger "superCharge"
 
       p = Point.fromAngle(direction).scale(baseShotPower + power * 2)
