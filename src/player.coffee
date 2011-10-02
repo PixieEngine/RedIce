@@ -187,7 +187,7 @@ Player = (I) ->
       movement = controller.position()
 
       # Hot Join
-      if controller.actionDown "start"
+      if controller.actionDown "START"
         I.cpu = false
     else
       if actionDown "left"
