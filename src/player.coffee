@@ -142,7 +142,7 @@ Player = (I) ->
 
     # Shot or pass
     if Collision.circular(circle, puck.circle())
-      if I.shootPower >= 2 * I.maxShotPower
+      if I.shootPower >= 2 * I.maxShotPowmaxShotPowerer
         puck.trigger "superCharge"
 
       p = Point.fromAngle(direction).scale(baseShotPower + power * 2)
@@ -185,6 +185,10 @@ Player = (I) ->
       movement = self.computeDirection()
     else if controller
       movement = controller.position()
+
+      # Hot Join
+      if controller.actionDown "start"
+        I.cpu = false
     else
       if actionDown "left"
         movement = movement.add(Point(-1, 0))
