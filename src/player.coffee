@@ -240,8 +240,6 @@ Player = (I) ->
 
       I.hasPuck = false
 
-  self.bind 'afterTransform', drawPowerMeters
-
   self.bind 'drawDebug', (canvas) ->
     if I.AI_TARGET
       {x, y} = I.AI_TARGET
@@ -279,6 +277,8 @@ Player = (I) ->
     self.include AI
 
   self.include PlayerDrawing
+
+  self.bind 'afterTransform', self.drawPowerMeters
 
   self
 
