@@ -27,11 +27,6 @@ Player = (I) ->
     velocity: Point()
     zIndex: 1
 
-  if I.cpu
-    playerColor = Player.CPU_COLOR
-  else
-    playerColor = Player.COLORS[I.id]
-
   redTeam = I.team
   standingOffset = Point(0, -16)
   flyingOffset = Point(-24, -16)
@@ -78,6 +73,12 @@ Player = (I) ->
       else
         I.blood.leftSkate = (I.blood.leftSkate + rand(10)).clamp(0, 60)
         I.blood.rightSkate = (I.blood.rightSkate + rand(10)).clamp(0, 60)
+
+    color: ->
+      if I.cpu
+        Color(Player.CPU_COLOR)
+      else
+        Color(Player.COLORS[I.id])
 
     controlCircle: ->
       p = Point.fromAngle(I.heading).scale(16)
