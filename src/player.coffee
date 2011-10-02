@@ -1,6 +1,12 @@
 Player = (I) ->
   $.reverseMerge I,
+    blood:
+      face: 0
+      body: 0
+      leftSkate: 0
+      rightSkate: 0
     boost: 0
+    boostMeter: 64
     cooldown:
       boost: 0
       shoot: 0
@@ -8,12 +14,9 @@ Player = (I) ->
     controller: 0
     falls: 0
     friction: 0.1
-    blood:
-      face: 0
-      body: 0
-      leftSkate: 0
-      rightSkate: 0
     heading: 0
+    maxShotPower: 20
+    movementDirection: 0
     radius: 16
     width: 32
     height: 32
@@ -41,13 +44,7 @@ Player = (I) ->
     actionDown = CONTROLLERS[I.controller].actionDown
     axisPosition = $.noop
 
-  maxShotPower = 20
-  boostMeter = 64
-
   I.heading = if redTeam then Math.TAU/2 else 0
-  movementDirection = 0
-
-
 
   particleSizes = [5, 4, 3]
   addSprayParticleEffect = (push, color=BLOOD_COLOR) ->
@@ -200,7 +197,7 @@ Player = (I) ->
       movement = movement.norm()
 
     if movement.x || movement.y
-      movementDirection = movement.direction()
+      I.movementDirection = movement.direction()
 
     if I.wipeout
       lastLeftSkatePos = null
@@ -213,8 +210,8 @@ Player = (I) ->
       else if I.shootPower
         I.cooldown.shoot = 4
 
-        shootPuck(movementDirection)
-      else if I.cooldown.boost < boostMeter && (actionDown("A", "L", "R") || (axisPosition(4) > 0) || (axisPosition(5) > 0))
+        shootPuck(I.movementDirection)
+      else if I.cooldown.boost < I.boostMeter && (actionDown("A", "L", "R") || (axisPosition(4) > 0) || (axisPosition(5) > 0))
         if I.cooldown.boost == 0
           bonus = 10
         else
