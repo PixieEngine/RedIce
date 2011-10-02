@@ -183,12 +183,12 @@ Player = (I) ->
 
     if I.cpu
       movement = self.computeDirection()
-    else if controller
-      movement = controller.position()
 
       # Hot Join
-      if controller.actionDown "START"
+      if controller?.actionDown "START"
         I.cpu = false
+    else if controller
+      movement = controller.position()
     else
       if actionDown "left"
         movement = movement.add(Point(-1, 0))
