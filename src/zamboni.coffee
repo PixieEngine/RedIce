@@ -78,15 +78,17 @@ Zamboni = (I) ->
     ].map (p) ->
       self.transform().transformPoint(p)
 
-    bloodCanvas.compositeOperation "destination-out"
+    bloodCanvas.globalCompositeOperation "destination-out"
     bloodCanvas.globalAlpha 0.25
 
-    bloodCanvas.fillColor("#000")
-    bloodCanvas.fillCircle(currentPos.x, currentPos.y, SWEEPER_SIZE/2, "#000")
-    bloodCanvas.fillShape.apply(null, boxPoints)
+    bloodCanvas.drawCircle
+      position: currentPos
+      radius: SWEEPER_SIZE/2
+      color: "#000"
+    bloodCanvas.drawPoly.apply(null, boxPoints)
 
     bloodCanvas.globalAlpha 1
-    bloodCanvas.compositeOperation "source-over"
+    bloodCanvas.globalCompositeOperation "source-over"
 
   pathfind = ->
     if path[pathIndex]
