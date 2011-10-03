@@ -30,7 +30,7 @@ window.bloodCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />
     top: 0
     left: 0
     zIndex: "-1"
-  .powerCanvas()
+  .pixieCanvas()
 
 bloodCanvas.strokeColor(BLOOD_COLOR)
 # bloodCanvas.fill(BLOOD_COLOR) # For zamboni testing
