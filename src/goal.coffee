@@ -79,7 +79,7 @@ Goal = (I) ->
 
   self.bind "drawDebug", (canvas) ->
     # Draw goal area
-    canvas.fillRect
+    canvas.drawRect
       bounds: I
       color: "rgba(255, 0, 255, 0.5)"
 
