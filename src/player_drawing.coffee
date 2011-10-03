@@ -4,9 +4,9 @@ PlayerDrawing = (I, self) ->
     if I.AI_TARGET
       {x, y} = I.AI_TARGET
       canvas.drawCircle {
-        x, 
-        y, 
-        radius: 3, 
+        x
+        y
+        radius: 3
         color: "rgba(255, 255, 0, 1)"
       }    
 
@@ -32,8 +32,8 @@ PlayerDrawing = (I, self) ->
         I.blood.face -= 1
         p = currentPos.add(Point.fromAngle(Random.angle()).scale(rand()*rand()*16))
 
-        bloodCanvas.drawCircle(
-          position: p.x
+        bloodCanvas.drawCircle
+          position: p
           radius: (rand(5)*rand()*rand()).clamp(0, 3)
           color: color
 
