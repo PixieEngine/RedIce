@@ -63,7 +63,7 @@ Rink = (I) ->
   x = WALL_LEFT + ARENA_WIDTH/10
   canvas.drawLine
     start: Point(x, WALL_TOP)
-    end: Point(x, WALL_BOTTOM
+    end: Point(x, WALL_BOTTOM)
     width: 1
     color: red
 
