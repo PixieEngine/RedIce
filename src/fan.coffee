@@ -7,7 +7,9 @@ Fan = (I) ->
     x: rand(App.width).snap(32)
     y: rand(WALL_TOP).snap(32)
 
-  self = GameObject(I)
+  self = GameObject(I).extend
+    center: ->
+      Point(I.x + I.width/2, I.y + I.height/2)
 
   if config.throwBottles && !rand(50)
     engine.add
