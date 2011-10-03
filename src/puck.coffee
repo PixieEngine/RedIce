@@ -51,7 +51,6 @@ Puck = (I) ->
           particleSizes.wrap(n)
 
   drawBloodStreaks = ->
-    # Skate blood streaks
     heading = Point.direction(Point(0, 0), I.velocity)
 
     currentPos = self.center()
@@ -59,9 +58,11 @@ Puck = (I) ->
     if lastPosition && (blood = I.blood)
       I.blood -= 1
 
-      color = Color(BLOOD_COLOR)
-      bloodCanvas.strokeColor(color)
-      bloodCanvas.drawLine(lastPosition, currentPos, (blood/20).clamp(1, 6))
+      bloodCanvas.drawLine
+        color: BLOOD_COLOR
+        start: lastPosition
+        end: currentPos, 
+        width: (blood/20).clamp(1, 6)
 
     lastPosition = currentPos
 
@@ -73,8 +74,10 @@ Puck = (I) ->
     # Draw velocity vector
     scaledVelocity = I.velocity.scale(10)
 
-    canvas.strokeColor("orange")
-    canvas.drawLine(x, y, x + scaledVelocity.x, y + scaledVelocity.y)
+    canvas.drawLine
+      color: "orange"
+      start: Point(x, y)
+      end: Point(x + scaledVelocity.x, y + scaledVelocity.y)
 
   self.bind "step", ->
     drawBloodStreaks()
@@ -89,7 +92,9 @@ Puck = (I) ->
 
     # Tunneling debug
     if DEBUG_DRAW
-      bloodCanvas.fillCircle(circle.x, circle.y, circle.radius, "rgba(0, 255, 0, 0.1)")
+      bloodCanvas.drawCircle
+        circle: circle
+        color: "rgba(0, 255, 0, 0.1)"
 
     engine.find("Goal").each (goal) ->
       if goal.withinGoal(circle)
