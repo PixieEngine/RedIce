@@ -3,7 +3,12 @@ PlayerDrawing = (I, self) ->
   self.bind 'drawDebug', (canvas) ->
     if I.AI_TARGET
       {x, y} = I.AI_TARGET
-      canvas.fillCircle(x, y, 3, "rgba(255, 255, 0, 1)")    
+      canvas.drawCircle {
+        x, 
+        y, 
+        radius: 3, 
+        color: "rgba(255, 255, 0, 1)"
+      }    
 
   I.lastLeftSkatePos = null
   I.lastRightSkatePos = null
@@ -27,7 +32,10 @@ PlayerDrawing = (I, self) ->
         I.blood.face -= 1
         p = currentPos.add(Point.fromAngle(Random.angle()).scale(rand()*rand()*16))
 
-        bloodCanvas.fillCircle(p.x, p.y, (rand(5)*rand()*rand()).clamp(0, 3), color)
+        bloodCanvas.drawCircle(
+          position: p.x
+          radius: (rand(5)*rand()*rand()).clamp(0, 3)
+          color: color
 
     if I.wipeout # Body blood streaks
 
@@ -76,9 +84,12 @@ PlayerDrawing = (I, self) ->
 
     canvas.withTransform Matrix.scale(1, -0.5, base), ->
       shadowColor = "rgba(0, 0, 0, 0.15)"
-      canvas.fillCircle(base.x - 4, base.y + 16, 16, shadowColor)
-      canvas.fillCircle(base.x, base.y + 8, 16, shadowColor)
-      canvas.fillCircle(base.x + 4, base.y + 16, 16, shadowColor)
+      for [x, y] in [[-4, 16], [0, 8], [4, 16]]
+        canvas.drawCircle
+          x: base.x + x
+          y: base.y + y
+          radius: 16
+          color: shadowColor
 
   drawFloatingNameTag: (canvas) ->
     if I.cpu
@@ -101,11 +112,18 @@ PlayerDrawing = (I, self) ->
     rectWidth = textWidth + 2*padding
     rectHeight = lineHeight + 2*padding
 
-    canvas.fillColor(backgroundColor)
-    canvas.fillRoundRect(topLeft.x, topLeft.y, rectWidth, rectHeight, 4)
+    canvas.drawRoundRect
+      color: backgroundColor
+      position: topLeft
+      width: rectWidth
+      height: rectHeight
+      radius: 4
 
-    canvas.fillColor("#FFF")
-    canvas.fillText(name, topLeft.x + padding, topLeft.y + lineHeight + padding/2)
+    canvas.drawText
+      text: name
+      color: "#FFF"
+      x: topLeft.x + padding
+      y: topLeft.y + lineHeight + padding/2
 
   drawPowerMeters: (canvas) ->
     ratio = (I.boostMeter - I.cooldown.boost) / I.boostMeter
@@ -114,14 +132,26 @@ PlayerDrawing = (I, self) ->
     maxWidth = I.width
     height = 3
 
-    canvas.fillColor("#000")
-    canvas.fillRoundRect(start.x - padding, start.y - padding, maxWidth + 2*padding, height + 2*padding, 2)
+    canvas.drawRoundRect
+      color: "#000"
+      x: start.x - padding
+      y: start.y - padding 
+      width: maxWidth + 2*padding
+      height: height + 2*padding
+      radius: 2
 
     if I.cooldown.boost == 0
-      canvas.fillColor("#0F0")
+      color = "#0F0"
     else
-      canvas.fillColor("#080")
-    canvas.fillRoundRect(start.x, start.y, maxWidth * ratio, height, 2)
+      color = "#080"
+
+    canvas.drawRoundRect {
+      color
+      position: start
+      width: maxWidth * ratio
+      height
+      radius: 2
+    }
 
     if I.shootPower
       maxWidth = 40
@@ -133,20 +163,45 @@ PlayerDrawing = (I, self) ->
       center = self.center().floor()
       canvas.withTransform Matrix.translation(center.x, center.y).concat(Matrix.rotation(I.movementDirection)), ->
         # Fill background
-        canvas.fillColor("#000")
-        canvas.fillRoundRect(-(padding + height)/2, -padding, maxWidth + 2*padding, height, 2)
+        canvas.drawRoundRect {
+          color: "#000"
+          x: -(padding + height)/2
+          y: -padding
+          width: maxWidth + 2*padding
+          height
+          radius: 2
+        }
 
         # Fill Power meter
-        canvas.fillColor("#EE0")
-        canvas.fillRoundRect(-height/2, 0, maxWidth * ratio, height, 2)
+        canvas.drawRoundRect {
+          color: "#EE0"
+          x: -height/2
+          y: 0
+          width: maxWidth * ratio
+          height
+          radius: 2
+        }
 
         # Fill Super Meter
-        canvas.fillColor("#0EF")
+        color = "#0EF"
         if superChargeRatio == 1
           if (I.age/2).floor() % 2
-            canvas.fillRoundRect(-height/2, 0, maxWidth, height, 2)
+            canvas.drawRoundRect {
+              color
+              x: -height/2
+              y: 0
+              width: maxWidth
+              height
+              radius: 2
+            }
         else if superChargeRatio > 0
-          canvas.fillRoundRect(-height/2, 0, maxWidth * superChargeRatio, height, 2)
+          canvas.drawRoundRect {
+            x: -height/2
+            y: 0
+            width: maxWidth * superChargeRatio
+            height
+            radius: 2
+          }
 
   drawControlCircle: (canvas) ->
     color = self.color().lighten(0.10)
@@ -154,4 +209,7 @@ PlayerDrawing = (I, self) ->
 
     circle = self.controlCircle()
 
-    canvas.fillCircle(circle.x, circle.y, circle.radius, color)
+    canvas.drawCircle {
+      circle
+      color
+    }
