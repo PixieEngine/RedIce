@@ -17,7 +17,7 @@ Shockwave = (I) ->
     scorch = Shockwave.scorchSprite
 
     bloodCanvas.withTransform Matrix.translation(I.x - scorch.width/2, I.y - scorch.height/2), ->
-      scorch.fill bloodCanvas, 0, 0, scorch.width, scorch.height
+      scorch.draw bloodCanvas, 0, 0
 
   particleSizes = [8, 4, 8, 16, 24, 12]
   particleColors = ["rgba(255, 0, 128, 0.75)", "#333"]
@@ -80,10 +80,17 @@ Shockwave = (I) ->
       max = I.radius
 
       g = constructGradient(canvas.context(), min, max, true)
-      canvas.fillCircle(I.x, I.y, max, g)
+      canvas.drawCircle
+        position: I
+        radius: max
+        color: g
 
       g = constructGradient(canvas.context(), min, max)
-      canvas.fillCircle(I.x, I.y + I.offsetHeight, max, g)
+      canvas.drawCircle
+        x: I.x
+        y: I.y + I.offsetHeight
+        radius: max
+        color: g
 
   self.bind "step", ->
     maxCircle = I
