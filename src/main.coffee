@@ -143,29 +143,35 @@ startMatch = (config) ->
   engine.add
     sprite: Sprite.loadByName("corner_left")
     x: 64
-    y: WALL_TOP - 48
+    y: WALL_TOP + 16
     width: 128
+    height: 128
     zIndex: 1
 
   engine.add
     sprite: Sprite.loadByName("corner_left")
     hflip: true
     x: WALL_RIGHT - 32
-    y: WALL_TOP - 48
+    y: WALL_TOP + 16
     width: 128
+    height: 128
     zIndex: 1
 
   engine.add
     spriteName: "corner_back_right"
     hflip: true
-    x: 32
-    y: WALL_BOTTOM - 128
+    x: 80
+    y: WALL_BOTTOM - 64
+    width: 128
+    height: 128
     zIndex: 2
 
   engine.add
     spriteName: "corner_back_right"
-    x: WALL_RIGHT - 96
-    y: WALL_BOTTOM - 128
+    x: WALL_RIGHT - 48
+    y: WALL_BOTTOM - 64
+    width: 128
+    height: 128
     zIndex: 2
 
   engine.add
