@@ -8,7 +8,7 @@ Rink = (I) ->
       top: 0
       left: 0
       zIndex: "-2"
-    .powerCanvas()
+    .pixieCanvas()
 
   red = "red"
   blue = "blue"
