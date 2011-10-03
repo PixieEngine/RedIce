@@ -83,20 +83,30 @@ NameEntry = (I) ->
       nameAreaWidth = canvas.measureText(["M"].wrap(0, I.maxLength).join("")) + 2 * horizontalPadding
 
       canvas.withTransform Matrix.translation(this.x, this.y), ->
-        canvas.fillColor(I.backgroundColor)
-        canvas.fillRoundRect(0, 0, nameAreaWidth, I.cellHeight)
-        
-        canvas.fillColor(I.textColor)
-        canvas.fillText(I.name, horizontalPadding, lineHeight + verticalPadding)
+        canvas.drawRoundRect
+          x: 0
+          y: 0
+          width: nameAreaWidth
+          height: I.cellHeight
+          color: I.backgroundColor
+
+        canvas.drawText
+          text: I.name
+          color: I.textColor
+          position: Point(horizontalPadding, lineHeight + verticalPadding)
         
         if (I.age / 20).floor() % 2
-          canvas.fillColor(I.cursorColor)
           if I.name.length == I.maxLength
             nameWidth = canvas.measureText(I.name.substring(0, I.name.length - 1))
           else
             nameWidth = canvas.measureText(I.name)
           
-          canvas.fillRect(nameWidth + horizontalPadding, verticalPadding + lineHeight, cursorWidth, cursorHeight)
+          canvas.drawRect
+            x: nameWidth + horizontalPadding
+            y: verticalPadding + lineHeight
+            width: cursorWidth
+            height: cursorHeight
+            color: I.cursorColor
 
     x: 0
     y: 0
@@ -104,22 +114,32 @@ NameEntry = (I) ->
   textArea =
     draw: (canvas) ->
       canvas.withTransform Matrix.translation(this.x, this.y), ->
-        canvas.fillColor(I.backgroundColor)
-        canvas.fillRoundRect(0, 0, width(), textAreaHeight())
-      
-        canvas.fillColor(I.textColor)
+        canvas.drawRoundRect
+          x: 0
+          y: 0
+          width: width()
+          height: textAreaHeight()
+          color: I.backgroundColor
   
         row = 0
         I.characterSet.each (c, i) ->
           col = i % I.cols
           row = (i / I.cols).floor()
-          canvas.fillText(c, col * I.cellWidth + horizontalPadding, row * I.cellHeight + lineHeight + verticalPadding)
+          canvas.drawText
+            text: c
+            color: I.textColor
+            x: col * I.cellWidth + horizontalPadding
+            y: row * I.cellHeight + lineHeight + verticalPadding
         
         row += 1
         
         unless I.cursor.menu
-          canvas.fillColor(I.cursorColor)
-          canvas.fillRoundRect(I.cursor.x * I.cellWidth, I.cursor.y * I.cellHeight, I.cellWidth, I.cellHeight)
+          canvas.drawRoundRect
+            color: I.cursorColor
+            x: I.cursor.x * I.cellWidth
+            y: I.cursor.y * I.cellHeight
+            width: I.cellWidth
+            height: I.cellHeight
 
     x: 0
     y: I.cellHeight + margin
@@ -129,14 +149,21 @@ NameEntry = (I) ->
       canvas.withTransform Matrix.translation(this.x, this.y), ->
         option = "Done"
         optionWidth = canvas.measureText(option)
-        
-        canvas.fillColor(I.textColor)
-        canvas.fillText(option, horizontalPadding, lineHeight + verticalPadding)
+
+        canvas.drawText
+          text: option
+          color: I.textColor
+          x: horizontalPadding
+          y: lineHeight + verticalPadding
         
         if I.cursor.menu
-          canvas.fillColor(I.cursorColor)
-          canvas.fillRoundRect(0, 0,optionWidth + 2 * horizontalPadding, I.cellHeight)
-          
+          canvas.drawRoundRect
+            color: I.cursorColor
+            x: 0
+            y: 0
+            width: optionWidth + 2 * horizontalPadding
+            height: I.cellHeight
+
     x: 0
     y: I.cellHeight * (rows() + 1) + 2 * margin
 
