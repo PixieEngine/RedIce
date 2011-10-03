@@ -17,37 +17,78 @@ Rink = (I) ->
   rinkCornerRadius = Rink.CORNER_RADIUS
 
   # Draw Arena
-  canvas.fillColor("white")
-  canvas.strokeColor("#888")
-  canvas.fillRoundRect(WALL_LEFT, WALL_TOP, ARENA_WIDTH, ARENA_HEIGHT, rinkCornerRadius)
+  canvas.drawRoundRect
+    color: "white"
+    x: WALL_LEFT
+    y: WALL_TOP
+    width: ARENA_WIDTH
+    height: ARENA_HEIGHT
+    radius: rinkCornerRadius
 
   # Blue Lines
-  canvas.strokeColor(blue)
-  x = WALL_LEFT + ARENA_WIDTH/3
-  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 4)
-  x = WALL_LEFT + ARENA_WIDTH*2/3
-  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 4)
+  for x in [ARENA_WIDTH/3, ARENA_WIDTH*2/3]
+    x += WALL_LEFT
+    canvas.drawLine
+      color: blue
+      start: Point(x, WALL_TOP)
+      end: Point(x, WALL_BOTTOM)
+      width: 4
 
   # Center Line
-  canvas.strokeColor(red)
   x = WALL_LEFT + ARENA_WIDTH/2
-  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 2)
+  canvas.drawLine
+    color: red
+    start: Point(x, WALL_TOP)
+    end: Point(x, WALL_BOTTOM)
+    width: 2
 
   # Center Circle
   x = WALL_LEFT + ARENA_WIDTH/2
   y = WALL_TOP + ARENA_HEIGHT/2
-  canvas.fillCircle(x, y, faceOffSpotRadius, blue)
-  canvas.context().lineWidth = 2
-  canvas.strokeCircle(x, y, faceOffCircleRadius, blue)
+  canvas.drawCircle
+    x: x 
+    y: y
+    radius: faceOffSpotRadius
+    color: blue
+
+  canvas.drawCircle
+    x: x 
+    y: y
+    radius: faceOffCircleRadius
+    stroke:
+      color: blue
+      width: 2
 
   # Goal Lines
-  canvas.strokeColor(red)
   x = WALL_LEFT + ARENA_WIDTH/10
-  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 1)
-  canvas.strokeRect(x, WALL_TOP + ARENA_HEIGHT/2 - 16, 16, 32)
+  canvas.drawLine
+    start: Point(x, WALL_TOP)
+    end: Point(x, WALL_BOTTOM
+    width: 1
+    color: red
+
+  canvas.drawRect
+    x: x
+    y: WALL_TOP + ARENA_HEIGHT/2 - 16
+    width: 16
+    height: 32
+    stroke:
+      color: red
+
   x = WALL_LEFT + ARENA_WIDTH*9/10
-  canvas.drawLine(x, WALL_TOP, x, WALL_BOTTOM, 1)
-  canvas.strokeRect(x - 16, WALL_TOP + ARENA_HEIGHT/2 - 16, 16, 32)
+  canvas.drawLine
+    start: Point(x, WALL_TOP)
+    end: Point(x, WALL_BOTTOM)
+    width: 1
+    color: red
+
+  canvas.drawRect
+    x: x - 16
+    y: WALL_TOP + ARENA_HEIGHT/2 - 16
+    width: 16
+    height: 32
+    stroke:
+      color: red
 
   [1, 3].each (verticalQuarter) ->
     y = WALL_TOP + verticalQuarter/4 * ARENA_HEIGHT
@@ -55,10 +96,20 @@ Rink = (I) ->
     [1/5, 1/3 + 1/40, 2/3 - 1/40, 4/5].each (faceOffX, i) ->
       x = WALL_LEFT + faceOffX * ARENA_WIDTH
 
-      canvas.fillCircle(x, y, faceOffSpotRadius, red)
+      canvas.drawCircle
+        x: x
+        y: y
+        radius: faceOffSpotRadius
+        color: red
+
       if i == 0 || i == 3
-        canvas.context().lineWidth = 2
-        canvas.strokeCircle(x, y, faceOffCircleRadius, red)
+        canvas.drawCircle
+          x: x
+          y: y
+          radius: faceOffCircleRadius
+          stroke:
+            color: red
+            width: 2
 
   fansSprite = Sprite.loadByName "fans", ->
     fansSprite.fill(canvas, 0, 0, App.width, WALL_TOP)
