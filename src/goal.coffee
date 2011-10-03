@@ -44,13 +44,12 @@ Goal = (I) ->
   }
 
   drawWall = (wall, canvas) ->
-    canvas.fillColor("#0F0")
-    canvas.fillRect(
-      wall.center.x - wall.halfWidth, 
-      wall.center.y - wall.halfHeight,
-      2 * wall.halfWidth,
-      2 * wall.halfHeight
-    )
+    canvas.drawRect
+      color: "#0F0"
+      x: wall.center.x - wall.halfWidth, 
+      y: wall.center.y - wall.halfHeight,
+      width: 2 * wall.halfWidth,
+      height: 2 * wall.halfHeight
 
   self = GameObject(I).extend
     walls: ->
@@ -80,8 +79,9 @@ Goal = (I) ->
 
   self.bind "drawDebug", (canvas) ->
     # Draw goal area
-    canvas.fillColor("rgba(255, 0, 255, 0.5)")
-    canvas.fillRect(I.x, I.y, I.width, I.height)
+    canvas.fillRect
+      bounds: I
+      color: "rgba(255, 0, 255, 0.5)"
 
     # Draw walls
     walls.each (wall) ->
