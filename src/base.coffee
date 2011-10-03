@@ -72,10 +72,11 @@ Base = (I) ->
   self.bind "drawDebug", (canvas) ->
     if I.radius
       center = self.center()
-      x = center.x
-      y = center.y
 
-      canvas.fillCircle(x, y, I.radius, "rgba(255, 0, 255, 0.5)")
+      canvas.drawCircle
+        position: center
+        radius: I.radius
+        color: "rgba(255, 0, 255, 0.5)"
 
   self.attrReader "mass"
 
