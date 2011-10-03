@@ -94,13 +94,23 @@ Configurator = (I) ->
       self.trigger "beforeTransform", canvas
 
       canvas.withTransform Matrix.translation(I.x, I.y), ->
-        canvas.fillColor("rgba(0, 0, 0, 0.5)")
-        canvas.fillRoundRect(0, 0, I.width, I.height, 15)
+        canvas.drawRoundRect
+          x: 0
+          y: 0
+          width: I.width
+          height: I.height
+          radius: 15
+          color: "rgba(0, 0, 0, 0.5)"
 
-        canvas.fillColor(Player.COLORS[0])
-        canvas.fillText("Blue Team", 20, 20)
-        canvas.fillColor(Player.COLORS[1])
-        canvas.fillText("Red Team", 520, 20)
+        canvas.drawText
+          text: "Blue Team"
+          position: Point(20 20)
+          color: Player.COLORS[0]
+
+        canvas.drawText
+          text: "Red Team"
+          position: Point(520, 20)
+          color: Player.COLORS[1]
 
         I.config.players.each (player, i) ->
           y = i * 60 + 30
@@ -120,11 +130,19 @@ Configurator = (I) ->
 
           nameWidth = canvas.measureText(name)
 
-          canvas.fillColor(color)
-          canvas.fillRoundRect(x, y, nameWidth + 2 * horizontalPadding, lineHeight + 2 * verticalPadding)
+          canvas.drawRoundRect {
+            x 
+            y
+            width: nameWidth + 2 * horizontalPadding 
+            height: lineHeight + 2 * verticalPadding
+            color
+          }
 
-          canvas.fillColor("#FFF")
-          canvas.fillText(name, x + horizontalPadding, y + lineHeight + verticalPadding)
+          canvas.drawText
+            text: name
+            x: x + horizontalPadding
+            y: y + lineHeight + verticalPadding
+            color: "white"
 
   self.bind "step", ->
     I.maxPlayers.times (i) ->
