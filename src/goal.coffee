@@ -52,6 +52,9 @@ Goal = (I) ->
       height: 2 * wall.halfHeight
 
   self = GameObject(I).extend
+    center: ->
+      Point(I.x + I.width/2, I.y + I.height/2)
+
     walls: ->
       walls
 
