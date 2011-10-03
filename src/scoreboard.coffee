@@ -49,29 +49,52 @@ Scoreboard = (I) ->
       if seconds.length == 1
         seconds = "0" + seconds
 
-      canvas.fillColor("red")
       canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
-      canvas.fillText("#{minutes}:#{seconds}", WALL_LEFT + ARENA_WIDTH/2 - 22, 46)
-      canvas.fillText(I.period, WALL_LEFT + ARENA_WIDTH/2 + 18, 84)
 
-      canvas.fillText(I.score.away, WALL_LEFT + ARENA_WIDTH/2 - 72, 60)
-      canvas.fillText(I.score.home, WALL_LEFT + ARENA_WIDTH/2 + 90, 60)
+      canvas.drawText
+        color: "red"
+        text: "#{minutes}:#{seconds}"
+        x: WALL_LEFT + ARENA_WIDTH/2 - 22
+        y: 46
+
+      canvas.drawText
+        color: "red"
+        text: I.period
+        x: WALL_LEFT + ARENA_WIDTH/2 + 18
+        y: 84
+
+      canvas.drawText
+        color: "red"
+        text: I.score.away
+        x: WALL_LEFT + ARENA_WIDTH/2 - 72
+        y: 60
+      canvas.drawText
+        color: "red"
+        text: I.score.home
+        x: WALL_LEFT + ARENA_WIDTH/2 + 90
+        y: 60
 
       if I.gameOver
-        canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
-        canvas.fillColor("#000")
-        canvas.centerText("GAME OVER", 384)
+        canvas.centerText
+          color: "#000"
+          text: "GAME OVER"
+          y: 384
 
         if I.winner == "HOME"
-          canvas.fillColor("#F00")
+          color = "#F00"
         else
-          canvas.fillColor("#00F")
+          color = "#00F"
 
-        canvas.centerText("#{I.winner} WINS", 416)
+        canvas.centerText
+          color: color
+          text: "#{I.winner} WINS"
+          y: 416
+
       else if I.period >= 4
-        canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
-        canvas.fillColor("#0F0")
-        canvas.centerText("SUDDEN DEATH", 120)
+        canvas.centerText
+          color: "#0F0"
+          text: "SUDDEN DEATH"
+          y: 120
 
     score: (team) ->
       I.score[team] += 1 unless I.gameOver
