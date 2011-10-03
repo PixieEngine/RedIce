@@ -85,7 +85,9 @@ Zamboni = (I) ->
       position: currentPos
       radius: SWEEPER_SIZE/2
       color: "#000"
-    bloodCanvas.drawPoly.apply(null, boxPoints)
+    bloodCanvas.drawPoly
+      points: boxPoints
+      color: "#000"
 
     bloodCanvas.globalAlpha 1
     bloodCanvas.globalCompositeOperation "source-over"
