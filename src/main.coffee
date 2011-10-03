@@ -40,7 +40,7 @@ window.MAX_PLAYERS = 6
 window.activePlayers = 0
 
 window.engine = Engine
-  canvas: $("canvas").powerCanvas()
+  canvas: $("canvas").pixieCanvas()
   excludedModules: ["HUD"]
   includedModules: ["Joysticks"]
   showFPS: true
