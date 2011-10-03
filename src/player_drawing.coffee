@@ -60,8 +60,11 @@ PlayerDrawing = (I, self) ->
           color = ICE_COLOR
           thickness = 1
 
-        bloodCanvas.strokeColor(color)
-        bloodCanvas.drawLine(I.lastLeftSkatePos, currentLeftSkatePos, thickness)
+        bloodCanvas.drawLine
+          start: I.lastLeftSkatePos
+          end: currentLeftSkatePos
+          width: thickness
+          color: color
 
       if I.lastRightSkatePos 
         if skateBlood = I.blood.rightSkate
@@ -74,7 +77,11 @@ PlayerDrawing = (I, self) ->
           thickness = 1
 
         bloodCanvas.strokeColor(color)        
-        bloodCanvas.drawLine(I.lastRightSkatePos, currentRightSkatePos, thickness)
+        bloodCanvas.drawLine
+          start: I.lastRightSkatePos
+          end: currentRightSkatePos
+          width: thickness
+          color: color
 
       I.lastLeftSkatePos = currentLeftSkatePos
       I.lastRightSkatePos = currentRightSkatePos
