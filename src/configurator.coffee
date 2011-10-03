@@ -104,7 +104,7 @@ Configurator = (I) ->
 
         canvas.drawText
           text: "Blue Team"
-          position: Point(20 20)
+          position: Point(20, 20)
           color: Player.COLORS[0]
 
         canvas.drawText
