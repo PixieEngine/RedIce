@@ -21,7 +21,11 @@ Bottle = (I) ->
       maxOffset = (7 - radius)
       maxOffset *= maxOffset
 
-      bloodCanvas.fillCircle(I.x + I.width/2 + (rand() - 0.5) * maxOffset, I.y + I.height/2 + (rand() - 0.5) * maxOffset, radius, fluidColor)
+      bloodCanvas.drawCircle
+        x: I.x + I.width/2 + (rand() - 0.5) * maxOffset
+        y: I.y + I.height/2 + (rand() - 0.5) * maxOffset
+        radius: radius
+        color: fluidColor
 
   particleSizes = [4, 3, 5]
 
@@ -52,7 +56,10 @@ Bottle = (I) ->
 
       shadowColor = "rgba(0, 0, 0, 0.15)"
       bonusRadius = (-4 + 256/I.z).clamp(-4, 4)
-      canvas.fillCircle(center.x, center.y, I.radius + bonusRadius, shadowColor)
+      canvas.drawCircle
+        position: center
+        radius: I.radius + bonusRadius
+        color: shadowColor
 
       transform = Matrix.translation(I.x + I.width/2, I.y + I.height/2 - I.z).concat(Matrix.rotation(I.rotation)).concat(Matrix.translation(-I.width/2, -I.height/2))
 
