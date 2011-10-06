@@ -34,7 +34,7 @@ AI = (I, self) ->
           targetPosition = opposingGoal.center()
 
       else
-        targetPosition = engine.find("Puck").first().center()
+        targetPosition = engine.find("Puck").first()?.center()
 
       targetPosition || self.center()
 
