@@ -78,10 +78,12 @@ Configurator = (I) ->
       playerData.team
 
     reds.each (red, i) ->
+      red.slot = i
       red.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (reds.length + 1)
       red.x = WALL_LEFT + ARENA_WIDTH/2 + ARENA_WIDTH / 6
 
     blues.each (blue, i) ->
+      blue.slot = i
       blue.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (blues.length + 1)
       blue.x = WALL_LEFT + ARENA_WIDTH/2 - ARENA_WIDTH / 6
 
