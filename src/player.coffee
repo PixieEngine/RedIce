@@ -78,7 +78,9 @@ Player = (I) ->
       if I.cpu
         Color(Player.CPU_COLOR)
       else
-        Color(Player.COLORS[I.id])
+        # Adjust the lightness of each player's name tag slightly, 
+        # based on team and id
+        Color(Player.COLORS[I.team]).lighten(((I.id % 3) - 1) * 0.1)
 
     controlCircle: ->
       p = Point.fromAngle(I.heading).scale(16)
@@ -134,7 +136,7 @@ Player = (I) ->
         y: I.y + push.y
 
   shootPuck = (direction) ->
-    puck = engine.find("Puck").first()
+    return unless puck = engine.find("Puck").first()
 
     power = Math.min(I.shootPower, I.maxShotPower)
     circle = self.controlCircle()
