@@ -102,7 +102,7 @@ Configurator = (I) ->
           width: I.width
           height: I.height
           radius: 15
-          color: "rgba(0, 0, 0, 0.5)"
+          color: "rgba(0, 0, 0, 0.75)"
 
         canvas.drawText
           text: "Blue Team"
