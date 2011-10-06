@@ -9669,7 +9669,7 @@ AI = function(I, self) {
       return targetPosition || self.center();
     }
   };
-  I.role = roles[(I.id / 2).floor()];
+  I.role = roles[I.slot];
   return {
     computeDirection: function() {
       var deltaPosition, targetPosition;
@@ -9984,10 +9984,12 @@ Configurator = function(I) {
       return playerData.team;
     }), reds = _ref3[0], blues = _ref3[1];
     reds.each(function(red, i) {
+      red.slot = i;
       red.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (reds.length + 1);
       return red.x = WALL_LEFT + ARENA_WIDTH / 2 + ARENA_WIDTH / 6;
     });
     blues.each(function(blue, i) {
+      blue.slot = i;
       blue.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (blues.length + 1);
       return blue.x = WALL_LEFT + ARENA_WIDTH / 2 - ARENA_WIDTH / 6;
     });
@@ -11136,6 +11138,7 @@ Player = function(I) {
     height: 32,
     x: 192,
     y: 128,
+    slot: 0,
     shootPower: 0,
     wipeout: 0,
     velocity: Point(),
@@ -11198,7 +11201,7 @@ Player = function(I) {
       if (I.cpu) {
         return Color(Player.CPU_COLOR);
       } else {
-        return Color(Player.COLORS[I.id]);
+        return Color(Player.COLORS[I.team]).lighten((I.slot - 1) * 0.1);
       }
     },
     controlCircle: function() {
@@ -11253,7 +11256,7 @@ Player = function(I) {
     power = Math.min(I.shootPower, I.maxShotPower);
     circle = self.controlCircle();
     baseShotPower = 15;
-    if (Collision.circular(circle, puck.circle())) {
+    if (puck && Collision.circular(circle, puck.circle())) {
       if (I.shootPower >= 2 * I.maxShotPower) {
         puck.trigger("superCharge");
       }
