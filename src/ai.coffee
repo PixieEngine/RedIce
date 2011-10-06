@@ -38,7 +38,7 @@ AI = (I, self) ->
 
       targetPosition || self.center()
 
-  I.role = roles[(I.id / 2).floor()]
+  I.role = roles[I.slot]
 
   computeDirection: ->
     I.AI_TARGET = targetPosition = directionAI[I.role]()
