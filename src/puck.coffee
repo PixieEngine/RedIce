@@ -1,5 +1,6 @@
 Puck = (I) ->
   DEBUG_DRAW = false
+  DEFAULT_FRICTION = 0.05
 
   $.reverseMerge I,
     blood: 0
@@ -10,7 +11,7 @@ Puck = (I) ->
     height: 8
     x: 512 - 8
     y: (WALL_BOTTOM + WALL_TOP)/2 - 4
-    friction: 0.05
+    friction: DEFAULT_FRICTION
     mass: 0.01
     superMassive: false
     zIndex: 10
@@ -110,9 +111,11 @@ Puck = (I) ->
 
   self.bind "wallCollision", ->
     I.superMassive = false
+    I.friction = DEFAULT_FRICTION
 
   self.bind "superCharge", ->
     I.superMassive = true
+    I.friction = 0
     Sound.play "super_power"
 
   self.mass = ->
