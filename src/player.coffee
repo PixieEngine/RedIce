@@ -22,6 +22,7 @@ Player = (I) ->
     height: 32
     x: 192
     y: 128
+    slot: 0
     shootPower: 0
     wipeout: 0
     velocity: Point()
@@ -79,8 +80,8 @@ Player = (I) ->
         Color(Player.CPU_COLOR)
       else
         # Adjust the lightness of each player's name tag slightly, 
-        # based on team and id
-        Color(Player.COLORS[I.team]).lighten(((I.id % 3) - 1) * 0.1)
+        # based on team and team slot
+        Color(Player.COLORS[I.team]).lighten((I.slot - 1) * 0.1)
 
     controlCircle: ->
       p = Point.fromAngle(I.heading).scale(16)
