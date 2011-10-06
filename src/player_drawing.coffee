@@ -203,6 +203,7 @@ PlayerDrawing = (I, self) ->
             }
         else if superChargeRatio > 0
           canvas.drawRoundRect {
+            color
             x: -height/2
             y: 0
             width: maxWidth * superChargeRatio
