@@ -136,14 +136,14 @@ Player = (I) ->
         y: I.y + push.y
 
   shootPuck = (direction) ->
-    return unless puck = engine.find("Puck").first()
+    puck = engine.find("Puck").first()
 
     power = Math.min(I.shootPower, I.maxShotPower)
     circle = self.controlCircle()
     baseShotPower = 15
 
     # Shot or pass
-    if Collision.circular(circle, puck.circle())
+    if puck and Collision.circular(circle, puck.circle())
       if I.shootPower >= 2 * I.maxShotPower
         puck.trigger "superCharge"
 
