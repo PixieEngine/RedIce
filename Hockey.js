@@ -7464,7 +7464,7 @@ Music = (function() {
 var __slice = Array.prototype.slice;
 (function($) {
   return $.fn.pixieCanvas = function(options) {
-    var $canvas, canvas, context, contextAttrAccessor;
+    var $canvas, canvas, canvasAttrAccessor, context, contextAttrAccessor;
     options || (options = {});
     canvas = this.get(0);
     context = void 0;
@@ -8218,7 +8218,22 @@ var __slice = Array.prototype.slice;
         };
       });
     };
-    contextAttrAccessor("font", "globalAlpha", "globalCompositeOperation", "height", "lineWidth", "textAlign", "width");
+    canvasAttrAccessor = function() {
+      var attrs;
+      attrs = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return attrs.each(function(attr) {
+        return $canvas[attr] = function(newVal) {
+          if (newVal != null) {
+            canvas[attr] = newVal;
+            return this;
+          } else {
+            return canvas[attr];
+          }
+        };
+      });
+    };
+    contextAttrAccessor("font", "globalAlpha", "globalCompositeOperation", "lineWidth", "textAlign");
+    canvasAttrAccessor("height", "width");
     if (canvas != null ? canvas.getContext : void 0) {
       context = canvas.getContext('2d');
       if (options.init) {
@@ -10006,7 +10021,7 @@ Configurator = function(I) {
           width: I.width,
           height: I.height,
           radius: 15,
-          color: "rgba(0, 0, 0, 0.5)"
+          color: "rgba(0, 0, 0, 0.75)"
         });
         canvas.drawText({
           text: "Blue Team",
