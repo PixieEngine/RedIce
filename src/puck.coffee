@@ -101,7 +101,7 @@ Puck = (I) ->
         self.destroy()
         goal.score()
 
-        engine.delay 15, ->
+        engine.delay 30, ->
           engine.add
             class: "Puck"
 
