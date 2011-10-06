@@ -209,7 +209,7 @@ Player = (I) ->
       I.lastRightSkatePos = null
     else
       if !I.cooldown.shoot && actionDown "B", "X"
-        if I.shootPower < maxShotPower
+        if I.shootPower < I.maxShotPower
           I.shootPower += 1
         else
           I.shootPower += 2
