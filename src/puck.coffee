@@ -101,9 +101,9 @@ Puck = (I) ->
         self.destroy()
         goal.score()
 
-        # TODO: More delay
-        engine.add
-          class: "Puck"
+        engine.delay 15, ->
+          engine.add
+            class: "Puck"
 
   self.bind "update", ->
     I.sprite = sprites[39]
