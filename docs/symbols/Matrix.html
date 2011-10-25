@@ -12,55 +12,61 @@
     <div class="index">
       <div class="menu">
         <!-- begin publish.classesIndex -->
-        <div align="center"><a href="../index.html">Class Index</a> | <a href="../files.html">File Index</a></div>
-
-<h2 class="heading1">Classes</h2>
+        <h2 class="heading1">Classes</h2>
 
 <ul class="classList">
   
     <li><a href="../symbols/_global_.html">_global_</a></li>
   
-    <li><a href="../symbols/Animated.html">Animated</a></li>
+    <li></li>
   
     <li><a href="../symbols/Array.html">Array</a></li>
   
-    <li><a href="../symbols/Bindable.html">Bindable</a></li>
+    <li></li>
   
     <li><a href="../symbols/Boolean.html">Boolean</a></li>
   
-    <li><a href="../symbols/Bounded.html">Bounded</a></li>
+    <li></li>
   
     <li><a href="../symbols/Collision.html">Collision</a></li>
+  
+    <li><a href="../symbols/Color.html">Color</a></li>
   
     <li><a href="../symbols/Core.html">Core</a></li>
   
     <li><a href="../symbols/Date.html">Date</a></li>
   
-    <li><a href="../symbols/Durable.html">Durable</a></li>
+    <li></li>
+  
+    <li></li>
   
     <li><a href="../symbols/Engine.html">Engine</a></li>
-  
-    <li><a href="../symbols/Framerate.html">Framerate</a></li>
   
     <li><a href="../symbols/Function.html">Function</a></li>
   
     <li><a href="../symbols/GameObject.html">GameObject</a></li>
   
+    <li><a href="../symbols/justPressed.html">justPressed</a></li>
+  
     <li><a href="../symbols/keydown.html">keydown</a></li>
   
     <li><a href="../symbols/Local.html">Local</a></li>
+  
+    <li><a href="../symbols/Logging.html">Logging</a></li>
   
     <li><a href="../symbols/Math.html">Math</a></li>
   
     <li><a href="../symbols/Matrix.html">Matrix</a></li>
   
-    <li><a href="../symbols/Movable.html">Movable</a></li>
+    <li></li>
+  
+    <li><a href="../symbols/Music.html">Music</a></li>
   
     <li><a href="../symbols/Number.html">Number</a></li>
   
     <li><a href="../symbols/Object.html">Object</a></li>
   
-    <li><a href="../symbols/Physical.html">Physical</a></li>
+    <li><a href="../symbols/PixieCanvas.html">PixieCanvas</a></li>
   
     <li><a href="../symbols/Point.html">Point</a></li>
   
@@ -70,9 +76,95 @@
   
     <li><a href="../symbols/RegExp.html">RegExp</a></li>
   
+    <li><a href="../symbols/requestAnimationFrame.html">requestAnimationFrame</a></li>
+  
+    <li><a href="../symbols/ResourceLoader.html">ResourceLoader</a></li>
+  
+    <li></li>
+  
+    <li><a href="../symbols/Sound.html">Sound</a></li>
+  
     <li><a href="../symbols/Sprite.html">Sprite</a></li>
   
     <li><a href="../symbols/String.html">String</a></li>
+  
+</ul>
+
+<h2 class="heading1">Modules</h2>
+
+<ul class="classList">
+  
+    <li></li>
+  
+    <li><a href="../symbols/Animated.html">Animated</a></li>
+  
+    <li></li>
+  
+    <li><a href="../symbols/Bindable.html">Bindable</a></li>
+  
+    <li></li>
+  
+    <li><a href="../symbols/Bounded.html">Bounded</a></li>
+  
+    <li></li>
+  
+    <li></li>
+  
+    <li></li>
+  
+    <li></li>
+  
+    <li><a href="../symbols/Drawable.html">Drawable</a></li>
+  
+    <li><a href="../symbols/Durable.html">Durable</a></li>
+  
+    <li></li>
+  
+    <li></li>
+  
+    <li></li>
+  
+    <li></li>
+  
+    <li></li>
+  
+    <li></li>
+  
+    <li></li>
+  
+    <li></li>
+  
+    <li></li>
+  
+    <li><a href="../symbols/Movable.html">Movable</a></li>
+  
+    <li></li>
+  
+    <li></li>
+  
+    <li></li>
+  
+    <li></li>
+  
+    <li></li>
+  
+    <li></li>
+  
+    <li></li>
+  
+    <li></li>
+  
+    <li></li>
+  
+    <li></li>
+  
+    <li><a href="../symbols/Rotatable.html">Rotatable</a></li>
+  
+    <li></li>
+  
+    <li></li>
+  
+    <li></li>
   
 </ul>
 
@@ -84,7 +176,7 @@
       <div class="innerContent">
         <h1 class="classTitle">
           
-          Class <span>Matrix</span>
+          <span>Matrix</span>
         </h1>
 
         <p class="description summary">
@@ -101,22 +193,20 @@
               <caption>Class Summary</caption>
               <tbody>
                 <tr>
-                  <td class="attributes">&nbsp;</td>
                   <td class="nameDescription" >
                     <div class="fixedFont">
                       <b><a href="../symbols/Matrix.html#constructor">Matrix</a></b>(a, b, c, d, tx, ty)
                     </div>
                     <div class="description"><pre>
- _        _
-| a  c tx  |
-| b  d ty  |
-|_0  0  1 _|
-</pre>
-Creates a matrix for 2d affine transformations.</div>
+     _        _
+    | a  c tx  |
+    | b  d ty  |
+    |_0  0  1 _|
+  </pre>
+  Creates a matrix for 2d affine transformations.</div>
                   </td>
                 </tr>
                 <tr>
-                  <td></td>
                   <td class="instanceVariables">&nbsp;</td>
                 </tr>
               </tbody>
@@ -134,90 +224,108 @@ Creates a matrix for 2d affine transformations.</div>
                 <tbody>
                   
                     <tr>
-                      <td class="attributes">&nbsp;</td>
                       <td class="nameDescription">
                         <div class="fixedFont">
                         <b><a href="../symbols/Matrix.html#a">a</a></b>
+                          <span class='lighter'>
+                          
+                          </span>
                         </div>
                         <div class="description"></div>
                       </td>
                     </tr>
                   
                     <tr>
-                      <td class="attributes">&nbsp;</td>
                       <td class="nameDescription">
                         <div class="fixedFont">
                         <b><a href="../symbols/Matrix.html#b">b</a></b>
+                          <span class='lighter'>
+                          
+                          </span>
                         </div>
                         <div class="description"></div>
                       </td>
                     </tr>
                   
                     <tr>
-                      <td class="attributes">&nbsp;</td>
                       <td class="nameDescription">
                         <div class="fixedFont">
                         <b><a href="../symbols/Matrix.html#c">c</a></b>
+                          <span class='lighter'>
+                          
+                          </span>
                         </div>
                         <div class="description"></div>
                       </td>
                     </tr>
                   
                     <tr>
-                      <td class="attributes">&nbsp;</td>
                       <td class="nameDescription">
                         <div class="fixedFont">
                         <b><a href="../symbols/Matrix.html#d">d</a></b>
+                          <span class='lighter'>
+                          
+                          </span>
                         </div>
                         <div class="description"></div>
                       </td>
                     </tr>
                   
                     <tr>
-                      <td class="attributes"><em>static</em>&nbsp;</td>
                       <td class="nameDescription">
                         <div class="fixedFont">
                         Matrix.<b><a href="../symbols/Matrix.html#.HORIZONTAL_FLIP">HORIZONTAL_FLIP</a></b>
+                          <span class='lighter'>
+                          <em>static</em>
+                          </span>
                         </div>
                         <div class="description">A constant representing the horizontal flip transformation matrix.</div>
                       </td>
                     </tr>
                   
                     <tr>
-                      <td class="attributes"><em>static</em>&nbsp;</td>
                       <td class="nameDescription">
                         <div class="fixedFont">
                         Matrix.<b><a href="../symbols/Matrix.html#.IDENTITY">IDENTITY</a></b>
+                          <span class='lighter'>
+                          <em>static</em>
+                          </span>
                         </div>
                         <div class="description">A constant representing the identity matrix.</div>
                       </td>
                     </tr>
                   
                     <tr>
-                      <td class="attributes">&nbsp;</td>
                       <td class="nameDescription">
                         <div class="fixedFont">
                         <b><a href="../symbols/Matrix.html#tx">tx</a></b>
+                          <span class='lighter'>
+                          
+                          </span>
                         </div>
                         <div class="description"></div>
                       </td>
                     </tr>
                   
                     <tr>
-                      <td class="attributes">&nbsp;</td>
                       <td class="nameDescription">
                         <div class="fixedFont">
                         <b><a href="../symbols/Matrix.html#ty">ty</a></b>
+                          <span class='lighter'>
+                          
+                          </span>
                         </div>
                         <div class="description"></div>
                       </td>
                     </tr>
                   
                     <tr>
-                      <td class="attributes"><em>static</em>&nbsp;</td>
                       <td class="nameDescription">
                         <div class="fixedFont">
                         Matrix.<b><a href="../symbols/Matrix.html#.VERTICAL_FLIP">VERTICAL_FLIP</a></b>
+                          <span class='lighter'>
+                          <em>static</em>
+                          </span>
                         </div>
                         <div class="description">A constant representing the vertical flip transformation matrix.</div>
                       </td>
@@ -244,27 +352,24 @@ Creates a matrix for 2d affine transformations.</div>
                 <tbody>
                   
                     <tr>
-                      <td class="attributes">&nbsp;</td>
                       <td class="nameDescription">
                         <div class="fixedFont"><b><a href="../symbols/Matrix.html#concat">concat</a></b>(matrix)
                         </div>
                         <div class="description">Returns the result of this matrix multiplied by another matrix
-combining the geometric effects of the two.</div>
+      combining the geometric effects of the two.</div>
                       </td>
                     </tr>
                   
                     <tr>
-                      <td class="attributes">&nbsp;</td>
                       <td class="nameDescription">
                         <div class="fixedFont"><b><a href="../symbols/Matrix.html#deltaTransformPoint">deltaTransformPoint</a></b>()
                         </div>
                         <div class="description">Given a point in the pretransform coordinate space, returns the coordinates of 
-that point after the transformation occurs.</div>
+    that point after the transformation occurs.</div>
                       </td>
                     </tr>
                   
                     <tr>
-                      <td class="attributes">&nbsp;</td>
                       <td class="nameDescription">
                         <div class="fixedFont"><b><a href="../symbols/Matrix.html#inverse">inverse</a></b>()
                         </div>
@@ -273,37 +378,33 @@ that point after the transformation occurs.</div>
                     </tr>
                   
                     <tr>
-                      <td class="attributes">&nbsp;</td>
                       <td class="nameDescription">
                         <div class="fixedFont"><b><a href="../symbols/Matrix.html#rotate">rotate</a></b>(theta, aboutPoint)
                         </div>
                         <div class="description">Returns a new matrix that corresponds this matrix multiplied by a
-a rotation matrix.</div>
+    a rotation matrix.</div>
                       </td>
                     </tr>
                   
                     <tr>
-                      <td class="attributes">&nbsp;</td>
                       <td class="nameDescription">
                         <div class="fixedFont"><b><a href="../symbols/Matrix.html#scale">scale</a></b>(sx, sy, aboutPoint)
                         </div>
                         <div class="description">Returns a new matrix that corresponds this matrix multiplied by a
-a scaling matrix.</div>
+    a scaling matrix.</div>
                       </td>
                     </tr>
                   
                     <tr>
-                      <td class="attributes">&nbsp;</td>
                       <td class="nameDescription">
                         <div class="fixedFont"><b><a href="../symbols/Matrix.html#transformPoint">transformPoint</a></b>()
                         </div>
                         <div class="description">Returns the result of applying the geometric transformation represented by the 
-Matrix object to the specified point.</div>
+    Matrix object to the specified point.</div>
                       </td>
                     </tr>
                   
                     <tr>
-                      <td class="attributes">&nbsp;</td>
                       <td class="nameDescription">
                         <div class="fixedFont"><b><a href="../symbols/Matrix.html#translate">translate</a></b>(tx, ty)
                         </div>
@@ -332,27 +433,23 @@ Matrix object to the specified point.</div>
             <div class="innerProps">
               <a name="constructor"></a>
 
-              <div class="sectionTitle">
-                Class Detail
-              </div>
-
               <div class="fixedFont">
                 <b>Matrix</b>(a, b, c, d, tx, ty)
               </div>
 
               <div class="description">
                 <pre>
- _        _
-| a  c tx  |
-| b  d ty  |
-|_0  0  1 _|
-</pre>
-Creates a matrix for 2d affine transformations.
+     _        _
+    | a  c tx  |
+    | b  d ty  |
+    |_0  0  1 _|
+  </pre>
+  Creates a matrix for 2d affine transformations.
 
-concat, inverse, rotate, scale and translate return new matrices with the
-transformations applied. The matrix is not modified in place.
+  concat, inverse, rotate, scale and translate return new matrices with the
+  transformations applied. The matrix is not modified in place.
 
-Returns the identity matrix when called with no arguments.
+  Returns the identity matrix when called with no arguments.
                 
               </div>
 
@@ -363,37 +460,37 @@ Returns the identity matrix when called with no arguments.
                   <dt class="heading">Parameters:</dt>
                   
                     <dt>
-                      <span class="light fixedFont">{<a href="../symbols/Number.html">Number</a>}</span>  <b>a</b>
+                      <b>a</b><span class='light fixedFont'> <a href="../symbols/Number.html">Number</a></span> 
                       <i>Optional</i>
                     </dt>
                     <dd></dd>
                   
                     <dt>
-                      <span class="light fixedFont">{<a href="../symbols/Number.html">Number</a>}</span>  <b>b</b>
+                      <b>b</b><span class='light fixedFont'> <a href="../symbols/Number.html">Number</a></span> 
                       <i>Optional</i>
                     </dt>
                     <dd></dd>
                   
                     <dt>
-                      <span class="light fixedFont">{<a href="../symbols/Number.html">Number</a>}</span>  <b>c</b>
+                      <b>c</b><span class='light fixedFont'> <a href="../symbols/Number.html">Number</a></span> 
                       <i>Optional</i>
                     </dt>
                     <dd></dd>
                   
                     <dt>
-                      <span class="light fixedFont">{<a href="../symbols/Number.html">Number</a>}</span>  <b>d</b>
+                      <b>d</b><span class='light fixedFont'> <a href="../symbols/Number.html">Number</a></span> 
                       <i>Optional</i>
                     </dt>
                     <dd></dd>
                   
                     <dt>
-                      <span class="light fixedFont">{<a href="../symbols/Number.html">Number</a>}</span>  <b>tx</b>
+                      <b>tx</b><span class='light fixedFont'> <a href="../symbols/Number.html">Number</a></span> 
                       <i>Optional</i>
                     </dt>
                     <dd></dd>
                   
                     <dt>
-                      <span class="light fixedFont">{<a href="../symbols/Number.html">Number</a>}</span>  <b>ty</b>
+                      <b>ty</b><span class='light fixedFont'> <a href="../symbols/Number.html">Number</a></span> 
                       <i>Optional</i>
                     </dt>
                     <dd></dd>
@@ -412,22 +509,15 @@ Returns the identity matrix when called with no arguments.
         
           <div class="details props">
             <div class="innerProps">
-
-              <div class="sectionTitle">
-                Field Detail
-              </div>
-
               
-                <a name="a"></a>
-
                 <div class="fixedFont heading">
-                  <span class='lighter'>
-                  
-                  </span>
-
+                  <a name="a"></a>
                   
 
                   <b>a</b>
+                  <span class='lighter'>
+                  
+                  </span>
                 </div>
 
                 <div class="description">
@@ -439,19 +529,15 @@ Returns the identity matrix when called with no arguments.
                 
 
                 
-
-                <div class="hr"></div>
               
-                <a name="b"></a>
-
                 <div class="fixedFont heading">
-                  <span class='lighter'>
-                  
-                  </span>
-
+                  <a name="b"></a>
                   
 
                   <b>b</b>
+                  <span class='lighter'>
+                  
+                  </span>
                 </div>
 
                 <div class="description">
@@ -463,19 +549,15 @@ Returns the identity matrix when called with no arguments.
                 
 
                 
-
-                <div class="hr"></div>
               
-                <a name="c"></a>
-
                 <div class="fixedFont heading">
-                  <span class='lighter'>
-                  
-                  </span>
-
+                  <a name="c"></a>
                   
 
                   <b>c</b>
+                  <span class='lighter'>
+                  
+                  </span>
                 </div>
 
                 <div class="description">
@@ -487,19 +569,15 @@ Returns the identity matrix when called with no arguments.
                 
 
                 
-
-                <div class="hr"></div>
               
-                <a name="d"></a>
-
                 <div class="fixedFont heading">
-                  <span class='lighter'>
-                  
-                  </span>
-
+                  <a name="d"></a>
                   
 
                   <b>d</b>
+                  <span class='lighter'>
+                  
+                  </span>
                 </div>
 
                 <div class="description">
@@ -511,19 +589,15 @@ Returns the identity matrix when called with no arguments.
                 
 
                 
-
-                <div class="hr"></div>
               
-                <a name=".HORIZONTAL_FLIP"></a>
-
                 <div class="fixedFont heading">
-                  <span class='lighter'>
-                  <em>static</em>
-                  </span>
-
+                  <a name=".HORIZONTAL_FLIP"></a>
                   
 
                   <span class="light">Matrix.</span><b>HORIZONTAL_FLIP</b>
+                  <span class='lighter'>
+                  <em>static</em>
+                  </span>
                 </div>
 
                 <div class="description">
@@ -535,19 +609,15 @@ Returns the identity matrix when called with no arguments.
                 
 
                 
-
-                <div class="hr"></div>
               
-                <a name=".IDENTITY"></a>
-
                 <div class="fixedFont heading">
-                  <span class='lighter'>
-                  <em>static</em>
-                  </span>
-
+                  <a name=".IDENTITY"></a>
                   
 
                   <span class="light">Matrix.</span><b>IDENTITY</b>
+                  <span class='lighter'>
+                  <em>static</em>
+                  </span>
                 </div>
 
                 <div class="description">
@@ -559,19 +629,15 @@ Returns the identity matrix when called with no arguments.
                 
 
                 
-
-                <div class="hr"></div>
               
-                <a name="tx"></a>
-
                 <div class="fixedFont heading">
-                  <span class='lighter'>
-                  
-                  </span>
-
+                  <a name="tx"></a>
                   
 
                   <b>tx</b>
+                  <span class='lighter'>
+                  
+                  </span>
                 </div>
 
                 <div class="description">
@@ -583,19 +649,15 @@ Returns the identity matrix when called with no arguments.
                 
 
                 
-
-                <div class="hr"></div>
               
-                <a name="ty"></a>
-
                 <div class="fixedFont heading">
-                  <span class='lighter'>
-                  
-                  </span>
-
+                  <a name="ty"></a>
                   
 
                   <b>ty</b>
+                  <span class='lighter'>
+                  
+                  </span>
                 </div>
 
                 <div class="description">
@@ -607,19 +669,15 @@ Returns the identity matrix when called with no arguments.
                 
 
                 
-
-                <div class="hr"></div>
               
-                <a name=".VERTICAL_FLIP"></a>
-
                 <div class="fixedFont heading">
-                  <span class='lighter'>
-                  <em>static</em>
-                  </span>
-
+                  <a name=".VERTICAL_FLIP"></a>
                   
 
                   <span class="light">Matrix.</span><b>VERTICAL_FLIP</b>
+                  <span class='lighter'>
+                  <em>static</em>
+                  </span>
                 </div>
 
                 <div class="description">
@@ -627,8 +685,6 @@ Returns the identity matrix when called with no arguments.
 
                   
                 </div>
-
-                
 
                 
 
@@ -644,29 +700,22 @@ Returns the identity matrix when called with no arguments.
         
           <div class="details props">
             <div class="innerProps">
-              <div class="sectionTitle">
-                Method Detail
-              </div>
-
               
-                <a name="concat"></a>
-
                 <div class="fixedFont heading">
+                  <a name="concat"></a>
                   <span class='lighter'>
                   
                   </span>
-
-                  <span class="light">{<a href="../symbols/Matrix.html">Matrix</a>}</span>
 
                   <b>concat</b>(matrix)
                 </div>
 
                 <div class="description">
                   Returns the result of this matrix multiplied by another matrix
-combining the geometric effects of the two. In mathematical terms, 
-concatenating two matrixes is the same as combining them using matrix multiplication.
-If this matrix is A and the matrix passed in is B, the resulting matrix is A x B
-http://mathworld.wolfram.com/MatrixMultiplication.html
+      combining the geometric effects of the two. In mathematical terms, 
+      concatenating two matrixes is the same as combining them using matrix multiplication.
+      If this matrix is A and the matrix passed in is B, the resulting matrix is A x B
+      http://mathworld.wolfram.com/MatrixMultiplication.html
 
                   
                 </div>
@@ -678,7 +727,7 @@ http://mathworld.wolfram.com/MatrixMultiplication.html
                     <dt class="heading">Parameters:</dt>
                     
                       <dt>
-                        <span class="light fixedFont">{<a href="../symbols/Matrix.html">Matrix</a>}</span> <b>matrix</b>
+                        <b>matrix</b><span class='light fixedFont'> <a href="../symbols/Matrix.html">Matrix</a></span> 
                         
                       </dt>
                       <dd>The matrix to multiply this matrix by.</dd>
@@ -696,8 +745,8 @@ http://mathworld.wolfram.com/MatrixMultiplication.html
                     
 
                     
-                      <dt class="heading">Returns:</dt>
                       
+                        <dt class="heading">Returns <span class="light fixedFont"><a href="../symbols/Matrix.html">Matrix</a></span> :</dt>
                         <dd>The result of the matrix multiplication, a new matrix.</dd>
                       
                     
@@ -708,26 +757,21 @@ http://mathworld.wolfram.com/MatrixMultiplication.html
 
                   </dl>
                 
-
-                <div class="hr"></div>
               
-                <a name="deltaTransformPoint"></a>
-
                 <div class="fixedFont heading">
+                  <a name="deltaTransformPoint"></a>
                   <span class='lighter'>
                   
                   </span>
-
-                  <span class="light">{<a href="../symbols/Point.html">Point</a>}</span>
 
                   <b>deltaTransformPoint</b>()
                 </div>
 
                 <div class="description">
                   Given a point in the pretransform coordinate space, returns the coordinates of 
-that point after the transformation occurs. Unlike the standard transformation 
-applied using the transformPoint() method, the deltaTransformPoint() method 
-does not consider the translation parameters tx and ty.
+    that point after the transformation occurs. Unlike the standard transformation 
+    applied using the transformPoint() method, the deltaTransformPoint() method 
+    does not consider the translation parameters tx and ty.
 
                   
                 </div>
@@ -746,8 +790,8 @@ does not consider the translation parameters tx and ty.
                     
 
                     
-                      <dt class="heading">Returns:</dt>
                       
+                        <dt class="heading">Returns <span class="light fixedFont"><a href="../symbols/Point.html">Point</a></span> :</dt>
                         <dd>A new point transformed by this matrix ignoring tx and ty.</dd>
                       
                     
@@ -763,24 +807,19 @@ does not consider the translation parameters tx and ty.
 
                   </dl>
                 
-
-                <div class="hr"></div>
               
-                <a name="inverse"></a>
-
                 <div class="fixedFont heading">
+                  <a name="inverse"></a>
                   <span class='lighter'>
                   
                   </span>
-
-                  <span class="light">{<a href="../symbols/Matrix.html">Matrix</a>}</span>
 
                   <b>inverse</b>()
                 </div>
 
                 <div class="description">
                   Returns the inverse of the matrix.
-http://mathworld.wolfram.com/MatrixInverse.html
+    http://mathworld.wolfram.com/MatrixInverse.html
 
                   
                 </div>
@@ -799,8 +838,8 @@ http://mathworld.wolfram.com/MatrixInverse.html
                     
 
                     
-                      <dt class="heading">Returns:</dt>
                       
+                        <dt class="heading">Returns <span class="light fixedFont"><a href="../symbols/Matrix.html">Matrix</a></span> :</dt>
                         <dd>A new matrix that is the inverse of this matrix.</dd>
                       
                     
@@ -811,24 +850,19 @@ http://mathworld.wolfram.com/MatrixInverse.html
 
                   </dl>
                 
-
-                <div class="hr"></div>
               
-                <a name="rotate"></a>
-
                 <div class="fixedFont heading">
+                  <a name="rotate"></a>
                   <span class='lighter'>
                   
                   </span>
-
-                  <span class="light">{<a href="../symbols/Matrix.html">Matrix</a>}</span>
 
                   <b>rotate</b>(theta, aboutPoint)
                 </div>
 
                 <div class="description">
                   Returns a new matrix that corresponds this matrix multiplied by a
-a rotation matrix.
+    a rotation matrix.
 
                   
                 </div>
@@ -840,13 +874,13 @@ a rotation matrix.
                     <dt class="heading">Parameters:</dt>
                     
                       <dt>
-                        <span class="light fixedFont">{<a href="../symbols/Number.html">Number</a>}</span> <b>theta</b>
+                        <b>theta</b><span class='light fixedFont'> <a href="../symbols/Number.html">Number</a></span> 
                         
                       </dt>
                       <dd>Amount to rotate in radians.</dd>
                     
                       <dt>
-                        <span class="light fixedFont">{<a href="../symbols/Point.html">Point</a>}</span> <b>aboutPoint</b>
+                        <b>aboutPoint</b><span class='light fixedFont'> <a href="../symbols/Point.html">Point</a></span> 
                         <i>Optional</i>
                       </dt>
                       <dd>The point about which this rotation occurs. Defaults to (0,0).</dd>
@@ -864,8 +898,8 @@ a rotation matrix.
                     
 
                     
-                      <dt class="heading">Returns:</dt>
                       
+                        <dt class="heading">Returns <span class="light fixedFont"><a href="../symbols/Matrix.html">Matrix</a></span> :</dt>
                         <dd>A new matrix, rotated by the specified amount.</dd>
                       
                     
@@ -881,24 +915,19 @@ a rotation matrix.
 
                   </dl>
                 
-
-                <div class="hr"></div>
               
-                <a name="scale"></a>
-
                 <div class="fixedFont heading">
+                  <a name="scale"></a>
                   <span class='lighter'>
                   
                   </span>
-
-                  <span class="light">{<a href="../symbols/Matrix.html">Matrix</a>}</span>
 
                   <b>scale</b>(sx, sy, aboutPoint)
                 </div>
 
                 <div class="description">
                   Returns a new matrix that corresponds this matrix multiplied by a
-a scaling matrix.
+    a scaling matrix.
 
                   
                 </div>
@@ -910,19 +939,19 @@ a scaling matrix.
                     <dt class="heading">Parameters:</dt>
                     
                       <dt>
-                        <span class="light fixedFont">{<a href="../symbols/Number.html">Number</a>}</span> <b>sx</b>
+                        <b>sx</b><span class='light fixedFont'> <a href="../symbols/Number.html">Number</a></span> 
                         
                       </dt>
                       <dd></dd>
                     
                       <dt>
-                        <span class="light fixedFont">{<a href="../symbols/Number.html">Number</a>}</span> <b>sy</b>
+                        <b>sy</b><span class='light fixedFont'> <a href="../symbols/Number.html">Number</a></span> 
                         <i>Optional</i>
                       </dt>
                       <dd></dd>
                     
                       <dt>
-                        <span class="light fixedFont">{<a href="../symbols/Point.html">Point</a>}</span> <b>aboutPoint</b>
+                        <b>aboutPoint</b><span class='light fixedFont'> <a href="../symbols/Point.html">Point</a></span> 
                         <i>Optional</i>
                       </dt>
                       <dd>The point that remains fixed during the scaling</dd>
@@ -940,6 +969,11 @@ a scaling matrix.
                     
 
                     
+                      
+                        <dt class="heading">Returns <span class="light fixedFont"><a href="../symbols/Matrix.html">Matrix</a></span> :</dt>
+                        <dd>A new Matrix. The original multiplied by a scaling matrix.</dd>
+                      
+                    
 
                     
 
@@ -952,24 +986,19 @@ a scaling matrix.
 
                   </dl>
                 
-
-                <div class="hr"></div>
               
-                <a name="transformPoint"></a>
-
                 <div class="fixedFont heading">
+                  <a name="transformPoint"></a>
                   <span class='lighter'>
                   
                   </span>
-
-                  <span class="light">{<a href="../symbols/Point.html">Point</a>}</span>
 
                   <b>transformPoint</b>()
                 </div>
 
                 <div class="description">
                   Returns the result of applying the geometric transformation represented by the 
-Matrix object to the specified point.
+    Matrix object to the specified point.
 
                   
                 </div>
@@ -988,8 +1017,8 @@ Matrix object to the specified point.
                     
 
                     
-                      <dt class="heading">Returns:</dt>
                       
+                        <dt class="heading">Returns <span class="light fixedFont"><a href="../symbols/Point.html">Point</a></span> :</dt>
                         <dd>A new point with the transformation applied.</dd>
                       
                     
@@ -1005,17 +1034,12 @@ Matrix object to the specified point.
 
                   </dl>
                 
-
-                <div class="hr"></div>
               
-                <a name="translate"></a>
-
                 <div class="fixedFont heading">
+                  <a name="translate"></a>
                   <span class='lighter'>
                   
                   </span>
-
-                  <span class="light">{<a href="../symbols/Matrix.html">Matrix</a>}</span>
 
                   <b>translate</b>(tx, ty)
                 </div>
@@ -1033,13 +1057,13 @@ Matrix object to the specified point.
                     <dt class="heading">Parameters:</dt>
                     
                       <dt>
-                        <span class="light fixedFont">{<a href="../symbols/Number.html">Number</a>}</span> <b>tx</b>
+                        <b>tx</b><span class='light fixedFont'> <a href="../symbols/Number.html">Number</a></span> 
                         
                       </dt>
                       <dd>The translation along the x axis.</dd>
                     
                       <dt>
-                        <span class="light fixedFont">{<a href="../symbols/Number.html">Number</a>}</span> <b>ty</b>
+                        <b>ty</b><span class='light fixedFont'> <a href="../symbols/Number.html">Number</a></span> 
                         
                       </dt>
                       <dd>The translation along the y axis.</dd>
@@ -1057,8 +1081,8 @@ Matrix object to the specified point.
                     
 
                     
-                      <dt class="heading">Returns:</dt>
                       
+                        <dt class="heading">Returns <span class="light fixedFont"><a href="../symbols/Matrix.html">Matrix</a></span> :</dt>
                         <dd>A new matrix with the translation applied.</dd>
                       
                     
@@ -1074,8 +1098,6 @@ Matrix object to the specified point.
 
                   </dl>
                 
-
-                
               
             </div>
           </div>
@@ -1087,5 +1109,7 @@ Matrix object to the specified point.
         
       </div>
     </div>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+  <script src="/assets/docs.js"></script>
   </body>
 </html>

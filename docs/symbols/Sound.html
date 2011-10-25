@@ -4,7 +4,7 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="generator" content="JsDoc Toolkit" />
     
-    <title>JsDoc Reference - Random</title>
+    <title>JsDoc Reference - Sound</title>
     <link href="/stylesheets/docs.css" type="text/css" rel="stylesheet" media="all" />
   </head>
 
@@ -176,7 +176,7 @@
       <div class="innerContent">
         <h1 class="classTitle">
           
-          <span>Random</span>
+          <span>Sound</span>
         </h1>
 
         <p class="description summary">
@@ -184,20 +184,20 @@
 
           
 
-          Some useful methods for generating random things.
+          
         </p>
 
         
           <div class="props">
-            <table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class Random.">
+            <table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class Sound.">
               <caption>Class Summary</caption>
               <tbody>
                 <tr>
                   <td class="nameDescription" >
                     <div class="fixedFont">
-                      <b><a href="../symbols/Random.html#constructor">Random</a></b>()
+                      <b><a href="../symbols/Sound.html#constructor">Sound</a></b>()
                     </div>
-                    <div class="description"></div>
+                    <div class="description">A simple interface for playing sounds in games.</div>
                   </td>
                 </tr>
                 <tr>
@@ -217,40 +217,34 @@
           
           
             <div class="props">
-              <table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class Random.">
+              <table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class Sound.">
                 <caption>Method Summary</caption>
 
                 <tbody>
                   
                     <tr>
                       <td class="nameDescription">
-                        <div class="fixedFont">Random.<b><a href="../symbols/Random.html#.angle">angle</a></b>()
+                        <div class="fixedFont">Sound.<b><a href="../symbols/Sound.html#.play">play</a></b>(id, maxChannels)
                         </div>
-                        <div class="description">Returns a random angle, uniformly distributed, between 0 and 2pi.</div>
+                        <div class="description">Play a sound from your sounds 
+    directory with the name of `id`.</div>
                       </td>
                     </tr>
                   
                     <tr>
                       <td class="nameDescription">
-                        <div class="fixedFont">Random.<b><a href="../symbols/Random.html#.color">color</a></b>()
+                        <div class="fixedFont">Sound.<b><a href="../symbols/Sound.html#.playFromUrl">playFromUrl</a></b>(url)
                         </div>
-                        <div class="description">Returns a random color.</div>
+                        <div class="description">Play a sound from the given
+    url with the name of `id`.</div>
                       </td>
                     </tr>
                   
                     <tr>
                       <td class="nameDescription">
-                        <div class="fixedFont">Random.<b><a href="../symbols/Random.html#.often">often</a></b>()
+                        <div class="fixedFont">Sound.<b><a href="../symbols/Sound.html#.stop">stop</a></b>(id)
                         </div>
-                        <div class="description">Happens often.</div>
-                      </td>
-                    </tr>
-                  
-                    <tr>
-                      <td class="nameDescription">
-                        <div class="fixedFont">Random.<b><a href="../symbols/Random.html#.sometimes">sometimes</a></b>()
-                        </div>
-                        <div class="description">Happens sometimes.</div>
+                        <div class="description">Stop a sound while it is playing.</div>
                       </td>
                     </tr>
                   
@@ -276,11 +270,11 @@
               <a name="constructor"></a>
 
               <div class="fixedFont">
-                <b>Random</b>()
+                <b>Sound</b>()
               </div>
 
               <div class="description">
-                
+                A simple interface for playing sounds in games.
                 
               </div>
 
@@ -306,22 +300,83 @@
             <div class="innerProps">
               
                 <div class="fixedFont heading">
-                  <a name=".angle"></a>
+                  <a name=".play"></a>
                   <span class='lighter'>
                   <em>static</em>
                   </span>
 
-                  <span class="light">Random.</span><b>angle</b>()
+                  <span class="light">Sound.</span><b>play</b>(id, maxChannels)
                 </div>
 
                 <div class="description">
-                  Returns a random angle, uniformly distributed, between 0 and 2pi.
+                  Play a sound from your sounds 
+    directory with the name of `id`.
+
+    <code><pre>
+    # plays a sound called explode from your sounds directory
+    Sound.play('explode')
+    </pre></code>
 
                   
                 </div>
 
                 
 
+                
+                  <dl class="detailList params">
+                    <dt class="heading">Parameters:</dt>
+                    
+                      <dt>
+                        <b>id</b><span class='light fixedFont'> <a href="../symbols/String.html">String</a></span> 
+                        
+                      </dt>
+                      <dd>id or name of the sound file to play</dd>
+                    
+                      <dt>
+                        <b>maxChannels</b><span class='light fixedFont'> <a href="../symbols/String.html">String</a></span> 
+                        
+                      </dt>
+                      <dd>max number of sounds able to be played simultaneously</dd>
+                    
+                  </dl>
+                
+
+                
+              
+                <div class="fixedFont heading">
+                  <a name=".playFromUrl"></a>
+                  <span class='lighter'>
+                  <em>static</em>
+                  </span>
+
+                  <span class="light">Sound.</span><b>playFromUrl</b>(url)
+                </div>
+
+                <div class="description">
+                  Play a sound from the given
+    url with the name of `id`.
+
+    <code><pre>
+    # plays the sound at the specified url
+    Sound.playFromUrl('http://YourSoundWebsite.com/explode.wav')
+    </pre></code>
+
+                  
+                </div>
+
+                
+
+                
+                  <dl class="detailList params">
+                    <dt class="heading">Parameters:</dt>
+                    
+                      <dt>
+                        <b>url</b><span class='light fixedFont'> <a href="../symbols/String.html">String</a></span> 
+                        
+                      </dt>
+                      <dd>location of sound file to play</dd>
+                    
+                  </dl>
                 
 
                 
@@ -335,8 +390,8 @@
 
                     
                       
-                        <dt class="heading">Returns <span class="light fixedFont"><a href="../symbols/Number.html">Number</a></span> :</dt>
-                        <dd>A random angle between 0 and 2pi</dd>
+                        <dt class="heading">Returns <span class="light fixedFont"><a href="../symbols/Sound.html">Sound</a></span> :</dt>
+                        <dd>this sound object</dd>
                       
                     
 
@@ -348,16 +403,22 @@
                 
               
                 <div class="fixedFont heading">
-                  <a name=".color"></a>
+                  <a name=".stop"></a>
                   <span class='lighter'>
                   <em>static</em>
                   </span>
 
-                  <span class="light">Random.</span><b>color</b>()
+                  <span class="light">Sound.</span><b>stop</b>(id)
                 </div>
 
                 <div class="description">
-                  Returns a random color.
+                  Stop a sound while it is playing.
+
+    <code><pre>
+    # stops the sound 'explode' from 
+    # playing if it is currently playing 
+    Sound.stop('explode')
+    </pre></code>
 
                   
                 </div>
@@ -365,68 +426,16 @@
                 
 
                 
-
-                
-                  <dl class="detailList nomargin">
-
+                  <dl class="detailList params">
+                    <dt class="heading">Parameters:</dt>
                     
-
+                      <dt>
+                        <b>id</b><span class='light fixedFont'> <a href="../symbols/String.html">String</a></span> 
+                        
+                      </dt>
+                      <dd>id or name of sound to stop playing.</dd>
                     
-
-                    
-
-                    
-                      
-                        <dt class="heading">Returns <span class="light fixedFont"><a href="../symbols/Color.html">Color</a></span> :</dt>
-                        <dd>A random color</dd>
-                      
-                    
-
-                    
-
-                    
-
                   </dl>
-                
-              
-                <div class="fixedFont heading">
-                  <a name=".often"></a>
-                  <span class='lighter'>
-                  <em>static</em>
-                  </span>
-
-                  <span class="light">Random.</span><b>often</b>()
-                </div>
-
-                <div class="description">
-                  Happens often.
-
-                  
-                </div>
-
-                
-
-                
-
-                
-              
-                <div class="fixedFont heading">
-                  <a name=".sometimes"></a>
-                  <span class='lighter'>
-                  <em>static</em>
-                  </span>
-
-                  <span class="light">Random.</span><b>sometimes</b>()
-                </div>
-
-                <div class="description">
-                  Happens sometimes.
-
-                  
-                </div>
-
-                
-
                 
 
                 

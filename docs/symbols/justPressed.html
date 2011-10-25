@@ -4,7 +4,7 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="generator" content="JsDoc Toolkit" />
     
-    <title>JsDoc Reference - Durable</title>
+    <title>JsDoc Reference - justPressed</title>
     <link href="/stylesheets/docs.css" type="text/css" rel="stylesheet" media="all" />
   </head>
 
@@ -176,7 +176,7 @@
       <div class="innerContent">
         <h1 class="classTitle">
           
-          <span>Durable</span>
+          <span>justPressed</span>
         </h1>
 
         <p class="description summary">
@@ -189,15 +189,15 @@
 
         
           <div class="props">
-            <table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class Durable.">
-              <caption>Module Summary</caption>
+            <table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class justPressed.">
+              <caption>Class Summary</caption>
               <tbody>
                 <tr>
                   <td class="nameDescription" >
                     <div class="fixedFont">
-                      <b><a href="../symbols/Durable.html#constructor">Durable</a></b>(I, self)
+                      <b><a href="../symbols/justPressed.html#constructor">justPressed</a></b>()
                     </div>
-                    <div class="description">The Durable module deactives a <code>GameObject</code> after a specified duration.</div>
+                    <div class="description">The global justPressed property lets your query the status of keys.</div>
                   </td>
                 </tr>
                 <tr>
@@ -229,53 +229,31 @@
               <a name="constructor"></a>
 
               <div class="fixedFont">
-                <b>Durable</b>(I, self)
+                <b>justPressed</b>()
               </div>
 
               <div class="description">
-                The Durable module deactives a <code>GameObject</code> after a specified duration.
-If a duration is specified the object will update that many times. If -1 is
-specified the object will have an unlimited duration.
+                The global justPressed property lets your query the status of keys. However, 
+  unlike keydown it will only trigger once for each time the key is pressed.
 
-<code><pre>
-enemy = GameObject
-  x: 50
-  y: 30
-  duration: 5
+  <code><pre>
+  if justPressed.left
+    moveLeft()
 
-enemy.include(Durable)
+  if justPressed.a or justPressed.space
+    attack()
 
-enemy.I.active
-# => true
+  if justPressed.return
+    confirm()
 
-5.times ->
-  enemy.update()
-
-enemy.I.active
-# => false
-</pre></code>
+  if justPressed.esc
+    cancel()
+  </pre></code>
                 
               </div>
 
               
 
-              
-                <dl class="detailList params">
-                  <dt class="heading">Parameters:</dt>
-                  
-                    <dt>
-                      <b>I</b><span class='light fixedFont'> <a href="../symbols/Object.html">Object</a></span> 
-                      
-                    </dt>
-                    <dd>Instance variables</dd>
-                  
-                    <dt>
-                      <b>self</b><span class='light fixedFont'> <a href="../symbols/Core.html">Core</a></span> 
-                      
-                    </dt>
-                    <dd>Reference to including object</dd>
-                  
-                </dl>
               
 
               
