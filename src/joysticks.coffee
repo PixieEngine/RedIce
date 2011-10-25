@@ -209,7 +209,19 @@ Joysticks = ( ->
       plugin.maxAxes = 6
 
       unless plugin.status
-        displayInstallPrompt("Your browser does not yet handle joysticks, please click here to install the Boomstick plugin!", "https://github.com/STRd6/Boomstick/wiki")
+        promptElement = displayInstallPrompt("Your browser does not yet handle joysticks, please click here to install the Boomstick plugin!", "https://github.com/STRd6/Boomstick/wiki")
+
+        # The periodic check will remove the prompt if the player
+        # needs to accept or run the plugin manually
+        periodicCheck = ->
+          if plugin.status
+            promptElement.remove()
+            log "removed"
+          else
+            log "checking"
+            setTimeout periodicCheck, 500
+
+        periodicCheck()
 
   status: ->
     plugin?.status
