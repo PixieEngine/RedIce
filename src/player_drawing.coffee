@@ -109,7 +109,7 @@ PlayerDrawing = (I, self) ->
     textWidth = canvas.measureText(name)
 
     backgroundColor = self.color()
-    backgroundColor.a "0.5"
+    backgroundColor.a = 0.5
 
     yOffset = 48
 
