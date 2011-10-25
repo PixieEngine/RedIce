@@ -28,6 +28,8 @@
   
     <li></li>
   
+    <li></li>
+  
     <li><a href="../symbols/Collision.html">Collision</a></li>
   
     <li><a href="../symbols/Color.html">Color</a></li>
@@ -41,6 +43,8 @@
     <li></li>
   
     <li><a href="../symbols/Engine.html">Engine</a></li>
+  
+    <li><a href="../symbols/Framerate.html">Framerate</a></li>
   
     <li><a href="../symbols/Function.html">Function</a></li>
   
@@ -106,6 +110,8 @@
   
     <li><a href="../symbols/Bounded.html">Bounded</a></li>
   
+    <li><a href="../symbols/Collidable.html">Collidable</a></li>
+  
     <li></li>
   
     <li></li>
@@ -117,6 +123,8 @@
     <li><a href="../symbols/Drawable.html">Drawable</a></li>
   
     <li><a href="../symbols/Durable.html">Durable</a></li>
+  
+    <li></li>
   
     <li></li>
   
@@ -232,6 +240,14 @@
                   
                     <tr>
                       <td class="nameDescription">
+                        <div class="fixedFont">Collision.<b><a href="../symbols/Collision.html#.collide">collide</a></b>(groupA, groupB, callback)
+                        </div>
+                        <div class="description">Collision holds many useful class methods for checking geometric overlap of various objects.</div>
+                      </td>
+                    </tr>
+                  
+                    <tr>
+                      <td class="nameDescription">
                         <div class="fixedFont">Collision.<b><a href="../symbols/Collision.html#.rayCircle">rayCircle</a></b>(source, direction, target)
                         </div>
                         <div class="description">Detects whether a line intersects a circle.</div>
@@ -316,30 +332,30 @@
 
                 <div class="description">
                   Takes two circle objects and returns true if they collide (overlap), false otherwise.
-  Circle objects have x, y, and radius.
+    Circle objects have x, y, and radius.
 
-  <code><pre>
-  player = GameObject
-    x: 5
-    y: 5
-    radius: 10
+    <code><pre>
+    player = GameObject
+      x: 5
+      y: 5
+      radius: 10
 
-  enemy = GameObject
-    x: 10
-    y: 10
-    radius: 10
+    enemy = GameObject
+      x: 10
+      y: 10
+      radius: 10
 
-  farEnemy = GameObject
-    x: 500
-    y: 500
-    radius: 30
+    farEnemy = GameObject
+      x: 500
+      y: 500
+      radius: 30
 
-  Collision.circular(player, enemy)
-  # => true
+    Collision.circular(player, enemy)
+    # => true
 
-  Collision.circular(player, farEnemy)
-  # => false
-  </pre></code>
+    Collision.circular(player, farEnemy)
+    # => false
+    </pre></code>
 
                   
                 </div>
@@ -389,6 +405,77 @@
                 
               
                 <div class="fixedFont heading">
+                  <a name=".collide"></a>
+                  <span class='lighter'>
+                  <em>static</em>
+                  </span>
+
+                  <span class="light">Collision.</span><b>collide</b>(groupA, groupB, callback)
+                </div>
+
+                <div class="description">
+                  Collision holds many useful class methods for checking geometric overlap of various objects.
+
+      <code><pre>
+      player = GameObject
+        x: 0
+        y: 0
+        width: 10
+        height: 10
+
+      enemy = GameObject
+        x: 5
+        y: 5
+        width: 10
+        height: 10
+
+      enemy2 = GameObject
+        x: -5
+        y: -5
+        width: 10
+        height: 10
+
+      Collision.collide(player, enemy, (p, e) -> ...)
+      # => callback is called once
+
+      Collision.collide(player, [enemy, enemy2], (p, e) -> ...)
+      # => callback is called twice
+      </pre></code>
+
+                  
+                </div>
+
+                
+
+                
+                  <dl class="detailList params">
+                    <dt class="heading">Parameters:</dt>
+                    
+                      <dt>
+                        <b>groupA</b><span class='light fixedFont'> <a href="../symbols/Object.html">Object</a>|<a href="../symbols/Array.html">Array</a></span> 
+                        
+                      </dt>
+                      <dd>An object or set of objects to check collisions with</dd>
+                    
+                      <dt>
+                        <b>groupB</b><span class='light fixedFont'> <a href="../symbols/Object.html">Object</a>|<a href="../symbols/Array.html">Array</a></span> 
+                        
+                      </dt>
+                      <dd>An objcet or set of objects to check collisions with</dd>
+                    
+                      <dt>
+                        <b>callback</b><span class='light fixedFont'> <a href="../symbols/Function.html">Function</a></span> 
+                        
+                      </dt>
+                      <dd>The callback to call when an object of groupA collides 
+      with an object of groupB: (a, b) -></dd>
+                    
+                  </dl>
+                
+
+                
+              
+                <div class="fixedFont heading">
                   <a name=".rayCircle"></a>
                   <span class='lighter'>
                   <em>static</em>
@@ -400,16 +487,16 @@
                 <div class="description">
                   Detects whether a line intersects a circle.
 
-  <code><pre>
-  circle = engine.add
-    class: "circle"
-    x: 50
-    y: 50
-    radius: 10
+    <code><pre>
+    circle = engine.add
+      class: "circle"
+      x: 50
+      y: 50
+      radius: 10
 
-  Collision.rayCircle(Point(0, 0), Point(1, 0), circle)
-  # => true
-  </pre></code>
+    Collision.rayCircle(Point(0, 0), Point(1, 0), circle)
+    # => true
+    </pre></code>
 
                   
                 </div>
@@ -476,17 +563,17 @@
                 <div class="description">
                   Detects whether a line intersects a rectangle.
 
-  <code><pre>
-  rect = engine.add
-    class: "circle"
-    x: 50
-    y: 50
-    width: 20
-    height: 20
+    <code><pre>
+    rect = engine.add
+      class: "circle"
+      x: 50
+      y: 50
+      width: 20
+      height: 20
 
-  Collision.rayRectangle(Point(0, 0), Point(1, 0), rect)
-  # => true
-  </pre></code>
+    Collision.rayRectangle(Point(0, 0), Point(1, 0), rect)
+    # => true
+    </pre></code>
 
                   
                 </div>

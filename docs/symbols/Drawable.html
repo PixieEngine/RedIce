@@ -28,6 +28,8 @@
   
     <li></li>
   
+    <li></li>
+  
     <li><a href="../symbols/Collision.html">Collision</a></li>
   
     <li><a href="../symbols/Color.html">Color</a></li>
@@ -41,6 +43,8 @@
     <li></li>
   
     <li><a href="../symbols/Engine.html">Engine</a></li>
+  
+    <li><a href="../symbols/Framerate.html">Framerate</a></li>
   
     <li><a href="../symbols/Function.html">Function</a></li>
   
@@ -106,6 +110,8 @@
   
     <li><a href="../symbols/Bounded.html">Bounded</a></li>
   
+    <li><a href="../symbols/Collidable.html">Collidable</a></li>
+  
     <li></li>
   
     <li></li>
@@ -117,6 +123,8 @@
     <li><a href="../symbols/Drawable.html">Drawable</a></li>
   
     <li><a href="../symbols/Durable.html">Durable</a></li>
+  
+    <li></li>
   
     <li></li>
   
@@ -258,6 +266,22 @@ object.</div>
               <caption>Event Summary</caption>
 
               <tbody>
+                
+                  <tr>
+                    <td class="nameDescription">
+                      <div class="fixedFont"><b><a href="../symbols/Drawable.html#event:afterTransform">afterTransform</a></b>(canvas)
+                      </div>
+                      <div class="description">Triggered after the object should be drawn.</div>
+                    </td>
+                  </tr>
+                
+                  <tr>
+                    <td class="nameDescription">
+                      <div class="fixedFont"><b><a href="../symbols/Drawable.html#event:beforeTransform">beforeTransform</a></b>(canvas)
+                      </div>
+                      <div class="description">Triggered before the object should be drawn.</div>
+                    </td>
+                  </tr>
                 
                   <tr>
                     <td class="nameDescription">
@@ -453,6 +477,78 @@ engine.bind 'draw', (canvas) ->
         
           <div class="details props">
             <div class="innerProps">
+              
+                <div class="fixedFont heading">
+                  <a name="event:afterTransform"> </a>
+                  <span class='lighter'>
+                  
+                  </span>
+
+                  
+
+                  <b>afterTransform</b>(canvas)
+                  <span class="lighter"><em>event</em></span>
+                </div>
+
+                <div class="description">
+                  Triggered after the object should be drawn. A canvas is passed as
+the first argument. This applies the current transform.
+
+                  
+                </div>
+
+                
+
+                
+                  <dl class="detailList params">
+                    <dt class="heading">Parameters:</dt>
+                    
+                      <dt>
+                        <b>canvas</b><span class='light fixedFont'> <a href="../symbols/PowerCanvas.html">PowerCanvas</a></span> 
+                        
+                      </dt>
+                      <dd>A reference to the canvas to draw on.</dd>
+                    
+                  </dl>
+                
+
+                
+              
+                <div class="fixedFont heading">
+                  <a name="event:beforeTransform"> </a>
+                  <span class='lighter'>
+                  
+                  </span>
+
+                  
+
+                  <b>beforeTransform</b>(canvas)
+                  <span class="lighter"><em>event</em></span>
+                </div>
+
+                <div class="description">
+                  Triggered before the object should be drawn. A canvas is passed as
+the first argument. This does not apply the current transform.
+
+                  
+                </div>
+
+                
+
+                
+                  <dl class="detailList params">
+                    <dt class="heading">Parameters:</dt>
+                    
+                      <dt>
+                        <b>canvas</b><span class='light fixedFont'> <a href="../symbols/PowerCanvas.html">PowerCanvas</a></span> 
+                        
+                      </dt>
+                      <dd>A reference to the canvas to draw on.</dd>
+                    
+                  </dl>
+                
+
+                
               
                 <div class="fixedFont heading">
                   <a name="event:draw"> </a>

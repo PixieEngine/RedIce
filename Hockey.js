@@ -10259,7 +10259,7 @@ Configurator = function(I) {
     player.team = 0.5;
     I.activePlayers += 1;
     backgroundColor = Color(player.color);
-    backgroundColor.a(0.5);
+    backgroundColor.a = 0.5;
     cursorColor = backgroundColor.lighten(0.25);
     nameEntry = engine.add({
       backgroundColor: backgroundColor,
@@ -10351,11 +10351,11 @@ Configurator = function(I) {
             color = Color(Player.CPU_COLOR);
           } else {
             name = player.name || ("P" + (player.id + 1));
-            color = I.teamColors[player.team] || Color(player.color);
+            color = Color(I.teamColors[player.team] || player.color);
             if (player.ready) {
-              color.a(1);
+              color.a = 1;
             } else {
-              color.a(0.5);
+              color.a = 0.5;
             }
           }
           nameWidth = canvas.measureText(name);
@@ -10666,237 +10666,6 @@ Goal = function(I) {
   self.attrAccessor("suddenDeath");
   return self;
 };;
-var Joysticks;
-var __slice = Array.prototype.slice;
-Joysticks = (function() {
-  var AXIS_MAX, Controller, DEAD_ZONE, MAX_BUFFER, TRIP_HIGH, TRIP_LOW, axisMappingDefault, axisMappingOSX, buttonMappingDefault, buttonMappingOSX, controllers, displayInstallPrompt, joysticks, plugin, previousJoysticks, type;
-  type = "application/x-boomstickjavascriptjoysticksupport";
-  plugin = null;
-  MAX_BUFFER = 2000;
-  AXIS_MAX = 32767 - MAX_BUFFER;
-  DEAD_ZONE = AXIS_MAX * 0.2;
-  TRIP_HIGH = AXIS_MAX * 0.75;
-  TRIP_LOW = AXIS_MAX * 0.5;
-  previousJoysticks = [];
-  joysticks = [];
-  controllers = [];
-  buttonMappingDefault = {
-    "A": 1,
-    "B": 2,
-    "C": 4,
-    "D": 8,
-    "X": 4,
-    "Y": 8,
-    "R": 32,
-    "RB": 32,
-    "R1": 32,
-    "L": 16,
-    "LB": 16,
-    "L1": 16,
-    "SELECT": 64,
-    "BACK": 64,
-    "START": 128,
-    "HOME": 256,
-    "GUIDE": 256,
-    "TL": 512,
-    "TR": 1024,
-    "ANY": 0xFFFFFF
-  };
-  buttonMappingOSX = {
-    "A": 2048,
-    "B": 4096,
-    "C": 8192,
-    "D": 16384,
-    "X": 8192,
-    "Y": 16384,
-    "R": 512,
-    "L": 256,
-    "SELECT": 32,
-    "BACK": 32,
-    "START": 16,
-    "HOME": 1024,
-    "LT": 64,
-    "TR": 128,
-    "ANY": 0xFFFFFF0
-  };
-  axisMappingDefault = {
-    0: 0,
-    1: 1,
-    2: 2,
-    3: 3,
-    4: 4,
-    5: 5
-  };
-  axisMappingOSX = {
-    0: 2,
-    1: 3,
-    2: 4,
-    3: 5,
-    4: 0,
-    5: 1
-  };
-  displayInstallPrompt = function(text, url) {
-    return $("<a />", {
-      css: {
-        backgroundColor: "yellow",
-        boxSizing: "border-box",
-        color: "#000",
-        display: "block",
-        fontWeight: "bold",
-        left: 0,
-        padding: "1em",
-        position: "absolute",
-        textDecoration: "none",
-        top: 0,
-        width: "100%",
-        zIndex: 2000
-      },
-      href: url,
-      target: "_blank",
-      text: text
-    }).appendTo("body");
-  };
-  Controller = function(i, remapOSX) {
-    var axisMapping, axisTrips, buttonMapping, currentState, previousState, self;
-    if (remapOSX === void 0) {
-      remapOSX = navigator.platform.match(/^Mac/);
-    }
-    if (remapOSX) {
-      buttonMapping = buttonMappingOSX;
-      axisMapping = axisMappingOSX;
-    } else {
-      buttonMapping = buttonMappingDefault;
-      axisMapping = axisMappingDefault;
-    }
-    currentState = function() {
-      return joysticks[i];
-    };
-    previousState = function() {
-      return previousJoysticks[i];
-    };
-    axisTrips = [];
-    return self = Core().include(Bindable).extend({
-      actionDown: function() {
-        var buttons, state;
-        buttons = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        if (state = currentState()) {
-          return buttons.inject(false, function(down, button) {
-            return down || state.buttons & buttonMapping[button];
-          });
-        } else {
-          return false;
-        }
-      },
-      buttonPressed: function(button) {
-        var buttonId;
-        buttonId = buttonMapping[button];
-        return (self.buttons() & buttonId) && !(previousState().buttons & buttonId);
-      },
-      position: function(stick) {
-        var magnitude, p, ratio, state;
-        if (stick == null) {
-          stick = 0;
-        }
-        if (state = currentState()) {
-          p = Point(self.axis(2 * stick), self.axis(2 * stick + 1));
-          magnitude = p.magnitude();
-          if (magnitude > AXIS_MAX) {
-            return p.norm();
-          } else if (magnitude < DEAD_ZONE) {
-            return Point(0, 0);
-          } else {
-            ratio = magnitude / AXIS_MAX;
-            return p.scale(ratio / AXIS_MAX);
-          }
-        } else {
-          return Point(0, 0);
-        }
-      },
-      axis: function(n) {
-        n = axisMapping[n];
-        return self.axes()[n] || 0;
-      },
-      axes: function() {
-        var state;
-        if (state = currentState()) {
-          return state.axes;
-        } else {
-          return [];
-        }
-      },
-      buttons: function() {
-        var state;
-        if (state = currentState()) {
-          return state.buttons;
-        }
-      },
-      processEvents: function() {
-        var x, y, _ref;
-        _ref = [0, 1].map(function(n) {
-          if (!axisTrips[n] && self.axis(n).abs() > TRIP_HIGH) {
-            axisTrips[n] = true;
-            return self.axis(n).sign();
-          }
-          if (axisTrips[n] && self.axis(n).abs() < TRIP_LOW) {
-            axisTrips[n] = false;
-          }
-          return 0;
-        }), x = _ref[0], y = _ref[1];
-        if (!x || !y) {
-          return self.trigger("tap", Point(x, y));
-        }
-      },
-      drawDebug: function(canvas) {
-        var axis, i, lineHeight, _len, _ref;
-        lineHeight = 18;
-        canvas.fillColor("#FFF");
-        _ref = self.axes();
-        for (i = 0, _len = _ref.length; i < _len; i++) {
-          axis = _ref[i];
-          canvas.fillText(axis, 0, i * lineHeight);
-        }
-        return canvas.fillText(self.buttons(), 0, i * lineHeight);
-      }
-    });
-  };
-  return {
-    getController: function(i) {
-      return controllers[i] || (controllers[i] = Controller(i));
-    },
-    init: function() {
-      if (!plugin) {
-        plugin = document.createElement("object");
-        plugin.type = type;
-        plugin.width = 0;
-        plugin.height = 0;
-        $("body").append(plugin);
-        plugin.maxAxes = 6;
-        if (!plugin.status) {
-          return displayInstallPrompt("Your browser does not yet handle joysticks, please click here to install the Boomstick plugin!", "https://github.com/STRd6/Boomstick/wiki");
-        }
-      }
-    },
-    status: function() {
-      return plugin != null ? plugin.status : void 0;
-    },
-    update: function() {
-      var controller, _i, _len, _results;
-      if (plugin.joysticksJSON) {
-        previousJoysticks = joysticks;
-        joysticks = JSON.parse(plugin.joysticksJSON());
-      }
-      _results = [];
-      for (_i = 0, _len = controllers.length; _i < _len; _i++) {
-        controller = controllers[_i];
-        _results.push(controller != null ? controller.processEvents() : void 0);
-      }
-      return _results;
-    },
-    joysticks: function() {
-      return joysticks;
-    }
-  };
-})();;
 var Music;
 Music = (function() {
   var track;
@@ -11845,7 +11614,7 @@ PlayerDrawing = function(I, self) {
       lineHeight = 16;
       textWidth = canvas.measureText(name);
       backgroundColor = self.color();
-      backgroundColor.a("0.5");
+      backgroundColor.a = 0.5;
       yOffset = 48;
       center = self.center();
       topLeft = center.subtract(Point(textWidth / 2 + padding, lineHeight / 2 + padding + yOffset));
