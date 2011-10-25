@@ -26,7 +26,7 @@ Configurator = (I) ->
     I.activePlayers += 1
 
     backgroundColor = Color(player.color)
-    backgroundColor.a(0.5)
+    backgroundColor.a = 0.5
 
     cursorColor = backgroundColor.lighten(0.25)
 
@@ -123,12 +123,12 @@ Configurator = (I) ->
             color = Color(Player.CPU_COLOR)
           else
             name = player.name || "P#{(player.id + 1)}"
-            color = I.teamColors[player.team] || Color(player.color)
+            color = Color(I.teamColors[player.team]) || Color(player.color)
 
             if player.ready
-              color.a(1)
+              color.a = 1
             else
-              color.a(0.5)
+              color.a = 0.5
 
           nameWidth = canvas.measureText(name)
 
