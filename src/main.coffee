@@ -2,6 +2,8 @@ window.sprites = Sprite.loadSheet("sprites", 32, 48)
 window.wideSprites = Sprite.loadSheet("sprites", 64, 48)
 window.tallSprites = Sprite.loadSheet("sprites", 32, 96)
 
+window.tubsSprites = Sprite.loadSheet("tubs_fast_front", 512, 512)
+
 window.CANVAS_WIDTH = App.width
 window.CANVAS_HEIGHT = App.height
 
