@@ -276,9 +276,17 @@ Player = (I) ->
       I.spriteOffset = standingOffset
       I.sprite = sprites[spriteIndex]
 
-      if I.id == 0
-        I.sprite = tubsSprites.wrap((I.age / 2).floor())
-        I.scale = 0.375
+    # Testing new  sprites
+    if I.id == 0
+      speed = "fast"
+
+      if 0 <= I.heading <= Math.TAU/2
+        facing = "front"
+      else
+        facing = "back"
+
+      I.sprite = tubsSprites[speed][facing].wrap((I.age / 2).floor())
+      I.scale = 0.375
 
   if I.cpu
     self.include AI
