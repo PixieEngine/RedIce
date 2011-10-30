@@ -2,14 +2,16 @@ window.sprites = Sprite.loadSheet("sprites", 32, 48)
 window.wideSprites = Sprite.loadSheet("sprites", 64, 48)
 window.tallSprites = Sprite.loadSheet("sprites", 32, 96)
 
-
-window.tubsSprites = 
-  fast: 
+window.tubsSprites =
+  fast:
     front: Sprite.loadSheet("tubs_fast_front", 512, 512)
     back: Sprite.loadSheet("tubs_fast_back", 512, 512)
-  slow: 
+  slow:
     front: Sprite.loadSheet("tubs_slow_front", 512, 512)
     back: Sprite.loadSheet("tubs_slow_back", 512, 512)
+  coast:
+    front: Sprite.loadSheet("tubs_coast_front", 512, 512)
+    back: Sprite.loadSheet("tubs_coast_back", 512, 512)
 
 window.CANVAS_WIDTH = App.width
 window.CANVAS_HEIGHT = App.height
