@@ -1,4 +1,29 @@
 PlayerDrawing = (I, self) ->
+  Object.reverseMerge I,
+    scale: 1
+
+  self.unbind 'draw'
+
+  self.bind 'draw', (canvas) ->
+    if sprite = I.sprite
+      if sprite.draw? 
+        sprite.draw(canvas, -sprite.width / 2, -sprite.height / 2)
+      else
+        warn?("Sprite has no draw method!")
+    else
+      if I.radius?
+        canvas.drawCircle
+          x: 0
+          y: 0
+          radius: I.radius
+          color: I.color
+      else
+        canvas.drawRect
+          x: -I.width/2
+          y: -I.height/2
+          width: I.width
+          height: I.height
+          color: I.color
 
   self.bind 'drawDebug', (canvas) ->
     if I.AI_TARGET
@@ -221,3 +246,18 @@ PlayerDrawing = (I, self) ->
       circle
       color
     }
+
+  transform: ->
+    center = self.center()
+
+    transform = Matrix.translation(center.x, center.y)
+
+    transform = transform.concat(Matrix.rotation(I.rotation)) if I.rotation
+    transform = transform.concat(Matrix.HORIZONTAL_FLIP) if I.hflip
+    transform = transform.concat(Matrix.VERTICAL_FLIP) if I.vflip
+    transform = transform.concat(Matrix.scale(I.scale))
+
+    if I.spriteOffset
+      transform = transform.concat(Matrix.translation(I.spriteOffset.x, I.spriteOffset.y))
+
+    return transform
