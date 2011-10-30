@@ -278,7 +278,6 @@ Player = (I) ->
 
     # Testing new  sprites
     if I.id == 0
-
       speed = I.velocity.magnitude()
 
       if speed < 1
