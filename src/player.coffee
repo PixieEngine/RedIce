@@ -240,7 +240,7 @@ Player = (I) ->
       if (velocityLength > 4) && (movement.dot(velocityNorm) < (-0.95) * movementLength)
         addSprayParticleEffect(I.velocity, "rgba(128, 202, 255, 1)")
 
-        I.velocity.x = 0 
+        I.velocity.x = 0
         I.velocity.y = 0
       else
         movement = movement.scale(movementScale)
@@ -278,14 +278,22 @@ Player = (I) ->
 
     # Testing new  sprites
     if I.id == 0
-      speed = "fast"
+
+      speed = I.velocity.magnitude()
+
+      if speed < 1
+        speedSheet = "coast"
+      else if speed < 4
+        speedSheet = "slow"
+      else
+        speedSheet = "fast"
 
       if 0 <= I.heading <= Math.TAU/2
         facing = "front"
       else
         facing = "back"
 
-      I.sprite = tubsSprites[speed][facing].wrap((I.age / 2).floor())
+      I.sprite = tubsSprites[speedSheet][facing].wrap((I.age / 2).floor())
       I.scale = 0.375
 
   if I.cpu
