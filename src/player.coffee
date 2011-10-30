@@ -282,7 +282,7 @@ Player = (I) ->
 
       if speed < 1
         speedSheet = "coast"
-      else if speed < 4
+      else if speed < 6
         speedSheet = "slow"
       else
         speedSheet = "fast"
