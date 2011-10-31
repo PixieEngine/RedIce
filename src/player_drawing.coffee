@@ -33,7 +33,9 @@ PlayerDrawing = (I, self) ->
         y
         radius: 3
         color: "rgba(255, 255, 0, 1)"
-      }    
+      }
+
+    drawControlCircle(canvas)
 
   I.lastLeftSkatePos = null
   I.lastRightSkatePos = null
