@@ -240,7 +240,7 @@ PlayerDrawing = (I, self) ->
 
   drawControlCircle: (canvas) ->
     color = self.color().lighten(0.10)
-    color.a "0.25"
+    color.a = 0.25
 
     circle = self.controlCircle()
 
