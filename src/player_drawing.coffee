@@ -5,13 +5,20 @@ PlayerDrawing = (I, self) ->
   self.unbind 'draw'
 
   self.bind 'draw', (canvas) ->
-    if sprite = I.sprite
-      sprite.draw(canvas, -sprite.width / 2, -sprite.height / 2)
+    drawBody = (canvas) ->
+      if sprite = I.sprite
+        sprite.draw(canvas, -sprite.width / 2, -sprite.height / 2)
+
+
+    if I.hflip
+      canvas.withTransform Matrix.HORIZONTAL_FLIP, drawBody
+    else
+      drawBody(canvas)
 
     #TODO: infront or behind computation
     canvas.withTransform Matrix.translation(32, -64), (canvas) ->
       if headSprite = I.headSprite
-        headSprite.draw(canvas, -sprite.width / 2, -sprite.height / 2)
+        headSprite.draw(canvas, -headSprite.width / 2, -headSprite.height / 2)
 
   self.bind 'drawDebug', (canvas) ->
     if I.AI_TARGET
@@ -243,8 +250,6 @@ PlayerDrawing = (I, self) ->
     transform = Matrix.translation(center.x, center.y)
 
     transform = transform.concat(Matrix.rotation(I.rotation)) if I.rotation
-    transform = transform.concat(Matrix.HORIZONTAL_FLIP) if I.hflip
-    transform = transform.concat(Matrix.VERTICAL_FLIP) if I.vflip
     transform = transform.concat(Matrix.scale(I.scale))
 
     if I.spriteOffset
