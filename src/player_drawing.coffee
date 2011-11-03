@@ -5,20 +5,25 @@ PlayerDrawing = (I, self) ->
   self.unbind 'draw'
 
   self.bind 'draw', (canvas) ->
+    headOffset = Point(32, -64)
+
     drawBody = (canvas) ->
       if sprite = I.sprite
         sprite.draw(canvas, -sprite.width / 2, -sprite.height / 2)
 
+    drawHead = (canvas) ->
+      canvas.withTransform Matrix.translation(currentHeadOffset.x, currentHeadOffset.y), (canvas) ->
+        if headSprite = I.headSprite
+          headSprite.draw(canvas, -headSprite.width / 2, -headSprite.height / 2)
 
-    if I.hflip
-      canvas.withTransform Matrix.HORIZONTAL_FLIP, drawBody
-    else
-      drawBody(canvas)
+    t = Matrix.IDENTITY
+    t = t.concat Matrix.HORIZONTAL_FLIP if I.hflip
 
-    #TODO: infront or behind computation
-    canvas.withTransform Matrix.translation(32, -64), (canvas) ->
-      if headSprite = I.headSprite
-        headSprite.draw(canvas, -headSprite.width / 2, -headSprite.height / 2)
+    currentHeadOffset = t.transformPoint(headOffset)
+
+    drawHead(canvas) if I.headOrder == "back"
+    canvas.withTransform t, drawBody
+    drawHead(canvas) if I.headOrder == "front"
 
   self.bind 'drawDebug', (canvas) ->
     if I.AI_TARGET
