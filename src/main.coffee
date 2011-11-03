@@ -13,6 +13,9 @@ window.tubsSprites =
     front: Sprite.loadSheet("tubs_coast_front", 512, 512)
     back: Sprite.loadSheet("tubs_coast_back", 512, 512)
 
+window.headSprites =
+  stubs: Sprite.loadSheet("stubs_norm_strip8", 512, 512)
+
 window.CANVAS_WIDTH = App.width
 window.CANVAS_HEIGHT = App.height
 
