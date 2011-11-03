@@ -296,6 +296,7 @@ Player = (I) ->
       angleSprites = 8
       headIndexOffset = 2
       headPosition = ((angleSprites * -I.heading / Math.TAU).round() + headIndexOffset).mod(angleSprites)
+      I.headOrder = facing
       I.headSprite = headSprites[headSheet][headPosition]
       I.sprite = tubsSprites[speedSheet][facing].wrap((I.age / 2).floor())
       I.scale = 0.375
