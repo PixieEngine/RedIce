@@ -138,7 +138,7 @@ PlayerDrawing = (I, self) ->
     backgroundColor = self.color()
     backgroundColor.a = 0.5
 
-    yOffset = 48
+    yOffset = 96
 
     center = self.center()
 
