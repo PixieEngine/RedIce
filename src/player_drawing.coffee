@@ -6,24 +6,12 @@ PlayerDrawing = (I, self) ->
 
   self.bind 'draw', (canvas) ->
     if sprite = I.sprite
-      if sprite.draw? 
-        sprite.draw(canvas, -sprite.width / 2, -sprite.height / 2)
-      else
-        warn?("Sprite has no draw method!")
-    else
-      if I.radius?
-        canvas.drawCircle
-          x: 0
-          y: 0
-          radius: I.radius
-          color: I.color
-      else
-        canvas.drawRect
-          x: -I.width/2
-          y: -I.height/2
-          width: I.width
-          height: I.height
-          color: I.color
+      sprite.draw(canvas, -sprite.width / 2, -sprite.height / 2)
+
+    #TODO: infront or behind computation
+    canvas.withTransform Matrix.translation(32, -64), (canvas) ->
+      if headSprite = I.headSprite
+        headSprite.draw(canvas, -sprite.width / 2, -sprite.height / 2)
 
   self.bind 'drawDebug', (canvas) ->
     if I.AI_TARGET
