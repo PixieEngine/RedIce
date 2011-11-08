@@ -43,6 +43,9 @@ GameState = (I={}) ->
 
       return object
 
+    objects: ->
+      I.objects.copy()
+
   self.include Bindable
 
   # Add events and methods here
