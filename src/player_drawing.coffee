@@ -14,7 +14,11 @@ PlayerDrawing = (I, self) ->
     drawHead = (canvas) ->
       canvas.withTransform Matrix.translation(currentHeadOffset.x, currentHeadOffset.y), (canvas) ->
         if headSprite = I.headSprite
-          headSprite.draw(canvas, -headSprite.width / 2, -headSprite.height / 2)
+          if I.headFlip
+            canvas.withTransform Matrix.HORIZONTAL_FLIP, (canvas) ->
+              headSprite.draw(canvas, -headSprite.width / 2, -headSprite.height / 2)
+          else
+            headSprite.draw(canvas, -headSprite.width / 2, -headSprite.height / 2)
 
     t = Matrix.IDENTITY
     t = t.concat Matrix.HORIZONTAL_FLIP if I.hflip
