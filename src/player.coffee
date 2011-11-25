@@ -309,6 +309,8 @@ Player = (I) ->
           I.sprite = tubsSprites.shoot.wrap((power * 8 / I.maxShotPower).floor())
         else
           I.sprite = tubsSprites.shoot.wrap(5 + (I.age/2).floor() % 2)
+      else if I.cooldown.shoot
+        I.sprite = tubsSprites.shoot[10 - I.cooldown.shoot]
       else
         I.sprite = tubsSprites[speedSheet][facing].wrap((I.age / 2).floor())
       I.scale = 0.375
