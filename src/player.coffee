@@ -308,6 +308,7 @@ Player = (I) ->
       if I.wipeout
         I.sprite = tubsSprites.fall[(25 - (I.wipeout / 4).floor()).clamp(0, 5)]
       else if power = I.shootPower
+        I.headOrder = "front"
         if power < I.maxShotPower
           I.sprite = tubsSprites.shoot.wrap((power * 8 / I.maxShotPower).floor())
         else
