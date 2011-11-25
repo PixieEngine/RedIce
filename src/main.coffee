@@ -10,8 +10,8 @@ window.tubsSprites =
     front: Sprite.loadSheet("tubs_slow_front", 512, 512)
     back: Sprite.loadSheet("tubs_slow_back", 512, 512)
   coast:
-    front: Sprite.loadSheet("tubs_coast_front", 512, 512)
-    back: Sprite.loadSheet("tubs_coast_back", 512, 512)
+    front: Sprite.loadSheet("spiketubs_idle_se_strip2", 512, 512)
+    back: Sprite.loadSheet("spiketubs_idle_ne_strip2", 512, 512)
 
 window.headSprites =
   stubs: Sprite.loadSheet("SPIKEstubs_norm_strip5", 512, 512)
