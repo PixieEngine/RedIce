@@ -304,7 +304,13 @@ Player = (I) ->
 
       I.headOrder = facing
       I.headSprite = headSprites[headSheet][headPosition]
-      I.sprite = tubsSprites[speedSheet][facing].wrap((I.age / 2).floor())
+      if power = I.shootPower
+        if power <= I.maxShotPower
+          I.sprite = tubsSprites.shoot.wrap((power * 8 / I.maxShotPower).floor())
+        else
+          I.sprite = tubsSprites.shoot.wrap(7 + (I.age/2).floor() % 2)
+      else
+        I.sprite = tubsSprites[speedSheet][facing].wrap((I.age / 2).floor())
       I.scale = 0.375
 
   if I.cpu

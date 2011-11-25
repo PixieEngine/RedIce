@@ -12,6 +12,8 @@ window.tubsSprites =
   coast:
     front: Sprite.loadSheet("spiketubs_idle_se_strip2", 512, 512)
     back: Sprite.loadSheet("spiketubs_idle_ne_strip2", 512, 512)
+  fall: Sprite.loadSheet("spiketubs_falldown_se_strip6", 512, 512)
+  shoot: Sprite.loadSheet("spiketubs_shoot_se_strip11", 512, 512)
 
 window.headSprites =
   stubs: Sprite.loadSheet("SPIKEstubs_norm_strip5", 512, 512)
