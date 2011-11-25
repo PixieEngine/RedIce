@@ -304,7 +304,10 @@ Player = (I) ->
 
       I.headOrder = facing
       I.headSprite = headSprites[headSheet][headPosition]
-      if power = I.shootPower
+
+      if I.wipeout
+        I.sprite = tubsSprites.fall[(25 - (wipeout / 4).floor()).clamp(0, 5)]
+      else if power = I.shootPower
         if power < I.maxShotPower
           I.sprite = tubsSprites.shoot.wrap((power * 8 / I.maxShotPower).floor())
         else
