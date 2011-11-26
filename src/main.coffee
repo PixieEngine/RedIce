@@ -5,7 +5,7 @@ window.tallSprites = Sprite.loadSheet("sprites", 32, 96)
 window.tubsSprites =
   fast:
     front: Sprite.loadSheet("tubs_fast_front", 512, 512)
-    back: Sprite.loadSheet("tubs_fast_back", 512, 512)
+    back: Sprite.loadSheet("spiketubs_fast_ne_strip6", 512, 512)
   slow:
     front: Sprite.loadSheet("tubs_slow_front", 512, 512)
     back: Sprite.loadSheet("tubs_slow_back", 512, 512)
