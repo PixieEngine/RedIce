@@ -100,7 +100,6 @@ matchPlayUpdate = ->
 controllers = []
 MAX_PLAYERS.times (i) ->
   controller = controllers[i] = engine.controller(i)
-  controller.bind()
 
 Music.play "title_screen"
 
