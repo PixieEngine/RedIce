@@ -7,7 +7,7 @@ window.tubsSprites =
     front: Sprite.loadSheet("tubs_fast_front", 512, 512)
     back: Sprite.loadSheet("spiketubs_fast_ne_strip6", 512, 512)
   slow:
-    front: Sprite.loadSheet("tubs_slow_front", 512, 512)
+    front: Sprite.loadSheet("spiketubs_slow_se_strip6", 512, 512)
     back: Sprite.loadSheet("tubs_slow_back", 512, 512)
   coast:
     front: Sprite.loadSheet("spiketubs_idle_se_strip2", 512, 512)
