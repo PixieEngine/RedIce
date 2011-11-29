@@ -100,7 +100,7 @@ controllers = []
 MAX_PLAYERS.times (i) ->
   controller = controllers[i] = engine.controller(i)
 
-# Music.volume 0.4
+Music.volume 0.4
 Music.play "title_screen"
 
 initPlayerData = ->
