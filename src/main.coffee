@@ -70,7 +70,7 @@ gameState = titleScreenUpdate = ->
 matchSetupUpdate = ->
 
 
-matchState = StateMatch()
+matchState = MatchState()
 
 controllers = []
 MAX_PLAYERS.times (i) ->
