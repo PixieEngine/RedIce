@@ -18,7 +18,7 @@ MatchState = (I={}) ->
     engine.add
       sprite: Sprite.loadByName("corner_left")
       x: 64
-      y: WALL_TOP + 16
+      y: WALL_TOP + 24
       width: 128
       height: 128
       zIndex: 1
@@ -27,7 +27,7 @@ MatchState = (I={}) ->
       sprite: Sprite.loadByName("corner_left")
       hflip: true
       x: WALL_RIGHT - 32
-      y: WALL_TOP + 16
+      y: WALL_TOP + 24
       width: 128
       height: 128
       zIndex: 1
