@@ -1,4 +1,4 @@
-StateMatch = (I={}) ->
+MatchState = (I={}) ->
   # Inherit from game object
   self = GameState(I)
 
