@@ -57,7 +57,7 @@ window.activePlayers = 0
 
 window.engine = Engine
   canvas: $("canvas").pixieCanvas()
-  includedModules: ["Joysticks", "FPS"]
+  includedModules: ["Joysticks", "FPSCounter"]
   showFPS: true
   zSort: true
 
