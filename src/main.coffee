@@ -36,9 +36,8 @@ window.config =
   throwBottles: true
   players: []
 
+#TODO Manage these extra canvases better
 rink = Rink()
-
-
 window.bloodCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />")
   .appendTo("body")
   .css
@@ -51,7 +50,6 @@ window.bloodCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />
 bloodCanvas.strokeColor(BLOOD_COLOR)
 # bloodCanvas.fill(BLOOD_COLOR) # For zamboni testing
 
-DEBUG_DRAW = false
 window.MAX_PLAYERS = 6
 window.activePlayers = 0
 
@@ -61,71 +59,9 @@ window.engine = Engine
   showFPS: true
   zSort: true
 
-gameState = titleScreenUpdate = ->
-  controllers.each (controller, i) ->
-    if controller.actionDown "ANY"
-      titleScreen.trigger("done")
-      setUpMatch()
-
-matchSetupUpdate = ->
-
-
-matchState = MatchState()
-
-controllers = []
-MAX_PLAYERS.times (i) ->
-  controller = controllers[i] = engine.controller(i)
-
-Music.volume 0.4
-Music.play "title_screen"
-
-initPlayerData = ->
-  MAX_PLAYERS.times (i) ->
-    $.reverseMerge config.players[i] ||= {},
-      class: "Player"
-      color: Player.COLORS[i]
-      id: i
-      name: ""
-      team: i % 2
-      joystick: true
-      cpu: true
-
-    $.extend config.players[i],
-      ready: false
-      cpu: true
-
-  return config
-
-setUpMatch = ->
-  engine.clear(false)
-
-  configurator = engine.add
-    class: "Configurator"
-    config: initPlayerData()
-    x: 240
-    y: 240
-
-  configurator.bind "done", (config) ->
-    configurator.destroy()
-
-    startMatch(config)
-
-restartMatch = ->
-  doRestart = ->
-    engine.I.objects.clear()
-    engine.unbind "afterUpdate", doRestart
-    setUpMatch()
-
-  engine.bind "afterUpdate", doRestart
-
-startMatch = (config) ->
-  engine.setState(matchState)
-
-nameEntry = ->
-  gameState = matchSetupUpdate
-
-titleScreen = TitleScreen
-  callback: nameEntry
+DEBUG_DRAW = false
+$(document).bind "keydown", "0", ->
+  DEBUG_DRAW = !DEBUG_DRAW
 
 engine.bind "draw", (canvas) ->
   if DEBUG_DRAW
@@ -135,14 +71,6 @@ engine.bind "draw", (canvas) ->
   canvas.font("bold 16px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
   engine.find("Player").invoke "drawFloatingNameTag", canvas
 
-engineUpdate = ->
-  gameState()
-
-engine.bind "update", engineUpdate
-
+engine.setState(MatchSetupState())
 engine.start()
-
-$(document).bind "keydown", "0", ->
-  DEBUG_DRAW = !DEBUG_DRAW
-
 
