@@ -37,7 +37,7 @@ window.config =
   players: []
 
 rink = Rink()
-physics = Physics()
+
 
 window.bloodCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />")
   .appendTo("body")
@@ -69,32 +69,6 @@ gameState = titleScreenUpdate = ->
 
 matchSetupUpdate = ->
 
-
-matchPlayUpdate = ->
-  pucks = engine.find("Puck")
-  players = engine.find("Player").shuffle()
-  zambonis = engine.find("Zamboni")
-
-  objects = players.concat zambonis, pucks
-  playersAndPucks = players.concat pucks
-
-  # Puck handling
-  players.each (player) ->
-    return if player.I.wipeout
-
-    pucks.each (puck) ->
-      if Collision.circular(player.controlCircle(), puck.circle())
-        player.controlPuck(puck)
-
-  physics.process(objects)
-
-  playersAndPucks.each (player) ->
-    # Blood Collisions
-    splats = engine.find("Blood")
-
-    splats.each (splat) ->
-      if Collision.circular(player.circle(), splat.circle())
-        player.bloody()
 
 controllers = []
 MAX_PLAYERS.times (i) ->
