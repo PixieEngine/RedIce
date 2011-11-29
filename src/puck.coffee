@@ -15,7 +15,7 @@ Puck = (I) ->
     mass: 0.01
     superMassive: false
     zIndex: 10
-    spriteOffset: Point(-10, -32)
+    spriteOffset: Point(-2, -12)
 
   self = Base(I).extend
     bloody: ->
@@ -91,7 +91,7 @@ Puck = (I) ->
 
     circle = self.circle()
 
-    # Tunneling debug
+    # Tunneling debug- HEIGHT/2
     if DEBUG_DRAW
       bloodCanvas.drawCircle
         circle: circle

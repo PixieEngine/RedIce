@@ -12,7 +12,7 @@ Goal = (I) ->
     width: WIDTH
     x: WALL_LEFT + ARENA_WIDTH/20 - WIDTH
     y: WALL_TOP + ARENA_HEIGHT/2 - HEIGHT/2
-    spriteOffset: Point(0, -(HEIGHT-2))
+    spriteOffset: Point(0, 2 - HEIGHT/2)
     suddenDeath: false
 
   I.color = Player.COLORS[I.team]
