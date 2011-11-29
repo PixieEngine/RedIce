@@ -70,6 +70,8 @@ gameState = titleScreenUpdate = ->
 matchSetupUpdate = ->
 
 
+matchState = MatchState()
+
 controllers = []
 MAX_PLAYERS.times (i) ->
   controller = controllers[i] = engine.controller(i)
@@ -117,87 +119,7 @@ restartMatch = ->
   engine.bind "afterUpdate", doRestart
 
 startMatch = (config) ->
-  gameState = matchPlayUpdate
-
-  engine.clear(true)
-
-  window.scoreboard = engine.add
-    class: "Scoreboard"
-    # periodTime: 120
-    # period: 3
-
-  scoreboard.bind "restart", ->
-    restartMatch()
-
-  engine.add
-    sprite: Sprite.loadByName("corner_left")
-    x: 64
-    y: WALL_TOP + 16
-    width: 128
-    height: 128
-    zIndex: 1
-
-  engine.add
-    sprite: Sprite.loadByName("corner_left")
-    hflip: true
-    x: WALL_RIGHT - 32
-    y: WALL_TOP + 16
-    width: 128
-    height: 128
-    zIndex: 1
-
-  engine.add
-    spriteName: "corner_back_right"
-    hflip: true
-    x: 80
-    y: WALL_BOTTOM - 64
-    width: 128
-    height: 128
-    zIndex: 2
-
-  engine.add
-    spriteName: "corner_back_right"
-    x: WALL_RIGHT - 48
-    y: WALL_BOTTOM - 64
-    width: 128
-    height: 128
-    zIndex: 2
-
-  engine.add
-    class: "Boards"
-    sprite: Sprite.loadByName("boards_front")
-    y: WALL_TOP - 48
-    zIndex: 1
-
-  engine.add
-    class: "Boards"
-    sprite: Sprite.loadByName("boards_back")
-    y: WALL_BOTTOM - 48
-    zIndex: 10
-
-  config.players.each (playerData) ->
-    engine.add $.extend({}, playerData)
-
-  engine.add
-    class: "Puck"
-
-  leftGoal = engine.add
-    class: "Goal"
-    team: 0
-    x: WALL_LEFT + ARENA_WIDTH/10 - 32
-
-  leftGoal.bind "score", ->
-    scoreboard.score "home"
-
-  rightGoal = engine.add
-    class: "Goal"
-    team: 1
-    x: WALL_LEFT + ARENA_WIDTH*9/10
-
-  rightGoal.bind "score", ->
-    scoreboard.score "away"
-
-  Music.play "music1"
+  engine.setState(matchState)
 
 nameEntry = ->
   gameState = matchSetupUpdate
