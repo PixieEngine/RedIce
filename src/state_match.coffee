@@ -87,9 +87,9 @@ StateMatch = (I={}) ->
 
   # Add events and methods here
   self.bind "update", ->
-    pucks = self.find("Puck")
-    players = self.find("Player").shuffle()
-    zambonis = self.find("Zamboni")
+    pucks = engine.find("Puck")
+    players = engine.find("Player").shuffle()
+    zambonis = engine.find("Zamboni")
 
     objects = players.concat zambonis, pucks
     playersAndPucks = players.concat pucks
@@ -106,7 +106,7 @@ StateMatch = (I={}) ->
 
     playersAndPucks.each (player) ->
       # Blood Collisions
-      splats = self.find("Blood")
+      splats = engine.find("Blood")
 
       splats.each (splat) ->
         if Collision.circular(player.circle(), splat.circle())
