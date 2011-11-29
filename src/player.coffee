@@ -29,8 +29,8 @@ Player = (I) ->
     zIndex: 1
 
   redTeam = I.team
-  standingOffset = Point(0, -16)
-  flyingOffset = Point(-24, -16)
+  standingOffset = Point(0, -8)
+  flyingOffset = Point(-12, -8)
 
   if I.joystick
     controller = Joysticks.getController(I.id)
