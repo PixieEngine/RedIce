@@ -231,11 +231,6 @@ nameEntry = ->
 titleScreen = TitleScreen
   callback: nameEntry
 
-engine.bind "beforeDraw", (canvas) ->
-  # Draw player shadows
-  # This needs to be done before draw so that shadows don't appear above sprites
-  engine.find("Player").invoke "drawShadow", canvas
-
 engine.bind "draw", (canvas) ->
   if DEBUG_DRAW
     engine.find("Player, Puck, Goal, Bottle, Zamboni").each (object) ->
