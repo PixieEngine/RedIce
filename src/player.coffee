@@ -24,6 +24,7 @@ Player = (I) ->
     y: 128
     slot: 0
     shootPower: 0
+    team: 0
     wipeout: 0
     velocity: Point()
     zIndex: 1
