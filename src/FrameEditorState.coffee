@@ -5,6 +5,7 @@ FrameEditorState = (I={}) ->
 
   self.bind "enter", ->
     p = engine.add
+      id: 0
       class: "Player"
       joystick: true
 
