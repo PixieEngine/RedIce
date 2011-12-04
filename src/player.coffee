@@ -280,13 +280,16 @@ Player = (I) ->
     # Testing new  sprites
     if I.id == 0
       speed = I.velocity.magnitude()
+      cycleDelay = 16
 
       if speed < 1
         speedSheet = "coast"
       else if speed < 6
         speedSheet = "slow"
+        cycleDelay = 4
       else
         speedSheet = "fast"
+        cycleDelay = 3
 
       if 0 <= I.heading <= Math.TAU/2
         facing = "front"
@@ -317,7 +320,7 @@ Player = (I) ->
       else if I.cooldown.shoot
         I.sprite = tubsSprites.shoot[10 - I.cooldown.shoot]
       else
-        I.sprite = tubsSprites[speedSheet][facing].wrap((I.age / 2).floor())
+        I.sprite = tubsSprites[speedSheet][facing].wrap((I.age / cycleDelay).floor())
       I.scale = 0.375
 
   if I.cpu
