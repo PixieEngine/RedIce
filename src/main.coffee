@@ -59,6 +59,9 @@ window.engine = Engine
   showFPS: true
   zSort: true
 
+$(document).bind "keydown", "f2", ->
+  engine.setState(FrameEditorState())
+
 DEBUG_DRAW = false
 $(document).bind "keydown", "0", ->
   DEBUG_DRAW = !DEBUG_DRAW
