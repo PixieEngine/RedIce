@@ -1,7 +1,15 @@
 FrameEditorState = (I={}) ->
+  self = GameState(I)
 
-  # Inherit from game object
-  self = GameObject(I)
+  p = null
+
+  self.bind "enter", ->
+    p = engine.add
+      class: "Player"
+      joystick: true
+
+
+    self.cameras().first().follow(p)
 
   # Add events and methods here
   self.bind "update", ->

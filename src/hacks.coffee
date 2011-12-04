@@ -1,8 +1,8 @@
 # Messing around with the global handler
 window.onerror = (message, url, lineNumber) ->
-  errorContext = $('script').last().text().split('\n')[(lineNumber-2)..(lineNumber+2)]
+  errorContext = $('script').last().text().split('\n')[(lineNumber-5)..(lineNumber+4)]
 
-  displayRuntimeError?("#{message} on line #{lineNumber} of #{url}")
+  errorContext[4] = "<b style='font-weight: bold; text-decoration: underline;'>" + errorContext[4] + "</b>"
 
-  displayRuntimeError?("Sometimes this context may be wrong. <br />" errorContext.join("<br />"))
+  displayRuntimeError?("<code>#{message}</code> <br /><br />(Sometimes this context may be wrong.)<br /><code><pre>#{errorContext.join('\n')}</pre></code>")
 
