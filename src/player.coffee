@@ -290,7 +290,7 @@ Player = (I) ->
         facing = "back"
 
       if speed < 1
-        speedSheet = "coast"
+        speedSheet = "idle"
       else if speed < 6
         speedSheet = "slow"
         cycleDelay = 4
