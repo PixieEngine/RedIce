@@ -64,6 +64,10 @@ FrameEditorState = (I={}) ->
         headPositionIndex += 1
       down: ->
         headPositionIndex -= 1
+      left: ->
+        frameIndex += 1
+      right: ->
+        frameIndex -= 1
 
     for key, fn of hotkeys
       $(document).bind "keydown#{namespace}", key, fn
