@@ -2,18 +2,7 @@ window.sprites = Sprite.loadSheet("sprites", 32, 48)
 window.wideSprites = Sprite.loadSheet("sprites", 64, 48)
 window.tallSprites = Sprite.loadSheet("sprites", 32, 96)
 
-window.tubsSprites =
-  fast:
-    front: Sprite.loadSheet("tubs_fast_front", 512, 512)
-    back: Sprite.loadSheet("spiketubs_fast_ne_strip6", 512, 512)
-  slow:
-    front: Sprite.loadSheet("spiketubs_slow_se_strip6", 512, 512)
-    back: Sprite.loadSheet("spiketubs_slow_ne_strip6", 512, 512)
-  coast:
-    front: Sprite.loadSheet("spiketubs_idle_se_strip2", 512, 512)
-    back: Sprite.loadSheet("spiketubs_idle_ne_strip2", 512, 512)
-  fall: Sprite.loadSheet("spiketubs_falldown_se_strip6", 512, 512)
-  shoot: Sprite.loadSheet("spiketubs_shoot_se_strip11", 512, 512)
+window.tubsSprites = CharacterSheet()
 
 window.headSprites =
   stubs: Sprite.loadSheet("SPIKEstubs_norm_strip5", 512, 512)
