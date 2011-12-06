@@ -173,7 +173,7 @@ PlayerDrawing = (I, self) ->
     maxWidth = 48
     height = 4
 
-    center = self.position().add(Point(I.radius, I.radius))
+    center = self.center()
     start = center.add(Point(-maxWidth/2, 40))
 
     canvas.drawRoundRect
@@ -197,9 +197,7 @@ PlayerDrawing = (I, self) ->
       radius: 2
     }
 
-  drawPowerMeters: (canvas) ->
-    self.drawTurboMeter(canvas)
-
+  drawShootMeter: (canvas) ->
     padding = 1
     if I.shootPower
       maxWidth = 40
@@ -251,6 +249,10 @@ PlayerDrawing = (I, self) ->
             height
             radius: 2
           }
+
+  drawPowerMeters: (canvas) ->
+    self.drawTurboMeter(canvas)
+    self.drawShootMeter(canvas)
 
   drawControlCircle: (canvas) ->
     color = self.color().lighten(0.10)
