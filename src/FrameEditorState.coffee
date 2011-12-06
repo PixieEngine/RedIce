@@ -4,10 +4,12 @@ FrameEditorState = (I={}) ->
   namespace = ".FRAME_EDITOR"
 
   p = null
-
   selectedComponent = null
-
   testObject = null
+  headPositionIndex = 0
+  action = "fast"
+  facing = "front"
+  frameIndex = 0
 
   componentAt = (position) ->
     testObject
@@ -35,12 +37,20 @@ FrameEditorState = (I={}) ->
       x: 250
       y: 250
       radius: 5
-      color: "magenta"
+      color: "cyan"
+
+    testObject.bind "draw", (canvas) ->
+      headScale = 0.75
+
+      canvas.withTransform Matrix.scale(0.75), (canvas) ->
+        headSprites.stubs.wrap(headPositionIndex)?.draw(canvas, -256, -256)
 
     p = engine.add
       id: 0
       class: "Player"
       joystick: true
+      x: 800
+      y: 600
 
     ["mousedown", "mousemove", "mouseup"].each (eventType) ->
       $(document).bind "#{eventType}#{namespace}", (event) ->
@@ -52,9 +62,14 @@ FrameEditorState = (I={}) ->
   self.bind "exit", ->
     $(document).unbind(namespace)
 
-  # Add events and methods here
-  self.bind "update", ->
-    ; # Add update method behavior
+  self.bind "beforeDraw", (canvas) ->
+    tubsSprites[action]?[facing]?.wrap(frameIndex)?.draw(canvas, 0, 0)
+
+  self.bind "keydown", "+", ->
+    headPositionIndex += 1
+
+  self.bind "keydown", "-", ->
+    headPositionIndex -= 1
 
   # We must always return self as the last line
   return self
