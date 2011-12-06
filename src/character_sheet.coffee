@@ -28,6 +28,8 @@ CharacterSheet = (I={}) ->
   idle:
     front: loadStrip(IDLE, FRONT, 2)
     back: loadStrip(IDLE, BACK, 2)
-  fall: loadStrip(FALL, FRONT, 6)
-  shoot: loadStrip(SHOOT, FRONT, 11)
+  fall: 
+    front: loadStrip(FALL, FRONT, 6)
+  shoot: 
+    front: loadStrip(SHOOT, FRONT, 11)
 
