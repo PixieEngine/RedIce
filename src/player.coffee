@@ -311,10 +311,6 @@ Player = (I) ->
       else
         I.sprite = tubsSprites[speedSheet][facing].wrap((I.age / cycleDelay).floor())
 
-      headSheet = "stubs"
-      angleSprites = 8
-      headIndexOffset = 2
-
       # Lock head for front facing actions
       if facing == "front"
         headDirection = I.heading.constrainRotation()
@@ -326,6 +322,9 @@ Player = (I) ->
       else
         headDirection = I.heading
 
+      headSheet = "stubs"
+      angleSprites = 8
+      headIndexOffset = 2
       headPosition = ((angleSprites * -headDirection / Math.TAU).round() + headIndexOffset).mod(angleSprites)
 
       if headPosition >= 5
