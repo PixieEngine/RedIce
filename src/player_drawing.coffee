@@ -146,7 +146,7 @@ PlayerDrawing = (I, self) ->
     backgroundColor = self.color()
     backgroundColor.a = 0.5
 
-    yOffset = 96
+    yOffset = 80
 
     center = self.center()
 
@@ -167,12 +167,14 @@ PlayerDrawing = (I, self) ->
       x: topLeft.x + padding
       y: topLeft.y + lineHeight + padding/2
 
-  drawPowerMeters: (canvas) ->
+  drawTurboMeter: (canvas) ->
     ratio = (I.boostMeter - I.cooldown.boost) / I.boostMeter
-    start = self.position().add(Point(0, I.height)).floor()
-    padding = 1
-    maxWidth = I.width
-    height = 3
+    padding = 1.25
+    maxWidth = 48
+    height = 4
+
+    center = self.position().add(Point(I.radius, I.radius))
+    start = center.add(Point(-maxWidth/2, 40))
 
     canvas.drawRoundRect
       color: "#000"
@@ -195,6 +197,10 @@ PlayerDrawing = (I, self) ->
       radius: 2
     }
 
+  drawPowerMeters: (canvas) ->
+    self.drawTurboMeter(canvas)
+
+    padding = 1
     if I.shootPower
       maxWidth = 40
       height = 5
