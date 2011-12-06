@@ -3,11 +3,19 @@ FrameEditorState = (I={}) ->
 
   namespace = ".FRAME_EDITOR"
 
+  characterActions = [
+    "fast"
+    "slow"
+    "idle"
+    "shoot"
+    "falldown"
+  ]
+
   p = null
   selectedComponent = null
   testObject = null
   headPositionIndex = 0
-  action = "fast"
+  actionIndex = 0
   facing = "front"
   frameIndex = 0
 
@@ -65,9 +73,11 @@ FrameEditorState = (I={}) ->
       down: ->
         headPositionIndex -= 1
       left: ->
-        frameIndex += 1
-      right: ->
         frameIndex -= 1
+      right: ->
+        frameIndex += 1
+      tab: ->
+        actionIndex += 1
 
     for key, fn of hotkeys
       $(document).bind "keydown#{namespace}", key, fn
@@ -76,7 +86,7 @@ FrameEditorState = (I={}) ->
     $(document).unbind(namespace)
 
   self.bind "beforeDraw", (canvas) ->
-    tubsSprites[action]?[facing]?.wrap(frameIndex)?.draw(canvas, 0, 0)
+    tubsSprites[characterActions.wrap(actionIndex)]?[facing]?.wrap(frameIndex)?.draw(canvas, 0, 0)
 
   # We must always return self as the last line
   return self
