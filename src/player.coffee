@@ -281,6 +281,13 @@ Player = (I) ->
     if I.id == 0
       speed = I.velocity.magnitude()
       cycleDelay = 16
+      I.scale = 0.375
+
+      # Determine character facing
+      if 0 <= I.heading <= Math.TAU/2
+        facing = "front"
+      else
+        facing = "back"
 
       if speed < 1
         speedSheet = "coast"
@@ -291,15 +298,36 @@ Player = (I) ->
         speedSheet = "fast"
         cycleDelay = 3
 
-      if 0 <= I.heading <= Math.TAU/2
+      if I.wipeout
+        I.sprite = tubsSprites.fall[(25 - (I.wipeout / 4).floor()).clamp(0, 5)]
+      else if power = I.shootPower
         facing = "front"
+        if power < I.maxShotPower
+          I.sprite = tubsSprites.shoot.wrap((power * 7 / I.maxShotPower).floor())
+        else
+          I.sprite = tubsSprites.shoot.wrap(5 + (I.age / 6).floor() % 2)
+      else if I.cooldown.shoot
+        I.sprite = tubsSprites.shoot[10 - I.cooldown.shoot]
       else
-        facing = "back"
+        I.sprite = tubsSprites[speedSheet][facing].wrap((I.age / cycleDelay).floor())
 
       headSheet = "stubs"
       angleSprites = 8
       headIndexOffset = 2
-      headPosition = ((angleSprites * -I.heading / Math.TAU).round() + headIndexOffset).mod(angleSprites)
+
+      # Lock head for front facing actions
+      if facing == "front"
+        headDirection = I.heading.constrainRotation()
+
+        if headDirection < -Math.TAU/4
+          headDirection = Math.TAU/2
+        else if headDirection < 0
+          headDirection = 0
+      else
+        headDirection = I.heading
+
+      headPosition = ((angleSprites * -headDirection / Math.TAU).round() + headIndexOffset).mod(angleSprites)
+
       if headPosition >= 5
         headPosition = 8 - headPosition
         I.headFlip = true
@@ -308,20 +336,6 @@ Player = (I) ->
 
       I.headOrder = facing
       I.headSprite = headSprites[headSheet][headPosition]
-
-      if I.wipeout
-        I.sprite = tubsSprites.fall[(25 - (I.wipeout / 4).floor()).clamp(0, 5)]
-      else if power = I.shootPower
-        I.headOrder = "front"
-        if power < I.maxShotPower
-          I.sprite = tubsSprites.shoot.wrap((power * 8 / I.maxShotPower).floor())
-        else
-          I.sprite = tubsSprites.shoot.wrap(5 + (I.age/2).floor() % 2)
-      else if I.cooldown.shoot
-        I.sprite = tubsSprites.shoot[10 - I.cooldown.shoot]
-      else
-        I.sprite = tubsSprites[speedSheet][facing].wrap((I.age / cycleDelay).floor())
-      I.scale = 0.375
 
   if I.cpu
     self.include AI
