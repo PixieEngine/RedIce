@@ -59,18 +59,20 @@ FrameEditorState = (I={}) ->
 
         activeTool[eventType]?({position, button})
 
+    hotkeys =
+      up: ->
+        headPositionIndex += 1
+      down: ->
+        headPositionIndex -= 1
+
+    for key, fn of hotkeys
+      $(document).bind "keydown#{namespace}", key, fn
+
   self.bind "exit", ->
     $(document).unbind(namespace)
 
   self.bind "beforeDraw", (canvas) ->
     tubsSprites[action]?[facing]?.wrap(frameIndex)?.draw(canvas, 0, 0)
 
-  self.bind "keydown", "+", ->
-    headPositionIndex += 1
-
-  self.bind "keydown", "-", ->
-    headPositionIndex -= 1
-
   # We must always return self as the last line
   return self
-
