@@ -74,6 +74,6 @@ engine.bind "draw", (canvas) ->
   canvas.font("bold 16px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
   engine.find("Player").invoke "drawFloatingNameTag", canvas
 
-engine.setState(MatchSetupState())
+engine.setState(FrameEditorState())
 engine.start()
 
