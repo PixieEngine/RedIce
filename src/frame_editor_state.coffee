@@ -103,6 +103,19 @@ FrameEditorState = (I={}) ->
 
     currentFrameData(dataToSave)
 
+  saveToServer = ->
+    saveFile
+      contents: JSON.stringify(data, null, 2)
+      path: "data/#{currentTeam()}_#{currentBody()}.json"
+
+  loadFromServer = ->
+    url = ResourceLoader.urlFor("data", "#{currentTeam()}_#{currentBody()}")
+
+    $.getJSON url, (remoteData) ->
+      console.log "received remote data"
+      console.log remoteData
+      data = remoteData
+
   data = {}
 
   tools.move = (->
@@ -148,14 +161,18 @@ FrameEditorState = (I={}) ->
 
     hotkeys =
       return: ->
-        console.log JSON.stringify(data)
+        console.log JSON.stringify(data, null, 2)
       f1: ->
         showHelp = !showHelp
       "ctrl+s": ->
         Local.set("characterData", data)
+      "ctrl+shift+s": ->
+        saveToServer()
       "ctrl+l": ->
         data = Local.get("characterData") || {}
         loadFrameData()
+      "ctrl+shift+l": ->
+        loadFromServer()
 
     adjustIndexVariable = (variableName, amount) ->
       storeFrameData()
