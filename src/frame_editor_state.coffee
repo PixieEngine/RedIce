@@ -1,6 +1,14 @@
 FrameEditorState = (I={}) ->
+  Object.reverseMerge I,
+    frameIndex: 0
+    facingIndex: 0
+    actionIndex: 0
+    headPositionIndex: 0
+
   self = GameState(I)
 
+
+  headPositions = 5
   namespace = ".FRAME_EDITOR"
 
   characterActions = [
@@ -11,15 +19,18 @@ FrameEditorState = (I={}) ->
     "falldown"
   ]
 
+  characterFacings = [
+    "front"
+    "back"
+  ]
+
   p = null
   selectedComponent = null
-  headPositionIndex = 0
-  actionIndex = 0
-  facing = "front"
-  frameIndex = 0
 
   headDataObject = null
+
   componentAt = (position) ->
+    #TODO Really check position against object list
     headDataObject
 
   tools = {}
@@ -32,24 +43,31 @@ FrameEditorState = (I={}) ->
 
     {x, y, scale}
 
+  constrainIndices = () ->
+    if currentAnimation().length
+      I.frameIndex = I.frameIndex.mod currentAnimation().length
+
+    I.headPositionIndex = I.headPositionIndex.mod headPositions
+    I.actionIndex = I.actionIndex.mod characterActions.length
+    I.facingIndex = I.facingIndex.mod characterFacings.length
+
   currentAction = ->
-    characterActions.wrap(actionIndex)
+    characterActions.wrap(I.actionIndex)
+
+  currentFacing = ->
+    characterFacings.wrap(I.facingIndex)
 
   currentAnimation = ->
-    tubsSprites[currentAction()]?[facing]
+    tubsSprites[currentAction()]?[currentFacing()]
 
   currentFrameData = (dataToSave) ->
-    # TODO: Move this wrapping elsewhere
-    if currentAnimation().length
-      frameIndex = frameIndex.mod currentAnimation().length
-
     data[currentAction()] ||= {}
-    data[currentAction()][facing] ||= []
+    data[currentAction()][currentFacing()] ||= []
 
     if dataToSave?
-      data[currentAction()][facing][frameIndex] = dataToSave
+      data[currentAction()][currentFacing()][I.frameIndex] = dataToSave
     else    
-      data[currentAction()][facing][frameIndex] ||=
+      data[currentAction()][currentFacing()][I.frameIndex] ||=
         head: defaultHeadData()
 
   loadFrameData = ->
@@ -92,7 +110,7 @@ FrameEditorState = (I={}) ->
       scale: 0.75
 
     headDataObject.bind "draw", (canvas) ->
-      headSprites.stubs.wrap(headPositionIndex)?.draw(canvas, -256, -256)
+      headSprites.stubs.wrap(I.headPositionIndex)?.draw(canvas, -256, -256)
 
     p = engine.add
       id: 0
@@ -109,22 +127,28 @@ FrameEditorState = (I={}) ->
         activeTool[eventType]?({position, button})
 
     hotkeys =
-      up: ->
-        headPositionIndex += 1
-      down: ->
-        headPositionIndex -= 1
-      left: ->
-        frameIndex -= 1
-      right: ->
-        frameIndex += 1
-      tab: ->
-        actionIndex += 1
       return: ->
         console.log data
       l: ->
         loadFrameData()
       s: ->
         storeFrameData()
+
+    addCycle = (variableName, prevKey, nextKey) ->
+      hotkeys[prevKey] = ->
+        I[variableName] -= 1
+
+        constrainIndices()
+
+      hotkeys[nextKey] = ->
+        I[variableName] += 1
+
+        constrainIndices()
+
+    addCycle("headPositionIndex", ";", "q")
+    addCycle("frameIndex", "a", "o")
+    addCycle("frameIndex", "shift+tab", "tab")
+    addCycle("facingIndex", "'", ",")
 
     for key, fn of hotkeys
       $(document).bind "keydown#{namespace}", key, fn
@@ -133,13 +157,18 @@ FrameEditorState = (I={}) ->
     $(document).unbind(namespace)
 
   self.bind "beforeDraw", (canvas) ->
-    currentAnimation()?.wrap(frameIndex)?.draw(canvas, 0, 0)
+    if currentFacing() == "front"
+      currentAnimation()?.wrap(I.frameIndex)?.draw(canvas, 0, 0)
+
+  self.bind "afterDraw", (canvas) ->
+    if currentFacing() == "back"
+      currentAnimation()?.wrap(I.frameIndex)?.draw(canvas, 0, 0)
 
   self.bind "overlay", (canvas) ->
     canvas.drawText
       position: Point(80, 20)
       color: "white"
-      text: facing
+      text: currentFacing()
 
     canvas.drawText
       position: Point(120, 20)
@@ -149,7 +178,7 @@ FrameEditorState = (I={}) ->
     canvas.drawText
       position: Point(200, 20)
       color: "white"
-      text: currentAnimation()?.wrap(frameIndex)
+      text: I.frameIndex
 
   # We must always return self as the last line
   return self
