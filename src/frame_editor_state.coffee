@@ -135,23 +135,20 @@ FrameEditorState = (I={}) ->
       f1: ->
         showHelp = !showHelp
 
+    adjustIndexVariable = (variableName, amount) ->
+      storeFrameData()
+
+      I[variableName] += amount
+
+      constrainIndices()
+      loadFrameData()      
+
     addCycle = (variableName, prevKey, nextKey) ->
       hotkeys[prevKey] = ->
-        storeFrameData()
-
-        I[variableName] -= 1
-
-        constrainIndices()
-        loadFrameData()
+        adjustIndexVariable(variableName, -1)
 
       hotkeys[nextKey] = ->
-        storeFrameData()
-
-        I[variableName] += 1
-
-        constrainIndices()
-        loadFrameData()
-
+        adjustIndexVariable(variableName, 1)
 
       helpInfo[prevKey] = "Decrement #{variableName.underscore().humanize()}"      
       helpInfo[nextKey] = "Increment #{variableName.underscore().humanize()}"
