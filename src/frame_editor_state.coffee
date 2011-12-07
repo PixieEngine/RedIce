@@ -9,6 +9,7 @@ FrameEditorState = (I={}) ->
 
   self = GameState(I)
 
+  screenCenter = Point(App.width, App.height).scale(0.5)
   headPositions = 5
   namespace = ".FRAME_EDITOR"
 
@@ -135,9 +136,11 @@ FrameEditorState = (I={}) ->
   activeTool = tools.move
 
   self.bind "enter", ->
+    engine.cameras().first().I.scroll = Point(0, 0).subtract(screenCenter)
+
     headDataObject = engine.add
-      x: 250
-      y: 250
+      x: 0
+      y: 0
       radius: 5
       color: "cyan"
       scale: 0.75
@@ -154,7 +157,7 @@ FrameEditorState = (I={}) ->
 
     ["mousedown", "mousemove", "mouseup"].each (eventType) ->
       $(document).bind "#{eventType}#{namespace}", (event) ->
-        position = Point(event.pageX, event.pageY)
+        position = Point(event.pageX, event.pageY).subtract(screenCenter)
         button = event.which
 
         activeTool[eventType]?({position, button})
@@ -204,13 +207,16 @@ FrameEditorState = (I={}) ->
   self.bind "exit", ->
     $(document).unbind(namespace)
 
+  drawBodySprite = (canvas) ->
+    canvas.withTransform Matrix.translation(screenCenter.x, screenCenter.y), (canvas) ->
+      if sprite = currentAnimation()?.wrap(I.frameIndex)
+        sprite.draw(canvas, -sprite.width/2, -sprite.height/2)
+
   self.bind "beforeDraw", (canvas) ->
-    if currentFacing() == "front"
-      currentAnimation()?.wrap(I.frameIndex)?.draw(canvas, 0, 0)
+    drawBodySprite(canvas) if currentFacing() == "front"
 
   self.bind "draw", (canvas) ->
-    if currentFacing() == "back"
-      currentAnimation()?.wrap(I.frameIndex)?.draw(canvas, 0, 0)
+    drawBodySprite(canvas) if currentFacing() == "back"
 
   self.bind "overlay", (canvas) ->
     canvas.drawText
