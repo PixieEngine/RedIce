@@ -45,6 +45,9 @@ PlayerDrawing = (I, self) ->
 
     self.drawControlCircle(canvas)
 
+  self.bind 'afterTransform', (canvas) ->
+    self.drawFloatingNameTag(canvas)
+
   I.lastLeftSkatePos = null
   I.lastRightSkatePos = null
 
@@ -134,6 +137,8 @@ PlayerDrawing = (I, self) ->
           color: shadowColor
 
   drawFloatingNameTag: (canvas) ->
+    canvas.font("bold 16px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
+
     if I.cpu
       name = "CPU"
     else
