@@ -25,6 +25,8 @@ Player = (I) ->
     slot: 0
     shootPower: 0
     team: 0
+    teamStyle: "spike"
+    bodyStyle: "tubs"
     wipeout: 0
     velocity: Point()
     zIndex: 1
@@ -279,7 +281,7 @@ Player = (I) ->
 
     # Testing new  sprites
     if I.id == 0
-      spriteSheet = bodySprites.tubs
+      spriteSheet = self.spriteSheet()
 
       speed = I.velocity.magnitude()
       cycleDelay = 16

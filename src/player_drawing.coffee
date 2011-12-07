@@ -271,6 +271,9 @@ PlayerDrawing = (I, self) ->
       color
     }
 
+  spriteSheet: ->
+    bodySprites[I.bodyStyle]
+
   transform: ->
     center = self.center()
 
