@@ -77,10 +77,13 @@ Configurator = (I) ->
     [reds, blues] = config.players.partition (playerData) ->
       playerData.team
 
+    #TODO Add in team style data
+
     reds.each (red, i) ->
       red.slot = i
       red.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (reds.length + 1)
       red.x = WALL_LEFT + ARENA_WIDTH/2 + ARENA_WIDTH / 6
+      red.heading = 0.5.rotations
 
     blues.each (blue, i) ->
       blue.slot = i

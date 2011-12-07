@@ -31,8 +31,6 @@ Player = (I) ->
     velocity: Point()
     zIndex: 1
 
-  redTeam = I.team
-
   if I.joystick
     controller = Joysticks.getController(I.id)
     actionDown = controller.actionDown
@@ -40,8 +38,6 @@ Player = (I) ->
   else
     actionDown = CONTROLLERS[I.controller].actionDown
     axisPosition = $.noop
-
-  I.heading = if redTeam then Math.TAU/2 else 0
 
   particleSizes = [5, 4, 3]
   addSprayParticleEffect = (push, color=BLOOD_COLOR) ->
@@ -258,8 +254,6 @@ Player = (I) ->
 
     if I.wipeout
       spriteIndex = 17
-      unless redTeam
-        spriteIndex += 1
 
       I.sprite = wideSprites[spriteIndex]
     else
@@ -273,7 +267,7 @@ Player = (I) ->
       else
         facingOffset = 0
 
-      teamColor = (redTeam) * 16
+      teamColor = 0
 
       spriteIndex = cycle + facingOffset + teamColor
 
