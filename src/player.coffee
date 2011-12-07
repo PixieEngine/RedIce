@@ -31,7 +31,6 @@ Player = (I) ->
 
   redTeam = I.team
   standingOffset = Point(0, -8)
-  flyingOffset = Point(-12, -8)
 
   if I.joystick
     controller = Joysticks.getController(I.id)
@@ -257,7 +256,6 @@ Player = (I) ->
       unless redTeam
         spriteIndex += 1
 
-      I.spriteOffset = flyingOffset
       I.sprite = wideSprites[spriteIndex]
     else
       cycle = (I.age/4).floor() % 2
