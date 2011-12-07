@@ -24,15 +24,19 @@ FrameEditorState = (I={}) ->
 
   tools = {}
 
-  defaultHeadData =
+  defaultHeadData = ->
     {x: 250, y: 200, scale: 0.75}
 
   currentAction = ->
     characterActions.wrap(actionIndex)
 
+  currentAnimation = ->
+    tubsSprites[currentAction()]?[facing]
+
   currentFrameData = ->
     # TODO: Move this wrapping elsewhere
-    frameIndex = frameIndex.mod currentAnimation().length
+    if currentAnimation().length
+      frameIndex = frameIndex.mod currentAnimation().length
 
     data[currentAction] ||= {}
     data[currentAction][facing] ||= []
@@ -74,8 +78,10 @@ FrameEditorState = (I={}) ->
       color: "cyan"
       scale: 0.75
 
-    testObject.bind "draw", (canvas) ->
+    headDataObject.bind "draw", (canvas) ->
       headSprites.stubs.wrap(headPositionIndex)?.draw(canvas, -256, -256)
+
+    loadFrameData()
 
     p = engine.add
       id: 0
@@ -112,7 +118,24 @@ FrameEditorState = (I={}) ->
     $(document).unbind(namespace)
 
   self.bind "beforeDraw", (canvas) ->
-    tubsSprites[characterActions.wrap(actionIndex)]?[facing]?.wrap(frameIndex)?.draw(canvas, 0, 0)
+    currentAnimation()?.wrap(frameIndex)?.draw(canvas, 0, 0)
+
+  self.bind "overlay", (canvas) ->
+    canvas.drawText
+      position: Point(80, 20)
+      color: "white"
+      text: facing
+
+    canvas.drawText
+      position: Point(120, 20)
+      color: "white"
+      text: currentAction()
+
+    canvas.drawText
+      position: Point(200, 20)
+      color: "white"
+      text: currentAnimation()?.wrap(frameIndex)
 
   # We must always return self as the last line
   return self
+
