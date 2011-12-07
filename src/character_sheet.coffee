@@ -1,13 +1,14 @@
 CharacterSheet = (I={}) ->
   # Set some default properties
   Object.reverseMerge I,
-    character: "spiketubs"
+    character: "tubs"
+    team: "spike"
     size: 512
 
   {character, size} = I
 
   loadStrip = (action, facing, cells) ->
-    Sprite.loadSheet("#{character}_#{action}_#{facing}_strip#{cells}", size, size)
+    Sprite.loadSheet("#{spike}_#{character}_#{action}_#{facing}_strip#{cells}", size, size)
 
   FRONT = "se"
   BACK = "ne"
