@@ -47,6 +47,7 @@ FrameEditorState = (I={}) ->
     #TODO Really check position against object list
     headDataObject
 
+  data = {}
   tools = {}
 
   defaultHeadData = ->
@@ -116,8 +117,6 @@ FrameEditorState = (I={}) ->
       console.log remoteData
       data = remoteData
       loadFrameData()
-
-  data = {}
 
   tools.move = (->
     activeComponent = null
