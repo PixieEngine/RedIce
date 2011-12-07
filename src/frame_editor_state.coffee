@@ -27,30 +27,43 @@ FrameEditorState = (I={}) ->
   defaultHeadData = ->
     {x: 250, y: 200, scale: 0.75}
 
+  extractHeadData = ->
+    {x, y, scale} = headDataObject.I
+
+    {x, y, scale}
+
   currentAction = ->
     characterActions.wrap(actionIndex)
 
   currentAnimation = ->
     tubsSprites[currentAction()]?[facing]
 
-  currentFrameData = ->
+  currentFrameData = (dataToSave) ->
     # TODO: Move this wrapping elsewhere
     if currentAnimation().length
       frameIndex = frameIndex.mod currentAnimation().length
 
-    data[currentAction] ||= {}
-    data[currentAction][facing] ||= []
-    data[currentAction][facing][frameIndex] ||=
-      head: defaultHeadData()
+    data[currentAction()] ||= {}
+    data[currentAction()][facing] ||= []
+
+    if dataToSave?
+      data[currentAction()][facing][frameIndex] = dataToSave
+    else    
+      data[currentAction()][facing][frameIndex] ||=
+        head: defaultHeadData()
 
   loadFrameData = ->
     # Load the head data
-    Object.extend headDataObject.I, currentFrameData().head
+    if d = currentFrameData()
+      Object.extend headDataObject.I, d.head
 
-    # TODO load additional metadata
+      # TODO load additional metadata
 
   storeFrameData = ->
+    dataToSave = 
+      head: extractHeadData()
 
+    currentFrameData(dataToSave)
 
   data = {}
 
@@ -81,8 +94,6 @@ FrameEditorState = (I={}) ->
     headDataObject.bind "draw", (canvas) ->
       headSprites.stubs.wrap(headPositionIndex)?.draw(canvas, -256, -256)
 
-    loadFrameData()
-
     p = engine.add
       id: 0
       class: "Player"
@@ -108,8 +119,12 @@ FrameEditorState = (I={}) ->
         frameIndex += 1
       tab: ->
         actionIndex += 1
-      enter: ->
+      return: ->
         console.log data
+      l: ->
+        loadFrameData()
+      s: ->
+        storeFrameData()
 
     for key, fn of hotkeys
       $(document).bind "keydown#{namespace}", key, fn
