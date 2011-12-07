@@ -2,9 +2,11 @@ window.sprites = Sprite.loadSheet("sprites", 32, 48)
 window.wideSprites = Sprite.loadSheet("sprites", 64, 48)
 window.tallSprites = Sprite.loadSheet("sprites", 32, 96)
 
-window.tubsSprites = CharacterSheet()
-window.skinnySprites = CharacterSheet
-  character: "skinny"
+window.bodySprites =
+  tubs: CharacterSheet
+    character: "tubs"
+  skinny: CharacterSheet
+    character: "skinny"
 
 window.headSprites =
   stubs: Sprite.loadSheet("SPIKEstubs_norm_strip5", 512, 512)
