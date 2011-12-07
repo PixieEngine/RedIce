@@ -5,10 +5,8 @@ CharacterSheet = (I={}) ->
     team: "spike"
     size: 512
 
-  {character, size} = I
-
   loadStrip = (action, facing, cells) ->
-    Sprite.loadSheet("#{spike}_#{character}_#{action}_#{facing}_strip#{cells}", size, size)
+    Sprite.loadSheet("#{I.team}_#{I.character}_#{action}_#{facing}_#{cells}", I.size, I.size)
 
   FRONT = "se"
   BACK = "ne"
