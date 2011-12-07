@@ -30,7 +30,6 @@ Player = (I) ->
     zIndex: 1
 
   redTeam = I.team
-  standingOffset = Point(0, -8)
 
   if I.joystick
     controller = Joysticks.getController(I.id)
@@ -207,6 +206,10 @@ Player = (I) ->
     if movement.x || movement.y
       I.movementDirection = movement.direction()
 
+    # Testing wipeout animation
+    if actionDown("BACK")
+      self.wipeout(Point(1, 0))
+
     if I.wipeout
       I.lastLeftSkatePos = null
       I.lastRightSkatePos = null
@@ -272,7 +275,6 @@ Player = (I) ->
 
       spriteIndex = cycle + facingOffset + teamColor
 
-      I.spriteOffset = standingOffset
       I.sprite = sprites[spriteIndex]
 
     # Testing new  sprites
@@ -297,13 +299,14 @@ Player = (I) ->
         cycleDelay = 3
 
       if I.wipeout
-        I.sprite = tubsSprites.fall[(25 - (I.wipeout / 4).floor()).clamp(0, 5)]
+        facing = "front"
+        I.sprite = tubsSprites.fall[facing][(25 - (I.wipeout / 4).floor()).clamp(0, 5)]
       else if power = I.shootPower
         facing = "front"
         if power < I.maxShotPower
-          I.sprite = tubsSprites.shoot.wrap((power * 7 / I.maxShotPower).floor())
+          I.sprite = tubsSprites.shoot[facing].wrap((power * 7 / I.maxShotPower).floor())
         else
-          I.sprite = tubsSprites.shoot.wrap(5 + (I.age / 6).floor() % 2)
+          I.sprite = tubsSprites.shoot[facing].wrap(5 + (I.age / 6).floor() % 2)
       else if I.cooldown.shoot
         I.sprite = tubsSprites.shoot[10 - I.cooldown.shoot]
       else
