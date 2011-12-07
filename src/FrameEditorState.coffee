@@ -46,12 +46,10 @@ FrameEditorState = (I={}) ->
       y: 250
       radius: 5
       color: "cyan"
+      scale: 0.75
 
     testObject.bind "draw", (canvas) ->
-      headScale = 0.75
-
-      canvas.withTransform Matrix.scale(0.75), (canvas) ->
-        headSprites.stubs.wrap(headPositionIndex)?.draw(canvas, -256, -256)
+      headSprites.stubs.wrap(headPositionIndex)?.draw(canvas, -256, -256)
 
     p = engine.add
       id: 0
