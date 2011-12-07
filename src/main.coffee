@@ -64,8 +64,6 @@ engine.bind "draw", (canvas) ->
     engine.find("Player, Puck, Goal, Bottle, Zamboni").each (object) ->
       object.trigger("drawDebug", canvas)
 
-  canvas.font("bold 16px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
-  engine.find("Player").invoke "drawFloatingNameTag", canvas
 
 engine.setState(FrameEditorState())
 engine.start()
