@@ -131,7 +131,7 @@ FrameEditorState = (I={}) ->
 
     hotkeys =
       return: ->
-        console.log data
+        console.log JSON.stringify(data)
       f1: ->
         showHelp = !showHelp
       "ctrl+s": ->
