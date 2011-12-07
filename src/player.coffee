@@ -309,7 +309,8 @@ Player = (I) ->
         else
           I.sprite = tubsSprites.shoot[facing].wrap(5 + (I.age / 6).floor() % 2)
       else if I.cooldown.shoot
-        I.sprite = tubsSprites.shoot[10 - I.cooldown.shoot]
+        facing = "front"
+        I.sprite = tubsSprites.shoot[facing][10 - I.cooldown.shoot]
       else
         I.sprite = tubsSprites[speedSheet][facing].wrap((I.age / cycleDelay).floor())
 
