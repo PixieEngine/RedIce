@@ -134,6 +134,11 @@ FrameEditorState = (I={}) ->
         console.log data
       f1: ->
         showHelp = !showHelp
+      "ctrl+s": ->
+        Local.set("characterData", data)
+      "ctrl+l": ->
+        data = Local.get("characterData") || {}
+        loadFrameData()
 
     adjustIndexVariable = (variableName, amount) ->
       storeFrameData()
@@ -141,7 +146,7 @@ FrameEditorState = (I={}) ->
       I[variableName] += amount
 
       constrainIndices()
-      loadFrameData()      
+      loadFrameData()
 
     addCycle = (variableName, prevKey, nextKey) ->
       hotkeys[prevKey] = ->
