@@ -46,7 +46,7 @@ FrameEditorState = (I={}) ->
       y: 250
       radius: 5
       color: "cyan"
-      scale: 0.75
+      scale: 0.1
 
     testObject.bind "draw", (canvas) ->
       headSprites.stubs.wrap(headPositionIndex)?.draw(canvas, -256, -256)
