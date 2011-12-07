@@ -132,23 +132,26 @@ FrameEditorState = (I={}) ->
     hotkeys =
       return: ->
         console.log data
-      l: ->
-        loadFrameData()
-      s: ->
-        storeFrameData()
       f1: ->
         showHelp = !showHelp
 
     addCycle = (variableName, prevKey, nextKey) ->
       hotkeys[prevKey] = ->
+        storeFrameData()
+
         I[variableName] -= 1
 
         constrainIndices()
+        loadFrameData()
 
       hotkeys[nextKey] = ->
+        storeFrameData()
+
         I[variableName] += 1
 
         constrainIndices()
+        loadFrameData()
+
 
       helpInfo[prevKey] = "Decrement #{variableName.underscore().humanize()}"      
       helpInfo[nextKey] = "Increment #{variableName.underscore().humanize()}"
