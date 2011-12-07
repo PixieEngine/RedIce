@@ -279,6 +279,8 @@ Player = (I) ->
 
     # Testing new  sprites
     if I.id == 0
+      spriteSheet = bodySprites.tubs
+
       speed = I.velocity.magnitude()
       cycleDelay = 16
       I.scale = 0.375
@@ -301,18 +303,18 @@ Player = (I) ->
       if I.wipeout
         facing = "front"
         wipeoutFrame = ((25 - I.wipeout) / 3).floor().clamp(0, 5)
-        I.sprite = tubsSprites.fall[facing][wipeoutFrame]
+        I.sprite = spriteSheet.fall[facing][wipeoutFrame]
       else if power = I.shootPower
         facing = "front"
         if power < I.maxShotPower
-          I.sprite = tubsSprites.shoot[facing].wrap((power * 7 / I.maxShotPower).floor())
+          I.sprite = spriteSheet.shoot[facing].wrap((power * 7 / I.maxShotPower).floor())
         else
-          I.sprite = tubsSprites.shoot[facing].wrap(5 + (I.age / 6).floor() % 2)
+          I.sprite = spriteSheet.shoot[facing].wrap(5 + (I.age / 6).floor() % 2)
       else if I.cooldown.shoot
         facing = "front"
-        I.sprite = tubsSprites.shoot[facing][10 - I.cooldown.shoot]
+        I.sprite = spriteSheet.shoot[facing][10 - I.cooldown.shoot]
       else
-        I.sprite = tubsSprites[speedSheet][facing].wrap((I.age / cycleDelay).floor())
+        I.sprite = spriteSheet[speedSheet][facing].wrap((I.age / cycleDelay).floor())
 
       # Lock head for front facing actions
       if facing == "front"
