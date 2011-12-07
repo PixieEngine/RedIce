@@ -115,6 +115,7 @@ FrameEditorState = (I={}) ->
       console.log "received remote data"
       console.log remoteData
       data = remoteData
+      loadFrameData()
 
   data = {}
 
