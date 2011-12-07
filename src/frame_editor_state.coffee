@@ -4,7 +4,7 @@ FrameEditorState = (I={}) ->
     facingIndex: 0
     actionIndex: 0
     headPositionIndex: 0
-    characterIndex: 0
+    bodyIndex: 0
     teamIndex: 0
 
   self = GameState(I)
@@ -16,7 +16,7 @@ FrameEditorState = (I={}) ->
     "spike"
   ]
 
-  characterList = [
+  characterBodies = [
     "tubs"
     "skinny"
   ]
@@ -68,8 +68,8 @@ FrameEditorState = (I={}) ->
   currentTeam = ->
     teamList.wrap(I.teamIndex)
 
-  currentCharacter = ->
-    characterList.wrap(I.characterIndex)
+  currentBody = ->
+    characterBodies.wrap(I.bodyIndex)
 
   currentAction = ->
     characterActions.wrap(I.actionIndex)
@@ -78,7 +78,7 @@ FrameEditorState = (I={}) ->
     characterFacings.wrap(I.facingIndex)
 
   currentAnimation = ->
-    tubsSprites[currentAction()]?[currentFacing()]
+    bodySprites[currentBody()][currentAction()]?[currentFacing()]
 
   currentFrameData = (dataToSave) ->
     data[currentAction()] ||= {}
@@ -179,7 +179,7 @@ FrameEditorState = (I={}) ->
     addCycle("frameIndex", "a", "o")
     addCycle("actionIndex", "shift+tab", "tab")
     addCycle("facingIndex", "'", ",")
-    addCycle("characterIndex", "j", "k")
+    addCycle("bodyIndex", "j", "k")
 
     for key, fn of hotkeys
       $(document).bind "keydown#{namespace}", key, fn
@@ -197,22 +197,22 @@ FrameEditorState = (I={}) ->
 
   self.bind "overlay", (canvas) ->
     canvas.drawText
-      position: Point(40, 20)
+      position: Point(60, 20)
       color: "white"
-      text: "#{currentTeam()} #{currentCharacter()}"
+      text: "#{currentTeam()} #{currentBody()}"
 
     canvas.drawText
-      position: Point(120, 20)
+      position: Point(140, 20)
       color: "white"
       text: currentFacing()
 
     canvas.drawText
-      position: Point(160, 20)
+      position: Point(180, 20)
       color: "white"
       text: currentAction()
 
     canvas.drawText
-      position: Point(240, 20)
+      position: Point(260, 20)
       color: "white"
       text: I.frameIndex
 
