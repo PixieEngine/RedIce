@@ -16,7 +16,7 @@ FrameEditorState = (I={}) ->
     "slow"
     "idle"
     "shoot"
-    "falldown"
+    "fall"
   ]
 
   characterFacings = [
@@ -147,7 +147,7 @@ FrameEditorState = (I={}) ->
 
     addCycle("headPositionIndex", ";", "q")
     addCycle("frameIndex", "a", "o")
-    addCycle("frameIndex", "shift+tab", "tab")
+    addCycle("actionIndex", "shift+tab", "tab")
     addCycle("facingIndex", "'", ",")
 
     for key, fn of hotkeys
@@ -160,7 +160,7 @@ FrameEditorState = (I={}) ->
     if currentFacing() == "front"
       currentAnimation()?.wrap(I.frameIndex)?.draw(canvas, 0, 0)
 
-  self.bind "afterDraw", (canvas) ->
+  self.bind "draw", (canvas) ->
     if currentFacing() == "back"
       currentAnimation()?.wrap(I.frameIndex)?.draw(canvas, 0, 0)
 
