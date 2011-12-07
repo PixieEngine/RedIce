@@ -46,6 +46,7 @@ PlayerDrawing = (I, self) ->
     self.drawControlCircle(canvas)
 
   self.bind 'afterTransform', (canvas) ->
+    self.drawPowerMeters(canvas)
     self.drawFloatingNameTag(canvas)
 
   I.lastLeftSkatePos = null

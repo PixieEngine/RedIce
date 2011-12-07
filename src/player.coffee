@@ -346,8 +346,6 @@ Player = (I) ->
 
   self.include PlayerDrawing
 
-  self.bind 'afterTransform', self.drawPowerMeters
-
   self
 
 Player.COLORS = [
