@@ -32,9 +32,9 @@ CharacterSheet = (I={}) ->
     shoot: 
       front: loadStrip(SHOOT, FRONT, 11)
 
-  metadataUrl = ResourceLoader.urlFor("data", "#{currentTeam()}_#{currentBody()}")
+  metadataUrl = ResourceLoader.urlFor("data", "#{I.team}_#{I.character}")
 
-  $.getJSON url, (data) ->
+  $.getJSON metadataUrl, (data) ->
     Object.extend self.metadata, data
 
   retrun self
