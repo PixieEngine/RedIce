@@ -4,11 +4,22 @@ FrameEditorState = (I={}) ->
     facingIndex: 0
     actionIndex: 0
     headPositionIndex: 0
+    characterIndex: 0
+    teamIndex: 0
 
   self = GameState(I)
 
   headPositions = 5
   namespace = ".FRAME_EDITOR"
+
+  teamList = [
+    "spike"
+  ]
+
+  characterList = [
+    "tubs"
+    "skinny"
+  ]
 
   characterActions = [
     "fast"
@@ -53,6 +64,12 @@ FrameEditorState = (I={}) ->
     I.headPositionIndex = I.headPositionIndex.mod headPositions
     I.actionIndex = I.actionIndex.mod characterActions.length
     I.facingIndex = I.facingIndex.mod characterFacings.length
+
+  currentTeam = ->
+    teamList.wrap(I.teamIndex)
+
+  currentCharacter = ->
+    characterList.wrap(I.characterIndex)
 
   currentAction = ->
     characterActions.wrap(I.actionIndex)
@@ -179,17 +196,22 @@ FrameEditorState = (I={}) ->
 
   self.bind "overlay", (canvas) ->
     canvas.drawText
-      position: Point(80, 20)
+      position: Point(40, 20)
       color: "white"
-      text: currentFacing()
+      text: "#{currentTeam()} #{currentCharacter()}"
 
     canvas.drawText
       position: Point(120, 20)
       color: "white"
+      text: currentFacing()
+
+    canvas.drawText
+      position: Point(160, 20)
+      color: "white"
       text: currentAction()
 
     canvas.drawText
-      position: Point(200, 20)
+      position: Point(240, 20)
       color: "white"
       text: I.frameIndex
 
