@@ -179,6 +179,7 @@ FrameEditorState = (I={}) ->
     addCycle("frameIndex", "a", "o")
     addCycle("actionIndex", "shift+tab", "tab")
     addCycle("facingIndex", "'", ",")
+    addCycle("characterIndex", "j", "k")
 
     for key, fn of hotkeys
       $(document).bind "keydown#{namespace}", key, fn
