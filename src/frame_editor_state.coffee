@@ -152,8 +152,8 @@ FrameEditorState = (I={}) ->
       id: 0
       class: "Player"
       joystick: true
-      x: 800
-      y: 600
+      x: -screenCenter.x + 128
+      y: screenCenter.y - 128
 
     ["mousedown", "mousemove", "mouseup"].each (eventType) ->
       $(document).bind "#{eventType}#{namespace}", (event) ->
