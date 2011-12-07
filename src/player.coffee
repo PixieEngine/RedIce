@@ -300,7 +300,8 @@ Player = (I) ->
 
       if I.wipeout
         facing = "front"
-        I.sprite = tubsSprites.fall[facing][(25 - (I.wipeout / 4).floor()).clamp(0, 5)]
+        wipeoutFrame = ((25 - I.wipeout) / 3).floor().clamp(0, 5)
+        I.sprite = tubsSprites.fall[facing][wipeoutFrame]
       else if power = I.shootPower
         facing = "front"
         if power < I.maxShotPower
