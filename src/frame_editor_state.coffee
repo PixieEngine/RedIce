@@ -7,7 +7,6 @@ FrameEditorState = (I={}) ->
 
   self = GameState(I)
 
-
   headPositions = 5
   namespace = ".FRAME_EDITOR"
 
@@ -23,6 +22,10 @@ FrameEditorState = (I={}) ->
     "front"
     "back"
   ]
+
+  showHelp = false
+  helpInfo = 
+    F1: "Toggle help info"
 
   p = null
   selectedComponent = null
@@ -133,6 +136,8 @@ FrameEditorState = (I={}) ->
         loadFrameData()
       s: ->
         storeFrameData()
+      f1: ->
+        showHelp = !showHelp
 
     addCycle = (variableName, prevKey, nextKey) ->
       hotkeys[prevKey] = ->
@@ -144,6 +149,9 @@ FrameEditorState = (I={}) ->
         I[variableName] += 1
 
         constrainIndices()
+
+      helpInfo[prevKey] = "Decrement #{variableName.underscore().humanize()}"      
+      helpInfo[nextKey] = "Increment #{variableName.underscore().humanize()}"
 
     addCycle("headPositionIndex", ";", "q")
     addCycle("frameIndex", "a", "o")
@@ -179,6 +187,29 @@ FrameEditorState = (I={}) ->
       position: Point(200, 20)
       color: "white"
       text: I.frameIndex
+
+    if showHelp
+      canvas.drawRect
+        x: 0
+        y: 0
+        width: App.width
+        height: App.height
+        color: "rgba(0, 0, 0, 0.75)"
+
+      y = 80
+      lineHeight = 30
+      for key, description of helpInfo
+        canvas.drawText
+          position: Point(200, y)
+          color: "white"
+          text: key
+
+        canvas.drawText
+          position: Point(300, y)
+          color: "white"
+          text: description
+
+        y += lineHeight
 
   # We must always return self as the last line
   return self
