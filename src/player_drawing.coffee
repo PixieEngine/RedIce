@@ -7,17 +7,18 @@ PlayerDrawing = (I, self) ->
   self.bind 'draw', (canvas) ->
     if frameData = self.frameData()
       headOffset = Point(frameData.head.x, frameData.head.y)
+      headRotation = frameData.head.rotation
+      headScale = frameData.head.scale
     else
       headOffset = Point(32, -64).add(Point(3 * Math.sin(I.age * Math.TAU / 31), 2 * Math.cos(I.age * Math.TAU / 27)))
+      headRotation = 0
+      headScale = 0.75
 
     drawBody = (canvas) ->
       if sprite = I.sprite
         sprite.draw(canvas, -sprite.width / 2, -sprite.height / 2)
 
     drawHead = (canvas) ->
-      headRotation = 0
-      headScale = 0.875
-
       canvas.withTransform Matrix.translation(currentHeadOffset.x, currentHeadOffset.y), (canvas) ->
         if headSprite = I.headSprite
           canvas.withTransform Matrix.scale(headScale).rotate(headRotation*Math.TAU/128), (canvas) ->
