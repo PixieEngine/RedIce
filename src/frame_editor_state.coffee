@@ -175,22 +175,6 @@ FrameEditorState = (I={}) ->
         console.log JSON.stringify(data, null, 2)
       f1: ->
         showHelp = !showHelp
-      left: ->
-        adjustComponentPosition(Point(-1, 0))
-      right: ->
-        adjustComponentPosition(Point(1, 0))
-      up: ->
-        adjustComponentPosition(Point(0, -1))
-      down: ->
-        adjustComponentPosition(Point(0, 1))
-      "shift+left": ->
-        adjustComponentPosition(Point(-1, 0).scale(shiftFactor))
-      "shift+right": ->
-        adjustComponentPosition(Point(1, 0).scale(shiftFactor))
-      "shift+up": ->
-        adjustComponentPosition(Point(0, -1).scale(shiftFactor))
-      "shift+down": ->
-        adjustComponentPosition(Point(0, 1).scale(shiftFactor))
       "ctrl+s": ->
         Local.set("characterData", data)
       "ctrl+shift+s": ->
@@ -200,6 +184,13 @@ FrameEditorState = (I={}) ->
         loadFrameData()
       "ctrl+shift+l": ->
         loadFromServer()
+
+    ["left", "right", "up", "down"].each (direction) ->
+      point = Point[direction.toUpperCase()]
+      hotkeys[direction] = ->
+        adjustComponentPosition(point)
+      hotkeys["shift+#{direction}"] = ->
+        adjustComponentPosition(point.scale(shiftFactor))
 
     adjustIndexVariable = (variableName, amount) ->
       storeFrameData()
