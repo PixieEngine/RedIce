@@ -36,8 +36,9 @@ FrameEditorState = (I={}) ->
   ]
 
   showHelp = false
-  helpInfo = 
+  helpInfo =
     F1: "Toggle help info"
+    "Arrow Keys": "Adjust component position"
 
   p = null
   selectedComponent = null
@@ -48,6 +49,10 @@ FrameEditorState = (I={}) ->
     #TODO Really check position against object list
     headDataObject
 
+  adjustComponentPosition = (delta) ->
+    # TODO: selected component
+    headDataObject.position(headDataObject.position().add(delta))
+
   data = {}
   tools = {}
 
@@ -55,9 +60,9 @@ FrameEditorState = (I={}) ->
     {x: 250, y: 200, scale: 0.75}
 
   extractHeadData = ->
-    {x, y, scale} = headDataObject.I
+    {x, y, scale, rotation} = headDataObject.I
 
-    {x, y, scale}
+    {x, y, scale, rotation}
 
   constrainIndices = () ->
     if currentAnimation().length
@@ -141,6 +146,7 @@ FrameEditorState = (I={}) ->
     headDataObject = engine.add
       x: 0
       y: 0
+      rotation: 0
       radius: 5
       color: "cyan"
       scale: 0.75
@@ -162,11 +168,29 @@ FrameEditorState = (I={}) ->
 
         activeTool[eventType]?({position, button})
 
+    shiftFactor = 10
+
     hotkeys =
       return: ->
         console.log JSON.stringify(data, null, 2)
       f1: ->
         showHelp = !showHelp
+      left: ->
+        adjustComponentPosition(Point(-1, 0))
+      right: ->
+        adjustComponentPosition(Point(1, 0))
+      up: ->
+        adjustComponentPosition(Point(0, -1))
+      down: ->
+        adjustComponentPosition(Point(0, 1))
+      "shift+left": ->
+        adjustComponentPosition(Point(-1, 0).scale(shiftFactor))
+      "shift+right": ->
+        adjustComponentPosition(Point(1, 0).scale(shiftFactor))
+      "shift+up": ->
+        adjustComponentPosition(Point(0, -1).scale(shiftFactor))
+      "shift+down": ->
+        adjustComponentPosition(Point(0, 1).scale(shiftFactor))
       "ctrl+s": ->
         Local.set("characterData", data)
       "ctrl+shift+s": ->
