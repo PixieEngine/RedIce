@@ -53,6 +53,10 @@ FrameEditorState = (I={}) ->
     # TODO: selected component
     headDataObject.position(headDataObject.position().add(delta))
 
+  adjustComponentRotation = (delta) ->
+    #TODO selected component
+    headDataObject.I.rotation += delta
+
   data = {}
   tools = {}
 
@@ -175,6 +179,10 @@ FrameEditorState = (I={}) ->
         console.log JSON.stringify(data, null, 2)
       f1: ->
         showHelp = !showHelp
+      "[": ->
+        adjustComponentRotation(-Math.TAU / 128)
+      "]": ->
+        adjustComponentRotation(Math.TAU / 128)
       "ctrl+s": ->
         Local.set("characterData", data)
       "ctrl+shift+s": ->
