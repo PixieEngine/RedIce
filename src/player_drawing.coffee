@@ -29,9 +29,9 @@ PlayerDrawing = (I, self) ->
 
     currentHeadOffset = t.transformPoint(headOffset)
 
-    drawHead(canvas) if I.headOrder == "back"
+    drawHead(canvas) if I.facing == "back"
     canvas.withTransform t, drawBody
-    drawHead(canvas) if I.headOrder == "front"
+    drawHead(canvas) if I.facing == "front"
 
   self.bind 'drawDebug', (canvas) ->
     if I.AI_TARGET
@@ -270,9 +270,6 @@ PlayerDrawing = (I, self) ->
       circle
       color
     }
-
-  spriteSheet: ->
-    bodySprites[I.bodyStyle]
 
   transform: ->
     center = self.center()
