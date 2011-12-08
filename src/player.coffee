@@ -283,37 +283,39 @@ Player = (I) ->
 
       # Determine character facing
       if 0 <= I.heading <= Math.TAU/2
-        facing = "front"
+        I.facing = "front"
       else
-        facing = "back"
+        I.facing = "back"
 
       if speed < 1
-        speedSheet = "idle"
+        I.action = "idle"
       else if speed < 6
-        speedSheet = "slow"
+        I.action = "slow"
         cycleDelay = 4
       else
-        speedSheet = "fast"
+        I.action = "fast"
         cycleDelay = 3
 
       if I.wipeout
-        facing = "front"
-        wipeoutFrame = ((25 - I.wipeout) / 3).floor().clamp(0, 5)
-        I.sprite = spriteSheet.fall[facing][wipeoutFrame]
+        I.facing = "front"
+        I.action = "fall"
+        I.frame = ((25 - I.wipeout) / 3).floor().clamp(0, 5)
       else if power = I.shootPower
-        facing = "front"
+        I.facing = "front"
+        I.action = "shoot"
         if power < I.maxShotPower
-          I.sprite = spriteSheet.shoot[facing].wrap((power * 7 / I.maxShotPower).floor())
+          I.frame = (power * 7 / I.maxShotPower).floor()
         else
-          I.sprite = spriteSheet.shoot[facing].wrap(5 + (I.age / 6).floor() % 2)
+          I.frame = 5 + (I.age / 6).floor() % 2
       else if I.cooldown.shoot
-        facing = "front"
-        I.sprite = spriteSheet.shoot[facing][10 - I.cooldown.shoot]
+        I.action = "shoot"
+        I.facing = "front"
+        I.frame = 10 - I.cooldown.shoot
       else
-        I.sprite = spriteSheet[speedSheet][facing].wrap((I.age / cycleDelay).floor())
+        I.frame = (I.age / cycleDelay).floor()
 
       # Lock head for front facing actions
-      if facing == "front"
+      if I.facing == "front"
         headDirection = I.heading.constrainRotation()
 
         if headDirection < -Math.TAU/4
@@ -334,12 +336,12 @@ Player = (I) ->
       else
         I.headFlip = false
 
-      I.headOrder = facing
       I.headSprite = headSprites[headSheet][headPosition]
 
   if I.cpu
     self.include AI
 
+  self.include PlayerState
   self.include PlayerDrawing
 
   self
