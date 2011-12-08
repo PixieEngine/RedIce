@@ -11,3 +11,6 @@ PlayerState = (I={}, self) ->
   spriteSheet: ->
     bodySprites[I.bodyStyle]
 
+  frameData: ->
+    self.spriteSheet().data[I.action]?[I.facing]?.wrap(I.frame)
+

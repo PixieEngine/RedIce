@@ -5,7 +5,10 @@ PlayerDrawing = (I, self) ->
   self.unbind 'draw'
 
   self.bind 'draw', (canvas) ->
-    headOffset = Point(32, -64).add(Point(3 * Math.sin(I.age * Math.TAU / 31), 2 * Math.cos(I.age * Math.TAU / 27)))
+    if frameData = self.frameData()
+      headOffset = Point(frameData.head.x, frameData.head.y)
+    else
+      headOffset = Point(32, -64).add(Point(3 * Math.sin(I.age * Math.TAU / 31), 2 * Math.cos(I.age * Math.TAU / 27)))
 
     drawBody = (canvas) ->
       if sprite = I.sprite
