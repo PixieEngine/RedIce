@@ -152,8 +152,8 @@ FrameEditorState = (I={}) ->
     engine.cameras().first().I.scroll = Point(0, 0).subtract(screenCenter)
 
     headDataObject = engine.add
-      x: 0
-      y: 0
+      x: 32
+      y: -64
       rotation: 0
       radius: 5
       color: "cyan"
