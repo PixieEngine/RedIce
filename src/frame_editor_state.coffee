@@ -61,7 +61,7 @@ FrameEditorState = (I={}) ->
   tools = {}
 
   defaultHeadData = ->
-    {x: 250, y: 200, scale: 0.75, rotation: 0}
+    {x: 32, y: -64, scale: 0.75, rotation: 0}
 
   extractHeadData = ->
     {x, y, scale, rotation} = headDataObject.I
