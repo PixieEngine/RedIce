@@ -199,7 +199,8 @@ FrameEditorState = (I={}) ->
         selectedComponent = engine.add
           radius: 50
           color: "rgba(255, 0, 255, 0.5)"
-
+          rotation: 0
+          scale: 1
       "ctrl+s": ->
         Local.set("characterData", data)
       "ctrl+shift+s": ->
