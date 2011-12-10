@@ -195,6 +195,11 @@ FrameEditorState = (I={}) ->
         adjustComponentScale(-0.1)
       "shift++": ->
         adjustComponentScale(0.1)
+      insert: ->
+        selectedComponent = engine.add
+          radius: 50
+          color: "rgba(255, 0, 255, 0.5)"
+
       "ctrl+s": ->
         Local.set("characterData", data)
       "ctrl+shift+s": ->
@@ -266,7 +271,7 @@ FrameEditorState = (I={}) ->
         canvas.drawText
           position: Point(60, lineHeight * i)
           color: "white"
-          text: selectedComponent.I[prop].toFixed(3)
+          text: selectedComponent.I[prop]?.toFixed(3)
 
   self.bind "overlay", (canvas) ->
     canvas.drawText
