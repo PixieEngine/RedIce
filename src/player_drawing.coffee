@@ -29,7 +29,9 @@ PlayerDrawing = (I, self) ->
               headSprite.draw(canvas, -headSprite.width / 2, -headSprite.height / 2)
 
     t = Matrix.IDENTITY
-    t = t.concat Matrix.HORIZONTAL_FLIP if I.hflip
+    if I.hflip
+      t = t.concat Matrix.HORIZONTAL_FLIP
+      headRotation = -headRotation
 
     currentHeadOffset = t.transformPoint(headOffset)
 
