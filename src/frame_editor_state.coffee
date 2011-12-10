@@ -57,6 +57,10 @@ FrameEditorState = (I={}) ->
     #TODO selected component
     headDataObject.I.rotation += delta
 
+  adjustComponentScale = (delta) ->
+    #TODO selected component
+    headDataObject.I.scale += delta
+
   data = {}
   tools = {}
 
@@ -187,6 +191,14 @@ FrameEditorState = (I={}) ->
         adjustComponentRotation(-Math.TAU / 128)
       "]": ->
         adjustComponentRotation(Math.TAU / 128)
+      "-": ->
+        adjustComponentScale(-0.01)
+      "+": ->
+        adjustComponentScale(0.01)
+      "shift+-": ->
+        adjustComponentScale(-0.1)
+      "shift++": ->
+        adjustComponentScale(0.1)
       "ctrl+s": ->
         Local.set("characterData", data)
       "ctrl+shift+s": ->
@@ -223,8 +235,8 @@ FrameEditorState = (I={}) ->
       helpInfo[nextKey] = "Increment #{variableName.underscore().humanize()}"
 
     addCycle("headPositionIndex", ";", "q")
-    addCycle("frameIndex", "a", "o")
-    addCycle("actionIndex", "shift+tab", "tab")
+    addCycle("frameIndex", "v", "z")
+    addCycle("actionIndex", "pageup", "pagedown")
     addCycle("facingIndex", "'", ",")
     addCycle("bodyIndex", "j", "k")
 
