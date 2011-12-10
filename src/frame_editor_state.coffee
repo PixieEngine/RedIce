@@ -49,7 +49,7 @@ FrameEditorState = (I={}) ->
     headDataObject
 
   adjustComponentPosition = (delta) ->
-    selectedComponent.position(headDataObject.position().add(delta))
+    selectedComponent.position(selectedComponent.position().add(delta))
 
   adjustComponentRotation = (delta) ->
     selectedComponent.I.rotation += delta
