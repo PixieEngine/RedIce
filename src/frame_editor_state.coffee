@@ -257,6 +257,21 @@ FrameEditorState = (I={}) ->
   self.bind "draw", (canvas) ->
     drawBodySprite(canvas) if currentFacing() == "back"
 
+  lineHeight = 30
+
+  drawComponentInfo = (canvas) ->
+    if selectedComponent
+      for prop, i in ["x", "y", "rotation", "scale"]
+        canvas.drawText
+          position: Point(0, lineHeight * i)
+          color: "white"
+          text: prop
+
+        canvas.drawText
+          position: Point(60, lineHeight * i)
+          color: "white"
+          text: selectedComponent.I[prop].toFixed(3)
+
   self.bind "overlay", (canvas) ->
     canvas.drawText
       position: Point(60, 20)
@@ -278,6 +293,9 @@ FrameEditorState = (I={}) ->
       color: "white"
       text: I.frameIndex
 
+    canvas.withTransform Matrix.translation(30, 60), (canvas) ->
+      drawComponentInfo(canvas)
+
     if showHelp
       canvas.drawRect
         x: 0
@@ -287,7 +305,6 @@ FrameEditorState = (I={}) ->
         color: "rgba(0, 0, 0, 0.75)"
 
       y = 80
-      lineHeight = 30
       for key, description of helpInfo
         canvas.drawText
           position: Point(200, y)
@@ -303,4 +320,3 @@ FrameEditorState = (I={}) ->
 
   # We must always return self as the last line
   return self
-
