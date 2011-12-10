@@ -42,7 +42,6 @@ FrameEditorState = (I={}) ->
 
   p = null
   selectedComponent = null
-
   headDataObject = null
 
   componentAt = (position) ->
@@ -50,16 +49,13 @@ FrameEditorState = (I={}) ->
     headDataObject
 
   adjustComponentPosition = (delta) ->
-    # TODO: selected component
-    headDataObject.position(headDataObject.position().add(delta))
+    selectedComponent.position(headDataObject.position().add(delta))
 
   adjustComponentRotation = (delta) ->
-    #TODO selected component
-    headDataObject.I.rotation += delta
+    selectedComponent.I.rotation += delta
 
   adjustComponentScale = (delta) ->
-    #TODO selected component
-    headDataObject.I.scale += delta
+    selectedComponent.I.scale += delta
 
   data = {}
   tools = {}
@@ -155,7 +151,7 @@ FrameEditorState = (I={}) ->
   self.bind "enter", ->
     engine.cameras().first().I.scroll = Point(0, 0).subtract(screenCenter)
 
-    headDataObject = engine.add
+    selectedComponent = headDataObject = engine.add
       x: 32
       y: -64
       rotation: 0
