@@ -55,6 +55,9 @@ window.engine = Engine
 $(document).bind "keydown", "f2", ->
   engine.setState(FrameEditorState())
 
+$(document).bind "keydown", "f3", ->
+  engine.setState(MatchSetupState())
+
 DEBUG_DRAW = false
 $(document).bind "keydown", "0", ->
   DEBUG_DRAW = !DEBUG_DRAW
