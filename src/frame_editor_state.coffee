@@ -44,6 +44,14 @@ FrameEditorState = (I={}) ->
   selectedComponent = null
   headDataObject = null
 
+  addEventComponent = (position) ->
+    selectedComponent = engine.add
+      x: position.x
+      y: position.y
+      radius: 5
+      color: "magenta"
+      name: "shoot"
+
   componentAt = (position) ->
     #TODO Really check position against object list
     headDataObject
@@ -136,7 +144,10 @@ FrameEditorState = (I={}) ->
     activeComponent = null
 
     mousedown: ({position, button}) ->
-      selectedComponent = activeComponent = componentAt(position)
+      if button == 1
+        selectedComponent = activeComponent = componentAt(position)
+      else if button == 3
+
 
     mousemove: ({position}) ->
       if activeComponent
@@ -266,7 +277,7 @@ FrameEditorState = (I={}) ->
       for prop, i in ["x", "y", "rotation", "scale"]
         canvas.drawText
           position: Point(0, lineHeight * i)
-          color: "white"
+          color: "white"luvs-2-knit.blogspot.com
           text: prop
 
         canvas.drawText
