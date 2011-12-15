@@ -49,8 +49,9 @@ FrameEditorState = (I={}) ->
       x: position.x
       y: position.y
       radius: 5
-      color: "magenta"
+      color: "rgba(255, 0, 255, 0.5)"
       name: "shoot"
+      type: "event"
 
   componentAt = (position) ->
     #TODO Really check position against object list
@@ -172,6 +173,7 @@ FrameEditorState = (I={}) ->
       radius: 5
       color: "cyan"
       scale: 0.75
+      type: "head"
 
     headDataObject.bind "draw", (canvas) ->
       headSprites.stubs.wrap(I.headPositionIndex)?.draw(canvas, -256, -256)
@@ -279,12 +281,14 @@ FrameEditorState = (I={}) ->
     if selectedComponent
       if selectedComponent.I.name
         # Event Metadata Component
-        infoProps = ["name", "x", "y", "radius"]
+        infoProps = ["x", "y", "radius"]
       else
         # Head Component
         infoProps = ["x", "y", "rotation", "scale"]
 
       for prop, i in infoProps
+        value = selectedComponent.I[prop]?.toFixed?(3) || selectedComponent.I[prop]
+
         canvas.drawText
           position: Point(0, lineHeight * i)
           color: "white"
@@ -293,7 +297,7 @@ FrameEditorState = (I={}) ->
         canvas.drawText
           position: Point(60, lineHeight * i)
           color: "white"
-          text: selectedComponent.I[prop]?.toFixed(3)
+          text: value
 
   self.bind "overlay", (canvas) ->
     canvas.drawText
