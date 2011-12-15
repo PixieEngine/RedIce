@@ -147,7 +147,7 @@ FrameEditorState = (I={}) ->
       if button == 1
         selectedComponent = activeComponent = componentAt(position)
       else if button == 3
-
+        addEventComponent(position)
 
     mousemove: ({position}) ->
       if activeComponent
@@ -277,7 +277,7 @@ FrameEditorState = (I={}) ->
       for prop, i in ["x", "y", "rotation", "scale"]
         canvas.drawText
           position: Point(0, lineHeight * i)
-          color: "white"luvs-2-knit.blogspot.com
+          color: "white"
           text: prop
 
         canvas.drawText
