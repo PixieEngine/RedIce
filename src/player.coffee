@@ -138,6 +138,7 @@ Player = (I) ->
 
     power = Math.min(I.shootPower, I.maxShotPower)
     circle = self.controlCircle()
+    circle.radius *= 2 # Shot hit radius is twice control circle radius
     baseShotPower = 15
 
     # Shot or pass
