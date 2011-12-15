@@ -219,10 +219,10 @@ Player = (I) ->
           I.shootPower += 2
 
         movementScale = 0.1
+      else if I.cooldown.shoot == 2 # Shoot on second frame
+        shootPuck(I.movementDirection) 
       else if I.shootPower
         I.cooldown.shoot = 4
-
-        shootPuck(I.movementDirection)
       else if I.cooldown.boost < I.boostMeter && (actionDown("A", "L", "R") || (axisPosition(4) > 0) || (axisPosition(5) > 0))
         if I.cooldown.boost == 0
           bonus = 10
