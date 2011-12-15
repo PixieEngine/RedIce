@@ -84,6 +84,12 @@ FrameEditorState = (I={}) ->
 
     {x, y, scale, rotation}
 
+  extractEventsData = ->
+    engine.find(".type=event").map (eventDatum) ->
+      {x, y, radius, name, type} = eventDatum.I
+
+      {x, y, radius, name, type}
+
   constrainIndices = () ->
     if currentAnimation().length
       I.frameIndex = I.frameIndex.mod currentAnimation().length
@@ -113,9 +119,10 @@ FrameEditorState = (I={}) ->
 
     if dataToSave?
       data[currentAction()][currentFacing()][I.frameIndex] = dataToSave
-    else    
+    else
       data[currentAction()][currentFacing()][I.frameIndex] ||=
         head: defaultHeadData()
+        events: []
 
   loadFrameData = ->
     # Load the head data
@@ -127,6 +134,7 @@ FrameEditorState = (I={}) ->
   storeFrameData = ->
     dataToSave = 
       head: extractHeadData()
+      events: extractEventsData()
 
     currentFrameData(dataToSave)
 
