@@ -16,6 +16,10 @@ CharacterSheet = (I={}) ->
   FALL = "falldown"
   SHOOT = "shoot"
 
+  shootLength =
+    tubs: 11
+    skinny: 12
+
   self =
     data: {}
     fast:
@@ -30,7 +34,7 @@ CharacterSheet = (I={}) ->
     fall: 
       front: loadStrip(FALL, FRONT, 6)
     shoot: 
-      front: loadStrip(SHOOT, FRONT, 11)
+      front: loadStrip(SHOOT, FRONT, shootLength[I.character] || 11)
 
   metadataUrl = ResourceLoader.urlFor("data", "#{I.team}_#{I.character}")
 
