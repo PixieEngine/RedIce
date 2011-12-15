@@ -63,7 +63,10 @@ FrameEditorState = (I={}) ->
     selectedComponent.I.rotation += delta
 
   adjustComponentScale = (delta) ->
-    selectedComponent.I.scale += delta
+    if selectedComponent.I.name == "shoot"
+      selectedComponent.I.radius += delta * 100
+    else
+      selectedComponent.I.scale += delta
 
   data = {}
   tools = {}
@@ -274,7 +277,14 @@ FrameEditorState = (I={}) ->
 
   drawComponentInfo = (canvas) ->
     if selectedComponent
-      for prop, i in ["x", "y", "rotation", "scale"]
+      if selectedComponent.I.name
+        # Event Metadata Component
+        infoProps = ["name", "x", "y", "radius"]
+      else
+        # Head Component
+        infoProps = ["x", "y", "rotation", "scale"]
+
+      for prop, i in infoProps
         canvas.drawText
           position: Point(0, lineHeight * i)
           color: "white"
