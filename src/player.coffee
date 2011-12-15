@@ -219,8 +219,9 @@ Player = (I) ->
           I.shootPower += 2
 
         movementScale = 0.1
-      else if I.cooldown.shoot == 2 # Shoot on second frame
-        shootPuck(I.movementDirection) 
+      else if I.cooldown.shoot
+        if I.cooldown.shoot == 2 # Shoot on second frame
+          shootPuck(I.movementDirection)
       else if I.shootPower
         I.cooldown.shoot = 4
       else if I.cooldown.boost < I.boostMeter && (actionDown("A", "L", "R") || (axisPosition(4) > 0) || (axisPosition(5) > 0))
@@ -252,91 +253,68 @@ Player = (I) ->
   self.bind "update", ->
     I.hflip = (I.heading > 2*Math.TAU/8 || I.heading < -2*Math.TAU/8)
 
-    if I.wipeout
-      spriteIndex = 17
+    spriteSheet = self.spriteSheet()
 
-      I.sprite = wideSprites[spriteIndex]
+    speed = I.velocity.magnitude()
+    cycleDelay = 16
+    I.scale = 0.375
+
+    # Determine character facing
+    if 0 <= I.heading <= Math.TAU/2
+      I.facing = "front"
     else
-      cycle = (I.age/4).floor() % 2
-      if -Math.TAU/8 <= I.heading <= Math.TAU/8
-        facingOffset = 0
-      else if -3*Math.TAU/8 <= I.heading <= -Math.TAU/8
-        facingOffset = 4
-      else if Math.TAU/8 < I.heading <= 3*Math.TAU/8
-        facingOffset = 2
+      I.facing = "back"
+
+    if speed < 1
+      I.action = "idle"
+    else if speed < 6
+      I.action = "slow"
+      cycleDelay = 4
+    else
+      I.action = "fast"
+      cycleDelay = 3
+
+    if I.wipeout
+      I.facing = "front"
+      I.action = "fall"
+      I.frame = ((25 - I.wipeout) / 3).floor().clamp(0, 5)
+    else if power = I.shootPower
+      I.facing = "front"
+      I.action = "shoot"
+      if power < I.maxShotPower
+        I.frame = (power * 7 / I.maxShotPower).floor()
       else
-        facingOffset = 0
+        I.frame = 5 + (I.age / 6).floor() % 2
+    else if I.cooldown.shoot
+      I.action = "shoot"
+      I.facing = "front"
+      I.frame = 10 - I.cooldown.shoot
+    else
+      I.frame = (I.age / cycleDelay).floor()
 
-      teamColor = 0
+    # Lock head for front facing actions
+    if I.facing == "front"
+      headDirection = I.heading.constrainRotation()
 
-      spriteIndex = cycle + facingOffset + teamColor
+      if headDirection < -Math.TAU/4
+        headDirection = Math.TAU/2
+      else if headDirection < 0
+        headDirection = 0
+    else
+      headDirection = I.heading
 
-      I.sprite = sprites[spriteIndex]
+    headSheet = "stubs"
+    angleSprites = 8
+    headIndexOffset = 2
+    headPosition = ((angleSprites * -headDirection / Math.TAU).round() + headIndexOffset).mod(angleSprites)
 
-    # Testing new  sprites
-    if I.id == 0
-      spriteSheet = self.spriteSheet()
+    if headPosition >= 5
+      headPosition = 8 - headPosition
+      I.headFlip = true
+    else
+      I.headFlip = false
 
-      speed = I.velocity.magnitude()
-      cycleDelay = 16
-      I.scale = 0.375
-
-      # Determine character facing
-      if 0 <= I.heading <= Math.TAU/2
-        I.facing = "front"
-      else
-        I.facing = "back"
-
-      if speed < 1
-        I.action = "idle"
-      else if speed < 6
-        I.action = "slow"
-        cycleDelay = 4
-      else
-        I.action = "fast"
-        cycleDelay = 3
-
-      if I.wipeout
-        I.facing = "front"
-        I.action = "fall"
-        I.frame = ((25 - I.wipeout) / 3).floor().clamp(0, 5)
-      else if power = I.shootPower
-        I.facing = "front"
-        I.action = "shoot"
-        if power < I.maxShotPower
-          I.frame = (power * 7 / I.maxShotPower).floor()
-        else
-          I.frame = 5 + (I.age / 6).floor() % 2
-      else if I.cooldown.shoot
-        I.action = "shoot"
-        I.facing = "front"
-        I.frame = 10 - I.cooldown.shoot
-      else
-        I.frame = (I.age / cycleDelay).floor()
-
-      # Lock head for front facing actions
-      if I.facing == "front"
-        headDirection = I.heading.constrainRotation()
-
-        if headDirection < -Math.TAU/4
-          headDirection = Math.TAU/2
-        else if headDirection < 0
-          headDirection = 0
-      else
-        headDirection = I.heading
-
-      headSheet = "stubs"
-      angleSprites = 8
-      headIndexOffset = 2
-      headPosition = ((angleSprites * -headDirection / Math.TAU).round() + headIndexOffset).mod(angleSprites)
-
-      if headPosition >= 5
-        headPosition = 8 - headPosition
-        I.headFlip = true
-      else
-        I.headFlip = false
-
-      I.headSprite = headSprites[headSheet][headPosition]
+    I.headSprite = headSprites[headSheet][headPosition]
 
   if I.cpu
     self.include AI
