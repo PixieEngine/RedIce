@@ -93,6 +93,7 @@ Configurator = (I) ->
       blue.x = WALL_LEFT + ARENA_WIDTH/2 - ARENA_WIDTH / 6
       blue.teamStyle = "smiley"
       blue.bodyStyle = "skinny"
+      blue.headStyle = "longface"
 
     return config
 
