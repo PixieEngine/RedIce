@@ -25,6 +25,7 @@ Player = (I) ->
     slot: 0
     shootPower: 0
     team: 0
+    headStyle: "stubs"
     teamStyle: "spike"
     bodyStyle: "tubs"
     wipeout: 0
@@ -304,7 +305,6 @@ Player = (I) ->
     else
       headDirection = I.heading
 
-    headSheet = "stubs"
     angleSprites = 8
     headIndexOffset = 2
     headPosition = ((angleSprites * -headDirection / Math.TAU).round() + headIndexOffset).mod(angleSprites)
@@ -315,7 +315,7 @@ Player = (I) ->
     else
       I.headFlip = false
 
-    I.headSprite = headSprites[headSheet][headPosition]
+    I.headSprite = teamSprites[I.teamStyle][I.headStyle][headPosition]
 
   if I.cpu
     self.include AI
