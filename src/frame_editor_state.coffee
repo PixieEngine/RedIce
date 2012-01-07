@@ -111,7 +111,7 @@ FrameEditorState = (I={}) ->
     characterFacings.wrap(I.facingIndex)
 
   currentAnimation = ->
-    bodySprites[currentBody()][currentAction()]?[currentFacing()]
+    teamSprites.spike[currentBody()][currentAction()]?[currentFacing()]
 
   currentFrameData = (dataToSave) ->
     data[currentAction()] ||= {}
@@ -184,7 +184,7 @@ FrameEditorState = (I={}) ->
       type: "head"
 
     headDataObject.bind "draw", (canvas) ->
-      headSprites.stubs.wrap(I.headPositionIndex)?.draw(canvas, -256, -256)
+      teamSprites.spike.stubs.wrap(I.headPositionIndex)?.draw(canvas, -256, -256)
 
     p = engine.add
       id: 0
