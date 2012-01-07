@@ -84,11 +84,15 @@ Configurator = (I) ->
       red.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (reds.length + 1)
       red.x = WALL_LEFT + ARENA_WIDTH/2 + ARENA_WIDTH / 6
       red.heading = 0.5.rotations
+      red.teamStyle = "spike"
+      red.bodyStyle = "tubs"
 
     blues.each (blue, i) ->
       blue.slot = i
       blue.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (blues.length + 1)
       blue.x = WALL_LEFT + ARENA_WIDTH/2 - ARENA_WIDTH / 6
+      blue.teamStyle = "smiley"
+      blue.bodyStyle = "skinny"
 
     return config
 
