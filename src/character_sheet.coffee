@@ -36,7 +36,8 @@ CharacterSheet = (I={}) ->
     shoot: 
       front: loadStrip(SHOOT, FRONT, shootLength[I.character] || 11)
 
-  metadataUrl = ResourceLoader.urlFor("data", "#{I.team}_#{I.character}")
+  #TODO Load based on team
+  metadataUrl = ResourceLoader.urlFor("data", "spike_#{I.character}")
 
   # TODO: Guarantee this metadata is ready to go
   # using preloading
