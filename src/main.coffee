@@ -2,11 +2,9 @@ window.sprites = Sprite.loadSheet("sprites", 32, 48)
 window.wideSprites = Sprite.loadSheet("sprites", 64, 48)
 window.tallSprites = Sprite.loadSheet("sprites", 32, 96)
 
-window.bodySprites = TeamSheet
-  team: "spike"
-
-window.headSprites =
-  stubs: Sprite.loadSheet("spike_stubs_5", 512, 512)
+window.teamSprites = 
+  spike: TeamSheet
+    team: "spike"
 
 window.CANVAS_WIDTH = App.width
 window.CANVAS_HEIGHT = App.height
