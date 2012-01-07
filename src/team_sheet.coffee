@@ -8,4 +8,5 @@ TeamSheet = (I={}) ->
   skinny: CharacterSheet
     team: I.team
     character: "skinny"
+  stubs: Sprite.loadSheet("#{I.team}_stubs_5", 512, 512)
 
