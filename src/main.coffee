@@ -5,6 +5,8 @@ window.tallSprites = Sprite.loadSheet("sprites", 32, 96)
 window.teamSprites = 
   spike: TeamSheet
     team: "spike"
+  smiley: TeamSheet
+    team: "smiley"
 
 window.CANVAS_WIDTH = App.width
 window.CANVAS_HEIGHT = App.height
