@@ -9,7 +9,7 @@ PlayerState = (I={}, self) ->
     I.sprite = self.spriteSheet()[I.action][I.facing].wrap(I.frame)
 
   spriteSheet: ->
-    bodySprites[I.bodyStyle]
+    teamSprites[I.teamStyle][I.bodyStyle]
 
   frameData: ->
     self.spriteSheet().data[I.action]?[I.facing]?.wrap(I.frame)
