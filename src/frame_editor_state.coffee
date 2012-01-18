@@ -5,6 +5,7 @@ FrameEditorState = (I={}) ->
     actionIndex: 0
     headPositionIndex: 0
     bodyIndex: 0
+    headIndex: 0
     teamIndex: 0
 
   self = GameState(I)
@@ -15,6 +16,15 @@ FrameEditorState = (I={}) ->
 
   teamList = [
     "spike"
+    "smiley"
+  ]
+
+  characterHeads = [
+    "bigeyes"
+    "jawhead"
+    "longface"
+    "roundhead"
+    "stubs"
   ]
 
   characterBodies = [
@@ -104,6 +114,9 @@ FrameEditorState = (I={}) ->
   currentBody = ->
     characterBodies.wrap(I.bodyIndex)
 
+  currentHead = ->
+    characterHeads.wrap(I.headIndex)
+
   currentAction = ->
     characterActions.wrap(I.actionIndex)
 
@@ -111,7 +124,7 @@ FrameEditorState = (I={}) ->
     characterFacings.wrap(I.facingIndex)
 
   currentAnimation = ->
-    teamSprites.spike[currentBody()][currentAction()]?[currentFacing()]
+    teamSprites[currentTeam()][currentBody()][currentAction()]?[currentFacing()]
 
   currentFrameData = (dataToSave) ->
     data[currentAction()] ||= {}
@@ -184,7 +197,7 @@ FrameEditorState = (I={}) ->
       type: "head"
 
     headDataObject.bind "draw", (canvas) ->
-      teamSprites.spike.stubs.wrap(I.headPositionIndex)?.draw(canvas, -256, -256)
+      teamSprites[currentTeam()][currentHead()].wrap(I.headPositionIndex)?.draw(canvas, -256, -256)
 
     p = engine.add
       id: 0
@@ -265,6 +278,7 @@ FrameEditorState = (I={}) ->
     addCycle("actionIndex", "pageup", "pagedown")
     addCycle("facingIndex", "'", ",")
     addCycle("bodyIndex", "j", "k")
+    addCycle("headIndex", "r", "l")
 
     for key, fn of hotkeys
       $(document).bind "keydown#{namespace}", key, fn
