@@ -16,10 +16,6 @@ CharacterSheet = (I={}) ->
   FALL = "falldown"
   SHOOT = "shoot"
 
-  shootLength =
-    tubs: 11
-    skinny: 12
-
   self =
     data: {}
     fast:
@@ -34,7 +30,7 @@ CharacterSheet = (I={}) ->
     fall: 
       front: loadStrip(FALL, FRONT, 6)
     shoot: 
-      front: loadStrip(SHOOT, FRONT, shootLength[I.character] || 11)
+      front: loadStrip(SHOOT, FRONT, 11)
 
   #TODO Load based on team
   metadataUrl = ResourceLoader.urlFor("data", "spike_#{I.character}")
