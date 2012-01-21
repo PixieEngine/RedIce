@@ -24,6 +24,7 @@ Player = (I) ->
     y: 128
     slot: 0
     shootPower: 0
+    shootHoldFrame: 5
     team: 0
     headStyle: "stubs"
     teamStyle: "spike"
@@ -253,6 +254,8 @@ Player = (I) ->
       I.hasPuck = false
 
   self.bind "update", ->
+    Object.extend I, 
+
     I.hflip = (I.heading > 2*Math.TAU/8 || I.heading < -2*Math.TAU/8)
 
     spriteSheet = self.spriteSheet()
@@ -286,7 +289,7 @@ Player = (I) ->
       if power < I.maxShotPower
         I.frame = (power * 7 / I.maxShotPower).floor()
       else
-        I.frame = 5 + (I.age / 6).floor() % 2
+        I.frame = I.shootHoldFrame + (I.age / 6).floor() % 2
     else if I.cooldown.shoot
       I.action = "shoot"
       I.facing = "front"
