@@ -32,6 +32,12 @@ CharacterSheet = (I={}) ->
     shoot: 
       front: loadStrip(SHOOT, FRONT, 11)
 
+  self.characterData =
+    shootHoldFrame: 5
+
+  if I.character == "skinny"
+    self.characterData.shootHoldFrame = 3
+
   metadataUrl = ResourceLoader.urlFor("data", "#{I.team}_#{I.character}")
 
   # TODO: Guarantee this metadata is ready to go
