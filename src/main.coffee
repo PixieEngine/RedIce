@@ -7,6 +7,8 @@ window.teamSprites =
     team: "spike"
   smiley: TeamSheet
     team: "smiley"
+  normal: TeamSheet
+    team: "normal"
 
 window.CANVAS_WIDTH = App.width
 window.CANVAS_HEIGHT = App.height
