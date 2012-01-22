@@ -223,7 +223,7 @@ Player = (I) ->
 
         movementScale = 0.1
       else if I.cooldown.shoot
-        if I.cooldown.shoot == 2 # Shoot on second frame
+        if I.cooldown.shoot == I.shootCooldownFrameCount - 2 # Shoot on second frame
           shootPuck(I.movementDirection)
       else if I.shootPower
         I.cooldown.shoot = I.shootCooldownFrameCount
@@ -255,7 +255,6 @@ Player = (I) ->
 
   self.bind "update", ->
     # Merge in team_body specific frame/character data
-    debugger
     Object.extend I, teamSprites[I.teamStyle][I.bodyStyle].characterData
 
     I.hflip = (I.heading > 2*Math.TAU/8 || I.heading < -2*Math.TAU/8)
@@ -289,7 +288,7 @@ Player = (I) ->
       I.facing = "front"
       I.action = "shoot"
       if power < I.maxShotPower
-        I.frame = (power * 7 / I.maxShotPower).floor()
+        I.frame = ((power * I.shootHoldFrame + 1) / I.maxShotPower).floor()
       else
         I.frame = I.shootHoldFrame + (I.age / 6).floor() % 2
     else if I.cooldown.shoot
