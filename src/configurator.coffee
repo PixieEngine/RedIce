@@ -93,7 +93,6 @@ Configurator = (I) ->
       blue.x = WALL_LEFT + ARENA_WIDTH/2 - ARENA_WIDTH / 6
       blue.teamStyle = "smiley"
       blue.bodyStyle = "skinny"
-      blue.headStyle = "longface"
 
     return config
 
@@ -147,7 +146,7 @@ Configurator = (I) ->
           else
             player.teamStyle = "normal"
 
-          player.headStyle = "stubs"
+          player.headStyle = TeamSheet.headStyles.wrap(player.headIndex) || "stubs"
 
           # Draw Head Sprite
           canvas.withTransform Matrix.scale(0.5, 0.5, Point(x, y)), (canvas) ->
@@ -173,6 +172,12 @@ Configurator = (I) ->
 
       if controller.actionDown "ANY"
         join(i)
+
+      if player = I.config.players[i]
+        if controller.buttonPressed("LB")
+          player.headIndex -= 1
+        if controller.buttonPressed("RB")
+          player.headIndex += 1
 
       if (player = I.config.players[i]) && (player.team != 0.5)
         if controller.actionDown("A")
