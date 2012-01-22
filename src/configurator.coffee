@@ -142,8 +142,10 @@ Configurator = (I) ->
 
           if player.team == 1
             player.teamStyle = "spike"
-          else
+          else if player.team == 0
             player.teamStyle = "smiley"
+          else
+            player.teamStyle = "normal"
 
           player.headStyle = "stubs"
 
