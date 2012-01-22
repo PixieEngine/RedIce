@@ -13,7 +13,7 @@ MatchState = (I={}) ->
       # period: 3
 
     scoreboard.bind "restart", ->
-      restartMatch()
+      engine.setState(MatchSetupState())
 
     engine.add
       sprite: Sprite.loadByName("corner_left")
