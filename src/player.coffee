@@ -226,7 +226,7 @@ Player = (I) ->
         if I.cooldown.shoot == 2 # Shoot on second frame
           shootPuck(I.movementDirection)
       else if I.shootPower
-        I.cooldown.shoot = 4
+        I.cooldown.shoot = I.shootCooldownFrameCount
       else if I.cooldown.boost < I.boostMeter && (actionDown("A", "L", "R") || (axisPosition(4) > 0) || (axisPosition(5) > 0))
         if I.cooldown.boost == 0
           bonus = 10
@@ -254,7 +254,9 @@ Player = (I) ->
       I.hasPuck = false
 
   self.bind "update", ->
-    Object.extend I, 
+    # Merge in team_body specific frame/character data
+    debugger
+    Object.extend I, teamSprites[I.teamStyle][I.bodyStyle].characterData
 
     I.hflip = (I.heading > 2*Math.TAU/8 || I.heading < -2*Math.TAU/8)
 
