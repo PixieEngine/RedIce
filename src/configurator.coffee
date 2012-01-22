@@ -140,6 +140,17 @@ Configurator = (I) ->
 
           nameWidth = canvas.measureText(name)
 
+          if player.team == 1
+            player.teamStyle = "spike"
+          else
+            player.teamStyle = "smiley"
+
+          player.headStyle = "stubs"
+
+          # Draw Head Sprite
+          canvas.withTransform Matrix.scale(0.5, 0.5, Point(x, y)), (canvas) ->
+            teamSprites[player.teamStyle][player.headStyle][0]?.draw(canvas, x - 256, y - 256)
+
           canvas.drawRoundRect {
             x 
             y
