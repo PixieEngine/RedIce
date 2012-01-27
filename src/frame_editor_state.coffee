@@ -30,6 +30,7 @@ FrameEditorState = (I={}) ->
   characterBodies = [
     "tubs"
     "skinny"
+    "thick"
   ]
 
   characterActions = [
