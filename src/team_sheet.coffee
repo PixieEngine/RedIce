@@ -8,6 +8,10 @@ TeamSheet = (I={}) ->
   skinny: CharacterSheet
     team: I.team
     character: "skinny"
+  thick: CharacterSheet
+    team: I.team
+    character: "thick"
+
 
   TeamSheet.headStyles.each (style) ->
     self[style] = Sprite.loadSheet("#{I.team}_#{style}_5", 512, 512)
