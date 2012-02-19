@@ -134,9 +134,10 @@ FrameEditorState = (I={}) ->
     if dataToSave?
       data[currentAction()][currentFacing()][I.frameIndex] = dataToSave
     else
-      data[currentAction()][currentFacing()][I.frameIndex] ||=
+      data[currentAction()][currentFacing()][I.frameIndex] ||= {
         head: defaultHeadData()
         events: []
+      }
 
   loadFrameData = ->
     # Load the head data
