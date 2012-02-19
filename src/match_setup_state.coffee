@@ -13,7 +13,7 @@ MatchSetupState = (I={}) ->
         team: i % 2
         joystick: true
         cpu: true
-        bodyStyle: if i.even() then "tubs" else "skinny"
+        bodyIndex: 0
         headIndex: 0
 
       $.extend config.players[i],
