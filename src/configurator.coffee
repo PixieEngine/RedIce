@@ -85,14 +85,12 @@ Configurator = (I) ->
       red.x = WALL_LEFT + ARENA_WIDTH/2 + ARENA_WIDTH / 6
       red.heading = 0.5.rotations
       red.teamStyle = "spike"
-      red.bodyStyle = "tubs"
 
     blues.each (blue, i) ->
       blue.slot = i
       blue.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (blues.length + 1)
       blue.x = WALL_LEFT + ARENA_WIDTH/2 - ARENA_WIDTH / 6
       blue.teamStyle = "smiley"
-      blue.bodyStyle = "skinny"
 
     return config
 
@@ -147,15 +145,20 @@ Configurator = (I) ->
             player.teamStyle = "normal"
 
           player.headStyle = TeamSheet.headStyles.wrap(player.headIndex) || "stubs"
+          player.bodyStyle = TeamSheet.bodyStyles.wrap(player.bodyIndex) || "thick"
+
+          # Draw Body Sprite
+          canvas.withTransform Matrix.scale(0.5, 0.5, Point(x, y)), (canvas) ->
+            teamSprites[player.teamStyle][player.bodyStyle].slow.front[0]?.draw(canvas, x - 256, y - 160)
 
           # Draw Head Sprite
           canvas.withTransform Matrix.scale(0.5, 0.5, Point(x, y)), (canvas) ->
-            teamSprites[player.teamStyle][player.headStyle][0]?.draw(canvas, x - 256, y - 256)
+            teamSprites[player.teamStyle][player.headStyle][0]?.draw(canvas, x - 224, y - 256)
 
           canvas.drawRoundRect {
             x 
             y
-            width: nameWidth + 2 * horizontalPadding 
+            width: nameWidth + 2 * horizontalPadding
             height: lineHeight + 2 * verticalPadding
             color
           }
@@ -175,7 +178,7 @@ Configurator = (I) ->
 
       if player = I.config.players[i]
         if controller.buttonPressed("LB")
-          player.headIndex -= 1
+          player.bodyIndex += 1
         if controller.buttonPressed("RB")
           player.headIndex += 1
 
