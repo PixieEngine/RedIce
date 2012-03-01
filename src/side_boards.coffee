@@ -12,7 +12,7 @@ SideBoards = (I={}) ->
     draw: (canvas) ->
       canvas.withTransform Matrix.translation(I.x, I.y), ->
         canvas.withTransform Matrix.scale(I.scale), ->
-          I.sprite.fill(canvas, 0, 0, 512, 512 * I.repetitions)
+          I.sprite.fill(canvas, -256, -256, 512, 512 * I.repetitions)
 
   return self
 
