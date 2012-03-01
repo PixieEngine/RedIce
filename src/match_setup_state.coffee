@@ -13,8 +13,8 @@ MatchSetupState = (I={}) ->
         team: i % 2
         joystick: true
         cpu: true
-        bodyIndex: 0
-        headIndex: 0
+        bodyIndex: rand(TeamSheet.bodyStyles.length)
+        headIndex: rand(TeamSheet.headStyles.length)
 
       $.extend config.players[i],
         ready: false
