@@ -4,9 +4,9 @@ SideBoards = (I={}) ->
     width: 64
     height: 64
     scale: 1/8
-    x: 32
+    x: 0
     y: WALL_TOP + 32
-    repetitions: 6
+    repetitions: 5
     flip: 1
 
   self = GameObject(I).extend
