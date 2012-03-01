@@ -220,7 +220,7 @@ PlayerDrawing = (I, self) ->
 
       center = self.center().floor()
       canvas.withTransform Matrix.translation(center.x, center.y).concat(Matrix.rotation(I.movementDirection)).concat(Matrix.scale(0.125 + I.ratio * 0.875)), ->
-        PlayerDrawing.shootArrow.wrap(I.age).draw(canvas, 0, 0)
+        PlayerDrawing.shootArrow.wrap((I.age/4).floor()).draw(canvas, 0, 0)
 
   drawPowerMeters: (canvas) ->
     self.drawTurboMeter(canvas)
