@@ -20,7 +20,7 @@ MatchState = (I={}) ->
     engine.add
       spriteName: "#{team}_wall_nw"
       x: 64
-      y: WALL_TOP + 24
+      y: WALL_TOP
       scale: 1/8
       width: 128
       height: 128
@@ -30,7 +30,7 @@ MatchState = (I={}) ->
     engine.add
       spriteName: "#{team}_wall_nw"
       x: WALL_RIGHT - 32
-      y: WALL_TOP + 24
+      y: WALL_TOP
       scale: 1/8
       hflip: true
       width: 128
