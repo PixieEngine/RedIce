@@ -54,13 +54,13 @@ MatchState = (I={}) ->
     engine.add
       class: "Boards"
       sprite: Sprite.loadByName("#{team}_wall_n")
-      y: WALL_TOP - 48
+      y: WALL_TOP - 64
       zIndex: 1
 
     engine.add
       class: "Boards"
       sprite: Sprite.loadByName("#{team}_wall_s")
-      y: WALL_BOTTOM - 48
+      y: WALL_BOTTOM - 64
       zIndex: 10
 
     config.players.each (playerData) ->
