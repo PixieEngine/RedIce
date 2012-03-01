@@ -246,6 +246,6 @@ PlayerDrawing = (I, self) ->
 
     return transform
 
-PlayerDrawing.shootArrow = Sprite.loadSheet("arrow_3", 512, 512)
-PlayerDrawing.chargedArrow = Sprite.loadSheet("arrow_charged_3", 512, 512)
+PlayerDrawing.shootArrow = Sprite.loadSheet("arrow2_3", 512, 512)
+PlayerDrawing.chargedArrow = Sprite.loadSheet("arrow2_charged_3", 512, 512)
 
