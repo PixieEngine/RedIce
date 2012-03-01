@@ -22,16 +22,17 @@ MatchState = (I={}) ->
       x: 64
       y: WALL_TOP + 24
       scale: 1/8
-      hflip: true
       width: 128
       height: 128
       zIndex: 1
 
+    # Note: This is actually wall_ne, image is flipped
     engine.add
       spriteName: "#{team}_wall_nw"
       x: WALL_RIGHT - 32
       y: WALL_TOP + 24
       scale: 1/8
+      hflip: true
       width: 128
       height: 128
       zIndex: 1
