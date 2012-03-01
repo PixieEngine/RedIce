@@ -4,6 +4,8 @@ MatchState = (I={}) ->
 
   physics = Physics()
 
+  team = "smiley"
+
   self.bind "enter", ->
     engine.clear(true)
 
@@ -51,13 +53,13 @@ MatchState = (I={}) ->
 
     engine.add
       class: "Boards"
-      sprite: Sprite.loadByName("boards_front")
+      sprite: Sprite.loadByName("#{team}_wall_n")
       y: WALL_TOP - 48
       zIndex: 1
 
     engine.add
       class: "Boards"
-      sprite: Sprite.loadByName("boards_back")
+      sprite: Sprite.loadByName("#{team}_wall_s")
       y: WALL_BOTTOM - 48
       zIndex: 10
 
