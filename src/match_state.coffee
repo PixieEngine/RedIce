@@ -26,7 +26,6 @@ MatchState = (I={}) ->
       height: 128
       zIndex: 1
 
-    # Note: This is actually wall_ne, image is flipped
     engine.add
       spriteName: "#{team}_wall_nw"
       x: WALL_RIGHT - 32
@@ -37,6 +36,7 @@ MatchState = (I={}) ->
       height: 128
       zIndex: 1
 
+    # Note: This is actually wall_se, image is flipped
     engine.add
       spriteName: "#{team}_wall_sw"
       x: WALL_LEFT + 32
@@ -66,6 +66,19 @@ MatchState = (I={}) ->
       class: "Boards"
       sprite: Sprite.loadByName("#{team}_wall_s")
       y: WALL_BOTTOM - 64
+      zIndex: 10
+
+    engine.add
+      class: "SideBoards"
+      sprite: Sprite.loadByName("#{team}_wall_w")
+      x: WALL_LEFT + 32
+      zIndex: 10
+
+    engine.add
+      class: "SideBoards"
+      sprite: Sprite.loadByName("#{team}_wall_w")
+      x: WALL_RIGHT - 32
+      hflip: true
       zIndex: 10
 
     config.players.each (playerData) ->
