@@ -1,5 +1,5 @@
 Boards = (I) ->
-  $.reverseMerge I,
+  Object.reverseMerge I,
     width: ARENA_WIDTH - 192
     height: 48
     x: WALL_LEFT + 96
