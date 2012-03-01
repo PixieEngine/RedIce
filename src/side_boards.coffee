@@ -9,7 +9,8 @@ SideBoards = (I={}) ->
   self = GameObject(I).extend
     draw: (canvas) ->
       canvas.withTransform Matrix.translation(I.x, I.y), ->
-        I.sprite.fill(canvas, 0, 0, 512, 512)
+        canvas.withTransform Matrix.scale(I.scale), ->
+          I.sprite.fill(canvas, 0, 0, 512 * 6, 512)
 
   return self
 
