@@ -5,7 +5,7 @@ SideBoards = (I={}) ->
     height: 64
     scale: 1/8
     x: 0
-    y: WALL_TOP + 32
+    y: WALL_TOP + 96
     repetitions: 5
     flip: 1
 
