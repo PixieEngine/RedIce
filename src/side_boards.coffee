@@ -1,6 +1,7 @@
 SideBoards = (I={}) ->
   Object.reverseMerge I,
-    width: ARENA_WIDTH - 192
+    spriteName: "norm_wall_w"
+    width: 64
     height: 64
     scale: 1/8
     x: 32
