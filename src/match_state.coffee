@@ -76,7 +76,7 @@ MatchState = (I={}) ->
     engine.add
       class: "SideBoards"
       x: WALL_RIGHT - 32
-      hflip: true
+      flip: -1
       zIndex: 10
 
     config.players.each (playerData) ->
