@@ -214,9 +214,14 @@ PlayerDrawing = (I, self) ->
       ratio = Math.min(I.shootPower / I.maxShotPower, 1)
       superChargeRatio = ((I.shootPower - I.maxShotPower) / I.maxShotPower).clamp(0, 1)
 
+      arrowAnimation = PlayerDrawing.shootArrow
+
+      if superChargeRatio is 1
+        arrowAnimation = PlayerDrawing.chargedArrow
+
       center = self.center().floor()
       canvas.withTransform Matrix.translation(center.x, center.y).concat(Matrix.scale(0.125 + ratio * 0.375)).concat(Matrix.rotation(I.movementDirection)), (canvas) ->
-        PlayerDrawing.shootArrow.wrap((I.age/4).floor()).draw(canvas, -256, -256)
+        arrowAnimation.wrap((I.age/4).floor()).draw(canvas, -256, -256)
 
   drawPowerMeters: (canvas) ->
     self.drawTurboMeter(canvas)
