@@ -219,48 +219,8 @@ PlayerDrawing = (I, self) ->
       superChargeRatio = ((I.shootPower - I.maxShotPower) / I.maxShotPower).clamp(0, 1)
 
       center = self.center().floor()
-      canvas.withTransform Matrix.translation(center.x, center.y).concat(Matrix.rotation(I.movementDirection)), ->
-        # Fill background
-        canvas.drawRoundRect {
-          color: "#000"
-          x: -(padding + height)/2
-          y: -padding
-          width: maxWidth + 2*padding
-          height
-          radius: 2
-        }
-
-        # Fill Power meter
-        canvas.drawRoundRect {
-          color: "#EE0"
-          x: -height/2
-          y: 0
-          width: maxWidth * ratio
-          height
-          radius: 2
-        }
-
-        # Fill Super Meter
-        color = "#0EF"
-        if superChargeRatio == 1
-          if (I.age/2).floor() % 2
-            canvas.drawRoundRect {
-              color
-              x: -height/2
-              y: 0
-              width: maxWidth
-              height
-              radius: 2
-            }
-        else if superChargeRatio > 0
-          canvas.drawRoundRect {
-            color
-            x: -height/2
-            y: 0
-            width: maxWidth * superChargeRatio
-            height
-            radius: 2
-          }
+      canvas.withTransform Matrix.translation(center.x, center.y).concat(Matrix.rotation(I.movementDirection)).concat(Matrix.scale(0.125 + I.ratio * 0.875)), ->
+        PlayerDrawing.shootArrow.wrap(I.age).draw(0, 0)
 
   drawPowerMeters: (canvas) ->
     self.drawTurboMeter(canvas)
@@ -289,3 +249,7 @@ PlayerDrawing = (I, self) ->
       transform = transform.concat(Matrix.translation(I.spriteOffset.x, I.spriteOffset.y))
 
     return transform
+
+PlayerDrawing.shootArrow = Sprite.loadSheet("arrow_3", 512, 512)
+PlayerDrawing.chargedArrow = Sprite.loadSheet("arrow_charged_3", 512, 512)
+
