@@ -18,35 +18,39 @@ MatchState = (I={}) ->
       engine.setState(MatchSetupState())
 
     engine.add
-      sprite: Sprite.loadByName("corner_left")
+      spriteName: "#{team}_wall_nw"
       x: 64
       y: WALL_TOP + 24
+      scale: 1/8
+      hflip: true
       width: 128
       height: 128
       zIndex: 1
 
     engine.add
-      sprite: Sprite.loadByName("corner_left")
-      hflip: true
+      spriteName: "#{team}_wall_nw"
       x: WALL_RIGHT - 32
       y: WALL_TOP + 24
+      scale: 1/8
       width: 128
       height: 128
       zIndex: 1
 
     engine.add
-      spriteName: "corner_back_right"
-      hflip: true
+      spriteName: "#{team}_wall_sw"
       x: 80
       y: WALL_BOTTOM - 64
+      scale: 1/8
       width: 128
       height: 128
       zIndex: 2
 
     engine.add
-      spriteName: "corner_back_right"
+      spriteName: "#{team}_wall_sw"
       x: WALL_RIGHT - 48
       y: WALL_BOTTOM - 64
+      scale: 1/8
+      hflip: true
       width: 128
       height: 128
       zIndex: 2
