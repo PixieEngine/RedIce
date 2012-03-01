@@ -70,13 +70,11 @@ MatchState = (I={}) ->
 
     engine.add
       class: "SideBoards"
-      sprite: Sprite.loadByName("#{team}_wall_w")
       x: WALL_LEFT + 32
       zIndex: 10
 
     engine.add
       class: "SideBoards"
-      sprite: Sprite.loadByName("#{team}_wall_w")
       x: WALL_RIGHT - 32
       hflip: true
       zIndex: 10
