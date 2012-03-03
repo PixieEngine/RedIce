@@ -19,7 +19,7 @@ MatchState = (I={}) ->
 
     engine.add
       spriteName: "#{team}_wall_nw"
-      x: WALL_LEFT + 32
+      x: WALL_LEFT + 64
       y: WALL_TOP
       scale: 1/8
       width: 128
@@ -28,7 +28,7 @@ MatchState = (I={}) ->
 
     engine.add
       spriteName: "#{team}_wall_nw"
-      x: WALL_RIGHT - 32
+      x: WALL_RIGHT - 64
       y: WALL_TOP
       scale: 1/8
       hflip: true
@@ -39,7 +39,7 @@ MatchState = (I={}) ->
     # Note: This is actually wall_se, image is flipped
     engine.add
       spriteName: "#{team}_wall_sw"
-      x: WALL_LEFT + 32
+      x: WALL_LEFT + 64
       y: WALL_BOTTOM - 64
       scale: 1/8
       width: 128
@@ -48,7 +48,7 @@ MatchState = (I={}) ->
 
     engine.add
       spriteName: "#{team}_wall_sw"
-      x: WALL_RIGHT - 32
+      x: WALL_RIGHT - 64
       y: WALL_BOTTOM - 64
       scale: 1/8
       hflip: true
