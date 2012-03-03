@@ -13,7 +13,7 @@ window.teamSprites =
 window.CANVAS_WIDTH = App.width
 window.CANVAS_HEIGHT = App.height
 
-window.WALL_LEFT = 32
+window.WALL_LEFT = 0
 window.WALL_RIGHT = CANVAS_WIDTH - WALL_LEFT
 window.WALL_TOP = 192
 window.WALL_BOTTOM = CANVAS_HEIGHT - (WALL_TOP - 128)
