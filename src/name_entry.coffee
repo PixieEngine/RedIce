@@ -1,7 +1,7 @@
 NameEntry = (I) ->
   $.reverseMerge I,
     backgroundColor: "rgba(0, 255, 255, 0.5)"
-    characterSet: "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 _-.!?♦♥♣♠★¤$¥£€®™".split("")
+    characterSet: "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 _-.!?".split("")
     cellWidth: 20
     cellHeight: 20
     textColor: "#FFF"
@@ -28,20 +28,20 @@ NameEntry = (I) ->
 
   rows = ->
     (I.characterSet.length / I.cols).ceil()
-    
+
   width = ->
     cols() * I.cellWidth
-    
+
   textAreaHeight = ->
     I.cellHeight * rows()
-    
+
   move = (delta) ->
     I.cursor.x = (I.cursor.x + delta.x).mod(cols())
-    
+
     newY = I.cursor.y + delta.y
     if I.cursor.menu && newY
       I.cursor.menu = false
-      
+
       if newY > 0
         newY = 0
 
@@ -51,24 +51,24 @@ NameEntry = (I) ->
       I.cursor.y = 0
     else
       I.cursor.y = newY.mod(rows())
-      
+
     # Horrible and terrifying hacks to skip blanks in partial rows
     if !I.cursor.menu && characterAtCursor() == undefined
       if delta.x > 0
         I.cursor.x = (I.cursor.x + 1) % rows() while characterAtCursor() == undefined
       else
         I.cursor.x = (I.cursor.x - 1) % rows() while characterAtCursor() == undefined
-    
+
   characterAtCursor = ->
     I.characterSet[I.cursor.x + I.cursor.y * I.cols]
-    
+
   addCharacter = ->
     if I.cursor.menu
       self.trigger "done", I.name
     else
       if I.name.length < I.maxLength
         I.name += characterAtCursor()
-        
+
       # Jump to 'done' menu when name is full
       if I.name.length == I.maxLength
         I.cursor.menu = true
@@ -79,7 +79,7 @@ NameEntry = (I) ->
     draw: (canvas) ->
       cursorWidth = 10
       cursorHeight = 2
-      
+
       nameAreaWidth = canvas.measureText(["M"].wrap(0, I.maxLength).join("")) + 2 * horizontalPadding
 
       canvas.withTransform Matrix.translation(this.x, this.y), ->
@@ -94,13 +94,13 @@ NameEntry = (I) ->
           text: I.name
           color: I.textColor
           position: Point(horizontalPadding, lineHeight + verticalPadding)
-        
+
         if (I.age / 20).floor() % 2
           if I.name.length == I.maxLength
             nameWidth = canvas.measureText(I.name.substring(0, I.name.length - 1))
           else
             nameWidth = canvas.measureText(I.name)
-          
+
           canvas.drawRect
             x: nameWidth + horizontalPadding
             y: verticalPadding + lineHeight
@@ -110,7 +110,7 @@ NameEntry = (I) ->
 
     x: 0
     y: 0
-    
+
   textArea =
     draw: (canvas) ->
       canvas.withTransform Matrix.translation(this.x, this.y), ->
@@ -120,7 +120,7 @@ NameEntry = (I) ->
           width: width()
           height: textAreaHeight()
           color: I.backgroundColor
-  
+
         row = 0
         I.characterSet.each (c, i) ->
           col = i % I.cols
@@ -130,9 +130,9 @@ NameEntry = (I) ->
             color: I.textColor
             x: col * I.cellWidth + horizontalPadding
             y: row * I.cellHeight + lineHeight + verticalPadding
-        
+
         row += 1
-        
+
         unless I.cursor.menu
           canvas.drawRoundRect
             color: I.cursorColor
@@ -143,7 +143,7 @@ NameEntry = (I) ->
 
     x: 0
     y: I.cellHeight + margin
-    
+
   menuArea =
     draw: (canvas) ->
       canvas.withTransform Matrix.translation(this.x, this.y), ->
@@ -155,7 +155,7 @@ NameEntry = (I) ->
           color: I.textColor
           x: horizontalPadding
           y: lineHeight + verticalPadding
-        
+
         if I.cursor.menu
           canvas.drawRoundRect
             color: I.cursorColor
@@ -187,13 +187,13 @@ NameEntry = (I) ->
       move(Point(0, -1))
     if justPressed.down
       move(Point(0, 1))
-      
+
     if justPressed.return
       addCharacter()
-      
+
     if justPressed.backspace
       I.name = I.name.substring(0, I.name.length - 1)
-      
+
     if controller?.buttonPressed "A"
       addCharacter()
 
