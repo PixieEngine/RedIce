@@ -1,16 +1,1 @@
-{
-  "author": "STRd6",
-  "name": "Hockey",
-  "libs": {
-    "00_gamelib.js": "https://github.com/STRd6/gamelib/raw/pixie/gamelib.js",
-    "browserlib.js": "https://github.com/STRd6/browserlib/raw/pixie/browserlib.js",
-    "extralib.js": "https://github.com/STRd6/extralib/raw/pixie/extralib.js"
-  },
-  "directories": {
-    "lib": "lib",
-    "source": "src",
-    "test": "test"
-  },
-  "width": 1024,
-  "height": 768
-}
+{"author":"STRd6","name":"Hockey","libs":{"00_gamelib.js":"https://github.com/STRd6/gamelib/raw/pixie/gamelib.js","browserlib.js":"https://github.com/STRd6/browserlib/raw/pixie/browserlib.js","extralib.js":"https://github.com/STRd6/extralib/raw/pixie/extralib.js","webgl2d.js":"https://raw.github.com/corbanbrook/webgl-2d/9a7ec2619cf8887cbd87e37a811eed458c868353/webgl-2d.js"},"directories":{"lib":"lib","source":"src","test":"test"},"width":1024,"height":768}
