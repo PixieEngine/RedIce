@@ -323,7 +323,7 @@ Player = (I) ->
     else
       I.headFlip = false
 
-    I.headSprite = teamSprites[I.teamStyle][I.headStyle][headPosition]
+    I.headSprite = teamSprites[I.teamStyle][I.headStyle][I.headAction][headPosition]
 
   if I.cpu
     self.include AI
