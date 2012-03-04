@@ -10,7 +10,9 @@ TeamSheet = (I={}) ->
       character: style
 
   TeamSheet.headStyles.each (style) ->
-    self[style] = Sprite.loadSheet("#{I.team}_#{style}_5", 512, 512)
+    self[style] = HeadSheet
+      team: I.team
+      character: style
 
   return self
 
