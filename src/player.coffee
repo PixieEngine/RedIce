@@ -84,7 +84,7 @@ Player = (I) ->
         Color(Player.COLORS[I.team]).lighten((I.slot - 1) * 0.1)
 
     controlCircle: ->
-      p = Point.fromAngle(I.heading).scale(16)
+      p = Point.fromAngle(I.heading).scale(I.controlRadius)
 
       c = self.center().add(p)
       speed = I.velocity.magnitude()
