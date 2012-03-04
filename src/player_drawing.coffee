@@ -188,7 +188,7 @@ PlayerDrawing = (I, self) ->
     height = 4
 
     center = self.center()
-    start = center.add(Point(-maxWidth/2, 20))
+    start = center.add(Point(-maxWidth/2, 24))
 
     canvas.drawRoundRect
       color: "#000"
