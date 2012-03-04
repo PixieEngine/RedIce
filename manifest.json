@@ -1,15 +1,1 @@
-{
-  "name": "Red Ice",
-  "description": "Battle your opponents in this fast-paced 3v3 hockey game. Watch out for rogue ice resurfacing machines and fans throwing bottles! Do",
-  "app": {
-    "launch": {
-      "local_path": "webstore/main.html"
-    }
-  },
-  "version": "0.0.5",
-  "icons": {
-    "128": "webstore/images/icon_128.png",
-    "96": "webstore/images/icon_96.png",
-    "16": "webstore/images/icon_16.png"
-  }
-}
+{"name":"Red Ice","description":"Battle your opponents in this fast-paced 3v3 hockey game. Watch out for rogue ice resurfacing machines and fans throwing bottles! Do","app":{"launch":{"local_path":"webstore/main.html"}},"version":"0.0.6","icons":{"128":"webstore/images/icon_128.png","96":"webstore/images/icon_96.png","16":"webstore/images/icon_16.png"}}

@@ -40,6 +40,10 @@ CharacterSheet = (I={}) ->
     self.characterData.shootHoldFrame = 3
     self.characterData.shootCooldownFrameCount = 6
 
+  if I.character == "thick"
+    self.characterData.shootHoldFrame = 6
+    self.characterData.shootCooldownFrameCount = 3
+
   metadataUrl = ResourceLoader.urlFor("data", "#{I.team}_#{I.character}")
 
   # TODO: Guarantee this metadata is ready to go
