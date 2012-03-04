@@ -114,5 +114,7 @@ Rink = (I) ->
   fansSprite = Sprite.loadByName "fans", ->
     fansSprite.fill(canvas, 0, 0, App.width, WALL_TOP)
 
+
+
 Rink.CORNER_RADIUS = 96
 
