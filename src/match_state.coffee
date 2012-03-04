@@ -4,8 +4,6 @@ MatchState = (I={}) ->
 
   physics = Physics()
 
-  team = "smiley"
-
   self.bind "enter", ->
     engine.clear(true)
 
@@ -16,43 +14,6 @@ MatchState = (I={}) ->
 
     scoreboard.bind "restart", ->
       engine.setState(MatchSetupState())
-
-    # Note: This is actually wall_se, image is flipped
-    engine.add
-      spriteName: "#{team}_wall_sw"
-      x: WALL_LEFT + 64
-      y: WALL_BOTTOM - 48
-      scale: 1/8
-      width: 128
-      height: 128
-      zIndex: 2
-
-    engine.add
-      spriteName: "#{team}_wall_sw"
-      x: WALL_RIGHT - 64
-      y: WALL_BOTTOM - 48
-      scale: 1/8
-      hflip: true
-      width: 128
-      height: 128
-      zIndex: 2
-
-    engine.add
-      class: "Boards"
-      sprite: Sprite.loadByName("#{team}_wall_s")
-      y: WALL_BOTTOM - 48
-      zIndex: 10
-
-    engine.add
-      class: "SideBoards"
-      x: WALL_LEFT
-      zIndex: 10
-
-    engine.add
-      class: "SideBoards"
-      x: WALL_RIGHT
-      flip: -1
-      zIndex: 10
 
     config.players.each (playerData) ->
       engine.add $.extend({}, playerData)
