@@ -12575,7 +12575,7 @@ NameEntry = function(I) {
   var addCharacter, characterAtCursor, cols, controller, horizontalPadding, lineHeight, margin, menuArea, move, nameArea, rows, self, textArea, textAreaHeight, verticalPadding, width;
   $.reverseMerge(I, {
     backgroundColor: "rgba(0, 255, 255, 0.5)",
-    characterSet: "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 _-.!?♦♥♣♠★¤$¥£€®™".split(""),
+    characterSet: "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 _-.!?".split(""),
     cellWidth: 20,
     cellHeight: 20,
     textColor: "#FFF",
