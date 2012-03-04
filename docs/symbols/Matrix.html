@@ -44,6 +44,10 @@
   
     <li><a href="../symbols/Engine.html">Engine</a></li>
   
+    <li></li>
+  
+    <li></li>
+  
     <li><a href="../symbols/Framerate.html">Framerate</a></li>
   
     <li><a href="../symbols/Function.html">Function</a></li>
@@ -125,6 +129,10 @@
     <li><a href="../symbols/Durable.html">Durable</a></li>
   
     <li></li>
+  
+    <li><a href="../symbols/Fadeable.html">Fadeable</a></li>
+  
+    <li><a href="../symbols/Flickerable.html">Flickerable</a></li>
   
     <li></li>
   
@@ -364,7 +372,15 @@
                         <div class="fixedFont"><b><a href="../symbols/Matrix.html#concat">concat</a></b>(matrix)
                         </div>
                         <div class="description">Returns the result of this matrix multiplied by another matrix
-      combining the geometric effects of the two.</div>
+    combining the geometric effects of the two.</div>
+                      </td>
+                    </tr>
+                  
+                    <tr>
+                      <td class="nameDescription">
+                        <div class="fixedFont"><b><a href="../symbols/Matrix.html#copy">copy</a></b>()
+                        </div>
+                        <div class="description">Copy this matrix.</div>
                       </td>
                     </tr>
                   
@@ -400,6 +416,14 @@
                         </div>
                         <div class="description">Returns a new matrix that corresponds this matrix multiplied by a
     a scaling matrix.</div>
+                      </td>
+                    </tr>
+                  
+                    <tr>
+                      <td class="nameDescription">
+                        <div class="fixedFont"><b><a href="../symbols/Matrix.html#toString">toString</a></b>()
+                        </div>
+                        <div class="description">Returns a string representation of this matrix.</div>
                       </td>
                     </tr>
                   
@@ -720,10 +744,10 @@
 
                 <div class="description">
                   Returns the result of this matrix multiplied by another matrix
-      combining the geometric effects of the two. In mathematical terms, 
-      concatenating two matrixes is the same as combining them using matrix multiplication.
-      If this matrix is A and the matrix passed in is B, the resulting matrix is A x B
-      http://mathworld.wolfram.com/MatrixMultiplication.html
+    combining the geometric effects of the two. In mathematical terms, 
+    concatenating two matrixes is the same as combining them using matrix multiplication.
+    If this matrix is A and the matrix passed in is B, the resulting matrix is A x B
+    http://mathworld.wolfram.com/MatrixMultiplication.html
 
                   
                 </div>
@@ -756,6 +780,48 @@
                       
                         <dt class="heading">Returns <span class="light fixedFont"><a href="../symbols/Matrix.html">Matrix</a></span> :</dt>
                         <dd>The result of the matrix multiplication, a new matrix.</dd>
+                      
+                    
+
+                    
+
+                    
+
+                  </dl>
+                
+              
+                <div class="fixedFont heading">
+                  <a name="copy"></a>
+                  <span class='lighter'>
+                  
+                  </span>
+
+                  <b>copy</b>()
+                </div>
+
+                <div class="description">
+                  Copy this matrix.
+
+                  
+                </div>
+
+                
+
+                
+
+                
+                  <dl class="detailList nomargin">
+
+                    
+
+                    
+
+                    
+
+                    
+                      
+                        <dt class="heading">Returns <span class="light fixedFont"><a href="../symbols/Matrix.html">Matrix</a></span> :</dt>
+                        <dd>A copy of this matrix.</dd>
                       
                     
 
@@ -990,6 +1056,48 @@
                       
                         <dd>Matrix.scale</dd>
                       
+                    
+
+                  </dl>
+                
+              
+                <div class="fixedFont heading">
+                  <a name="toString"></a>
+                  <span class='lighter'>
+                  
+                  </span>
+
+                  <b>toString</b>()
+                </div>
+
+                <div class="description">
+                  Returns a string representation of this matrix.
+
+                  
+                </div>
+
+                
+
+                
+
+                
+                  <dl class="detailList nomargin">
+
+                    
+
+                    
+
+                    
+
+                    
+                      
+                        <dt class="heading">Returns <span class="light fixedFont"><a href="../symbols/String.html">String</a></span> :</dt>
+                        <dd>A string reperesentation of this matrix.</dd>
+                      
+                    
+
+                    
+
                     
 
                   </dl>

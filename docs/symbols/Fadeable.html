@@ -4,7 +4,7 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="generator" content="JsDoc Toolkit" />
     
-    <title>JsDoc Reference - Random</title>
+    <title>JsDoc Reference - Fadeable</title>
     <link href="/stylesheets/docs.css" type="text/css" rel="stylesheet" media="all" />
   </head>
 
@@ -192,7 +192,7 @@
       <div class="innerContent">
         <h1 class="classTitle">
           
-          <span>Random</span>
+          <span>Fadeable</span>
         </h1>
 
         <p class="description summary">
@@ -200,20 +200,20 @@
 
           
 
-          Some useful methods for generating random things.
+          
         </p>
 
         
           <div class="props">
-            <table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class Random.">
-              <caption>Class Summary</caption>
+            <table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class Fadeable.">
+              <caption>Module Summary</caption>
               <tbody>
                 <tr>
                   <td class="nameDescription" >
                     <div class="fixedFont">
-                      <b><a href="../symbols/Random.html#constructor">Random</a></b>()
+                      <b><a href="../symbols/Fadeable.html#constructor">Fadeable</a></b>(I, self)
                     </div>
-                    <div class="description"></div>
+                    <div class="description">The <code>Fadeable</code> module provides a method to fade a sprite to transparent.</div>
                   </td>
                 </tr>
                 <tr>
@@ -233,40 +233,16 @@
           
           
             <div class="props">
-              <table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class Random.">
+              <table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class Fadeable.">
                 <caption>Method Summary</caption>
 
                 <tbody>
                   
                     <tr>
                       <td class="nameDescription">
-                        <div class="fixedFont">Random.<b><a href="../symbols/Random.html#.angle">angle</a></b>()
+                        <div class="fixedFont"><b><a href="../symbols/Fadeable.html#fadeOut">fadeOut</a></b>(duration, callback)
                         </div>
-                        <div class="description">Returns a random angle, uniformly distributed, between 0 and 2pi.</div>
-                      </td>
-                    </tr>
-                  
-                    <tr>
-                      <td class="nameDescription">
-                        <div class="fixedFont">Random.<b><a href="../symbols/Random.html#.color">color</a></b>()
-                        </div>
-                        <div class="description">Returns a random color.</div>
-                      </td>
-                    </tr>
-                  
-                    <tr>
-                      <td class="nameDescription">
-                        <div class="fixedFont">Random.<b><a href="../symbols/Random.html#.often">often</a></b>()
-                        </div>
-                        <div class="description">Happens often.</div>
-                      </td>
-                    </tr>
-                  
-                    <tr>
-                      <td class="nameDescription">
-                        <div class="fixedFont">Random.<b><a href="../symbols/Random.html#.sometimes">sometimes</a></b>()
-                        </div>
-                        <div class="description">Happens sometimes.</div>
+                        <div class="description">A convenient way to set the fade instance variables on a sprite.</div>
                       </td>
                     </tr>
                   
@@ -292,16 +268,34 @@
               <a name="constructor"></a>
 
               <div class="fixedFont">
-                <b>Random</b>()
+                <b>Fadeable</b>(I, self)
               </div>
 
               <div class="description">
-                
+                The <code>Fadeable</code> module provides a method to fade a sprite to transparent. 
+You may also provide a callback function that is executed when the sprite has finished fading out.
                 
               </div>
 
               
 
+              
+                <dl class="detailList params">
+                  <dt class="heading">Parameters:</dt>
+                  
+                    <dt>
+                      <b>I</b><span class='light fixedFont'> <a href="../symbols/Object.html">Object</a></span> 
+                      
+                    </dt>
+                    <dd>Instance variables</dd>
+                  
+                    <dt>
+                      <b>self</b><span class='light fixedFont'> <a href="../symbols/Core.html">Core</a></span> 
+                      
+                    </dt>
+                    <dd>Reference to including object</dd>
+                  
+                </dl>
               
 
               
@@ -322,16 +316,36 @@
             <div class="innerProps">
               
                 <div class="fixedFont heading">
-                  <a name=".angle"></a>
+                  <a name="fadeOut"></a>
                   <span class='lighter'>
-                  <em>static</em>
+                  
                   </span>
 
-                  <span class="light">Random.</span><b>angle</b>()
+                  <b>fadeOut</b>(duration, callback)
                 </div>
 
                 <div class="description">
-                  Returns a random angle, uniformly distributed, between 0 and 2pi.
+                  A convenient way to set the fade instance variables on a sprite. You can modify the
+    instance variables by hand but the suggested way to do it is through this method.
+
+    <code><pre>
+    player = GameObject()
+
+    player.include(Fadeable)
+
+    fadedOut = false
+
+    # this will fade the player object out over the next 30 frames. 
+    # once the player is faded out the fadedOut variable will be set to true.
+    player.fadeOut 30, (player) ->
+      fadedOut = true
+
+    30.times ->
+      player.update()
+
+    fadedOut
+    # => true
+    </pre></code>
 
                   
                 </div>
@@ -339,110 +353,22 @@
                 
 
                 
-
-                
-                  <dl class="detailList nomargin">
-
+                  <dl class="detailList params">
+                    <dt class="heading">Parameters:</dt>
                     
-
+                      <dt>
+                        <b>duration</b><span class='light fixedFont'> <a href="../symbols/Number.html">Number</a></span> 
+                        <i>Optional, Default: 30</i>
+                      </dt>
+                      <dd>How long the effect lasts</dd>
                     
-
+                      <dt>
+                        <b>callback</b><span class='light fixedFont'> <a href="../symbols/Function.html">Function</a></span> 
+                        <i>Optional, Default: null</i>
+                      </dt>
+                      <dd>The function to execute when the sprite has finished fading.</dd>
                     
-
-                    
-                      
-                        <dt class="heading">Returns <span class="light fixedFont"><a href="../symbols/Number.html">Number</a></span> :</dt>
-                        <dd>A random angle between 0 and 2pi</dd>
-                      
-                    
-
-                    
-
-                    
-
                   </dl>
-                
-              
-                <div class="fixedFont heading">
-                  <a name=".color"></a>
-                  <span class='lighter'>
-                  <em>static</em>
-                  </span>
-
-                  <span class="light">Random.</span><b>color</b>()
-                </div>
-
-                <div class="description">
-                  Returns a random color.
-
-                  
-                </div>
-
-                
-
-                
-
-                
-                  <dl class="detailList nomargin">
-
-                    
-
-                    
-
-                    
-
-                    
-                      
-                        <dt class="heading">Returns <span class="light fixedFont"><a href="../symbols/Color.html">Color</a></span> :</dt>
-                        <dd>A random color</dd>
-                      
-                    
-
-                    
-
-                    
-
-                  </dl>
-                
-              
-                <div class="fixedFont heading">
-                  <a name=".often"></a>
-                  <span class='lighter'>
-                  <em>static</em>
-                  </span>
-
-                  <span class="light">Random.</span><b>often</b>()
-                </div>
-
-                <div class="description">
-                  Happens often.
-
-                  
-                </div>
-
-                
-
-                
-
-                
-              
-                <div class="fixedFont heading">
-                  <a name=".sometimes"></a>
-                  <span class='lighter'>
-                  <em>static</em>
-                  </span>
-
-                  <span class="light">Random.</span><b>sometimes</b>()
-                </div>
-
-                <div class="description">
-                  Happens sometimes.
-
-                  
-                </div>
-
-                
-
                 
 
                 

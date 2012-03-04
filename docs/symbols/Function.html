@@ -44,6 +44,10 @@
   
     <li><a href="../symbols/Engine.html">Engine</a></li>
   
+    <li></li>
+  
+    <li></li>
+  
     <li><a href="../symbols/Framerate.html">Framerate</a></li>
   
     <li><a href="../symbols/Function.html">Function</a></li>
@@ -125,6 +129,10 @@
     <li><a href="../symbols/Durable.html">Durable</a></li>
   
     <li></li>
+  
+    <li><a href="../symbols/Fadeable.html">Fadeable</a></li>
+  
+    <li><a href="../symbols/Flickerable.html">Flickerable</a></li>
   
     <li></li>
   
@@ -234,6 +242,16 @@ any provided when the new function was called.</div>
                         <div class="fixedFont"><b><a href="../symbols/Function.html#call">call</a></b>(thisArg, arg1,)
                         </div>
                         <div class="description">Calls a function with a given this value and arguments provided individually.</div>
+                      </td>
+                    </tr>
+                  
+                    <tr>
+                      <td class="nameDescription">
+                        <div class="fixedFont"><b><a href="../symbols/Function.html#debounce">debounce</a></b>()
+                        </div>
+                        <div class="description">Calling a debounced function will postpone its execution until after 
+wait milliseconds have elapsed since the last time the function was 
+invoked.</div>
                       </td>
                     </tr>
                   
@@ -412,6 +430,58 @@ executes.</dd>
                   </dl>
                 
 
+                
+              
+                <div class="fixedFont heading">
+                  <a name="debounce"></a>
+                  <span class='lighter'>
+                  
+                  </span>
+
+                  <b>debounce</b>()
+                </div>
+
+                <div class="description">
+                  Calling a debounced function will postpone its execution until after 
+wait milliseconds have elapsed since the last time the function was 
+invoked. Useful for implementing behavior that should only happen after 
+the input has stopped arriving. For example: rendering a preview of a 
+Markdown comment, recalculating a layout after the window has stopped 
+being resized...
+
+<code><pre>
+lazyLayout = calculateLayout.debounce(300)
+$(window).resize(lazyLayout)
+</pre></code>
+
+                  
+                </div>
+
+                
+
+                
+
+                
+                  <dl class="detailList nomargin">
+
+                    
+
+                    
+
+                    
+
+                    
+                      
+                        <dt class="heading">Returns <span class="light fixedFont"><a href="../symbols/Function.html">Function</a></span> :</dt>
+                        <dd>The debounced version of this function.</dd>
+                      
+                    
+
+                    
+
+                    
+
+                  </dl>
                 
               
                 <div class="fixedFont heading">

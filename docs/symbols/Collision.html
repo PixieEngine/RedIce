@@ -44,6 +44,10 @@
   
     <li><a href="../symbols/Engine.html">Engine</a></li>
   
+    <li></li>
+  
+    <li></li>
+  
     <li><a href="../symbols/Framerate.html">Framerate</a></li>
   
     <li><a href="../symbols/Function.html">Function</a></li>
@@ -125,6 +129,10 @@
     <li><a href="../symbols/Durable.html">Durable</a></li>
   
     <li></li>
+  
+    <li><a href="../symbols/Fadeable.html">Fadeable</a></li>
+  
+    <li><a href="../symbols/Flickerable.html">Flickerable</a></li>
   
     <li></li>
   
@@ -240,7 +248,7 @@
                   
                     <tr>
                       <td class="nameDescription">
-                        <div class="fixedFont">Collision.<b><a href="../symbols/Collision.html#.collide">collide</a></b>(groupA, groupB, callback)
+                        <div class="fixedFont">Collision.<b><a href="../symbols/Collision.html#.collide">collide</a></b>(groupA, groupB, callback, detectionMethod)
                         </div>
                         <div class="description">Collision holds many useful class methods for checking geometric overlap of various objects.</div>
                       </td>
@@ -410,37 +418,43 @@
                   <em>static</em>
                   </span>
 
-                  <span class="light">Collision.</span><b>collide</b>(groupA, groupB, callback)
+                  <span class="light">Collision.</span><b>collide</b>(groupA, groupB, callback, detectionMethod)
                 </div>
 
                 <div class="description">
                   Collision holds many useful class methods for checking geometric overlap of various objects.
 
-      <code><pre>
-      player = GameObject
-        x: 0
-        y: 0
-        width: 10
-        height: 10
+    <code><pre>
+    player = engine.add
+      class: "Player"
+      x: 0
+      y: 0
+      width: 10
+      height: 10
 
-      enemy = GameObject
-        x: 5
-        y: 5
-        width: 10
-        height: 10
+    enemy = engine.add
+      class: "Enemy"
+      x: 5
+      y: 5
+      width: 10
+      height: 10
 
-      enemy2 = GameObject
-        x: -5
-        y: -5
-        width: 10
-        height: 10
+    enemy2 = engine.add
+      class: "Enemy"
+      x: -5
+      y: -5
+      width: 10
+      height: 10
 
-      Collision.collide(player, enemy, (p, e) -> ...)
-      # => callback is called once
+    Collision.collide(player, enemy, (p, e) -> ...)
+    # => callback is called once
 
-      Collision.collide(player, [enemy, enemy2], (p, e) -> ...)
-      # => callback is called twice
-      </pre></code>
+    Collision.collide(player, [enemy, enemy2], (p, e) -> ...)
+    # => callback is called twice
+
+    Collision.collide("Player", "Enemy", (p, e) -> ...)
+    # => callback is also called twice
+    </pre></code>
 
                   
                 </div>
@@ -452,23 +466,30 @@
                     <dt class="heading">Parameters:</dt>
                     
                       <dt>
-                        <b>groupA</b><span class='light fixedFont'> <a href="../symbols/Object.html">Object</a>|<a href="../symbols/Array.html">Array</a></span> 
+                        <b>groupA</b><span class='light fixedFont'> <a href="../symbols/Object.html">Object</a>|<a href="../symbols/Array.html">Array</a>|<a href="../symbols/String.html">String</a></span> 
                         
                       </dt>
                       <dd>An object or set of objects to check collisions with</dd>
                     
                       <dt>
-                        <b>groupB</b><span class='light fixedFont'> <a href="../symbols/Object.html">Object</a>|<a href="../symbols/Array.html">Array</a></span> 
+                        <b>groupB</b><span class='light fixedFont'> <a href="../symbols/Object.html">Object</a>|<a href="../symbols/Array.html">Array</a>|<a href="../symbols/String.html">String</a></span> 
                         
                       </dt>
-                      <dd>An objcet or set of objects to check collisions with</dd>
+                      <dd>An object or set of objects to check collisions with</dd>
                     
                       <dt>
                         <b>callback</b><span class='light fixedFont'> <a href="../symbols/Function.html">Function</a></span> 
                         
                       </dt>
-                      <dd>The callback to call when an object of groupA collides 
-      with an object of groupB: (a, b) -></dd>
+                      <dd>The callback to call when an object of groupA collides
+    with an object of groupB: (a, b) -></dd>
+                    
+                      <dt>
+                        <b>detectionMethod</b><span class='light fixedFont'> <a href="../symbols/Function.html">Function</a></span> 
+                        <i>Optional</i>
+                      </dt>
+                      <dd>An optional detection method to determine when two 
+    objects are colliding.</dd>
                     
                   </dl>
                 

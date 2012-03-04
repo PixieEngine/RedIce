@@ -11470,10 +11470,14 @@ CharacterSheet = function(I) {
   };
   self.characterData = {
     shootHoldFrame: 5,
-    shootCooldownFrameCount: 4
+    shootCooldownFrameCount: 5
   };
   if (I.character === "skinny") {
     self.characterData.shootHoldFrame = 3;
+    self.characterData.shootCooldownFrameCount = 6;
+  }
+  if (I.character === "thick") {
+    self.characterData.shootHoldFrame = 5;
     self.characterData.shootCooldownFrameCount = 6;
   }
   metadataUrl = ResourceLoader.urlFor("data", "" + I.team + "_" + I.character);
@@ -11629,7 +11633,7 @@ Configurator = function(I) {
           });
           canvas.withTransform(Matrix.scale(0.5, 0.5, Point(x, y)), function(canvas) {
             var _ref;
-            return (_ref = teamSprites[player.teamStyle][player.headStyle][0]) != null ? _ref.draw(canvas, x - 224, y - 256) : void 0;
+            return (_ref = teamSprites[player.teamStyle][player.headStyle].normal[0]) != null ? _ref.draw(canvas, x - 224, y - 256) : void 0;
           });
           canvas.drawRoundRect({
             x: x,
@@ -12039,7 +12043,7 @@ FrameEditorState = function(I) {
     });
     headDataObject.bind("draw", function(canvas) {
       var _ref;
-      return (_ref = teamSprites[currentTeam()][currentHead()].wrap(I.headPositionIndex)) != null ? _ref.draw(canvas, -256, -256) : void 0;
+      return (_ref = teamSprites[currentTeam()][currentHead()].normal.wrap(I.headPositionIndex)) != null ? _ref.draw(canvas, -256, -256) : void 0;
     });
     p = engine.add({
       id: 0,
@@ -12359,6 +12363,32 @@ window.onerror = function(message, url, lineNumber) {
   errorContext = $('script').last().text().split('\n').slice(lineNumber - 5, (lineNumber + 4) + 1 || 9e9);
   errorContext[4] = "<b style='font-weight: bold; text-decoration: underline;'>" + errorContext[4] + "</b>";
   return typeof displayRuntimeError === "function" ? displayRuntimeError("<code>" + message + "</code> <br /><br />(Sometimes this context may be wrong.)<br /><code><pre>" + (errorContext.join('\n')) + "</pre></code>") : void 0;
+};
+;
+var HeadSheet;
+
+HeadSheet = function(I) {
+  var actions, loadStrip, self;
+  if (I == null) I = {};
+  Object.reverseMerge(I, {
+    character: "bigeyes",
+    team: "spike",
+    size: 512
+  });
+  loadStrip = function(action, cells) {
+    if (action) {
+      return Sprite.loadSheet("" + I.team + "_" + I.character + "_" + action + "_" + cells, I.size, I.size);
+    } else {
+      return Sprite.loadSheet("" + I.team + "_" + I.character + "_" + cells, I.size, I.size);
+    }
+  };
+  actions = ["charged", "pain"];
+  self = {};
+  actions.each(function(action) {
+    return self[action] = loadStrip(action, 5);
+  });
+  self.normal = loadStrip(null, 5);
+  return self;
 };
 ;
 ;
@@ -12972,12 +13002,13 @@ Player = function(I) {
     },
     collisionMargin: Point(2, 2),
     controller: 0,
+    controlRadius: 30,
     falls: 0,
     friction: 0.1,
     heading: 0,
     maxShotPower: 20,
     movementDirection: 0,
-    radius: 16,
+    radius: 20,
     width: 32,
     height: 32,
     x: 192,
@@ -13049,10 +13080,10 @@ Player = function(I) {
     },
     controlCircle: function() {
       var c, p, speed;
-      p = Point.fromAngle(I.heading).scale(16);
+      p = Point.fromAngle(I.heading).scale(I.controlRadius);
       c = self.center().add(p);
       speed = I.velocity.magnitude();
-      c.radius = 20 + ((100 - speed * speed) / 100 * 8).clamp(-7, 8);
+      c.radius = I.controlRadius + ((100 - speed * speed) / 100 * 8).clamp(-7, 8);
       return c;
     },
     controlPuck: function(puck) {
@@ -13060,7 +13091,7 @@ Player = function(I) {
       if (I.cooldown.shoot) return;
       puckControl = 0.04;
       maxPuckForce = puckControl / puck.mass();
-      p = Point.fromAngle(I.heading).scale(32);
+      p = Point.fromAngle(I.heading).scale(48);
       targetPuckPosition = self.center().add(p);
       puckVelocity = puck.I.velocity;
       positionDelta = targetPuckPosition.subtract(puck.center().add(puckVelocity));
@@ -13195,6 +13226,7 @@ Player = function(I) {
   self.bind("update", function() {
     var angleSprites, cycleDelay, headDirection, headIndexOffset, headPosition, power, speed, spriteSheet, _ref;
     Object.extend(I, teamSprites[I.teamStyle][I.bodyStyle].characterData);
+    I.headAction = "normal";
     I.hflip = I.heading > 2 * Math.TAU / 8 || I.heading < -2 * Math.TAU / 8;
     spriteSheet = self.spriteSheet();
     speed = I.velocity.magnitude();
@@ -13217,6 +13249,7 @@ Player = function(I) {
     if (I.wipeout) {
       I.facing = "front";
       I.action = "fall";
+      I.headAction = "pain";
       I.frame = ((25 - I.wipeout) / 3).floor().clamp(0, 5);
     } else if (power = I.shootPower) {
       I.facing = "front";
@@ -13224,6 +13257,7 @@ Player = function(I) {
       if (power < I.maxShotPower) {
         I.frame = ((power * I.shootHoldFrame + 1) / I.maxShotPower).floor();
       } else {
+        I.headAction = "charged";
         I.frame = I.shootHoldFrame + (I.age / 6).floor() % 2;
       }
     } else if (I.cooldown.shoot) {
@@ -13252,7 +13286,7 @@ Player = function(I) {
     } else {
       I.headFlip = false;
     }
-    return I.headSprite = teamSprites[I.teamStyle][I.headStyle][headPosition];
+    return I.headSprite = teamSprites[I.teamStyle][I.headStyle][I.headAction][headPosition];
   });
   if (I.cpu) self.include(AI);
   self.include(PlayerState);
@@ -14111,7 +14145,10 @@ TeamSheet = function(I) {
     });
   });
   TeamSheet.headStyles.each(function(style) {
-    return self[style] = Sprite.loadSheet("" + I.team + "_" + style + "_5", 512, 512);
+    return self[style] = HeadSheet({
+      team: I.team,
+      character: style
+    });
   });
   return self;
 };
