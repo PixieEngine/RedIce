@@ -257,6 +257,8 @@ Player = (I) ->
     # Merge in team_body specific frame/character data
     Object.extend I, teamSprites[I.teamStyle][I.bodyStyle].characterData
 
+    I.headAction = "normal"
+
     I.hflip = (I.heading > 2*Math.TAU/8 || I.heading < -2*Math.TAU/8)
 
     spriteSheet = self.spriteSheet()
@@ -283,6 +285,7 @@ Player = (I) ->
     if I.wipeout
       I.facing = "front"
       I.action = "fall"
+      I.headAction = "pain"
       I.frame = ((25 - I.wipeout) / 3).floor().clamp(0, 5)
     else if power = I.shootPower
       I.facing = "front"
@@ -290,6 +293,7 @@ Player = (I) ->
       if power < I.maxShotPower
         I.frame = ((power * I.shootHoldFrame + 1) / I.maxShotPower).floor()
       else
+        I.headAction = "charged"
         I.frame = I.shootHoldFrame + (I.age / 6).floor() % 2
     else if I.cooldown.shoot
       I.action = "shoot"
