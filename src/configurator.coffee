@@ -153,7 +153,7 @@ Configurator = (I) ->
 
           # Draw Head Sprite
           canvas.withTransform Matrix.scale(0.5, 0.5, Point(x, y)), (canvas) ->
-            teamSprites[player.teamStyle][player.headStyle][0]?.draw(canvas, x - 224, y - 256)
+            teamSprites[player.teamStyle][player.headStyle].normal[0]?.draw(canvas, x - 224, y - 256)
 
           canvas.drawRoundRect {
             x 
