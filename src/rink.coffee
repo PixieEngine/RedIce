@@ -139,5 +139,31 @@ Rink = (I={}) ->
       backBoardsCanvas.withTransform Matrix.scale(-1/8, 1/8), ->
         sprite.draw(backBoardsCanvas, 0, 0)
 
+  frontBoardsCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />")
+    .appendTo("body")
+    .css
+      position: "absolute"
+      top: 0
+      left: 0
+      zIndex: "1"
+    .pixieCanvas()
+
+  Sprite.loadByName "#{I.team}_wall_sw", (sprite) ->
+    frontBoardsCanvas.withTransform Matrix.translation(WALL_LEFT, WALL_BOTTOM - 48), ->
+      frontBoardsCanvas.withTransform Matrix.scale(1/8), ->
+        sprite.draw(frontBoardsCanvas, 0, 0)
+
+  Sprite.loadByName "#{I.team}_wall_sw", (sprite) ->
+    frontBoardsCanvas.withTransform Matrix.translation(WALL_LEFT, WALL_BOTTOM - 48), ->
+      frontBoardsCanvas.withTransform Matrix.scale(-1/8, 1/8), ->
+        sprite.draw(frontBoardsCanvas, 0, 0)
+
+  Sprite.loadByName "#{I.team}_wall_s", (sprite) ->
+    frontBoardsCanvas.withTransform Matrix.translation(WALL_LEFT + 128, WALL_BOTTOM - 48), ->
+      frontBoardsCanvas.withTransform Matrix.scale(1/8), ->
+        sprite.fill(frontBoardsCanvas, 0, 0, 512 * 12, 512)
+
+
+
 Rink.CORNER_RADIUS = 96
 
