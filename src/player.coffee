@@ -17,7 +17,7 @@ Player = (I) ->
     heading: 0
     maxShotPower: 20
     movementDirection: 0
-    radius: 24
+    radius: 20
     width: 32
     height: 32
     x: 192
