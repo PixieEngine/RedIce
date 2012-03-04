@@ -27,6 +27,7 @@ window.ICE_COLOR = "rgba(192, 255, 255, 0.2)"
 window.config =
   throwBottles: true
   players: []
+  particleEffects: false
 
 #TODO Manage these extra canvases better
 rink = Rink()
