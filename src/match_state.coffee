@@ -18,6 +18,12 @@ MatchState = (I={}) ->
       engine.setState(MatchSetupState())
 
     engine.add
+      class: "Boards"
+      sprite: Sprite.loadByName("#{team}_wall_n")
+      y: WALL_TOP - 64
+      zIndex: 1
+
+    engine.add
       spriteName: "#{team}_wall_nw"
       x: WALL_LEFT + 64
       y: WALL_TOP
@@ -55,12 +61,6 @@ MatchState = (I={}) ->
       width: 128
       height: 128
       zIndex: 2
-
-    engine.add
-      class: "Boards"
-      sprite: Sprite.loadByName("#{team}_wall_n")
-      y: WALL_TOP - 64
-      zIndex: 1
 
     engine.add
       class: "Boards"
