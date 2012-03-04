@@ -127,7 +127,7 @@ Rink = (I={}) ->
   Sprite.loadByName "#{I.team}_wall_n", (sprite) ->
     backBoardsCanvas.withTransform Matrix.translation(WALL_LEFT + 128, WALL_TOP - 64), ->
       backBoardsCanvas.withTransform Matrix.scale(1/8), ->
-        sprite.fill(backBoardsCanvas, 0, 0, 512 * 8, 512)
+        sprite.fill(backBoardsCanvas, 0, 0, 512 * 12, 512)
 
   Sprite.loadByName "#{I.team}_wall_nw", (sprite) ->
     backBoardsCanvas.withTransform Matrix.translation(WALL_LEFT, WALL_TOP - 64), ->
