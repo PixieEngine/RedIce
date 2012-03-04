@@ -127,10 +127,6 @@ Player = (I) ->
 
       addSprayParticleEffect(push)
 
-      (rand(6) + 3).times ->
-        engine.add
-          class: "Fan"
-
       engine.add
         class: "Blood"
         x: I.x + push.x
