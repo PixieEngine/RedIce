@@ -12,6 +12,7 @@ Player = (I) ->
       shoot: 0
     collisionMargin: Point(2, 2)
     controller: 0
+    controlRadius: 30
     falls: 0
     friction: 0.1
     heading: 0
@@ -87,7 +88,7 @@ Player = (I) ->
 
       c = self.center().add(p)
       speed = I.velocity.magnitude()
-      c.radius = 20 + ((100 - speed * speed)/100 * 8).clamp(-7, 8)
+      c.radius = I.controlRadius + ((100 - speed * speed)/100 * 8).clamp(-7, 8)
 
       return c
 
