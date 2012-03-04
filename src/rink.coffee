@@ -163,7 +163,14 @@ Rink = (I={}) ->
       frontBoardsCanvas.withTransform Matrix.scale(1/8), ->
         sprite.fill(frontBoardsCanvas, 0, 0, 512 * 12, 512)
 
+  Sprite.loadByName "norm_wall_w", (sprite) ->
+    frontBoardsCanvas.withTransform Matrix.translation(WALL_LEFT, WALL_TOP + 96), (canvas) ->
+      canvas.withTransform Matrix.scale(1/8), ->
+        sprite.fill(canvas, -256, -256, 512, 512 * 6)
 
+    frontBoardsCanvas.withTransform Matrix.translation(WALL_RIGHT, WALL_TOP + 96), (canvas) ->
+      canvas.withTransform Matrix.scale(-1/8, 1/8), ->
+        sprite.fill(canvas, -256, -256, 512, 512 * 6)
 
 Rink.CORNER_RADIUS = 96
 
