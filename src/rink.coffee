@@ -1,5 +1,6 @@
-Rink = (I) ->
-  I ||= {}
+Rink = (I={}) ->
+  Object.reverseMerge I,
+    team: "smiley"
 
   canvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />")
     .appendTo("body")
