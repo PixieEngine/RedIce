@@ -727,8 +727,8 @@
     )
 
     if canvas?.getContext
-      WebGL2D.enable canvas
-      context = canvas.getContext("webgl-2d")
+      #WebGL2D.enable canvas
+      context = canvas.getContext("2d")
 
       if options.init
         options.init($canvas)
