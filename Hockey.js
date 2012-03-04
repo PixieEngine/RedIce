@@ -13498,7 +13498,7 @@ PlayerDrawing = function(I, self) {
       maxWidth = 48;
       height = 4;
       center = self.center();
-      start = center.add(Point(-maxWidth / 2, 40));
+      start = center.add(Point(-maxWidth / 2, 24));
       canvas.drawRoundRect({
         color: "#000",
         x: start.x - padding,
