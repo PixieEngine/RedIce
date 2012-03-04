@@ -36,7 +36,7 @@ window.bloodCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />
     position: "absolute"
     top: 0
     left: 0
-    zIndex: "-1"
+    zIndex: "-5"
   .pixieCanvas()
 
 bloodCanvas.strokeColor(BLOOD_COLOR)
