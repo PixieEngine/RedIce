@@ -98,7 +98,7 @@ Player = (I) ->
       puckControl = 0.04
       maxPuckForce = puckControl / puck.mass()
 
-      p = Point.fromAngle(I.heading).scale(32)
+      p = Point.fromAngle(I.heading).scale(48)
       targetPuckPosition = self.center().add(p)
 
       puckVelocity = puck.I.velocity
