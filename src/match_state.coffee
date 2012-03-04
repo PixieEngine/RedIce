@@ -70,12 +70,12 @@ MatchState = (I={}) ->
 
     engine.add
       class: "SideBoards"
-      x: WALL_LEFT - 64
+      x: WALL_LEFT
       zIndex: 10
 
     engine.add
       class: "SideBoards"
-      x: WALL_RIGHT + 64
+      x: WALL_RIGHT
       flip: -1
       zIndex: 10
 
