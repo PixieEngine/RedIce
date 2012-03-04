@@ -199,7 +199,7 @@ FrameEditorState = (I={}) ->
       type: "head"
 
     headDataObject.bind "draw", (canvas) ->
-      teamSprites[currentTeam()][currentHead()].wrap(I.headPositionIndex)?.draw(canvas, -256, -256)
+      teamSprites[currentTeam()][currentHead()].normal.wrap(I.headPositionIndex)?.draw(canvas, -256, -256)
 
     p = engine.add
       id: 0
