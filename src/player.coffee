@@ -44,6 +44,8 @@ Player = (I) ->
 
   particleSizes = [5, 4, 3]
   addSprayParticleEffect = (push, color=BLOOD_COLOR) ->
+    return unless config.particleEffects
+
     push = push.norm(13)
 
     engine.add
