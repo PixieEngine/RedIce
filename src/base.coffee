@@ -44,7 +44,7 @@ Base = (I) ->
 
         self
       else
-        I.center
+        I.center.floor()
 
     updatePosition: (dt, noFriction) ->
       if noFriction then friction = 0 else friction = I.friction
