@@ -69,7 +69,7 @@ engine.bind "draw", (canvas) ->
     engine.find("Player, Puck, Goal, Bottle, Zamboni").each (object) ->
       object.trigger("drawDebug", canvas)
 
-# Timing Draw
+# Timing Draw and update
 drawStartTime = null
 updateDuration = null
 engine.bind "beforeDraw", ->
@@ -86,7 +86,6 @@ engine.bind "overlay", (canvas) ->
     text: "ms/update: #{updateDuration}"
     x: 10
     y: 50
-
 updateStartTime = null
 engine.bind "beforeUpdate", ->
   updateStartTime = +new Date
