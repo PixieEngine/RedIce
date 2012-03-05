@@ -82,9 +82,9 @@ engine.bind "overlay", (canvas) ->
     y: 30
 
 updateStartTime = null
-engine.bind "beforeDraw", ->
+engine.bind "beforeUpdate", ->
   updateStartTime = +new Date
-engine.bind "overlay", (canvas) ->
+engine.bind "afterUpdate", (canvas) ->
   updateDuration = (+new Date) - updateStartTime
   canvas.drawText
     color: "white"
