@@ -25,8 +25,9 @@ MatchSetupState = (I={}) ->
   self.bind "enter", ->
     engine.clear(false)
 
-    Music.volume 0.4
-    Music.play "title_screen"
+    if config.music
+      Music.volume 0.4
+      Music.play "title_screen"
 
     configurator = engine.add
       class: "Configurator"

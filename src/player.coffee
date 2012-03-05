@@ -264,7 +264,6 @@ Player = (I) ->
 
     speed = I.velocity.magnitude()
     cycleDelay = 16
-    I.scale = 0.375
 
     # Determine character facing
     if 0 <= I.heading <= Math.TAU/2
