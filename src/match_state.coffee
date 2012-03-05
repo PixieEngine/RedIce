@@ -37,7 +37,8 @@ MatchState = (I={}) ->
     rightGoal.bind "score", ->
       scoreboard.score "away"
 
-    Music.play "music1"
+    if config.music
+      Music.play "music1"
 
   # Add events and methods here
   self.bind "update", ->
