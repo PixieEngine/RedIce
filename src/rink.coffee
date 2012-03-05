@@ -124,19 +124,19 @@ Rink = (I={}) ->
       zIndex: "-4"
     .pixieCanvas()
 
-  Sprite.loadByName "#{I.team}_wall_n", (sprite) ->
+  Sprite.loadByName "25/#{I.team}_wall_n", (sprite) ->
     backBoardsCanvas.withTransform Matrix.translation(WALL_LEFT + 128, WALL_TOP - 64), ->
-      backBoardsCanvas.withTransform Matrix.scale(1/8), ->
-        sprite.fill(backBoardsCanvas, 0, 0, 512 * 12, 512)
+      backBoardsCanvas.withTransform Matrix.scale(1/2), ->
+        sprite.fill(backBoardsCanvas, 0, 0, 128 * 12, 512)
 
-  Sprite.loadByName "#{I.team}_wall_nw", (sprite) ->
+  Sprite.loadByName "25/#{I.team}_wall_nw", (sprite) ->
     backBoardsCanvas.withTransform Matrix.translation(WALL_LEFT, WALL_TOP - 64), ->
-      backBoardsCanvas.withTransform Matrix.scale(1/8), ->
+      backBoardsCanvas.withTransform Matrix.scale(1/2), ->
         sprite.draw(backBoardsCanvas, 0, 0)
 
-  Sprite.loadByName "#{I.team}_wall_nw", (sprite) ->
+  Sprite.loadByName "25/#{I.team}_wall_nw", (sprite) ->
     backBoardsCanvas.withTransform Matrix.translation(WALL_RIGHT, WALL_TOP - 64), ->
-      backBoardsCanvas.withTransform Matrix.scale(-1/8, 1/8), ->
+      backBoardsCanvas.withTransform Matrix.scale(-1/2, 1/2), ->
         sprite.draw(backBoardsCanvas, 0, 0)
 
   frontBoardsCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />")
@@ -148,29 +148,29 @@ Rink = (I={}) ->
       zIndex: "1"
     .pixieCanvas()
 
-  Sprite.loadByName "#{I.team}_wall_sw", (sprite) ->
+  Sprite.loadByName "25/#{I.team}_wall_sw", (sprite) ->
     frontBoardsCanvas.withTransform Matrix.translation(WALL_LEFT, WALL_BOTTOM - 112), ->
-      frontBoardsCanvas.withTransform Matrix.scale(1/8), ->
+      frontBoardsCanvas.withTransform Matrix.scale(1/2), ->
         sprite.draw(frontBoardsCanvas, 0, 0)
 
-  Sprite.loadByName "#{I.team}_wall_sw", (sprite) ->
+  Sprite.loadByName "25/#{I.team}_wall_sw", (sprite) ->
     frontBoardsCanvas.withTransform Matrix.translation(WALL_RIGHT, WALL_BOTTOM - 112), ->
-      frontBoardsCanvas.withTransform Matrix.scale(-1/8, 1/8), ->
+      frontBoardsCanvas.withTransform Matrix.scale(-1/2, 1/2), ->
         sprite.draw(frontBoardsCanvas, 0, 0)
 
-  Sprite.loadByName "#{I.team}_wall_s", (sprite) ->
+  Sprite.loadByName "25/#{I.team}_wall_s", (sprite) ->
     frontBoardsCanvas.withTransform Matrix.translation(WALL_LEFT + 128, WALL_BOTTOM - 48), ->
-      frontBoardsCanvas.withTransform Matrix.scale(1/8), ->
-        sprite.fill(frontBoardsCanvas, 0, 0, 512 * 12, 512)
+      frontBoardsCanvas.withTransform Matrix.scale(1/2), ->
+        sprite.fill(frontBoardsCanvas, 0, 0, 128 * 12, 128)
 
   Sprite.loadByName "norm_wall_w", (sprite) ->
     frontBoardsCanvas.withTransform Matrix.translation(WALL_LEFT, WALL_TOP + 96), (canvas) ->
-      canvas.withTransform Matrix.scale(1/8), ->
-        sprite.fill(canvas, -256, -256, 512, 512 * 6)
+      canvas.withTransform Matrix.scale(1/2), ->
+        sprite.fill(canvas, -64, -64, 128, 128 * 6)
 
     frontBoardsCanvas.withTransform Matrix.translation(WALL_RIGHT, WALL_TOP + 96), (canvas) ->
-      canvas.withTransform Matrix.scale(-1/8, 1/8), ->
-        sprite.fill(canvas, -256, -256, 512, 512 * 6)
+      canvas.withTransform Matrix.scale(-1/2, 1/2), ->
+        sprite.fill(canvas, -64, -256, 128, 128 * 6)
 
 Rink.CORNER_RADIUS = 96
 
