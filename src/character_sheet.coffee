@@ -3,10 +3,10 @@ CharacterSheet = (I={}) ->
   Object.reverseMerge I,
     character: "tubs"
     team: "spike"
-    size: 128
+    size: 256
 
   loadStrip = (action, facing, cells) ->
-    Sprite.loadSheet("25/#{I.team}_#{I.character}_#{action}_#{facing}_#{cells}", I.size, I.size)
+    Sprite.loadSheet("#{I.size}/#{I.team}_#{I.character}_#{action}_#{facing}_#{cells}", I.size, I.size)
 
   FRONT = "se"
   BACK = "ne"

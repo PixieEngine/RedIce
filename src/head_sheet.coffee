@@ -3,13 +3,13 @@ HeadSheet = (I={}) ->
   Object.reverseMerge I,
     character: "bigeyes"
     team: "spike"
-    size: 128
+    size: 256
 
   loadStrip = (action, cells) ->
     if action
-      Sprite.loadSheet("25/#{I.team}_#{I.character}_#{action}_#{cells}", I.size, I.size)
+      Sprite.loadSheet("#{I.size}/#{I.team}_#{I.character}_#{action}_#{cells}", I.size, I.size)
     else
-      Sprite.loadSheet("25/#{I.team}_#{I.character}_#{cells}", I.size, I.size)
+      Sprite.loadSheet("#{I.size}/#{I.team}_#{I.character}_#{cells}", I.size, I.size)
 
   actions = [
     "charged"
