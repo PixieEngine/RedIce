@@ -7,8 +7,7 @@ Boards = (I) ->
   self = GameObject(I).extend
     draw: (canvas) ->
       canvas.withTransform Matrix.translation(I.x, I.y), ->
-        canvas.withTransform Matrix.scale(1/8), ->
-          I.sprite.fill(canvas, 0, 0, I.width * 8, 512)
+        I.sprite.fill(canvas, 0, 0, I.width, I.height)
 
   return self
 
