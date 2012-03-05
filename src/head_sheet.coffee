@@ -3,7 +3,7 @@ HeadSheet = (I={}) ->
   Object.reverseMerge I,
     character: "bigeyes"
     team: "spike"
-    size: 128
+    size: 256
 
   loadStrip = (action, cells) ->
     if action
