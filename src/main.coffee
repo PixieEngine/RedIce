@@ -78,8 +78,8 @@ engine.bind "overlay", (canvas) ->
   canvas.drawText
     color: "white"
     text: drawDuration
-    x: 50
-    y: 120
+    x: 70
+    y: 20
 
 engine.setState(FrameEditorState())
 engine.start()
