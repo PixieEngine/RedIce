@@ -71,6 +71,7 @@ engine.bind "draw", (canvas) ->
 
 # Timing Draw
 drawStartTime = null
+updateDuration
 engine.bind "beforeDraw", ->
   drawStartTime = +new Date
 engine.bind "overlay", (canvas) ->
@@ -80,17 +81,17 @@ engine.bind "overlay", (canvas) ->
     text: "ms/draw: #{drawDuration}"
     x: 10
     y: 30
+  canvas.drawText
+    color: "white"
+    text: "ms/update: #{updateDuration}"
+    x: 10
+    y: 50
 
 updateStartTime = null
 engine.bind "beforeUpdate", ->
   updateStartTime = +new Date
 engine.bind "afterUpdate", (canvas) ->
   updateDuration = (+new Date) - updateStartTime
-  canvas.drawText
-    color: "white"
-    text: "ms/update: #{updateDuration}"
-    x: 10
-    y: 50
 
 engine.setState(FrameEditorState())
 engine.start()
