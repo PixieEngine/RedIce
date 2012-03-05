@@ -33,6 +33,7 @@ Player = (I) ->
     wipeout: 0
     velocity: Point()
     zIndex: 1
+    scale: 0.75
 
   if I.joystick
     controller = Joysticks.getController(I.id)
