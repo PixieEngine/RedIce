@@ -71,7 +71,7 @@ engine.bind "draw", (canvas) ->
 
 # Timing Draw
 drawStartTime = null
-updateDuration
+updateDuration = null
 engine.bind "beforeDraw", ->
   drawStartTime = +new Date
 engine.bind "overlay", (canvas) ->
