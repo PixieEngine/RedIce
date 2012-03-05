@@ -77,7 +77,7 @@ engine.bind "overlay", (canvas) ->
   drawDuration = (+new Date) - drawStartTime
   canvas.drawText
     color: "white"
-    text: drawDuration
+    text: "ms/draw: #{drawDuration}"
     x: 10
     y: 30
 
