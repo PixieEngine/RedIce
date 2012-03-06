@@ -119,7 +119,7 @@ Rink = (I={}) ->
   spriteSize = 64
 
   backBoardsCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />")
-    #.appendTo("body")
+    .appendTo("body")
     .css
       position: "absolute"
       top: 0
@@ -141,7 +141,7 @@ Rink = (I={}) ->
         sprite.draw(backBoardsCanvas, 0, 0)
 
   frontBoardsCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />")
-    #.appendTo("body")
+    .appendTo("body")
     .css
       position: "absolute"
       top: 0
