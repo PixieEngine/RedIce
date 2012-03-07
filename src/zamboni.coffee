@@ -14,6 +14,7 @@ Zamboni = (I) ->
     y: ARENA_HEIGHT/2 + WALL_TOP
     velocity: Point(1, 0)
     mass: 10
+    team: "smiley"
     zIndex: 10
 
   SWEEPER_SIZE = 48
@@ -134,7 +135,7 @@ Zamboni = (I) ->
       else if -Math.TAU/8 > heading > -3*Math.TAU/8
         facing = "n"
 
-      I.sprite = Zamboni.sprites[I.team][I.facing]
+      I.sprite = Zamboni.sprites[I.team][facing]
 
   self.bind "destroy", ->
     engine.add
