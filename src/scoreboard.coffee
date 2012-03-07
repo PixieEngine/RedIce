@@ -109,6 +109,7 @@ Scoreboard = (I) ->
         engine.add
           class: "Zamboni"
           reverse: I.reverse
+          team: ["smiley", "spike"].rand()
 
     I.time -= 1
 
