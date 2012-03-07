@@ -92,6 +92,6 @@ engine.bind "beforeUpdate", ->
 engine.bind "afterUpdate", (canvas) ->
   updateDuration = (+new Date) - updateStartTime
 
-engine.setState(FrameEditorState())
+engine.setState(MatchSetupState())
 engine.start()
 
