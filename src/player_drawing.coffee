@@ -221,7 +221,7 @@ PlayerDrawing = (I, self) ->
 
       if superChargeRatio is 1
         arrowAnimation = PlayerDrawing.chargedArrow
-        canvas.withTransform Matrix.translation(center.x, center.y).scale(0.375), (canvas) ->
+        canvas.withTransform Matrix.translation(center.x, center.y - 40).scale(0.375), (canvas) ->
           PlayerDrawing.chargeAura.rand()?.draw(canvas, -256, -256)
 
       canvas.withTransform Matrix.translation(center.x, center.y).concat(Matrix.scale(0.125 + ratio * 0.375)).concat(Matrix.rotation(I.movementDirection)), (canvas) ->
