@@ -16676,8 +16676,7 @@ window.config = {
   throwBottles: true,
   players: [],
   particleEffects: false,
-  music: false,
-  sound: false
+  music: true
 };
 
 rink = Rink();
@@ -16735,18 +16734,20 @@ engine.bind("beforeDraw", function() {
 engine.bind("overlay", function(canvas) {
   var drawDuration;
   drawDuration = (+(new Date)) - drawStartTime;
-  canvas.drawText({
-    color: "white",
-    text: "ms/draw: " + drawDuration,
-    x: 10,
-    y: 30
-  });
-  return canvas.drawText({
-    color: "white",
-    text: "ms/update: " + updateDuration,
-    x: 10,
-    y: 50
-  });
+  if (DEBUG_DRAW) {
+    canvas.drawText({
+      color: "white",
+      text: "ms/draw: " + drawDuration,
+      x: 10,
+      y: 30
+    });
+    return canvas.drawText({
+      color: "white",
+      text: "ms/update: " + updateDuration,
+      x: 10,
+      y: 50
+    });
+  }
 });
 
 updateStartTime = null;
