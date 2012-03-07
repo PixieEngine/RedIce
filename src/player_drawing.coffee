@@ -36,7 +36,7 @@ PlayerDrawing = (I, self) ->
     currentHeadOffset = t.transformPoint(headOffset)
 
     # Sprite Offset
-    canvas.withTransform Matrix.translation(0, 0), ->
+    canvas.withTransform Matrix.translation(0, -32), ->
       drawHead(canvas) if I.facing == "back"
       canvas.withTransform t, drawBody
       drawHead(canvas) if I.facing == "front"
