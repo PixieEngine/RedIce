@@ -10,6 +10,7 @@ Zamboni = (I) ->
     width: 96
     height: 48
     speed: 8
+    scale: 0.5
     x: 0
     y: ARENA_HEIGHT/2 + WALL_TOP
     velocity: Point(1, 0)
