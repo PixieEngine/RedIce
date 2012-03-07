@@ -215,13 +215,15 @@ PlayerDrawing = (I, self) ->
     if I.shootPower
       ratio = Math.min(I.shootPower / I.maxShotPower, 1)
       superChargeRatio = ((I.shootPower - I.maxShotPower) / I.maxShotPower).clamp(0, 1)
+      center = self.center().floor()
 
       arrowAnimation = PlayerDrawing.shootArrow
 
       if superChargeRatio is 1
         arrowAnimation = PlayerDrawing.chargedArrow
+        canvas.withTransform Matrix.translation(center.x, center.y).scale(0.5), (canvas) ->
+          PlayerDrawing.chargeAura.rand()?.draw(canvas, -256, -256)
 
-      center = self.center().floor()
       canvas.withTransform Matrix.translation(center.x, center.y).concat(Matrix.scale(0.125 + ratio * 0.375)).concat(Matrix.rotation(I.movementDirection)), (canvas) ->
         arrowAnimation.wrap((I.age/4).floor()).draw(canvas, -256, -256)
 
@@ -255,4 +257,5 @@ PlayerDrawing = (I, self) ->
 
 PlayerDrawing.shootArrow = Sprite.loadSheet("arrow_3", 512, 512)
 PlayerDrawing.chargedArrow = Sprite.loadSheet("arrow_charged_3", 512, 512)
+PlayerDrawing.chargeAura = Sprite.loadSheet("charge_aura_strip2", 512, 512)
 
