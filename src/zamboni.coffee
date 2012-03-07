@@ -5,7 +5,7 @@ Zamboni = (I) ->
     color: "yellow"
     fuse: 30
     strength: 5
-    radius: 64
+    radius: 50
     rotation: 0
     width: 96
     height: 48
