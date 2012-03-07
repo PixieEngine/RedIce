@@ -29,7 +29,6 @@ window.config =
   players: []
   particleEffects: false
   music: true
-  sound: true
 
 #TODO Manage these extra canvases better
 rink = Rink()
