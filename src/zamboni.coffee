@@ -5,7 +5,7 @@ Zamboni = (I) ->
     color: "yellow"
     fuse: 30
     strength: 5
-    radius: 20
+    radius: 64
     rotation: 0
     width: 96
     height: 48
@@ -127,7 +127,14 @@ Zamboni = (I) ->
 
       I.hflip = (heading > 2*Math.TAU/8 || heading < -2*Math.TAU/8)
 
-    I.sprite = wideSprites[16 + 8*(I.blood/3).floor()]
+      facing = "e"
+
+      if Math.TAU/8 < heading < 3*Math.TAU/8
+        facing = "s"
+      else if -Math.TAU/8 > heading > -3*Math.TAU/8
+        facing = "n"
+
+      I.sprite = Zamboni.sprites[I.team][I.facing]
 
   self.bind "destroy", ->
     engine.add
@@ -137,4 +144,12 @@ Zamboni = (I) ->
       velocity: I.velocity
 
   self
+
+Zamboni.sprites = {}
+
+["smiley", "spike"].each (team) ->
+  Zamboni.sprites[team] = 
+    n: Sprite.loadByName("#{team}_zamboni_drive_n")
+    s: Sprite.loadByName("#{team}_zamboni_drive_s")
+    e: Sprite.loadByName("#{team}_zamboni_drive_e")
 
