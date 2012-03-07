@@ -76,16 +76,17 @@ engine.bind "beforeDraw", ->
   drawStartTime = +new Date
 engine.bind "overlay", (canvas) ->
   drawDuration = (+new Date) - drawStartTime
-  canvas.drawText
-    color: "white"
-    text: "ms/draw: #{drawDuration}"
-    x: 10
-    y: 30
-  canvas.drawText
-    color: "white"
-    text: "ms/update: #{updateDuration}"
-    x: 10
-    y: 50
+  if DEBUG_DRAW
+    canvas.drawText
+      color: "white"
+      text: "ms/draw: #{drawDuration}"
+      x: 10
+      y: 30
+    canvas.drawText
+      color: "white"
+      text: "ms/update: #{updateDuration}"
+      x: 10
+      y: 50
 updateStartTime = null
 engine.bind "beforeUpdate", ->
   updateStartTime = +new Date
