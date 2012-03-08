@@ -15,8 +15,6 @@ Configurator = (I) ->
   verticalPadding = 4
   horizontalPadding = 6
 
-  blueBg = Sprite.loadByName "gameselect_back_blue"
-
   join = (id) ->
     player = I.config.players[id]
 
@@ -25,7 +23,6 @@ Configurator = (I) ->
 
     player.cpu = false
     player.ready = false
-    player.team = 0.5
     I.activePlayers += 1
 
     backgroundColor = Color(player.color)
@@ -132,7 +129,7 @@ Configurator = (I) ->
           player.headStyle = TeamSheet.headStyles.wrap(player.headIndex) || "stubs"
           player.bodyStyle = TeamSheet.bodyStyles.wrap(player.bodyIndex) || "thick"
 
-          blueBg.draw(canvas, x, 0)
+          Configurator.images[player.team].draw(canvas, x, 0)
 
           # Draw Body Sprite
           canvas.withTransform Matrix.scale(0.5, 0.5, Point(x, y)), (canvas) ->
@@ -176,3 +173,15 @@ Configurator = (I) ->
 
   return self
 
+Configurator.images = [
+  {
+    background: Sprite.loadByName("gameselect_back_blue")
+    nameBubble: Sprite.loadByName("gameselect_namebubble_blue")
+    readyBubble: Sprite.loadByName("gameselect_readybubble_blue")
+    readyBubbleActive: Sprite.loadByName("gameselect_readybubble2_blue")
+  }
+]
+
+Configurator.ready = []
+
+Configurator.border = Sprite.loadByName("gameselect_borders")
