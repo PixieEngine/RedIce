@@ -130,6 +130,7 @@ Configurator = (I) ->
           Configurator.images[player.team].background.draw(canvas, x, 0)
           Configurator.border.draw(canvas, x, 0)
           Configurator.images[player.team].nameBubble.draw(canvas, x, 0)
+          Configurator.images[player.team].readyBubble.draw(canvas, x, I.height - 62)
 
           # Draw Body Sprite
           canvas.withTransform Matrix.scale(0.5, 0.5, Point(x, y)), (canvas) ->
