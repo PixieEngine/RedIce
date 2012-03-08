@@ -182,7 +182,7 @@ Configurator = (I) ->
 
   return self
 
-Configurator.images = ["blue", "red"].map (team) ->
+Configurator.images = ["red", "blue"].map (team) ->
   {
     background: Sprite.loadByName("gameselect_back_#{team}")
     nameBubble: Sprite.loadByName("gameselect_namebubble_#{team}")
