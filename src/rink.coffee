@@ -172,7 +172,11 @@ Rink = (I={}) ->
 
   return {
     show: ->
+      [canvas, frontBoardsCanvas, backBoardsCanvas].each (c) ->
+        $(c.element).show()
     hide: ->
+      [canvas, frontBoardsCanvas, backBoardsCanvas].each (c) ->
+        $(c.element).hide()
   }
 
 Rink.CORNER_RADIUS = 96
