@@ -119,8 +119,8 @@ Configurator = (I) ->
           color: Player.COLORS[1]
 
         I.config.players.each (player, i) ->
-          y = i * 60 + 30
-          x = (player.team) * 500 + 30
+          y = 0
+          x = player.id * App.width / MAX_PLAYERS
 
           if player.cpu
             name = "CPU"
