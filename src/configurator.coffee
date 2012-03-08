@@ -132,14 +132,6 @@ Configurator = (I) ->
           Configurator.images[player.team].nameBubble.draw(canvas, x, 0)
           Configurator.images[player.team].readyBubble.draw(canvas, x, I.height - 62)
 
-          # Draw Body Sprite
-          canvas.withTransform Matrix.scale(0.5, 0.5, Point(x, y)), (canvas) ->
-            teamSprites[player.teamStyle][player.bodyStyle].slow.front[0]?.draw(canvas, x - 256, y - 160)
-
-          # Draw Head Sprite
-          canvas.withTransform Matrix.scale(0.5, 0.5, Point(x, y)), (canvas) ->
-            teamSprites[player.teamStyle][player.headStyle].normal[0]?.draw(canvas, x - 224, y - 200)
-
           canvas.centerText
             text: name
             x: x + I.width / 12 + 2
@@ -151,6 +143,16 @@ Configurator = (I) ->
             x: x + I.width / 12
             y: y + lineHeight + verticalPadding
             color: "white"
+
+          y = I.height/2
+
+          # Draw Body Sprite
+          canvas.withTransform Matrix.scale(0.5, 0.5, Point(x, y)), (canvas) ->
+            teamSprites[player.teamStyle][player.bodyStyle].slow.front[0]?.draw(canvas, x - 256, y - 160)
+
+          # Draw Head Sprite
+          canvas.withTransform Matrix.scale(0.5, 0.5, Point(x, y)), (canvas) ->
+            teamSprites[player.teamStyle][player.headStyle].normal[0]?.draw(canvas, x - 224, y - 200)
 
   self.bind "step", ->
     I.maxPlayers.times (i) ->
