@@ -29,7 +29,7 @@ window.config =
   music: true
 
 #TODO Manage these extra canvases better
-rink = Rink()
+window.rink = Rink()
 window.bloodCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />")
   .appendTo("body")
   .css
