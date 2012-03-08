@@ -102,24 +102,6 @@ Configurator = (I) ->
       self.trigger "beforeTransform", canvas
 
       canvas.withTransform Matrix.translation(I.x, I.y), ->
-        canvas.drawRoundRect
-          x: 0
-          y: 0
-          width: I.width
-          height: I.height
-          radius: 15
-          color: "rgba(0, 0, 0, 0.75)"
-
-        canvas.drawText
-          text: "Blue Team"
-          position: Point(20, 20)
-          color: Player.COLORS[0]
-
-        canvas.drawText
-          text: "Red Team"
-          position: Point(520, 20)
-          color: Player.COLORS[1]
-
         I.config.players.each (player, i) ->
           y = 0
           x = player.id * App.width / MAX_PLAYERS
