@@ -127,7 +127,8 @@ Configurator = (I) ->
           player.headStyle = TeamSheet.headStyles.wrap(player.headIndex) || "stubs"
           player.bodyStyle = TeamSheet.bodyStyles.wrap(player.bodyIndex) || "thick"
 
-          Configurator.images[player.team].draw(canvas, x, 0)
+          Configurator.images[player.team].background.draw(canvas, x, 0)
+          Configurator.border.draw(canvas, x, 0)
 
           # Draw Body Sprite
           canvas.withTransform Matrix.scale(0.5, 0.5, Point(x, y)), (canvas) ->
