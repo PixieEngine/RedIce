@@ -13,7 +13,7 @@ Configurator = (I) ->
 
   lineHeight = 11
   verticalPadding = 18
-  horizontalPadding = 6
+  horizontalPadding = 0
 
   join = (id) ->
     player = I.config.players[id]
