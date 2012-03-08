@@ -142,13 +142,13 @@ Configurator = (I) ->
 
           canvas.centerText
             text: name
-            x: x + horizontalPadding + I.width / 12 + 1
+            x: x + I.width / 12 + 1
             y: y + lineHeight + verticalPadding + 1
             color: "black"
 
           canvas.centerText
             text: name
-            x: x + horizontalPadding + I.width / 12
+            x: x + I.width / 12
             y: y + lineHeight + verticalPadding
             color: "white"
 
