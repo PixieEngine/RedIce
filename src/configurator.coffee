@@ -145,7 +145,7 @@ Configurator = (I) ->
             color: "white"
 
           y = I.height/2
-          x += I.width/12
+          x += I.width/24
 
           # Draw Body Sprite
           teamSprites[player.teamStyle][player.bodyStyle].slow.front[0]?.draw(canvas, x - 256, y - 160)
