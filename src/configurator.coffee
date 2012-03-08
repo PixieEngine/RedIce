@@ -173,14 +173,13 @@ Configurator = (I) ->
 
   return self
 
-Configurator.images = [
+Configurator.images = ["blue", "red"].map (team) ->
   {
-    background: Sprite.loadByName("gameselect_back_blue")
-    nameBubble: Sprite.loadByName("gameselect_namebubble_blue")
-    readyBubble: Sprite.loadByName("gameselect_readybubble_blue")
-    readyBubbleActive: Sprite.loadByName("gameselect_readybubble2_blue")
+    background: Sprite.loadByName("gameselect_back_#{team}")
+    nameBubble: Sprite.loadByName("gameselect_namebubble_#{team}")
+    readyBubble: Sprite.loadByName("gameselect_readybubble_#{team}")
+    readyBubbleActive: Sprite.loadByName("gameselect_readybubble2_#{team}")
   }
-]
 
 Configurator.ready = []
 
