@@ -140,9 +140,15 @@ Configurator = (I) ->
           canvas.withTransform Matrix.scale(0.5, 0.5, Point(x, y)), (canvas) ->
             teamSprites[player.teamStyle][player.headStyle].normal[0]?.draw(canvas, x - 224, y - 200)
 
-          canvas.drawText
+          canvas.centerText
             text: name
-            x: x + horizontalPadding
+            x: x + horizontalPadding + I.width / 12 + 1
+            y: y + lineHeight + verticalPadding + 1
+            color: "white"
+
+          canvas.centerText
+            text: name
+            x: x + horizontalPadding + I.width / 12
             y: y + lineHeight + verticalPadding
             color: "white"
 
