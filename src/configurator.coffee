@@ -12,7 +12,6 @@ Configurator = (I) ->
   lineHeight = 11
   verticalPadding = 4
   horizontalPadding = 6
-  iceBg = Sprite.loadByName("ice_bg")
 
   join = (id) ->
     player = I.config.players[id]
@@ -194,10 +193,6 @@ Configurator = (I) ->
     if readyPlayers.length == I.activePlayers && readyPlayers.length > 0
       unbindTapEvents()
       self.trigger "done", finalizeConfig(I.config)
-
-  self.bind "beforeTransform", (canvas) ->
-    iceBg.fill(canvas, 0, 0, canvas.width(), canvas.height())
-    canvas.fill("rgba(0, 0, 0, 0.5)")
 
   return self
 
