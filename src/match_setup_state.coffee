@@ -25,6 +25,8 @@ MatchSetupState = (I={}) ->
   self.bind "enter", ->
     engine.clear(false)
 
+    rink.hide()
+
     if config.music
       Music.volume 0.4
       Music.play "title_screen"
