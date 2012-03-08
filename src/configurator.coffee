@@ -1,13 +1,15 @@
 Configurator = (I) ->
-  $.reverseMerge I,
+  Object.reverseMerge I,
     activePlayers: 0
     font: "bold 14px 'Monaco', 'Inconsolata', 'consolas', 'Courier New', 'andale mono', 'lucida console', 'monospace'"
     maxPlayers: 6
     teamColors:
       "0": Color("#0246E3")
       "1": Color("#EB070E")
-    width: 600
-    height: 480
+    width: App.width
+    height: App.height
+    x: 0
+    y: 0
 
   lineHeight = 11
   verticalPadding = 4
