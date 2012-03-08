@@ -1,7 +1,7 @@
 Configurator = (I) ->
   Object.reverseMerge I,
     activePlayers: 0
-    font: "bold 34px 'Monaco', 'Inconsolata', 'consolas', 'Courier New', 'andale mono', 'lucida console', 'monospace'"
+    font: "bold 26px 'Monaco', 'Inconsolata', 'consolas', 'Courier New', 'andale mono', 'lucida console', 'monospace'"
     maxPlayers: 6
     teamColors:
       "0": Color("#0246E3")
@@ -144,7 +144,7 @@ Configurator = (I) ->
             text: name
             x: x + horizontalPadding + I.width / 12 + 1
             y: y + lineHeight + verticalPadding + 1
-            color: "white"
+            color: "black"
 
           canvas.centerText
             text: name
