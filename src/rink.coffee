@@ -170,5 +170,10 @@ Rink = (I={}) ->
       canvas.withTransform Matrix.scale(-1, 1), ->
         sprite.fill(canvas, -I.spriteSize/2, -I.spriteSize/2, I.spriteSize, I.spriteSize * 6)
 
+  return {
+    show: ->
+    hide: ->
+  }
+
 Rink.CORNER_RADIUS = 96
 
