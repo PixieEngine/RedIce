@@ -44,8 +44,8 @@ Configurator = (I) ->
 
       player.name = name
       player.tapListener = (p) ->
-        unless player.ready
-          player.team = (player.team + p.x/2).clamp(0, 1)
+        unless player.ready # TODO Scope to when team icon is active
+          player.team = (player.team + p.x).clamp(0, 1)
 
       engine.controller(id).bind "tap", player.tapListener
 
@@ -123,8 +123,6 @@ Configurator = (I) ->
             player.teamStyle = "spike"
           else if player.team == 0
             player.teamStyle = "smiley"
-          else
-            player.teamStyle = "normal"
 
           player.headStyle = TeamSheet.headStyles.wrap(player.headIndex) || "stubs"
           player.bodyStyle = TeamSheet.bodyStyles.wrap(player.bodyIndex) || "thick"
@@ -158,7 +156,8 @@ Configurator = (I) ->
         if controller.buttonPressed("RB")
           player.headIndex += 1
 
-      if (player = I.config.players[i]) && (player.team != 0.5)
+      if (player = I.config.players[i])
+        # TODO Scope to focused on ready button
         if controller.actionDown("A")
           player.ready = true
 
