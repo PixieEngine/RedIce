@@ -7,6 +7,8 @@ MatchState = (I={}) ->
   self.bind "enter", ->
     engine.clear(true)
 
+    rink.show()
+
     scoreboard = engine.add
       class: "Scoreboard"
       # periodTime: 120
