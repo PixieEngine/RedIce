@@ -1,7 +1,7 @@
 Configurator = (I) ->
   Object.reverseMerge I,
     activePlayers: 0
-    font: "bold 14px 'Monaco', 'Inconsolata', 'consolas', 'Courier New', 'andale mono', 'lucida console', 'monospace'"
+    font: "bold 22px 'Monaco', 'Inconsolata', 'consolas', 'Courier New', 'andale mono', 'lucida console', 'monospace'"
     maxPlayers: 6
     teamColors:
       "0": Color("#0246E3")
