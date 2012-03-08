@@ -173,10 +173,10 @@ Rink = (I={}) ->
   self =
     show: ->
       [canvas, frontBoardsCanvas, backBoardsCanvas].each (c) ->
-        $(c.element).show()
+        $(c.element()).show()
     hide: ->
       [canvas, frontBoardsCanvas, backBoardsCanvas].each (c) ->
-        $(c.element).hide()
+        $(c.element()).hide()
 
   return self
 
