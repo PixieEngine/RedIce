@@ -151,7 +151,7 @@ Configurator = (I) ->
           teamSprites[player.teamStyle][player.bodyStyle].slow.front[0]?.draw(canvas, x - 128, y - 160)
 
           # Draw Head Sprite
-          teamSprites[player.teamStyle][player.headStyle].normal[0]?.draw(canvas, x - 128, y - 200)
+          teamSprites[player.teamStyle][player.headStyle].normal[0]?.draw(canvas, x - 110, y - 200)
 
   self.bind "step", ->
     I.maxPlayers.times (i) ->
