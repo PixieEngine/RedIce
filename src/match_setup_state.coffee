@@ -32,8 +32,6 @@ MatchSetupState = (I={}) ->
     configurator = engine.add
       class: "Configurator"
       config: initPlayerData()
-      x: 240
-      y: 240
 
     configurator.bind "done", (config) ->
       configurator.destroy()
