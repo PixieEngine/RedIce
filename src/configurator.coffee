@@ -12,7 +12,7 @@ Configurator = (I) ->
     y: 0
 
   lineHeight = 11
-  verticalPadding = 4
+  verticalPadding = 18
   horizontalPadding = 6
 
   join = (id) ->
