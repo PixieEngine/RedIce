@@ -15,6 +15,8 @@ Configurator = (I) ->
   verticalPadding = 4
   horizontalPadding = 6
 
+  blueBg = Sprite.loadByName "gameselect_back_blue"
+
   join = (id) ->
     player = I.config.players[id]
 
@@ -130,6 +132,8 @@ Configurator = (I) ->
           player.headStyle = TeamSheet.headStyles.wrap(player.headIndex) || "stubs"
           player.bodyStyle = TeamSheet.bodyStyles.wrap(player.bodyIndex) || "thick"
 
+          blueBg.draw(canvas, x, 0)
+
           # Draw Body Sprite
           canvas.withTransform Matrix.scale(0.5, 0.5, Point(x, y)), (canvas) ->
             teamSprites[player.teamStyle][player.bodyStyle].slow.front[0]?.draw(canvas, x - 256, y - 160)
@@ -137,14 +141,6 @@ Configurator = (I) ->
           # Draw Head Sprite
           canvas.withTransform Matrix.scale(0.5, 0.5, Point(x, y)), (canvas) ->
             teamSprites[player.teamStyle][player.headStyle].normal[0]?.draw(canvas, x - 224, y - 200)
-
-          canvas.drawRoundRect {
-            x 
-            y
-            width: nameWidth + 2 * horizontalPadding
-            height: lineHeight + 2 * verticalPadding
-            color
-          }
 
           canvas.drawText
             text: name
