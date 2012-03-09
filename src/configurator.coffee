@@ -142,7 +142,10 @@ Configurator = (I) ->
           Configurator.border.draw(canvas, x, 0)
           Configurator.images[player.teamStyle].nameBubble.draw(canvas, x, 0)
           Configurator.images[player.teamStyle].logo.draw(canvas, x - 42, 375)
-          Configurator.images[player.teamStyle].readyBubble.draw(canvas, x, I.height - 62)
+          if player.ready
+            Configurator.images[player.teamStyle].readyBubbleActive.draw(canvas, x, I.height - 62)
+          else
+            Configurator.images[player.teamStyle].readyBubble.draw(canvas, x, I.height - 62)
 
           canvas.centerText
             text: name
