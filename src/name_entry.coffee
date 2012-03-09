@@ -69,7 +69,7 @@ NameEntry = (I) ->
       if I.name.length < I.maxLength
         I.name += characterAtCursor()
 
-        self.trigger "changed", I.name
+        self.trigger "change", I.name
 
       # Jump to 'done' menu when name is full
       if I.name.length == I.maxLength
