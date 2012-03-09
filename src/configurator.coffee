@@ -51,7 +51,13 @@ Configurator = (I) ->
 
       player.name = name
       player.tapListener = (p) ->
-        unless player.ready # TODO Scope to when team icon is active
+        return if player.ready
+
+        if p.y
+          # Move Cursor
+          player.optionIndex = (player.optionIndex + p.y).clamp(0, Configurator.options.length - 1)
+        else
+          # TODO Scope to when team icon is active
           player.team = (player.team + p.x).mod 2
 
       engine.controller(id).bind "tap", player.tapListener
@@ -135,6 +141,7 @@ Configurator = (I) ->
           player.bodyStyle = TeamSheet.bodyStyles.wrap(player.bodyIndex) || "thick"
 
           Configurator.images[player.team].background.draw(canvas, x, 0)
+          Configurator.active.draw(canvas, x, Configurator.options[player.optionIndex].y)
           Configurator.border.draw(canvas, x, 0)
           Configurator.images[player.team].nameBubble.draw(canvas, x, 0)
           Configurator.images[player.team].readyBubble.draw(canvas, x, I.height - 62)
@@ -200,4 +207,21 @@ Configurator.images = ["blue", "red"].map (team) ->
 Configurator.ready = []
 
 Configurator.border = Sprite.loadByName("gameselect_borders")
+
+Configurator.options = [
+  {
+    name: "headIndex"
+    y: 200
+  }, {
+    name: "bodyIndex"
+    y: 250
+  }, {
+    name: "teamIndex"
+    y: 400
+  }, {
+    name: "ready"
+    action: "toggle"
+    y: 700
+  }
+]
 
