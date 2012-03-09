@@ -50,6 +50,7 @@ Configurator = (I) ->
       nameEntry.destroy()
 
       player.name = name
+      player.optionIndex = 0
       player.tapListener = (p) ->
         return if player.ready
 
