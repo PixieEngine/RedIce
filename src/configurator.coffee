@@ -59,7 +59,10 @@ Configurator = (I) ->
           player.optionIndex = (player.optionIndex + p.y).clamp(0, Configurator.options.length - 1)
         else
           # TODO Scope to when team icon is active
-          player.team = (player.team + p.x).mod 2
+          if (currentOption = Configurator.options[player.optionIndex])
+            if currentOption.action
+            else
+              player[currentOption.name] += p.x
 
       engine.controller(id).bind "tap", player.tapListener
 
