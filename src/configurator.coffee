@@ -15,7 +15,7 @@ Configurator = (I) ->
   verticalPadding = 24
   horizontalPadding = 0
 
-  teams = [0, 1]
+  teamStyles = ["smiley", "spike"]
 
   join = (id) ->
     player = I.config.players[id]
@@ -138,14 +138,9 @@ Configurator = (I) ->
 
           nameWidth = canvas.measureText(name)
 
-          if player.team == 1
-            player.teamStyle = "spike"
-          else if player.team == 0
-            player.teamStyle = "smiley"
-
           player.headStyle = TeamSheet.headStyles.wrap(player.headIndex) || "stubs"
           player.bodyStyle = TeamSheet.bodyStyles.wrap(player.bodyIndex) || "thick"
-          player.team = teams.wrap(player.teamIndex) || 0
+          player.teamStyle = teamStyles.wrap(player.teamIndex) || 0
 
           Configurator.images[player.team].background.draw(canvas, x, 0)
           if player.optionIndex? and !player.ready
