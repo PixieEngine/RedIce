@@ -52,7 +52,7 @@ Configurator = (I) ->
       player.name = name
       player.tapListener = (p) ->
         unless player.ready # TODO Scope to when team icon is active
-          player.team = (player.team + p.x).clamp(0, 1)
+          player.team = (player.team + p.x) % 2
 
       engine.controller(id).bind "tap", player.tapListener
 
@@ -200,3 +200,4 @@ Configurator.images = ["blue", "red"].map (team) ->
 Configurator.ready = []
 
 Configurator.border = Sprite.loadByName("gameselect_borders")
+
