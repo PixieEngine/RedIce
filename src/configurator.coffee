@@ -208,7 +208,7 @@ Configurator.border = Sprite.loadByName("gameselect_borders")
 Configurator.options = [
   {
     name: "headIndex"
-    y: 200
+    y: 150
   }, {
     name: "bodyIndex"
     y: 250
