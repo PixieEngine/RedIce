@@ -25,6 +25,9 @@ Configurator = (I) ->
     player.ready = false
     I.activePlayers += 1
 
+    addNameEntry(player)
+
+  addNameEntry = (player) ->
     backgroundColor = Color(player.color)
     backgroundColor.a = 0.5
 
