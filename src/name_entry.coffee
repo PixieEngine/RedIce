@@ -62,6 +62,21 @@ NameEntry = (I) ->
   characterAtCursor = ->
     I.characterSet[I.cursor.x + I.cursor.y * I.cols]
 
+  addCharacter = ->
+    if I.cursor.menu
+      self.trigger "done", I.name
+    else
+      if I.name.length < I.maxLength
+        I.name += characterAtCursor()
+
+        self.trigger "change", I.name
+
+      # Jump to 'done' menu when name is full
+      if I.name.length == I.maxLength
+        I.cursor.menu = true
+        I.cursor.y = 0
+        I.cursor.x = 0
+
   nameArea =
     draw: (canvas) ->
       cursorWidth = 10
@@ -186,6 +201,8 @@ NameEntry = (I) ->
 
     if controller?.buttonPressed "B"
       I.name = I.name.substring(0, I.name.length - 1)
+
+      self.trigger "change", I.name
 
   return self
 
