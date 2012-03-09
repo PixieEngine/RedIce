@@ -215,7 +215,7 @@ Configurator.options = [
   }, {
     name: "ready"
     action: "toggle"
-    y: 600
+    y: 700
   }
 ]
 
