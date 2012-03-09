@@ -141,7 +141,8 @@ Configurator = (I) ->
           player.bodyStyle = TeamSheet.bodyStyles.wrap(player.bodyIndex) || "thick"
 
           Configurator.images[player.team].background.draw(canvas, x, 0)
-          Configurator.active.draw(canvas, x, Configurator.options[player.optionIndex].y)
+          if player.optionIndex and !player.ready
+            Configurator.active.draw(canvas, x, Configurator.options[player.optionIndex].y)
           Configurator.border.draw(canvas, x, 0)
           Configurator.images[player.team].nameBubble.draw(canvas, x, 0)
           Configurator.images[player.team].readyBubble.draw(canvas, x, I.height - 62)
@@ -174,12 +175,6 @@ Configurator = (I) ->
       if controller.actionDown "ANY"
         join(i)
 
-      if player = I.config.players[i]
-        if controller.buttonPressed("LB")
-          player.bodyIndex += 1
-        if controller.buttonPressed("RB")
-          player.headIndex += 1
-
       if (player = I.config.players[i])
         # TODO Scope to focused on ready button
         if controller.actionDown("A") and false
@@ -206,6 +201,7 @@ Configurator.images = ["blue", "red"].map (team) ->
 
 Configurator.ready = []
 
+Configurator.active = Sprite.loadByName("gameselect_selectglow")
 Configurator.border = Sprite.loadByName("gameselect_borders")
 
 Configurator.options = [
