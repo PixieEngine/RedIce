@@ -141,6 +141,7 @@ Configurator = (I) ->
             Configurator.active.draw(canvas, x, Configurator.options[player.optionIndex].y)
           Configurator.border.draw(canvas, x, 0)
           Configurator.images[player.teamStyle].nameBubble.draw(canvas, x, 0)
+          Configurator.images[player.teamStyle].logo.draw(canvas, x, 375)
           Configurator.images[player.teamStyle].readyBubble.draw(canvas, x, I.height - 62)
 
           canvas.centerText
@@ -194,6 +195,7 @@ Configurator.images = {}
     nameBubble: Sprite.loadByName("gameselect_namebubble_#{team}")
     readyBubble: Sprite.loadByName("gameselect_readybubble_#{team}")
     readyBubbleActive: Sprite.loadByName("gameselect_readybubble2_#{team}")
+    logo: Sprite.loadByName("gameselect_#{style}logo")
 
 Configurator.ready = []
 
