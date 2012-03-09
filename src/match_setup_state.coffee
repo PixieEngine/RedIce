@@ -10,7 +10,7 @@ MatchSetupState = (I={}) ->
         color: Player.COLORS[i]
         id: i
         name: ""
-        team: i % 2
+        teamIndex: i % 2
         joystick: true
         cpu: true
         bodyIndex: rand(TeamSheet.bodyStyles.length)
