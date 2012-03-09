@@ -142,12 +142,12 @@ Configurator = (I) ->
           player.bodyStyle = TeamSheet.bodyStyles.wrap(player.bodyIndex) || "thick"
           player.teamStyle = teamStyles.wrap(player.teamIndex) || 0
 
-          Configurator.images[player.team].background.draw(canvas, x, 0)
+          Configurator.images[player.teamStyle].background.draw(canvas, x, 0)
           if player.optionIndex? and !player.ready
             Configurator.active.draw(canvas, x, Configurator.options[player.optionIndex].y)
           Configurator.border.draw(canvas, x, 0)
-          Configurator.images[player.team].nameBubble.draw(canvas, x, 0)
-          Configurator.images[player.team].readyBubble.draw(canvas, x, I.height - 62)
+          Configurator.images[player.teamStyle].nameBubble.draw(canvas, x, 0)
+          Configurator.images[player.teamStyle].readyBubble.draw(canvas, x, I.height - 62)
 
           canvas.centerText
             text: name
@@ -193,13 +193,13 @@ Configurator = (I) ->
 
   return self
 
-Configurator.images = ["blue", "red"].map (team) ->
-  {
+Configurator.images = {}
+[["blue", "smiley"], ["red", "spike"]].map ([team, style]) ->
+  Configurator.images[style] = 
     background: Sprite.loadByName("gameselect_back_#{team}")
     nameBubble: Sprite.loadByName("gameselect_namebubble_#{team}")
     readyBubble: Sprite.loadByName("gameselect_readybubble_#{team}")
     readyBubbleActive: Sprite.loadByName("gameselect_readybubble2_#{team}")
-  }
 
 Configurator.ready = []
 
