@@ -39,8 +39,8 @@ Configurator = (I) ->
       controller: player.id
       cursorColor: cursorColor
       name: player.name
-      x:  player.id * (App.width / I.maxPlayers)
-      y:  20
+      x:  player.id * (App.width / I.maxPlayers) + 4
+      y:  40
 
     nameEntry.bind "change", (name) ->
       player.name = name
