@@ -174,11 +174,13 @@ Configurator = (I) ->
 
       if (player = I.config.players[i])
         # TODO Scope to focused on ready button
-        if controller.actionDown("A") and false
-          player.ready = true
+        if (currentOption = Configurator.options[player.optionIndex])
+          if currentOption.action == toggle
+            if controller.actionDown("A")
+              player[currentOption.name] = true
 
-        if controller.actionDown("B")
-          player.ready = false
+            if controller.actionDown("B")
+              player[currentOption.name] = false
 
     readyPlayers = I.config.players.select((player) -> player.ready)
 
