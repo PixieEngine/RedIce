@@ -15,6 +15,8 @@ Configurator = (I) ->
   verticalPadding = 24
   horizontalPadding = 0
 
+  teams = [0, 1]
+
   join = (id) ->
     player = I.config.players[id]
 
@@ -143,6 +145,7 @@ Configurator = (I) ->
 
           player.headStyle = TeamSheet.headStyles.wrap(player.headIndex) || "stubs"
           player.bodyStyle = TeamSheet.bodyStyles.wrap(player.bodyIndex) || "thick"
+          player.team = teams.wrap(player.teamIndex) || 0
 
           Configurator.images[player.team].background.draw(canvas, x, 0)
           if player.optionIndex? and !player.ready
