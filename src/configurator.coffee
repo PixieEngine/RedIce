@@ -28,6 +28,7 @@ Configurator = (I) ->
     addNameEntry(player)
 
   addNameEntry = (player) ->
+    id = player.id
     backgroundColor = Color(player.color)
     backgroundColor.a = 0.5
 
@@ -36,10 +37,10 @@ Configurator = (I) ->
     nameEntry = engine.add
       backgroundColor: backgroundColor
       class: "NameEntry"
-      controller: player.id
+      controller: id
       cursorColor: cursorColor
       name: player.name
-      x:  player.id * (App.width / I.maxPlayers) + 4
+      x:  id * (App.width / I.maxPlayers) + 4
       y:  40
 
     nameEntry.bind "change", (name) ->
