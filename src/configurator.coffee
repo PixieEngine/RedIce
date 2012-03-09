@@ -142,7 +142,7 @@ Configurator = (I) ->
           player.bodyStyle = TeamSheet.bodyStyles.wrap(player.bodyIndex) || "thick"
 
           Configurator.images[player.team].background.draw(canvas, x, 0)
-          if player.optionIndex and !player.ready
+          if player.optionIndex? and !player.ready
             Configurator.active.draw(canvas, x, Configurator.options[player.optionIndex].y)
           Configurator.border.draw(canvas, x, 0)
           Configurator.images[player.team].nameBubble.draw(canvas, x, 0)
