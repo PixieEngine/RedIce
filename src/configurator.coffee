@@ -168,7 +168,7 @@ Configurator = (I) ->
 
       if (player = I.config.players[i])
         # TODO Scope to focused on ready button
-        if controller.actionDown("A")
+        if controller.actionDown("A") and false
           player.ready = true
 
         if controller.actionDown("B")
