@@ -174,7 +174,7 @@ Configurator = (I) ->
 
       if (player = I.config.players[i])
         if (currentOption = Configurator.options[player.optionIndex])
-          if currentOption.action == toggle
+          if currentOption.action == "toggle"
             if controller.actionDown("A")
               player[currentOption.name] = true
 
