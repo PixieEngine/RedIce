@@ -173,7 +173,6 @@ Configurator = (I) ->
         join(i)
 
       if (player = I.config.players[i])
-        # TODO Scope to focused on ready button
         if (currentOption = Configurator.options[player.optionIndex])
           if currentOption.action == toggle
             if controller.actionDown("A")
