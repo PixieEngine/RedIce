@@ -42,7 +42,7 @@ Configurator = (I) ->
       x:  id * (App.width / I.maxPlayers)
       y:  20
 
-    nameEntry.bind "changed", (name) ->
+    nameEntry.bind "change", (name) ->
       player.name = name
 
     nameEntry.bind "done", (name) ->
