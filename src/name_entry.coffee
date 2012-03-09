@@ -173,7 +173,7 @@ NameEntry = (I) ->
     draw: (canvas) ->
       canvas.withTransform self.transform(), (canvas) ->
         canvas.font(I.font)
-        nameArea.draw(canvas)
+        # nameArea.draw(canvas)
         textArea.draw(canvas)
         menuArea.draw(canvas)
 
