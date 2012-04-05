@@ -12794,30 +12794,36 @@ CharacterSheet = function(I) {
 var Configurator;
 
 Configurator = function(I) {
-  var finalizeConfig, horizontalPadding, iceBg, join, lineHeight, self, unbindTapEvents, verticalPadding;
-  $.reverseMerge(I, {
+  var addNameEntry, finalizeConfig, horizontalPadding, join, lineHeight, self, teamStyles, unbindTapEvents, verticalPadding;
+  Object.reverseMerge(I, {
     activePlayers: 0,
-    font: "bold 14px 'Monaco', 'Inconsolata', 'consolas', 'Courier New', 'andale mono', 'lucida console', 'monospace'",
+    font: "bold 32px 'Monaco', 'Inconsolata', 'consolas', 'Courier New', 'andale mono', 'lucida console', 'monospace'",
     maxPlayers: 6,
     teamColors: {
       "0": Color("#0246E3"),
       "1": Color("#EB070E")
     },
-    width: 600,
-    height: 480
+    width: App.width,
+    height: App.height,
+    x: 0,
+    y: 0
   });
   lineHeight = 11;
-  verticalPadding = 4;
-  horizontalPadding = 6;
-  iceBg = Sprite.loadByName("ice_bg");
+  verticalPadding = 24;
+  horizontalPadding = 0;
+  teamStyles = ["smiley", "spike"];
   join = function(id) {
-    var backgroundColor, cursorColor, nameEntry, player;
+    var player;
     player = I.config.players[id];
     if (!player.cpu) return;
     player.cpu = false;
     player.ready = false;
-    player.team = 0.5;
     I.activePlayers += 1;
+    return addNameEntry(player);
+  };
+  addNameEntry = function(player) {
+    var backgroundColor, cursorColor, id, nameEntry;
+    id = player.id;
     backgroundColor = Color(player.color);
     backgroundColor.a = 0.5;
     cursorColor = backgroundColor.lighten(0.25);
@@ -12827,15 +12833,27 @@ Configurator = function(I) {
       controller: id,
       cursorColor: cursorColor,
       name: player.name,
-      x: id * (App.width / I.maxPlayers),
-      y: 20
+      x: id * (App.width / I.maxPlayers) + 4,
+      y: 40
+    });
+    nameEntry.bind("change", function(name) {
+      return player.name = name;
     });
     return nameEntry.bind("done", function(name) {
       nameEntry.destroy();
       player.name = name;
+      player.optionIndex = 0;
       player.tapListener = function(p) {
-        if (!player.ready) {
-          return player.team = (player.team + p.x / 2).clamp(0, 1);
+        var currentOption;
+        if (player.ready) return;
+        if (p.y) {
+          return player.optionIndex = (player.optionIndex + p.y).clamp(0, Configurator.options.length - 1);
+        } else {
+          if ((currentOption = Configurator.options[player.optionIndex])) {
+            if (currentOption.action) {} else {
+              return player[currentOption.name] += p.x;
+            }
+          }
         }
       };
       return engine.controller(id).bind("tap", player.tapListener);
@@ -12887,71 +12905,50 @@ Configurator = function(I) {
       canvas.font(I.font);
       self.trigger("beforeTransform", canvas);
       return canvas.withTransform(Matrix.translation(I.x, I.y), function() {
-        canvas.drawRoundRect({
-          x: 0,
-          y: 0,
-          width: I.width,
-          height: I.height,
-          radius: 15,
-          color: "rgba(0, 0, 0, 0.75)"
-        });
-        canvas.drawText({
-          text: "Blue Team",
-          position: Point(20, 20),
-          color: Player.COLORS[0]
-        });
-        canvas.drawText({
-          text: "Red Team",
-          position: Point(520, 20),
-          color: Player.COLORS[1]
-        });
         return I.config.players.each(function(player, i) {
-          var color, name, nameWidth, x, y;
-          y = i * 60 + 30;
-          x = player.team * 500 + 30;
+          var color, name, nameWidth, x, y, _ref, _ref2;
+          y = 0;
+          x = player.id * App.width / MAX_PLAYERS;
           if (player.cpu) {
             name = "CPU";
             color = Color(Player.CPU_COLOR);
           } else {
             name = player.name || ("P" + (player.id + 1));
-            color = Color(I.teamColors[player.team] || player.color);
-            if (player.ready) {
-              color.a = 1;
-            } else {
-              color.a = 0.5;
-            }
           }
           nameWidth = canvas.measureText(name);
-          if (player.team === 1) {
-            player.teamStyle = "spike";
-          } else if (player.team === 0) {
-            player.teamStyle = "smiley";
-          } else {
-            player.teamStyle = "normal";
-          }
           player.headStyle = TeamSheet.headStyles.wrap(player.headIndex) || "stubs";
           player.bodyStyle = TeamSheet.bodyStyles.wrap(player.bodyIndex) || "thick";
-          canvas.withTransform(Matrix.scale(0.5, 0.5, Point(x, y)), function(canvas) {
-            var _ref;
-            return (_ref = teamSprites[player.teamStyle][player.bodyStyle].slow.front[0]) != null ? _ref.draw(canvas, x - 256, y - 160) : void 0;
-          });
-          canvas.withTransform(Matrix.scale(0.5, 0.5, Point(x, y)), function(canvas) {
-            var _ref;
-            return (_ref = teamSprites[player.teamStyle][player.headStyle].normal[0]) != null ? _ref.draw(canvas, x - 224, y - 200) : void 0;
-          });
-          canvas.drawRoundRect({
-            x: x,
-            y: y,
-            width: nameWidth + 2 * horizontalPadding,
-            height: lineHeight + 2 * verticalPadding,
-            color: color
-          });
-          return canvas.drawText({
+          player.teamStyle = teamStyles.wrap(player.teamIndex) || 0;
+          Configurator.images[player.teamStyle].background.draw(canvas, x, 0);
+          if ((player.optionIndex != null) && !player.ready) {
+            Configurator.active.draw(canvas, x, Configurator.options[player.optionIndex].y);
+          }
+          Configurator.border.draw(canvas, x, 0);
+          Configurator.images[player.teamStyle].nameBubble.draw(canvas, x, 0);
+          Configurator.images[player.teamStyle].logo.draw(canvas, x - 42, 375);
+          if (player.ready) {
+            Configurator.images[player.teamStyle].readyBubbleActive.draw(canvas, x, I.height - 62);
+          } else {
+            Configurator.images[player.teamStyle].readyBubble.draw(canvas, x, I.height - 62);
+          }
+          canvas.centerText({
             text: name,
-            x: x + horizontalPadding,
+            x: x + I.width / 12 + 2,
+            y: y + lineHeight + verticalPadding + 1,
+            color: "black"
+          });
+          canvas.centerText({
+            text: name,
+            x: x + I.width / 12,
             y: y + lineHeight + verticalPadding,
             color: "white"
           });
+          y = I.height / 2;
+          x += I.width / 12;
+          if ((_ref = teamSprites[player.teamStyle][player.bodyStyle].slow.front[0]) != null) {
+            _ref.draw(canvas, x - 128, y - 160);
+          }
+          return (_ref2 = teamSprites[player.teamStyle][player.headStyle].normal[0]) != null ? _ref2.draw(canvas, x - 110, y - 200) : void 0;
         });
       });
     }
@@ -12959,16 +12956,18 @@ Configurator = function(I) {
   self.bind("step", function() {
     var readyPlayers;
     I.maxPlayers.times(function(i) {
-      var controller, player;
+      var controller, currentOption, player;
       controller = engine.controller(i);
       if (controller.actionDown("ANY")) join(i);
-      if (player = I.config.players[i]) {
-        if (controller.buttonPressed("LB")) player.bodyIndex += 1;
-        if (controller.buttonPressed("RB")) player.headIndex += 1;
-      }
-      if ((player = I.config.players[i]) && (player.team !== 0.5)) {
-        if (controller.actionDown("A")) player.ready = true;
-        if (controller.actionDown("B")) return player.ready = false;
+      if ((player = I.config.players[i])) {
+        if ((currentOption = Configurator.options[player.optionIndex])) {
+          if (currentOption.action === "toggle") {
+            if (controller.actionDown("A")) player[currentOption.name] = true;
+            if (controller.actionDown("B")) {
+              return player[currentOption.name] = false;
+            }
+          }
+        }
       }
     });
     readyPlayers = I.config.players.select(function(player) {
@@ -12979,12 +12978,45 @@ Configurator = function(I) {
       return self.trigger("done", finalizeConfig(I.config));
     }
   });
-  self.bind("beforeTransform", function(canvas) {
-    iceBg.fill(canvas, 0, 0, canvas.width(), canvas.height());
-    return canvas.fill("rgba(0, 0, 0, 0.5)");
-  });
   return self;
 };
+
+Configurator.images = {};
+
+[["blue", "smiley"], ["red", "spike"]].map(function(_arg) {
+  var style, team;
+  team = _arg[0], style = _arg[1];
+  return Configurator.images[style] = {
+    background: Sprite.loadByName("gameselect_back_" + team),
+    nameBubble: Sprite.loadByName("gameselect_namebubble_" + team),
+    readyBubble: Sprite.loadByName("gameselect_readybubble_" + team),
+    readyBubbleActive: Sprite.loadByName("gameselect_readybubble2_" + team),
+    logo: Sprite.loadByName("gameselect_" + style + "logo")
+  };
+});
+
+Configurator.ready = [];
+
+Configurator.active = Sprite.loadByName("gameselect_selectglow");
+
+Configurator.border = Sprite.loadByName("gameselect_borders");
+
+Configurator.options = [
+  {
+    name: "headIndex",
+    y: 200
+  }, {
+    name: "bodyIndex",
+    y: 250
+  }, {
+    name: "teamIndex",
+    y: 400
+  }, {
+    name: "ready",
+    action: "toggle",
+    y: 650
+  }
+];
 ;
 var CONTROLLERS, Controller, gameControlData, keyActionNames, layouts, selectedLayout,
   __slice = Array.prototype.slice;
@@ -13992,7 +14024,7 @@ MatchSetupState = function(I) {
         color: Player.COLORS[i],
         id: i,
         name: "",
-        team: i % 2,
+        teamIndex: i % 2,
         joystick: true,
         cpu: true,
         bodyIndex: rand(TeamSheet.bodyStyles.length),
@@ -14008,15 +14040,14 @@ MatchSetupState = function(I) {
   self.bind("enter", function() {
     var configurator;
     engine.clear(false);
+    rink.hide();
     if (config.music) {
       Music.volume(0.4);
       Music.play("title_screen");
     }
     configurator = engine.add({
       "class": "Configurator",
-      config: initPlayerData(),
-      x: 240,
-      y: 240
+      config: initPlayerData()
     });
     return configurator.bind("done", function(config) {
       configurator.destroy();
@@ -14036,6 +14067,7 @@ MatchState = function(I) {
   self.bind("enter", function() {
     var leftGoal, rightGoal, scoreboard;
     engine.clear(true);
+    rink.show();
     scoreboard = engine.add({
       "class": "Scoreboard"
     });
@@ -14171,7 +14203,10 @@ NameEntry = function(I) {
     if (I.cursor.menu) {
       return self.trigger("done", I.name);
     } else {
-      if (I.name.length < I.maxLength) I.name += characterAtCursor();
+      if (I.name.length < I.maxLength) {
+        I.name += characterAtCursor();
+        self.trigger("change", I.name);
+      }
       if (I.name.length === I.maxLength) {
         I.cursor.menu = true;
         I.cursor.y = 0;
@@ -14286,7 +14321,6 @@ NameEntry = function(I) {
     draw: function(canvas) {
       return canvas.withTransform(self.transform(), function(canvas) {
         canvas.font(I.font);
-        nameArea.draw(canvas);
         textArea.draw(canvas);
         return menuArea.draw(canvas);
       });
@@ -14308,7 +14342,8 @@ NameEntry = function(I) {
       addCharacter();
     }
     if (controller != null ? controller.buttonPressed("B") : void 0) {
-      return I.name = I.name.substring(0, I.name.length - 1);
+      I.name = I.name.substring(0, I.name.length - 1);
+      return self.trigger("change", I.name);
     }
   });
   return self;
@@ -15986,7 +16021,7 @@ Puck = function(I) {
 var Rink;
 
 Rink = function(I) {
-  var backBoardsCanvas, blue, canvas, faceOffCircleRadius, faceOffSpotRadius, fansSprite, frontBoardsCanvas, red, rinkCornerRadius, spriteSize, x, y, _i, _len, _ref;
+  var backBoardsCanvas, blue, canvas, faceOffCircleRadius, faceOffSpotRadius, fansSprite, frontBoardsCanvas, red, rinkCornerRadius, self, spriteSize, x, y, _i, _len, _ref;
   if (I == null) I = {};
   Object.reverseMerge(I, {
     team: "smiley",
@@ -16151,7 +16186,7 @@ Rink = function(I) {
       return sprite.fill(frontBoardsCanvas, 0, 0, I.spriteSize * 12, I.spriteSize);
     });
   });
-  return Sprite.loadByName("" + I.spriteSize + "/norm_wall_w", function(sprite) {
+  Sprite.loadByName("" + I.spriteSize + "/norm_wall_w", function(sprite) {
     frontBoardsCanvas.withTransform(Matrix.translation(WALL_LEFT, WALL_TOP + 96), function(canvas) {
       return sprite.fill(canvas, -I.spriteSize / 2, -I.spriteSize / 2, I.spriteSize, I.spriteSize * 6);
     });
@@ -16161,6 +16196,19 @@ Rink = function(I) {
       });
     });
   });
+  self = {
+    show: function() {
+      return [canvas, frontBoardsCanvas, backBoardsCanvas].each(function(c) {
+        return $(c.element()).show();
+      });
+    },
+    hide: function() {
+      return [canvas, frontBoardsCanvas, backBoardsCanvas].each(function(c) {
+        return $(c.element()).hide();
+      });
+    }
+  };
+  return self;
 };
 
 Rink.CORNER_RADIUS = 96;
@@ -16632,7 +16680,7 @@ Zamboni.sprites = {};
 
 App.entities = {};
 ;
-;$(function(){ var DEBUG_DRAW, drawStartTime, rink, updateDuration, updateStartTime;
+;$(function(){ var DEBUG_DRAW, drawStartTime, updateDuration, updateStartTime;
 
 window.sprites = Sprite.loadSheet("sprites", 32, 48);
 
@@ -16646,9 +16694,6 @@ window.teamSprites = {
   }),
   smiley: TeamSheet({
     team: "smiley"
-  }),
-  normal: TeamSheet({
-    team: "normal"
   })
 };
 
@@ -16679,7 +16724,7 @@ window.config = {
   music: true
 };
 
-rink = Rink();
+window.rink = Rink();
 
 window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").appendTo("body").css({
   position: "absolute",
@@ -16760,7 +16805,7 @@ engine.bind("afterUpdate", function(canvas) {
   return updateDuration = (+(new Date)) - updateStartTime;
 });
 
-engine.setState(FrameEditorState());
+engine.setState(MatchSetupState());
 
 engine.start();
  });
