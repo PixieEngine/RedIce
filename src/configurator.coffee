@@ -77,7 +77,7 @@ Configurator = (I) ->
       playerData.cpu
 
     [reds, blues] = humans.partition (playerData) ->
-      playerData.teamIndex
+      playerData.team = playerData.teamIndex.mod(teamStyles.length)
 
     # Rebalance CPU players as needed
     while (blues.length < I.maxPlayers / 2) && cpus.length
