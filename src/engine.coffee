@@ -152,7 +152,7 @@
         update()
         I.age += 1
 
-      draw() if I.age % 2
+      draw()
 
     self = Core(I).extend {
       ###*
