@@ -12709,7 +12709,8 @@ CharacterSheet = function(I) {
   if (I == null) I = {};
   Object.reverseMerge(I, {
     character: "tubs",
-    team: "spike"
+    team: "spike",
+    size: 512
   });
   loadStrip = function(action, facing, cells) {
     return Sprite.loadSheet("" + I.team + "_" + I.character + "_" + action + "_" + facing + "_" + cells, I.size, I.size);
@@ -12876,7 +12877,7 @@ Configurator = function(I) {
       self.trigger("beforeTransform", canvas);
       return canvas.withTransform(Matrix.translation(I.x, I.y), function() {
         return I.config.players.each(function(player, i) {
-          var color, name, nameWidth, x, y, _ref, _ref2;
+          var bodySprite, color, headSprite, name, nameWidth, x, y;
           y = 0;
           x = player.id * App.width / MAX_PLAYERS;
           if (player.cpu) {
@@ -12915,10 +12916,12 @@ Configurator = function(I) {
           });
           y = I.height / 2;
           x += I.width / 12;
-          if ((_ref = teamSprites[player.teamStyle][player.bodyStyle].slow.front[0]) != null) {
-            _ref.draw(canvas, x - 128, y - 160);
+          if (bodySprite = teamSprites[player.teamStyle][player.bodyStyle].slow.front[0]) {
+            bodySprite.draw(canvas, x - bodySprite.width / 2, y - bodySprite.height / 2);
           }
-          return (_ref2 = teamSprites[player.teamStyle][player.headStyle].normal[0]) != null ? _ref2.draw(canvas, x - 110, y - 200) : void 0;
+          if (headSprite = teamSprites[player.teamStyle][player.headStyle].normal[0]) {
+            return headSprite != null ? headSprite.draw(canvas, x - headSprite.width / 2, y - headSprite.height / 2) : void 0;
+          }
         });
       });
     }
@@ -13960,7 +13963,8 @@ HeadSheet = function(I) {
   if (I == null) I = {};
   Object.reverseMerge(I, {
     character: "bigeyes",
-    team: "spike"
+    team: "spike",
+    size: 512
   });
   loadStrip = function(action, cells) {
     if (action) {
