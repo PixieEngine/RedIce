@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible' />
+    <title>GameState</title>
+    <link href='/assets/spacedocs/docs.css' media='screen, projection' rel='stylesheet' type='text/css' />
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js' type='text/javascript'></script>
+  </head>
+  <body>
+    <pre></pre>
+    <nav>
+      <a href='Animated.html'>Animated</a>
+      <a href='Array.html'>Array</a>
+      <a href='Bindable.html'>Bindable</a>
+      <a href='Boolean.html'>Boolean</a>
+      <a href='Bounded.html'>Bounded</a>
+      <a href='Camera.html'>Camera</a>
+      <a href='Collidable.html'>Collidable</a>
+      <a href='Collision.html'>Collision</a>
+      <a href='Color.html'>Color</a>
+      <a href='Core.html'>Core</a>
+      <a href='Date.html'>Date</a>
+      <a href='Drawable.html'>Drawable</a>
+      <a href='Durable.html'>Durable</a>
+      <a href='Engine.html'>Engine</a>
+      <a href='Engine.Joysticks.html'>Engine.Joysticks</a>
+      <a href='Fadeable.html'>Fadeable</a>
+      <a href='Flickerable.html'>Flickerable</a>
+      <a href='Framerate.html'>Framerate</a>
+      <a href='Function.html'>Function</a>
+      <a href='GameObject.html'>GameObject</a>
+      <a class='active' href='GameState.html'>GameState</a>
+      <a href='Local.html'>Local</a>
+      <a href='Math.html'>Math</a>
+      <a href='Matrix.html'>Matrix</a>
+      <a href='Movable.html'>Movable</a>
+      <a href='Music.html'>Music</a>
+      <a href='Number.html'>Number</a>
+      <a href='Object.html'>Object</a>
+      <a href='PixieCanvas.html'>PixieCanvas</a>
+      <a href='Point.html'>Point</a>
+      <a href='PowerCanvas.html'>PowerCanvas</a>
+      <a href='Random.html'>Random</a>
+      <a href='RegExp.html'>RegExp</a>
+      <a href='ResourceLoader.html'>ResourceLoader</a>
+      <a href='Rotatable.html'>Rotatable</a>
+      <a href='Sound.html'>Sound</a>
+      <a href='Sprite.html'>Sprite</a>
+      <a href='String.html'>String</a>
+      <a href='jQuery.html'>jQuery</a>
+      <a href='justPressed.html'>justPressed</a>
+      <a href='keydown.html'>keydown</a>
+      <a href='requestAnimationFrame.html'>requestAnimationFrame</a>
+      <a href='window.html'>window</a>
+    </nav>
+    <section class='method_list'>
+      <h3>GameState Methods</h3>
+      <div class='methods'>
+        <a href='GameState.html##loadState'>#loadState</a>
+        <a href='GameState.html##reload'>#reload</a>
+        <a href='GameState.html##saveState'>#saveState</a>
+      </div>
+    </section>
+    <div class='documentation'>
+      <a name='#loadState'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>GameState#loadState(An)</h1>
+      <div class='description'>
+        <section class='summary'><p>Loads the game state passed in, or the last saved state, if any.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />engine.bind 'update', -><br />  if justPressed.l<br />    # loads the last saved state<br />    engine.loadState()</p>
+          
+          <p>if justPressed.o<br />    # removes all game objects, then reinstantiates <br />    # them with the entityData passed in<br />    engine.loadState([{x: 40, y: 50, class: "Player"}, {x: 0, y: 0, class: "Enemy"}, {x: 500, y: 400, class: "Boss"}])<br /></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>An</span>
+               -
+              <span class='param_description'>arraf of object instance data to load.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>loadState: function(newState) {&#x000A;      if (newState || (newState = savedState)) {&#x000A;        I.objects.invoke("trigger", "remove");&#x000A;        I.objects = [];&#x000A;        return newState.each(function(objectData) {&#x000A;          return self.add(Object.extend({}, objectData));&#x000A;        });&#x000A;      }&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#reload'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>GameState#reload()</h1>
+      <div class='description'>
+        <section class='summary'><p>Reloads the current game state, useful for hotswapping code.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />engine.I.objects.each (object) -><br />  # bring all objects to (0, 0) for some reason<br />  object.I.x = 0<br />  object.I.y = 0</p>
+          
+          <h1>reload all objects to make sure</h1>
+          
+          <h1>they are at (0, 0)</h1>
+          
+          <p>engine.reload()<br /></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>reload: function() {&#x000A;      var oldObjects;&#x000A;      oldObjects = I.objects;&#x000A;      I.objects = [];&#x000A;      return oldObjects.each(function(object) {&#x000A;        object.trigger("remove");&#x000A;        return self.add(object.I);&#x000A;      });&#x000A;    }&#x000A;  };&#x000A;};&#x000A;;</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#saveState'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>GameState#saveState()</h1>
+      <div class='description'>
+        <section class='summary'><p>Save the current game state and returns a JSON object representing that state.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />engine.bind 'update', -><br />  if justPressed.s<br />    engine.saveState()<br /></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Array.html'>Array</a>
+          </p>
+          <p class='return_description'>An array of the instance data of all objects in the game state</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>saveState: function() {&#x000A;      return savedState = I.objects.map(function(object) {&#x000A;        return Object.extend({}, object.I);&#x000A;      });&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+    </div>
+  </body>
+</html>
+<script type='text/javascript'>
+  //<![CDATA[
+    $(function() {
+      $(".documentation").on("click", ".toggle_source", function(e) {
+        e.preventDefault();
+        return $(this).next().toggle();
+      });
+      return $("code.run").each(function() {
+        var canvas, codeElement, compiledJs, source;
+        codeElement = $(this);
+        source = codeElement.text();
+        compiledJs = CoffeeScript.compile(source, {
+          bare: true
+        });
+        canvas = $("<canvas width=200 height=150/>").pixieCanvas();
+        codeElement.after(canvas);
+        return eval(compiledJs);
+      });
+    });
+  //]]>
+</script>

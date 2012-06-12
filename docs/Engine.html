@@ -1,0 +1,821 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible' />
+    <title>Engine</title>
+    <link href='/assets/spacedocs/docs.css' media='screen, projection' rel='stylesheet' type='text/css' />
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js' type='text/javascript'></script>
+  </head>
+  <body>
+    <pre></pre>
+    <nav>
+      <a href='Animated.html'>Animated</a>
+      <a href='Array.html'>Array</a>
+      <a href='Bindable.html'>Bindable</a>
+      <a href='Boolean.html'>Boolean</a>
+      <a href='Bounded.html'>Bounded</a>
+      <a href='Camera.html'>Camera</a>
+      <a href='Collidable.html'>Collidable</a>
+      <a href='Collision.html'>Collision</a>
+      <a href='Color.html'>Color</a>
+      <a href='Core.html'>Core</a>
+      <a href='Date.html'>Date</a>
+      <a href='Drawable.html'>Drawable</a>
+      <a href='Durable.html'>Durable</a>
+      <a class='active' href='Engine.html'>Engine</a>
+      <a href='Engine.Joysticks.html'>Engine.Joysticks</a>
+      <a href='Fadeable.html'>Fadeable</a>
+      <a href='Flickerable.html'>Flickerable</a>
+      <a href='Framerate.html'>Framerate</a>
+      <a href='Function.html'>Function</a>
+      <a href='GameObject.html'>GameObject</a>
+      <a href='GameState.html'>GameState</a>
+      <a href='Local.html'>Local</a>
+      <a href='Math.html'>Math</a>
+      <a href='Matrix.html'>Matrix</a>
+      <a href='Movable.html'>Movable</a>
+      <a href='Music.html'>Music</a>
+      <a href='Number.html'>Number</a>
+      <a href='Object.html'>Object</a>
+      <a href='PixieCanvas.html'>PixieCanvas</a>
+      <a href='Point.html'>Point</a>
+      <a href='PowerCanvas.html'>PowerCanvas</a>
+      <a href='Random.html'>Random</a>
+      <a href='RegExp.html'>RegExp</a>
+      <a href='ResourceLoader.html'>ResourceLoader</a>
+      <a href='Rotatable.html'>Rotatable</a>
+      <a href='Sound.html'>Sound</a>
+      <a href='Sprite.html'>Sprite</a>
+      <a href='String.html'>String</a>
+      <a href='jQuery.html'>jQuery</a>
+      <a href='justPressed.html'>justPressed</a>
+      <a href='keydown.html'>keydown</a>
+      <a href='requestAnimationFrame.html'>requestAnimationFrame</a>
+      <a href='window.html'>window</a>
+    </nav>
+    <section class='method_list'>
+      <h3>Engine Methods</h3>
+      <div class='methods'>
+        <a href='Engine.html##add'>#add</a>
+        <a href='Engine.html##afterAdd'>#afterAdd</a>
+        <a href='Engine.html##afterUpdate'>#afterUpdate</a>
+        <a href='Engine.html##beforeAdd'>#beforeAdd</a>
+        <a href='Engine.html##beforeDraw'>#beforeDraw</a>
+        <a href='Engine.html##cameras'>#cameras</a>
+        <a href='Engine.html##collides'>#collides</a>
+        <a href='Engine.html##collidesWith'>#collidesWith</a>
+        <a href='Engine.html##delay'>#delay</a>
+        <a href='Engine.html##draw'>#draw</a>
+        <a href='Engine.html##find'>#find</a>
+        <a href='Engine.html##frameAdvance'>#frameAdvance</a>
+        <a href='Engine.html##loadMap'>#loadMap</a>
+        <a href='Engine.html##overlay'>#overlay</a>
+        <a href='Engine.html##pause'>#pause</a>
+        <a href='Engine.html##paused'>#paused</a>
+        <a href='Engine.html##play'>#play</a>
+        <a href='Engine.html##rayCollides'>#rayCollides</a>
+        <a href='Engine.html##setFramerate'>#setFramerate</a>
+        <a href='Engine.html##start'>#start</a>
+        <a href='Engine.html##stop'>#stop</a>
+        <a href='Engine.html##update'>#update</a>
+      </div>
+    </section>
+    <div class='documentation'>
+      <h1>Engine Summary</h1>
+      <div class='description'>
+        <section class='summary'></section>
+        <p>The Engine controls the game world and manages game state. Once you <br />set it up and let it run it pretty much takes care of itself.</p>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p>You can use the engine to add or remove objects from the game world.</p>
+          
+          <p>There are several modules that can include to add additional capabilities <br />to the engine.</p>
+          
+          <p>The engine fires events that you  may bind listeners to. Event listeners <br />may be bound with <code>engine.bind(eventName, callback)</code></p>
+        </section>
+      </div>
+      <hr />
+      <a name='#add'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Engine#add(entityData)</h1>
+      <div class='description'>
+        <section class='summary'><p>The add method creates and adds an object to the game world. Two<br />other events are triggered around this one: beforeAdd and afterAdd.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre></p>
+          
+          <h1>you can add arbitrary entityData and</h1>
+          
+          <h1>the engine will make it into a GameObject</h1>
+          
+          <p>engine.add <br />  x: 50<br />  y: 30<br />  color: "red"</p>
+          
+          <p>player = engine.add<br />  class: "Player"<br /></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>entityData</span>
+               -
+              <span class='param_description'>The data used to create the game object.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='GameObject.html'>GameObject</a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>add: function(entityData) {&#x000A;      var object;&#x000A;      self.trigger("beforeAdd", entityData);&#x000A;      object = GameObject.construct(entityData);&#x000A;      object.create();&#x000A;      self.trigger("afterAdd", object);&#x000A;      if (I.updating) {&#x000A;        queuedObjects.push(object);&#x000A;      } else {&#x000A;        I.objects.push(object);&#x000A;      }&#x000A;      return object;&#x000A;    },&#x000A;    objects: function() {&#x000A;      return I.objects.copy();&#x000A;    }&#x000A;  });&#x000A;  self.include(Bindable);&#x000A;  self.bind("update", function() {&#x000A;    var toRemove, _ref;&#x000A;    I.updating = true;&#x000A;    _ref = I.objects.partition(function(object) {&#x000A;      return object.update();&#x000A;    }), I.objects = _ref[0], toRemove = _ref[1];&#x000A;    toRemove.invoke("trigger", "remove");&#x000A;    I.updating = false;&#x000A;    I.objects = I.objects.concat(queuedObjects);&#x000A;    return queuedObjects = [];&#x000A;  });&#x000A;  self.include(GameState.Cameras);&#x000A;  self.include(GameState.SaveState);&#x000A;  return self;&#x000A;};&#x000A;;&#x000A;&#x000A;GameState.Cameras = function(I, self) {&#x000A;  var cameras;&#x000A;  cameras = [Camera()];&#x000A;  self.bind('afterUpdate', function() {&#x000A;    return self.cameras().each(function(camera) {&#x000A;      return camera.trigger('afterUpdate');&#x000A;    });&#x000A;  });&#x000A;  self.bind('draw', function(canvas) {&#x000A;    return self.cameras().invoke('trigger', 'draw', canvas, self.objects());&#x000A;  });&#x000A;  self.bind('overlay', function(canvas) {&#x000A;    return self.cameras().each(function(camera) {&#x000A;      return camera.trigger('overlay', canvas);&#x000A;    });&#x000A;  });&#x000A;  return {&#x000A;    addCamera: function(data) {&#x000A;      return cameras.push(Camera(data));&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#afterAdd'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Engine#afterAdd(object)</h1>
+      <div class='description'>
+        <section class='summary'><p>Observe or configure a <code>gameObject</code> that has been added <br />to the engine.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>object</span>
+               -
+              <span class='param_description'>The object that has just been added to the</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#afterUpdate'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Engine#afterUpdate()</h1>
+      <div class='description'>
+        <section class='summary'><p>Called after the engine completes an update. Here it is <br />safe to modify the game objects array.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#beforeAdd'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Engine#beforeAdd(entityData)</h1>
+      <div class='description'>
+        <section class='summary'><p>Observe or modify the <br />entity data before it is added to the engine.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>entityData</span>
+               -
+              <span class='param_description'></span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#beforeDraw'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Engine#beforeDraw()</h1>
+      <div class='description'>
+        <section class='summary'><p>Called before the engine draws the game objects on the canvas. The current camera transform is applied.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#cameras'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Engine#cameras()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the array of camera objects.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Array.html'>Array</a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>cameras: function(newCameras) {&#x000A;      if (newCameras) {&#x000A;        cameras = newCameras;&#x000A;        return self;&#x000A;      } else {&#x000A;        return cameras;&#x000A;      }&#x000A;    }&#x000A;  };&#x000A;};&#x000A;;</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#collides'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Engine#collides(The, An)</h1>
+      <div class='description'>
+        <section class='summary'><p>Detects collisions between a bounds and the game objects.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>The</span>
+               -
+              <span class='param_description'>bounds to check collisions with.</span>
+            </li>
+            <li>
+              <span class='param_name'>An</span>
+               -
+              <span class='param_description'>object to exclude from the results.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Boolean.html'>Boolean</a>
+          </p>
+          <p class='return_description'>true if the bounds object collides with any of the game objects, false otherwise.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>collides: function(bounds, sourceObject) {&#x000A;      return self.objects().inject(false, function(collided, object) {&#x000A;        return collided || (object.solid() && (object !== sourceObject) && object.collides(bounds));&#x000A;      });&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#collidesWith'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Engine#collidesWith(The, An)</h1>
+      <div class='description'>
+        <section class='summary'><p>Detects collisions between a bounds and the game objects. <br />Returns an array of objects colliding with the bounds provided.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>The</span>
+               -
+              <span class='param_description'>bounds to check collisions with.</span>
+            </li>
+            <li>
+              <span class='param_name'>An</span>
+               -
+              <span class='param_description'>object to exclude from the results.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Array.html'>Array</a>
+          </p>
+          <p class='return_description'>An array of objects that collide with the given bounds.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>collidesWith: function(bounds, sourceObject) {&#x000A;      var collided;&#x000A;      collided = [];&#x000A;      self.objects().each(function(object) {&#x000A;        if (!object.solid()) return;&#x000A;        if (object !== sourceObject && object.collides(bounds)) {&#x000A;          return collided.push(object);&#x000A;        }&#x000A;      });&#x000A;      if (collided.length) return collided;&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#delay'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Engine#delay(steps, callback)</h1>
+      <div class='description'>
+        <section class='summary'><p>Execute a callback after a number of steps have passed.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />engine.delay 5, -><br />  engine.add<br />    class: "Ghost"<br /></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>steps</span>
+               -
+              <span class='param_description'>The number of steps to wait before executing the callback</span>
+            </li>
+            <li>
+              <span class='param_name'>callback</span>
+               -
+              <span class='param_description'>The callback to be executed.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Engine.html'>Engine</a>
+          </p>
+          <p class='return_description'>self</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>delay: function(steps, callback) {&#x000A;      delayedEvents.push({&#x000A;        delay: steps,&#x000A;        callback: callback&#x000A;      });&#x000A;      return self;&#x000A;    }&#x000A;  };&#x000A;};&#x000A;;&#x000A;&#x000A;Engine.GameState = function(I, self) {&#x000A;  var requestedState;&#x000A;  Object.reverseMerge(I, {&#x000A;    currentState: GameState()&#x000A;  });&#x000A;  requestedState = null;&#x000A;  self.bind("update", function() {&#x000A;    I.currentState.trigger("beforeUpdate");&#x000A;    I.currentState.trigger("update");&#x000A;    return I.currentState.trigger("afterUpdate");&#x000A;  });&#x000A;  self.bind("afterUpdate", function() {&#x000A;    var previousState;&#x000A;    if (requestedState != null) {&#x000A;      I.currentState.trigger("exit", requestedState);&#x000A;      previousState = I.currentState;&#x000A;      I.currentState = requestedState;&#x000A;      I.currentState.trigger("enter", previousState);&#x000A;      return requestedState = null;&#x000A;    }&#x000A;  });&#x000A;  self.bind("draw", function(canvas) {&#x000A;    I.currentState.trigger("beforeDraw", canvas);&#x000A;    I.currentState.trigger("draw", canvas);&#x000A;    return I.currentState.trigger("overlay", canvas);&#x000A;  });&#x000A;  return {&#x000A;    add: function(entityData) {&#x000A;      var object;&#x000A;      self.trigger("beforeAdd", entityData);&#x000A;      object = I.currentState.add(entityData);&#x000A;      self.trigger("afterAdd", object);&#x000A;      return object;&#x000A;    },&#x000A;    camera: function(n) {&#x000A;      if (n == null) n = 0;&#x000A;      return self.cameras()[n];&#x000A;    },&#x000A;    cameras: function(newCameras) {&#x000A;      if (newCameras != null) {&#x000A;        I.currentState.cameras(newCameras);&#x000A;        return self;&#x000A;      } else {&#x000A;        return I.currentState.cameras();&#x000A;      }&#x000A;    },&#x000A;    flash: function(options) {&#x000A;      if (options == null) options = {};&#x000A;      return self.camera(options.camera).flash(options);&#x000A;    },&#x000A;    objects: function() {&#x000A;      return I.currentState.objects();&#x000A;    },&#x000A;    setState: function(newState) {&#x000A;      return requestedState = newState;&#x000A;    },&#x000A;    shake: function(options) {&#x000A;      if (options == null) options = {};&#x000A;      return self.camera(options.camera).shake(options);&#x000A;    },&#x000A;    saveState: function() {&#x000A;      return I.currentState.saveState();&#x000A;    },&#x000A;    loadState: function(newState) {&#x000A;      return I.currentState.loadState(newState);&#x000A;    },&#x000A;    reload: function() {&#x000A;      return I.currentState.reload();&#x000A;    }&#x000A;  };&#x000A;};&#x000A;;</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#draw'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Engine#draw()</h1>
+      <div class='description'>
+        <section class='summary'><p>Called after the engine draws on the canvas. The current camera transform is applied.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />engine.bind "draw", (canvas) -><br />  # print some directions for the player<br />  canvas.drawText<br />    text: "Go this way =>"<br />    x: 200<br />    y: 200 <br /></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#find'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Engine#find(selector)</h1>
+      <div class='description'>
+        <section class='summary'><p>Get a selection of GameObjects that match the specified selector criteria. The selector language<br />can select objects by id, class, or attributes. Note that this method always returns an Array,<br />so if you are trying to find only one object you will need something like <code>engine.find("Enemy").first()</code>.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />player = engine.add<br />  class: "Player"</p>
+          
+          <p>enemy = engine.add<br />  class: "Enemy"<br />  speed: 5<br />  x: 0</p>
+          
+          <p>distantEnemy = engine.add<br />  class "Enemy"<br />  x: 500</p>
+          
+          <p>boss = engine.add<br />  class: "Enemy"<br />  id: "Boss"<br />  x: 0</p>
+          
+          <h1>to select an object by id use "#anId"</h1>
+          
+          <p>engine.find "#Boss"</p>
+          
+          <h1>=> [boss]</h1>
+          
+          <h1>to select an object by class use "MyClass"</h1>
+          
+          <p>engine.find "Enemy"</p>
+          
+          <h1>=> [enemy, distantEnemy, boss]</h1>
+          
+          <h1>to select an object by properties use ".someProperty" or ".someProperty=someValue"</h1>
+          
+          <p>engine.find ".speed=5"</p>
+          
+          <h1>=> [enemy]</h1>
+          
+          <h1>You may mix and match selectors.</h1>
+          
+          <p>engine.find "Enemy.x=0"</p>
+          
+          <h1>=> [enemy, boss] # doesn't return distantEnemy</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>selector</span>
+               -
+              <span class='param_description'></span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Array.html'>Array</a>
+          </p>
+          <p class='return_description'>An array of the objects found</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>find: function(selector) {&#x000A;      var matcher, results;&#x000A;      results = [];&#x000A;      matcher = Engine.Selector.generate(selector);&#x000A;      self.objects().each(function(object) {&#x000A;        if (matcher.match(object)) return results.push(object);&#x000A;      });&#x000A;      return Object.extend(results, instanceMethods);&#x000A;    }&#x000A;  };&#x000A;};&#x000A;&#x000A;Object.extend(Engine.Selector, {&#x000A;  parse: function(selector) {&#x000A;    return selector.split(",").invoke("trim");&#x000A;  },&#x000A;  process: function(item) {&#x000A;    var result;&#x000A;    result = /^(\w+)?#?([\w\-]+)?\.?([\w\-]+)?=?([\w\-]+)?/.exec(item);&#x000A;    if (result) {&#x000A;      if (result[4]) result[4] = result[4].parse();&#x000A;      return result.splice(1);&#x000A;    } else {&#x000A;      return [];&#x000A;    }&#x000A;  },&#x000A;  generate: function(selector) {&#x000A;    var ATTR, ATTR_VALUE, ID, TYPE, components;&#x000A;    components = Engine.Selector.parse(selector).map(function(piece) {&#x000A;      return Engine.Selector.process(piece);&#x000A;    });&#x000A;    TYPE = 0;&#x000A;    ID = 1;&#x000A;    ATTR = 2;&#x000A;    ATTR_VALUE = 3;&#x000A;    return {&#x000A;      match: function(object) {&#x000A;        var attr, attrMatch, component, idMatch, typeMatch, value, _i, _len;&#x000A;        for (_i = 0, _len = components.length; _i < _len; _i++) {&#x000A;          component = components[_i];&#x000A;          idMatch = (component[ID] === object.I.id) || !component[ID];&#x000A;          typeMatch = (component[TYPE] === object.I["class"]) || !component[TYPE];&#x000A;          if (attr = component[ATTR]) {&#x000A;            if ((value = component[ATTR_VALUE]) != null) {&#x000A;              attrMatch = object.I[attr] === value;&#x000A;            } else {&#x000A;              attrMatch = object.I[attr];&#x000A;            }&#x000A;          } else {&#x000A;            attrMatch = true;&#x000A;          }&#x000A;          if (idMatch && typeMatch && attrMatch) return true;&#x000A;        }&#x000A;        return false;&#x000A;      }&#x000A;    };&#x000A;  }&#x000A;});&#x000A;;</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#frameAdvance'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Engine#frameAdvance()</h1>
+      <div class='description'>
+        <section class='summary'><p>Pause the game and step through 1 update of the engine.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />engine.frameAdvance()<br /></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>frameAdvance: function() {&#x000A;        I.paused = true;&#x000A;        frameAdvance = true;&#x000A;        step();&#x000A;        return frameAdvance = false;&#x000A;      },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#loadMap'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Engine#loadMap()</h1>
+      <div class='description'>
+        <section class='summary'><p>Loads a new may and unloads any existing map or entities.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>loadMap: function(name, complete) {&#x000A;      clearObjects = updating;&#x000A;      return map = Tilemap.load({&#x000A;        name: name,&#x000A;        complete: complete,&#x000A;        entity: self.add&#x000A;      });&#x000A;    }&#x000A;  };&#x000A;};;</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#overlay'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Engine#overlay()</h1>
+      <div class='description'>
+        <section class='summary'><p>Called after the engine draws.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p>The current camera transform is not applied. This is great for<br />adding overlays.</p>
+          
+          <p><code><pre><br />engine.bind "overlay", (canvas) -><br />  # print the player's health. This will be<br />  # positioned absolutely according to the viewport.<br />  canvas.drawText<br />    text: "HEALTH:"<br />    position: Point(20, 20)</p>
+          
+          <p>canvas.drawText<br />    text: player.health()<br />    position: Point(50, 20)<br /></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Engine = function(I) {&#x000A;    var animLoop, defaultModules, draw, frameAdvance, lastStepTime, modules, running, self, startTime, step, update;&#x000A;    if (I == null) I = {};&#x000A;    Object.reverseMerge(I, defaults);&#x000A;    frameAdvance = false;&#x000A;    running = false;&#x000A;    startTime = +new Date();&#x000A;    lastStepTime = -Infinity;&#x000A;    animLoop = function(timestamp) {&#x000A;      var delta, msPerFrame, remainder;&#x000A;      timestamp || (timestamp = +new Date());&#x000A;      msPerFrame = 1000 / I.FPS;&#x000A;      delta = timestamp - lastStepTime;&#x000A;      remainder = delta - msPerFrame;&#x000A;      if (remainder > 0) {&#x000A;        lastStepTime = timestamp - Math.min(remainder, msPerFrame);&#x000A;        step();&#x000A;      }&#x000A;      if (running) return window.requestAnimationFrame(animLoop);&#x000A;    };&#x000A;    update = function() {&#x000A;      self.trigger("beforeUpdate");&#x000A;      self.trigger("update");&#x000A;      return self.trigger("afterUpdate");&#x000A;    };&#x000A;    draw = function() {&#x000A;      var canvas;&#x000A;      if (!(canvas = I.canvas)) return;&#x000A;      self.trigger("beforeDraw", canvas);&#x000A;      self.trigger("draw", canvas);&#x000A;      return self.trigger("overlay", I.canvas);&#x000A;    };&#x000A;    step = function() {&#x000A;      if (!I.paused || frameAdvance) {&#x000A;        update();&#x000A;        I.age += 1;&#x000A;      }&#x000A;      return draw();&#x000A;    };&#x000A;    self = Core(I).extend({</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#pause'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Engine#pause(setTo)</h1>
+      <div class='description'>
+        <section class='summary'><p>Toggle the paused state of the simulation.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />engine.pause()<br /></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>setTo</span>
+               -
+              <span class='param_description'>Force to pause by passing true or unpause by passing false.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>pause: function(setTo) {&#x000A;        if (setTo != null) {&#x000A;          return I.paused = setTo;&#x000A;        } else {&#x000A;          return I.paused = !I.paused;&#x000A;        }&#x000A;      },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#paused'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Engine#paused()</h1>
+      <div class='description'>
+        <section class='summary'><p>Query the engine to see if it is paused.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />engine.pause()</p>
+          
+          <p>engine.paused()</p>
+          
+          <h1>true</h1>
+          
+          <p>engine.play()</p>
+          
+          <p>engine.paused()</p>
+          
+          <h1>false</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>paused: function() {&#x000A;        return I.paused;&#x000A;      },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#play'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Engine#play()</h1>
+      <div class='description'>
+        <section class='summary'><p>Resume the game.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />engine.play()<br /></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>play: function() {&#x000A;        return I.paused = false;&#x000A;      },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#rayCollides'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Engine#rayCollides(The, A, An)</h1>
+      <div class='description'>
+        <section class='summary'><p>Detects collisions between a ray and the game objects.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>The</span>
+               -
+              <span class='param_description'>origin point</span>
+            </li>
+            <li>
+              <span class='param_name'>A</span>
+               -
+              <span class='param_description'>point representing the direction of the ray</span>
+            </li>
+            <li>
+              <span class='param_name'>An</span>
+               -
+              <span class='param_description'>object to exclude from the results.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>rayCollides: function(source, direction, sourceObject) {&#x000A;      var hits, nearestDistance, nearestHit;&#x000A;      hits = self.objects().map(function(object) {&#x000A;        var hit;&#x000A;        hit = object.solid() && (object !== sourceObject) && Collision.rayRectangle(source, direction, object.centeredBounds());&#x000A;        if (hit) hit.object = object;&#x000A;        return hit;&#x000A;      });&#x000A;      nearestDistance = Infinity;&#x000A;      nearestHit = null;&#x000A;      hits.each(function(hit) {&#x000A;        var d;&#x000A;        if (hit && (d = hit.distance(source)) < nearestDistance) {&#x000A;          nearestDistance = d;&#x000A;          return nearestHit = hit;&#x000A;        }&#x000A;      });&#x000A;      return nearestHit;&#x000A;    }&#x000A;  };&#x000A;};&#x000A;;</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#setFramerate'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Engine#setFramerate()</h1>
+      <div class='description'>
+        <section class='summary'><p>Change the framerate of the game. The default framerate is 30 fps.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />engine.setFramerate(60)<br /></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>setFramerate: function(newFPS) {&#x000A;        I.FPS = newFPS;&#x000A;        self.stop();&#x000A;        return self.start();&#x000A;      },&#x000A;      update: update,&#x000A;      draw: draw&#x000A;    });&#x000A;    self.include(Bindable);&#x000A;    defaultModules = ["Keyboard", "Clear", "Delay", "GameState", "Selector", "Collision"];&#x000A;    modules = defaultModules.concat(I.includedModules);&#x000A;    modules = modules.without([].concat(I.excludedModules));&#x000A;    modules.each(function(moduleName) {&#x000A;      if (!Engine[moduleName]) {&#x000A;        throw "#Engine." + moduleName + " is not a valid engine module";&#x000A;      }&#x000A;      return self.include(Engine[moduleName]);&#x000A;    });&#x000A;    self.trigger("init");&#x000A;    return self;&#x000A;  };&#x000A;  oldEngine = (typeof exports !== "undefined" && exports !== null ? exports : this).Engine;&#x000A;  Object.extend(Engine, oldEngine);&#x000A;  return (typeof exports !== "undefined" && exports !== null ? exports : this)["Engine"] = Engine;&#x000A;})();&#x000A;&#x000A;var Fan;&#x000A;&#x000A;Fan = function(I) {&#x000A;  var self;&#x000A;  $.reverseMerge(I, {&#x000A;    duration: 16 + rand(64),&#x000A;    sprite: Fan.sprites.rand(),&#x000A;    width: 32,&#x000A;    height: 32,&#x000A;    x: rand(App.width).snap(32),&#x000A;    y: rand(WALL_TOP).snap(32)&#x000A;  });&#x000A;  self = GameObject(I).extend({&#x000A;    center: function() {&#x000A;      return Point(I.x + I.width / 2, I.y + I.height / 2);&#x000A;    }&#x000A;  });&#x000A;  if (config.throwBottles && !rand(50)) {&#x000A;    engine.add({&#x000A;      "class": "Bottle",&#x000A;      x: I.x,&#x000A;      y: I.y&#x000A;    });&#x000A;  }&#x000A;  return self;&#x000A;};&#x000A;&#x000A;Fan.sprites || (Fan.sprites = [Sprite.loadByName("fans_active")]);&#x000A;&#x000A;var FrameEditorState;&#x000A;&#x000A;FrameEditorState = function(I) {&#x000A;  var activeTool, addEventComponent, adjustComponentPosition, adjustComponentRotation, adjustComponentScale, characterActions, characterBodies, characterFacings, characterHeads, componentAt, constrainIndices, currentAction, currentAnimation, currentBody, currentFacing, currentFrameData, currentHead, currentTeam, data, defaultHeadData, drawBodySprite, drawComponentInfo, extractEventsData, extractHeadData, headDataObject, headPositions, helpInfo, lineHeight, loadFrameData, loadFromServer, namespace, p, saveToServer, screenCenter, selectedComponent, self, showHelp, storeFrameData, teamList, tools;&#x000A;  if (I == null) I = {};&#x000A;  Object.reverseMerge(I, {&#x000A;    frameIndex: 0,&#x000A;    facingIndex: 0,&#x000A;    actionIndex: 0,&#x000A;    headPositionIndex: 0,&#x000A;    bodyIndex: 0,&#x000A;    headIndex: 0,&#x000A;    teamIndex: 0&#x000A;  });&#x000A;  self = GameState(I);&#x000A;  screenCenter = Point(App.width, App.height).scale(0.5);&#x000A;  headPositions = 5;&#x000A;  namespace = ".FRAME_EDITOR";&#x000A;  teamList = ["spike", "smiley"];&#x000A;  characterHeads = ["bigeyes", "jawhead", "longface", "roundhead", "stubs"];&#x000A;  characterBodies = ["tubs", "skinny", "thick"];&#x000A;  characterActions = ["fast", "slow", "idle", "shoot", "fall"];&#x000A;  characterFacings = ["front", "back"];&#x000A;  showHelp = false;&#x000A;  helpInfo = {&#x000A;    F1: "Toggle help info",&#x000A;    "Arrow Keys": "Adjust component position"&#x000A;  };&#x000A;  p = null;&#x000A;  selectedComponent = null;&#x000A;  headDataObject = null;&#x000A;  addEventComponent = function(position) {&#x000A;    return selectedComponent = engine.add({&#x000A;      x: position.x,&#x000A;      y: position.y,&#x000A;      radius: 5,&#x000A;      color: "rgba(255, 0, 255, 0.5)",&#x000A;      name: "shoot",&#x000A;      type: "event"&#x000A;    });&#x000A;  };&#x000A;  componentAt = function(position) {&#x000A;    return headDataObject;&#x000A;  };&#x000A;  adjustComponentPosition = function(delta) {&#x000A;    return selectedComponent.position(selectedComponent.position().add(delta));&#x000A;  };&#x000A;  adjustComponentRotation = function(delta) {&#x000A;    return selectedComponent.I.rotation += delta;&#x000A;  };&#x000A;  adjustComponentScale = function(delta) {&#x000A;    if (selectedComponent.I.name === "shoot") {&#x000A;      return selectedComponent.I.radius += delta * 100;&#x000A;    } else {&#x000A;      return selectedComponent.I.scale += delta;&#x000A;    }&#x000A;  };&#x000A;  data = {};&#x000A;  tools = {};&#x000A;  defaultHeadData = function() {&#x000A;    return {&#x000A;      x: 32,&#x000A;      y: -64,&#x000A;      scale: 0.75,&#x000A;      rotation: 0&#x000A;    };&#x000A;  };&#x000A;  extractHeadData = function() {&#x000A;    var rotation, scale, x, y, _ref;&#x000A;    _ref = headDataObject.I, x = _ref.x, y = _ref.y, scale = _ref.scale, rotation = _ref.rotation;&#x000A;    if ((-0.001 < rotation && rotation < 0.001)) rotation = 0;&#x000A;    return {&#x000A;      x: x,&#x000A;      y: y,&#x000A;      scale: scale,&#x000A;      rotation: rotation&#x000A;    };&#x000A;  };&#x000A;  extractEventsData = function() {&#x000A;    return engine.find(".type=event").map(function(eventDatum) {&#x000A;      var name, radius, type, x, y, _ref;&#x000A;      _ref = eventDatum.I, x = _ref.x, y = _ref.y, radius = _ref.radius, name = _ref.name, type = _ref.type;&#x000A;      return {&#x000A;        x: x,&#x000A;        y: y,&#x000A;        radius: radius,&#x000A;        name: name,&#x000A;        type: type&#x000A;      };&#x000A;    });&#x000A;  };&#x000A;  constrainIndices = function() {&#x000A;    if (currentAnimation().length) {&#x000A;      I.frameIndex = I.frameIndex.mod(currentAnimation().length);&#x000A;    }&#x000A;    I.headPositionIndex = I.headPositionIndex.mod(headPositions);&#x000A;    I.actionIndex = I.actionIndex.mod(characterActions.length);&#x000A;    return I.facingIndex = I.facingIndex.mod(characterFacings.length);&#x000A;  };&#x000A;  currentTeam = function() {&#x000A;    return teamList.wrap(I.teamIndex);&#x000A;  };&#x000A;  currentBody = function() {&#x000A;    return characterBodies.wrap(I.bodyIndex);&#x000A;  };&#x000A;  currentHead = function() {&#x000A;    return characterHeads.wrap(I.headIndex);&#x000A;  };&#x000A;  currentAction = function() {&#x000A;    return characterActions.wrap(I.actionIndex);&#x000A;  };&#x000A;  currentFacing = function() {&#x000A;    return characterFacings.wrap(I.facingIndex);&#x000A;  };&#x000A;  currentAnimation = function() {&#x000A;    var _ref;&#x000A;    return (_ref = teamSprites[currentTeam()][currentBody()][currentAction()]) != null ? _ref[currentFacing()] : void 0;&#x000A;  };&#x000A;  currentFrameData = function(dataToSave) {&#x000A;    var _base, _base2, _name, _name2, _name3;&#x000A;    data[_name = currentAction()] || (data[_name] = {});&#x000A;    (_base = data[currentAction()])[_name2 = currentFacing()] || (_base[_name2] = []);&#x000A;    if (dataToSave != null) {&#x000A;      return data[currentAction()][currentFacing()][I.frameIndex] = dataToSave;&#x000A;    } else {&#x000A;      return (_base2 = data[currentAction()][currentFacing()])[_name3 = I.frameIndex] || (_base2[_name3] = {&#x000A;        head: defaultHeadData(),&#x000A;        events: []&#x000A;      });&#x000A;    }&#x000A;  };&#x000A;  loadFrameData = function() {&#x000A;    var d;&#x000A;    if (d = currentFrameData()) return Object.extend(headDataObject.I, d.head);&#x000A;  };&#x000A;  storeFrameData = function() {&#x000A;    var dataToSave;&#x000A;    dataToSave = {&#x000A;      head: extractHeadData(),&#x000A;      events: extractEventsData()&#x000A;    };&#x000A;    return currentFrameData(dataToSave);&#x000A;  };&#x000A;  saveToServer = function() {&#x000A;    return saveFile({&#x000A;      contents: JSON.stringify(data, null, 2),&#x000A;      path: "data/" + (currentTeam()) + "_" + (currentBody()) + ".json"&#x000A;    });&#x000A;  };&#x000A;  loadFromServer = function() {&#x000A;    var url;&#x000A;    url = ResourceLoader.urlFor("data", "" + (currentTeam()) + "_" + (currentBody()));&#x000A;    return $.getJSON(url, function(remoteData) {&#x000A;      console.log("received remote data");&#x000A;      console.log(remoteData);&#x000A;      data = remoteData;&#x000A;      return loadFrameData();&#x000A;    });&#x000A;  };&#x000A;  tools.move = (function() {&#x000A;    var activeComponent;&#x000A;    activeComponent = null;&#x000A;    return {&#x000A;      mousedown: function(_arg) {&#x000A;        var button, position;&#x000A;        position = _arg.position, button = _arg.button;&#x000A;        if (button === 1) {&#x000A;          return selectedComponent = activeComponent = componentAt(position);&#x000A;        } else if (button === 3) {&#x000A;          return addEventComponent(position);&#x000A;        }&#x000A;      },&#x000A;      mousemove: function(_arg) {&#x000A;        var position;&#x000A;        position = _arg.position;&#x000A;        if (activeComponent) return activeComponent.position(position);&#x000A;      },&#x000A;      mouseup: function() {&#x000A;        return activeComponent = null;&#x000A;      }&#x000A;    };&#x000A;  })();&#x000A;  activeTool = tools.move;&#x000A;  self.bind("enter", function() {&#x000A;    var addCycle, adjustIndexVariable, fn, hotkeys, key, shiftFactor, _results;&#x000A;    engine.cameras().first().I.scroll = Point(0, 0).subtract(screenCenter);&#x000A;    selectedComponent = headDataObject = engine.add({&#x000A;      x: 32,&#x000A;      y: -64,&#x000A;      rotation: 0,&#x000A;      radius: 5,&#x000A;      color: "cyan",&#x000A;      scale: 0.75,&#x000A;      type: "head"&#x000A;    });&#x000A;    headDataObject.bind("draw", function(canvas) {&#x000A;      var _ref;&#x000A;      return (_ref = teamSprites[currentTeam()][currentHead()].normal.wrap(I.headPositionIndex)) != null ? _ref.draw(canvas, -256, -256) : void 0;&#x000A;    });&#x000A;    p = engine.add({&#x000A;      id: 0,&#x000A;      "class": "Player",&#x000A;      joystick: true,&#x000A;      x: -screenCenter.x + 128,&#x000A;      y: screenCenter.y - 128&#x000A;    });&#x000A;    ["mousedown", "mousemove", "mouseup"].each(function(eventType) {&#x000A;      return $(document).bind("" + eventType + namespace, function(event) {&#x000A;        var button, position;&#x000A;        position = Point(event.pageX, event.pageY).subtract(screenCenter);&#x000A;        button = event.which;&#x000A;        return typeof activeTool[eventType] === "function" ? activeTool[eventType]({&#x000A;          position: position,&#x000A;          button: button&#x000A;        }) : void 0;&#x000A;      });&#x000A;    });&#x000A;    shiftFactor = 10;&#x000A;    hotkeys = {&#x000A;      "return": function() {&#x000A;        return console.log(JSON.stringify(data, null, 2));&#x000A;      },&#x000A;      f1: function() {&#x000A;        return showHelp = !showHelp;&#x000A;      },&#x000A;      "[": function() {&#x000A;        return adjustComponentRotation(-Math.TAU / 128);&#x000A;      },&#x000A;      "]": function() {&#x000A;        return adjustComponentRotation(Math.TAU / 128);&#x000A;      },&#x000A;      "-": function() {&#x000A;        return adjustComponentScale(-0.01);&#x000A;      },&#x000A;      "+": function() {&#x000A;        return adjustComponentScale(0.01);&#x000A;      },&#x000A;      "shift+-": function() {&#x000A;        return adjustComponentScale(-0.1);&#x000A;      },&#x000A;      "shift++": function() {&#x000A;        return adjustComponentScale(0.1);&#x000A;      },&#x000A;      insert: function() {&#x000A;        return selectedComponent = engine.add({&#x000A;          radius: 50,&#x000A;          color: "rgba(255, 0, 255, 0.5)",&#x000A;          rotation: 0,&#x000A;          scale: 1&#x000A;        });&#x000A;      },&#x000A;      "ctrl+s": function() {&#x000A;        return Local.set("characterData", data);&#x000A;      },&#x000A;      "ctrl+shift+s": function() {&#x000A;        return saveToServer();&#x000A;      },&#x000A;      "ctrl+l": function() {&#x000A;        data = Local.get("characterData") || {};&#x000A;        return loadFrameData();&#x000A;      },&#x000A;      "ctrl+shift+l": function() {&#x000A;        return loadFromServer();&#x000A;      }&#x000A;    };&#x000A;    ["left", "right", "up", "down"].each(function(direction) {&#x000A;      var point;&#x000A;      point = Point[direction.toUpperCase()];&#x000A;      hotkeys[direction] = function() {&#x000A;        return adjustComponentPosition(point);&#x000A;      };&#x000A;      return hotkeys["shift+" + direction] = function() {&#x000A;        return adjustComponentPosition(point.scale(shiftFactor));&#x000A;      };&#x000A;    });&#x000A;    adjustIndexVariable = function(variableName, amount) {&#x000A;      storeFrameData();&#x000A;      I[variableName] += amount;&#x000A;      constrainIndices();&#x000A;      return loadFrameData();&#x000A;    };&#x000A;    addCycle = function(variableName, prevKey, nextKey) {&#x000A;      hotkeys[prevKey] = function() {&#x000A;        return adjustIndexVariable(variableName, -1);&#x000A;      };&#x000A;      hotkeys[nextKey] = function() {&#x000A;        return adjustIndexVariable(variableName, 1);&#x000A;      };&#x000A;      helpInfo[prevKey] = "Decrement " + (variableName.underscore().humanize());&#x000A;      return helpInfo[nextKey] = "Increment " + (variableName.underscore().humanize());&#x000A;    };&#x000A;    addCycle("headPositionIndex", ";", "q");&#x000A;    addCycle("frameIndex", "v", "z");&#x000A;    addCycle("actionIndex", "pageup", "pagedown");&#x000A;    addCycle("facingIndex", "'", ",");&#x000A;    addCycle("bodyIndex", "j", "k");&#x000A;    addCycle("headIndex", "r", "l");&#x000A;    addCycle("teamIndex", "n", "s");&#x000A;    _results = [];&#x000A;    for (key in hotkeys) {&#x000A;      fn = hotkeys[key];&#x000A;      _results.push($(document).bind("keydown" + namespace, key, fn));&#x000A;    }&#x000A;    return _results;&#x000A;  });&#x000A;  self.bind("exit", function() {&#x000A;    return $(document).unbind(namespace);&#x000A;  });&#x000A;  drawBodySprite = function(canvas) {&#x000A;    return canvas.withTransform(Matrix.translation(screenCenter.x, screenCenter.y), function(canvas) {&#x000A;      var sprite, _ref;&#x000A;      if (sprite = (_ref = currentAnimation()) != null ? _ref.wrap(I.frameIndex) : void 0) {&#x000A;        return sprite.draw(canvas, -sprite.width / 2, -sprite.height / 2);&#x000A;      }&#x000A;    });&#x000A;  };&#x000A;  self.bind("beforeDraw", function(canvas) {&#x000A;    if (currentFacing() === "front") return drawBodySprite(canvas);&#x000A;  });&#x000A;  self.bind("draw", function(canvas) {&#x000A;    if (currentFacing() === "back") return drawBodySprite(canvas);&#x000A;  });&#x000A;  lineHeight = 30;&#x000A;  drawComponentInfo = function(canvas) {&#x000A;    var i, infoProps, prop, value, _len, _ref, _results;&#x000A;    if (selectedComponent) {&#x000A;      if (selectedComponent.I.name) {&#x000A;        infoProps = ["x", "y", "radius"];&#x000A;      } else {&#x000A;        infoProps = ["x", "y", "rotation", "scale"];&#x000A;      }&#x000A;      _results = [];&#x000A;      for (i = 0, _len = infoProps.length; i < _len; i++) {&#x000A;        prop = infoProps[i];&#x000A;        value = ((_ref = selectedComponent.I[prop]) != null ? typeof _ref.toFixed === "function" ? _ref.toFixed(3) : void 0 : void 0) || selectedComponent.I[prop];&#x000A;        canvas.drawText({&#x000A;          position: Point(0, lineHeight * i),&#x000A;          color: "white",&#x000A;          text: prop&#x000A;        });&#x000A;        _results.push(canvas.drawText({&#x000A;          position: Point(60, lineHeight * i),&#x000A;          color: "white",&#x000A;          text: value&#x000A;        }));&#x000A;      }&#x000A;      return _results;&#x000A;    }&#x000A;  };&#x000A;  self.bind("overlay", function(canvas) {&#x000A;    var description, key, y, _results;&#x000A;    canvas.drawText({&#x000A;      position: Point(60, 20),&#x000A;      color: "white",&#x000A;      text: "" + (currentTeam()) + " " + (currentBody())&#x000A;    });&#x000A;    canvas.drawText({&#x000A;      position: Point(140, 20),&#x000A;      color: "white",&#x000A;      text: currentFacing()&#x000A;    });&#x000A;    canvas.drawText({&#x000A;      position: Point(180, 20),&#x000A;      color: "white",&#x000A;      text: currentAction()&#x000A;    });&#x000A;    canvas.drawText({&#x000A;      position: Point(260, 20),&#x000A;      color: "white",&#x000A;      text: I.frameIndex&#x000A;    });&#x000A;    canvas.withTransform(Matrix.translation(30, 60), function(canvas) {&#x000A;      return drawComponentInfo(canvas);&#x000A;    });&#x000A;    if (showHelp) {&#x000A;      canvas.drawRect({&#x000A;        x: 0,&#x000A;        y: 0,&#x000A;        width: App.width,&#x000A;        height: App.height,&#x000A;        color: "rgba(0, 0, 0, 0.75)"&#x000A;      });&#x000A;      y = 80;&#x000A;      _results = [];&#x000A;      for (key in helpInfo) {&#x000A;        description = helpInfo[key];&#x000A;        canvas.drawText({&#x000A;          position: Point(200, y),&#x000A;          color: "white",&#x000A;          text: key&#x000A;        });&#x000A;        canvas.drawText({&#x000A;          position: Point(300, y),&#x000A;          color: "white",&#x000A;          text: description&#x000A;        });&#x000A;        _results.push(y += lineHeight);&#x000A;      }&#x000A;      return _results;&#x000A;    }&#x000A;  });&#x000A;  return self;&#x000A;};&#x000A;&#x000A;var Goal;&#x000A;&#x000A;Goal = function(I) {&#x000A;  var DEBUG_DRAW, HEIGHT, WALL_RADIUS, WIDTH, drawWall, self, walls;&#x000A;  I || (I = {});&#x000A;  DEBUG_DRAW = false;&#x000A;  WALL_RADIUS = 2;&#x000A;  WIDTH = 32;&#x000A;  HEIGHT = 48;&#x000A;  $.reverseMerge(I, {&#x000A;    color: "green",&#x000A;    height: HEIGHT,&#x000A;    width: WIDTH,&#x000A;    x: WALL_LEFT + ARENA_WIDTH / 20 - WIDTH,&#x000A;    y: WALL_TOP + ARENA_HEIGHT / 2 - HEIGHT / 2,&#x000A;    spriteOffset: Point(0, 2 - HEIGHT / 2),&#x000A;    suddenDeath: false&#x000A;  });&#x000A;  I.color = Player.COLORS[I.team];&#x000A;  walls = [];&#x000A;  if (I.team) {&#x000A;    walls.push({&#x000A;      center: Point(I.x + I.width, I.y + I.height / 2),&#x000A;      halfWidth: WALL_RADIUS,&#x000A;      halfHeight: I.height / 2,&#x000A;      killSide: -1&#x000A;    });&#x000A;  } else {&#x000A;    walls.push({&#x000A;      center: Point(I.x, I.y + I.height / 2),&#x000A;      halfWidth: WALL_RADIUS,&#x000A;      halfHeight: I.height / 2,&#x000A;      killSide: 1&#x000A;    });&#x000A;  }&#x000A;  walls.push({&#x000A;    center: Point(I.x + I.width / 2, I.y),&#x000A;    halfWidth: I.width / 2,&#x000A;    halfHeight: WALL_RADIUS,&#x000A;    horizontal: true&#x000A;  }, {&#x000A;    center: Point(I.x + I.width / 2, I.y + I.height),&#x000A;    halfWidth: I.width / 2,&#x000A;    halfHeight: WALL_RADIUS,&#x000A;    horizontal: true&#x000A;  });&#x000A;  drawWall = function(wall, canvas) {&#x000A;    return canvas.drawRect({&#x000A;      color: "#0F0",&#x000A;      x: wall.center.x - wall.halfWidth,&#x000A;      y: wall.center.y - wall.halfHeight,&#x000A;      width: 2 * wall.halfWidth,&#x000A;      height: 2 * wall.halfHeight&#x000A;    });&#x000A;  };&#x000A;  self = GameObject(I).extend({&#x000A;    center: function() {&#x000A;      return Point(I.x + I.width / 2, I.y + I.height / 2);&#x000A;    },&#x000A;    walls: function() {&#x000A;      return walls;&#x000A;    },&#x000A;    withinGoal: function(circle) {&#x000A;      if (circle.x - circle.radius > I.x && circle.x + circle.radius < I.x + I.width) {&#x000A;        if (circle.y - circle.radius > I.y && circle.y + circle.radius < I.y + I.height) {&#x000A;          return true;&#x000A;        }&#x000A;      }&#x000A;      return false;&#x000A;    },&#x000A;    score: function() {&#x000A;      self.trigger("score");&#x000A;      Sound.play("crowd" + (rand(3)));&#x000A;      Sound.play("siren");&#x000A;      if (I.suddenDeath) return self.destroy();&#x000A;    }&#x000A;  });&#x000A;  self.bind("destroy", function() {&#x000A;    return engine.add({&#x000A;      "class": "Shockwave",&#x000A;      x: I.x + I.width / 2,&#x000A;      y: I.y + I.height / 2,&#x000A;      velocity: Point(0, 1)&#x000A;    });&#x000A;  });&#x000A;  self.bind("drawDebug", function(canvas) {&#x000A;    canvas.drawRect({&#x000A;      bounds: I,&#x000A;      color: "rgba(255, 0, 255, 0.5)"&#x000A;    });&#x000A;    return walls.each(function(wall) {&#x000A;      return drawWall(wall, canvas);&#x000A;    });&#x000A;  });&#x000A;  self.bind("step", function() {&#x000A;    if (I.team) {&#x000A;      I.sprite = tallSprites[7];&#x000A;    } else {&#x000A;      I.sprite = tallSprites[6];&#x000A;    }&#x000A;    return I.zIndex = 1 + (I.y + I.height) / CANVAS_HEIGHT;&#x000A;  });&#x000A;  self.attrReader("team");&#x000A;  self.attrAccessor("suddenDeath");&#x000A;  return self;&#x000A;};&#x000A;&#x000A;&#x000A;window.onerror = function(message, url, lineNumber) {&#x000A;  var errorContext;&#x000A;  errorContext = $('script').last().text().split('\n').slice(lineNumber - 5, (lineNumber + 4) + 1 || 9e9);&#x000A;  errorContext[4] = "<b style='font-weight: bold; text-decoration: underline;'>" + errorContext[4] + "</b>";&#x000A;  return typeof displayRuntimeError === "function" ? displayRuntimeError("<code>" + message + "</code> <br /><br />(Sometimes this context may be wrong.)<br /><code><pre>" + (errorContext.join('\n')) + "</pre></code>") : void 0;&#x000A;};&#x000A;&#x000A;var HeadSheet;&#x000A;&#x000A;HeadSheet = function(I) {&#x000A;  var actions, loadStrip, self;&#x000A;  if (I == null) I = {};&#x000A;  Object.reverseMerge(I, {&#x000A;    character: "bigeyes",&#x000A;    team: "spike"&#x000A;  });&#x000A;  loadStrip = function(action, cells) {&#x000A;    if (action) {&#x000A;      return Sprite.loadSheet("" + I.team + "_" + I.character + "_" + action + "_" + cells, I.size, I.size);&#x000A;    } else {&#x000A;      return Sprite.loadSheet("" + I.team + "_" + I.character + "_" + cells, I.size, I.size);&#x000A;    }&#x000A;  };&#x000A;  actions = ["charged", "pain"];&#x000A;  self = {};&#x000A;  actions.each(function(action) {&#x000A;    return self[action] = loadStrip(action, 5);&#x000A;  });&#x000A;  self.normal = loadStrip(null, 5);&#x000A;  return self;&#x000A;};&#x000A;&#x000A;&#x000A;var MatchSetupState;&#x000A;&#x000A;MatchSetupState = function(I) {&#x000A;  var initPlayerData, self;&#x000A;  if (I == null) I = {};&#x000A;  self = GameState(I);&#x000A;  initPlayerData = function() {&#x000A;    MAX_PLAYERS.times(function(i) {&#x000A;      var _base;&#x000A;      $.reverseMerge((_base = config.players)[i] || (_base[i] = {}), {&#x000A;        "class": "Player",&#x000A;        color: Player.COLORS[i],&#x000A;        id: i,&#x000A;        name: "",&#x000A;        teamIndex: i % 2,&#x000A;        joystick: true,&#x000A;        cpu: true,&#x000A;        bodyIndex: rand(TeamSheet.bodyStyles.length),&#x000A;        headIndex: rand(TeamSheet.headStyles.length)&#x000A;      });&#x000A;      return $.extend(config.players[i], {&#x000A;        ready: false,&#x000A;        cpu: true&#x000A;      });&#x000A;    });&#x000A;    return config;&#x000A;  };&#x000A;  self.bind("enter", function() {&#x000A;    var configurator;&#x000A;    engine.clear(false);&#x000A;    rink.hide();&#x000A;    if (config.music) {&#x000A;      Music.volume(0.4);&#x000A;      Music.play("title_screen");&#x000A;    }&#x000A;    configurator = engine.add({&#x000A;      "class": "Configurator",&#x000A;      config: initPlayerData()&#x000A;    });&#x000A;    return configurator.bind("done", function(config) {&#x000A;      configurator.destroy();&#x000A;      return engine.setState(MatchState());&#x000A;    });&#x000A;  });&#x000A;  return self;&#x000A;};&#x000A;&#x000A;var MatchState;&#x000A;&#x000A;MatchState = function(I) {&#x000A;  var physics, self;&#x000A;  if (I == null) I = {};&#x000A;  self = GameState(I);&#x000A;  physics = Physics();&#x000A;  self.bind("enter", function() {&#x000A;    var leftGoal, rightGoal, scoreboard;&#x000A;    engine.clear(true);&#x000A;    rink.show();&#x000A;    scoreboard = engine.add({&#x000A;      "class": "Scoreboard"&#x000A;    });&#x000A;    scoreboard.bind("restart", function() {&#x000A;      return engine.setState(MatchSetupState());&#x000A;    });&#x000A;    config.players.each(function(playerData) {&#x000A;      return engine.add($.extend({}, playerData));&#x000A;    });&#x000A;    engine.add({&#x000A;      "class": "Puck"&#x000A;    });&#x000A;    leftGoal = engine.add({&#x000A;      "class": "Goal",&#x000A;      team: 0,&#x000A;      x: WALL_LEFT + ARENA_WIDTH / 10 - 32&#x000A;    });&#x000A;    leftGoal.bind("score", function() {&#x000A;      return scoreboard.score("home");&#x000A;    });&#x000A;    rightGoal = engine.add({&#x000A;      "class": "Goal",&#x000A;      team: 1,&#x000A;      x: WALL_LEFT + ARENA_WIDTH * 9 / 10&#x000A;    });&#x000A;    rightGoal.bind("score", function() {&#x000A;      return scoreboard.score("away");&#x000A;    });&#x000A;    if (config.music) return Music.play("music1");&#x000A;  });&#x000A;  self.bind("update", function() {&#x000A;    var objects, players, playersAndPucks, pucks, zambonis;&#x000A;    pucks = engine.find("Puck");&#x000A;    players = engine.find("Player").shuffle();&#x000A;    zambonis = engine.find("Zamboni");&#x000A;    objects = players.concat(zambonis, pucks);&#x000A;    playersAndPucks = players.concat(pucks);&#x000A;    players.each(function(player) {&#x000A;      if (player.I.wipeout) return;&#x000A;      return pucks.each(function(puck) {&#x000A;        if (Collision.circular(player.controlCircle(), puck.circle())) {&#x000A;          return player.controlPuck(puck);&#x000A;        }&#x000A;      });&#x000A;    });&#x000A;    physics.process(objects);&#x000A;    return playersAndPucks.each(function(player) {&#x000A;      var splats;&#x000A;      splats = engine.find("Blood");&#x000A;      return splats.each(function(splat) {&#x000A;        if (Collision.circular(player.circle(), splat.circle())) {&#x000A;          return player.bloody();&#x000A;        }&#x000A;      });&#x000A;    });&#x000A;  });&#x000A;  return self;&#x000A;};&#x000A;&#x000A;var NameEntry;&#x000A;&#x000A;NameEntry = function(I) {&#x000A;  var addCharacter, characterAtCursor, cols, controller, horizontalPadding, lineHeight, margin, menuArea, move, nameArea, rows, self, textArea, textAreaHeight, verticalPadding, width;&#x000A;  $.reverseMerge(I, {&#x000A;    backgroundColor: "rgba(0, 255, 255, 0.5)",&#x000A;    characterSet: "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 _-.!?".split(""),&#x000A;    cellWidth: 20,&#x000A;    cellHeight: 20,&#x000A;    textColor: "#FFF",&#x000A;    cols: 8,&#x000A;    cursorColor: "rgba(0, 255, 0, 0.5)",&#x000A;    cursor: {&#x000A;      x: 0,&#x000A;      y: 0,&#x000A;      menu: false&#x000A;    },&#x000A;    font: "bold 14px 'Monaco', 'Inconsolata', 'consolas', 'Courier New', 'andale mono', 'lucida console', 'monospace'",&#x000A;    name: "",&#x000A;    maxLength: 8,&#x000A;    controller: null&#x000A;  });&#x000A;  lineHeight = 11;&#x000A;  verticalPadding = 4;&#x000A;  horizontalPadding = 6;&#x000A;  margin = 6;&#x000A;  if (I.controller != null) controller = engine.controller(I.controller);&#x000A;  cols = function() {&#x000A;    return I.cols;&#x000A;  };&#x000A;  rows = function() {&#x000A;    return (I.characterSet.length / I.cols).ceil();&#x000A;  };&#x000A;  width = function() {&#x000A;    return cols() * I.cellWidth;&#x000A;  };&#x000A;  textAreaHeight = function() {&#x000A;    return I.cellHeight * rows();&#x000A;  };&#x000A;  move = function(delta) {&#x000A;    var newY, _results, _results2;&#x000A;    I.cursor.x = (I.cursor.x + delta.x).mod(cols());&#x000A;    newY = I.cursor.y + delta.y;&#x000A;    if (I.cursor.menu && newY) {&#x000A;      I.cursor.menu = false;&#x000A;      if (newY > 0) newY = 0;&#x000A;      I.cursor.y = newY.mod(rows());&#x000A;    } else if ((newY === -1) || (newY === rows())) {&#x000A;      I.cursor.menu = true;&#x000A;      I.cursor.y = 0;&#x000A;    } else {&#x000A;      I.cursor.y = newY.mod(rows());&#x000A;    }&#x000A;    if (!I.cursor.menu && characterAtCursor() === void 0) {&#x000A;      if (delta.x > 0) {&#x000A;        _results = [];&#x000A;        while (characterAtCursor() === void 0) {&#x000A;          _results.push(I.cursor.x = (I.cursor.x + 1) % rows());&#x000A;        }&#x000A;        return _results;&#x000A;      } else {&#x000A;        _results2 = [];&#x000A;        while (characterAtCursor() === void 0) {&#x000A;          _results2.push(I.cursor.x = (I.cursor.x - 1) % rows());&#x000A;        }&#x000A;        return _results2;&#x000A;      }&#x000A;    }&#x000A;  };&#x000A;  characterAtCursor = function() {&#x000A;    return I.characterSet[I.cursor.x + I.cursor.y * I.cols];&#x000A;  };&#x000A;  addCharacter = function() {&#x000A;    if (I.cursor.menu) {&#x000A;      return self.trigger("done", I.name);&#x000A;    } else {&#x000A;      if (I.name.length < I.maxLength) {&#x000A;        I.name += characterAtCursor();&#x000A;        self.trigger("change", I.name);&#x000A;      }&#x000A;      if (I.name.length === I.maxLength) {&#x000A;        I.cursor.menu = true;&#x000A;        I.cursor.y = 0;&#x000A;        return I.cursor.x = 0;&#x000A;      }&#x000A;    }&#x000A;  };&#x000A;  nameArea = {&#x000A;    draw: function(canvas) {&#x000A;      var cursorHeight, cursorWidth, nameAreaWidth;&#x000A;      cursorWidth = 10;&#x000A;      cursorHeight = 2;&#x000A;      nameAreaWidth = canvas.measureText(["M"].wrap(0, I.maxLength).join("")) + 2 * horizontalPadding;&#x000A;      return canvas.withTransform(Matrix.translation(this.x, this.y), function() {&#x000A;        var nameWidth;&#x000A;        canvas.drawRoundRect({&#x000A;          x: 0,&#x000A;          y: 0,&#x000A;          width: nameAreaWidth,&#x000A;          height: I.cellHeight,&#x000A;          color: I.backgroundColor&#x000A;        });&#x000A;        canvas.drawText({&#x000A;          text: I.name,&#x000A;          color: I.textColor,&#x000A;          position: Point(horizontalPadding, lineHeight + verticalPadding)&#x000A;        });&#x000A;        if ((I.age / 20).floor() % 2) {&#x000A;          if (I.name.length === I.maxLength) {&#x000A;            nameWidth = canvas.measureText(I.name.substring(0, I.name.length - 1));&#x000A;          } else {&#x000A;            nameWidth = canvas.measureText(I.name);&#x000A;          }&#x000A;          return canvas.drawRect({&#x000A;            x: nameWidth + horizontalPadding,&#x000A;            y: verticalPadding + lineHeight,&#x000A;            width: cursorWidth,&#x000A;            height: cursorHeight,&#x000A;            color: I.cursorColor&#x000A;          });&#x000A;        }&#x000A;      });&#x000A;    },&#x000A;    x: 0,&#x000A;    y: 0&#x000A;  };&#x000A;  textArea = {&#x000A;    draw: function(canvas) {&#x000A;      return canvas.withTransform(Matrix.translation(this.x, this.y), function() {&#x000A;        var row;&#x000A;        canvas.drawRoundRect({&#x000A;          x: 0,&#x000A;          y: 0,&#x000A;          width: width(),&#x000A;          height: textAreaHeight(),&#x000A;          color: I.backgroundColor&#x000A;        });&#x000A;        row = 0;&#x000A;        I.characterSet.each(function(c, i) {&#x000A;          var col;&#x000A;          col = i % I.cols;&#x000A;          row = (i / I.cols).floor();&#x000A;          return canvas.drawText({&#x000A;            text: c,&#x000A;            color: I.textColor,&#x000A;            x: col * I.cellWidth + horizontalPadding,&#x000A;            y: row * I.cellHeight + lineHeight + verticalPadding&#x000A;          });&#x000A;        });&#x000A;        row += 1;&#x000A;        if (!I.cursor.menu) {&#x000A;          return canvas.drawRoundRect({&#x000A;            color: I.cursorColor,&#x000A;            x: I.cursor.x * I.cellWidth,&#x000A;            y: I.cursor.y * I.cellHeight,&#x000A;            width: I.cellWidth,&#x000A;            height: I.cellHeight&#x000A;          });&#x000A;        }&#x000A;      });&#x000A;    },&#x000A;    x: 0,&#x000A;    y: I.cellHeight + margin&#x000A;  };&#x000A;  menuArea = {&#x000A;    draw: function(canvas) {&#x000A;      return canvas.withTransform(Matrix.translation(this.x, this.y), function() {&#x000A;        var option, optionWidth;&#x000A;        option = "Done";&#x000A;        optionWidth = canvas.measureText(option);&#x000A;        canvas.drawText({&#x000A;          text: option,&#x000A;          color: I.textColor,&#x000A;          x: horizontalPadding,&#x000A;          y: lineHeight + verticalPadding&#x000A;        });&#x000A;        if (I.cursor.menu) {&#x000A;          return canvas.drawRoundRect({&#x000A;            color: I.cursorColor,&#x000A;            x: 0,&#x000A;            y: 0,&#x000A;            width: optionWidth + 2 * horizontalPadding,&#x000A;            height: I.cellHeight&#x000A;          });&#x000A;        }&#x000A;      });&#x000A;    },&#x000A;    x: 0,&#x000A;    y: I.cellHeight * (rows() + 1) + 2 * margin&#x000A;  };&#x000A;  self = GameObject(I).extend({&#x000A;    draw: function(canvas) {&#x000A;      return canvas.withTransform(self.transform(), function(canvas) {&#x000A;        canvas.font(I.font);&#x000A;        textArea.draw(canvas);&#x000A;        return menuArea.draw(canvas);&#x000A;      });&#x000A;    }&#x000A;  });&#x000A;  if (controller != null) {&#x000A;    controller.bind("tap", function(direction) {&#x000A;      return move(direction);&#x000A;    });&#x000A;  }&#x000A;  self.bind("step", function() {&#x000A;    if (justPressed.left) move(Point(-1, 0));&#x000A;    if (justPressed.right) move(Point(1, 0));&#x000A;    if (justPressed.up) move(Point(0, -1));&#x000A;    if (justPressed.down) move(Point(0, 1));&#x000A;    if (justPressed["return"]) addCharacter();&#x000A;    if (justPressed.backspace) I.name = I.name.substring(0, I.name.length - 1);&#x000A;    if (controller != null ? controller.buttonPressed("A") : void 0) {&#x000A;      addCharacter();&#x000A;    }&#x000A;    if (controller != null ? controller.buttonPressed("B") : void 0) {&#x000A;      I.name = I.name.substring(0, I.name.length - 1);&#x000A;      return self.trigger("change", I.name);&#x000A;    }&#x000A;  });&#x000A;  return self;&#x000A;};&#x000A;&#x000A;var Physics;&#x000A;&#x000A;Physics = function() {&#x000A;  var cornerRadius, corners, overlapX, overlapY, rectangularOverlap, resolveCollision, resolveCollisions, threshold, wallCollisions, walls;&#x000A;  overlapX = function(wall, circle) {&#x000A;    return (circle.x - wall.center.x).abs() < wall.halfWidth + circle.radius;&#x000A;  };&#x000A;  overlapY = function(wall, circle) {&#x000A;    return (circle.y - wall.center.y).abs() < wall.halfHeight + circle.radius;&#x000A;  };&#x000A;  rectangularOverlap = function(wall, circle) {&#x000A;    return overlapX(wall, circle) && overlapY(wall, circle);&#x000A;  };&#x000A;  walls = [&#x000A;    {&#x000A;      normal: Point(1, 0),&#x000A;      position: WALL_LEFT&#x000A;    }, {&#x000A;      normal: Point(-1, 0),&#x000A;      position: -WALL_RIGHT&#x000A;    }, {&#x000A;      normal: Point(0, 1),&#x000A;      position: WALL_TOP&#x000A;    }, {&#x000A;      normal: Point(0, -1),&#x000A;      position: -WALL_BOTTOM&#x000A;    }&#x000A;  ];&#x000A;  cornerRadius = Rink.CORNER_RADIUS;&#x000A;  corners = [&#x000A;    {&#x000A;      position: Point(WALL_LEFT + cornerRadius, WALL_TOP + cornerRadius),&#x000A;      quadrant: 0&#x000A;    }, {&#x000A;      position: Point(WALL_RIGHT - cornerRadius, WALL_TOP + cornerRadius),&#x000A;      quadrant: 1&#x000A;    }, {&#x000A;      position: Point(WALL_LEFT + cornerRadius, WALL_BOTTOM - cornerRadius),&#x000A;      quadrant: -1&#x000A;    }, {&#x000A;      position: Point(WALL_RIGHT - cornerRadius, WALL_BOTTOM - cornerRadius),&#x000A;      quadrant: -2&#x000A;    }&#x000A;  ];&#x000A;  threshold = 5;&#x000A;  resolveCollision = function(A, B) {&#x000A;    var massA, massB, max, normal, powA, powB, pushA, pushB, relativeVelocity, totalMass;&#x000A;    normal = B.center().subtract(A.center()).norm();&#x000A;    powA = A.collisionPower(normal);&#x000A;    powB = -B.collisionPower(normal);&#x000A;    max = Math.max(powA, powB);&#x000A;    if (max > threshold) {&#x000A;      if (powA === max) {&#x000A;        A.crush(B);&#x000A;        B.wipeout(normal);&#x000A;      } else {&#x000A;        B.crush(A);&#x000A;        A.wipeout(normal.scale(-1));&#x000A;      }&#x000A;    }&#x000A;    relativeVelocity = A.I.velocity.subtract(B.I.velocity);&#x000A;    massA = A.mass();&#x000A;    massB = B.mass();&#x000A;    totalMass = massA + massB;&#x000A;    pushA = normal.scale(-2 * (relativeVelocity.dot(normal) * (massB / totalMass) + 1));&#x000A;    pushB = normal.scale(+2 * (relativeVelocity.dot(normal) * (massA / totalMass) + 1));&#x000A;    A.I.velocity = A.I.velocity.add(pushA);&#x000A;    return B.I.velocity = B.I.velocity.add(pushB);&#x000A;  };&#x000A;  resolveCollisions = function(objects) {&#x000A;    return objects.eachPair(function(a, b) {&#x000A;      if (!(a.collides() && b.collides())) return;&#x000A;      if (Collision.circular(a.circle(), b.circle())) {&#x000A;        return resolveCollision(a, b);&#x000A;      }&#x000A;    });&#x000A;  };&#x000A;  wallCollisions = function(objects, dt) {&#x000A;    var wallSegments;&#x000A;    wallSegments = engine.find("Goal").map(function(goal) {&#x000A;      return goal.walls();&#x000A;    }).flatten();&#x000A;    objects.each(function(object) {&#x000A;      var center, circle, collided, radius, velocity;&#x000A;      if (!object.collidesWithWalls()) return;&#x000A;      center = circle = object.circle();&#x000A;      radius = circle.radius;&#x000A;      velocity = object.I.velocity;&#x000A;      collided = false;&#x000A;      wallSegments.each(function(wall) {&#x000A;        var capCenter, normal, velocityProjection, wallToObject;&#x000A;        if (rectangularOverlap(wall, circle)) {&#x000A;          wallToObject = center.subtract(wall.center);&#x000A;          if (wall.horizontal) {&#x000A;            if (wallToObject.x.abs() < wall.halfWidth) {&#x000A;              normal = Point(0, wallToObject.y.sign());&#x000A;            } else {&#x000A;              capCenter = Point(wallToObject.x.sign() * wall.halfWidth, 0).add(wall.center);&#x000A;              normal = center.subtract(capCenter).norm();&#x000A;            }&#x000A;          } else {&#x000A;            normal = Point(wallToObject.x.sign(), 0);&#x000A;          }&#x000A;          velocityProjection = velocity.dot(normal);&#x000A;          if (velocityProjection < 0) {&#x000A;            velocity = velocity.subtract(normal.scale(2 * velocityProjection));&#x000A;            return collided = true;&#x000A;          }&#x000A;        }&#x000A;      });&#x000A;      if (collided) {&#x000A;        object.I.velocity = velocity;&#x000A;        object.updatePosition(dt, true);&#x000A;        object.trigger("wallCollision");&#x000A;        if (object.puck()) Sound.play("clink0");&#x000A;      }&#x000A;    });&#x000A;    objects.each(function(object) {&#x000A;      var center, radius, velocity;&#x000A;      if (!object.collidesWithWalls()) return;&#x000A;      center = object.center();&#x000A;      radius = object.I.radius;&#x000A;      velocity = object.I.velocity;&#x000A;      corners.each(function(corner) {&#x000A;        var angle, distanceToCenter, normal, position, quadrant, velocityProjection;&#x000A;        position = corner.position;&#x000A;        switch (corner.quadrant) {&#x000A;          case 0:&#x000A;            if (!(center.x < position.x && center.y < position.y)) return;&#x000A;            break;&#x000A;          case 1:&#x000A;            if (!(center.x > position.x && center.y < position.y)) return;&#x000A;            break;&#x000A;          case -1:&#x000A;            if (!(center.x < position.x && center.y > position.y)) return;&#x000A;            break;&#x000A;          case -2:&#x000A;            if (!(center.x > position.x && center.y > position.y)) return;&#x000A;        }&#x000A;        distanceToCenter = position.subtract(center);&#x000A;        normal = distanceToCenter.norm();&#x000A;        angle = Point.direction(Point(0, 0), normal);&#x000A;        quadrant = (4 * angle / Math.TAU).floor();&#x000A;        if (quadrant === corner.quadrant && radius * radius + distanceToCenter.dot(distanceToCenter) > cornerRadius * cornerRadius) {&#x000A;          velocityProjection = velocity.dot(normal);&#x000A;          if (velocityProjection < 0) {&#x000A;            velocity = velocity.subtract(normal.scale(2 * velocityProjection));&#x000A;            object.I.velocity = velocity;&#x000A;            object.updatePosition(dt, true);&#x000A;            object.trigger("wallCollision");&#x000A;            if (object.puck()) return Sound.play("thud0");&#x000A;          }&#x000A;        }&#x000A;      });&#x000A;    });&#x000A;    return objects.each(function(object) {&#x000A;      var center, collided, radius, velocity;&#x000A;      if (!object.collidesWithWalls()) return;&#x000A;      center = object.center();&#x000A;      radius = object.I.radius;&#x000A;      velocity = object.I.velocity;&#x000A;      collided = false;&#x000A;      walls.each(function(wall) {&#x000A;        var normal, position, velocityProjection;&#x000A;        position = wall.position, normal = wall.normal;&#x000A;        if (center.dot(normal) < radius + position) {&#x000A;          velocityProjection = velocity.dot(normal);&#x000A;          if (velocityProjection < 0) {&#x000A;            velocity = velocity.subtract(normal.scale(2 * velocityProjection));&#x000A;            return collided = true;&#x000A;          }&#x000A;        }&#x000A;      });&#x000A;      if (collided) {&#x000A;        object.I.velocity = velocity;&#x000A;        object.updatePosition(dt, true);&#x000A;        object.trigger("wallCollision");&#x000A;        if (object.puck()) Sound.play("thud0");&#x000A;      }&#x000A;    });&#x000A;  };&#x000A;  return {&#x000A;    process: function(objects) {&#x000A;      var dt, steps;&#x000A;      steps = 5;&#x000A;      dt = 1 / steps;&#x000A;      return steps.times(function() {&#x000A;        objects.invoke("updatePosition", dt);&#x000A;        resolveCollisions(objects, dt);&#x000A;        return wallCollisions(objects, dt);&#x000A;      });&#x000A;    }&#x000A;  };&#x000A;};&#x000A;&#x000A;var __slice = Array.prototype.slice;&#x000A;&#x000A;(function($) {&#x000A;  return $.fn.pixieCanvas = function(options) {&#x000A;    var $canvas, canvas, canvasAttrAccessor, context, contextAttrAccessor;&#x000A;    options || (options = {});&#x000A;    canvas = this.get(0);&#x000A;    context = void 0;</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#start'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Engine#start()</h1>
+      <div class='description'>
+        <section class='summary'><p>Start the game simulation.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />engine.start()<br /></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>start: function() {&#x000A;        if (!running) {&#x000A;          running = true;&#x000A;          return window.requestAnimationFrame(animLoop);&#x000A;        }&#x000A;      },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#stop'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Engine#stop()</h1>
+      <div class='description'>
+        <section class='summary'><p>Stop the simulation.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />engine.stop()<br /></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>stop: function() {&#x000A;        return running = false;&#x000A;      },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#update'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Engine#update()</h1>
+      <div class='description'>
+        <section class='summary'><p>Called when the engine updates all the game objects.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+    </div>
+  </body>
+</html>
+<script type='text/javascript'>
+  //<![CDATA[
+    $(function() {
+      $(".documentation").on("click", ".toggle_source", function(e) {
+        e.preventDefault();
+        return $(this).next().toggle();
+      });
+      return $("code.run").each(function() {
+        var canvas, codeElement, compiledJs, source;
+        codeElement = $(this);
+        source = codeElement.text();
+        compiledJs = CoffeeScript.compile(source, {
+          bare: true
+        });
+        canvas = $("<canvas width=200 height=150/>").pixieCanvas();
+        codeElement.after(canvas);
+        return eval(compiledJs);
+      });
+    });
+  //]]>
+</script>

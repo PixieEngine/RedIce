@@ -1,0 +1,1764 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible' />
+    <title>Array</title>
+    <link href='/assets/spacedocs/docs.css' media='screen, projection' rel='stylesheet' type='text/css' />
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js' type='text/javascript'></script>
+  </head>
+  <body>
+    <pre></pre>
+    <nav>
+      <a href='Animated.html'>Animated</a>
+      <a class='active' href='Array.html'>Array</a>
+      <a href='Bindable.html'>Bindable</a>
+      <a href='Boolean.html'>Boolean</a>
+      <a href='Bounded.html'>Bounded</a>
+      <a href='Camera.html'>Camera</a>
+      <a href='Collidable.html'>Collidable</a>
+      <a href='Collision.html'>Collision</a>
+      <a href='Color.html'>Color</a>
+      <a href='Core.html'>Core</a>
+      <a href='Date.html'>Date</a>
+      <a href='Drawable.html'>Drawable</a>
+      <a href='Durable.html'>Durable</a>
+      <a href='Engine.html'>Engine</a>
+      <a href='Engine.Joysticks.html'>Engine.Joysticks</a>
+      <a href='Fadeable.html'>Fadeable</a>
+      <a href='Flickerable.html'>Flickerable</a>
+      <a href='Framerate.html'>Framerate</a>
+      <a href='Function.html'>Function</a>
+      <a href='GameObject.html'>GameObject</a>
+      <a href='GameState.html'>GameState</a>
+      <a href='Local.html'>Local</a>
+      <a href='Math.html'>Math</a>
+      <a href='Matrix.html'>Matrix</a>
+      <a href='Movable.html'>Movable</a>
+      <a href='Music.html'>Music</a>
+      <a href='Number.html'>Number</a>
+      <a href='Object.html'>Object</a>
+      <a href='PixieCanvas.html'>PixieCanvas</a>
+      <a href='Point.html'>Point</a>
+      <a href='PowerCanvas.html'>PowerCanvas</a>
+      <a href='Random.html'>Random</a>
+      <a href='RegExp.html'>RegExp</a>
+      <a href='ResourceLoader.html'>ResourceLoader</a>
+      <a href='Rotatable.html'>Rotatable</a>
+      <a href='Sound.html'>Sound</a>
+      <a href='Sprite.html'>Sprite</a>
+      <a href='String.html'>String</a>
+      <a href='jQuery.html'>jQuery</a>
+      <a href='justPressed.html'>justPressed</a>
+      <a href='keydown.html'>keydown</a>
+      <a href='requestAnimationFrame.html'>requestAnimationFrame</a>
+      <a href='window.html'>window</a>
+    </nav>
+    <section class='method_list'>
+      <h3>Array Methods</h3>
+      <div class='methods'>
+        <a href='Array.html##clear'>#clear</a>
+        <a href='Array.html##compact'>#compact</a>
+        <a href='Array.html##concat'>#concat</a>
+        <a href='Array.html##copy'>#copy</a>
+        <a href='Array.html##each'>#each</a>
+        <a href='Array.html##eachPair'>#eachPair</a>
+        <a href='Array.html##eachSlice'>#eachSlice</a>
+        <a href='Array.html##eachWithObject'>#eachWithObject</a>
+        <a href='Array.html##every'>#every</a>
+        <a href='Array.html##extremes'>#extremes</a>
+        <a href='Array.html##filter'>#filter</a>
+        <a href='Array.html##first'>#first</a>
+        <a href='Array.html##flatten'>#flatten</a>
+        <a href='Array.html##forEach'>#forEach</a>
+        <a href='Array.html##include'>#include</a>
+        <a href='Array.html##indexOf'>#indexOf</a>
+        <a href='Array.html##inject'>#inject</a>
+        <a href='Array.html##invoke'>#invoke</a>
+        <a href='Array.html##join'>#join</a>
+        <a href='Array.html##last'>#last</a>
+        <a href='Array.html##lastIndexOf'>#lastIndexOf</a>
+        <a href='Array.html##map'>#map</a>
+        <a href='Array.html##partition'>#partition</a>
+        <a href='Array.html##pipeline'>#pipeline</a>
+        <a href='Array.html##pop'>#pop</a>
+        <a href='Array.html##product'>#product</a>
+        <a href='Array.html##push'>#push</a>
+        <a href='Array.html##rand'>#rand</a>
+        <a href='Array.html##reduce'>#reduce</a>
+        <a href='Array.html##reduceRight'>#reduceRight</a>
+        <a href='Array.html##reject'>#reject</a>
+        <a href='Array.html##remove'>#remove</a>
+        <a href='Array.html##reverse'>#reverse</a>
+        <a href='Array.html##select'>#select</a>
+        <a href='Array.html##shift'>#shift</a>
+        <a href='Array.html##shuffle'>#shuffle</a>
+        <a href='Array.html##slice'>#slice</a>
+        <a href='Array.html##some'>#some</a>
+        <a href='Array.html##sort'>#sort</a>
+        <a href='Array.html##splice'>#splice</a>
+        <a href='Array.html##sum'>#sum</a>
+        <a href='Array.html##toSource'>#toSource</a>
+        <a href='Array.html##toString'>#toString</a>
+        <a href='Array.html##unshift'>#unshift</a>
+        <a href='Array.html##without'>#without</a>
+        <a href='Array.html##wrap'>#wrap</a>
+        <a href='Array.html##zip'>#zip</a>
+      </div>
+    </section>
+    <div class='documentation'>
+      <a name='#clear'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#clear()</h1>
+      <div class='description'>
+        <section class='summary'><p>Empties the array of its contents. It is modified in place.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />fullArray = [1, 2, 3]<br />fullArray.clear()<br />fullArray</p>
+          
+          <h1>=> []</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Array.html'>Array</a>
+          </p>
+          <p class='return_description'>this, now emptied.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Array.prototype.clear = function() {&#x000A;  this.length = 0;&#x000A;  return this;&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#compact'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#compact()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns a copy of the array without null and undefined values.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />[null, undefined, 3, 3, undefined, 5].compact()</p>
+          
+          <h1>=> [3, 3, 5]</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Array.html'>Array</a>
+          </p>
+          <p class='return_description'>A new array that contains only the non-null values.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>var _base;&#x000A;var __slice = Array.prototype.slice;&#x000A;&#x000A;Array.prototype.compact = function() {&#x000A;  return this.select(function(element) {&#x000A;    return element != null;&#x000A;  });&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#concat'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#concat(Arrays)</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns a new array comprised of this array joined with other array(s) and/or<br />value(s).</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>array</em>.concat(<em>value1</em>, <em>value2</em>, ..., <em>valueN</em>)</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>Arrays</span>
+               -
+              <span class='param_description'>and/or values to concatenate to the resulting array.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#copy'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#copy()</h1>
+      <div class='description'>
+        <section class='summary'><p>Creates and returns a copy of the array. The copy contains<br />the same objects.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />a = ["a", "b", "c"]<br />b = a.copy()</p>
+          
+          <h1>their elements are equal</h1>
+          
+          <p>a[0] == b[0] &amp;&amp; a[1] == b[1] &amp;&amp; a[2] == b[2]</p>
+          
+          <h1>=> true</h1>
+          
+          <h1>but they aren't the same object in memory</h1>
+          
+          <p>a === b</p>
+          
+          <h1>=> false</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Array.html'>Array</a>
+          </p>
+          <p class='return_description'>A new array that is a copy of the array</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Array.prototype.copy = function() {&#x000A;  return this.concat();&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#each'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#each(iterator, context)</h1>
+      <div class='description'>
+        <section class='summary'><p>Call the given iterator once for each element in the array,<br />passing in the element as the first argument, the index of <br />the element as the second argument, and <code>this</code> array as the<br />third argument.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />word = ""<br />indices = []<br />["r", "a", "d"].each (letter, index) -><br />  word += letter<br />  indices.push(index)</p>
+          
+          <h1>=> ["r", "a", "d"]</h1>
+          
+          <p>word</p>
+          
+          <h1>=> "rad"</h1>
+          
+          <p>indices</p>
+          
+          <h1>=> [0, 1, 2]</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>iterator</span>
+               -
+              <span class='param_description'>Function to be called once for each element in the array.</span>
+            </li>
+            <li>
+              <span class='param_name'>context</span>
+               -
+              <span class='param_description'>Optional context parameter to be used as `this` when calling the iterator function.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Array.html'>Array</a>
+          </p>
+          <p class='return_description'>this to enable method chaining.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Array.prototype.each = function(iterator, context) {&#x000A;  var element, i, _len;&#x000A;  if (this.forEach) {&#x000A;    this.forEach(iterator, context);&#x000A;  } else {&#x000A;    for (i = 0, _len = this.length; i < _len; i++) {&#x000A;      element = this[i];&#x000A;      iterator.call(context, element, i, this);&#x000A;    }&#x000A;  }&#x000A;  return this;&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#eachPair'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#eachPair(iterator, context)</h1>
+      <div class='description'>
+        <section class='summary'><p>Call the given iterator once for each pair of objects in the array.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />[1, 2, 3, 4].eachPair (a, b) -><br />  # 1, 2<br />  # 1, 3<br />  # 1, 4<br />  # 2, 3<br />  # 2, 4<br />  # 3, 4<br /></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>iterator</span>
+               -
+              <span class='param_description'>Function to be called once for each pair of elements in the array.</span>
+            </li>
+            <li>
+              <span class='param_name'>context</span>
+               -
+              <span class='param_description'>Optional context parameter to be used as `this` when calling the iterator function.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Array.prototype.eachPair = function(iterator, context) {&#x000A;  var a, b, i, j, length, _results;&#x000A;  length = this.length;&#x000A;  i = 0;&#x000A;  _results = [];&#x000A;  while (i < length) {&#x000A;    a = this[i];&#x000A;    j = i + 1;&#x000A;    i += 1;&#x000A;    _results.push((function() {&#x000A;      var _results2;&#x000A;      _results2 = [];&#x000A;      while (j < length) {&#x000A;        b = this[j];&#x000A;        j += 1;&#x000A;        _results2.push(iterator.call(context, a, b));&#x000A;      }&#x000A;      return _results2;&#x000A;    }).call(this));&#x000A;  }&#x000A;  return _results;&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#eachSlice'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#eachSlice(n, iterator, context)</h1>
+      <div class='description'>
+        <section class='summary'><p>Call the given iterator once for each group of elements in the array,<br />passing in the elements in groups of n. Additional argumens are<br />passed as in each.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />results = []<br />[1, 2, 3, 4].eachSlice 2, (slice) -><br />  results.push(slice)</p>
+          
+          <h1>=> [1, 2, 3, 4]</h1>
+          
+          <p>results</p>
+          
+          <h1>=> [[1, 2], [3, 4]]</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>n</span>
+               -
+              <span class='param_description'>The number of elements in each group.</span>
+            </li>
+            <li>
+              <span class='param_name'>iterator</span>
+               -
+              <span class='param_description'>Function to be called once for each group of elements in the array.</span>
+            </li>
+            <li>
+              <span class='param_name'>context</span>
+               -
+              <span class='param_description'>Optional context parameter to be used as `this` when calling the iterator function.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Array.html'>Array</a>
+          </p>
+          <p class='return_description'>this</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Array.prototype.eachSlice = function(n, iterator, context) {&#x000A;  var i, len;&#x000A;  if (n > 0) {&#x000A;    len = (this.length / n).floor();&#x000A;    i = -1;&#x000A;    while (++i < len) {&#x000A;      iterator.call(context, this.slice(i * n, (i + 1) * n), i * n, this);&#x000A;    }&#x000A;  }&#x000A;  return this;&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#eachWithObject'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#eachWithObject(object, iterator, context)</h1>
+      <div class='description'>
+        <section class='summary'><p>Call the given iterator once for each element in the array,<br />passing in the element as the first argument and the given object<br />as the second argument. Additional arguments are passed similar to<br /><code>each</code>.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>object</span>
+               -
+              <span class='param_description'>The object to pass to the iterator on each visit.</span>
+            </li>
+            <li>
+              <span class='param_name'>iterator</span>
+               -
+              <span class='param_description'>Function to be called once for each element in the array.</span>
+            </li>
+            <li>
+              <span class='param_name'>context</span>
+               -
+              <span class='param_description'>Optional context parameter to be used as `this` when calling the iterator function.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Array.html'>Array</a>
+          </p>
+          <p class='return_description'>this</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Array.prototype.eachWithObject = function(object, iterator, context) {&#x000A;  this.each(function(element, i, self) {&#x000A;    return iterator.call(context, element, object, i, self);&#x000A;  });&#x000A;  return object;&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#every'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#every(Function)</h1>
+      <div class='description'>
+        <section class='summary'><p>Tests whether all elements in the array pass the test implemented by the<br />provided function.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>array</em>.every(<em>callback</em>[, <em>thisObject</em>])</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>Function</span>
+               -
+              <span class='param_description'>to test for each element.Object to use as</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#extremes'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#extremes(fn)</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns an object containing the extremes of this array.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />[-1, 3, 0].extremes()</p>
+          
+          <h1>=> {min: -1, max: 3}</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>fn</span>
+               -
+              <span class='param_description'>An optional funtion used to evaluate each element to calculate its value for determining extremes.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Object.html'>Object</a>
+          </p>
+          <p class='return_description'>{min: minElement, max: maxElement}</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Array.prototype.extremes = function(fn) {&#x000A;  var max, maxResult, min, minResult;&#x000A;  fn || (fn = function(n) {&#x000A;    return n;&#x000A;  });&#x000A;  min = max = void 0;&#x000A;  minResult = maxResult = void 0;&#x000A;  this.each(function(object) {&#x000A;    var result;&#x000A;    result = fn(object);&#x000A;    if (min != null) {&#x000A;      if (result < minResult) {&#x000A;        min = object;&#x000A;        minResult = result;&#x000A;      }&#x000A;    } else {&#x000A;      min = object;&#x000A;      minResult = result;&#x000A;    }&#x000A;    if (max != null) {&#x000A;      if (result > maxResult) {&#x000A;        max = object;&#x000A;        return maxResult = result;&#x000A;      }&#x000A;    } else {&#x000A;      max = object;&#x000A;      return maxResult = result;&#x000A;    }&#x000A;  });&#x000A;  return {&#x000A;    min: min,&#x000A;    max: max&#x000A;  };&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#filter'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#filter(thisObject)</h1>
+      <div class='description'>
+        <section class='summary'><p>Creates a new array with all elements that pass the test implemented by the<br />provided function.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>array</em>.filter(<em>callback</em>[, <em>thisObject</em>])</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>thisObject</span>
+               -
+              <span class='param_description'>Function to test each element of the array.Object to</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#first'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#first()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the first element of the array, undefined if the array is empty.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />["first", "second", "third"].first()</p>
+          
+          <h1>=> "first"</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Object.html'>Object</a>
+          </p>
+          <p class='return_description'>The first element, or undefined if the array is empty.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Array.prototype.first = function() {&#x000A;  return this[0];&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#flatten'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#flatten()</h1>
+      <div class='description'>
+        <section class='summary'><p>Flatten out an array of arrays into a single array of elements.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />[[1, 2], [3, 4], 5].flatten()</p>
+          
+          <h1>=> [1, 2, 3, 4, 5]</h1>
+          
+          <h1>won't flatten twice nested arrays. call</h1>
+          
+          <h1>flatten twice if that is what you want</h1>
+          
+          <p>[[1, 2], [3, [4, 5]], 6].flatten()</p>
+          
+          <h1>=> [1, 2, 3, [4, 5], 6]</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Array.html'>Array</a>
+          </p>
+          <p class='return_description'>A new array with all the sub-arrays flattened to the top.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Array.prototype.flatten = function() {&#x000A;  return this.inject([], function(a, b) {&#x000A;    return a.concat(b);&#x000A;  });&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#forEach'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#forEach(thisObject)</h1>
+      <div class='description'>
+        <section class='summary'><p>Executes a provided function once per array element.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>array</em>.forEach(<em>callback</em>[, <em>thisObject</em>])</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>thisObject</span>
+               -
+              <span class='param_description'>Function to execute for each element.Object to use</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#include'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#include(element)</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns true if the element is present in the array.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />["a", "b", "c"].include("c")</p>
+          
+          <h1>=> true</h1>
+          
+          <p>[40, "a"].include(700)</p>
+          
+          <h1>=> false</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>element</span>
+               -
+              <span class='param_description'>The element to check if present.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Boolean.html'>Boolean</a>
+          </p>
+          <p class='return_description'>true if the element is in the array, false otherwise.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Array.prototype.include = function(element) {&#x000A;  return this.indexOf(element) !== -1;&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#indexOf'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#indexOf(fromIndex)</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the first index at which a given element can be found in the array, or<br />-1 if it is not present.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>array</em>.indexOf(<em>searchElement</em>[, <em>fromIndex</em>])</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>fromIndex</span>
+               -
+              <span class='param_description'>Element to locate in the array.The index at</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#inject'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#inject()</h1>
+      <div class='description'>
+        <section class='summary'><p>Combines all elements of the array by applying a binary operation.<br />for each element in the arra the iterator is passed an accumulator <br />value (memo) and the element.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Object.html'>Object</a>
+          </p>
+          <p class='return_description'>The result of a</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Array.prototype.inject = function(initial, iterator) {&#x000A;  this.each(function(element) {&#x000A;    return initial = iterator(initial, element);&#x000A;  });&#x000A;  return initial;&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#invoke'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#invoke(method, Optional)</h1>
+      <div class='description'>
+        <section class='summary'><p>Invoke the named method on each element in the array<br />and return a new array containing the results of the invocation.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />[1.1, 2.2, 3.3, 4.4].invoke("floor")</p>
+          
+          <h1>=> [1, 2, 3, 4]</h1>
+          
+          <p>['hello', 'world', 'cool!'].invoke('substring', 0, 3)</p>
+          
+          <h1>=> ['hel', 'wor', 'coo']</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>method</span>
+               -
+              <span class='param_description'>The name of the method to invoke.</span>
+            </li>
+            <li>
+              <span class='param_name'>Optional</span>
+               -
+              <span class='param_description'>arguments to pass to the method being invoked.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Array.html'>Array</a>
+          </p>
+          <p class='return_description'>A new array containing the results of invoking the named method on each element.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Array.prototype.invoke = function() {&#x000A;  var args, method;&#x000A;  method = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];&#x000A;  return this.map(function(element) {&#x000A;    return element[method].apply(element, args);&#x000A;  });&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#join'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#join(Specifies)</h1>
+      <div class='description'>
+        <section class='summary'><p>Joins all elements of an array into a string.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>array</em>.join(<em>separator</em>)</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>Specifies</span>
+               -
+              <span class='param_description'>a string to separate each element of the array. The</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#last'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#last()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the last element of the array, undefined if the array is empty.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />["first", "second", "third"].last()</p>
+          
+          <h1>=> "third"</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Object.html'>Object</a>
+          </p>
+          <p class='return_description'>The last element, or undefined if the array is empty.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Array.prototype.last = function() {&#x000A;  return this[this.length - 1];&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#lastIndexOf'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#lastIndexOf(fromIndex)</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the last index at which a given element can be found in the array, or -1<br />if it is not present. The array is searched backwards, starting at fromIndex.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>array</em>.lastIndexOf(<em>searchElement</em>[, <em>fromIndex</em>])</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>fromIndex</span>
+               -
+              <span class='param_description'>Element to locate in the array.The index at</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#map'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#map(Function)</h1>
+      <div class='description'>
+        <section class='summary'><p>Creates a new array with the results of calling a provided function on every<br />element in this array.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>array</em>.map(<em>callback</em>[, <em>thisObject</em>])</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>Function</span>
+               -
+              <span class='param_description'>that produces an element of the new Array</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#partition'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#partition(iterator, context)</h1>
+      <div class='description'>
+        <section class='summary'><p>Partitions the elements into two groups: those for which the iterator returns<br />true, and those for which it returns false.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />[evens, odds] = [1, 2, 3, 4].partition (n) -><br />  n.even()</p>
+          
+          <p>evens</p>
+          
+          <h1>=> [2, 4]</h1>
+          
+          <p>odds</p>
+          
+          <h1>=> [1, 3]</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>iterator</span>
+               -
+              <span class='param_description'></span>
+            </li>
+            <li>
+              <span class='param_name'>context</span>
+               -
+              <span class='param_description'>Optional context parameter to be used as `this` when calling the iterator function.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Array.html'>Array</a>
+          </p>
+          <p class='return_description'>An array in the form of [trueCollection, falseCollection]</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Array.prototype.partition = function(iterator, context) {&#x000A;  var falseCollection, trueCollection;&#x000A;  trueCollection = [];&#x000A;  falseCollection = [];&#x000A;  this.each(function(element) {&#x000A;    if (iterator.call(context, element)) {&#x000A;      return trueCollection.push(element);&#x000A;    } else {&#x000A;      return falseCollection.push(element);&#x000A;    }&#x000A;  });&#x000A;  return [trueCollection, falseCollection];&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#pipeline'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#pipeline(input)</h1>
+      <div class='description'>
+        <section class='summary'><p>Pipe the input through each function in the array in turn. For example, if you have a<br />list of objects you can perform a series of selection, sorting, and other processing<br />methods and then receive the processed list. This array must contain functions that<br />accept a single input and return the processed input. The output of the first function<br />is fed to the input of the second and so on until the final processed output is returned.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>input</span>
+               -
+              <span class='param_description'>The initial input to pass to the first function in the pipeline.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Object.html'>Object</a>
+          </p>
+          <p class='return_description'>The result of processing the input by each function in the array.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Array.prototype.pipeline = function(input) {&#x000A;  var fn, _i, _len;&#x000A;  for (_i = 0, _len = this.length; _i < _len; _i++) {&#x000A;    fn = this[_i];&#x000A;    input = fn(input);&#x000A;  }&#x000A;  return input;&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#pop'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#pop()</h1>
+      <div class='description'>
+        <section class='summary'><p>Removes the last element from an array and returns that element.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br /><i>array</i>.pop()<br /></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#product'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#product()</h1>
+      <div class='description'>
+        <section class='summary'><p>Multiply all the elements in the array.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />[1, 2, 3, 4].product()</p>
+          
+          <h1>=> 24</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Number.html'>Number</a>
+          </p>
+          <p class='return_description'>The product of the elements in the array.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Array.prototype.product = function() {&#x000A;  return this.inject(1, function(product, n) {&#x000A;    return product * n;&#x000A;  });&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#push'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#push(...,)</h1>
+      <div class='description'>
+        <section class='summary'><p>Mutates an array by appending the given elements and returning the new length of<br />the array.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>array</em>.push(<em>element1</em>, ..., <em>elementN</em>)</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>...,</span>
+               -
+              <span class='param_description'>elementN The elements to add to the end of the array.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#rand'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#rand()</h1>
+      <div class='description'>
+        <section class='summary'><p>Randomly select an element from the array.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />[1, 2, 3].rand()</p>
+          
+          <h1>=> 2</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Object.html'>Object</a>
+          </p>
+          <p class='return_description'>A random element from an array</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Array.prototype.rand = function() {&#x000A;  return this[rand(this.length)];&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#reduce'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#reduce(Function)</h1>
+      <div class='description'>
+        <section class='summary'><p>Apply a function against an accumulator and each value of the array (from<br />left-to-right) as to reduce it to a single value.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>array</em>.reduce(<em>callback</em>[, <em>initialValue</em>])</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>Function</span>
+               -
+              <span class='param_description'>to execute on each value in the</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#reduceRight'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#reduceRight(initialValue)</h1>
+      <div class='description'>
+        <section class='summary'><p>Apply a function simultaneously against two values of the array (from<br />right-to-left) as to reduce it to a single value.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>array</em>.reduceRight(<em>callback</em>[, <em>initialValue</em>])</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>initialValue</span>
+               -
+              <span class='param_description'>Function to execute on each value in the</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#reject'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#reject(iterator, context)</h1>
+      <div class='description'>
+        <section class='summary'><p>Return the group of elements for which the return value of the iterator is false.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>iterator</span>
+               -
+              <span class='param_description'>The iterator receives each element in turn as the first agument.</span>
+            </li>
+            <li>
+              <span class='param_name'>context</span>
+               -
+              <span class='param_description'>Optional context parameter to be used as `this` when calling the iterator function.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Array.html'>Array</a>
+          </p>
+          <p class='return_description'>An array containing the elements for which the iterator returned false.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Array.prototype.reject = function(iterator, context) {&#x000A;  return this.partition(iterator, context)[1];&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#remove'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#remove(object)</h1>
+      <div class='description'>
+        <section class='summary'><p>Remove the first occurrence of the given object from the array if it is<br />present. The array is modified in place.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />a = [1, 1, "a", "b"]<br />a.remove(1)</p>
+          
+          <h1>=> 1</h1>
+          
+          <p>a</p>
+          
+          <h1>=> [1, "a", "b"]</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>object</span>
+               -
+              <span class='param_description'>The object to remove from the array if present.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Object.html'>Object</a>
+          </p>
+          <p class='return_description'>The removed object if present otherwise undefined.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Array.prototype.remove = function(object) {&#x000A;  var index;&#x000A;  index = this.indexOf(object);&#x000A;  if (index >= 0) {&#x000A;    return this.splice(index, 1)[0];&#x000A;  } else {&#x000A;    return;&#x000A;  }&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#reverse'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#reverse()</h1>
+      <div class='description'>
+        <section class='summary'><p>Reverses an array in place.  The first array element becomes the last and the<br />last becomes the first.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>array</em>.reverse()</code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#select'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#select(iterator, context)</h1>
+      <div class='description'>
+        <section class='summary'><p>Return the group of elements for which the return value of the iterator is true.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>iterator</span>
+               -
+              <span class='param_description'>The iterator receives each element in turn as the first agument.</span>
+            </li>
+            <li>
+              <span class='param_name'>context</span>
+               -
+              <span class='param_description'>Optional context parameter to be used as `this` when calling the iterator function.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Array.html'>Array</a>
+          </p>
+          <p class='return_description'>An array containing the elements for which the iterator returned true.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Array.prototype.select = function(iterator, context) {&#x000A;  return this.partition(iterator, context)[0];&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#shift'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#shift()</h1>
+      <div class='description'>
+        <section class='summary'><p>Removes the first element from an array and returns that element. This method<br />changes the length of the array.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>array</em>.shift()</code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#shuffle'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#shuffle()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns a new array with the elements all shuffled up.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />a = [1, 2, 3]</p>
+          
+          <p>a.shuffle()</p>
+          
+          <h1>=> [2, 3, 1]</h1>
+          
+          <p>a # => [1, 2, 3]<br /></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Array.html'>Array</a>
+          </p>
+          <p class='return_description'>A new array that is randomly shuffled.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Array.prototype.shuffle = function() {&#x000A;  var shuffledArray;&#x000A;  shuffledArray = [];&#x000A;  this.each(function(element) {&#x000A;    return shuffledArray.splice(rand(shuffledArray.length + 1), 0, element);&#x000A;  });&#x000A;  return shuffledArray;&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#slice'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#slice(Zero-based)</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns a one-level deep copy of a portion of an array.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>array</em>.slice(<em>begin</em>[, <em>end</em>])</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>Zero-based</span>
+               -
+              <span class='param_description'>index at which to end extraction. slice extracts up to</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#some'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#some(thisObject)</h1>
+      <div class='description'>
+        <section class='summary'><p>Tests whether some element in the array passes the test implemented by the<br />provided function.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>array</em>.some(<em>callback</em>[, <em>thisObject</em>])</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>thisObject</span>
+               -
+              <span class='param_description'>Function to test for each element.Object to use as</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#sort'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#sort(Specifies)</h1>
+      <div class='description'>
+        <section class='summary'><p>Sorts the elements of an array in place.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>array</em>.sort([<em>compareFunction</em>])</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>Specifies</span>
+               -
+              <span class='param_description'>a function that defines the sort order. If</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#splice'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#splice(Index, An, ...,)</h1>
+      <div class='description'>
+        <section class='summary'><p>Changes the content of an array, adding new elements while removing old<br />elements.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>array</em>.splice(<em>index</em>, <em>howMany</em>[, <em>element1</em>[, ...[, <em>elementN</em>]]])</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>Index</span>
+               -
+              <span class='param_description'>at which to start changing the array. If negative, will</span>
+            </li>
+            <li>
+              <span class='param_name'>An</span>
+               -
+              <span class='param_description'>integer indicating the number of old array elements to</span>
+            </li>
+            <li>
+              <span class='param_name'>...,</span>
+               -
+              <span class='param_description'>elementN The elements to add to the array. If you don't</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#sum'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#sum()</h1>
+      <div class='description'>
+        <section class='summary'><p>Add all the elements in the array.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />[1, 2, 3, 4].sum()</p>
+          
+          <h1>=> 10</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Number.html'>Number</a>
+          </p>
+          <p class='return_description'>The sum of the elements in the array.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Array.prototype.sum = function() {&#x000A;  return this.inject(0, function(sum, n) {&#x000A;    return sum + n;&#x000A;  });&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#toSource'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#toSource()</h1>
+      <div class='description'>
+        <section class='summary'><p>Non-standard</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#toString'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#toString()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns a string representing the specified array and its elements.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>array</em>.toString()</code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#unshift'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#unshift(...,)</h1>
+      <div class='description'>
+        <section class='summary'><p>Adds one or more elements to the beginning of an array and returns the new<br />length of the array.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>arrayName</em>.unshift(<em>element1</em>, ..., <em>elementN</em>) </code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>...,</span>
+               -
+              <span class='param_description'>elementN The elements to add to the front of the array.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#without'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#without(values)</h1>
+      <div class='description'>
+        <section class='summary'><p>Return the group of elements that are not in the passed in set.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />[1, 2, 3, 4].without ([2, 3])</p>
+          
+          <h1>=> [1, 4]</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>values</span>
+               -
+              <span class='param_description'>List of elements to exclude.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Array.html'>Array</a>
+          </p>
+          <p class='return_description'>An array containing the elements that are not passed in.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Array.prototype.without = function(values) {&#x000A;  return this.reject(function(element) {&#x000A;    return values.include(element);&#x000A;  });&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#wrap'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#wrap(start, length)</h1>
+      <div class='description'>
+        <section class='summary'><p>Pretend the array is a circle and grab a new array containing length elements. <br />If length is not given return the element at start, again assuming the array <br />is a circle.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />[1, 2, 3].wrap(-1)</p>
+          
+          <h1>=> 3</h1>
+          
+          <p>[1, 2, 3].wrap(6)</p>
+          
+          <h1>=> 1</h1>
+          
+          <p>["l", "o", "o", "p"].wrap(0, 16)</p>
+          
+          <h1>=> ["l", "o", "o", "p", "l", "o", "o", "p", "l", "o", "o", "p", "l", "o", "o", "p"]</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>start</span>
+               -
+              <span class='param_description'>The index to start wrapping at, or the index of the sole element to return if no length is given.</span>
+            </li>
+            <li>
+              <span class='param_name'>length</span>
+               -
+              <span class='param_description'>Optional length determines how long result array should be.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Object.html'>Object</a>
+          </p>
+          <p class='return_description'>or {Array} The element at start mod array.length, or an array of length elements, starting from start and wrapping.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Array.prototype.wrap = function(start, length) {&#x000A;  var end, i, result;&#x000A;  if (length != null) {&#x000A;    end = start + length;&#x000A;    i = start;&#x000A;    result = [];&#x000A;    while (i++ < end) {&#x000A;      result.push(this[i.mod(this.length)]);&#x000A;    }&#x000A;    return result;&#x000A;  } else {&#x000A;    return this[start.mod(this.length)];&#x000A;  }&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#zip'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Array#zip()</h1>
+      <div class='description'>
+        <section class='summary'><p>Merges together the values of each of the arrays with the values at the corresponding position.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />['a', 'b', 'c'].zip([1, 2, 3])</p>
+          
+          <h1>=> [['a', 1], ['b', 2], ['c', 3]]</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Array.html'>Array</a>
+          </p>
+          <p class='return_description'>Array groupings whose values are arranged by their positions in the original input arrays.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Array.prototype.zip = function() {&#x000A;  var args;&#x000A;  args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];&#x000A;  return this.map(function(element, index) {&#x000A;    var output;&#x000A;    output = args.map(function(arr) {&#x000A;      return arr[index];&#x000A;    });&#x000A;    output.unshift(element);&#x000A;    return output;&#x000A;  });&#x000A;};&#x000A;;</code></pre>
+        </section>
+      </div>
+      <hr />
+    </div>
+  </body>
+</html>
+<script type='text/javascript'>
+  //<![CDATA[
+    $(function() {
+      $(".documentation").on("click", ".toggle_source", function(e) {
+        e.preventDefault();
+        return $(this).next().toggle();
+      });
+      return $("code.run").each(function() {
+        var canvas, codeElement, compiledJs, source;
+        codeElement = $(this);
+        source = codeElement.text();
+        compiledJs = CoffeeScript.compile(source, {
+          bare: true
+        });
+        canvas = $("<canvas width=200 height=150/>").pixieCanvas();
+        codeElement.after(canvas);
+        return eval(compiledJs);
+      });
+    });
+  //]]>
+</script>

@@ -1,0 +1,238 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible' />
+    <title>Drawable</title>
+    <link href='/assets/spacedocs/docs.css' media='screen, projection' rel='stylesheet' type='text/css' />
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js' type='text/javascript'></script>
+  </head>
+  <body>
+    <pre></pre>
+    <nav>
+      <a href='Animated.html'>Animated</a>
+      <a href='Array.html'>Array</a>
+      <a href='Bindable.html'>Bindable</a>
+      <a href='Boolean.html'>Boolean</a>
+      <a href='Bounded.html'>Bounded</a>
+      <a href='Camera.html'>Camera</a>
+      <a href='Collidable.html'>Collidable</a>
+      <a href='Collision.html'>Collision</a>
+      <a href='Color.html'>Color</a>
+      <a href='Core.html'>Core</a>
+      <a href='Date.html'>Date</a>
+      <a class='active' href='Drawable.html'>Drawable</a>
+      <a href='Durable.html'>Durable</a>
+      <a href='Engine.html'>Engine</a>
+      <a href='Engine.Joysticks.html'>Engine.Joysticks</a>
+      <a href='Fadeable.html'>Fadeable</a>
+      <a href='Flickerable.html'>Flickerable</a>
+      <a href='Framerate.html'>Framerate</a>
+      <a href='Function.html'>Function</a>
+      <a href='GameObject.html'>GameObject</a>
+      <a href='GameState.html'>GameState</a>
+      <a href='Local.html'>Local</a>
+      <a href='Math.html'>Math</a>
+      <a href='Matrix.html'>Matrix</a>
+      <a href='Movable.html'>Movable</a>
+      <a href='Music.html'>Music</a>
+      <a href='Number.html'>Number</a>
+      <a href='Object.html'>Object</a>
+      <a href='PixieCanvas.html'>PixieCanvas</a>
+      <a href='Point.html'>Point</a>
+      <a href='PowerCanvas.html'>PowerCanvas</a>
+      <a href='Random.html'>Random</a>
+      <a href='RegExp.html'>RegExp</a>
+      <a href='ResourceLoader.html'>ResourceLoader</a>
+      <a href='Rotatable.html'>Rotatable</a>
+      <a href='Sound.html'>Sound</a>
+      <a href='Sprite.html'>Sprite</a>
+      <a href='String.html'>String</a>
+      <a href='jQuery.html'>jQuery</a>
+      <a href='justPressed.html'>justPressed</a>
+      <a href='keydown.html'>keydown</a>
+      <a href='requestAnimationFrame.html'>requestAnimationFrame</a>
+      <a href='window.html'>window</a>
+    </nav>
+    <section class='method_list'>
+      <h3>Drawable Methods</h3>
+      <div class='methods'>
+        <a href='Drawable.html##afterTransform'>#afterTransform</a>
+        <a href='Drawable.html##beforeTransform'>#beforeTransform</a>
+        <a href='Drawable.html##draw'>#draw</a>
+        <a href='Drawable.html##transform'>#transform</a>
+      </div>
+    </section>
+    <div class='documentation'>
+      <h1>Drawable Summary</h1>
+      <div class='description'>
+        <section class='summary'></section>
+        <p>The Drawable module is used to provide a simple draw method to the including<br />object.</p>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p>Binds a default draw listener to draw a rectangle or a sprite, if one exists.</p>
+          
+          <p>Binds a step listener to update the transform of the object.</p>
+          
+          <p>Autoloads the sprite specified in I.spriteName, if any.</p>
+          
+          <p><code><pre><br />player = Core<br />  x: 15<br />  y: 30<br />  width: 5<br />  height: 5<br />  sprite: "my_cool_sprite"</p>
+          
+          <p>engine.bind 'draw', (canvas) -><br />  player.draw(canvas) </p>
+          
+          <h1>=> Uncaught TypeError: Object has no method 'draw'</h1>
+          
+          <p>player.include(Drawable)</p>
+          
+          <p>engine.bind 'draw', (canvas) -><br />  player.draw(canvas)</p>
+          
+          <h1>=> if you have a sprite named "my_cool_sprite" in your images folder</h1>
+          
+          <h1>then it will be drawn. Otherwise, a rectangle positioned at x: 15 and</h1>
+          
+          <h1>y: 30 with width and height 5 will be drawn.</h1>
+          
+          <p></pre></code></p>
+        </section>
+      </div>
+      <hr />
+      <a name='#afterTransform'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Drawable#afterTransform(canvas)</h1>
+      <div class='description'>
+        <section class='summary'><p>Triggered after the object should be drawn. A canvas is passed as<br />the first argument. This applies the current transform.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>canvas</span>
+               -
+              <span class='param_description'>A reference to the canvas to draw on.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>var Drawable;&#x000A;&#x000A;Drawable = function(I, self) {&#x000A;  var _ref;&#x000A;  I || (I = {});&#x000A;  Object.reverseMerge(I, {&#x000A;    alpha: 1,&#x000A;    color: "#196",&#x000A;    hflip: false,&#x000A;    vflip: false,&#x000A;    spriteName: null,&#x000A;    zIndex: 0&#x000A;  });&#x000A;  if ((_ref = I.sprite) != null ? typeof _ref.isString === "function" ? _ref.isString() : void 0 : void 0) {&#x000A;    I.sprite = Sprite.loadByName(I.sprite, function(sprite) {&#x000A;      I.width = sprite.width;&#x000A;      return I.height = sprite.height;&#x000A;    });&#x000A;  } else if (I.spriteName) {&#x000A;    I.sprite = Sprite.loadByName(I.spriteName, function(sprite) {&#x000A;      I.width = sprite.width;&#x000A;      return I.height = sprite.height;&#x000A;    });&#x000A;  }&#x000A;  self.bind('draw', function(canvas) {&#x000A;    var previousAlpha, sprite;&#x000A;    if ((I.alpha != null) && I.alpha !== 1) {&#x000A;      previousAlpha = canvas.context().globalAlpha;&#x000A;      canvas.context().globalAlpha = I.alpha;&#x000A;    }&#x000A;    if (sprite = I.sprite) {&#x000A;      if (sprite.draw != null) {&#x000A;        sprite.draw(canvas, -sprite.width / 2, -sprite.height / 2);&#x000A;      } else {&#x000A;        if (typeof warn === "function") warn("Sprite has no draw method!");&#x000A;      }&#x000A;    } else {&#x000A;      if (I.radius != null) {&#x000A;        canvas.drawCircle({&#x000A;          x: 0,&#x000A;          y: 0,&#x000A;          radius: I.radius,&#x000A;          color: I.color&#x000A;        });&#x000A;      } else {&#x000A;        canvas.drawRect({&#x000A;          x: -I.width / 2,&#x000A;          y: -I.height / 2,&#x000A;          width: I.width,&#x000A;          height: I.height,&#x000A;          color: I.color&#x000A;        });&#x000A;      }&#x000A;    }&#x000A;    if ((I.alpha != null) && I.alpha !== 1) {&#x000A;      return canvas.context().globalAlpha = previousAlpha;&#x000A;    }&#x000A;  });&#x000A;  return {</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#beforeTransform'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Drawable#beforeTransform(canvas)</h1>
+      <div class='description'>
+        <section class='summary'><p>Triggered before the object should be drawn. A canvas is passed as<br />the first argument. This does not apply the current transform.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>canvas</span>
+               -
+              <span class='param_description'>A reference to the canvas to draw on.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#draw'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Drawable#draw()</h1>
+      <div class='description'>
+        <section class='summary'><p>Draw does not actually do any drawing itself, instead it triggers all of the draw events.<br />Listeners on the events do the actual drawing.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='self.html'>self</a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>draw: function(canvas) {&#x000A;      self.trigger('beforeTransform', canvas);&#x000A;      canvas.withTransform(self.transform(), function(canvas) {&#x000A;        self.trigger('beforeDraw', canvas);&#x000A;        self.trigger('draw', canvas);&#x000A;        return self.trigger('afterDraw', canvas);&#x000A;      });&#x000A;      self.trigger('afterTransform', canvas);&#x000A;      return self;&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#transform'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Drawable#transform()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the current transform, with translation, rotation, and flipping applied.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Matrix.html'>Matrix</a>
+          </p>
+          <p class='return_description'>The current transform</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>transform: function() {&#x000A;      var center, transform;&#x000A;      center = self.center();&#x000A;      transform = Matrix.translation(center.x, center.y);&#x000A;      if ((I.scale != null) && I.scale !== 1) {&#x000A;        transform = transform.concat(Matrix.scale(I.scale));&#x000A;      }&#x000A;      if (I.rotation) transform = transform.concat(Matrix.rotation(I.rotation));&#x000A;      if (I.hflip) transform = transform.concat(Matrix.HORIZONTAL_FLIP);&#x000A;      if (I.vflip) transform = transform.concat(Matrix.VERTICAL_FLIP);&#x000A;      if (I.spriteOffset) {&#x000A;        transform = transform.concat(Matrix.translation(I.spriteOffset.x, I.spriteOffset.y));&#x000A;      }&#x000A;      return transform;&#x000A;    }&#x000A;  };&#x000A;};&#x000A;;</code></pre>
+        </section>
+      </div>
+      <hr />
+    </div>
+  </body>
+</html>
+<script type='text/javascript'>
+  //<![CDATA[
+    $(function() {
+      $(".documentation").on("click", ".toggle_source", function(e) {
+        e.preventDefault();
+        return $(this).next().toggle();
+      });
+      return $("code.run").each(function() {
+        var canvas, codeElement, compiledJs, source;
+        codeElement = $(this);
+        source = codeElement.text();
+        compiledJs = CoffeeScript.compile(source, {
+          bare: true
+        });
+        canvas = $("<canvas width=200 height=150/>").pixieCanvas();
+        codeElement.after(canvas);
+        return eval(compiledJs);
+      });
+    });
+  //]]>
+</script>

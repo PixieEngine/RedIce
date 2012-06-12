@@ -1,0 +1,238 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible' />
+    <title>Core</title>
+    <link href='/assets/spacedocs/docs.css' media='screen, projection' rel='stylesheet' type='text/css' />
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js' type='text/javascript'></script>
+  </head>
+  <body>
+    <pre></pre>
+    <nav>
+      <a href='Animated.html'>Animated</a>
+      <a href='Array.html'>Array</a>
+      <a href='Bindable.html'>Bindable</a>
+      <a href='Boolean.html'>Boolean</a>
+      <a href='Bounded.html'>Bounded</a>
+      <a href='Camera.html'>Camera</a>
+      <a href='Collidable.html'>Collidable</a>
+      <a href='Collision.html'>Collision</a>
+      <a href='Color.html'>Color</a>
+      <a class='active' href='Core.html'>Core</a>
+      <a href='Date.html'>Date</a>
+      <a href='Drawable.html'>Drawable</a>
+      <a href='Durable.html'>Durable</a>
+      <a href='Engine.html'>Engine</a>
+      <a href='Engine.Joysticks.html'>Engine.Joysticks</a>
+      <a href='Fadeable.html'>Fadeable</a>
+      <a href='Flickerable.html'>Flickerable</a>
+      <a href='Framerate.html'>Framerate</a>
+      <a href='Function.html'>Function</a>
+      <a href='GameObject.html'>GameObject</a>
+      <a href='GameState.html'>GameState</a>
+      <a href='Local.html'>Local</a>
+      <a href='Math.html'>Math</a>
+      <a href='Matrix.html'>Matrix</a>
+      <a href='Movable.html'>Movable</a>
+      <a href='Music.html'>Music</a>
+      <a href='Number.html'>Number</a>
+      <a href='Object.html'>Object</a>
+      <a href='PixieCanvas.html'>PixieCanvas</a>
+      <a href='Point.html'>Point</a>
+      <a href='PowerCanvas.html'>PowerCanvas</a>
+      <a href='Random.html'>Random</a>
+      <a href='RegExp.html'>RegExp</a>
+      <a href='ResourceLoader.html'>ResourceLoader</a>
+      <a href='Rotatable.html'>Rotatable</a>
+      <a href='Sound.html'>Sound</a>
+      <a href='Sprite.html'>Sprite</a>
+      <a href='String.html'>String</a>
+      <a href='jQuery.html'>jQuery</a>
+      <a href='justPressed.html'>justPressed</a>
+      <a href='keydown.html'>keydown</a>
+      <a href='requestAnimationFrame.html'>requestAnimationFrame</a>
+      <a href='window.html'>window</a>
+    </nav>
+    <section class='method_list'>
+      <h3>Core Methods</h3>
+      <div class='methods'>
+        <a href='Core.html##attrAccessor'>#attrAccessor</a>
+        <a href='Core.html##attrReader'>#attrReader</a>
+        <a href='Core.html##extend'>#extend</a>
+        <a href='Core.html##include'>#include</a>
+      </div>
+    </section>
+    <div class='documentation'>
+      <h1>Core Summary</h1>
+      <div class='description'>
+        <section class='summary'></section>
+        <p>The Core class is used to add extended functionality to objects without<br />extending the object class directly. Inherit from Core to gain its utility<br />methods.</p>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+      </div>
+      <hr />
+      <a name='#attrAccessor'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Core#attrAccessor()</h1>
+      <div class='description'>
+        <section class='summary'><p>Generates a public jQuery style getter / setter method for each <br />String argument.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />myObject = Core<br />  r: 255<br />  g: 0<br />  b: 100</p>
+          
+          <p>myObject.attrAccessor "r", "g", "b"</p>
+          
+          <p>myObject.r(254)<br />myObject.r()</p>
+          
+          <p>=> 254<br /></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>attrAccessor: function() {&#x000A;      var attrNames;&#x000A;      attrNames = 1 <= arguments.length ? __slice.call(arguments, 0) : [];&#x000A;      return attrNames.each(function(attrName) {&#x000A;        return self[attrName] = function(newValue) {&#x000A;          if (newValue != null) {&#x000A;            I[attrName] = newValue;&#x000A;            return self;&#x000A;          } else {&#x000A;            return I[attrName];&#x000A;          }&#x000A;        };&#x000A;      });&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#attrReader'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Core#attrReader()</h1>
+      <div class='description'>
+        <section class='summary'><p>Generates a public jQuery style getter method for each String argument.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />myObject = Core<br />  r: 255<br />  g: 0<br />  b: 100</p>
+          
+          <p>myObject.attrReader "r", "g", "b"</p>
+          
+          <p>myObject.r()<br />=> 255</p>
+          
+          <p>myObject.g()<br />=> 0</p>
+          
+          <p>myObject.b()<br />=> 100<br /></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>attrReader: function() {&#x000A;      var attrNames;&#x000A;      attrNames = 1 <= arguments.length ? __slice.call(arguments, 0) : [];&#x000A;      return attrNames.each(function(attrName) {&#x000A;        return self[attrName] = function() {&#x000A;          return I[attrName];&#x000A;        };&#x000A;      });&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#extend'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Core#extend()</h1>
+      <div class='description'>
+        <section class='summary'><p>Extends this object with methods from the passed in object. <code>before</code> and <br /><code>after</code> are special option names that glue functionality before or after <br />existing methods.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />I =<br />  x: 30<br />  y: 40<br />  maxSpeed: 5</p>
+          
+          <h1>we are using extend to give player</h1>
+          
+          <h1>additional methods that Core doesn't have</h1>
+          
+          <p>player = Core(I).extend<br />  increaseSpeed: -><br />    I.maxSpeed += 1</p>
+          
+          <p># this will execute before the update method<br />  beforeUpdate: -><br />    checkPowerupStatus()</p>
+          
+          <p>player.I.maxSpeed<br />=> 5</p>
+          
+          <p>player.increaseSpeed()</p>
+          
+          <p>player.I.maxSpeed<br />=> 6<br /></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>extend: function(options) {&#x000A;      Object.extend(self, options);&#x000A;      return self;&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#include'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Core#include(Module)</h1>
+      <div class='description'>
+        <section class='summary'><p>Includes a module in this object.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />myObject = Core()<br />myObject.include(Bindable)</p>
+          
+          <h1>now you can bind handlers to functions</h1>
+          
+          <p>myObject.bind "someEvent", -><br />  alert("wow. that was easy.")<br /></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>Module</span>
+               -
+              <span class='param_description'>the module to include. A module is a constructor that takes two parameters, I and self, and returns an object containing the public methods to extend the including object with.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>include: function(Module) {&#x000A;      return self.extend(Module(I, self));&#x000A;    }&#x000A;  };&#x000A;};&#x000A;;&#x000A;&#x000A;Function.prototype.withBefore = function(interception) {&#x000A;  var method;&#x000A;  method = this;&#x000A;  return function() {&#x000A;    interception.apply(this, arguments);&#x000A;    return method.apply(this, arguments);&#x000A;  };&#x000A;};&#x000A;&#x000A;Function.prototype.withAfter = function(interception) {&#x000A;  var method;&#x000A;  method = this;&#x000A;  return function() {&#x000A;    var result;&#x000A;    result = method.apply(this, arguments);&#x000A;    interception.apply(this, arguments);&#x000A;    return result;&#x000A;  };&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+    </div>
+  </body>
+</html>
+<script type='text/javascript'>
+  //<![CDATA[
+    $(function() {
+      $(".documentation").on("click", ".toggle_source", function(e) {
+        e.preventDefault();
+        return $(this).next().toggle();
+      });
+      return $("code.run").each(function() {
+        var canvas, codeElement, compiledJs, source;
+        codeElement = $(this);
+        source = codeElement.text();
+        compiledJs = CoffeeScript.compile(source, {
+          bare: true
+        });
+        canvas = $("<canvas width=200 height=150/>").pixieCanvas();
+        codeElement.after(canvas);
+        return eval(compiledJs);
+      });
+    });
+  //]]>
+</script>

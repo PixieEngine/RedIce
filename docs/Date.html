@@ -1,0 +1,1466 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible' />
+    <title>Date</title>
+    <link href='/assets/spacedocs/docs.css' media='screen, projection' rel='stylesheet' type='text/css' />
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js' type='text/javascript'></script>
+  </head>
+  <body>
+    <pre></pre>
+    <nav>
+      <a href='Animated.html'>Animated</a>
+      <a href='Array.html'>Array</a>
+      <a href='Bindable.html'>Bindable</a>
+      <a href='Boolean.html'>Boolean</a>
+      <a href='Bounded.html'>Bounded</a>
+      <a href='Camera.html'>Camera</a>
+      <a href='Collidable.html'>Collidable</a>
+      <a href='Collision.html'>Collision</a>
+      <a href='Color.html'>Color</a>
+      <a href='Core.html'>Core</a>
+      <a class='active' href='Date.html'>Date</a>
+      <a href='Drawable.html'>Drawable</a>
+      <a href='Durable.html'>Durable</a>
+      <a href='Engine.html'>Engine</a>
+      <a href='Engine.Joysticks.html'>Engine.Joysticks</a>
+      <a href='Fadeable.html'>Fadeable</a>
+      <a href='Flickerable.html'>Flickerable</a>
+      <a href='Framerate.html'>Framerate</a>
+      <a href='Function.html'>Function</a>
+      <a href='GameObject.html'>GameObject</a>
+      <a href='GameState.html'>GameState</a>
+      <a href='Local.html'>Local</a>
+      <a href='Math.html'>Math</a>
+      <a href='Matrix.html'>Matrix</a>
+      <a href='Movable.html'>Movable</a>
+      <a href='Music.html'>Music</a>
+      <a href='Number.html'>Number</a>
+      <a href='Object.html'>Object</a>
+      <a href='PixieCanvas.html'>PixieCanvas</a>
+      <a href='Point.html'>Point</a>
+      <a href='PowerCanvas.html'>PowerCanvas</a>
+      <a href='Random.html'>Random</a>
+      <a href='RegExp.html'>RegExp</a>
+      <a href='ResourceLoader.html'>ResourceLoader</a>
+      <a href='Rotatable.html'>Rotatable</a>
+      <a href='Sound.html'>Sound</a>
+      <a href='Sprite.html'>Sprite</a>
+      <a href='String.html'>String</a>
+      <a href='jQuery.html'>jQuery</a>
+      <a href='justPressed.html'>justPressed</a>
+      <a href='keydown.html'>keydown</a>
+      <a href='requestAnimationFrame.html'>requestAnimationFrame</a>
+      <a href='window.html'>window</a>
+    </nav>
+    <section class='method_list'>
+      <h3>Date Methods</h3>
+      <div class='methods'>
+        <a href='Date.html##constructor'>#constructor</a>
+        <a href='Date.html##getDate'>#getDate</a>
+        <a href='Date.html##getDay'>#getDay</a>
+        <a href='Date.html##getFullYear'>#getFullYear</a>
+        <a href='Date.html##getHours'>#getHours</a>
+        <a href='Date.html##getMilliseconds'>#getMilliseconds</a>
+        <a href='Date.html##getMinutes'>#getMinutes</a>
+        <a href='Date.html##getMonth'>#getMonth</a>
+        <a href='Date.html##getSeconds'>#getSeconds</a>
+        <a href='Date.html##getTime'>#getTime</a>
+        <a href='Date.html##getTimezoneOffset'>#getTimezoneOffset</a>
+        <a href='Date.html##getUTCDate'>#getUTCDate</a>
+        <a href='Date.html##getUTCDay'>#getUTCDay</a>
+        <a href='Date.html##getUTCFullYear'>#getUTCFullYear</a>
+        <a href='Date.html##getUTCHours'>#getUTCHours</a>
+        <a href='Date.html##getUTCMilliseconds'>#getUTCMilliseconds</a>
+        <a href='Date.html##getUTCMinutes'>#getUTCMinutes</a>
+        <a href='Date.html##getUTCMonth'>#getUTCMonth</a>
+        <a href='Date.html##getUTCSeconds'>#getUTCSeconds</a>
+        <a href='Date.html##getYear'>#getYear</a>
+        <a href='Date.html##setDate'>#setDate</a>
+        <a href='Date.html##setFullYear'>#setFullYear</a>
+        <a href='Date.html##setHours'>#setHours</a>
+        <a href='Date.html##setMilliseconds'>#setMilliseconds</a>
+        <a href='Date.html##setMinutes'>#setMinutes</a>
+        <a href='Date.html##setMonth'>#setMonth</a>
+        <a href='Date.html##setSeconds'>#setSeconds</a>
+        <a href='Date.html##setTime'>#setTime</a>
+        <a href='Date.html##setUTCDate'>#setUTCDate</a>
+        <a href='Date.html##setUTCFullYear'>#setUTCFullYear</a>
+        <a href='Date.html##setUTCHours'>#setUTCHours</a>
+        <a href='Date.html##setUTCMilliseconds'>#setUTCMilliseconds</a>
+        <a href='Date.html##setUTCMinutes'>#setUTCMinutes</a>
+        <a href='Date.html##setUTCMonth'>#setUTCMonth</a>
+        <a href='Date.html##setUTCSeconds'>#setUTCSeconds</a>
+        <a href='Date.html##setYear'>#setYear</a>
+        <a href='Date.html##toDateString'>#toDateString</a>
+        <a href='Date.html##toGMTString'>#toGMTString</a>
+        <a href='Date.html##toJSON'>#toJSON</a>
+        <a href='Date.html##toLocaleDateString'>#toLocaleDateString</a>
+        <a href='Date.html##toLocaleFormat'>#toLocaleFormat</a>
+        <a href='Date.html##toLocaleString'>#toLocaleString</a>
+        <a href='Date.html##toLocaleTimeString'>#toLocaleTimeString</a>
+        <a href='Date.html##toSource'>#toSource</a>
+        <a href='Date.html##toString'>#toString</a>
+        <a href='Date.html##toTimeString'>#toTimeString</a>
+        <a href='Date.html##toUTCString'>#toUTCString</a>
+        <a href='Date.html##valueOf'>#valueOf</a>
+      </div>
+    </section>
+    <div class='documentation'>
+      <a name='#constructor'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#constructor()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns a reference to the Date function that created the instance's prototype.<br />Note that the value of this property is a reference to the function itself, not<br />a string containing the function's name.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#getDate'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#getDate()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the day of the month for the specified date according to local time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />getDate()<br /></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#getDay'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#getDay()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the day of the week for the specified date according to local time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />getDay()<br /></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#getFullYear'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#getFullYear()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the year of the specified date according to local time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />getFullYear()<br /></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#getHours'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#getHours()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the hour for the specified date according to local time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />getHours()<br /></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#getMilliseconds'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#getMilliseconds()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the milliseconds in the specified date according to local time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />getMilliseconds()<br /></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#getMinutes'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#getMinutes()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the minutes in the specified date according to local time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />getMinutes()<br /></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#getMonth'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#getMonth()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the month in the specified date according to local time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />getMonth()<br /></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#getSeconds'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#getSeconds()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the seconds in the specified date according to local time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />getSeconds()<br /></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#getTime'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#getTime()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the numeric value corresponding to the time for the specified date<br />according to universal time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code> getTime() </code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#getTimezoneOffset'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#getTimezoneOffset()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the time-zone offset from UTC, in minutes, for the current locale.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code> getTimezoneOffset() </code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#getUTCDate'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#getUTCDate()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the day (date) of the month in the specified date according to universal<br />time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />getUTCDate()<br /></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#getUTCDay'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#getUTCDay()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the day of the week in the specified date according to universal time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />getUTCDay()<br /></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#getUTCFullYear'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#getUTCFullYear()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the year in the specified date according to universal time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />getUTCFullYear()<br /></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#getUTCHours'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#getUTCHours()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the hours in the specified date according to universal time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />getUTCHours<br /></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#getUTCMilliseconds'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#getUTCMilliseconds()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the milliseconds in the specified date according to universal time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />getUTCMilliseconds()<br /></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#getUTCMinutes'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#getUTCMinutes()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the minutes in the specified date according to universal time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />getUTCMinutes()<br /></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#getUTCMonth'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#getUTCMonth()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the month of the specified date according to universal time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />getUTCMonth()<br /></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#getUTCSeconds'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#getUTCSeconds()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the seconds in the specified date according to universal time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />getUTCSeconds()<br /></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#getYear'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#getYear()</h1>
+      <div class='description'>
+        <section class='summary'><p>Deprecated</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#setDate'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#setDate(An)</h1>
+      <div class='description'>
+        <section class='summary'><p>Sets the day of the month for a specified date according to local time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code> setDate(<em>dayValue</em>) </code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>An</span>
+               -
+              <span class='param_description'>integer from 1 to 31, representing the day of the month.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#setFullYear'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#setFullYear(An)</h1>
+      <div class='description'>
+        <section class='summary'><p>Sets the full year for a specified date according to local time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />setFullYear(<i>yearValue</i>[, <i>monthValue</i>[, <em>dayValue</em>]])<br /></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>An</span>
+               -
+              <span class='param_description'>integer between 1 and 31 representing the day of the</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#setHours'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#setHours(An, A)</h1>
+      <div class='description'>
+        <section class='summary'><p>Sets the hours for a specified date according to local time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />setHours(<i>hoursValue</i>[, <i>minutesValue</i>[, <i>secondsValue</i>[, <em>msValue</em>]]])<br /></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>An</span>
+               -
+              <span class='param_description'>integer between 0 and 59, representing the seconds. If</span>
+            </li>
+            <li>
+              <span class='param_name'>A</span>
+               -
+              <span class='param_description'>number between 0 and 999, representing the milliseconds. If</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#setMilliseconds'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#setMilliseconds(A)</h1>
+      <div class='description'>
+        <section class='summary'><p>Sets the milliseconds for a specified date according to local time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />setMilliseconds(<i>millisecondsValue</i>)<br /></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>A</span>
+               -
+              <span class='param_description'>number between 0 and 999, representing the</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#setMinutes'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#setMinutes(An, A)</h1>
+      <div class='description'>
+        <section class='summary'><p>Sets the minutes for a specified date according to local time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />setMinutes(<i>minutesValue</i>[, <i>secondsValue</i>[, <em>msValue</em>]])<br /></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>An</span>
+               -
+              <span class='param_description'>integer between 0 and 59, representing the seconds. If</span>
+            </li>
+            <li>
+              <span class='param_name'>A</span>
+               -
+              <span class='param_description'>number between 0 and 999, representing the milliseconds. If</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#setMonth'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#setMonth(An)</h1>
+      <div class='description'>
+        <section class='summary'><p>Set the month for a specified date according to local time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />setMonth(<i>monthValue</i>[, <em>dayValue</em>])<br /></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>An</span>
+               -
+              <span class='param_description'>integer from 1 to 31, representing the day of the month.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#setSeconds'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#setSeconds(An, A)</h1>
+      <div class='description'>
+        <section class='summary'><p>Sets the seconds for a specified date according to local time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />setSeconds(<i>secondsValue</i>[, <em>msValue</em>])<br /></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>An</span>
+               -
+              <span class='param_description'>integer between 0 and 59.</span>
+            </li>
+            <li>
+              <span class='param_name'>A</span>
+               -
+              <span class='param_description'>number between 0 and 999, representing the milliseconds.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#setTime'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#setTime(An)</h1>
+      <div class='description'>
+        <section class='summary'><p>Sets the Date object to the time represented by a number of milliseconds since<br />January 1, 1970, 00:00:00 UTC.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />setTime(<i>timeValue</i>)<br /></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>An</span>
+               -
+              <span class='param_description'>integer representing the number of milliseconds since 1</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#setUTCDate'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#setUTCDate(An)</h1>
+      <div class='description'>
+        <section class='summary'><p>Sets the day of the month for a specified date according to universal time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />setUTCDate(<i>dayValue</i>)<br /></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>An</span>
+               -
+              <span class='param_description'>integer from 1 to 31, representing the day of the month.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#setUTCFullYear'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#setUTCFullYear(An)</h1>
+      <div class='description'>
+        <section class='summary'><p>Sets the full year for a specified date according to universal time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />setUTCFullYear(<i>yearValue</i>[, <i>monthValue</i>[, <em>dayValue</em>]])<br /></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>An</span>
+               -
+              <span class='param_description'>integer between 1 and 31 representing the day of the</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#setUTCHours'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#setUTCHours(An, A)</h1>
+      <div class='description'>
+        <section class='summary'><p>Sets the hour for a specified date according to universal time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />setUTCHours(<i>hoursValue</i>[, <i>minutesValue</i>[, <i>secondsValue</i>[, <em>msValue</em>]]])<br /></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>An</span>
+               -
+              <span class='param_description'>integer between 0 and 59, representing the seconds. If</span>
+            </li>
+            <li>
+              <span class='param_name'>A</span>
+               -
+              <span class='param_description'>number between 0 and 999, representing the milliseconds. If</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#setUTCMilliseconds'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#setUTCMilliseconds(A)</h1>
+      <div class='description'>
+        <section class='summary'><p>Sets the milliseconds for a specified date according to universal time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />setUTCMilliseconds(<i>millisecondsValue</i>)<br /></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>A</span>
+               -
+              <span class='param_description'>number between 0 and 999, representing the</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#setUTCMinutes'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#setUTCMinutes(An, A)</h1>
+      <div class='description'>
+        <section class='summary'><p>Sets the minutes for a specified date according to universal time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />setUTCMinutes(<i>minutesValue</i>[, <i>secondsValue</i>[, <em>msValue</em>]])<br /></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>An</span>
+               -
+              <span class='param_description'>integer between 0 and 59, representing the seconds. If</span>
+            </li>
+            <li>
+              <span class='param_name'>A</span>
+               -
+              <span class='param_description'>number between 0 and 999, representing the milliseconds. If</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#setUTCMonth'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#setUTCMonth(An)</h1>
+      <div class='description'>
+        <section class='summary'><p>Sets the month for a specified date according to universal time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />setUTCMonth(<i>monthValue</i>[, <em>dayValue</em>])<br /></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>An</span>
+               -
+              <span class='param_description'>integer from 1 to 31, representing the day of the month.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#setUTCSeconds'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#setUTCSeconds(An, A)</h1>
+      <div class='description'>
+        <section class='summary'><p>Sets the seconds for a specified date according to universal time.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />setUTCSeconds(<i>secondsValue</i>[, <em>msValue</em>])<br /></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>An</span>
+               -
+              <span class='param_description'>integer between 0 and 59.</span>
+            </li>
+            <li>
+              <span class='param_name'>A</span>
+               -
+              <span class='param_description'>number between 0 and 999, representing the milliseconds.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#setYear'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#setYear()</h1>
+      <div class='description'>
+        <section class='summary'><p>Deprecated</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#toDateString'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#toDateString()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the date portion of a Date object in human readable form in American<br />English.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>date</em>.toDateString()</code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#toGMTString'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#toGMTString()</h1>
+      <div class='description'>
+        <section class='summary'><p>Deprecated</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#toJSON'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#toJSON()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns a JSON representation of the Date object.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>date</em>.prototype.toJSON()</code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#toLocaleDateString'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#toLocaleDateString()</h1>
+      <div class='description'>
+        <section class='summary'><p>Converts a date to a string, returning the "date" portion using the operating<br />system's locale's conventions.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />toLocaleDateString()<br /></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#toLocaleFormat'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#toLocaleFormat()</h1>
+      <div class='description'>
+        <section class='summary'><p>Non-standard</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#toLocaleString'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#toLocaleString()</h1>
+      <div class='description'>
+        <section class='summary'><p>Converts a date to a string, using the operating system's locale's conventions.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />toLocaleString()<br /></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#toLocaleTimeString'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#toLocaleTimeString()</h1>
+      <div class='description'>
+        <section class='summary'><p>Converts a date to a string, returning the "time" portion using the current<br />locale's conventions.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code> toLocaleTimeString() </code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#toSource'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#toSource()</h1>
+      <div class='description'>
+        <section class='summary'><p>Non-standard</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#toString'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#toString()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns a string representing the specified Date object.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code> toString() </code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#toTimeString'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#toTimeString()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the time portion of a Date object in human readable form in American<br />English.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>date</em>.toTimeString()</code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#toUTCString'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#toUTCString()</h1>
+      <div class='description'>
+        <section class='summary'><p>Converts a date to a string, using the universal time convention.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code> toUTCString() </code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#valueOf'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Date#valueOf()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the primitive value of a Date object.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><br />valueOf()<br /></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>;</code></pre>
+        </section>
+      </div>
+      <hr />
+    </div>
+  </body>
+</html>
+<script type='text/javascript'>
+  //<![CDATA[
+    $(function() {
+      $(".documentation").on("click", ".toggle_source", function(e) {
+        e.preventDefault();
+        return $(this).next().toggle();
+      });
+      return $("code.run").each(function() {
+        var canvas, codeElement, compiledJs, source;
+        codeElement = $(this);
+        source = codeElement.text();
+        compiledJs = CoffeeScript.compile(source, {
+          bare: true
+        });
+        canvas = $("<canvas width=200 height=150/>").pixieCanvas();
+        codeElement.after(canvas);
+        return eval(compiledJs);
+      });
+    });
+  //]]>
+</script>

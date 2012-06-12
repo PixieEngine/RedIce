@@ -1,33 +1,4 @@
-var App;
-
-App = {
-  "directories": {
-    "animations": "animations",
-    "data": "data",
-    "entities": "entities",
-    "images": "images",
-    "lib": "lib",
-    "sounds": "sounds",
-    "source": "src",
-    "test": "test",
-    "test_lib": "test_lib",
-    "tilemaps": "tilemaps"
-  },
-  "width": 1024,
-  "height": 768,
-  "library": false,
-  "main": "main",
-  "wrapMain": true,
-  "hotSwap": true,
-  "name": "Hockey",
-  "author": "STRd6",
-  "libs": {
-    "00_gamelib.js": "https://github.com/STRd6/gamelib/raw/pixie/gamelib.js",
-    "browserlib.js": "https://github.com/STRd6/browserlib/raw/pixie/browserlib.js",
-    "extralib.js": "https://github.com/STRd6/extralib/raw/pixie/extralib.js"
-  }
-};
-;
+App = {"directories":{"animations":"animations","data":"data","entities":"entities","images":"images","lib":"lib","sounds":"sounds","source":"src","test":"test","test_lib":"test_lib","tilemaps":"tilemaps"},"width":1024,"height":768,"library":false,"main":"main.coffee","wrapMain":true,"hotSwap":true,"name":"Hockey","author":"STRd6","libs":{"00_gamelib.js":"https://github.com/STRd6/gamelib/raw/pixie/gamelib.js","browserlib.js":"https://github.com/STRd6/browserlib/raw/pixie/browserlib.js","extralib.js":"https://github.com/STRd6/extralib/raw/pixie/extralib.js"}};
 ;
 ;
 ;
@@ -8632,7 +8603,7 @@ draw anything to the screen until the image has been loaded.
 })();
 ;
 ;
-;
+
 ;
 ;
 
@@ -10425,7 +10396,7 @@ window.requestAnimationFrame || (window.requestAnimationFrame = window.webkitReq
 })();
 ;
 ;
-;
+
 ;
 ;
 /**
@@ -11142,7 +11113,7 @@ Framerate = function(options) {
   return (typeof exports !== "undefined" && exports !== null ? exports : this)["Tilemap"] = Tilemap;
 })();;
 ;
-;
+
 /**
  *  WebGL-2D.js - HTML5 Canvas2D API in a WebGL context
  *
@@ -12448,7 +12419,7 @@ Framerate = function(options) {
   };
 
 }(Math));
-;
+
 var AI;
 
 AI = function(I, self) {
@@ -12500,7 +12471,7 @@ AI = function(I, self) {
     }
   };
 };
-;
+
 var Base;
 
 Base = function(I) {
@@ -12585,7 +12556,7 @@ Base = function(I) {
   I.center = Point(I.x + I.width / 2, I.y + I.height / 2);
   return self;
 };
-;
+
 var Blood;
 
 Blood = function(I) {
@@ -12611,7 +12582,7 @@ Blood = function(I) {
 };
 
 Blood.sprites || (Blood.sprites = [Sprite.loadByName("blood")]);
-;
+
 var Boards;
 
 Boards = function(I) {
@@ -12630,7 +12601,7 @@ Boards = function(I) {
   });
   return self;
 };
-;
+
 var Bottle;
 
 Bottle = function(I) {
@@ -12730,7 +12701,7 @@ Bottle = function(I) {
   });
   return self;
 };
-;
+
 var CharacterSheet;
 
 CharacterSheet = function(I) {
@@ -12738,11 +12709,10 @@ CharacterSheet = function(I) {
   if (I == null) I = {};
   Object.reverseMerge(I, {
     character: "tubs",
-    team: "spike",
-    size: 256
+    team: "spike"
   });
   loadStrip = function(action, facing, cells) {
-    return Sprite.loadSheet("" + I.size + "/" + I.team + "_" + I.character + "_" + action + "_" + facing + "_" + cells, I.size, I.size);
+    return Sprite.loadSheet("" + I.team + "_" + I.character + "_" + action + "_" + facing + "_" + cells, I.size, I.size);
   };
   FRONT = "se";
   BACK = "ne";
@@ -12790,7 +12760,7 @@ CharacterSheet = function(I) {
   });
   return self;
 };
-;
+
 var Configurator;
 
 Configurator = function(I) {
@@ -13017,7 +12987,7 @@ Configurator.options = [
     y: 650
   }
 ];
-;
+
 var CONTROLLERS, Controller, gameControlData, keyActionNames, layouts, selectedLayout,
   __slice = Array.prototype.slice;
 
@@ -13152,7 +13122,7 @@ layouts[selectedLayout].each(function(actions, i) {
 });
 
 parent.gameControlData = gameControlData;
-;
+
 
 (function() {
   var Engine, defaults, oldEngine;
@@ -13299,7 +13269,7 @@ parent.gameControlData = gameControlData;
         update();
         I.age += 1;
       }
-      if (I.age % 2) return draw();
+      return draw();
     };
     self = Core(I).extend({
       /**
@@ -13434,7 +13404,7 @@ parent.gameControlData = gameControlData;
   Object.extend(Engine, oldEngine);
   return (typeof exports !== "undefined" && exports !== null ? exports : this)["Engine"] = Engine;
 })();
-;
+
 var Fan;
 
 Fan = function(I) {
@@ -13463,7 +13433,7 @@ Fan = function(I) {
 };
 
 Fan.sprites || (Fan.sprites = [Sprite.loadByName("fans_active")]);
-;
+
 var FrameEditorState;
 
 FrameEditorState = function(I) {
@@ -13867,7 +13837,7 @@ FrameEditorState = function(I) {
   });
   return self;
 };
-;
+
 var Goal;
 
 Goal = function(I) {
@@ -13974,7 +13944,7 @@ Goal = function(I) {
   self.attrAccessor("suddenDeath");
   return self;
 };
-;
+
 
 window.onerror = function(message, url, lineNumber) {
   var errorContext;
@@ -13982,7 +13952,7 @@ window.onerror = function(message, url, lineNumber) {
   errorContext[4] = "<b style='font-weight: bold; text-decoration: underline;'>" + errorContext[4] + "</b>";
   return typeof displayRuntimeError === "function" ? displayRuntimeError("<code>" + message + "</code> <br /><br />(Sometimes this context may be wrong.)<br /><code><pre>" + (errorContext.join('\n')) + "</pre></code>") : void 0;
 };
-;
+
 var HeadSheet;
 
 HeadSheet = function(I) {
@@ -13990,14 +13960,13 @@ HeadSheet = function(I) {
   if (I == null) I = {};
   Object.reverseMerge(I, {
     character: "bigeyes",
-    team: "spike",
-    size: 256
+    team: "spike"
   });
   loadStrip = function(action, cells) {
     if (action) {
-      return Sprite.loadSheet("" + I.size + "/" + I.team + "_" + I.character + "_" + action + "_" + cells, I.size, I.size);
+      return Sprite.loadSheet("" + I.team + "_" + I.character + "_" + action + "_" + cells, I.size, I.size);
     } else {
-      return Sprite.loadSheet("" + I.size + "/" + I.team + "_" + I.character + "_" + cells, I.size, I.size);
+      return Sprite.loadSheet("" + I.team + "_" + I.character + "_" + cells, I.size, I.size);
     }
   };
   actions = ["charged", "pain"];
@@ -14008,8 +13977,8 @@ HeadSheet = function(I) {
   self.normal = loadStrip(null, 5);
   return self;
 };
-;
-;
+
+
 var MatchSetupState;
 
 MatchSetupState = function(I) {
@@ -14056,7 +14025,7 @@ MatchSetupState = function(I) {
   });
   return self;
 };
-;
+
 var MatchState;
 
 MatchState = function(I) {
@@ -14126,7 +14095,7 @@ MatchState = function(I) {
   });
   return self;
 };
-;
+
 var NameEntry;
 
 NameEntry = function(I) {
@@ -14348,7 +14317,7 @@ NameEntry = function(I) {
   });
   return self;
 };
-;
+
 var Physics;
 
 Physics = function() {
@@ -14543,7 +14512,7 @@ Physics = function() {
     }
   };
 };
-;
+
 var __slice = Array.prototype.slice;
 
 (function($) {
@@ -15274,7 +15243,7 @@ var __slice = Array.prototype.slice;
     }
   };
 })(jQuery);
-;
+
 var Player;
 
 Player = function(I) {
@@ -15585,7 +15554,7 @@ Player = function(I) {
 Player.COLORS = ["#0246E3", "#EB070E", "#388326", "#F69508", "#563495", "#58C4F5", "#FFDE49"];
 
 Player.CPU_COLOR = "#888";
-;
+
 var PlayerDrawing;
 
 PlayerDrawing = function(I, self) {
@@ -15860,7 +15829,7 @@ PlayerDrawing.shootArrow = Sprite.loadSheet("arrow_3", 512, 512);
 PlayerDrawing.chargedArrow = Sprite.loadSheet("arrow_charged_3", 512, 512);
 
 PlayerDrawing.chargeAura = Sprite.loadSheet("charge_aura_strip2", 512, 512);
-;
+
 var PlayerState;
 
 PlayerState = function(I, self) {
@@ -15883,7 +15852,7 @@ PlayerState = function(I, self) {
     }
   };
 };
-;
+
 var Puck;
 
 Puck = function(I) {
@@ -16017,7 +15986,7 @@ Puck = function(I) {
   };
   return self;
 };
-;
+
 var Rink;
 
 Rink = function(I) {
@@ -16212,7 +16181,7 @@ Rink = function(I) {
 };
 
 Rink.CORNER_RADIUS = 96;
-;
+
 var Scoreboard;
 
 Scoreboard = function(I) {
@@ -16343,7 +16312,7 @@ Scoreboard = function(I) {
   self.attrReader("gameOver");
   return self;
 };
-;
+
 var Shockwave;
 
 Shockwave = function(I) {
@@ -16472,7 +16441,7 @@ Shockwave = function(I) {
 };
 
 Shockwave.scorchSprite = Sprite.loadByName("scorch");
-;
+
 var SideBoards;
 
 SideBoards = function(I) {
@@ -16499,29 +16468,26 @@ SideBoards = function(I) {
   });
   return self;
 };
-;
+
 var TeamSheet;
 
 TeamSheet = function(I) {
   var self;
   if (I == null) I = {};
   Object.reverseMerge(I, {
-    team: "spike",
-    size: 256
+    team: "spike"
   });
   self = {};
   TeamSheet.bodyStyles.each(function(style) {
     return self[style] = CharacterSheet({
       team: I.team,
-      character: style,
-      size: I.size
+      character: style
     });
   });
   TeamSheet.headStyles.each(function(style) {
     return self[style] = HeadSheet({
       team: I.team,
-      character: style,
-      size: I.size
+      character: style
     });
   });
   return self;
@@ -16530,7 +16496,7 @@ TeamSheet = function(I) {
 TeamSheet.bodyStyles = ["tubs", "skinny", "thick"];
 
 TeamSheet.headStyles = ["bigeyes", "jawhead", "longface", "roundhead", "stubs"];
-;
+
 var Zamboni;
 
 Zamboni = function(I) {
@@ -16676,10 +16642,8 @@ Zamboni.sprites = {};
     e: Sprite.loadByName("" + team + "_zamboni_drive_e")
   };
 });
-;
 
 App.entities = {};
-;
 ;$(function(){ var DEBUG_DRAW, drawStartTime, updateDuration, updateStartTime;
 
 window.sprites = Sprite.loadSheet("sprites", 32, 48);
@@ -16721,7 +16685,7 @@ window.config = {
   throwBottles: true,
   players: [],
   particleEffects: false,
-  music: true
+  music: false
 };
 
 window.rink = Rink();

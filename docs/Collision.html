@@ -1,0 +1,372 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible' />
+    <title>Collision</title>
+    <link href='/assets/spacedocs/docs.css' media='screen, projection' rel='stylesheet' type='text/css' />
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js' type='text/javascript'></script>
+  </head>
+  <body>
+    <pre></pre>
+    <nav>
+      <a href='Animated.html'>Animated</a>
+      <a href='Array.html'>Array</a>
+      <a href='Bindable.html'>Bindable</a>
+      <a href='Boolean.html'>Boolean</a>
+      <a href='Bounded.html'>Bounded</a>
+      <a href='Camera.html'>Camera</a>
+      <a href='Collidable.html'>Collidable</a>
+      <a class='active' href='Collision.html'>Collision</a>
+      <a href='Color.html'>Color</a>
+      <a href='Core.html'>Core</a>
+      <a href='Date.html'>Date</a>
+      <a href='Drawable.html'>Drawable</a>
+      <a href='Durable.html'>Durable</a>
+      <a href='Engine.html'>Engine</a>
+      <a href='Engine.Joysticks.html'>Engine.Joysticks</a>
+      <a href='Fadeable.html'>Fadeable</a>
+      <a href='Flickerable.html'>Flickerable</a>
+      <a href='Framerate.html'>Framerate</a>
+      <a href='Function.html'>Function</a>
+      <a href='GameObject.html'>GameObject</a>
+      <a href='GameState.html'>GameState</a>
+      <a href='Local.html'>Local</a>
+      <a href='Math.html'>Math</a>
+      <a href='Matrix.html'>Matrix</a>
+      <a href='Movable.html'>Movable</a>
+      <a href='Music.html'>Music</a>
+      <a href='Number.html'>Number</a>
+      <a href='Object.html'>Object</a>
+      <a href='PixieCanvas.html'>PixieCanvas</a>
+      <a href='Point.html'>Point</a>
+      <a href='PowerCanvas.html'>PowerCanvas</a>
+      <a href='Random.html'>Random</a>
+      <a href='RegExp.html'>RegExp</a>
+      <a href='ResourceLoader.html'>ResourceLoader</a>
+      <a href='Rotatable.html'>Rotatable</a>
+      <a href='Sound.html'>Sound</a>
+      <a href='Sprite.html'>Sprite</a>
+      <a href='String.html'>String</a>
+      <a href='jQuery.html'>jQuery</a>
+      <a href='justPressed.html'>justPressed</a>
+      <a href='keydown.html'>keydown</a>
+      <a href='requestAnimationFrame.html'>requestAnimationFrame</a>
+      <a href='window.html'>window</a>
+    </nav>
+    <section class='method_list'>
+      <h3>Collision Methods</h3>
+      <div class='methods'>
+        <a href='Collision.html#.circular'>.circular</a>
+        <a href='Collision.html#.collide'>.collide</a>
+        <a href='Collision.html#.rayCircle'>.rayCircle</a>
+        <a href='Collision.html#.rayRectangle'>.rayRectangle</a>
+        <a href='Collision.html#.rectangular'>.rectangular</a>
+      </div>
+    </section>
+    <div class='documentation'>
+      <h1>Collision Summary</h1>
+      <div class='description'>
+        <section class='summary'></section>
+        <p>Collision holds many useful class methods for checking geometric overlap of various objects.</p>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+      </div>
+      <hr />
+      <a name='.circular'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Collision.circular(a, b)</h1>
+      <div class='description'>
+        <section class='summary'><p>Takes two circle objects and returns true if they collide (overlap), false otherwise.<br />Circle objects have x, y, and radius.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />player = GameObject<br />  x: 5<br />  y: 5<br />  radius: 10</p>
+          
+          <p>enemy = GameObject<br />  x: 10<br />  y: 10<br />  radius: 10</p>
+          
+          <p>farEnemy = GameObject<br />  x: 500<br />  y: 500<br />  radius: 30</p>
+          
+          <p>Collision.circular(player, enemy)</p>
+          
+          <h1>=> true</h1>
+          
+          <p>Collision.circular(player, farEnemy)</p>
+          
+          <h1>=> false</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>a</span>
+               -
+              <span class='param_description'>The first circle</span>
+            </li>
+            <li>
+              <span class='param_name'>b</span>
+               -
+              <span class='param_description'>The second circle</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Boolean.html'>Boolean</a>
+          </p>
+          <p class='return_description'>true is the circles overlap, false otherwise</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>circular: function(a, b) {&#x000A;      var dx, dy, r;&#x000A;      r = a.radius + b.radius;&#x000A;      dx = b.x - a.x;&#x000A;      dy = b.y - a.y;&#x000A;      return r * r >= dx * dx + dy * dy;&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='.collide'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Collision.collide(groupA, groupB, callback, detectionMethod)</h1>
+      <div class='description'>
+        <section class='summary'><p>Collision holds many useful class methods for checking geometric overlap of various objects.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />player = engine.add<br />  class: "Player"<br />  x: 0<br />  y: 0<br />  width: 10<br />  height: 10</p>
+          
+          <p>enemy = engine.add<br />  class: "Enemy"<br />  x: 5<br />  y: 5<br />  width: 10<br />  height: 10</p>
+          
+          <p>enemy2 = engine.add<br />  class: "Enemy"<br />  x: -5<br />  y: -5<br />  width: 10<br />  height: 10</p>
+          
+          <p>Collision.collide(player, enemy, (p, e) -> ...)</p>
+          
+          <h1>=> callback is called once</h1>
+          
+          <p>Collision.collide(player, [enemy, enemy2], (p, e) -> ...)</p>
+          
+          <h1>=> callback is called twice</h1>
+          
+          <p>Collision.collide("Player", "Enemy", (p, e) -> ...)</p>
+          
+          <h1>=> callback is also called twice</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>groupA</span>
+               -
+              <span class='param_description'>An object or set of objects to check collisions with</span>
+            </li>
+            <li>
+              <span class='param_name'>groupB</span>
+               -
+              <span class='param_description'>An object or set of objects to check collisions with</span>
+            </li>
+            <li>
+              <span class='param_name'>callback</span>
+               -
+              <span class='param_description'>The callback to call when an object of groupA collides</span>
+            </li>
+            <li>
+              <span class='param_name'>detectionMethod</span>
+               -
+              <span class='param_description'>An optional detection method to determine when two</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>collide: function(groupA, groupB, callback, detectionMethod) {&#x000A;      if (detectionMethod == null) detectionMethod = collides;&#x000A;      if (Object.isString(groupA)) {&#x000A;        groupA = engine.find(groupA);&#x000A;      } else {&#x000A;        groupA = [].concat(groupA);&#x000A;      }&#x000A;      if (Object.isString(groupB)) {&#x000A;        groupB = engine.find(groupB);&#x000A;      } else {&#x000A;        groupB = [].concat(groupB);&#x000A;      }&#x000A;      return groupA.each(function(a) {&#x000A;        return groupB.each(function(b) {&#x000A;          if (detectionMethod(a, b)) return callback(a, b);&#x000A;        });&#x000A;      });&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='.rayCircle'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Collision.rayCircle(source, direction, target)</h1>
+      <div class='description'>
+        <section class='summary'><p>Detects whether a line intersects a circle.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />circle = engine.add<br />  class: "circle"<br />  x: 50<br />  y: 50<br />  radius: 10</p>
+          
+          <p>Collision.rayCircle(Point(0, 0), Point(1, 0), circle)</p>
+          
+          <h1>=> true</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>source</span>
+               -
+              <span class='param_description'>The starting position</span>
+            </li>
+            <li>
+              <span class='param_name'>direction</span>
+               -
+              <span class='param_description'>A vector from the point</span>
+            </li>
+            <li>
+              <span class='param_name'>target</span>
+               -
+              <span class='param_description'>The circle</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Boolean.html'>Boolean</a>
+          </p>
+          <p class='return_description'>true if the line intersects the circle, false otherwise</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>rayCircle: function(source, direction, target) {&#x000A;      var dt, hit, intersection, intersectionToTarget, intersectionToTargetLength, laserToTarget, projection, projectionLength, radius;&#x000A;      radius = target.radius();&#x000A;      target = target.position();&#x000A;      laserToTarget = target.subtract(source);&#x000A;      projectionLength = direction.dot(laserToTarget);&#x000A;      if (projectionLength < 0) return false;&#x000A;      projection = direction.scale(projectionLength);&#x000A;      intersection = source.add(projection);&#x000A;      intersectionToTarget = target.subtract(intersection);&#x000A;      intersectionToTargetLength = intersectionToTarget.length();&#x000A;      if (intersectionToTargetLength < radius) hit = true;&#x000A;      if (hit) {&#x000A;        dt = Math.sqrt(radius * radius - intersectionToTargetLength * intersectionToTargetLength);&#x000A;        return hit = direction.scale(projectionLength - dt).add(source);&#x000A;      }&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='.rayRectangle'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Collision.rayRectangle(source, direction, target)</h1>
+      <div class='description'>
+        <section class='summary'><p>Detects whether a line intersects a rectangle.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />rect = engine.add<br />  class: "circle"<br />  x: 50<br />  y: 50<br />  width: 20<br />  height: 20</p>
+          
+          <p>Collision.rayRectangle(Point(0, 0), Point(1, 0), rect)</p>
+          
+          <h1>=> true</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>source</span>
+               -
+              <span class='param_description'>The starting position</span>
+            </li>
+            <li>
+              <span class='param_name'>direction</span>
+               -
+              <span class='param_description'>A vector from the point</span>
+            </li>
+            <li>
+              <span class='param_name'>target</span>
+               -
+              <span class='param_description'>The rectangle</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Boolean.html'>Boolean</a>
+          </p>
+          <p class='return_description'>true if the line intersects the rectangle, false otherwise</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>rayRectangle: function(source, direction, target) {&#x000A;      var areaPQ0, areaPQ1, hit, p0, p1, t, tX, tY, xval, xw, yval, yw, _ref, _ref2;&#x000A;      xw = target.xw;&#x000A;      yw = target.yw;&#x000A;      if (source.x < target.x) {&#x000A;        xval = target.x - xw;&#x000A;      } else {&#x000A;        xval = target.x + xw;&#x000A;      }&#x000A;      if (source.y < target.y) {&#x000A;        yval = target.y - yw;&#x000A;      } else {&#x000A;        yval = target.y + yw;&#x000A;      }&#x000A;      if (direction.x === 0) {&#x000A;        p0 = Point(target.x - xw, yval);&#x000A;        p1 = Point(target.x + xw, yval);&#x000A;        t = (yval - source.y) / direction.y;&#x000A;      } else if (direction.y === 0) {&#x000A;        p0 = Point(xval, target.y - yw);&#x000A;        p1 = Point(xval, target.y + yw);&#x000A;        t = (xval - source.x) / direction.x;&#x000A;      } else {&#x000A;        tX = (xval - source.x) / direction.x;&#x000A;        tY = (yval - source.y) / direction.y;&#x000A;        if ((tX < tY || ((-xw < (_ref = source.x - target.x) && _ref < xw))) && !((-yw < (_ref2 = source.y - target.y) && _ref2 < yw))) {&#x000A;          p0 = Point(target.x - xw, yval);&#x000A;          p1 = Point(target.x + xw, yval);&#x000A;          t = tY;&#x000A;        } else {&#x000A;          p0 = Point(xval, target.y - yw);&#x000A;          p1 = Point(xval, target.y + yw);&#x000A;          t = tX;&#x000A;        }&#x000A;      }&#x000A;      if (t > 0) {&#x000A;        areaPQ0 = direction.cross(p0.subtract(source));&#x000A;        areaPQ1 = direction.cross(p1.subtract(source));&#x000A;        if (areaPQ0 * areaPQ1 < 0) return hit = direction.scale(t).add(source);&#x000A;      }&#x000A;    }&#x000A;  };&#x000A;  return (typeof exports !== "undefined" && exports !== null ? exports : this)["Collision"] = Collision;&#x000A;})();&#x000A;;&#x000A;var __slice = Array.prototype.slice;&#x000A;&#x000A;(function() {&#x000A;  var Color, channelize, hslParser, hslToRgb, hsvToRgb, lookup, names, normalizeKey, parseHSL, parseHex, parseRGB, rgbParser;&#x000A;  rgbParser = /^rgba?\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),?\s*(\d?\.?\d*)?\)$/;&#x000A;  hslParser = /^hsla?\((\d{1,3}),\s*(\d?\.?\d*),\s*(\d?\.?\d*),?\s*(\d?\.?\d*)?\)$/;&#x000A;  parseRGB = function(colorString) {&#x000A;    var channel, channels, parsedColor;&#x000A;    if (!(channels = rgbParser.exec(colorString))) return;&#x000A;    parsedColor = (function() {&#x000A;      var _i, _len, _ref, _results;&#x000A;      _ref = channels.slice(1, 5);&#x000A;      _results = [];&#x000A;      for (_i = 0, _len = _ref.length; _i < _len; _i++) {&#x000A;        channel = _ref[_i];&#x000A;        _results.push(parseFloat(channel));&#x000A;      }&#x000A;      return _results;&#x000A;    })();&#x000A;    if (isNaN(parsedColor[3])) parsedColor[3] = 1;&#x000A;    return parsedColor;&#x000A;  };&#x000A;  parseHex = function(hexString) {&#x000A;    var alpha, i, rgb;&#x000A;    hexString = hexString.replace(/#/, '');&#x000A;    switch (hexString.length) {&#x000A;      case 3:&#x000A;      case 4:&#x000A;        if (hexString.length === 4) {&#x000A;          alpha = (parseInt(hexString.substr(3, 1), 16) * 0x11) / 255;&#x000A;        } else {&#x000A;          alpha = 1;&#x000A;        }&#x000A;        rgb = (function() {&#x000A;          var _results;&#x000A;          _results = [];&#x000A;          for (i = 0; i <= 2; i++) {&#x000A;            _results.push(parseInt(hexString.substr(i, 1), 16) * 0x11);&#x000A;          }&#x000A;          return _results;&#x000A;        })();&#x000A;        rgb.push(alpha);&#x000A;        return rgb;&#x000A;      case 6:&#x000A;      case 8:&#x000A;        if (hexString.length === 8) {&#x000A;          alpha = parseInt(hexString.substr(6, 2), 16) / 255;&#x000A;        } else {&#x000A;          alpha = 1;&#x000A;        }&#x000A;        rgb = (function() {&#x000A;          var _results;&#x000A;          _results = [];&#x000A;          for (i = 0; i <= 2; i++) {&#x000A;            _results.push(parseInt(hexString.substr(2 * i, 2), 16));&#x000A;          }&#x000A;          return _results;&#x000A;        })();&#x000A;        rgb.push(alpha);&#x000A;        return rgb;&#x000A;    }&#x000A;  };&#x000A;  parseHSL = function(colorString) {&#x000A;    var channel, channels, parsedColor;&#x000A;    if (!(channels = hslParser.exec(colorString))) return;&#x000A;    parsedColor = (function() {&#x000A;      var _i, _len, _ref, _results;&#x000A;      _ref = channels.slice(1, 5);&#x000A;      _results = [];&#x000A;      for (_i = 0, _len = _ref.length; _i < _len; _i++) {&#x000A;        channel = _ref[_i];&#x000A;        _results.push(parseFloat(channel));&#x000A;      }&#x000A;      return _results;&#x000A;    })();&#x000A;    if (isNaN(parsedColor[3])) parsedColor[3] = 1;&#x000A;    return hslToRgb(parsedColor);&#x000A;  };&#x000A;  hsvToRgb = function(hsv) {&#x000A;    var a, b, f, g, h, i, p, q, r, rgb, s, t, v;&#x000A;    r = g = b = null;&#x000A;    h = hsv[0], s = hsv[1], v = hsv[2], a = hsv[3];&#x000A;    if (a == null) a = 1;&#x000A;    i = (h / 60).floor();&#x000A;    f = h / 60 - i;&#x000A;    p = v * (1 - s);&#x000A;    q = v * (1 - f * s);&#x000A;    t = v * (1 - (1 - f) * s);&#x000A;    switch (i % 6) {&#x000A;      case 0:&#x000A;        r = v;&#x000A;        g = t;&#x000A;        b = p;&#x000A;        break;&#x000A;      case 1:&#x000A;        r = q;&#x000A;        g = v;&#x000A;        b = p;&#x000A;        break;&#x000A;      case 2:&#x000A;        r = p;&#x000A;        g = v;&#x000A;        b = t;&#x000A;        break;&#x000A;      case 3:&#x000A;        r = p;&#x000A;        g = q;&#x000A;        b = v;&#x000A;        break;&#x000A;      case 4:&#x000A;        r = t;&#x000A;        g = p;&#x000A;        b = v;&#x000A;        break;&#x000A;      case 5:&#x000A;        r = v;&#x000A;        g = p;&#x000A;        b = q;&#x000A;    }&#x000A;    rgb = [(r * 255).round(), (g * 255).round(), (b * 255).round()];&#x000A;    return rgb.concat(a);&#x000A;  };&#x000A;  hslToRgb = function(hsl) {&#x000A;    var a, b, channel, g, h, hueToRgb, l, p, q, r, rgbMap, s;&#x000A;    h = hsl[0], s = hsl[1], l = hsl[2], a = hsl[3];&#x000A;    h = h % 360;&#x000A;    if (a == null) a = 1;&#x000A;    r = g = b = null;&#x000A;    hueToRgb = function(p, q, hue) {&#x000A;      hue = hue.mod(360);&#x000A;      if (hue < 60) return p + (q - p) * (hue / 60);&#x000A;      if (hue < 180) return q;&#x000A;      if (hue < 240) return p + (q - p) * ((240 - hue) / 60);&#x000A;      return p;&#x000A;    };&#x000A;    if (s === 0) {&#x000A;      r = g = b = l;&#x000A;    } else {&#x000A;      q = (l < 0.5 ? l * (1 + s) : l + s - l * s);&#x000A;      p = 2 * l - q;&#x000A;      r = hueToRgb(p, q, h + 120);&#x000A;      g = hueToRgb(p, q, h);&#x000A;      b = hueToRgb(p, q, h - 120);&#x000A;    }&#x000A;    rgbMap = (function() {&#x000A;      var _i, _len, _ref, _results;&#x000A;      _ref = [r, g, b];&#x000A;      _results = [];&#x000A;      for (_i = 0, _len = _ref.length; _i < _len; _i++) {&#x000A;        channel = _ref[_i];&#x000A;        _results.push((channel * 255).round());&#x000A;      }&#x000A;      return _results;&#x000A;    })();&#x000A;    return rgbMap.concat(a);&#x000A;  };&#x000A;  normalizeKey = function(key) {&#x000A;    return key.toString().toLowerCase().split(' ').join('');&#x000A;  };&#x000A;  channelize = function(color, alpha) {&#x000A;    var channel, result;&#x000A;    if (color.channels != null) return color.channels();&#x000A;    if (Object.isArray(color)) {&#x000A;      if (alpha != null) {&#x000A;        alpha = parseFloat(alpha);&#x000A;      } else if (color[3] != null) {&#x000A;        alpha = parseFloat(color[3]);&#x000A;      } else {&#x000A;        alpha = 1;&#x000A;      }&#x000A;      result = ((function() {&#x000A;        var _i, _len, _ref, _results;&#x000A;        _ref = color.slice(0, 3);&#x000A;        _results = [];&#x000A;        for (_i = 0, _len = _ref.length; _i < _len; _i++) {&#x000A;          channel = _ref[_i];&#x000A;          _results.push(parseFloat(channel));&#x000A;        }&#x000A;        return _results;&#x000A;      })()).concat(alpha);&#x000A;    } else {&#x000A;      result = lookup[normalizeKey(color)] || parseHex(color) || parseRGB(color) || parseHSL(color);&#x000A;      if (alpha != null) result[3] = parseFloat(alpha);&#x000A;    }&#x000A;    return result;&#x000A;  };</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='.rectangular'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Collision.rectangular(a, b)</h1>
+      <div class='description'>
+        <section class='summary'><p>Takes two bounds objects and returns true if they collide (overlap), false otherwise.<br />Bounds objects have x, y, width and height properties.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />player = GameObject<br />  x: 0<br />  y: 0<br />  width: 10<br />  height: 10</p>
+          
+          <p>enemy = GameObject<br />  x: 5<br />  y: 5<br />  width: 10<br />  height: 10</p>
+          
+          <p>Collision.rectangular(player, enemy)</p>
+          
+          <h1>=> true</h1>
+          
+          <p>Collision.rectangular(player, {x: 50, y: 40, width: 30, height: 30})</p>
+          
+          <h1>=> false</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>a</span>
+               -
+              <span class='param_description'>The first rectangle</span>
+            </li>
+            <li>
+              <span class='param_name'>b</span>
+               -
+              <span class='param_description'>The second rectangle</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Boolean.html'>Boolean</a>
+          </p>
+          <p class='return_description'>true if the rectangles overlap, false otherwise</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>rectangular: function(a, b) {&#x000A;      return a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+    </div>
+  </body>
+</html>
+<script type='text/javascript'>
+  //<![CDATA[
+    $(function() {
+      $(".documentation").on("click", ".toggle_source", function(e) {
+        e.preventDefault();
+        return $(this).next().toggle();
+      });
+      return $("code.run").each(function() {
+        var canvas, codeElement, compiledJs, source;
+        codeElement = $(this);
+        source = codeElement.text();
+        compiledJs = CoffeeScript.compile(source, {
+          bare: true
+        });
+        canvas = $("<canvas width=200 height=150/>").pixieCanvas();
+        codeElement.after(canvas);
+        return eval(compiledJs);
+      });
+    });
+  //]]>
+</script>

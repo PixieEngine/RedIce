@@ -1,0 +1,1490 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible' />
+    <title>String</title>
+    <link href='/assets/spacedocs/docs.css' media='screen, projection' rel='stylesheet' type='text/css' />
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js' type='text/javascript'></script>
+  </head>
+  <body>
+    <pre></pre>
+    <nav>
+      <a href='Animated.html'>Animated</a>
+      <a href='Array.html'>Array</a>
+      <a href='Bindable.html'>Bindable</a>
+      <a href='Boolean.html'>Boolean</a>
+      <a href='Bounded.html'>Bounded</a>
+      <a href='Camera.html'>Camera</a>
+      <a href='Collidable.html'>Collidable</a>
+      <a href='Collision.html'>Collision</a>
+      <a href='Color.html'>Color</a>
+      <a href='Core.html'>Core</a>
+      <a href='Date.html'>Date</a>
+      <a href='Drawable.html'>Drawable</a>
+      <a href='Durable.html'>Durable</a>
+      <a href='Engine.html'>Engine</a>
+      <a href='Engine.Joysticks.html'>Engine.Joysticks</a>
+      <a href='Fadeable.html'>Fadeable</a>
+      <a href='Flickerable.html'>Flickerable</a>
+      <a href='Framerate.html'>Framerate</a>
+      <a href='Function.html'>Function</a>
+      <a href='GameObject.html'>GameObject</a>
+      <a href='GameState.html'>GameState</a>
+      <a href='Local.html'>Local</a>
+      <a href='Math.html'>Math</a>
+      <a href='Matrix.html'>Matrix</a>
+      <a href='Movable.html'>Movable</a>
+      <a href='Music.html'>Music</a>
+      <a href='Number.html'>Number</a>
+      <a href='Object.html'>Object</a>
+      <a href='PixieCanvas.html'>PixieCanvas</a>
+      <a href='Point.html'>Point</a>
+      <a href='PowerCanvas.html'>PowerCanvas</a>
+      <a href='Random.html'>Random</a>
+      <a href='RegExp.html'>RegExp</a>
+      <a href='ResourceLoader.html'>ResourceLoader</a>
+      <a href='Rotatable.html'>Rotatable</a>
+      <a href='Sound.html'>Sound</a>
+      <a href='Sprite.html'>Sprite</a>
+      <a class='active' href='String.html'>String</a>
+      <a href='jQuery.html'>jQuery</a>
+      <a href='justPressed.html'>justPressed</a>
+      <a href='keydown.html'>keydown</a>
+      <a href='requestAnimationFrame.html'>requestAnimationFrame</a>
+      <a href='window.html'>window</a>
+    </nav>
+    <section class='method_list'>
+      <h3>String Methods</h3>
+      <div class='methods'>
+        <a href='String.html##anchor'>#anchor</a>
+        <a href='String.html##big'>#big</a>
+        <a href='String.html##blank'>#blank</a>
+        <a href='String.html##blink'>#blink</a>
+        <a href='String.html##bold'>#bold</a>
+        <a href='String.html##camelize'>#camelize</a>
+        <a href='String.html##capitalize'>#capitalize</a>
+        <a href='String.html##charAt'>#charAt</a>
+        <a href='String.html##charCodeAt'>#charCodeAt</a>
+        <a href='String.html##concat'>#concat</a>
+        <a href='String.html##constantize'>#constantize</a>
+        <a href='String.html##fixed'>#fixed</a>
+        <a href='String.html##fontcolor'>#fontcolor</a>
+        <a href='String.html##fontsize'>#fontsize</a>
+        <a href='String.html##humanize'>#humanize</a>
+        <a href='String.html##indexOf'>#indexOf</a>
+        <a href='String.html##isString'>#isString</a>
+        <a href='String.html##italics'>#italics</a>
+        <a href='String.html##lastIndexOf'>#lastIndexOf</a>
+        <a href='String.html##link'>#link</a>
+        <a href='String.html##localeCompare'>#localeCompare</a>
+        <a href='String.html##match'>#match</a>
+        <a href='String.html##parse'>#parse</a>
+        <a href='String.html##quote'>#quote</a>
+        <a href='String.html##replace'>#replace</a>
+        <a href='String.html##search'>#search</a>
+        <a href='String.html##slice'>#slice</a>
+        <a href='String.html##small'>#small</a>
+        <a href='String.html##split'>#split</a>
+        <a href='String.html##strike'>#strike</a>
+        <a href='String.html##sub'>#sub</a>
+        <a href='String.html##substr'>#substr</a>
+        <a href='String.html##substring'>#substring</a>
+        <a href='String.html##sup'>#sup</a>
+        <a href='String.html##titleize'>#titleize</a>
+        <a href='String.html##toLocaleLowerCase'>#toLocaleLowerCase</a>
+        <a href='String.html##toLocaleUpperCase'>#toLocaleUpperCase</a>
+        <a href='String.html##toLowerCase'>#toLowerCase</a>
+        <a href='String.html##toSource'>#toSource</a>
+        <a href='String.html##toString'>#toString</a>
+        <a href='String.html##toUpperCase'>#toUpperCase</a>
+        <a href='String.html##trim'>#trim</a>
+        <a href='String.html##trimLeft'>#trimLeft</a>
+        <a href='String.html##trimRight'>#trimRight</a>
+        <a href='String.html##underscore'>#underscore</a>
+        <a href='String.html##valueOf'>#valueOf</a>
+        <a href='String.html##withoutExtension'>#withoutExtension</a>
+      </div>
+    </section>
+    <div class='documentation'>
+      <a name='#anchor'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#anchor()</h1>
+      <div class='description'>
+        <section class='summary'><p>Non-standard</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#big'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#big()</h1>
+      <div class='description'>
+        <section class='summary'><p>Non-standard</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#blank'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#blank()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns true if this string only contains whitespace characters.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />"".blank()</p>
+          
+          <h1>=> true</h1>
+          
+          <p>"hello".blank()</p>
+          
+          <h1>=> false</h1>
+          
+          <p>"   ".blank()</p>
+          
+          <h1>=> true</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Boolean.html'>Boolean</a>
+          </p>
+          <p class='return_description'>Whether or not this string is blank.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>String.prototype.blank = function() {&#x000A;  return /^\s*$/.test(this);&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#blink'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#blink()</h1>
+      <div class='description'>
+        <section class='summary'><p>Non-standard</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code>BLINK</code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#bold'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#bold()</h1>
+      <div class='description'>
+        <section class='summary'><p>Non-standard</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#camelize'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#camelize()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns a new string that is a camelCase version.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />"camel_case".camelize()<br />"camel-case".camelize()<br />"camel case".camelize()</p>
+          
+          <h1>=> "camelCase"</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='String.html'>String</a>
+          </p>
+          <p class='return_description'>A new string. camelCase version of `this`.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>String.prototype.camelize = function() {&#x000A;  return this.trim().replace(/(\-|_|\s)+(.)?/g, function(match, separator, chr) {&#x000A;    if (chr) {&#x000A;      return chr.toUpperCase();&#x000A;    } else {&#x000A;      return '';&#x000A;    }&#x000A;  });&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#capitalize'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#capitalize()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns a new string with the first letter capitalized and the rest lower cased.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />"capital".capitalize()<br />"cAPITAL".capitalize()<br />"cApItAl".capitalize()<br />"CAPITAL".capitalize()</p>
+          
+          <h1>=> "Capital"</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='String.html'>String</a>
+          </p>
+          <p class='return_description'>A new string. Capitalized version of `this`</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>String.prototype.capitalize = function() {&#x000A;  return this.charAt(0).toUpperCase() + this.substring(1).toLowerCase();&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#charAt'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#charAt(An)</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the specified character from a string.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>string</em>.charAt(<em>index</em>)</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>An</span>
+               -
+              <span class='param_description'>integer between 0 and 1 less than the length of the string.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#charCodeAt'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#charCodeAt(An)</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the numeric Unicode value of the character at the given index (except<br />for unicode codepoints > 0x10000).</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>An</span>
+               -
+              <span class='param_description'>integer greater than 0 and less than the length of the string;</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#concat'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#concat(Strings)</h1>
+      <div class='description'>
+        <section class='summary'><p>Combines the text of two or more strings and returns a new string.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>string</em>.concat(<em>string2</em>, <em>string3</em>[, ..., <em>stringN</em>])</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>Strings</span>
+               -
+              <span class='param_description'>to concatenate to this string.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#constantize'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#constantize()</h1>
+      <div class='description'>
+        <section class='summary'><p>Return the class or constant named in this string.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre></p>
+          
+          <p>"Constant".constantize()</p>
+          
+          <h1>=> Constant</h1>
+          
+          <h1>notice this isn't a string. Useful for calling methods on class with the same name as <code>this</code>.</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Object.html'>Object</a>
+          </p>
+          <p class='return_description'>The class or constant named in this string.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>String.prototype.constantize = function() {&#x000A;  if (this.match(/[A-Z][A-Za-z0-9]*/)) {&#x000A;    eval("var that = " + this);&#x000A;    return that;&#x000A;  } else {&#x000A;    throw "String#constantize: '" + this + "' is not a valid constant name.";&#x000A;  }&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#fixed'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#fixed()</h1>
+      <div class='description'>
+        <section class='summary'><p>Non-standard</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#fontcolor'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#fontcolor()</h1>
+      <div class='description'>
+        <section class='summary'><p>Non-standard</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code>&lt;FONT COLOR="<i>color</i>"&gt;</code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#fontsize'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#fontsize()</h1>
+      <div class='description'>
+        <section class='summary'><p>Non-standard</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code>&lt;FONT SIZE="<i>size</i>"&gt;</code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#humanize'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#humanize()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns a new string that is a more human readable version.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />"player_id".humanize()</p>
+          
+          <h1>=> "Player"</h1>
+          
+          <p>"player_ammo".humanize()</p>
+          
+          <h1>=> "Player ammo"</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='String.html'>String</a>
+          </p>
+          <p class='return_description'>A new string. Replaces _id and _ with "" and capitalizes the word.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>String.prototype.humanize = function() {&#x000A;  return this.replace(/_id$/, "").replace(/_/g, " ").capitalize();&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#indexOf'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#indexOf(A, The)</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the index within the calling String object of the first occurrence of<br />the specified value, starting the search at fromIndex,<br />returns -1 if the value is not found.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>string</em>.indexOf(<em>searchValue</em>[, <em>fromIndex</em>]</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>A</span>
+               -
+              <span class='param_description'>string representing the value to search for.</span>
+            </li>
+            <li>
+              <span class='param_name'>The</span>
+               -
+              <span class='param_description'>location within the calling string to start the search</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#isString'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#isString()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns true.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Boolean.html'>Boolean</a>
+          </p>
+          <p class='return_description'>true</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>String.prototype.isString = function() {&#x000A;  return true;&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#italics'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#italics()</h1>
+      <div class='description'>
+        <section class='summary'><p>Non-standard</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#lastIndexOf'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#lastIndexOf(A, The)</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the index within the calling String object of the last occurrence of the<br />specified value, or -1 if not found. The calling string is searched backward,<br />starting at fromIndex.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>string</em>.lastIndexOf(<em>searchValue</em>[, <em>fromIndex</em>])</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>A</span>
+               -
+              <span class='param_description'>string representing the value to search for.</span>
+            </li>
+            <li>
+              <span class='param_name'>The</span>
+               -
+              <span class='param_description'>location within the calling string to start the search</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#link'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#link()</h1>
+      <div class='description'>
+        <section class='summary'><p>Non-standard</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#localeCompare'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#localeCompare()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns a number indicating whether a reference string comes before or after or<br />is the same as the given string in sort order.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code> localeCompare(compareString) </code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#match'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#match(A)</h1>
+      <div class='description'>
+        <section class='summary'><p>Used to retrieve the matches when matching a string against a regular<br />expression.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>string</em>.match(<em>regexp</em>)</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>A</span>
+               -
+              <span class='param_description'>regular expression object. If a non-RegExp object obj is passed,</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#parse'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#parse()</h1>
+      <div class='description'>
+        <section class='summary'><p>Parse this string as though it is JSON and return the object it represents. If it<br />is not valid JSON returns the string itself.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre></p>
+          
+          <h1>this is valid json, so an object is returned</h1>
+          
+          <p>'{"a": 3}'.parse()</p>
+          
+          <h1>=> {a: 3}</h1>
+          
+          <h1>double quoting instead isn't valid JSON so a string is returned</h1>
+          
+          <p>"{'a': 3}".parse()</p>
+          
+          <h1>=> "{'a': 3}"</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Object.html'>Object</a>
+          </p>
+          <p class='return_description'>Returns an object from the JSON this string contains. If it is not valid JSON returns the string itself.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>String.prototype.parse = function() {&#x000A;  try {&#x000A;    return JSON.parse(this.toString());&#x000A;  } catch (e) {&#x000A;    return this.toString();&#x000A;  }&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#quote'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#quote()</h1>
+      <div class='description'>
+        <section class='summary'><p>Non-standard</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#replace'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#replace(A, The, gimy)</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns a new string with some or all matches of a pattern replaced by a<br />replacement.  The pattern can be a string or a RegExp, and the replacement can<br />be a string or a function to be called for each match.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>str</em>.replace(<em>regexp|substr</em>, <em>newSubStr|function[</em>, </code><code><em>flags]</em>);</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>A</span>
+               -
+              <span class='param_description'>function to be invoked to create the new substring (to put in</span>
+            </li>
+            <li>
+              <span class='param_name'>The</span>
+               -
+              <span class='param_description'>String that replaces the substring received from parameter</span>
+            </li>
+            <li>
+              <span class='param_name'>gimy</span>
+               -
+              <span class='param_description'></span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#search'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#search(A)</h1>
+      <div class='description'>
+        <section class='summary'><p>Executes the search for a match between a regular expression and this String<br />object.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>string</em>.search(<em>regexp</em>)</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>A</span>
+               -
+              <span class='param_description'>regular expression object. If a non-RegExp object obj is</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#slice'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#slice(The)</h1>
+      <div class='description'>
+        <section class='summary'><p>Extracts a section of a string and returns a new string.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>string</em>.slice(<em>beginslice</em>[, <em>endSlice</em>])</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>The</span>
+               -
+              <span class='param_description'>zero-based index at which to end extraction. If omitted,</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#small'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#small()</h1>
+      <div class='description'>
+        <section class='summary'><p>Non-standard</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#split'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#split(Specifies, Integer)</h1>
+      <div class='description'>
+        <section class='summary'><p>Splits a String object into an array of strings by separating the string into<br />substrings.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>string</em>.split([<em>separator</em>][, <em>limit</em>])</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>Specifies</span>
+               -
+              <span class='param_description'>the character to use for separating the string. The</span>
+            </li>
+            <li>
+              <span class='param_name'>Integer</span>
+               -
+              <span class='param_description'>specifying a limit on the number of splits to be found.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#strike'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#strike()</h1>
+      <div class='description'>
+        <section class='summary'><p>Non-standard</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#sub'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#sub()</h1>
+      <div class='description'>
+        <section class='summary'><p>Non-standard</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#substr'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#substr(Location, The)</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the characters in a string beginning at the specified location through<br />the specified number of characters.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>string</em>.substr(<em>start</em>[, <em>length</em>])</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>Location</span>
+               -
+              <span class='param_description'>at which to begin extracting characters.</span>
+            </li>
+            <li>
+              <span class='param_name'>The</span>
+               -
+              <span class='param_description'>number of characters to extract.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#substring'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#substring(An, (optional))</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns a subset of a string between one index and another, or through the end<br />of the string.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>string</em>.substring(<em>indexA</em>[, <em>indexB</em>])</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>An</span>
+               -
+              <span class='param_description'>integer between 0 and one less than the length of the string.</span>
+            </li>
+            <li>
+              <span class='param_name'>(optional)</span>
+               -
+              <span class='param_description'>An integer between 0 and the length of the string.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#sup'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#sup()</h1>
+      <div class='description'>
+        <section class='summary'><p>Non-standard</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#titleize'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#titleize()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns a new string in Title Case.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />"title-case".titleize()</p>
+          
+          <h1>=> "Title Case"</h1>
+          
+          <p>"title case".titleize()</p>
+          
+          <h1>=> "Title Case"</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='String.html'>String</a>
+          </p>
+          <p class='return_description'>A new string. Title Cased.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>String.prototype.titleize = function() {&#x000A;  return this.split(/[- ]/).map(function(word) {&#x000A;    return word.capitalize();&#x000A;  }).join(' ');&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#toLocaleLowerCase'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#toLocaleLowerCase()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the calling string value converted to lower case, according to any<br />locale-specific case mappings.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code> toLocaleLowerCase() </code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#toLocaleUpperCase'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#toLocaleUpperCase()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the calling string value converted to upper case, according to any<br />locale-specific case mappings.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code> toLocaleUpperCase() </code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#toLowerCase'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#toLowerCase()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the calling string value converted to lowercase.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>string</em>.toLowerCase()</code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#toSource'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#toSource()</h1>
+      <div class='description'>
+        <section class='summary'><p>Non-standard</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#toString'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#toString()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns a string representing the specified object.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>string</em>.toString()</code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#toUpperCase'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#toUpperCase()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the calling string value converted to uppercase.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>string</em>.toUpperCase()</code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#trim'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#trim()</h1>
+      <div class='description'>
+        <section class='summary'><p>Removes whitespace from both ends of the string.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>string</em>.trim()</code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#trimLeft'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#trimLeft()</h1>
+      <div class='description'>
+        <section class='summary'><p>Non-standard</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#trimRight'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#trimRight()</h1>
+      <div class='description'>
+        <section class='summary'><p>Non-standard</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#underscore'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#underscore()</h1>
+      <div class='description'>
+        <section class='summary'><p>Underscore a word, changing camelCased with under_scored.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />"UNDERScore".underscore()</p>
+          
+          <h1>=> "under_score"</h1>
+          
+          <p>"UNDER-SCORE".underscore()</p>
+          
+          <h1>=> "under_score"</h1>
+          
+          <p>"UnDEr-SCorE".underscore()</p>
+          
+          <h1>=> "un_d<em>er_s</em>cor_e"</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='String.html'>String</a>
+          </p>
+          <p class='return_description'>A new string. Separated by _.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>String.prototype.underscore = function() {&#x000A;  return this.replace(/([A-Z]+)([A-Z][a-z])/g, '$1_$2').replace(/([a-z\d])([A-Z])/g, '$1_$2').replace(/-/g, '_').toLowerCase();&#x000A;};</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#valueOf'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#valueOf()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the primitive value of a String object.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>string</em>.valueOf()</code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#withoutExtension'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>String#withoutExtension()</h1>
+      <div class='description'>
+        <section class='summary'><p>Assumes the string is something like a file name and returns the <br />contents of the string without the extension.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />"neat.png".witouthExtension() </p>
+          
+          <h1>=> "neat"</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='String.html'>String</a>
+          </p>
+          <p class='return_description'>A new string without the extension name.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>String.prototype.withoutExtension = function() {&#x000A;  return this.replace(/\.[^\.]*$/, '');&#x000A;};&#x000A;;</code></pre>
+        </section>
+      </div>
+      <hr />
+    </div>
+  </body>
+</html>
+<script type='text/javascript'>
+  //<![CDATA[
+    $(function() {
+      $(".documentation").on("click", ".toggle_source", function(e) {
+        e.preventDefault();
+        return $(this).next().toggle();
+      });
+      return $("code.run").each(function() {
+        var canvas, codeElement, compiledJs, source;
+        codeElement = $(this);
+        source = codeElement.text();
+        compiledJs = CoffeeScript.compile(source, {
+          bare: true
+        });
+        canvas = $("<canvas width=200 height=150/>").pixieCanvas();
+        codeElement.after(canvas);
+        return eval(compiledJs);
+      });
+    });
+  //]]>
+</script>

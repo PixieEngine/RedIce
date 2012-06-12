@@ -1,0 +1,346 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible' />
+    <title>Sprite</title>
+    <link href='/assets/spacedocs/docs.css' media='screen, projection' rel='stylesheet' type='text/css' />
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js' type='text/javascript'></script>
+  </head>
+  <body>
+    <pre></pre>
+    <nav>
+      <a href='Animated.html'>Animated</a>
+      <a href='Array.html'>Array</a>
+      <a href='Bindable.html'>Bindable</a>
+      <a href='Boolean.html'>Boolean</a>
+      <a href='Bounded.html'>Bounded</a>
+      <a href='Camera.html'>Camera</a>
+      <a href='Collidable.html'>Collidable</a>
+      <a href='Collision.html'>Collision</a>
+      <a href='Color.html'>Color</a>
+      <a href='Core.html'>Core</a>
+      <a href='Date.html'>Date</a>
+      <a href='Drawable.html'>Drawable</a>
+      <a href='Durable.html'>Durable</a>
+      <a href='Engine.html'>Engine</a>
+      <a href='Engine.Joysticks.html'>Engine.Joysticks</a>
+      <a href='Fadeable.html'>Fadeable</a>
+      <a href='Flickerable.html'>Flickerable</a>
+      <a href='Framerate.html'>Framerate</a>
+      <a href='Function.html'>Function</a>
+      <a href='GameObject.html'>GameObject</a>
+      <a href='GameState.html'>GameState</a>
+      <a href='Local.html'>Local</a>
+      <a href='Math.html'>Math</a>
+      <a href='Matrix.html'>Matrix</a>
+      <a href='Movable.html'>Movable</a>
+      <a href='Music.html'>Music</a>
+      <a href='Number.html'>Number</a>
+      <a href='Object.html'>Object</a>
+      <a href='PixieCanvas.html'>PixieCanvas</a>
+      <a href='Point.html'>Point</a>
+      <a href='PowerCanvas.html'>PowerCanvas</a>
+      <a href='Random.html'>Random</a>
+      <a href='RegExp.html'>RegExp</a>
+      <a href='ResourceLoader.html'>ResourceLoader</a>
+      <a href='Rotatable.html'>Rotatable</a>
+      <a href='Sound.html'>Sound</a>
+      <a class='active' href='Sprite.html'>Sprite</a>
+      <a href='String.html'>String</a>
+      <a href='jQuery.html'>jQuery</a>
+      <a href='justPressed.html'>justPressed</a>
+      <a href='keydown.html'>keydown</a>
+      <a href='requestAnimationFrame.html'>requestAnimationFrame</a>
+      <a href='window.html'>window</a>
+    </nav>
+    <section class='method_list'>
+      <h3>Sprite Methods</h3>
+      <div class='methods'>
+        <a href='Sprite.html##draw'>#draw</a>
+        <a href='Sprite.html#.fromPixieId'>.fromPixieId</a>
+        <a href='Sprite.html#.fromURL'>.fromURL</a>
+        <a href='Sprite.html#.load'>.load</a>
+        <a href='Sprite.html#.loadByName'>.loadByName</a>
+        <a href='Sprite.html#.loadSheet'>.loadSheet</a>
+      </div>
+    </section>
+    <div class='documentation'>
+      <h1>Sprite Summary</h1>
+      <div class='description'>
+        <section class='summary'></section>
+        <p>The Sprite class provides a way to load images for use in games.</p>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p>By default, images are loaded asynchronously. A proxy object is <br />returned immediately. Even though it has a draw method it will not<br />draw anything to the screen until the image has been loaded.</p>
+        </section>
+      </div>
+      <hr />
+      <a name='#draw'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Sprite#draw(canvas, x, y)</h1>
+      <div class='description'>
+        <section class='summary'><p>Draw this sprite on the given canvas at the given position.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>canvas</span>
+               -
+              <span class='param_description'>Reference to the canvas to draw the sprite on</span>
+            </li>
+            <li>
+              <span class='param_name'>x</span>
+               -
+              <span class='param_description'>Position on the x axis to draw the sprite</span>
+            </li>
+            <li>
+              <span class='param_name'>y</span>
+               -
+              <span class='param_description'>Position on the y axis to draw the sprite</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>draw: function(canvas, x, y) {&#x000A;        return canvas.drawImage(image, sourceX, sourceY, width, height, x, y, width, height);&#x000A;      },&#x000A;      fill: function(canvas, x, y, width, height, repeat) {&#x000A;        var pattern;&#x000A;        if (repeat == null) repeat = "repeat";&#x000A;        pattern = canvas.createPattern(image, repeat);&#x000A;        return canvas.drawRect({&#x000A;          x: x,&#x000A;          y: y,&#x000A;          width: width,&#x000A;          height: height,&#x000A;          color: pattern&#x000A;        });&#x000A;      },&#x000A;      width: width,&#x000A;      height: height&#x000A;    };&#x000A;  };</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='.fromPixieId'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Sprite.fromPixieId(id, callback)</h1>
+      <div class='description'>
+        <section class='summary'><p>Loads a sprite with the given pixie id.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>id</span>
+               -
+              <span class='param_description'>Pixie Id of the sprite to load</span>
+            </li>
+            <li>
+              <span class='param_name'>callback</span>
+               -
+              <span class='param_description'>Function to execute once the image is loaded. The sprite proxy data is passed to this as a parameter.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Sprite.html'>Sprite</a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Sprite.fromPixieId = function(id, callback) {&#x000A;    return Sprite.load("http://pixieengine.com/s3/sprites/" + id + "/original.png", callback);&#x000A;  };</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='.fromURL'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Sprite.fromURL(url, callback)</h1>
+      <div class='description'>
+        <section class='summary'><p>Loads a sprite from a given url.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>url</span>
+               -
+              <span class='param_description'>The url where the image to load is located</span>
+            </li>
+            <li>
+              <span class='param_name'>callback</span>
+               -
+              <span class='param_description'>Function to execute once the image is loaded. The sprite proxy data is passed to this as a parameter.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Sprite.html'>Sprite</a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Sprite.fromURL = Sprite.load;</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='.load'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Sprite.load(url, loadedCallback)</h1>
+      <div class='description'>
+        <section class='summary'><p>Loads a sprite from a given url.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>url</span>
+               -
+              <span class='param_description'></span>
+            </li>
+            <li>
+              <span class='param_name'>loadedCallback</span>
+               -
+              <span class='param_description'></span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Sprite.html'>Sprite</a>
+          </p>
+          <p class='return_description'>A sprite object</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Sprite.load = function(url, loadedCallback) {&#x000A;    var img, proxy;&#x000A;    img = new Image();&#x000A;    proxy = LoaderProxy();&#x000A;    img.onload = function() {&#x000A;      var tile;&#x000A;      tile = Sprite(this);&#x000A;      Object.extend(proxy, tile);&#x000A;      if (loadedCallback) return loadedCallback(proxy);&#x000A;    };&#x000A;    img.src = url;&#x000A;    return proxy;&#x000A;  };</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='.loadByName'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Sprite.loadByName(name, callback)</h1>
+      <div class='description'>
+        <section class='summary'><p>Loads a sprite with the given name.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>name</span>
+               -
+              <span class='param_description'>The name of the image in your images directory</span>
+            </li>
+            <li>
+              <span class='param_name'>callback</span>
+               -
+              <span class='param_description'>Function to execute once the image is loaded. The sprite proxy data is passed to this as a parameter.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Sprite.html'>Sprite</a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Sprite.loadByName = function(name, callback) {&#x000A;    return Sprite.load(ResourceLoader.urlFor("images", name), callback);&#x000A;  };&#x000A;  return (typeof exports !== "undefined" && exports !== null ? exports : this)["Sprite"] = Sprite;&#x000A;})();&#x000A;;&#x000A;;&#x000A;&#x000A;;&#x000A;;&#x000A;&#x000A;document.oncontextmenu = function() {&#x000A;  return false;&#x000A;};&#x000A;&#x000A;$(document).bind("keydown", function(event) {&#x000A;  if (!$(event.target).is("input")) return event.preventDefault();&#x000A;});&#x000A;;</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='.loadSheet'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Sprite.loadSheet(name, tileWidth, tileHeight)</h1>
+      <div class='description'>
+        <section class='summary'><p>Loads all sprites from a sprite sheet found in<br />your images directory, specified by the name passed in.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>name</span>
+               -
+              <span class='param_description'>Name of the spriteSheet image in your images directory</span>
+            </li>
+            <li>
+              <span class='param_name'>tileWidth</span>
+               -
+              <span class='param_description'>Width of each sprite in the sheet</span>
+            </li>
+            <li>
+              <span class='param_name'>tileHeight</span>
+               -
+              <span class='param_description'>Height of each sprite in the sheet</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Array.html'>Array</a>
+          </p>
+          <p class='return_description'>An array of sprite objects</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Sprite.loadSheet = function(name, tileWidth, tileHeight) {&#x000A;    var image, sprites, url;&#x000A;    url = ResourceLoader.urlFor("images", name);&#x000A;    sprites = [];&#x000A;    image = new Image();&#x000A;    image.onload = function() {&#x000A;      var imgElement;&#x000A;      imgElement = this;&#x000A;      return (image.height / tileHeight).times(function(row) {&#x000A;        return (image.width / tileWidth).times(function(col) {&#x000A;          return sprites.push(Sprite(imgElement, col * tileWidth, row * tileHeight, tileWidth, tileHeight));&#x000A;        });&#x000A;      });&#x000A;    };&#x000A;    image.src = url;&#x000A;    return sprites;&#x000A;  };</code></pre>
+        </section>
+      </div>
+      <hr />
+    </div>
+  </body>
+</html>
+<script type='text/javascript'>
+  //<![CDATA[
+    $(function() {
+      $(".documentation").on("click", ".toggle_source", function(e) {
+        e.preventDefault();
+        return $(this).next().toggle();
+      });
+      return $("code.run").each(function() {
+        var canvas, codeElement, compiledJs, source;
+        codeElement = $(this);
+        source = codeElement.text();
+        compiledJs = CoffeeScript.compile(source, {
+          bare: true
+        });
+        canvas = $("<canvas width=200 height=150/>").pixieCanvas();
+        codeElement.after(canvas);
+        return eval(compiledJs);
+      });
+    });
+  //]]>
+</script>

@@ -1,0 +1,239 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible' />
+    <title>Camera</title>
+    <link href='/assets/spacedocs/docs.css' media='screen, projection' rel='stylesheet' type='text/css' />
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js' type='text/javascript'></script>
+  </head>
+  <body>
+    <pre></pre>
+    <nav>
+      <a href='Animated.html'>Animated</a>
+      <a href='Array.html'>Array</a>
+      <a href='Bindable.html'>Bindable</a>
+      <a href='Boolean.html'>Boolean</a>
+      <a href='Bounded.html'>Bounded</a>
+      <a class='active' href='Camera.html'>Camera</a>
+      <a href='Collidable.html'>Collidable</a>
+      <a href='Collision.html'>Collision</a>
+      <a href='Color.html'>Color</a>
+      <a href='Core.html'>Core</a>
+      <a href='Date.html'>Date</a>
+      <a href='Drawable.html'>Drawable</a>
+      <a href='Durable.html'>Durable</a>
+      <a href='Engine.html'>Engine</a>
+      <a href='Engine.Joysticks.html'>Engine.Joysticks</a>
+      <a href='Fadeable.html'>Fadeable</a>
+      <a href='Flickerable.html'>Flickerable</a>
+      <a href='Framerate.html'>Framerate</a>
+      <a href='Function.html'>Function</a>
+      <a href='GameObject.html'>GameObject</a>
+      <a href='GameState.html'>GameState</a>
+      <a href='Local.html'>Local</a>
+      <a href='Math.html'>Math</a>
+      <a href='Matrix.html'>Matrix</a>
+      <a href='Movable.html'>Movable</a>
+      <a href='Music.html'>Music</a>
+      <a href='Number.html'>Number</a>
+      <a href='Object.html'>Object</a>
+      <a href='PixieCanvas.html'>PixieCanvas</a>
+      <a href='Point.html'>Point</a>
+      <a href='PowerCanvas.html'>PowerCanvas</a>
+      <a href='Random.html'>Random</a>
+      <a href='RegExp.html'>RegExp</a>
+      <a href='ResourceLoader.html'>ResourceLoader</a>
+      <a href='Rotatable.html'>Rotatable</a>
+      <a href='Sound.html'>Sound</a>
+      <a href='Sprite.html'>Sprite</a>
+      <a href='String.html'>String</a>
+      <a href='jQuery.html'>jQuery</a>
+      <a href='justPressed.html'>justPressed</a>
+      <a href='keydown.html'>keydown</a>
+      <a href='requestAnimationFrame.html'>requestAnimationFrame</a>
+      <a href='window.html'>window</a>
+    </nav>
+    <section class='method_list'>
+      <h3>Camera Methods</h3>
+      <div class='methods'>
+        <a href='Camera.html##fadeIn'>#fadeIn</a>
+        <a href='Camera.html##fadeOut'>#fadeOut</a>
+        <a href='Camera.html##flash'>#flash</a>
+      </div>
+    </section>
+    <div class='documentation'>
+      <a name='#fadeIn'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Camera#fadeIn(duration=30, color="black")</h1>
+      <div class='description'>
+        <section class='summary'><p>A convenient way to set the flash effect instance variables. This provides a shorthand for fading the screen in <br />from a given color over a specified duration.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />engine.fadeIn()</p>
+          
+          <h1>=> Sets the effect variables to their default state. This will the screen to go from black to transparent over the next 30 frames.</h1>
+          
+          <p>engine.fadeIn('blue', 50)</p>
+          
+          <h1>=> This effect will start off blue and fade to transparent over 50 frames.</h1>
+          
+          <p></pre></code>  </p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>duration=30</span>
+               -
+              <span class='param_description'>How long the effect lasts</span>
+            </li>
+            <li>
+              <span class='param_name'>color="black"</span>
+               -
+              <span class='param_description'>The color to fade from</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>fadeIn: function(duration, color) {&#x000A;      if (duration == null) duration = 30;&#x000A;      if (color == null) color = 'black';&#x000A;      return configureFade(duration, color, 0);&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#fadeOut'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Camera#fadeOut(duration=30, color="transparent")</h1>
+      <div class='description'>
+        <section class='summary'><p>A convenient way to set the flash effect instance variables. This provides a shorthand for fading <br />the screen to a given color over a specified duration.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />camera.fadeOut()</p>
+          
+          <h1>=> Sets the effect variables to their default state. This will the screen to fade from ransparent to black over the next 30 frames.</h1>
+          
+          <p>camera.fadeOut('blue', 50)</p>
+          
+          <h1>=> This effect will start off transparent and change to blue over 50 frames.</h1>
+          
+          <p></pre></code>  </p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>duration=30</span>
+               -
+              <span class='param_description'>How long the effect lasts</span>
+            </li>
+            <li>
+              <span class='param_name'>color="transparent"</span>
+               -
+              <span class='param_description'>The color to fade to</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>fadeOut: function(duration, color) {&#x000A;      if (duration == null) duration = 30;&#x000A;      if (color == null) color = 'transparent';&#x000A;      return configureFade(duration, color, 1);&#x000A;    }&#x000A;  };&#x000A;};&#x000A;;</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#flash'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Camera#flash(color="white", duration=12, targetAlpha=0)</h1>
+      <div class='description'>
+        <section class='summary'><p>A convenient way to set the flash effect instance variables. Alternatively, you can modify them by hand, but<br />using Camera#flash is the suggested approach.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />camera.flash()</p>
+          
+          <h1>=> Sets the flash effect variables to their default state. This will cause a white flash that will turn transparent in the next 12 frames.</h1>
+          
+          <p>camera.flash<br />  color: 'green'<br />  duration: 30</p>
+          
+          <h1>=> This flash effect will start off green and fade to transparent over 30 frames.</h1>
+          
+          <p>camera.flash<br />  color: Color(255, 0, 0, 0)<br />  duration: 20<br />  targetAlpha: 1</p>
+          
+          <h1>=> This flash effect will start off transparent and move toward red over 20 frames</h1>
+          
+          <p></pre></code>  </p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>color="white"</span>
+               -
+              <span class='param_description'>The flash color</span>
+            </li>
+            <li>
+              <span class='param_name'>duration=12</span>
+               -
+              <span class='param_description'>How long the effect lasts</span>
+            </li>
+            <li>
+              <span class='param_name'>targetAlpha=0</span>
+               -
+              <span class='param_description'>The alpha value to fade to. By default, this is set to 0, which fades the color to transparent.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>flash: function(options) {&#x000A;      var color, duration, targetAlpha;&#x000A;      if (options == null) options = {};&#x000A;      Object.reverseMerge(options, defaultParams);&#x000A;      color = options.color, duration = options.duration, targetAlpha = options.targetAlpha;&#x000A;      I.flashColor = Color(color);&#x000A;      I.flashTargetAlpha = targetAlpha;&#x000A;      I.flashCooldown = duration;&#x000A;      I.flashDuration = duration;&#x000A;      return self;&#x000A;    }&#x000A;  };&#x000A;};&#x000A;;&#x000A;&#x000A;Camera.Rotate = function(I, self) {&#x000A;  Object.reverseMerge(I, {&#x000A;    rotation: 0&#x000A;  });&#x000A;  self.transformFilterChain(function(transform) {&#x000A;    return transform.rotate(I.rotation);&#x000A;  });&#x000A;  self.attrAccessor("rotation");&#x000A;  return {&#x000A;    rotate: function(amount) {&#x000A;      return self.rotation(I.rotation + amount);&#x000A;    }&#x000A;  };&#x000A;};&#x000A;;&#x000A;&#x000A;Camera.Shake = function(I, self) {&#x000A;  var defaultParams;&#x000A;  Object.reverseMerge(I, {&#x000A;    shakeIntensity: 20,&#x000A;    shakeCooldown: 0&#x000A;  });&#x000A;  defaultParams = {&#x000A;    duration: 10,&#x000A;    intensity: 20&#x000A;  };&#x000A;  self.bind("afterUpdate", function() {&#x000A;    return I.shakeCooldown = I.shakeCooldown.approach(0, 1);&#x000A;  });&#x000A;  self.transformFilterChain(function(transform) {&#x000A;    if (I.shakeCooldown > 0) {&#x000A;      transform.tx += signedRand(I.shakeIntensity);&#x000A;      transform.ty += signedRand(I.shakeIntensity);&#x000A;    }&#x000A;    return transform;&#x000A;  });&#x000A;  return {&#x000A;    shake: function(options) {&#x000A;      var duration, intensity, _ref;&#x000A;      if (options == null) options = {};&#x000A;      _ref = Object.reverseMerge(options, defaultParams), duration = _ref.duration, intensity = _ref.intensity;&#x000A;      I.shakeCooldown = duration * I.zoom;&#x000A;      I.shakeIntensity = intensity * I.zoom;&#x000A;      return self;&#x000A;    }&#x000A;  };&#x000A;};&#x000A;;&#x000A;&#x000A;Camera.Zoom = function(I, self) {&#x000A;  var clampZoom;&#x000A;  Object.reverseMerge(I, {&#x000A;    maxZoom: 10,&#x000A;    minZoom: 0.1,&#x000A;    zoom: 1&#x000A;  });&#x000A;  self.transformFilterChain(function(transform) {&#x000A;    return transform.scale(I.zoom, I.zoom);&#x000A;  });&#x000A;  clampZoom = function(value) {&#x000A;    return value.clamp(I.minZoom, I.maxZoom);&#x000A;  };&#x000A;  return {&#x000A;    zoomIn: function(percentage) {&#x000A;      return self.zoom(clampZoom(I.zoom * (1 + percentage)));&#x000A;    },&#x000A;    zoomOut: function(percentage) {&#x000A;      return self.zoom(clampZoom(I.zoom * (1 - percentage)));&#x000A;    },&#x000A;    zoom: function(value) {&#x000A;      if (value != null) {&#x000A;        I.zoom = clampZoom(value);&#x000A;        return self;&#x000A;      } else {&#x000A;        return I.zoom;&#x000A;      }&#x000A;    }&#x000A;  };&#x000A;};&#x000A;;&#x000A;&#x000A;Camera.ZSort = function(I, self) {&#x000A;  Object.reverseMerge(I, {&#x000A;    zSort: true&#x000A;  });&#x000A;  self.objectFilterChain(function(objects) {&#x000A;    if (I.zSort) {&#x000A;      objects.sort(function(a, b) {&#x000A;        return a.I.zIndex - b.I.zIndex;&#x000A;      });&#x000A;    }&#x000A;    return objects;&#x000A;  });&#x000A;  return {};&#x000A;};&#x000A;;&#x000A;&#x000A;(function() {</code></pre>
+        </section>
+      </div>
+      <hr />
+    </div>
+  </body>
+</html>
+<script type='text/javascript'>
+  //<![CDATA[
+    $(function() {
+      $(".documentation").on("click", ".toggle_source", function(e) {
+        e.preventDefault();
+        return $(this).next().toggle();
+      });
+      return $("code.run").each(function() {
+        var canvas, codeElement, compiledJs, source;
+        codeElement = $(this);
+        source = codeElement.text();
+        compiledJs = CoffeeScript.compile(source, {
+          bare: true
+        });
+        canvas = $("<canvas width=200 height=150/>").pixieCanvas();
+        codeElement.after(canvas);
+        return eval(compiledJs);
+      });
+    });
+  //]]>
+</script>

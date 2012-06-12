@@ -1,0 +1,379 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible' />
+    <title>Bounded</title>
+    <link href='/assets/spacedocs/docs.css' media='screen, projection' rel='stylesheet' type='text/css' />
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js' type='text/javascript'></script>
+  </head>
+  <body>
+    <pre></pre>
+    <nav>
+      <a href='Animated.html'>Animated</a>
+      <a href='Array.html'>Array</a>
+      <a href='Bindable.html'>Bindable</a>
+      <a href='Boolean.html'>Boolean</a>
+      <a class='active' href='Bounded.html'>Bounded</a>
+      <a href='Camera.html'>Camera</a>
+      <a href='Collidable.html'>Collidable</a>
+      <a href='Collision.html'>Collision</a>
+      <a href='Color.html'>Color</a>
+      <a href='Core.html'>Core</a>
+      <a href='Date.html'>Date</a>
+      <a href='Drawable.html'>Drawable</a>
+      <a href='Durable.html'>Durable</a>
+      <a href='Engine.html'>Engine</a>
+      <a href='Engine.Joysticks.html'>Engine.Joysticks</a>
+      <a href='Fadeable.html'>Fadeable</a>
+      <a href='Flickerable.html'>Flickerable</a>
+      <a href='Framerate.html'>Framerate</a>
+      <a href='Function.html'>Function</a>
+      <a href='GameObject.html'>GameObject</a>
+      <a href='GameState.html'>GameState</a>
+      <a href='Local.html'>Local</a>
+      <a href='Math.html'>Math</a>
+      <a href='Matrix.html'>Matrix</a>
+      <a href='Movable.html'>Movable</a>
+      <a href='Music.html'>Music</a>
+      <a href='Number.html'>Number</a>
+      <a href='Object.html'>Object</a>
+      <a href='PixieCanvas.html'>PixieCanvas</a>
+      <a href='Point.html'>Point</a>
+      <a href='PowerCanvas.html'>PowerCanvas</a>
+      <a href='Random.html'>Random</a>
+      <a href='RegExp.html'>RegExp</a>
+      <a href='ResourceLoader.html'>ResourceLoader</a>
+      <a href='Rotatable.html'>Rotatable</a>
+      <a href='Sound.html'>Sound</a>
+      <a href='Sprite.html'>Sprite</a>
+      <a href='String.html'>String</a>
+      <a href='jQuery.html'>jQuery</a>
+      <a href='justPressed.html'>justPressed</a>
+      <a href='keydown.html'>keydown</a>
+      <a href='requestAnimationFrame.html'>requestAnimationFrame</a>
+      <a href='window.html'>window</a>
+    </nav>
+    <section class='method_list'>
+      <h3>Bounded Methods</h3>
+      <div class='methods'>
+        <a href='Bounded.html##bounds'>#bounds</a>
+        <a href='Bounded.html##center'>#center</a>
+        <a href='Bounded.html##centeredBounds'>#centeredBounds</a>
+        <a href='Bounded.html##circle'>#circle</a>
+        <a href='Bounded.html##collides'>#collides</a>
+        <a href='Bounded.html##collisionBounds'>#collisionBounds</a>
+        <a href='Bounded.html##position'>#position</a>
+      </div>
+    </section>
+    <div class='documentation'>
+      <h1>Bounded Summary</h1>
+      <div class='description'>
+        <section class='summary'></section>
+        <p>The Bounded module is used to provide basic data about the<br />location and dimensions of the including object. This module is included<br />by default in <code>GameObject</code>.</p>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />player = Core<br />  x: 10<br />  y: 50<br />  width: 20<br />  height: 20<br />  other: "stuff"<br />  more: "properties"</p>
+          
+          <p>player.position()</p>
+          
+          <h1>=> Uncaught TypeError: Object has no method 'position'</h1>
+          
+          <p>player.include(Bounded)</p>
+          
+          <h1>now player has all the methods provided by this module</h1>
+          
+          <p>player.position()</p>
+          
+          <h1>=> {x: 10, y: 50}</h1>
+          
+          <p></pre></code></p>
+        </section>
+      </div>
+      <hr />
+      <a name='#bounds'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Bounded#bounds(xOffset, yOffset)</h1>
+      <div class='description'>
+        <section class='summary'><p>The bounds method returns infomation about the location <br />of the object and its dimensions with optional offsets.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />player = Core<br />  x: 3<br />  y: 6<br />  width: 2<br />  height: 2</p>
+          
+          <p>player.include(Bounded)</p>
+          
+          <p>player.bounds()</p>
+          
+          <h1>=> {x: 3, y: 6, width: 2, height: 2}</h1>
+          
+          <p>player.bounds(7, 4)</p>
+          
+          <h1>=> {x: 10, y: 10, width: 2, height: 2}</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>xOffset</span>
+               -
+              <span class='param_description'>the amount to shift the x position</span>
+            </li>
+            <li>
+              <span class='param_name'>yOffset</span>
+               -
+              <span class='param_description'>the amount to shift the y position</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>bounds: function(xOffset, yOffset) {&#x000A;      var center;&#x000A;      center = self.center();&#x000A;      return {&#x000A;        x: center.x - I.width / 2 + (xOffset || 0),&#x000A;        y: center.y - I.height / 2 + (yOffset || 0),&#x000A;        width: I.width,&#x000A;        height: I.height&#x000A;      };&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#center'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Bounded#center()</h1>
+      <div class='description'>
+        <section class='summary'><p>The center method returns the {@link Point} that is<br />the center of the object.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />player = Core<br />  x: 50<br />  y: 40<br />  width: 10<br />  height: 30</p>
+          
+          <p>player.include(Bounded)  </p>
+          
+          <p>player.center()</p>
+          
+          <h1>=> {x: 30, y: 35}</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Point.html'>Point</a>
+          </p>
+          <p class='return_description'>The middle of the calling object</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>center: function(newCenter) {&#x000A;      return self.position(newCenter);&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#centeredBounds'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Bounded#centeredBounds()</h1>
+      <div class='description'>
+        <section class='summary'><p>The centeredBounds method returns infomation about the center<br />of the object along with the midpoint of the width and height.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />player = Core<br />  x: 3<br />  y: 6<br />  width: 2<br />  height: 2</p>
+          
+          <p>player.include(Bounded)</p>
+          
+          <p>player.centeredBounds()</p>
+          
+          <h1>=> {x: 4, y: 7, xw: 1, yw: 1}</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>centeredBounds: function() {&#x000A;      var center;&#x000A;      center = self.center();&#x000A;      return {&#x000A;        x: center.x,&#x000A;        y: center.y,&#x000A;        xw: I.width / 2,&#x000A;        yw: I.height / 2&#x000A;      };&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#circle'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Bounded#circle()</h1>
+      <div class='description'>
+        <section class='summary'><p>Return the circular bounds of the object. The circle is<br />centered at the midpoint of the object.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />player = Core<br />  radius: 5<br />  x: 50<br />  y: 50<br />  other: "stuff"</p>
+          
+          <p>player.include(Bounded)</p>
+          
+          <p>player.circle()</p>
+          
+          <h1>=> {radius: 5, x: 50, y: 50}</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Object.html'>Object</a>
+          </p>
+          <p class='return_description'>An object with a position and a radius</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>circle: function() {&#x000A;      var circle;&#x000A;      circle = self.center();&#x000A;      circle.radius = I.radius || I.width / 2 || I.height / 2;&#x000A;      return circle;&#x000A;    }&#x000A;  };&#x000A;};&#x000A;;&#x000A;var Camera;&#x000A;&#x000A;Camera = function(I) {&#x000A;  var currentObject, currentType, focusOn, followTypes, objectFilters, self, transformFilters;&#x000A;  if (I == null) I = {};&#x000A;  Object.reverseMerge(I, {&#x000A;    cameraBounds: Rectangle({&#x000A;      x: 0,&#x000A;      y: 0,&#x000A;      width: App.width,&#x000A;      height: App.height&#x000A;    }),&#x000A;    screen: Rectangle({&#x000A;      x: 0,&#x000A;      y: 0,&#x000A;      width: App.width,&#x000A;      height: App.height&#x000A;    }),&#x000A;    deadzone: Point(0, 0),&#x000A;    zoom: 1,&#x000A;    transform: Matrix(),&#x000A;    scroll: Point(0, 0)&#x000A;  });&#x000A;  currentType = "centered";&#x000A;  currentObject = null;&#x000A;  objectFilters = [];&#x000A;  transformFilters = [];&#x000A;  focusOn = function(object) {&#x000A;    var centerOffset, centerRect, deadzone, objectCenter;&#x000A;    objectCenter = object.center();&#x000A;    centerOffset = objectCenter.subtract(I.screen.width / 2, I.screen.height / 2);&#x000A;    deadzone = I.deadzone.scale(1 / (2 * I.zoom));&#x000A;    centerRect = Rectangle({&#x000A;      x: centerOffset.x - deadzone.x,&#x000A;      y: centerOffset.y - deadzone.y,&#x000A;      width: 2 * deadzone.x,&#x000A;      height: 2 * deadzone.y&#x000A;    });&#x000A;    return I.scroll = Point(I.scroll.x.clamp(centerRect.left, centerRect.right).clamp(I.cameraBounds.left, I.cameraBounds.right - I.screen.width), I.scroll.y.clamp(centerRect.top, centerRect.bottom).clamp(I.cameraBounds.top, I.cameraBounds.bottom - I.screen.height));&#x000A;  };&#x000A;  followTypes = {&#x000A;    centered: function(object) {&#x000A;      I.deadzone = Point(0, 0);&#x000A;      return focusOn(object);&#x000A;    },&#x000A;    topdown: function(object) {&#x000A;      var helper;&#x000A;      helper = Math.max(I.cameraBounds.width, I.cameraBounds.height) / 4;&#x000A;      I.deadzone = Point(helper, helper);&#x000A;      return focusOn(object);&#x000A;    },&#x000A;    platformer: function(object) {&#x000A;      var height, width;&#x000A;      width = I.cameraBounds.width / 8;&#x000A;      height = I.cameraBounds.height / 3;&#x000A;      I.deadzone = Point(width, height);&#x000A;      return focusOn(object);&#x000A;    }&#x000A;  };&#x000A;  self = Core(I).extend({&#x000A;    follow: function(object, type) {&#x000A;      if (type == null) type = "centered";&#x000A;      currentObject = object;&#x000A;      currentType = type;&#x000A;      return I.scroll = object.center();&#x000A;    },&#x000A;    objectFilterChain: function(fn) {&#x000A;      return objectFilters.push(fn);&#x000A;    },&#x000A;    transformFilterChain: function(fn) {&#x000A;      return transformFilters.push(fn);&#x000A;    }&#x000A;  });&#x000A;  self.attrAccessor("transform", "scroll");&#x000A;  self.include(Bindable);&#x000A;  self.bind("afterUpdate", function() {&#x000A;    if (currentObject) followTypes[currentType](currentObject);&#x000A;    return I.transform = Matrix.translate(-I.scroll.x, -I.scroll.y);&#x000A;  });&#x000A;  self.bind("draw", function(canvas, objects) {&#x000A;    return canvas.withTransform(Matrix.translate(I.screen.x, I.screen.y), function(canvas) {&#x000A;      var transform;&#x000A;      canvas.clip(0, 0, I.screen.width, I.screen.height);&#x000A;      objects = objectFilters.pipeline(objects);&#x000A;      transform = transformFilters.pipeline(self.transform().copy());&#x000A;      canvas.withTransform(transform, function(canvas) {&#x000A;        self.trigger("beforeDraw", canvas);&#x000A;        return objects.invoke("draw", canvas);&#x000A;      });&#x000A;      return self.trigger('flash', canvas);&#x000A;    });&#x000A;  });&#x000A;  self.include(Camera.ZSort);&#x000A;  self.include(Camera.Zoom);&#x000A;  self.include(Camera.Rotate);&#x000A;  self.include(Camera.Shake);&#x000A;  self.include(Camera.Flash);&#x000A;  self.include(Camera.Fade);&#x000A;  return self;&#x000A;};&#x000A;;</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#collides'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Bounded#collides()</h1>
+      <div class='description'>
+        <section class='summary'><p>Does a check to see if this object is overlapping<br />with the bounds passed in.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />player = Core<br />  x: 4<br />  y: 6<br />  width: 20<br />  height: 20</p>
+          
+          <p>player.include(Bounded)  </p>
+          
+          <p>player.collides({x: 5, y: 7, width: 20, height: 20})</p>
+          
+          <h1>=> true</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Point.html'>Point</a>
+          </p>
+          <p class='return_description'>The position of this object</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>collides: function(bounds) {&#x000A;      return Collision.rectangular(self.bounds(), bounds);&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#collisionBounds'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Bounded#collisionBounds(xOffset, yOffset)</h1>
+      <div class='description'>
+        <section class='summary'><p>This returns a modified bounds based on the collision margin.<br />The area of the bounds is reduced if collision margin is positive<br />and increased if collision margin is negative.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />player = Core<br />  collisionMargin: <br />    x: -2<br />    y: -4<br />  x: 50<br />  y: 50<br />  width: 20<br />  height: 20</p>
+          
+          <p>player.include(Bounded)</p>
+          
+          <p>player.collisionBounds()</p>
+          
+          <h1>=> {x: 38, y: 36, height: 28, width: 24}</h1>
+          
+          <p>player.collisionBounds(10, 10)</p>
+          
+          <h1>=> {x: 48, y: 46, height: 28, width: 24}</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>xOffset</span>
+               -
+              <span class='param_description'>the amount to shift the x position</span>
+            </li>
+            <li>
+              <span class='param_name'>yOffset</span>
+               -
+              <span class='param_description'>the amount to shift the y position</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Object.html'>Object</a>
+          </p>
+          <p class='return_description'>The collision bounds</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>collisionBounds: function(xOffset, yOffset) {&#x000A;      var bounds;&#x000A;      bounds = self.bounds(xOffset, yOffset);&#x000A;      bounds.x += I.collisionMargin.x;&#x000A;      bounds.y += I.collisionMargin.y;&#x000A;      bounds.width -= 2 * I.collisionMargin.x;&#x000A;      bounds.height -= 2 * I.collisionMargin.y;&#x000A;      return bounds;&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#position'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Bounded#position()</h1>
+      <div class='description'>
+        <section class='summary'><p>The position of this game object. By default it is the top left point.<br />Redefining the center method will change the relative position.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />player = Core<br />  x: 50<br />  y: 40</p>
+          
+          <p>player.include(Bounded)      </p>
+          
+          <p>player.position()</p>
+          
+          <h1>=> {x: 50, y: 40}</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Point.html'>Point</a>
+          </p>
+          <p class='return_description'>The position of this object</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>position: function(newPosition) {&#x000A;      if (newPosition != null) {&#x000A;        I.x = newPosition.x;&#x000A;        return I.y = newPosition.y;&#x000A;      } else {&#x000A;        return Point(I.x, I.y);&#x000A;      }&#x000A;    },&#x000A;    changePosition: function(delta) {&#x000A;      I.x += delta.x;&#x000A;      I.y += delta.y;&#x000A;      return self;&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+    </div>
+  </body>
+</html>
+<script type='text/javascript'>
+  //<![CDATA[
+    $(function() {
+      $(".documentation").on("click", ".toggle_source", function(e) {
+        e.preventDefault();
+        return $(this).next().toggle();
+      });
+      return $("code.run").each(function() {
+        var canvas, codeElement, compiledJs, source;
+        codeElement = $(this);
+        source = codeElement.text();
+        compiledJs = CoffeeScript.compile(source, {
+          bare: true
+        });
+        canvas = $("<canvas width=200 height=150/>").pixieCanvas();
+        codeElement.after(canvas);
+        return eval(compiledJs);
+      });
+    });
+  //]]>
+</script>

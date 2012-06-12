@@ -1,0 +1,390 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible' />
+    <title>Matrix</title>
+    <link href='/assets/spacedocs/docs.css' media='screen, projection' rel='stylesheet' type='text/css' />
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js' type='text/javascript'></script>
+  </head>
+  <body>
+    <pre></pre>
+    <nav>
+      <a href='Animated.html'>Animated</a>
+      <a href='Array.html'>Array</a>
+      <a href='Bindable.html'>Bindable</a>
+      <a href='Boolean.html'>Boolean</a>
+      <a href='Bounded.html'>Bounded</a>
+      <a href='Camera.html'>Camera</a>
+      <a href='Collidable.html'>Collidable</a>
+      <a href='Collision.html'>Collision</a>
+      <a href='Color.html'>Color</a>
+      <a href='Core.html'>Core</a>
+      <a href='Date.html'>Date</a>
+      <a href='Drawable.html'>Drawable</a>
+      <a href='Durable.html'>Durable</a>
+      <a href='Engine.html'>Engine</a>
+      <a href='Engine.Joysticks.html'>Engine.Joysticks</a>
+      <a href='Fadeable.html'>Fadeable</a>
+      <a href='Flickerable.html'>Flickerable</a>
+      <a href='Framerate.html'>Framerate</a>
+      <a href='Function.html'>Function</a>
+      <a href='GameObject.html'>GameObject</a>
+      <a href='GameState.html'>GameState</a>
+      <a href='Local.html'>Local</a>
+      <a href='Math.html'>Math</a>
+      <a class='active' href='Matrix.html'>Matrix</a>
+      <a href='Movable.html'>Movable</a>
+      <a href='Music.html'>Music</a>
+      <a href='Number.html'>Number</a>
+      <a href='Object.html'>Object</a>
+      <a href='PixieCanvas.html'>PixieCanvas</a>
+      <a href='Point.html'>Point</a>
+      <a href='PowerCanvas.html'>PowerCanvas</a>
+      <a href='Random.html'>Random</a>
+      <a href='RegExp.html'>RegExp</a>
+      <a href='ResourceLoader.html'>ResourceLoader</a>
+      <a href='Rotatable.html'>Rotatable</a>
+      <a href='Sound.html'>Sound</a>
+      <a href='Sprite.html'>Sprite</a>
+      <a href='String.html'>String</a>
+      <a href='jQuery.html'>jQuery</a>
+      <a href='justPressed.html'>justPressed</a>
+      <a href='keydown.html'>keydown</a>
+      <a href='requestAnimationFrame.html'>requestAnimationFrame</a>
+      <a href='window.html'>window</a>
+    </nav>
+    <section class='method_list'>
+      <h3>Matrix Methods</h3>
+      <div class='methods'>
+        <a href='Matrix.html##concat'>#concat</a>
+        <a href='Matrix.html##copy'>#copy</a>
+        <a href='Matrix.html##deltaTransformPoint'>#deltaTransformPoint</a>
+        <a href='Matrix.html##inverse'>#inverse</a>
+        <a href='Matrix.html##rotate'>#rotate</a>
+        <a href='Matrix.html##scale'>#scale</a>
+        <a href='Matrix.html##toString'>#toString</a>
+        <a href='Matrix.html##transformPoint'>#transformPoint</a>
+        <a href='Matrix.html##translate'>#translate</a>
+      </div>
+    </section>
+    <div class='documentation'>
+      <h1>Matrix Summary</h1>
+      <div class='description'>
+        <section class='summary'></section>
+        <pre>
+           _        _
+          | a  c tx  |
+          | b  d ty  |
+          |_0  0  1 _|
+        </pre>
+        
+        <p>Creates a matrix for 2d affine transformations.</p>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p>concat, inverse, rotate, scale and translate return new matrices with the<br />transformations applied. The matrix is not modified in place.</p>
+          
+          <p>Returns the identity matrix when called with no arguments.</p>
+        </section>
+      </div>
+      <hr />
+      <a name='#concat'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Matrix#concat(matrix)</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the result of this matrix multiplied by another matrix<br />combining the geometric effects of the two. In mathematical terms, <br />concatenating two matrixes is the same as combining them using matrix multiplication.<br />If this matrix is A and the matrix passed in is B, the resulting matrix is A x B<br /><a href='http://mathworld.wolfram.com/MatrixMultiplication.html'>http://mathworld.wolfram.com/MatrixMultiplication.html</a></p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>matrix</span>
+               -
+              <span class='param_description'>The matrix to multiply this matrix by.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Matrix.html'>Matrix</a>
+          </p>
+          <p class='return_description'>The result of the matrix multiplication, a new matrix.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>concat: function(matrix) {&#x000A;      return Matrix(this.a * matrix.a + this.c * matrix.b, this.b * matrix.a + this.d * matrix.b, this.a * matrix.c + this.c * matrix.d, this.b * matrix.c + this.d * matrix.d, this.a * matrix.tx + this.c * matrix.ty + this.tx, this.b * matrix.tx + this.d * matrix.ty + this.ty);&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#copy'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Matrix#copy()</h1>
+      <div class='description'>
+        <section class='summary'><p>Copy this matrix.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Matrix.html'>Matrix</a>
+          </p>
+          <p class='return_description'>A copy of this matrix.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>copy: function() {&#x000A;      return Matrix(this.a, this.b, this.c, this.d, this.tx, this.ty);&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#deltaTransformPoint'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Matrix#deltaTransformPoint()</h1>
+      <div class='description'>
+        <section class='summary'><p>Given a point in the pretransform coordinate space, returns the coordinates of <br />that point after the transformation occurs. Unlike the standard transformation <br />applied using the transformPoint() method, the deltaTransformPoint() method <br />does not consider the translation parameters tx and ty.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>deltaTransformPoint: function(point) {&#x000A;      return Point(this.a * point.x + this.c * point.y, this.b * point.x + this.d * point.y);&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#inverse'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Matrix#inverse()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the inverse of the matrix.<br /><a href='http://mathworld.wolfram.com/MatrixInverse.html'>http://mathworld.wolfram.com/MatrixInverse.html</a></p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Matrix.html'>Matrix</a>
+          </p>
+          <p class='return_description'>A new matrix that is the inverse of this matrix.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>inverse: function() {&#x000A;      var determinant;&#x000A;      determinant = this.a * this.d - this.b * this.c;&#x000A;      return Matrix(this.d / determinant, -this.b / determinant, -this.c / determinant, this.a / determinant, (this.c * this.ty - this.d * this.tx) / determinant, (this.b * this.tx - this.a * this.ty) / determinant);&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#rotate'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Matrix#rotate(theta, aboutPoint)</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns a new matrix that corresponds this matrix multiplied by a<br />a rotation matrix.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>theta</span>
+               -
+              <span class='param_description'>Amount to rotate in radians.</span>
+            </li>
+            <li>
+              <span class='param_name'>aboutPoint</span>
+               -
+              <span class='param_description'>The point about which this rotation occurs. Defaults to (0,0).</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Matrix.html'>Matrix</a>
+          </p>
+          <p class='return_description'>A new matrix, rotated by the specified amount.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>rotate: function(theta, aboutPoint) {&#x000A;      return this.concat(Matrix.rotation(theta, aboutPoint));&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#scale'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Matrix#scale(sx, sy, aboutPoint)</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns a new matrix that corresponds this matrix multiplied by a<br />a scaling matrix.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>sx</span>
+               -
+              <span class='param_description'></span>
+            </li>
+            <li>
+              <span class='param_name'>sy</span>
+               -
+              <span class='param_description'></span>
+            </li>
+            <li>
+              <span class='param_name'>aboutPoint</span>
+               -
+              <span class='param_description'>The point that remains fixed during the scaling</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Matrix.html'>Matrix</a>
+          </p>
+          <p class='return_description'>A new Matrix. The original multiplied by a scaling matrix.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>scale: function(sx, sy, aboutPoint) {&#x000A;      return this.concat(Matrix.scale(sx, sy, aboutPoint));&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#toString'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Matrix#toString()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns a string representation of this matrix.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='String.html'>String</a>
+          </p>
+          <p class='return_description'>A string reperesentation of this matrix.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>toString: function() {&#x000A;      return "Matrix(" + this.a + ", " + this.b + ", " + this.c + ", " + this.d + ", " + this.tx + ", " + this.ty + ")";&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#transformPoint'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Matrix#transformPoint()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the result of applying the geometric transformation represented by the <br />Matrix object to the specified point.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Point.html'>Point</a>
+          </p>
+          <p class='return_description'>A new point with the transformation applied.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>transformPoint: function(point) {&#x000A;      return Point(this.a * point.x + this.c * point.y + this.tx, this.b * point.x + this.d * point.y + this.ty);&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#translate'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Matrix#translate(tx, ty)</h1>
+      <div class='description'>
+        <section class='summary'><p>Translates the matrix along the x and y axes, as specified by the tx and ty parameters.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>tx</span>
+               -
+              <span class='param_description'>The translation along the x axis.</span>
+            </li>
+            <li>
+              <span class='param_name'>ty</span>
+               -
+              <span class='param_description'>The translation along the y axis.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Matrix.html'>Matrix</a>
+          </p>
+          <p class='return_description'>A new matrix with the translation applied.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>translate: function(tx, ty) {&#x000A;      return this.concat(Matrix.translation(tx, ty));&#x000A;    }&#x000A;  };</code></pre>
+        </section>
+      </div>
+      <hr />
+    </div>
+  </body>
+</html>
+<script type='text/javascript'>
+  //<![CDATA[
+    $(function() {
+      $(".documentation").on("click", ".toggle_source", function(e) {
+        e.preventDefault();
+        return $(this).next().toggle();
+      });
+      return $("code.run").each(function() {
+        var canvas, codeElement, compiledJs, source;
+        codeElement = $(this);
+        source = codeElement.text();
+        compiledJs = CoffeeScript.compile(source, {
+          bare: true
+        });
+        canvas = $("<canvas width=200 height=150/>").pixieCanvas();
+        codeElement.after(canvas);
+        return eval(compiledJs);
+      });
+    });
+  //]]>
+</script>

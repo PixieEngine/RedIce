@@ -1,0 +1,286 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible' />
+    <title>Function</title>
+    <link href='/assets/spacedocs/docs.css' media='screen, projection' rel='stylesheet' type='text/css' />
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js' type='text/javascript'></script>
+  </head>
+  <body>
+    <pre></pre>
+    <nav>
+      <a href='Animated.html'>Animated</a>
+      <a href='Array.html'>Array</a>
+      <a href='Bindable.html'>Bindable</a>
+      <a href='Boolean.html'>Boolean</a>
+      <a href='Bounded.html'>Bounded</a>
+      <a href='Camera.html'>Camera</a>
+      <a href='Collidable.html'>Collidable</a>
+      <a href='Collision.html'>Collision</a>
+      <a href='Color.html'>Color</a>
+      <a href='Core.html'>Core</a>
+      <a href='Date.html'>Date</a>
+      <a href='Drawable.html'>Drawable</a>
+      <a href='Durable.html'>Durable</a>
+      <a href='Engine.html'>Engine</a>
+      <a href='Engine.Joysticks.html'>Engine.Joysticks</a>
+      <a href='Fadeable.html'>Fadeable</a>
+      <a href='Flickerable.html'>Flickerable</a>
+      <a href='Framerate.html'>Framerate</a>
+      <a class='active' href='Function.html'>Function</a>
+      <a href='GameObject.html'>GameObject</a>
+      <a href='GameState.html'>GameState</a>
+      <a href='Local.html'>Local</a>
+      <a href='Math.html'>Math</a>
+      <a href='Matrix.html'>Matrix</a>
+      <a href='Movable.html'>Movable</a>
+      <a href='Music.html'>Music</a>
+      <a href='Number.html'>Number</a>
+      <a href='Object.html'>Object</a>
+      <a href='PixieCanvas.html'>PixieCanvas</a>
+      <a href='Point.html'>Point</a>
+      <a href='PowerCanvas.html'>PowerCanvas</a>
+      <a href='Random.html'>Random</a>
+      <a href='RegExp.html'>RegExp</a>
+      <a href='ResourceLoader.html'>ResourceLoader</a>
+      <a href='Rotatable.html'>Rotatable</a>
+      <a href='Sound.html'>Sound</a>
+      <a href='Sprite.html'>Sprite</a>
+      <a href='String.html'>String</a>
+      <a href='jQuery.html'>jQuery</a>
+      <a href='justPressed.html'>justPressed</a>
+      <a href='keydown.html'>keydown</a>
+      <a href='requestAnimationFrame.html'>requestAnimationFrame</a>
+      <a href='window.html'>window</a>
+    </nav>
+    <section class='method_list'>
+      <h3>Function Methods</h3>
+      <div class='methods'>
+        <a href='Function.html##apply'>#apply</a>
+        <a href='Function.html##bind'>#bind</a>
+        <a href='Function.html##call'>#call</a>
+        <a href='Function.html##debounce'>#debounce</a>
+        <a href='Function.html##toSource'>#toSource</a>
+        <a href='Function.html##toString'>#toString</a>
+      </div>
+    </section>
+    <div class='documentation'>
+      <a name='#apply'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Function#apply(Determines, An)</h1>
+      <div class='description'>
+        <section class='summary'><p>Calls a function with a given this value and arguments provided as an array.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>fun</em>.apply(<em>thisArg</em>[, <em>argsArray</em>])</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>Determines</span>
+               -
+              <span class='param_description'>the value of this inside fun. If thisArg is null or</span>
+            </li>
+            <li>
+              <span class='param_name'>An</span>
+               -
+              <span class='param_description'>argument array for the object, specifying the arguments</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#bind'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Function#bind(arg2,)</h1>
+      <div class='description'>
+        <section class='summary'><p>Creates a new function that, when called, itself calls this function in the<br />context of the provided this value, with a given sequence of arguments preceding<br />any provided when the new function was called.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>fun</em>.bind(<em>thisArg</em>[, <em>arg1</em>[, <em>arg2</em>[, ...]]])</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>arg2,</span>
+               -
+              <span class='param_description'>... The value to be passed as the this parameter to</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#call'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Function#call(Determines, arg2,)</h1>
+      <div class='description'>
+        <section class='summary'><p>Calls a function with a given this value and arguments provided individually.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>fun</em>.call(<em>thisArg</em>[, <em>arg1</em>[, <em>arg2</em>[, ...]]])</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>Determines</span>
+               -
+              <span class='param_description'>the value of this inside fun. If thisArg is null or</span>
+            </li>
+            <li>
+              <span class='param_name'>arg2,</span>
+               -
+              <span class='param_description'>... Arguments for the object.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#debounce'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Function#debounce()</h1>
+      <div class='description'>
+        <section class='summary'><p>Calling a debounced function will postpone its execution until after <br />wait milliseconds have elapsed since the last time the function was <br />invoked. Useful for implementing behavior that should only happen after <br />the input has stopped arriving. For example: rendering a preview of a <br />Markdown comment, recalculating a layout after the window has stopped <br />being resized...</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />lazyLayout = calculateLayout.debounce(300)<br />$(window).resize(lazyLayout)<br /></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Function.html'>Function</a>
+          </p>
+          <p class='return_description'>The debounced version of this function.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Function.prototype.debounce = function(wait) {&#x000A;  var func, timeout;&#x000A;  timeout = null;&#x000A;  func = this;&#x000A;  return function() {&#x000A;    var args, context, later;&#x000A;    context = this;&#x000A;    args = arguments;&#x000A;    later = function() {&#x000A;      timeout = null;&#x000A;      return func.apply(context, args);&#x000A;    };&#x000A;    clearTimeout(timeout);&#x000A;    return timeout = setTimeout(later, wait);&#x000A;  };&#x000A;};&#x000A;&#x000A;Function.prototype.returning = function(x) {&#x000A;  var func;&#x000A;  func = this;&#x000A;  return function() {&#x000A;    func.apply(this, arguments);&#x000A;    return x;&#x000A;  };&#x000A;};&#x000A;;</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#toSource'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Function#toSource()</h1>
+      <div class='description'>
+        <section class='summary'><p>Non-standard</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#toString'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Function#toString(Non-standard)</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns a string representing the source code of the function.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><em>function</em>.toString(<em>indentation</em>)</code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>Non-standard</span>
+               -
+              <span class='param_description'>The amount of spaces to indent the string</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code></code></pre>
+        </section>
+      </div>
+      <hr />
+    </div>
+  </body>
+</html>
+<script type='text/javascript'>
+  //<![CDATA[
+    $(function() {
+      $(".documentation").on("click", ".toggle_source", function(e) {
+        e.preventDefault();
+        return $(this).next().toggle();
+      });
+      return $("code.run").each(function() {
+        var canvas, codeElement, compiledJs, source;
+        codeElement = $(this);
+        source = codeElement.text();
+        compiledJs = CoffeeScript.compile(source, {
+          bare: true
+        });
+        canvas = $("<canvas width=200 height=150/>").pixieCanvas();
+        codeElement.after(canvas);
+        return eval(compiledJs);
+      });
+    });
+  //]]>
+</script>

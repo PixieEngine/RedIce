@@ -3,13 +3,14 @@
   <head>
     <meta charset='utf-8' />
     <meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible' />
-    <title>PixieEngine Documentation</title>
+    <title>Animated</title>
     <link href='/assets/spacedocs/docs.css' media='screen, projection' rel='stylesheet' type='text/css' />
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js' type='text/javascript'></script>
   </head>
   <body>
     <pre></pre>
     <nav>
-      <a href='Animated.html'>Animated</a>
+      <a class='active' href='Animated.html'>Animated</a>
       <a href='Array.html'>Array</a>
       <a href='Bindable.html'>Bindable</a>
       <a href='Boolean.html'>Boolean</a>
@@ -53,5 +54,38 @@
       <a href='requestAnimationFrame.html'>requestAnimationFrame</a>
       <a href='window.html'>window</a>
     </nav>
+    <div class='documentation'>
+      <h1>Animated Summary</h1>
+      <div class='description'>
+        <section class='summary'></section>
+        <p>The Animated module, when included in a GameObject, gives the object <br />methods to transition from one animation state to another</p>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+      </div>
+      <hr />
+    </div>
   </body>
 </html>
+<script type='text/javascript'>
+  //<![CDATA[
+    $(function() {
+      $(".documentation").on("click", ".toggle_source", function(e) {
+        e.preventDefault();
+        return $(this).next().toggle();
+      });
+      return $("code.run").each(function() {
+        var canvas, codeElement, compiledJs, source;
+        codeElement = $(this);
+        source = codeElement.text();
+        compiledJs = CoffeeScript.compile(source, {
+          bare: true
+        });
+        canvas = $("<canvas width=200 height=150/>").pixieCanvas();
+        codeElement.after(canvas);
+        return eval(compiledJs);
+      });
+    });
+  //]]>
+</script>

@@ -1,0 +1,925 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible' />
+    <title>Point</title>
+    <link href='/assets/spacedocs/docs.css' media='screen, projection' rel='stylesheet' type='text/css' />
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js' type='text/javascript'></script>
+  </head>
+  <body>
+    <pre></pre>
+    <nav>
+      <a href='Animated.html'>Animated</a>
+      <a href='Array.html'>Array</a>
+      <a href='Bindable.html'>Bindable</a>
+      <a href='Boolean.html'>Boolean</a>
+      <a href='Bounded.html'>Bounded</a>
+      <a href='Camera.html'>Camera</a>
+      <a href='Collidable.html'>Collidable</a>
+      <a href='Collision.html'>Collision</a>
+      <a href='Color.html'>Color</a>
+      <a href='Core.html'>Core</a>
+      <a href='Date.html'>Date</a>
+      <a href='Drawable.html'>Drawable</a>
+      <a href='Durable.html'>Durable</a>
+      <a href='Engine.html'>Engine</a>
+      <a href='Engine.Joysticks.html'>Engine.Joysticks</a>
+      <a href='Fadeable.html'>Fadeable</a>
+      <a href='Flickerable.html'>Flickerable</a>
+      <a href='Framerate.html'>Framerate</a>
+      <a href='Function.html'>Function</a>
+      <a href='GameObject.html'>GameObject</a>
+      <a href='GameState.html'>GameState</a>
+      <a href='Local.html'>Local</a>
+      <a href='Math.html'>Math</a>
+      <a href='Matrix.html'>Matrix</a>
+      <a href='Movable.html'>Movable</a>
+      <a href='Music.html'>Music</a>
+      <a href='Number.html'>Number</a>
+      <a href='Object.html'>Object</a>
+      <a href='PixieCanvas.html'>PixieCanvas</a>
+      <a class='active' href='Point.html'>Point</a>
+      <a href='PowerCanvas.html'>PowerCanvas</a>
+      <a href='Random.html'>Random</a>
+      <a href='RegExp.html'>RegExp</a>
+      <a href='ResourceLoader.html'>ResourceLoader</a>
+      <a href='Rotatable.html'>Rotatable</a>
+      <a href='Sound.html'>Sound</a>
+      <a href='Sprite.html'>Sprite</a>
+      <a href='String.html'>String</a>
+      <a href='jQuery.html'>jQuery</a>
+      <a href='justPressed.html'>justPressed</a>
+      <a href='keydown.html'>keydown</a>
+      <a href='requestAnimationFrame.html'>requestAnimationFrame</a>
+      <a href='window.html'>window</a>
+    </nav>
+    <section class='method_list'>
+      <h3>Point Methods</h3>
+      <div class='methods'>
+        <a href='Point.html##add'>#add</a>
+        <a href='Point.html##add$'>#add$</a>
+        <a href='Point.html##copy'>#copy</a>
+        <a href='Point.html##cross'>#cross</a>
+        <a href='Point.html##direction'>#direction</a>
+        <a href='Point.html##distance'>#distance</a>
+        <a href='Point.html##dot'>#dot</a>
+        <a href='Point.html##equal'>#equal</a>
+        <a href='Point.html##floor'>#floor</a>
+        <a href='Point.html##floor$'>#floor$</a>
+        <a href='Point.html##length'>#length</a>
+        <a href='Point.html##magnitude'>#magnitude</a>
+        <a href='Point.html##norm'>#norm</a>
+        <a href='Point.html##norm$'>#norm$</a>
+        <a href='Point.html##scale'>#scale</a>
+        <a href='Point.html##scale$'>#scale$</a>
+        <a href='Point.html##subtract'>#subtract</a>
+        <a href='Point.html##subtract$'>#subtract$</a>
+        <a href='Point.html#.centroid'>.centroid</a>
+      </div>
+    </section>
+    <div class='documentation'>
+      <h1>Point Summary</h1>
+      <div class='description'>
+        <section class='summary'></section>
+        <p>Create a new point with given x and y coordinates. If no arguments are given<br />defaults to (0, 0).</p>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />point = Point()</p>
+          
+          <p>p.x</p>
+          
+          <h1>=> 0</h1>
+          
+          <p>p.y</p>
+          
+          <h1>=> 0</h1>
+          
+          <p>point = Point(-2, 5)</p>
+          
+          <p>p.x</p>
+          
+          <h1>=> -2</h1>
+          
+          <p>p.y</p>
+          
+          <h1>=> 5</h1>
+          
+          <p></pre></code></p>
+        </section>
+      </div>
+      <hr />
+      <a name='#add'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Point#add(other)</h1>
+      <div class='description'>
+        <section class='summary'><p>Adds a point to this one and returns the new point. You may<br />also use a two argument call like <code>point.add(x, y)</code><br />to add x and y values without a second point object.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />point = Point(2, 3).add(Point(3, 4))</p>
+          
+          <p>point.x</p>
+          
+          <h1>=> 5</h1>
+          
+          <p>point.y</p>
+          
+          <h1>=> 7</h1>
+          
+          <p>anotherPoint = Point(2, 3).add(3, 4)</p>
+          
+          <p>anotherPoint.x</p>
+          
+          <h1>=> 5</h1>
+          
+          <p>anotherPoint.y</p>
+          
+          <h1>=> 7</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>other</span>
+               -
+              <span class='param_description'>The point to add this point to.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Point.html'>Point</a>
+          </p>
+          <p class='return_description'>A new point, the sum of both.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>add: function(first, second) {&#x000A;      return this.copy().add$(first, second);&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#add$'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Point#add$(other)</h1>
+      <div class='description'>
+        <section class='summary'><p>Adds a point to this one, returning a modified point. You may<br />also use a two argument call like <code>point.add(x, y)</code><br />to add x and y values without a second point object.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />point = Point(2, 3)</p>
+          
+          <p>point.x</p>
+          
+          <h1>=> 2</h1>
+          
+          <p>point.y</p>
+          
+          <h1>=> 3</h1>
+          
+          <p>point.add$(Point(3, 4))</p>
+          
+          <p>point.x</p>
+          
+          <h1>=> 5</h1>
+          
+          <p>point.y</p>
+          
+          <h1>=> 7</h1>
+          
+          <p>anotherPoint = Point(2, 3)<br />anotherPoint.add$(3, 4)</p>
+          
+          <p>anotherPoint.x</p>
+          
+          <h1>=> 5</h1>
+          
+          <p>anotherPoint.y</p>
+          
+          <h1>=> 7</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>other</span>
+               -
+              <span class='param_description'>The point to add this point to.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Point.html'>Point</a>
+          </p>
+          <p class='return_description'>The sum of both points.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>add$: function(first, second) {&#x000A;      if (second != null) {&#x000A;        this.x += first;&#x000A;        this.y += second;&#x000A;      } else {&#x000A;        this.x += first.x;&#x000A;        this.y += first.y;&#x000A;      }&#x000A;      return this;&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#copy'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Point#copy()</h1>
+      <div class='description'>
+        <section class='summary'><p>Creates a copy of this point.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Point.html'>Point</a>
+          </p>
+          <p class='return_description'>A new point with the same x and y value as this point.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>copy: function() {&#x000A;      return Point(this.x, this.y);&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#cross'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Point#cross(other)</h1>
+      <div class='description'>
+        <section class='summary'><p>Calculate the cross product of this point and another point (Vector). <br />Usually cross products are thought of as only applying to three dimensional vectors,<br />but z can be treated as zero. The result of this method is interpreted as the magnitude <br />of the vector result of the cross product between [x1, y1, 0] x [x2, y2, 0]<br />perpendicular to the xy plane.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>other</span>
+               -
+              <span class='param_description'>The point to cross with this point.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Number.html'>Number</a>
+          </p>
+          <p class='return_description'>The cross product of this point with the other point as scalar value.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>cross: function(other) {&#x000A;      return this.x * other.y - other.x * this.y;&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#direction'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Point#direction()</h1>
+      <div class='description'>
+        <section class='summary'><p>Returns the direction in radians of this point from the origin.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />point = Point(0, 1)</p>
+          
+          <p>point.direction()</p>
+          
+          <h1>=> 1.5707963267948966 # Math.PI / 2</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Number.html'>Number</a>
+          </p>
+          <p class='return_description'>The direction in radians of this point from the origin</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>direction: function() {&#x000A;      return Math.atan2(this.y, this.x);&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#distance'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Point#distance(other)</h1>
+      <div class='description'>
+        <section class='summary'><p>Compute the Euclidean distance between this point and another point.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />pointA = Point(2, 3)<br />pointB = Point(9, 2)</p>
+          
+          <p>pointA.distance(pointB)</p>
+          
+          <h1>=> 7.0710678118654755 # Math.sqrt(50)</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>other</span>
+               -
+              <span class='param_description'>The point to compute the distance to.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Number.html'>Number</a>
+          </p>
+          <p class='return_description'>The distance between this point and another point.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>distance: function(other) {&#x000A;      return Point.distance(this, other);&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#dot'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Point#dot(other)</h1>
+      <div class='description'>
+        <section class='summary'><p>Calculate the dot product of this point and another point (Vector).</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>other</span>
+               -
+              <span class='param_description'>The point to dot with this point.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Number.html'>Number</a>
+          </p>
+          <p class='return_description'>The dot product of this point dot other as a scalar value.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>dot: function(other) {&#x000A;      return this.x * other.x + this.y * other.y;&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#equal'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Point#equal(other)</h1>
+      <div class='description'>
+        <section class='summary'><p>Determine whether this point is equal to another point.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />pointA = Point(2, 3)<br />pointB = Point(2, 3)<br />pointC = Point(4, 5)</p>
+          
+          <p>pointA.equal(pointB)</p>
+          
+          <h1>=> true</h1>
+          
+          <p>pointA.equal(pointC)</p>
+          
+          <h1>=> false</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>other</span>
+               -
+              <span class='param_description'>The point to check for equality.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Boolean.html'>Boolean</a>
+          </p>
+          <p class='return_description'>true if the other point has the same x, y coordinates, false otherwise.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>equal: function(other) {&#x000A;      return this.x === other.x && this.y === other.y;&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#floor'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Point#floor()</h1>
+      <div class='description'>
+        <section class='summary'><p>Floor the x and y values, returning a new point.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />point = Point(3.4, 5.8).floor()</p>
+          
+          <p>point.x</p>
+          
+          <h1>=> 3</h1>
+          
+          <p>point.y</p>
+          
+          <h1>=> 5</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Point.html'>Point</a>
+          </p>
+          <p class='return_description'>A new point, with x and y values each floored to the largest previous integer.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>floor: function() {&#x000A;      return this.copy().floor$();&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#floor$'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Point#floor$()</h1>
+      <div class='description'>
+        <section class='summary'><p>Floor the x and y values, returning a modified point.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />point = Point(3.4, 5.8)<br />point.floor$()</p>
+          
+          <p>point.x</p>
+          
+          <h1>=> 3</h1>
+          
+          <p>point.y</p>
+          
+          <h1>=> 5</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Point.html'>Point</a>
+          </p>
+          <p class='return_description'>A modified point, with x and y values each floored to the largest previous integer.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>floor$: function() {&#x000A;      this.x = this.x.floor();&#x000A;      this.y = this.y.floor();&#x000A;      return this;&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#length'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Point#length()</h1>
+      <div class='description'>
+        <section class='summary'><p>Computed the length of this point as though it were a vector from (0,0) to (x,y).</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />point = Point(5, 7)</p>
+          
+          <p>point.length()</p>
+          
+          <h1>=> 8.602325267042627</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Number.html'>Number</a>
+          </p>
+          <p class='return_description'>The length of the vector from the origin to this point.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>length: function() {&#x000A;      return Math.sqrt(this.dot(this));&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#magnitude'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Point#magnitude()</h1>
+      <div class='description'>
+        <section class='summary'><p>Calculate the magnitude of this Point (Vector).</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />point = Point(5, 7)</p>
+          
+          <p>point.magnitude()</p>
+          
+          <h1>=> 8.602325267042627</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Number.html'>Number</a>
+          </p>
+          <p class='return_description'>The magnitude of this point as if it were a vector from (0, 0) -> (x, y).</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>magnitude: function() {&#x000A;      return this.length();&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#norm'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Point#norm()</h1>
+      <div class='description'>
+        <section class='summary'><p>The norm of a vector is the unit vector pointing in the same direction. This method<br />treats the point as though it is a vector from the origin to (x, y).</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />point = Point(2, 3).norm()</p>
+          
+          <p>point.x</p>
+          
+          <h1>=> 0.5547001962252291</h1>
+          
+          <p>point.y  </p>
+          
+          <h1>=> 0.8320502943378437</h1>
+          
+          <p>anotherPoint = Point(2, 3).norm(2)</p>
+          
+          <p>anotherPoint.x</p>
+          
+          <h1>=> 1.1094003924504583</h1>
+          
+          <p>anotherPoint.y   </p>
+          
+          <h1>=> 1.6641005886756874</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Point.html'>Point</a>
+          </p>
+          <p class='return_description'>The unit vector pointing in the same direction as this vector.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>norm: function(length) {&#x000A;      if (length == null) length = 1.0;&#x000A;      return this.copy().norm$(length);&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#norm$'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Point#norm$()</h1>
+      <div class='description'>
+        <section class='summary'><p>The norm of a vector is the unit vector pointing in the same direction. This method<br />treats the point as though it is a vector from the origin to (x, y). Modifies the point in place.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />point = Point(2, 3).norm$()</p>
+          
+          <p>point.x</p>
+          
+          <h1>=> 0.5547001962252291</h1>
+          
+          <p>point.y  </p>
+          
+          <h1>=> 0.8320502943378437</h1>
+          
+          <p>anotherPoint = Point(2, 3).norm$(2)</p>
+          
+          <p>anotherPoint.x</p>
+          
+          <h1>=> 1.1094003924504583</h1>
+          
+          <p>anotherPoint.y   </p>
+          
+          <h1>=> 1.6641005886756874</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Point.html'>Point</a>
+          </p>
+          <p class='return_description'>The unit vector pointing in the same direction as this vector.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>norm$: function(length) {&#x000A;      var m;&#x000A;      if (length == null) length = 1.0;&#x000A;      if (m = this.length()) {&#x000A;        return this.scale$(length / m);&#x000A;      } else {&#x000A;        return this;&#x000A;      }&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#scale'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Point#scale(scalar)</h1>
+      <div class='description'>
+        <section class='summary'><p>Scale this Point (Vector) by a constant amount.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />point = Point(5, 6).scale(2)</p>
+          
+          <p>point.x</p>
+          
+          <h1>=> 10</h1>
+          
+          <p>point.y</p>
+          
+          <h1>=> 12</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>scalar</span>
+               -
+              <span class='param_description'>The amount to scale this point by.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Point.html'>Point</a>
+          </p>
+          <p class='return_description'>A new point, this * scalar.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>scale: function(scalar) {&#x000A;      return this.copy().scale$(scalar);&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#scale$'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Point#scale$(scalar)</h1>
+      <div class='description'>
+        <section class='summary'><p>Scale this Point (Vector) by a constant amount. Modifies the point in place.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />point = Point(5, 6)</p>
+          
+          <p>point.x</p>
+          
+          <h1>=> 5</h1>
+          
+          <p>point.y</p>
+          
+          <h1>=> 6</h1>
+          
+          <p>point.scale$(2)</p>
+          
+          <p>point.x</p>
+          
+          <h1>=> 10</h1>
+          
+          <p>point.y</p>
+          
+          <h1>=> 12</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>scalar</span>
+               -
+              <span class='param_description'>The amount to scale this point by.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Point.html'>Point</a>
+          </p>
+          <p class='return_description'>this * scalar.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>scale$: function(scalar) {&#x000A;      this.x *= scalar;&#x000A;      this.y *= scalar;&#x000A;      return this;&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#subtract'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Point#subtract(other)</h1>
+      <div class='description'>
+        <section class='summary'><p>Subtracts a point to this one and returns the new point.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />point = Point(1, 2).subtract(Point(2, 0))</p>
+          
+          <p>point.x</p>
+          
+          <h1>=> -1</h1>
+          
+          <p>point.y</p>
+          
+          <h1>=> 2</h1>
+          
+          <p>anotherPoint = Point(1, 2).subtract(2, 0)</p>
+          
+          <p>anotherPoint.x</p>
+          
+          <h1>=> -1</h1>
+          
+          <p>anotherPoint.y</p>
+          
+          <h1>=> 2</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>other</span>
+               -
+              <span class='param_description'>The point to subtract from this point.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Point.html'>Point</a>
+          </p>
+          <p class='return_description'>A new point, this - other.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>subtract: function(first, second) {&#x000A;      return this.copy().subtract$(first, second);&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#subtract$'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Point#subtract$(other)</h1>
+      <div class='description'>
+        <section class='summary'><p>Subtracts a point to this one and returns the new point.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          <p><code><pre><br />point = Point(1, 2)</p>
+          
+          <p>point.x</p>
+          
+          <h1>=> 1</h1>
+          
+          <p>point.y</p>
+          
+          <h1>=> 2</h1>
+          
+          <p>point.subtract$(Point(2, 0))</p>
+          
+          <p>point.x</p>
+          
+          <h1>=> -1</h1>
+          
+          <p>point.y</p>
+          
+          <h1>=> 2</h1>
+          
+          <p>anotherPoint = Point(1, 2)<br />anotherPoint.subtract$(2, 0)</p>
+          
+          <p>anotherPoint.x</p>
+          
+          <h1>=> -1</h1>
+          
+          <p>anotherPoint.y</p>
+          
+          <h1>=> 2</h1>
+          
+          <p></pre></code></p>
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>other</span>
+               -
+              <span class='param_description'>The point to subtract from this point.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='Point.html'>Point</a>
+          </p>
+          <p class='return_description'>The difference of the two points.</p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>subtract$: function(first, second) {&#x000A;      if (second != null) {&#x000A;        this.x -= first;&#x000A;        this.y -= second;&#x000A;      } else {&#x000A;        this.x -= first.x;&#x000A;        this.y -= first.y;&#x000A;      }&#x000A;      return this;&#x000A;    },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='.centroid'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Point.centroid(The)</h1>
+      <div class='description'>
+        <section class='summary'><p>The centroid of a set of points is their arithmetic mean.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>The</span>
+               -
+              <span class='param_description'>points to find the centroid of.</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>Point.centroid = function() {&#x000A;    var points;&#x000A;    points = 1 <= arguments.length ? __slice.call(arguments, 0) : [];&#x000A;    return points.inject(Point(0, 0), function(sumPoint, point) {&#x000A;      return sumPoint.add(point);&#x000A;    }).scale(1 / points.length);&#x000A;  };</code></pre>
+        </section>
+      </div>
+      <hr />
+    </div>
+  </body>
+</html>
+<script type='text/javascript'>
+  //<![CDATA[
+    $(function() {
+      $(".documentation").on("click", ".toggle_source", function(e) {
+        e.preventDefault();
+        return $(this).next().toggle();
+      });
+      return $("code.run").each(function() {
+        var canvas, codeElement, compiledJs, source;
+        codeElement = $(this);
+        source = codeElement.text();
+        compiledJs = CoffeeScript.compile(source, {
+          bare: true
+        });
+        canvas = $("<canvas width=200 height=150/>").pixieCanvas();
+        codeElement.after(canvas);
+        return eval(compiledJs);
+      });
+    });
+  //]]>
+</script>
