@@ -29,4 +29,3 @@ TeamSheet.headStyles = [
   "roundhead"
   "stubs"
 ]
-
