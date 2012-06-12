@@ -26,7 +26,7 @@ window.config =
   throwBottles: true
   players: []
   particleEffects: false
-  music: true
+  music: false
 
 #TODO Manage these extra canvases better
 window.rink = Rink()
