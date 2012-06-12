@@ -163,10 +163,12 @@ Configurator = (I) ->
           x += I.width/12
 
           # Draw Body Sprite
-          teamSprites[player.teamStyle][player.bodyStyle].slow.front[0]?.draw(canvas, x - 128, y - 160)
+          if bodySprite = teamSprites[player.teamStyle][player.bodyStyle].slow.front[0]
+            bodySprite.draw(canvas, x - bodySprite.width/2, y - bodySprite.height/2)
 
           # Draw Head Sprite
-          teamSprites[player.teamStyle][player.headStyle].normal[0]?.draw(canvas, x - 110, y - 200)
+          if headSprite = teamSprites[player.teamStyle][player.headStyle].normal[0]
+            headSprite?.draw(canvas, x - headSprite.width/2, y - headSprite.height/2)
 
   self.bind "step", ->
     I.maxPlayers.times (i) ->
