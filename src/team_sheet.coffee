@@ -8,13 +8,11 @@ TeamSheet = (I={}) ->
     self[style] = CharacterSheet
       team: I.team
       character: style
-      size: 64
 
   TeamSheet.headStyles.each (style) ->
     self[style] = HeadSheet
       team: I.team
       character: style
-      size: 64
 
   return self
 
