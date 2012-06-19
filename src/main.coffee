@@ -51,7 +51,7 @@ window.engine = Engine
   includedModules: ["Joysticks", "Stats"]
   showFPS: true
   zSort: true
-  FPS: 60
+  FPS: 30
 
 $(document).bind "keydown", "f2", ->
   engine.setState(FrameEditorState())
