@@ -103,13 +103,13 @@ Configurator = (I) ->
       red.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (reds.length + 1)
       red.x = WALL_LEFT + ARENA_WIDTH/2 + ARENA_WIDTH / 6
       red.heading = 0.5.rotations
-      red.teamStyle = "spike"
+      red.teamStyle = teamStyles[0]
 
     blues.each (blue, i) ->
       blue.slot = i
       blue.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (blues.length + 1)
       blue.x = WALL_LEFT + ARENA_WIDTH/2 - ARENA_WIDTH / 6
-      blue.teamStyle = "smiley"
+      blue.teamStyle = teamStyles[1]
 
     return config
 
@@ -159,16 +159,18 @@ Configurator = (I) ->
             y: y + lineHeight + verticalPadding
             color: "white"
 
-          y = I.height/2
+          y = I.height/2 - 50
           x += I.width/12
 
-          # Draw Body Sprite
-          if bodySprite = teamSprites[player.teamStyle][player.bodyStyle].slow.front[0]
-            bodySprite.draw(canvas, x - bodySprite.width/2, y - bodySprite.height/2)
-
-          # Draw Head Sprite
-          if headSprite = teamSprites[player.teamStyle][player.headStyle].normal[0]
-            headSprite?.draw(canvas, x - headSprite.width/2, y - headSprite.height/2)
+          canvas.withTransform Matrix.translation(x, y), (canvas) ->
+            canvas.withTransform Matrix.scale(0.75), ->
+              # Draw Body Sprite
+              if bodySprite = teamSprites[player.teamStyle][player.bodyStyle].slow.front[0]
+                bodySprite.draw(canvas, -bodySprite.width/2 - 20, -bodySprite.height/2)
+    
+              # Draw Head Sprite
+              if headSprite = teamSprites[player.teamStyle][player.headStyle].normal[0]
+                headSprite?.draw(canvas, -headSprite.width/2 + 20, -headSprite.height/2 - 80)
 
   self.bind "step", ->
     I.maxPlayers.times (i) ->
@@ -188,7 +190,7 @@ Configurator = (I) ->
 
     readyPlayers = I.config.players.select((player) -> player.ready)
 
-    if readyPlayers.length == I.activePlayers #&& readyPlayers.length > 0
+    if readyPlayers.length == I.activePlayers && readyPlayers.length > 0
       unbindTapEvents()
       self.trigger "done", finalizeConfig(I.config)
 
