@@ -19,7 +19,7 @@ PlayerDrawing = (I, self) ->
         sprite.draw(canvas, -sprite.width / 2, -sprite.height / 2)
 
     drawHead = (canvas) ->
-      canvas.withTransform Matrix.translation(currentHeadOffset.x/2, currentHeadOffset.y/2), (canvas) ->
+      canvas.withTransform Matrix.translation(currentHeadOffset.x, currentHeadOffset.y), (canvas) ->
         if headSprite = I.headSprite
           canvas.withTransform Matrix.scale(headScale).rotate(headRotation), (canvas) ->
             if I.headFlip

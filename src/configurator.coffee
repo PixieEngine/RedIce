@@ -15,7 +15,7 @@ Configurator = (I) ->
   verticalPadding = 24
   horizontalPadding = 0
 
-  teamStyles = ["smiley", "spike"]
+  teamStyles = ["mutant", "hiss"]
 
   join = (id) ->
     player = I.config.players[id]
@@ -195,8 +195,8 @@ Configurator = (I) ->
   return self
 
 Configurator.images = {}
-[["blue", "smiley"], ["red", "spike"]].map ([team, style]) ->
-  Configurator.images[style] = 
+[["blue", "smiley"], ["red", "spike"], ["purple", "mutant"], ["green", "hiss"]].map ([team, style]) ->
+  Configurator.images[style] =
     background: Sprite.loadByName("gameselect_back_#{team}")
     nameBubble: Sprite.loadByName("gameselect_namebubble_#{team}")
     readyBubble: Sprite.loadByName("gameselect_readybubble_#{team}")

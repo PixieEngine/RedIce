@@ -11,7 +11,7 @@ MatchSetupState = (I={}) ->
         id: i
         name: ""
         teamIndex: i % 2
-        joystick: true
+        joystick: window.config.joysticks
         cpu: true
         bodyIndex: rand(TeamSheet.bodyStyles.length)
         headIndex: rand(TeamSheet.headStyles.length)

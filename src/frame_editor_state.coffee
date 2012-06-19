@@ -17,6 +17,8 @@ FrameEditorState = (I={}) ->
   teamList = [
     "spike"
     "smiley"
+    "hiss"
+    "mutant"
   ]
 
   characterHeads = [
