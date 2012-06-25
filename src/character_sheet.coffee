@@ -6,7 +6,7 @@ CharacterSheet = (I={}) ->
     size: 512
 
   loadStrip = (action, facing, cells) ->
-    Sprite.loadSheet("#{I.team}_#{I.character}_#{action}_#{facing}_#{cells}", I.size, I.size)
+    Sprite.loadSheet("#{I.team}_#{I.character}_#{action}_#{facing}_#{cells}", I.size, I.size, 0.5)
 
   FRONT = "se"
   BACK = "ne"
@@ -52,4 +52,3 @@ CharacterSheet = (I={}) ->
     Object.extend self.data, data
 
   return self
-

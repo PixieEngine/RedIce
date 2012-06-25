@@ -46,8 +46,11 @@ bloodCanvas.strokeColor(BLOOD_COLOR)
 window.MAX_PLAYERS = 6
 window.activePlayers = 0
 
+canvas = $("canvas").pixieCanvas()
+# canvas.context().imageSmoothingEnabled = false
+
 window.engine = Engine
-  canvas: $("canvas").pixieCanvas()
+  canvas: canvas
   includedModules: ["Joysticks", "Stats"]
   showFPS: true
   zSort: true

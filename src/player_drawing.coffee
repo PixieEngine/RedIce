@@ -2,6 +2,12 @@ PlayerDrawing = (I, self) ->
   Object.reverseMerge I,
     scale: 1
 
+  assetScale = 0.5
+
+  drawBody = (canvas) ->
+    if sprite = I.sprite
+      sprite.draw(canvas, -sprite.width / 2, -sprite.height / 2)
+
   self.unbind 'draw'
 
   self.bind 'draw', (canvas) ->
@@ -13,10 +19,6 @@ PlayerDrawing = (I, self) ->
       headOffset = Point(32, -64).add(Point(3 * Math.sin(I.age * Math.TAU / 31), 2 * Math.cos(I.age * Math.TAU / 27)))
       headRotation = 0
       headScale = 0.75
-
-    drawBody = (canvas) ->
-      if sprite = I.sprite
-        sprite.draw(canvas, -sprite.width / 2, -sprite.height / 2)
 
     drawHead = (canvas) ->
       canvas.withTransform Matrix.translation(currentHeadOffset.x, currentHeadOffset.y), (canvas) ->
@@ -33,7 +35,7 @@ PlayerDrawing = (I, self) ->
       t = t.concat Matrix.HORIZONTAL_FLIP
       headRotation = -headRotation
 
-    currentHeadOffset = t.transformPoint(headOffset)
+    currentHeadOffset = t.transformPoint(headOffset.scale(assetScale))
 
     # Sprite Offset
     canvas.withTransform Matrix.translation(0, -32), ->
