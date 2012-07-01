@@ -27,7 +27,7 @@ window.config =
   players: []
   particleEffects: false
   music: false
-  joysticks: false
+  joysticks: true
 
 #TODO Manage these extra canvases better
 window.rink = Rink()
