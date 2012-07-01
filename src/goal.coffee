@@ -90,12 +90,12 @@ Goal = (I) ->
       drawWall(wall, canvas)
 
   self.bind "step", ->
-    I.sprite = teamSprites[I.team].goal.back
+    I.sprite = teamSprites[I.team].goal.back[0]
 
     I.zIndex = 1 + (I.y + I.height)/CANVAS_HEIGHT
 
   self.bind "draw", (canvas) ->
-    teamSprites[I.team].goal.front.draw(canvas, 0, 0)
+    teamSprites[I.team].goal.front[0].draw(canvas, 0, 0)
 
   self.attrReader "team"
   self.attrAccessor "suddenDeath"
