@@ -13198,7 +13198,7 @@ AI = function(I, self) {
     goalie: function() {
       var ownGoal, targetPosition;
       ownGoal = engine.find("Goal").select(function(goal) {
-        return goal.team() === I.team;
+        return goal.team() === I.teamStyle;
       }).first();
       if (ownGoal) {
         targetPosition = ownGoal.center();
@@ -14635,17 +14635,18 @@ Goal = function(I) {
   WIDTH = 32;
   HEIGHT = 48;
   $.reverseMerge(I, {
-    color: "green",
     height: HEIGHT,
     width: WIDTH,
     x: WALL_LEFT + ARENA_WIDTH / 20 - WIDTH,
     y: WALL_TOP + ARENA_HEIGHT / 2 - HEIGHT / 2,
     spriteOffset: Point(0, 2 - HEIGHT / 2),
-    suddenDeath: false
+    suddenDeath: false,
+    team: "mutant"
   });
-  I.color = Player.COLORS[I.team];
+  I.hflip = I.right;
+  if (!I.right) I.team = "hiss";
   walls = [];
-  if (I.team) {
+  if (I.right) {
     walls.push({
       center: Point(I.x + I.width, I.y + I.height / 2),
       halfWidth: WALL_RADIUS,
@@ -14720,12 +14721,14 @@ Goal = function(I) {
     });
   });
   self.bind("step", function() {
-    if (I.team) {
-      I.sprite = tallSprites[7];
-    } else {
-      I.sprite = tallSprites[6];
-    }
+    I.sprite = teamSprites[I.team].goal.back[0];
     return I.zIndex = 1 + (I.y + I.height) / CANVAS_HEIGHT;
+  });
+  self.bind("draw", function(canvas) {
+    var sprite;
+    if (sprite = teamSprites[I.team].goal.front[0]) {
+      return sprite.draw(canvas, -63, -72);
+    }
   });
   self.attrReader("team");
   self.attrAccessor("suddenDeath");
@@ -14839,7 +14842,7 @@ MatchState = function(I) {
     });
     leftGoal = engine.add({
       "class": "Goal",
-      team: 0,
+      right: false,
       x: WALL_LEFT + ARENA_WIDTH / 10 - 32
     });
     leftGoal.bind("score", function() {
@@ -14847,7 +14850,7 @@ MatchState = function(I) {
     });
     rightGoal = engine.add({
       "class": "Goal",
-      team: 1,
+      right: true,
       x: WALL_LEFT + ARENA_WIDTH * 9 / 10
     });
     rightGoal.bind("score", function() {
@@ -17451,9 +17454,14 @@ TeamSheet = function(I) {
   var self;
   if (I == null) I = {};
   Object.reverseMerge(I, {
-    team: "spike"
+    team: "spike",
+    size: 512
   });
   self = {};
+  self.goal = {
+    back: Sprite.loadSheet("" + I.team + "_goal_back", 640, 640, 0.2),
+    front: Sprite.loadSheet("" + I.team + "_goal_front", 640, 640, 0.2)
+  };
   TeamSheet.bodyStyles.each(function(style) {
     return self[style] = CharacterSheet({
       team: I.team,
