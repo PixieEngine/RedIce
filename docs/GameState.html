@@ -70,9 +70,7 @@
         <section class='summary'><p>Loads the game state passed in, or the last saved state, if any.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />engine.bind 'update', -><br />  if justPressed.l<br />    # loads the last saved state<br />    engine.loadState()</p>
-          
-          <p>if justPressed.o<br />    # removes all game objects, then reinstantiates <br />    # them with the entityData passed in<br />    engine.loadState([{x: 40, y: 50, class: "Player"}, {x: 0, y: 0, class: "Enemy"}, {x: 500, y: 400, class: "Boss"}])<br /></pre></code></p>
+          <p><code><pre><br />engine.bind 'update', -><br />  if justPressed.l<br />    # loads the last saved state<br />    engine.loadState()</p>&#x000A;&#x000A;<p>if justPressed.o<br />    # removes all game objects, then reinstantiates <br />    # them with the entityData passed in<br />    engine.loadState([{x: 40, y: 50, class: "Player"}, {x: 0, y: 0, class: "Enemy"}, {x: 500, y: 400, class: "Boss"}])<br /></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -106,13 +104,7 @@
         <section class='summary'><p>Reloads the current game state, useful for hotswapping code.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />engine.I.objects.each (object) -><br />  # bring all objects to (0, 0) for some reason<br />  object.I.x = 0<br />  object.I.y = 0</p>
-          
-          <h1>reload all objects to make sure</h1>
-          
-          <h1>they are at (0, 0)</h1>
-          
-          <p>engine.reload()<br /></pre></code></p>
+          <p><code><pre><br />engine.I.objects.each (object) -><br />  # bring all objects to (0, 0) for some reason<br />  object.I.x = 0<br />  object.I.y = 0</p>&#x000A;&#x000A;<h1>reload all objects to make sure</h1>&#x000A;&#x000A;<h1>they are at (0, 0)</h1>&#x000A;&#x000A;<p>engine.reload()<br /></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>

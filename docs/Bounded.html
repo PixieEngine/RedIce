@@ -98,19 +98,7 @@
         <section class='summary'><p>The bounds method returns infomation about the location <br />of the object and its dimensions with optional offsets.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />player = Core<br />  x: 3<br />  y: 6<br />  width: 2<br />  height: 2</p>
-          
-          <p>player.include(Bounded)</p>
-          
-          <p>player.bounds()</p>
-          
-          <h1>=> {x: 3, y: 6, width: 2, height: 2}</h1>
-          
-          <p>player.bounds(7, 4)</p>
-          
-          <h1>=> {x: 10, y: 10, width: 2, height: 2}</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />player = Core<br />  x: 3<br />  y: 6<br />  width: 2<br />  height: 2</p>&#x000A;&#x000A;<p>player.include(Bounded)</p>&#x000A;&#x000A;<p>player.bounds()</p>&#x000A;&#x000A;<h1>=> {x: 3, y: 6, width: 2, height: 2}</h1>&#x000A;&#x000A;<p>player.bounds(7, 4)</p>&#x000A;&#x000A;<h1>=> {x: 10, y: 10, width: 2, height: 2}</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -149,15 +137,7 @@
         <section class='summary'><p>The center method returns the {@link Point} that is<br />the center of the object.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />player = Core<br />  x: 50<br />  y: 40<br />  width: 10<br />  height: 30</p>
-          
-          <p>player.include(Bounded)  </p>
-          
-          <p>player.center()</p>
-          
-          <h1>=> {x: 30, y: 35}</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />player = Core<br />  x: 50<br />  y: 40<br />  width: 10<br />  height: 30</p>&#x000A;&#x000A;<p>player.include(Bounded)  </p>&#x000A;&#x000A;<p>player.center()</p>&#x000A;&#x000A;<h1>=> {x: 30, y: 35}</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -181,15 +161,7 @@
         <section class='summary'><p>The centeredBounds method returns infomation about the center<br />of the object along with the midpoint of the width and height.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />player = Core<br />  x: 3<br />  y: 6<br />  width: 2<br />  height: 2</p>
-          
-          <p>player.include(Bounded)</p>
-          
-          <p>player.centeredBounds()</p>
-          
-          <h1>=> {x: 4, y: 7, xw: 1, yw: 1}</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />player = Core<br />  x: 3<br />  y: 6<br />  width: 2<br />  height: 2</p>&#x000A;&#x000A;<p>player.include(Bounded)</p>&#x000A;&#x000A;<p>player.centeredBounds()</p>&#x000A;&#x000A;<h1>=> {x: 4, y: 7, xw: 1, yw: 1}</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -213,15 +185,7 @@
         <section class='summary'><p>Return the circular bounds of the object. The circle is<br />centered at the midpoint of the object.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />player = Core<br />  radius: 5<br />  x: 50<br />  y: 50<br />  other: "stuff"</p>
-          
-          <p>player.include(Bounded)</p>
-          
-          <p>player.circle()</p>
-          
-          <h1>=> {radius: 5, x: 50, y: 50}</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />player = Core<br />  radius: 5<br />  x: 50<br />  y: 50<br />  other: "stuff"</p>&#x000A;&#x000A;<p>player.include(Bounded)</p>&#x000A;&#x000A;<p>player.circle()</p>&#x000A;&#x000A;<h1>=> {radius: 5, x: 50, y: 50}</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -245,15 +209,7 @@
         <section class='summary'><p>Does a check to see if this object is overlapping<br />with the bounds passed in.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />player = Core<br />  x: 4<br />  y: 6<br />  width: 20<br />  height: 20</p>
-          
-          <p>player.include(Bounded)  </p>
-          
-          <p>player.collides({x: 5, y: 7, width: 20, height: 20})</p>
-          
-          <h1>=> true</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />player = Core<br />  x: 4<br />  y: 6<br />  width: 20<br />  height: 20</p>&#x000A;&#x000A;<p>player.include(Bounded)  </p>&#x000A;&#x000A;<p>player.collides({x: 5, y: 7, width: 20, height: 20})</p>&#x000A;&#x000A;<h1>=> true</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -277,19 +233,7 @@
         <section class='summary'><p>This returns a modified bounds based on the collision margin.<br />The area of the bounds is reduced if collision margin is positive<br />and increased if collision margin is negative.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />player = Core<br />  collisionMargin: <br />    x: -2<br />    y: -4<br />  x: 50<br />  y: 50<br />  width: 20<br />  height: 20</p>
-          
-          <p>player.include(Bounded)</p>
-          
-          <p>player.collisionBounds()</p>
-          
-          <h1>=> {x: 38, y: 36, height: 28, width: 24}</h1>
-          
-          <p>player.collisionBounds(10, 10)</p>
-          
-          <h1>=> {x: 48, y: 46, height: 28, width: 24}</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />player = Core<br />  collisionMargin: <br />    x: -2<br />    y: -4<br />  x: 50<br />  y: 50<br />  width: 20<br />  height: 20</p>&#x000A;&#x000A;<p>player.include(Bounded)</p>&#x000A;&#x000A;<p>player.collisionBounds()</p>&#x000A;&#x000A;<h1>=> {x: 38, y: 36, height: 28, width: 24}</h1>&#x000A;&#x000A;<p>player.collisionBounds(10, 10)</p>&#x000A;&#x000A;<h1>=> {x: 48, y: 46, height: 28, width: 24}</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -328,15 +272,7 @@
         <section class='summary'><p>The position of this game object. By default it is the top left point.<br />Redefining the center method will change the relative position.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />player = Core<br />  x: 50<br />  y: 40</p>
-          
-          <p>player.include(Bounded)      </p>
-          
-          <p>player.position()</p>
-          
-          <h1>=> {x: 50, y: 40}</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />player = Core<br />  x: 50<br />  y: 40</p>&#x000A;&#x000A;<p>player.include(Bounded)      </p>&#x000A;&#x000A;<p>player.position()</p>&#x000A;&#x000A;<h1>=> {x: 50, y: 40}</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>

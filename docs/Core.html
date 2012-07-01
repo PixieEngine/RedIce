@@ -81,13 +81,7 @@
         <section class='summary'><p>Generates a public jQuery style getter / setter method for each <br />String argument.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />myObject = Core<br />  r: 255<br />  g: 0<br />  b: 100</p>
-          
-          <p>myObject.attrAccessor "r", "g", "b"</p>
-          
-          <p>myObject.r(254)<br />myObject.r()</p>
-          
-          <p>=> 254<br /></pre></code></p>
+          <p><code><pre><br />myObject = Core<br />  r: 255<br />  g: 0<br />  b: 100</p>&#x000A;&#x000A;<p>myObject.attrAccessor "r", "g", "b"</p>&#x000A;&#x000A;<p>myObject.r(254)<br />myObject.r()</p>&#x000A;&#x000A;<p>=> 254<br /></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -111,15 +105,7 @@
         <section class='summary'><p>Generates a public jQuery style getter method for each String argument.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />myObject = Core<br />  r: 255<br />  g: 0<br />  b: 100</p>
-          
-          <p>myObject.attrReader "r", "g", "b"</p>
-          
-          <p>myObject.r()<br />=> 255</p>
-          
-          <p>myObject.g()<br />=> 0</p>
-          
-          <p>myObject.b()<br />=> 100<br /></pre></code></p>
+          <p><code><pre><br />myObject = Core<br />  r: 255<br />  g: 0<br />  b: 100</p>&#x000A;&#x000A;<p>myObject.attrReader "r", "g", "b"</p>&#x000A;&#x000A;<p>myObject.r()<br />=> 255</p>&#x000A;&#x000A;<p>myObject.g()<br />=> 0</p>&#x000A;&#x000A;<p>myObject.b()<br />=> 100<br /></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -143,21 +129,7 @@
         <section class='summary'><p>Extends this object with methods from the passed in object. <code>before</code> and <br /><code>after</code> are special option names that glue functionality before or after <br />existing methods.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />I =<br />  x: 30<br />  y: 40<br />  maxSpeed: 5</p>
-          
-          <h1>we are using extend to give player</h1>
-          
-          <h1>additional methods that Core doesn't have</h1>
-          
-          <p>player = Core(I).extend<br />  increaseSpeed: -><br />    I.maxSpeed += 1</p>
-          
-          <p># this will execute before the update method<br />  beforeUpdate: -><br />    checkPowerupStatus()</p>
-          
-          <p>player.I.maxSpeed<br />=> 5</p>
-          
-          <p>player.increaseSpeed()</p>
-          
-          <p>player.I.maxSpeed<br />=> 6<br /></pre></code></p>
+          <p><code><pre><br />I =<br />  x: 30<br />  y: 40<br />  maxSpeed: 5</p>&#x000A;&#x000A;<h1>we are using extend to give player</h1>&#x000A;&#x000A;<h1>additional methods that Core doesn't have</h1>&#x000A;&#x000A;<p>player = Core(I).extend<br />  increaseSpeed: -><br />    I.maxSpeed += 1</p>&#x000A;&#x000A;<p># this will execute before the update method<br />  beforeUpdate: -><br />    checkPowerupStatus()</p>&#x000A;&#x000A;<p>player.I.maxSpeed<br />=> 5</p>&#x000A;&#x000A;<p>player.increaseSpeed()</p>&#x000A;&#x000A;<p>player.I.maxSpeed<br />=> 6<br /></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -181,11 +153,7 @@
         <section class='summary'><p>Includes a module in this object.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />myObject = Core()<br />myObject.include(Bindable)</p>
-          
-          <h1>now you can bind handlers to functions</h1>
-          
-          <p>myObject.bind "someEvent", -><br />  alert("wow. that was easy.")<br /></pre></code></p>
+          <p><code><pre><br />myObject = Core()<br />myObject.include(Bindable)</p>&#x000A;&#x000A;<h1>now you can bind handlers to functions</h1>&#x000A;&#x000A;<p>myObject.bind "someEvent", -><br />  alert("wow. that was easy.")<br /></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>

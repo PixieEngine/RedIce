@@ -130,9 +130,7 @@
         <section class='summary'><p>Triggered when the object is removed from<br />the engine. Use the remove event to handle any clean up.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />boss = GameObject()</p>
-          
-          <p>boss.bind 'remove', -><br />  unlockDoorToLevel2()<br /></pre></code></p>
+          <p><code><pre><br />boss = GameObject()</p>&#x000A;&#x000A;<p>boss.bind 'remove', -><br />  unlockDoorToLevel2()<br /></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -156,9 +154,7 @@
         <section class='summary'><p>Triggered during every update step.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />player = GameObject()</p>
-          
-          <p>player.bind 'step', -><br />  # check to see if keys are being pressed and <br />  # change the player's velocity<br />  if keydown.left<br />    player.velocity(Point(-1, 0))<br />  else if keydown.right<br />    player.velocity(Point(1, 0))<br />  else<br />    player.velocity(Point(0, 0))<br /></pre></code></p>
+          <p><code><pre><br />player = GameObject()</p>&#x000A;&#x000A;<p>player.bind 'step', -><br />  # check to see if keys are being pressed and <br />  # change the player's velocity<br />  if keydown.left<br />    player.velocity(Point(-1, 0))<br />  else if keydown.right<br />    player.velocity(Point(1, 0))<br />  else<br />    player.velocity(Point(0, 0))<br /></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>

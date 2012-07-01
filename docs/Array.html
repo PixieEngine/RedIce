@@ -114,11 +114,7 @@
         <section class='summary'><p>Empties the array of its contents. It is modified in place.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />fullArray = [1, 2, 3]<br />fullArray.clear()<br />fullArray</p>
-          
-          <h1>=> []</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />fullArray = [1, 2, 3]<br />fullArray.clear()<br />fullArray</p>&#x000A;&#x000A;<h1>=> []</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -142,11 +138,7 @@
         <section class='summary'><p>Returns a copy of the array without null and undefined values.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />[null, undefined, 3, 3, undefined, 5].compact()</p>
-          
-          <h1>=> [3, 3, 5]</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />[null, undefined, 3, 3, undefined, 5].compact()</p>&#x000A;&#x000A;<h1>=> [3, 3, 5]</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -204,21 +196,7 @@
         <section class='summary'><p>Creates and returns a copy of the array. The copy contains<br />the same objects.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />a = ["a", "b", "c"]<br />b = a.copy()</p>
-          
-          <h1>their elements are equal</h1>
-          
-          <p>a[0] == b[0] &amp;&amp; a[1] == b[1] &amp;&amp; a[2] == b[2]</p>
-          
-          <h1>=> true</h1>
-          
-          <h1>but they aren't the same object in memory</h1>
-          
-          <p>a === b</p>
-          
-          <h1>=> false</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />a = ["a", "b", "c"]<br />b = a.copy()</p>&#x000A;&#x000A;<h1>their elements are equal</h1>&#x000A;&#x000A;<p>a[0] == b[0] &amp;&amp; a[1] == b[1] &amp;&amp; a[2] == b[2]</p>&#x000A;&#x000A;<h1>=> true</h1>&#x000A;&#x000A;<h1>but they aren't the same object in memory</h1>&#x000A;&#x000A;<p>a === b</p>&#x000A;&#x000A;<h1>=> false</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -242,19 +220,7 @@
         <section class='summary'><p>Call the given iterator once for each element in the array,<br />passing in the element as the first argument, the index of <br />the element as the second argument, and <code>this</code> array as the<br />third argument.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />word = ""<br />indices = []<br />["r", "a", "d"].each (letter, index) -><br />  word += letter<br />  indices.push(index)</p>
-          
-          <h1>=> ["r", "a", "d"]</h1>
-          
-          <p>word</p>
-          
-          <h1>=> "rad"</h1>
-          
-          <p>indices</p>
-          
-          <h1>=> [0, 1, 2]</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />word = ""<br />indices = []<br />["r", "a", "d"].each (letter, index) -><br />  word += letter<br />  indices.push(index)</p>&#x000A;&#x000A;<h1>=> ["r", "a", "d"]</h1>&#x000A;&#x000A;<p>word</p>&#x000A;&#x000A;<h1>=> "rad"</h1>&#x000A;&#x000A;<p>indices</p>&#x000A;&#x000A;<h1>=> [0, 1, 2]</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -332,15 +298,7 @@
         <section class='summary'><p>Call the given iterator once for each group of elements in the array,<br />passing in the elements in groups of n. Additional argumens are<br />passed as in each.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />results = []<br />[1, 2, 3, 4].eachSlice 2, (slice) -><br />  results.push(slice)</p>
-          
-          <h1>=> [1, 2, 3, 4]</h1>
-          
-          <p>results</p>
-          
-          <h1>=> [[1, 2], [3, 4]]</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />results = []<br />[1, 2, 3, 4].eachSlice 2, (slice) -><br />  results.push(slice)</p>&#x000A;&#x000A;<h1>=> [1, 2, 3, 4]</h1>&#x000A;&#x000A;<p>results</p>&#x000A;&#x000A;<h1>=> [[1, 2], [3, 4]]</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -462,11 +420,7 @@
         <section class='summary'><p>Returns an object containing the extremes of this array.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />[-1, 3, 0].extremes()</p>
-          
-          <h1>=> {min: -1, max: 3}</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />[-1, 3, 0].extremes()</p>&#x000A;&#x000A;<h1>=> {min: -1, max: 3}</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -534,11 +488,7 @@
         <section class='summary'><p>Returns the first element of the array, undefined if the array is empty.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />["first", "second", "third"].first()</p>
-          
-          <h1>=> "first"</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />["first", "second", "third"].first()</p>&#x000A;&#x000A;<h1>=> "first"</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -562,19 +512,7 @@
         <section class='summary'><p>Flatten out an array of arrays into a single array of elements.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />[[1, 2], [3, 4], 5].flatten()</p>
-          
-          <h1>=> [1, 2, 3, 4, 5]</h1>
-          
-          <h1>won't flatten twice nested arrays. call</h1>
-          
-          <h1>flatten twice if that is what you want</h1>
-          
-          <p>[[1, 2], [3, [4, 5]], 6].flatten()</p>
-          
-          <h1>=> [1, 2, 3, [4, 5], 6]</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />[[1, 2], [3, 4], 5].flatten()</p>&#x000A;&#x000A;<h1>=> [1, 2, 3, 4, 5]</h1>&#x000A;&#x000A;<h1>won't flatten twice nested arrays. call</h1>&#x000A;&#x000A;<h1>flatten twice if that is what you want</h1>&#x000A;&#x000A;<p>[[1, 2], [3, [4, 5]], 6].flatten()</p>&#x000A;&#x000A;<h1>=> [1, 2, 3, [4, 5], 6]</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -632,15 +570,7 @@
         <section class='summary'><p>Returns true if the element is present in the array.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />["a", "b", "c"].include("c")</p>
-          
-          <h1>=> true</h1>
-          
-          <p>[40, "a"].include(700)</p>
-          
-          <h1>=> false</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />["a", "b", "c"].include("c")</p>&#x000A;&#x000A;<h1>=> true</h1>&#x000A;&#x000A;<p>[40, "a"].include(700)</p>&#x000A;&#x000A;<h1>=> false</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -732,15 +662,7 @@
         <section class='summary'><p>Invoke the named method on each element in the array<br />and return a new array containing the results of the invocation.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />[1.1, 2.2, 3.3, 4.4].invoke("floor")</p>
-          
-          <h1>=> [1, 2, 3, 4]</h1>
-          
-          <p>['hello', 'world', 'cool!'].invoke('substring', 0, 3)</p>
-          
-          <h1>=> ['hel', 'wor', 'coo']</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />[1.1, 2.2, 3.3, 4.4].invoke("floor")</p>&#x000A;&#x000A;<h1>=> [1, 2, 3, 4]</h1>&#x000A;&#x000A;<p>['hello', 'world', 'cool!'].invoke('substring', 0, 3)</p>&#x000A;&#x000A;<h1>=> ['hel', 'wor', 'coo']</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -813,11 +735,7 @@
         <section class='summary'><p>Returns the last element of the array, undefined if the array is empty.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />["first", "second", "third"].last()</p>
-          
-          <h1>=> "third"</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />["first", "second", "third"].last()</p>&#x000A;&#x000A;<h1>=> "third"</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -909,17 +827,7 @@
         <section class='summary'><p>Partitions the elements into two groups: those for which the iterator returns<br />true, and those for which it returns false.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />[evens, odds] = [1, 2, 3, 4].partition (n) -><br />  n.even()</p>
-          
-          <p>evens</p>
-          
-          <h1>=> [2, 4]</h1>
-          
-          <p>odds</p>
-          
-          <h1>=> [1, 3]</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />[evens, odds] = [1, 2, 3, 4].partition (n) -><br />  n.even()</p>&#x000A;&#x000A;<p>evens</p>&#x000A;&#x000A;<h1>=> [2, 4]</h1>&#x000A;&#x000A;<p>odds</p>&#x000A;&#x000A;<h1>=> [1, 3]</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -1016,11 +924,7 @@
         <section class='summary'><p>Multiply all the elements in the array.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />[1, 2, 3, 4].product()</p>
-          
-          <h1>=> 24</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />[1, 2, 3, 4].product()</p>&#x000A;&#x000A;<h1>=> 24</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -1078,11 +982,7 @@
         <section class='summary'><p>Randomly select an element from the array.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />[1, 2, 3].rand()</p>
-          
-          <h1>=> 2</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />[1, 2, 3].rand()</p>&#x000A;&#x000A;<h1>=> 2</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -1213,15 +1113,7 @@
         <section class='summary'><p>Remove the first occurrence of the given object from the array if it is<br />present. The array is modified in place.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />a = [1, 1, "a", "b"]<br />a.remove(1)</p>
-          
-          <h1>=> 1</h1>
-          
-          <p>a</p>
-          
-          <h1>=> [1, "a", "b"]</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />a = [1, 1, "a", "b"]<br />a.remove(1)</p>&#x000A;&#x000A;<h1>=> 1</h1>&#x000A;&#x000A;<p>a</p>&#x000A;&#x000A;<h1>=> [1, "a", "b"]</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -1342,13 +1234,7 @@
         <section class='summary'><p>Returns a new array with the elements all shuffled up.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />a = [1, 2, 3]</p>
-          
-          <p>a.shuffle()</p>
-          
-          <h1>=> [2, 3, 1]</h1>
-          
-          <p>a # => [1, 2, 3]<br /></pre></code></p>
+          <p><code><pre><br />a = [1, 2, 3]</p>&#x000A;&#x000A;<p>a.shuffle()</p>&#x000A;&#x000A;<h1>=> [2, 3, 1]</h1>&#x000A;&#x000A;<p>a # => [1, 2, 3]<br /></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -1518,11 +1404,7 @@
         <section class='summary'><p>Add all the elements in the array.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />[1, 2, 3, 4].sum()</p>
-          
-          <h1>=> 10</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />[1, 2, 3, 4].sum()</p>&#x000A;&#x000A;<h1>=> 10</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -1628,11 +1510,7 @@
         <section class='summary'><p>Return the group of elements that are not in the passed in set.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />[1, 2, 3, 4].without ([2, 3])</p>
-          
-          <h1>=> [1, 4]</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />[1, 2, 3, 4].without ([2, 3])</p>&#x000A;&#x000A;<h1>=> [1, 4]</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -1666,19 +1544,7 @@
         <section class='summary'><p>Pretend the array is a circle and grab a new array containing length elements. <br />If length is not given return the element at start, again assuming the array <br />is a circle.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />[1, 2, 3].wrap(-1)</p>
-          
-          <h1>=> 3</h1>
-          
-          <p>[1, 2, 3].wrap(6)</p>
-          
-          <h1>=> 1</h1>
-          
-          <p>["l", "o", "o", "p"].wrap(0, 16)</p>
-          
-          <h1>=> ["l", "o", "o", "p", "l", "o", "o", "p", "l", "o", "o", "p", "l", "o", "o", "p"]</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />[1, 2, 3].wrap(-1)</p>&#x000A;&#x000A;<h1>=> 3</h1>&#x000A;&#x000A;<p>[1, 2, 3].wrap(6)</p>&#x000A;&#x000A;<h1>=> 1</h1>&#x000A;&#x000A;<p>["l", "o", "o", "p"].wrap(0, 16)</p>&#x000A;&#x000A;<h1>=> ["l", "o", "o", "p", "l", "o", "o", "p", "l", "o", "o", "p", "l", "o", "o", "p"]</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -1717,11 +1583,7 @@
         <section class='summary'><p>Merges together the values of each of the arrays with the values at the corresponding position.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />['a', 'b', 'c'].zip([1, 2, 3])</p>
-          
-          <h1>=> [['a', 1], ['b', 2], ['c', 3]]</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />['a', 'b', 'c'].zip([1, 2, 3])</p>&#x000A;&#x000A;<h1>=> [['a', 1], ['b', 2], ['c', 3]]</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
