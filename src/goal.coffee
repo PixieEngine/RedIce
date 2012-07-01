@@ -95,7 +95,7 @@ Goal = (I) ->
     I.zIndex = 1 + (I.y + I.height)/CANVAS_HEIGHT
 
   self.bind "draw", (canvas) ->
-    teamSprites[I.team].goal.front[0]?.draw(canvas, 0, 0)
+    teamSprites[I.team].goal.front[0]?.draw(canvas, -I.width/2, -I.height/2)
 
   self.attrReader "team"
   self.attrAccessor "suddenDeath"
