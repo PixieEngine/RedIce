@@ -16,6 +16,8 @@ Goal = (I) ->
     team: "mutant"
 
   I.hflip = I.right
+  unless I.right
+    I.team = "hiss" 
 
   walls = []
 
