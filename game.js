@@ -13687,10 +13687,10 @@ Configurator = function(I) {
           return canvas.withTransform(Matrix.translation(x, y), function(canvas) {
             var bodySprite, headSprite;
             if (bodySprite = teamSprites[player.teamStyle][player.bodyStyle].slow.front[0]) {
-              bodySprite.draw(canvas, -bodySprite.width / 2 - 20, -bodySprite.height / 2);
+              bodySprite.draw(canvas, -bodySprite.width / 2 - 10, -bodySprite.height / 2);
             }
             if (headSprite = teamSprites[player.teamStyle][player.headStyle].normal[0]) {
-              return headSprite != null ? headSprite.draw(canvas, -headSprite.width / 2 + 20, -headSprite.height / 2 - 80) : void 0;
+              return headSprite != null ? headSprite.draw(canvas, -headSprite.width / 2 + 10, -headSprite.height / 2 - 40) : void 0;
             }
           });
         });
