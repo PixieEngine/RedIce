@@ -190,7 +190,7 @@ Configurator = (I) ->
 
     readyPlayers = I.config.players.select((player) -> player.ready)
 
-    if readyPlayers.length == I.activePlayers# && readyPlayers.length > 0
+    if readyPlayers.length == I.activePlayers && readyPlayers.length > 0
       unbindTapEvents()
       self.trigger "done", finalizeConfig(I.config)
 
