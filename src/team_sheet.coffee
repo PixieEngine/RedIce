@@ -14,8 +14,8 @@ TeamSheet = (I={}) ->
     self[style] = HeadSheet
       team: I.team
       character: style
-      
-  TeamSheet.goal =
+
+  self.goal =
     back: Sprite.loadSheet("#{I.team}_goal_back", I.size, I.size, 0.5)
     front: Sprite.loadSheet("#{I.team}_goal_front", I.size, I.size, 0.5)
 
