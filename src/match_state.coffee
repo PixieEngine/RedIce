@@ -25,7 +25,7 @@ MatchState = (I={}) ->
 
     leftGoal = engine.add
       class: "Goal"
-      team: 0
+      right: false
       x: WALL_LEFT + ARENA_WIDTH/10 - 32
 
     leftGoal.bind "score", ->
@@ -33,7 +33,7 @@ MatchState = (I={}) ->
 
     rightGoal = engine.add
       class: "Goal"
-      team: 1
+      right: true
       x: WALL_LEFT + ARENA_WIDTH*9/10
 
     rightGoal.bind "score", ->

@@ -7,7 +7,6 @@ Goal = (I) ->
   HEIGHT = 48
 
   $.reverseMerge I,
-    color: "green"
     height: HEIGHT
     width: WIDTH
     x: WALL_LEFT + ARENA_WIDTH/20 - WIDTH
@@ -16,10 +15,9 @@ Goal = (I) ->
     suddenDeath: false
     team: "hiss"
 
-  I.color = Player.COLORS[I.team]
   walls = []
 
-  if I.team
+  if I.right
     walls.push
       center: Point(I.x + I.width, I.y + I.height/2)
       halfWidth: WALL_RADIUS
