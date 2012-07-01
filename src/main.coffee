@@ -97,6 +97,3 @@ engine.bind "afterUpdate", (canvas) ->
 
 engine.setState(MatchSetupState())
 engine.start()
-
-# Remove Joysticks Prompt
-$("a").remove()
