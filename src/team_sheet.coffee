@@ -6,8 +6,8 @@ TeamSheet = (I={}) ->
   self = {}
 
   self.goal =
-    back: Sprite.loadSheet("#{I.team}_goal_back", I.size, I.size, 0.2)
-    front: Sprite.loadSheet("#{I.team}_goal_front", I.size, I.size, 0.2)
+    back: Sprite.loadSheet("#{I.team}_goal_back", 640, 640, 0.2)
+    front: Sprite.loadSheet("#{I.team}_goal_front", 640, 640, 0.2)
 
   TeamSheet.bodyStyles.each (style) ->
     self[style] = CharacterSheet
