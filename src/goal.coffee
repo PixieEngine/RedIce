@@ -13,7 +13,7 @@ Goal = (I) ->
     y: WALL_TOP + ARENA_HEIGHT/2 - HEIGHT/2
     spriteOffset: Point(0, 2 - HEIGHT/2)
     suddenDeath: false
-    team: "hiss"
+    team: "mutant"
 
   walls = []
 
