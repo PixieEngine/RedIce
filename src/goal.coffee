@@ -15,6 +15,8 @@ Goal = (I) ->
     suddenDeath: false
     team: "mutant"
 
+  I.hflip = I.right
+
   walls = []
 
   if I.right
