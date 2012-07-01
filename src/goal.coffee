@@ -98,7 +98,7 @@ Goal = (I) ->
 
   self.bind "draw", (canvas) ->
     if sprite = teamSprites[I.team].goal.front[0]
-      sprite.draw(canvas, 0, 0)
+      sprite.draw(canvas, -100, -100)
 
   self.attrReader "team"
   self.attrAccessor "suddenDeath"
