@@ -17683,7 +17683,7 @@ canvas = $("canvas").pixieCanvas();
 
 window.engine = Engine({
   canvas: canvas,
-  includedModules: ["Joysticks", "Stats"],
+  includedModules: ["Joysticks"],
   showFPS: true,
   zSort: true,
   FPS: 30
