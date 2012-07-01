@@ -4,7 +4,7 @@ window.tallSprites = Sprite.loadSheet("sprites", 32, 96)
 
 window.teamSprites = {}
 
-["spike", "smiley", "mutant", "hiss"].each (name) ->
+["mutant", "hiss"].each (name) ->
   teamSprites[name] = TeamSheet
     team: name
 
