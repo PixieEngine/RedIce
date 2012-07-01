@@ -14,6 +14,7 @@ Goal = (I) ->
     y: WALL_TOP + ARENA_HEIGHT/2 - HEIGHT/2
     spriteOffset: Point(0, 2 - HEIGHT/2)
     suddenDeath: false
+    team: "hiss"
 
   I.color = Player.COLORS[I.team]
   walls = []
@@ -91,12 +92,12 @@ Goal = (I) ->
       drawWall(wall, canvas)
 
   self.bind "step", ->
-    if I.team
-      I.sprite = tallSprites[7]      
-    else
-      I.sprite = tallSprites[6]
+    I.sprite = teamSprites[I.team].goal.back
 
     I.zIndex = 1 + (I.y + I.height)/CANVAS_HEIGHT
+
+  self.bind "draw", (canvas) ->
+    teamSprites[I.team].goal.front.draw(canvas, 0, 0)
 
   self.attrReader "team"
   self.attrAccessor "suddenDeath"

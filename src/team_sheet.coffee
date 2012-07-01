@@ -1,6 +1,7 @@
 TeamSheet = (I={}) ->
   Object.reverseMerge I,
     team: "spike"
+    size: 512
 
   self = {}
 
@@ -13,6 +14,10 @@ TeamSheet = (I={}) ->
     self[style] = HeadSheet
       team: I.team
       character: style
+      
+  TeamSheet.goal =
+    back: Sprite.loadSheet("#{I.team}_goal_back", I.size, I.size, 0.5)
+    front: Sprite.loadSheet("#{I.team}_goal_front", I.size, I.size, 0.5)
 
   return self
 
