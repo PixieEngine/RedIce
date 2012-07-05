@@ -32,7 +32,7 @@ PlayerDrawing = (I, self) ->
 
     t = Matrix.IDENTITY
     if I.hflip
-      t = t.concat Matrix.HORIZONTAL_FLIP
+      t = Matrix.HORIZONTAL_FLIP
       headRotation = -headRotation
 
     currentHeadOffset = t.transformPoint(headOffset.scale(assetScale))

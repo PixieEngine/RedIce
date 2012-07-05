@@ -9,6 +9,8 @@ Player = (I) ->
     boostMeter: 64
     cooldown:
       boost: 0
+      facing: 0
+      flip: 0
       shoot: 0
     collisionMargin: Point(2, 2)
     controller: 0
@@ -68,6 +70,23 @@ Player = (I) ->
           Point.fromAngle(Random.angle()).scale(rand(5) + 1).add(push)
         width: (n) ->
           particleSizes.wrap(n)
+          
+  jitterSoak = 10
+          
+  setFacing = (newFacing) ->
+    unless I.cooldown.facing
+      I.cooldown.facing = jitterSoak
+      I.facing = newFacing
+
+  forceFacing = (newFacing) ->
+    I.facing = newFacing
+    I.cooldown.facing = jitterSoak
+    
+  setFlip = (newFlip) ->
+    if I.hflip != newFlip
+      unless I.cooldown.flip
+        I.cooldown.flip = jitterSoak
+        I.hflip = newFlip
 
   self = Base(I).extend
     bloody: ->
@@ -258,7 +277,7 @@ Player = (I) ->
 
     I.headAction = "normal"
 
-    I.hflip = (I.heading > 2*Math.TAU/8 || I.heading < -2*Math.TAU/8)
+    setFlip (I.heading > 2*Math.TAU/8 || I.heading < -2*Math.TAU/8)
 
     spriteSheet = self.spriteSheet()
 
@@ -267,9 +286,9 @@ Player = (I) ->
 
     # Determine character facing
     if 0 <= I.heading <= Math.TAU/2
-      I.facing = "front"
+      setFacing "front"
     else
-      I.facing = "back"
+      setFacing "back"
 
     if speed < 1
       I.action = "idle"
@@ -281,12 +300,12 @@ Player = (I) ->
       cycleDelay = 3
 
     if I.wipeout
-      I.facing = "front"
+      forceFacing "front"
       I.action = "fall"
       I.headAction = "pain"
       I.frame = ((25 - I.wipeout) / 3).floor().clamp(0, 5)
     else if power = I.shootPower
-      I.facing = "front"
+      forceFacing "front"
       I.action = "shoot"
       if power < I.maxShotPower
         I.frame = ((power * I.shootHoldFrame + 1) / I.maxShotPower).floor()
@@ -295,7 +314,7 @@ Player = (I) ->
         I.frame = I.shootHoldFrame + (I.age / 6).floor() % 2
     else if I.cooldown.shoot
       I.action = "shoot"
-      I.facing = "front"
+      setFacing "front"
       I.frame = 10 - I.cooldown.shoot
     else
       I.frame = (I.age / cycleDelay).floor()
