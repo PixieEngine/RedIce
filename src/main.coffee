@@ -4,7 +4,7 @@ window.tallSprites = Sprite.loadSheet("sprites", 32, 96)
 
 window.teamSprites = {}
 
-["spike", "smiley", "mutant", "hiss"].each (name) ->
+["mutant", "hiss"].each (name) ->
   teamSprites[name] = TeamSheet
     team: name
 
@@ -27,7 +27,7 @@ window.config =
   players: []
   particleEffects: false
   music: false
-  joysticks: false
+  joysticks: true
 
 #TODO Manage these extra canvases better
 window.rink = Rink()
@@ -51,7 +51,7 @@ canvas = $("canvas").pixieCanvas()
 
 window.engine = Engine
   canvas: canvas
-  includedModules: ["Joysticks", "Stats"]
+  includedModules: ["Joysticks"]#, "Stats"]
   showFPS: true
   zSort: true
   FPS: 30
@@ -97,6 +97,3 @@ engine.bind "afterUpdate", (canvas) ->
 
 engine.setState(MatchSetupState())
 engine.start()
-
-# Remove Joysticks Prompt
-$("a").remove()

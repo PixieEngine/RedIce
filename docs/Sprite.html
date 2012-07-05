@@ -58,6 +58,7 @@
       <h3>Sprite Methods</h3>
       <div class='methods'>
         <a href='Sprite.html##draw'>#draw</a>
+        <a href='Sprite.html##fill'>#fill</a>
         <a href='Sprite.html#.fromPixieId'>.fromPixieId</a>
         <a href='Sprite.html#.fromURL'>.fromURL</a>
         <a href='Sprite.html#.load'>.load</a>
@@ -116,7 +117,66 @@
         <section class='source'>
           <h3>Source</h3>
           <a class='toggle_source'>Toggle</a>
-          <pre><code>draw: function(canvas, x, y) {&#x000A;        return canvas.drawImage(image, sourceX, sourceY, width, height, x, y, width, height);&#x000A;      },&#x000A;      fill: function(canvas, x, y, width, height, repeat) {&#x000A;        var pattern;&#x000A;        if (repeat == null) repeat = "repeat";&#x000A;        pattern = canvas.createPattern(image, repeat);&#x000A;        return canvas.drawRect({&#x000A;          x: x,&#x000A;          y: y,&#x000A;          width: width,&#x000A;          height: height,&#x000A;          color: pattern&#x000A;        });&#x000A;      },&#x000A;      width: width,&#x000A;      height: height&#x000A;    };&#x000A;  };</code></pre>
+          <pre><code>draw: function(canvas, x, y) {&#x000A;        return canvas.drawImage(image, sourceX, sourceY, width, height, x, y, width, height);&#x000A;      },</code></pre>
+        </section>
+      </div>
+      <hr />
+      <a name='#fill'></a>
+      <!-- TODO make sure method_data isn't nil -->
+      <h1>Sprite#fill(canvas, x, y, width, height, repeat)</h1>
+      <div class='description'>
+        <section class='summary'><p>Draw this sprite on the given canvas tiled to the x, y, <br />width, and height dimensions specified.</p></section>
+        <section class='usage'>
+          <h3>Usage</h3>
+          
+        </section>
+        <section class='parameters'>
+          <h3>Parameters</h3>
+          <ul>
+            <li>
+              <span class='param_name'>canvas</span>
+               -
+              <span class='param_description'>Reference to the canvas to draw the sprite on</span>
+            </li>
+            <li>
+              <span class='param_name'>x</span>
+               -
+              <span class='param_description'>Position on the x axis to draw the sprite</span>
+            </li>
+            <li>
+              <span class='param_name'>y</span>
+               -
+              <span class='param_description'>Position on the y axis to draw the sprite</span>
+            </li>
+            <li>
+              <span class='param_name'>width</span>
+               -
+              <span class='param_description'>How far to tile the sprite on the x-axis</span>
+            </li>
+            <li>
+              <span class='param_name'>height</span>
+               -
+              <span class='param_description'>How far to tile the sprite on the y-axis</span>
+            </li>
+            <li>
+              <span class='param_name'>repeat</span>
+               -
+              <span class='param_description'>Repeat options. Can be `repeat-x`, `repeat-y`, `no-repeat`, or `repeat`. Defaults to `repeat`</span>
+            </li>
+          </ul>
+        </section>
+        <section class='returns'>
+          <h3>Returns</h3>
+          <p>
+            Type:
+            <a href='.html'></a>
+          </p>
+          <p class='return_description'></p>
+        </section>
+        <section class='source'>
+          <h3>Source</h3>
+          <a class='toggle_source'>Toggle</a>
+          <pre><code>fill: function(canvas, x, y, width, height, repeat) {&#x000A;        var pattern;&#x000A;        if (repeat == null) repeat = "repeat";&#x000A;        pattern = canvas.createPattern(image, repeat);&#x000A;        return canvas.drawRect({&#x000A;          x: x,&#x000A;          y: y,&#x000A;          width: width,&#x000A;          height: height,&#x000A;          color: pattern&#x000A;        });&#x000A;      },&#x000A;      width: width,&#x000A;      height: height&#x000A;    };&#x000A;  };</code></pre>
         </section>
       </div>
       <hr />
@@ -233,7 +293,7 @@
         <section class='source'>
           <h3>Source</h3>
           <a class='toggle_source'>Toggle</a>
-          <pre><code>Sprite.load = function(url, loadedCallback) {&#x000A;    var img, proxy;&#x000A;    img = new Image();&#x000A;    proxy = LoaderProxy();&#x000A;    img.onload = function() {&#x000A;      var tile;&#x000A;      tile = Sprite(this);&#x000A;      Object.extend(proxy, tile);&#x000A;      if (loadedCallback) return loadedCallback(proxy);&#x000A;    };&#x000A;    img.src = url;&#x000A;    return proxy;&#x000A;  };</code></pre>
+          <pre><code>Sprite.load = function(url, loadedCallback) {&#x000A;    var img, proxy, sprite;&#x000A;    if (sprite = spriteCache[url]) {&#x000A;      if (loadedCallback != null) loadedCallback.defer(sprite);&#x000A;      return sprite;&#x000A;    }&#x000A;    img = new Image();&#x000A;    proxy = LoaderProxy();&#x000A;    img.onload = function() {&#x000A;      spriteCache[url] = Object.extend(proxy, Sprite(this));&#x000A;      return typeof loadedCallback === "function" ? loadedCallback(proxy) : void 0;&#x000A;    };&#x000A;    img.src = url;&#x000A;    return proxy;&#x000A;  };</code></pre>
         </section>
       </div>
       <hr />
@@ -272,7 +332,7 @@
         <section class='source'>
           <h3>Source</h3>
           <a class='toggle_source'>Toggle</a>
-          <pre><code>Sprite.loadByName = function(name, callback) {&#x000A;    return Sprite.load(ResourceLoader.urlFor("images", name), callback);&#x000A;  };&#x000A;  return (typeof exports !== "undefined" && exports !== null ? exports : this)["Sprite"] = Sprite;&#x000A;})();&#x000A;;&#x000A;;&#x000A;&#x000A;;&#x000A;;&#x000A;&#x000A;document.oncontextmenu = function() {&#x000A;  return false;&#x000A;};&#x000A;&#x000A;$(document).bind("keydown", function(event) {&#x000A;  if (!$(event.target).is("input")) return event.preventDefault();&#x000A;});&#x000A;;</code></pre>
+          <pre><code>Sprite.loadByName = function(name, callback) {&#x000A;    return Sprite.load(ResourceLoader.urlFor("images", name), callback);&#x000A;  };&#x000A;  return (typeof exports !== "undefined" && exports !== null ? exports : this)["Sprite"] = Sprite;&#x000A;})();&#x000A;&#x000A;var TeamSheet;&#x000A;&#x000A;TeamSheet = function(I) {&#x000A;  var self;&#x000A;  if (I == null) I = {};&#x000A;  Object.reverseMerge(I, {&#x000A;    team: "spike",&#x000A;    size: 512&#x000A;  });&#x000A;  self = {};&#x000A;  self.goal = {&#x000A;    back: Sprite.loadSheet("" + I.team + "_goal_back", 640, 640, 0.2),&#x000A;    front: Sprite.loadSheet("" + I.team + "_goal_front", 640, 640, 0.2)&#x000A;  };&#x000A;  TeamSheet.bodyStyles.each(function(style) {&#x000A;    return self[style] = CharacterSheet({&#x000A;      team: I.team,&#x000A;      character: style&#x000A;    });&#x000A;  });&#x000A;  TeamSheet.headStyles.each(function(style) {&#x000A;    return self[style] = HeadSheet({&#x000A;      team: I.team,&#x000A;      character: style&#x000A;    });&#x000A;  });&#x000A;  return self;&#x000A;};&#x000A;&#x000A;TeamSheet.bodyStyles = ["tubs", "skinny", "thick"];&#x000A;&#x000A;TeamSheet.headStyles = ["bigeyes", "jawhead", "longface", "roundhead", "stubs"];&#x000A;&#x000A;var Zamboni;&#x000A;&#x000A;Zamboni = function(I) {&#x000A;  var SWEEPER_SIZE, bounds, cleanIce, generatePath, heading, lastPosition, path, pathIndex, pathfind, self;&#x000A;  $.reverseMerge(I, {&#x000A;    blood: 0,&#x000A;    careening: false,&#x000A;    color: "yellow",&#x000A;    fuse: 30,&#x000A;    strength: 5,&#x000A;    radius: 50,&#x000A;    rotation: 0,&#x000A;    width: 96,&#x000A;    height: 48,&#x000A;    speed: 8,&#x000A;    scale: 0.375,&#x000A;    x: 0,&#x000A;    y: ARENA_HEIGHT / 2 + WALL_TOP,&#x000A;    velocity: Point(1, 0),&#x000A;    mass: 10,&#x000A;    team: "smiley",&#x000A;    zIndex: 10&#x000A;  });&#x000A;  SWEEPER_SIZE = 48;&#x000A;  bounds = 256;&#x000A;  if (I.reverse) I.x = App.width;&#x000A;  path = [];&#x000A;  generatePath = function() {&#x000A;    var horizontalPoints, verticalPoints;&#x000A;    horizontalPoints = ARENA_WIDTH / SWEEPER_SIZE;&#x000A;    verticalPoints = ARENA_HEIGHT / SWEEPER_SIZE;&#x000A;    path.push(Point(0, verticalPoints / 2));&#x000A;    (horizontalPoints / 2 - 1).floor().times(function(x) {&#x000A;      var xEnd, y, yEnd;&#x000A;      x += 0.5;&#x000A;      y = 3 / 4 * x + 0.5;&#x000A;      xEnd = horizontalPoints - x;&#x000A;      yEnd = verticalPoints - y;&#x000A;      path.push(Point(x, y));&#x000A;      path.push(Point(xEnd, y));&#x000A;      path.push(Point(xEnd, yEnd));&#x000A;      path.push(Point(x, yEnd));&#x000A;      return path.push(Point(x, y + 3 / 4));&#x000A;    });&#x000A;    path.push(Point(0, verticalPoints / 2));&#x000A;    return path.push(Point(-10, verticalPoints / 2));&#x000A;  };&#x000A;  generatePath();&#x000A;  self = Base(I).extend({&#x000A;    controlCircle: function() {&#x000A;      return self.circle();&#x000A;    },&#x000A;    crush: function(other) {&#x000A;      if (!other.puck()) return I.blood = (I.blood + 1).clamp(0, 6);&#x000A;    },&#x000A;    controlPuck: $.noop,&#x000A;    collidesWithWalls: function() {&#x000A;      return I.careening;&#x000A;    },&#x000A;    wipeout: function() {&#x000A;      if (I.careening) {&#x000A;        return self.destroy();&#x000A;      } else {&#x000A;        return I.careening = true;&#x000A;      }&#x000A;    }&#x000A;  });&#x000A;  heading = 0;&#x000A;  lastPosition = null;&#x000A;  pathIndex = 0;&#x000A;  cleanIce = function() {&#x000A;    var boxPoints, currentPos;&#x000A;    currentPos = self.center();&#x000A;    boxPoints = [Point(SWEEPER_SIZE / 2, 0), Point(SWEEPER_SIZE, 0), Point(SWEEPER_SIZE, SWEEPER_SIZE), Point(SWEEPER_SIZE / 2, SWEEPER_SIZE)].map(function(p) {&#x000A;      return self.transform().transformPoint(p);&#x000A;    });&#x000A;    bloodCanvas.globalCompositeOperation("destination-out");&#x000A;    bloodCanvas.globalAlpha(0.25);&#x000A;    bloodCanvas.drawCircle({&#x000A;      position: currentPos,&#x000A;      radius: SWEEPER_SIZE / 2,&#x000A;      color: "#000"&#x000A;    });&#x000A;    bloodCanvas.drawPoly({&#x000A;      points: boxPoints,&#x000A;      color: "#000"&#x000A;    });&#x000A;    bloodCanvas.globalAlpha(1);&#x000A;    return bloodCanvas.globalCompositeOperation("source-over");&#x000A;  };&#x000A;  pathfind = function() {&#x000A;    var center, nextTarget;&#x000A;    if (path[pathIndex]) {&#x000A;      nextTarget = path[pathIndex].scale(SWEEPER_SIZE).add(Point(WALL_LEFT, WALL_TOP));&#x000A;      if (I.reverse) {&#x000A;        nextTarget = Matrix.scale(-1, 1, Point(WALL_LEFT + ARENA_WIDTH / 2, WALL_TOP + ARENA_HEIGHT / 2)).transformPoint(nextTarget);&#x000A;      }&#x000A;      nextTarget.radius = 0;&#x000A;      center = self.center();&#x000A;      center.radius = 5;&#x000A;      if (Collision.circular(center, nextTarget)) pathIndex += 1;&#x000A;      return I.velocity = nextTarget.subtract(center).norm().scale(I.speed);&#x000A;    }&#x000A;  };&#x000A;  self.bind("step", function() {&#x000A;    var facing;&#x000A;    if (I.x < -bounds || I.x > App.width + bounds) I.active = false;&#x000A;    if (I.careening) {&#x000A;      I.rotation += Math.TAU / 10;&#x000A;      I.fuse -= 1;&#x000A;      if (I.fuse <= 0) return self.destroy();&#x000A;    } else {&#x000A;      pathfind();&#x000A;      heading = Point.direction(Point(0, 0), I.velocity);&#x000A;      if (!(I.age < 1)) cleanIce();&#x000A;      I.hflip = heading > 2 * Math.TAU / 8 || heading < -2 * Math.TAU / 8;&#x000A;      facing = "e";&#x000A;      if ((Math.TAU / 8 < heading && heading < 3 * Math.TAU / 8)) {&#x000A;        facing = "s";&#x000A;      } else if ((-Math.TAU / 8 > heading && heading > -3 * Math.TAU / 8)) {&#x000A;        facing = "n";&#x000A;      }&#x000A;      return I.sprite = Zamboni.sprites[I.team][facing];&#x000A;    }&#x000A;  });&#x000A;  self.bind("destroy", function() {&#x000A;    return engine.add({&#x000A;      "class": "Shockwave",&#x000A;      x: I.x + I.width / 2,&#x000A;      y: I.y + I.height / 2,&#x000A;      velocity: I.velocity&#x000A;    });&#x000A;  });&#x000A;  return self;&#x000A;};&#x000A;&#x000A;Zamboni.sprites = {};&#x000A;&#x000A;["smiley", "spike"].each(function(team) {&#x000A;  return Zamboni.sprites[team] = {&#x000A;    n: Sprite.loadByName("" + team + "_zamboni_drive_n"),&#x000A;    s: Sprite.loadByName("" + team + "_zamboni_drive_s"),&#x000A;    e: Sprite.loadByName("" + team + "_zamboni_drive_e")&#x000A;  };&#x000A;});&#x000A;&#x000A;App.entities = {};&#x000A;;$(function(){ var DEBUG_DRAW, canvas, drawStartTime, updateDuration, updateStartTime;&#x000A;&#x000A;window.sprites = Sprite.loadSheet("sprites", 32, 48);&#x000A;&#x000A;window.wideSprites = Sprite.loadSheet("sprites", 64, 48);&#x000A;&#x000A;window.tallSprites = Sprite.loadSheet("sprites", 32, 96);&#x000A;&#x000A;window.teamSprites = {};&#x000A;&#x000A;["mutant", "hiss"].each(function(name) {&#x000A;  return teamSprites[name] = TeamSheet({&#x000A;    team: name&#x000A;  });&#x000A;});&#x000A;&#x000A;window.CANVAS_WIDTH = App.width;&#x000A;&#x000A;window.CANVAS_HEIGHT = App.height;&#x000A;&#x000A;window.WALL_LEFT = 0;&#x000A;&#x000A;window.WALL_RIGHT = CANVAS_WIDTH - WALL_LEFT;&#x000A;&#x000A;window.WALL_TOP = 192;&#x000A;&#x000A;window.WALL_BOTTOM = CANVAS_HEIGHT - (WALL_TOP - 128);&#x000A;&#x000A;window.ARENA_WIDTH = WALL_RIGHT - WALL_LEFT;&#x000A;&#x000A;window.ARENA_HEIGHT = WALL_BOTTOM - WALL_TOP;&#x000A;&#x000A;window.BLOOD_COLOR = "#BA1A19";&#x000A;&#x000A;window.ICE_COLOR = "rgba(192, 255, 255, 0.2)";&#x000A;&#x000A;window.config = {&#x000A;  throwBottles: true,&#x000A;  players: [],&#x000A;  particleEffects: false,&#x000A;  music: false,&#x000A;  joysticks: true&#x000A;};&#x000A;&#x000A;window.rink = Rink();&#x000A;&#x000A;window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").appendTo("body").css({&#x000A;  position: "absolute",&#x000A;  top: 0,&#x000A;  left: 0,&#x000A;  zIndex: "-5"&#x000A;}).pixieCanvas();&#x000A;&#x000A;bloodCanvas.strokeColor(BLOOD_COLOR);&#x000A;&#x000A;window.MAX_PLAYERS = 6;&#x000A;&#x000A;window.activePlayers = 0;&#x000A;&#x000A;canvas = $("canvas").pixieCanvas();&#x000A;&#x000A;window.engine = Engine({&#x000A;  canvas: canvas,&#x000A;  includedModules: ["Joysticks"],&#x000A;  showFPS: true,&#x000A;  zSort: true,&#x000A;  FPS: 30&#x000A;});&#x000A;&#x000A;$(document).bind("keydown", "f2", function() {&#x000A;  return engine.setState(FrameEditorState());&#x000A;});&#x000A;&#x000A;$(document).bind("keydown", "f3", function() {&#x000A;  return engine.setState(MatchSetupState());&#x000A;});&#x000A;&#x000A;DEBUG_DRAW = false;&#x000A;&#x000A;$(document).bind("keydown", "0", function() {&#x000A;  return DEBUG_DRAW = !DEBUG_DRAW;&#x000A;});&#x000A;&#x000A;engine.bind("draw", function(canvas) {&#x000A;  if (DEBUG_DRAW) {&#x000A;    return engine.find("Player, Puck, Goal, Bottle, Zamboni").each(function(object) {&#x000A;      return object.trigger("drawDebug", canvas);&#x000A;    });&#x000A;  }&#x000A;});&#x000A;&#x000A;drawStartTime = null;&#x000A;&#x000A;updateDuration = null;&#x000A;&#x000A;engine.bind("beforeDraw", function() {&#x000A;  return drawStartTime = +(new Date);&#x000A;});&#x000A;&#x000A;engine.bind("overlay", function(canvas) {&#x000A;  var drawDuration;&#x000A;  drawDuration = (+(new Date)) - drawStartTime;&#x000A;  if (DEBUG_DRAW) {&#x000A;    canvas.drawText({&#x000A;      color: "white",&#x000A;      text: "ms/draw: " + drawDuration,&#x000A;      x: 10,&#x000A;      y: 30&#x000A;    });&#x000A;    return canvas.drawText({&#x000A;      color: "white",&#x000A;      text: "ms/update: " + updateDuration,&#x000A;      x: 10,&#x000A;      y: 50&#x000A;    });&#x000A;  }&#x000A;});&#x000A;&#x000A;updateStartTime = null;&#x000A;&#x000A;engine.bind("beforeUpdate", function() {&#x000A;  return updateStartTime = +(new Date);&#x000A;});&#x000A;&#x000A;engine.bind("afterUpdate", function(canvas) {&#x000A;  return updateDuration = (+(new Date)) - updateStartTime;&#x000A;});&#x000A;&#x000A;engine.setState(MatchSetupState());&#x000A;&#x000A;engine.start();&#x000A; });</code></pre>
         </section>
       </div>
       <hr />
@@ -316,7 +376,7 @@
         <section class='source'>
           <h3>Source</h3>
           <a class='toggle_source'>Toggle</a>
-          <pre><code>Sprite.loadSheet = function(name, tileWidth, tileHeight) {&#x000A;    var image, sprites, url;&#x000A;    url = ResourceLoader.urlFor("images", name);&#x000A;    sprites = [];&#x000A;    image = new Image();&#x000A;    image.onload = function() {&#x000A;      var imgElement;&#x000A;      imgElement = this;&#x000A;      return (image.height / tileHeight).times(function(row) {&#x000A;        return (image.width / tileWidth).times(function(col) {&#x000A;          return sprites.push(Sprite(imgElement, col * tileWidth, row * tileHeight, tileWidth, tileHeight));&#x000A;        });&#x000A;      });&#x000A;    };&#x000A;    image.src = url;&#x000A;    return sprites;&#x000A;  };</code></pre>
+          <pre><code>Sprite.loadSheet = function(name, tileWidth, tileHeight, scale) {&#x000A;    var image, sprites, url;&#x000A;    if (scale == null) scale = 1;&#x000A;    url = ResourceLoader.urlFor("images", name);&#x000A;    sprites = [];&#x000A;    image = new Image();&#x000A;    image.onload = function() {&#x000A;      var context, height, imgElement, width;&#x000A;      imgElement = this;&#x000A;      width = this.width * scale;&#x000A;      height = this.height * scale;&#x000A;      tileWidth *= scale;&#x000A;      tileHeight *= scale;&#x000A;      if (scale !== 1) {&#x000A;        imgElement = $("<canvas width=" + width + " height=" + height + ">").get(0);&#x000A;        context = imgElement.getContext('2d');&#x000A;        context.drawImage(this, 0, 0, this.width, this.height, 0, 0, width, height);&#x000A;      }&#x000A;      return (height / tileHeight).times(function(row) {&#x000A;        return (width / tileWidth).times(function(col) {&#x000A;          return sprites.push(Sprite(imgElement, col * tileWidth, row * tileHeight, tileWidth, tileHeight));&#x000A;        });&#x000A;      });&#x000A;    };&#x000A;    image.src = url;&#x000A;    return sprites;&#x000A;  };</code></pre>
         </section>
       </div>
       <hr />

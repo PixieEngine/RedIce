@@ -150,25 +150,7 @@
         <section class='summary'><p>Returns the rgba color channels in an array.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />transparent =  Color()</p>
-          
-          <p>transparent.channels()</p>
-          
-          <h1>=> [0, 0, 0, 0]</h1>
-          
-          <p>red = Color("#FF0000")</p>
-          
-          <p>red.channels()</p>
-          
-          <h1>=> [255, 0, 0, 1]</h1>
-          
-          <p>rgb = Color(200, 34, 2)</p>
-          
-          <p>rgb.channels()</p>
-          
-          <h1>=> [200, 34, 2, 1]</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />transparent =  Color()</p>&#x000A;&#x000A;<p>transparent.channels()</p>&#x000A;&#x000A;<h1>=> [0, 0, 0, 0]</h1>&#x000A;&#x000A;<p>red = Color("#FF0000")</p>&#x000A;&#x000A;<p>red.channels()</p>&#x000A;&#x000A;<h1>=> [255, 0, 0, 1]</h1>&#x000A;&#x000A;<p>rgb = Color(200, 34, 2)</p>&#x000A;&#x000A;<p>rgb.channels()</p>&#x000A;&#x000A;<h1>=> [200, 34, 2, 1]</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -192,13 +174,7 @@
         <section class='summary'><p>A copy of the calling color that is its complementary color on the color wheel.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code class="run"><pre><br />red = Color(255, 0, 0)</p>
-          
-          <p>cyan = red.complement()</p>
-          
-          <h1>to see what they look like</h1>
-          
-          <p>for color, index in [red, cyan]<br />  canvas.drawRect<br />    color: color<br />    x: 20 + (60 * index)<br />    y: 20 + (60 * index)<br />    width: 60<br />    height: 60 <br /><br /></pre></code></p>
+          <p><code class="run"><pre><br />red = Color(255, 0, 0)</p>&#x000A;&#x000A;<p>cyan = red.complement()</p>&#x000A;&#x000A;<h1>to see what they look like</h1>&#x000A;&#x000A;<p>for color, index in [red, cyan]<br />  canvas.drawRect<br />    color: color<br />    x: 20 + (60 * index)<br />    y: 20 + (60 * index)<br />    width: 60<br />    height: 60 <br /><br /></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -222,17 +198,7 @@
         <section class='summary'><p>Modifies the calling color to make it the complement of its previous value.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />red = Color(255, 0, 0)</p>
-          
-          <h1>modifies red in place to make it into cyan</h1>
-          
-          <p>red.complement$()</p>
-          
-          <p>red.toString()</p>
-          
-          <h1>=> 'rgba(0, 255, 255, 1)'</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />red = Color(255, 0, 0)</p>&#x000A;&#x000A;<h1>modifies red in place to make it into cyan</h1>&#x000A;&#x000A;<p>red.complement$()</p>&#x000A;&#x000A;<p>red.toString()</p>&#x000A;&#x000A;<h1>=> 'rgba(0, 255, 255, 1)'</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -256,19 +222,7 @@
         <section class='summary'><p>A copy of the calling color.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />color = Color(0, 100, 200)</p>
-          
-          <p>copy = color.copy()</p>
-          
-          <p>color == copy</p>
-          
-          <h1>=> false</h1>
-          
-          <p>color.equal(copy)</p>
-          
-          <h1>=> true</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />color = Color(0, 100, 200)</p>&#x000A;&#x000A;<p>copy = color.copy()</p>&#x000A;&#x000A;<p>color == copy</p>&#x000A;&#x000A;<h1>=> false</h1>&#x000A;&#x000A;<p>color.equal(copy)</p>&#x000A;&#x000A;<h1>=> true</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -292,13 +246,7 @@
         <section class='summary'><p>Returns a copy of the calling color darkened by <code>amount</code> (Lightness of the color ranges from 0 to 1).</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code class="run"><pre><br />green = Color(0, 255, 0)</p>
-          
-          <p>darkGreen = green.darken(0.3)</p>
-          
-          <h1>to see what they look like</h1>
-          
-          <p>for color, index in [green, darkGreen]<br />  canvas.drawRect<br />    color: color<br />    x: 20 + (60 * index)<br />    y: 20 + (60 * index)<br />    width: 60<br />    height: 60 <br /><br /></pre></code></p>
+          <p><code class="run"><pre><br />green = Color(0, 255, 0)</p>&#x000A;&#x000A;<p>darkGreen = green.darken(0.3)</p>&#x000A;&#x000A;<h1>to see what they look like</h1>&#x000A;&#x000A;<p>for color, index in [green, darkGreen]<br />  canvas.drawRect<br />    color: color<br />    x: 20 + (60 * index)<br />    y: 20 + (60 * index)<br />    width: 60<br />    height: 60 <br /><br /></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -332,17 +280,7 @@
         <section class='summary'><p>Modifies the color so that it is darkened by <code>amount</code> (Lightness of the color ranges from 0 to 1).</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />green = Color(0, 255, 0)</p>
-          
-          <h1>Modifies green to be darkGreen</h1>
-          
-          <p>green.darken$(0.3)</p>
-          
-          <p>green.toString()</p>
-          
-          <h1>=> 'rgba(0, 102, 0, 1)'</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />green = Color(0, 255, 0)</p>&#x000A;&#x000A;<h1>Modifies green to be darkGreen</h1>&#x000A;&#x000A;<p>green.darken$(0.3)</p>&#x000A;&#x000A;<p>green.toString()</p>&#x000A;&#x000A;<h1>=> 'rgba(0, 102, 0, 1)'</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -376,13 +314,7 @@
         <section class='summary'><p>A copy of the calling color with its saturation reduced by <code>amount</code>.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code class="run"><pre><br />blue = Color(0, 0, 255)</p>
-          
-          <p>desaturatedBlue = blue.desaturate(0.4)</p>
-          
-          <h1>to see what they look like</h1>
-          
-          <p>for color, index in [blue, desaturatedBlue]<br />  canvas.drawRect<br />    color: color<br />    x: 20 + (60 * index)<br />    y: 20 + (60 * index)<br />    width: 60<br />    height: 60 <br /><br /></pre></code></p>
+          <p><code class="run"><pre><br />blue = Color(0, 0, 255)</p>&#x000A;&#x000A;<p>desaturatedBlue = blue.desaturate(0.4)</p>&#x000A;&#x000A;<h1>to see what they look like</h1>&#x000A;&#x000A;<p>for color, index in [blue, desaturatedBlue]<br />  canvas.drawRect<br />    color: color<br />    x: 20 + (60 * index)<br />    y: 20 + (60 * index)<br />    width: 60<br />    height: 60 <br /><br /></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -416,17 +348,7 @@
         <section class='summary'><p>The modified color with its saturation reduced by <code>amount</code>.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />blue = Color(0, 0, 255)</p>
-          
-          <h1>modifies blue to be desaturatedBlue</h1>
-          
-          <p>blue.desaturate$(0.4)</p>
-          
-          <p>blue.toString()</p>
-          
-          <h1>=> 'rgba(38, 38, 217, 1)'</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />blue = Color(0, 0, 255)</p>&#x000A;&#x000A;<h1>modifies blue to be desaturatedBlue</h1>&#x000A;&#x000A;<p>blue.desaturate$(0.4)</p>&#x000A;&#x000A;<p>blue.toString()</p>&#x000A;&#x000A;<h1>=> 'rgba(38, 38, 217, 1)'</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -460,17 +382,7 @@
         <section class='summary'><p>Determine whether two colors are equal. Compares their r, g, b, and alpha values.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />hex = Color('#ffff00')<br />rgb = Color(255, 255, 0)</p>
-          
-          <p>hex == rgb</p>
-          
-          <h1>=> false</h1>
-          
-          <p>hex.equal(rgb)</p>
-          
-          <h1>=> true</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />hex = Color('#ffff00')<br />rgb = Color(255, 255, 0)</p>&#x000A;&#x000A;<p>hex == rgb</p>&#x000A;&#x000A;<h1>=> false</h1>&#x000A;&#x000A;<p>hex.equal(rgb)</p>&#x000A;&#x000A;<h1>=> true</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -504,13 +416,7 @@
         <section class='summary'><p>A copy of the calling color converted to grayscale.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code class="run"><pre><br />yellow = Color(255, 255, 0)</p>
-          
-          <p>gray = yellow.grayscale()</p>
-          
-          <h1>to see what they look like</h1>
-          
-          <p>for color, index in [yellow, gray]<br />  canvas.drawRect<br />    color: color<br />    x: 20 + (60 * index)<br />    y: 20 + (60 * index)<br />    width: 60<br />    height: 60 <br /></pre></code>    </p>
+          <p><code class="run"><pre><br />yellow = Color(255, 255, 0)</p>&#x000A;&#x000A;<p>gray = yellow.grayscale()</p>&#x000A;&#x000A;<h1>to see what they look like</h1>&#x000A;&#x000A;<p>for color, index in [yellow, gray]<br />  canvas.drawRect<br />    color: color<br />    x: 20 + (60 * index)<br />    y: 20 + (60 * index)<br />    width: 60<br />    height: 60 <br /></pre></code>    </p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -534,17 +440,7 @@
         <section class='summary'><p>The calling color converted to grayscale.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />color = Color(255, 255, 0)</p>
-          
-          <h1>modifies color into gray</h1>
-          
-          <p>color.grayscale$()</p>
-          
-          <p>color.toString()</p>
-          
-          <h1>=> 'rgba(128, 128, 128, 1)'</h1>
-          
-          <p></pre></code>  </p>
+          <p><code><pre><br />color = Color(255, 255, 0)</p>&#x000A;&#x000A;<h1>modifies color into gray</h1>&#x000A;&#x000A;<p>color.grayscale$()</p>&#x000A;&#x000A;<p>color.toString()</p>&#x000A;&#x000A;<h1>=> 'rgba(128, 128, 128, 1)'</h1>&#x000A;&#x000A;<p></pre></code>  </p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -568,19 +464,7 @@
         <section class='summary'><p>A getter / setter for the hue value of the color. Passing no argument returns the <br />current hue value. Passing a value will set the hue to that value and return the color.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code class="run"><pre><br />magenta = Color(255, 0, 255)</p>
-          
-          <p>magenta.hue()</p>
-          
-          <h1>=> 300</h1>
-          
-          <h1>modifies the color to be yellow</h1>
-          
-          <p>magenta.hue(60)</p>
-          
-          <h1>to see what it looks like</h1>
-          
-          <p>canvas.drawRect<br />  color: magenta<br />  x: 50 <br />  y: 30 <br />  width: 80<br />  height: 80 <br /></pre></code>  </p>
+          <p><code class="run"><pre><br />magenta = Color(255, 0, 255)</p>&#x000A;&#x000A;<p>magenta.hue()</p>&#x000A;&#x000A;<h1>=> 300</h1>&#x000A;&#x000A;<h1>modifies the color to be yellow</h1>&#x000A;&#x000A;<p>magenta.hue(60)</p>&#x000A;&#x000A;<h1>to see what it looks like</h1>&#x000A;&#x000A;<p>canvas.drawRect<br />  color: magenta<br />  x: 50 <br />  y: 30 <br />  width: 80<br />  height: 80 <br /></pre></code>  </p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -614,13 +498,7 @@
         <section class='summary'><p>Returns a copy of the calling color lightened by <code>amount</code> (Lightness of the color ranges from 0 to 1).</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code class="run"><pre><br />green = Color(0, 255, 0)</p>
-          
-          <p>lightGreen = green.lighten(0.3)</p>
-          
-          <h1>to see what they look like</h1>
-          
-          <p>for color, index in [green, lightGreen]<br />  canvas.drawRect<br />    color: color<br />    x: 20 + (60 * index)<br />    y: 20 + (60 * index)<br />    width: 60<br />    height: 60 <br /></pre></code></p>
+          <p><code class="run"><pre><br />green = Color(0, 255, 0)</p>&#x000A;&#x000A;<p>lightGreen = green.lighten(0.3)</p>&#x000A;&#x000A;<h1>to see what they look like</h1>&#x000A;&#x000A;<p>for color, index in [green, lightGreen]<br />  canvas.drawRect<br />    color: color<br />    x: 20 + (60 * index)<br />    y: 20 + (60 * index)<br />    width: 60<br />    height: 60 <br /></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -654,19 +532,7 @@
         <section class='summary'><p>The calling color lightened by <code>amount</code> (Lightness of the color ranges from 0 to 1).</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />green = Color(0, 255, 0)</p>
-          
-          <p>green.lighten$(0.2)</p>
-          
-          <h1>we have modified green in place</h1>
-          
-          <h1>to become lightGreen</h1>
-          
-          <p>green.toString()</p>
-          
-          <h1>=> 'rgba(102, 255, 102, 1)'</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />green = Color(0, 255, 0)</p>&#x000A;&#x000A;<p>green.lighten$(0.2)</p>&#x000A;&#x000A;<h1>we have modified green in place</h1>&#x000A;&#x000A;<h1>to become lightGreen</h1>&#x000A;&#x000A;<p>green.toString()</p>&#x000A;&#x000A;<h1>=> 'rgba(102, 255, 102, 1)'</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -700,19 +566,7 @@
         <section class='summary'><p>A getter / setter for the lightness value of the color. Passing no argument returns the <br />current lightness value. Passing a value will set the lightness to that value and return the color.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code class="run"><pre><br />magenta = Color(255, 0, 255)</p>
-          
-          <p>magenta.lightness()</p>
-          
-          <h1>=> 0.9</h1>
-          
-          <h1>modifies magenta in place to be lighter</h1>
-          
-          <p>magenta.lightness(0.75)</p>
-          
-          <h1>to see what it looks like</h1>
-          
-          <p>canvas.drawRect<br />  color: magenta<br />  x: 50 <br />  y: 30 <br />  width: 80<br />  height: 80 <br /></pre></code>  </p>
+          <p><code class="run"><pre><br />magenta = Color(255, 0, 255)</p>&#x000A;&#x000A;<p>magenta.lightness()</p>&#x000A;&#x000A;<h1>=> 0.9</h1>&#x000A;&#x000A;<h1>modifies magenta in place to be lighter</h1>&#x000A;&#x000A;<p>magenta.lightness(0.75)</p>&#x000A;&#x000A;<h1>to see what it looks like</h1>&#x000A;&#x000A;<p>canvas.drawRect<br />  color: magenta<br />  x: 50 <br />  y: 30 <br />  width: 80<br />  height: 80 <br /></pre></code>  </p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -746,19 +600,7 @@
         <section class='summary'><p>A copy of the calling color mixed with <code>other</code> using <code>amount</code> as the <br />mixing ratio. If amount is not passed, then the colors are mixed evenly.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code class="run"><pre><br />red = Color(255, 0, 0)<br />yellow = Color(255, 255, 0)</p>
-          
-          <h1>With no amount argument the colors are mixed evenly</h1>
-          
-          <p>orange = red.mixWith(yellow)</p>
-          
-          <h1>With an amount of 0.3 we are mixing the color 30% red and 70% yellow</h1>
-          
-          <p>somethingCloseToOrange = red.mixWith(yellow, 0.3)</p>
-          
-          <h1>to see what they look like</h1>
-          
-          <p>for color, index in [red, yellow, orange, somethingCloseToOrange]<br />  canvas.drawRect<br />    color: color<br />    x: 20 + (60 * (index % 2))<br />    y: 20 + (60 * (if index > 1 then 1 else 0))<br />    width: 60<br />    height: 60 <br /></pre></code></p>
+          <p><code class="run"><pre><br />red = Color(255, 0, 0)<br />yellow = Color(255, 255, 0)</p>&#x000A;&#x000A;<h1>With no amount argument the colors are mixed evenly</h1>&#x000A;&#x000A;<p>orange = red.mixWith(yellow)</p>&#x000A;&#x000A;<h1>With an amount of 0.3 we are mixing the color 30% red and 70% yellow</h1>&#x000A;&#x000A;<p>somethingCloseToOrange = red.mixWith(yellow, 0.3)</p>&#x000A;&#x000A;<h1>to see what they look like</h1>&#x000A;&#x000A;<p>for color, index in [red, yellow, orange, somethingCloseToOrange]<br />  canvas.drawRect<br />    color: color<br />    x: 20 + (60 * (index % 2))<br />    y: 20 + (60 * (if index > 1 then 1 else 0))<br />    width: 60<br />    height: 60 <br /></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -797,29 +639,7 @@
         <section class='summary'><p>A copy of the calling color mixed with <code>other</code> using <code>amount</code> as the <br />mixing ratio. If amount is not passed, then the colors are mixed evenly.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />red = Color(255, 0, 0)<br />yellow = Color(255, 255, 0)<br />anotherRed = Color(255, 0, 0)</p>
-          
-          <h1>With no amount argument the colors are mixed evenly</h1>
-          
-          <p>red.mixWith$(yellow)</p>
-          
-          <h1>We have modified red in place to be orange</h1>
-          
-          <p>red.toString()</p>
-          
-          <h1>=> 'rgba(255, 128, 0, 1)'</h1>
-          
-          <h1>With an amount of 0.3 we are mixing the color 30% red and 70% yellow</h1>
-          
-          <p>anotherRed.mixWith$(yellow, 0.3)</p>
-          
-          <h1>We have modified <code>anotherRed</code> in place to be somethingCloseToOrange</h1>
-          
-          <p>anotherRed.toString()</p>
-          
-          <h1>=> rgba(255, 179, 0, 1)</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />red = Color(255, 0, 0)<br />yellow = Color(255, 255, 0)<br />anotherRed = Color(255, 0, 0)</p>&#x000A;&#x000A;<h1>With no amount argument the colors are mixed evenly</h1>&#x000A;&#x000A;<p>red.mixWith$(yellow)</p>&#x000A;&#x000A;<h1>We have modified red in place to be orange</h1>&#x000A;&#x000A;<p>red.toString()</p>&#x000A;&#x000A;<h1>=> 'rgba(255, 128, 0, 1)'</h1>&#x000A;&#x000A;<h1>With an amount of 0.3 we are mixing the color 30% red and 70% yellow</h1>&#x000A;&#x000A;<p>anotherRed.mixWith$(yellow, 0.3)</p>&#x000A;&#x000A;<h1>We have modified <code>anotherRed</code> in place to be somethingCloseToOrange</h1>&#x000A;&#x000A;<p>anotherRed.toString()</p>&#x000A;&#x000A;<h1>=> rgba(255, 179, 0, 1)</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -858,21 +678,7 @@
         <section class='summary'><p>A copy of the calling color with its alpha increased by <code>amount</code>.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code class="run"><pre><br />color = Color(0, 0, 0, 0.25)</p>
-          
-          <p>color.a</p>
-          
-          <h1>=> 0.25</h1>
-          
-          <p>opaqueColor = color.opacify(0.5)</p>
-          
-          <p>opaqueColor.a</p>
-          
-          <h1>=> 0.75</h1>
-          
-          <h1>to see what they look like</h1>
-          
-          <p>for color, index in [color, opaqueColor]<br />  canvas.drawRect<br />    color: color<br />    x: 20 + (60 * index)<br />    y: 20 + (60 * index)<br />    width: 60<br />    height: 60 <br /><br /></pre></code></p>
+          <p><code class="run"><pre><br />color = Color(0, 0, 0, 0.25)</p>&#x000A;&#x000A;<p>color.a</p>&#x000A;&#x000A;<h1>=> 0.25</h1>&#x000A;&#x000A;<p>opaqueColor = color.opacify(0.5)</p>&#x000A;&#x000A;<p>opaqueColor.a</p>&#x000A;&#x000A;<h1>=> 0.75</h1>&#x000A;&#x000A;<h1>to see what they look like</h1>&#x000A;&#x000A;<p>for color, index in [color, opaqueColor]<br />  canvas.drawRect<br />    color: color<br />    x: 20 + (60 * index)<br />    y: 20 + (60 * index)<br />    width: 60<br />    height: 60 <br /><br /></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -896,21 +702,7 @@
         <section class='summary'><p>The calling color with its alpha increased by <code>amount</code>.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />color = Color(0, 0, 0, 0)</p>
-          
-          <p>color.a</p>
-          
-          <h1>=> 0</h1>
-          
-          <h1>We modify color in place</h1>
-          
-          <p>color.opacify$(0.25)</p>
-          
-          <p>color.a</p>
-          
-          <h1>=> 0.25</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />color = Color(0, 0, 0, 0)</p>&#x000A;&#x000A;<p>color.a</p>&#x000A;&#x000A;<h1>=> 0</h1>&#x000A;&#x000A;<h1>We modify color in place</h1>&#x000A;&#x000A;<p>color.opacify$(0.25)</p>&#x000A;&#x000A;<p>color.a</p>&#x000A;&#x000A;<h1>=> 0.25</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -934,21 +726,7 @@
         <section class='summary'><p>A copy of the calling color with its saturation increased by <code>amount</code>.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code class="run"><pre><br />color = Color(50, 50, 200)</p>
-          
-          <p>color.saturation()</p>
-          
-          <h1>=> 0.6</h1>
-          
-          <p>saturatedColor = color.saturate(0.2)</p>
-          
-          <p>saturatedColor.saturation()</p>
-          
-          <h1>=> 0.8</h1>
-          
-          <h1>to see what they look like</h1>
-          
-          <p>for color, index in [color, saturatedColor]<br />  canvas.drawRect<br />    color: color<br />    x: 20 + (60 * index)<br />    y: 20 + (60 * index)<br />    width: 60<br />    height: 60 <br /></pre></code></p>
+          <p><code class="run"><pre><br />color = Color(50, 50, 200)</p>&#x000A;&#x000A;<p>color.saturation()</p>&#x000A;&#x000A;<h1>=> 0.6</h1>&#x000A;&#x000A;<p>saturatedColor = color.saturate(0.2)</p>&#x000A;&#x000A;<p>saturatedColor.saturation()</p>&#x000A;&#x000A;<h1>=> 0.8</h1>&#x000A;&#x000A;<h1>to see what they look like</h1>&#x000A;&#x000A;<p>for color, index in [color, saturatedColor]<br />  canvas.drawRect<br />    color: color<br />    x: 20 + (60 * index)<br />    y: 20 + (60 * index)<br />    width: 60<br />    height: 60 <br /></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -982,25 +760,7 @@
         <section class='summary'><p>The calling color with its saturation increased by <code>amount</code>.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />color = Color(50, 50, 200)</p>
-          
-          <p>color.saturation()</p>
-          
-          <h1>=> 0.6</h1>
-          
-          <p>color.saturate$(0.2)</p>
-          
-          <h1>We have modified color in place and increased its saturation to 0.8</h1>
-          
-          <p>color.saturation()</p>
-          
-          <h1>=> 0.8</h1>
-          
-          <p>color.toString()</p>
-          
-          <h1>=> rgba(25, 25, 225, 1)</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />color = Color(50, 50, 200)</p>&#x000A;&#x000A;<p>color.saturation()</p>&#x000A;&#x000A;<h1>=> 0.6</h1>&#x000A;&#x000A;<p>color.saturate$(0.2)</p>&#x000A;&#x000A;<h1>We have modified color in place and increased its saturation to 0.8</h1>&#x000A;&#x000A;<p>color.saturation()</p>&#x000A;&#x000A;<h1>=> 0.8</h1>&#x000A;&#x000A;<p>color.toString()</p>&#x000A;&#x000A;<h1>=> rgba(25, 25, 225, 1)</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -1034,17 +794,7 @@
         <section class='summary'><p>A getter / setter for the saturation value of the color. Passing no argument returns the <br />current saturation value. Passing a value will set the saturation to that value and return the color.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code class="run"><pre><br />yellow = Color('hsl(60, 0.5, 0.5)')</p>
-          
-          <p>yellow.saturation()</p>
-          
-          <h1>=> 0.5</h1>
-          
-          <p>yellow.saturation(0.8)</p>
-          
-          <h1>to see what it looks like</h1>
-          
-          <p>canvas.drawRect<br />  color: yellow<br />  x: 50 <br />  y: 30 <br />  width: 80<br />  height: 80 <br /><br /></pre></code></p>
+          <p><code class="run"><pre><br />yellow = Color('hsl(60, 0.5, 0.5)')</p>&#x000A;&#x000A;<p>yellow.saturation()</p>&#x000A;&#x000A;<h1>=> 0.5</h1>&#x000A;&#x000A;<p>yellow.saturation(0.8)</p>&#x000A;&#x000A;<h1>to see what it looks like</h1>&#x000A;&#x000A;<p>canvas.drawRect<br />  color: yellow<br />  x: 50 <br />  y: 30 <br />  width: 80<br />  height: 80 <br /><br /></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -1078,25 +828,7 @@
         <section class='summary'><p>A copy of the calling color with its hue shifted by <code>degrees</code>. This differs from the hue setter in that it adds to the existing hue value and will wrap around 0 and 360.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code class="run"><pre><br />magenta = Color(255, 0, 255)</p>
-          
-          <p>magenta.hue()</p>
-          
-          <h1>=> 300</h1>
-          
-          <p>yellow = magenta.shiftHue(120)</p>
-          
-          <h1>since magenta's hue is 300 we have wrapped</h1>
-          
-          <h1>around 360 to end up at 60</h1>
-          
-          <p>yellow.hue()</p>
-          
-          <h1>=> 60</h1>
-          
-          <h1>to see what they look like</h1>
-          
-          <p>for color, index in [magenta, yellow]<br />  canvas.drawRect<br />    color: color<br />    x: 20 + (60 * index)<br />    y: 20 + (60 * index)<br />    width: 60<br />    height: 60 <br /></pre></code></p>
+          <p><code class="run"><pre><br />magenta = Color(255, 0, 255)</p>&#x000A;&#x000A;<p>magenta.hue()</p>&#x000A;&#x000A;<h1>=> 300</h1>&#x000A;&#x000A;<p>yellow = magenta.shiftHue(120)</p>&#x000A;&#x000A;<h1>since magenta's hue is 300 we have wrapped</h1>&#x000A;&#x000A;<h1>around 360 to end up at 60</h1>&#x000A;&#x000A;<p>yellow.hue()</p>&#x000A;&#x000A;<h1>=> 60</h1>&#x000A;&#x000A;<h1>to see what they look like</h1>&#x000A;&#x000A;<p>for color, index in [magenta, yellow]<br />  canvas.drawRect<br />    color: color<br />    x: 20 + (60 * index)<br />    y: 20 + (60 * index)<br />    width: 60<br />    height: 60 <br /></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -1130,29 +862,7 @@
         <section class='summary'><p>The calling color with its hue shifted by <code>degrees</code>. This differs from the hue setter in that it adds to the existing hue value and will wrap around 0 and 360.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />magenta = Color(255, 0, 255)</p>
-          
-          <p>magenta.hue()</p>
-          
-          <h1>=> 300</h1>
-          
-          <p>magenta.shiftHue$(120)</p>
-          
-          <h1>since magenta's hue is 300 we have wrapped</h1>
-          
-          <h1>around 360 to end up at 60. Also we have</h1>
-          
-          <h1>modified magenta in place to become yellow</h1>
-          
-          <p>magenta.hue()</p>
-          
-          <h1>=> 60</h1>
-          
-          <p>magenta.toString()</p>
-          
-          <h1>=> 'rgba(255, 255, 0, 1)'</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />magenta = Color(255, 0, 255)</p>&#x000A;&#x000A;<p>magenta.hue()</p>&#x000A;&#x000A;<h1>=> 300</h1>&#x000A;&#x000A;<p>magenta.shiftHue$(120)</p>&#x000A;&#x000A;<h1>since magenta's hue is 300 we have wrapped</h1>&#x000A;&#x000A;<h1>around 360 to end up at 60. Also we have</h1>&#x000A;&#x000A;<h1>modified magenta in place to become yellow</h1>&#x000A;&#x000A;<p>magenta.hue()</p>&#x000A;&#x000A;<h1>=> 60</h1>&#x000A;&#x000A;<p>magenta.toString()</p>&#x000A;&#x000A;<h1>=> 'rgba(255, 255, 0, 1)'</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -1186,21 +896,7 @@
         <section class='summary'><p>returns the Hex representation of the color. Exclude the leading <code>#</code> by passing false. </p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />color = Color('hsl(60, 1, 0.5)')</p>
-          
-          <h1>passing nothing will leave the <code>#</code> intact</h1>
-          
-          <p>color.toHex()</p>
-          
-          <h1>=> '#ffff00'</h1>
-          
-          <h1>passing false will remove the <code>#</code></h1>
-          
-          <p>color.toHex(false)</p>
-          
-          <h1>=> 'ffff00'</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />color = Color('hsl(60, 1, 0.5)')</p>&#x000A;&#x000A;<h1>passing nothing will leave the <code>#</code> intact</h1>&#x000A;&#x000A;<p>color.toHex()</p>&#x000A;&#x000A;<h1>=> '#ffff00'</h1>&#x000A;&#x000A;<h1>passing false will remove the <code>#</code></h1>&#x000A;&#x000A;<p>color.toHex(false)</p>&#x000A;&#x000A;<h1>=> 'ffff00'</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -1234,13 +930,7 @@
         <section class='summary'><p>returns an array of the hue, saturation, lightness, and alpha values of the color. </p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />magenta = Color(255, 0, 255)</p>
-          
-          <p>magenta.toHsl()</p>
-          
-          <h1>=> [300, 1, 0.5, 1]</h1>
-          
-          <p></pre></code>  </p>
+          <p><code><pre><br />magenta = Color(255, 0, 255)</p>&#x000A;&#x000A;<p>magenta.toHsl()</p>&#x000A;&#x000A;<h1>=> [300, 1, 0.5, 1]</h1>&#x000A;&#x000A;<p></pre></code>  </p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -1264,13 +954,7 @@
         <section class='summary'><p>returns string rgba representation of the color. </p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />red = Color('#ff0000')</p>
-          
-          <p>red.toString()</p>
-          
-          <h1>=> 'rgba(255, 0, 0, 1)'</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />red = Color('#ff0000')</p>&#x000A;&#x000A;<p>red.toString()</p>&#x000A;&#x000A;<h1>=> 'rgba(255, 0, 0, 1)'</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -1294,21 +978,7 @@
         <section class='summary'><p>A copy of the calling color with its alpha reduced by <code>amount</code>.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code class="run"><pre><br />color = Color(0, 0, 0, 1)</p>
-          
-          <p>color.a</p>
-          
-          <h1>=> 1</h1>
-          
-          <p>transparentColor = color.transparentize(0.5)</p>
-          
-          <p>transparentColor.a</p>
-          
-          <h1>=> 0.5</h1>
-          
-          <h1>to see what they look like</h1>
-          
-          <p>for color, index in [color, transparentColor]<br />  canvas.drawRect<br />    color: color<br />    x: 20 + (60 * index)<br />    y: 20 + (60 * index)<br />    width: 60<br />    height: 60 <br /><br /></pre></code></p>
+          <p><code class="run"><pre><br />color = Color(0, 0, 0, 1)</p>&#x000A;&#x000A;<p>color.a</p>&#x000A;&#x000A;<h1>=> 1</h1>&#x000A;&#x000A;<p>transparentColor = color.transparentize(0.5)</p>&#x000A;&#x000A;<p>transparentColor.a</p>&#x000A;&#x000A;<h1>=> 0.5</h1>&#x000A;&#x000A;<h1>to see what they look like</h1>&#x000A;&#x000A;<p>for color, index in [color, transparentColor]<br />  canvas.drawRect<br />    color: color<br />    x: 20 + (60 * index)<br />    y: 20 + (60 * index)<br />    width: 60<br />    height: 60 <br /><br /></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -1332,21 +1002,7 @@
         <section class='summary'><p>The calling color with its alpha reduced by <code>amount</code>.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />color = Color(0, 0, 0, 1)</p>
-          
-          <p>color.a</p>
-          
-          <h1>=> 1</h1>
-          
-          <h1>We modify color in place</h1>
-          
-          <p>color.transparentize$(0.5)</p>
-          
-          <p>color.a</p>
-          
-          <h1>=> 0.5</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />color = Color(0, 0, 0, 1)</p>&#x000A;&#x000A;<p>color.a</p>&#x000A;&#x000A;<h1>=> 1</h1>&#x000A;&#x000A;<h1>We modify color in place</h1>&#x000A;&#x000A;<p>color.transparentize$(0.5)</p>&#x000A;&#x000A;<p>color.a</p>&#x000A;&#x000A;<h1>=> 0.5</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -1370,25 +1026,7 @@
         <section class='summary'><p>Mix two colors. Behaves just like <code>#mixWith</code> except that you are passing two colors.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />red = Color(255, 0, 0)<br />yellow = Color(255, 255, 0)</p>
-          
-          <h1>With no amount argument the colors are mixed evenly</h1>
-          
-          <p>orange = Color.mix(red, yellow)</p>
-          
-          <p>orange.toString()</p>
-          
-          <h1>=> 'rgba(255, 128, 0, 1)'</h1>
-          
-          <h1>With an amount of 0.3 we are mixing the color 30% red and 70% yellow</h1>
-          
-          <p>somethingCloseToOrange = Color.mix(red, yellow, 0.3)</p>
-          
-          <p>somethingCloseToOrange.toString()</p>
-          
-          <h1>=> rgba(255, 179, 0, 1)</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />red = Color(255, 0, 0)<br />yellow = Color(255, 255, 0)</p>&#x000A;&#x000A;<h1>With no amount argument the colors are mixed evenly</h1>&#x000A;&#x000A;<p>orange = Color.mix(red, yellow)</p>&#x000A;&#x000A;<p>orange.toString()</p>&#x000A;&#x000A;<h1>=> 'rgba(255, 128, 0, 1)'</h1>&#x000A;&#x000A;<h1>With an amount of 0.3 we are mixing the color 30% red and 70% yellow</h1>&#x000A;&#x000A;<p>somethingCloseToOrange = Color.mix(red, yellow, 0.3)</p>&#x000A;&#x000A;<p>somethingCloseToOrange.toString()</p>&#x000A;&#x000A;<h1>=> rgba(255, 179, 0, 1)</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -1432,15 +1070,7 @@
         <section class='summary'><p>returns a random color.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />Color.random().toString()</p>
-          
-          <h1>=> 'rgba(213, 144, 202, 1)'</h1>
-          
-          <p>Color.random().toString()</p>
-          
-          <h1>=> 'rgba(1, 211, 24, 1)'</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />Color.random().toString()</p>&#x000A;&#x000A;<h1>=> 'rgba(213, 144, 202, 1)'</h1>&#x000A;&#x000A;<p>Color.random().toString()</p>&#x000A;&#x000A;<h1>=> 'rgba(1, 211, 24, 1)'</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>

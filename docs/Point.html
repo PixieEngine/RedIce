@@ -116,27 +116,7 @@
         <section class='summary'><p>Adds a point to this one and returns the new point. You may<br />also use a two argument call like <code>point.add(x, y)</code><br />to add x and y values without a second point object.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />point = Point(2, 3).add(Point(3, 4))</p>
-          
-          <p>point.x</p>
-          
-          <h1>=> 5</h1>
-          
-          <p>point.y</p>
-          
-          <h1>=> 7</h1>
-          
-          <p>anotherPoint = Point(2, 3).add(3, 4)</p>
-          
-          <p>anotherPoint.x</p>
-          
-          <h1>=> 5</h1>
-          
-          <p>anotherPoint.y</p>
-          
-          <h1>=> 7</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />point = Point(2, 3).add(Point(3, 4))</p>&#x000A;&#x000A;<p>point.x</p>&#x000A;&#x000A;<h1>=> 5</h1>&#x000A;&#x000A;<p>point.y</p>&#x000A;&#x000A;<h1>=> 7</h1>&#x000A;&#x000A;<p>anotherPoint = Point(2, 3).add(3, 4)</p>&#x000A;&#x000A;<p>anotherPoint.x</p>&#x000A;&#x000A;<h1>=> 5</h1>&#x000A;&#x000A;<p>anotherPoint.y</p>&#x000A;&#x000A;<h1>=> 7</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -170,37 +150,7 @@
         <section class='summary'><p>Adds a point to this one, returning a modified point. You may<br />also use a two argument call like <code>point.add(x, y)</code><br />to add x and y values without a second point object.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />point = Point(2, 3)</p>
-          
-          <p>point.x</p>
-          
-          <h1>=> 2</h1>
-          
-          <p>point.y</p>
-          
-          <h1>=> 3</h1>
-          
-          <p>point.add$(Point(3, 4))</p>
-          
-          <p>point.x</p>
-          
-          <h1>=> 5</h1>
-          
-          <p>point.y</p>
-          
-          <h1>=> 7</h1>
-          
-          <p>anotherPoint = Point(2, 3)<br />anotherPoint.add$(3, 4)</p>
-          
-          <p>anotherPoint.x</p>
-          
-          <h1>=> 5</h1>
-          
-          <p>anotherPoint.y</p>
-          
-          <h1>=> 7</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />point = Point(2, 3)</p>&#x000A;&#x000A;<p>point.x</p>&#x000A;&#x000A;<h1>=> 2</h1>&#x000A;&#x000A;<p>point.y</p>&#x000A;&#x000A;<h1>=> 3</h1>&#x000A;&#x000A;<p>point.add$(Point(3, 4))</p>&#x000A;&#x000A;<p>point.x</p>&#x000A;&#x000A;<h1>=> 5</h1>&#x000A;&#x000A;<p>point.y</p>&#x000A;&#x000A;<h1>=> 7</h1>&#x000A;&#x000A;<p>anotherPoint = Point(2, 3)<br />anotherPoint.add$(3, 4)</p>&#x000A;&#x000A;<p>anotherPoint.x</p>&#x000A;&#x000A;<h1>=> 5</h1>&#x000A;&#x000A;<p>anotherPoint.y</p>&#x000A;&#x000A;<h1>=> 7</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -292,13 +242,7 @@
         <section class='summary'><p>Returns the direction in radians of this point from the origin.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />point = Point(0, 1)</p>
-          
-          <p>point.direction()</p>
-          
-          <h1>=> 1.5707963267948966 # Math.PI / 2</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />point = Point(0, 1)</p>&#x000A;&#x000A;<p>point.direction()</p>&#x000A;&#x000A;<h1>=> 1.5707963267948966 # Math.PI / 2</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -322,13 +266,7 @@
         <section class='summary'><p>Compute the Euclidean distance between this point and another point.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />pointA = Point(2, 3)<br />pointB = Point(9, 2)</p>
-          
-          <p>pointA.distance(pointB)</p>
-          
-          <h1>=> 7.0710678118654755 # Math.sqrt(50)</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />pointA = Point(2, 3)<br />pointB = Point(9, 2)</p>&#x000A;&#x000A;<p>pointA.distance(pointB)</p>&#x000A;&#x000A;<h1>=> 7.0710678118654755 # Math.sqrt(50)</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -396,17 +334,7 @@
         <section class='summary'><p>Determine whether this point is equal to another point.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />pointA = Point(2, 3)<br />pointB = Point(2, 3)<br />pointC = Point(4, 5)</p>
-          
-          <p>pointA.equal(pointB)</p>
-          
-          <h1>=> true</h1>
-          
-          <p>pointA.equal(pointC)</p>
-          
-          <h1>=> false</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />pointA = Point(2, 3)<br />pointB = Point(2, 3)<br />pointC = Point(4, 5)</p>&#x000A;&#x000A;<p>pointA.equal(pointB)</p>&#x000A;&#x000A;<h1>=> true</h1>&#x000A;&#x000A;<p>pointA.equal(pointC)</p>&#x000A;&#x000A;<h1>=> false</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -440,17 +368,7 @@
         <section class='summary'><p>Floor the x and y values, returning a new point.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />point = Point(3.4, 5.8).floor()</p>
-          
-          <p>point.x</p>
-          
-          <h1>=> 3</h1>
-          
-          <p>point.y</p>
-          
-          <h1>=> 5</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />point = Point(3.4, 5.8).floor()</p>&#x000A;&#x000A;<p>point.x</p>&#x000A;&#x000A;<h1>=> 3</h1>&#x000A;&#x000A;<p>point.y</p>&#x000A;&#x000A;<h1>=> 5</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -474,17 +392,7 @@
         <section class='summary'><p>Floor the x and y values, returning a modified point.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />point = Point(3.4, 5.8)<br />point.floor$()</p>
-          
-          <p>point.x</p>
-          
-          <h1>=> 3</h1>
-          
-          <p>point.y</p>
-          
-          <h1>=> 5</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />point = Point(3.4, 5.8)<br />point.floor$()</p>&#x000A;&#x000A;<p>point.x</p>&#x000A;&#x000A;<h1>=> 3</h1>&#x000A;&#x000A;<p>point.y</p>&#x000A;&#x000A;<h1>=> 5</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -508,13 +416,7 @@
         <section class='summary'><p>Computed the length of this point as though it were a vector from (0,0) to (x,y).</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />point = Point(5, 7)</p>
-          
-          <p>point.length()</p>
-          
-          <h1>=> 8.602325267042627</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />point = Point(5, 7)</p>&#x000A;&#x000A;<p>point.length()</p>&#x000A;&#x000A;<h1>=> 8.602325267042627</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -538,13 +440,7 @@
         <section class='summary'><p>Calculate the magnitude of this Point (Vector).</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />point = Point(5, 7)</p>
-          
-          <p>point.magnitude()</p>
-          
-          <h1>=> 8.602325267042627</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />point = Point(5, 7)</p>&#x000A;&#x000A;<p>point.magnitude()</p>&#x000A;&#x000A;<h1>=> 8.602325267042627</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -568,27 +464,7 @@
         <section class='summary'><p>The norm of a vector is the unit vector pointing in the same direction. This method<br />treats the point as though it is a vector from the origin to (x, y).</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />point = Point(2, 3).norm()</p>
-          
-          <p>point.x</p>
-          
-          <h1>=> 0.5547001962252291</h1>
-          
-          <p>point.y  </p>
-          
-          <h1>=> 0.8320502943378437</h1>
-          
-          <p>anotherPoint = Point(2, 3).norm(2)</p>
-          
-          <p>anotherPoint.x</p>
-          
-          <h1>=> 1.1094003924504583</h1>
-          
-          <p>anotherPoint.y   </p>
-          
-          <h1>=> 1.6641005886756874</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />point = Point(2, 3).norm()</p>&#x000A;&#x000A;<p>point.x</p>&#x000A;&#x000A;<h1>=> 0.5547001962252291</h1>&#x000A;&#x000A;<p>point.y  </p>&#x000A;&#x000A;<h1>=> 0.8320502943378437</h1>&#x000A;&#x000A;<p>anotherPoint = Point(2, 3).norm(2)</p>&#x000A;&#x000A;<p>anotherPoint.x</p>&#x000A;&#x000A;<h1>=> 1.1094003924504583</h1>&#x000A;&#x000A;<p>anotherPoint.y   </p>&#x000A;&#x000A;<h1>=> 1.6641005886756874</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -612,27 +488,7 @@
         <section class='summary'><p>The norm of a vector is the unit vector pointing in the same direction. This method<br />treats the point as though it is a vector from the origin to (x, y). Modifies the point in place.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />point = Point(2, 3).norm$()</p>
-          
-          <p>point.x</p>
-          
-          <h1>=> 0.5547001962252291</h1>
-          
-          <p>point.y  </p>
-          
-          <h1>=> 0.8320502943378437</h1>
-          
-          <p>anotherPoint = Point(2, 3).norm$(2)</p>
-          
-          <p>anotherPoint.x</p>
-          
-          <h1>=> 1.1094003924504583</h1>
-          
-          <p>anotherPoint.y   </p>
-          
-          <h1>=> 1.6641005886756874</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />point = Point(2, 3).norm$()</p>&#x000A;&#x000A;<p>point.x</p>&#x000A;&#x000A;<h1>=> 0.5547001962252291</h1>&#x000A;&#x000A;<p>point.y  </p>&#x000A;&#x000A;<h1>=> 0.8320502943378437</h1>&#x000A;&#x000A;<p>anotherPoint = Point(2, 3).norm$(2)</p>&#x000A;&#x000A;<p>anotherPoint.x</p>&#x000A;&#x000A;<h1>=> 1.1094003924504583</h1>&#x000A;&#x000A;<p>anotherPoint.y   </p>&#x000A;&#x000A;<h1>=> 1.6641005886756874</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='returns'>
           <h3>Returns</h3>
@@ -656,17 +512,7 @@
         <section class='summary'><p>Scale this Point (Vector) by a constant amount.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />point = Point(5, 6).scale(2)</p>
-          
-          <p>point.x</p>
-          
-          <h1>=> 10</h1>
-          
-          <p>point.y</p>
-          
-          <h1>=> 12</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />point = Point(5, 6).scale(2)</p>&#x000A;&#x000A;<p>point.x</p>&#x000A;&#x000A;<h1>=> 10</h1>&#x000A;&#x000A;<p>point.y</p>&#x000A;&#x000A;<h1>=> 12</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -700,27 +546,7 @@
         <section class='summary'><p>Scale this Point (Vector) by a constant amount. Modifies the point in place.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />point = Point(5, 6)</p>
-          
-          <p>point.x</p>
-          
-          <h1>=> 5</h1>
-          
-          <p>point.y</p>
-          
-          <h1>=> 6</h1>
-          
-          <p>point.scale$(2)</p>
-          
-          <p>point.x</p>
-          
-          <h1>=> 10</h1>
-          
-          <p>point.y</p>
-          
-          <h1>=> 12</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />point = Point(5, 6)</p>&#x000A;&#x000A;<p>point.x</p>&#x000A;&#x000A;<h1>=> 5</h1>&#x000A;&#x000A;<p>point.y</p>&#x000A;&#x000A;<h1>=> 6</h1>&#x000A;&#x000A;<p>point.scale$(2)</p>&#x000A;&#x000A;<p>point.x</p>&#x000A;&#x000A;<h1>=> 10</h1>&#x000A;&#x000A;<p>point.y</p>&#x000A;&#x000A;<h1>=> 12</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -754,27 +580,7 @@
         <section class='summary'><p>Subtracts a point to this one and returns the new point.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />point = Point(1, 2).subtract(Point(2, 0))</p>
-          
-          <p>point.x</p>
-          
-          <h1>=> -1</h1>
-          
-          <p>point.y</p>
-          
-          <h1>=> 2</h1>
-          
-          <p>anotherPoint = Point(1, 2).subtract(2, 0)</p>
-          
-          <p>anotherPoint.x</p>
-          
-          <h1>=> -1</h1>
-          
-          <p>anotherPoint.y</p>
-          
-          <h1>=> 2</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />point = Point(1, 2).subtract(Point(2, 0))</p>&#x000A;&#x000A;<p>point.x</p>&#x000A;&#x000A;<h1>=> -1</h1>&#x000A;&#x000A;<p>point.y</p>&#x000A;&#x000A;<h1>=> 2</h1>&#x000A;&#x000A;<p>anotherPoint = Point(1, 2).subtract(2, 0)</p>&#x000A;&#x000A;<p>anotherPoint.x</p>&#x000A;&#x000A;<h1>=> -1</h1>&#x000A;&#x000A;<p>anotherPoint.y</p>&#x000A;&#x000A;<h1>=> 2</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -808,37 +614,7 @@
         <section class='summary'><p>Subtracts a point to this one and returns the new point.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />point = Point(1, 2)</p>
-          
-          <p>point.x</p>
-          
-          <h1>=> 1</h1>
-          
-          <p>point.y</p>
-          
-          <h1>=> 2</h1>
-          
-          <p>point.subtract$(Point(2, 0))</p>
-          
-          <p>point.x</p>
-          
-          <h1>=> -1</h1>
-          
-          <p>point.y</p>
-          
-          <h1>=> 2</h1>
-          
-          <p>anotherPoint = Point(1, 2)<br />anotherPoint.subtract$(2, 0)</p>
-          
-          <p>anotherPoint.x</p>
-          
-          <h1>=> -1</h1>
-          
-          <p>anotherPoint.y</p>
-          
-          <h1>=> 2</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />point = Point(1, 2)</p>&#x000A;&#x000A;<p>point.x</p>&#x000A;&#x000A;<h1>=> 1</h1>&#x000A;&#x000A;<p>point.y</p>&#x000A;&#x000A;<h1>=> 2</h1>&#x000A;&#x000A;<p>point.subtract$(Point(2, 0))</p>&#x000A;&#x000A;<p>point.x</p>&#x000A;&#x000A;<h1>=> -1</h1>&#x000A;&#x000A;<p>point.y</p>&#x000A;&#x000A;<h1>=> 2</h1>&#x000A;&#x000A;<p>anotherPoint = Point(1, 2)<br />anotherPoint.subtract$(2, 0)</p>&#x000A;&#x000A;<p>anotherPoint.x</p>&#x000A;&#x000A;<h1>=> -1</h1>&#x000A;&#x000A;<p>anotherPoint.y</p>&#x000A;&#x000A;<h1>=> 2</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>

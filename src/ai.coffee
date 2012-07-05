@@ -10,7 +10,7 @@ AI = (I, self) ->
   directionAI = 
     goalie: ->
       ownGoal = engine.find("Goal").select (goal) ->
-        goal.team() == I.team
+        goal.team() == I.teamStyle
       .first()
 
       if ownGoal

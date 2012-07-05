@@ -18,6 +18,7 @@ Player = (I) ->
     falls: 0
     friction: 0.1
     heading: 0
+    joystick: true
     maxShotPower: 20
     movementDirection: 0
     radius: 20

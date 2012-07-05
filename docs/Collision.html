@@ -82,21 +82,7 @@
         <section class='summary'><p>Takes two circle objects and returns true if they collide (overlap), false otherwise.<br />Circle objects have x, y, and radius.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />player = GameObject<br />  x: 5<br />  y: 5<br />  radius: 10</p>
-          
-          <p>enemy = GameObject<br />  x: 10<br />  y: 10<br />  radius: 10</p>
-          
-          <p>farEnemy = GameObject<br />  x: 500<br />  y: 500<br />  radius: 30</p>
-          
-          <p>Collision.circular(player, enemy)</p>
-          
-          <h1>=> true</h1>
-          
-          <p>Collision.circular(player, farEnemy)</p>
-          
-          <h1>=> false</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />player = GameObject<br />  x: 5<br />  y: 5<br />  radius: 10</p>&#x000A;&#x000A;<p>enemy = GameObject<br />  x: 10<br />  y: 10<br />  radius: 10</p>&#x000A;&#x000A;<p>farEnemy = GameObject<br />  x: 500<br />  y: 500<br />  radius: 30</p>&#x000A;&#x000A;<p>Collision.circular(player, enemy)</p>&#x000A;&#x000A;<h1>=> true</h1>&#x000A;&#x000A;<p>Collision.circular(player, farEnemy)</p>&#x000A;&#x000A;<h1>=> false</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -135,25 +121,7 @@
         <section class='summary'><p>Collision holds many useful class methods for checking geometric overlap of various objects.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />player = engine.add<br />  class: "Player"<br />  x: 0<br />  y: 0<br />  width: 10<br />  height: 10</p>
-          
-          <p>enemy = engine.add<br />  class: "Enemy"<br />  x: 5<br />  y: 5<br />  width: 10<br />  height: 10</p>
-          
-          <p>enemy2 = engine.add<br />  class: "Enemy"<br />  x: -5<br />  y: -5<br />  width: 10<br />  height: 10</p>
-          
-          <p>Collision.collide(player, enemy, (p, e) -> ...)</p>
-          
-          <h1>=> callback is called once</h1>
-          
-          <p>Collision.collide(player, [enemy, enemy2], (p, e) -> ...)</p>
-          
-          <h1>=> callback is called twice</h1>
-          
-          <p>Collision.collide("Player", "Enemy", (p, e) -> ...)</p>
-          
-          <h1>=> callback is also called twice</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />player = engine.add<br />  class: "Player"<br />  x: 0<br />  y: 0<br />  width: 10<br />  height: 10</p>&#x000A;&#x000A;<p>enemy = engine.add<br />  class: "Enemy"<br />  x: 5<br />  y: 5<br />  width: 10<br />  height: 10</p>&#x000A;&#x000A;<p>enemy2 = engine.add<br />  class: "Enemy"<br />  x: -5<br />  y: -5<br />  width: 10<br />  height: 10</p>&#x000A;&#x000A;<p>Collision.collide(player, enemy, (p, e) -> ...)</p>&#x000A;&#x000A;<h1>=> callback is called once</h1>&#x000A;&#x000A;<p>Collision.collide(player, [enemy, enemy2], (p, e) -> ...)</p>&#x000A;&#x000A;<h1>=> callback is called twice</h1>&#x000A;&#x000A;<p>Collision.collide("Player", "Enemy", (p, e) -> ...)</p>&#x000A;&#x000A;<h1>=> callback is also called twice</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -202,13 +170,7 @@
         <section class='summary'><p>Detects whether a line intersects a circle.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />circle = engine.add<br />  class: "circle"<br />  x: 50<br />  y: 50<br />  radius: 10</p>
-          
-          <p>Collision.rayCircle(Point(0, 0), Point(1, 0), circle)</p>
-          
-          <h1>=> true</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />circle = engine.add<br />  class: "circle"<br />  x: 50<br />  y: 50<br />  radius: 10</p>&#x000A;&#x000A;<p>Collision.rayCircle(Point(0, 0), Point(1, 0), circle)</p>&#x000A;&#x000A;<h1>=> true</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -252,13 +214,7 @@
         <section class='summary'><p>Detects whether a line intersects a rectangle.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />rect = engine.add<br />  class: "circle"<br />  x: 50<br />  y: 50<br />  width: 20<br />  height: 20</p>
-          
-          <p>Collision.rayRectangle(Point(0, 0), Point(1, 0), rect)</p>
-          
-          <h1>=> true</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />rect = engine.add<br />  class: "circle"<br />  x: 50<br />  y: 50<br />  width: 20<br />  height: 20</p>&#x000A;&#x000A;<p>Collision.rayRectangle(Point(0, 0), Point(1, 0), rect)</p>&#x000A;&#x000A;<h1>=> true</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>
@@ -302,19 +258,7 @@
         <section class='summary'><p>Takes two bounds objects and returns true if they collide (overlap), false otherwise.<br />Bounds objects have x, y, width and height properties.</p></section>
         <section class='usage'>
           <h3>Usage</h3>
-          <p><code><pre><br />player = GameObject<br />  x: 0<br />  y: 0<br />  width: 10<br />  height: 10</p>
-          
-          <p>enemy = GameObject<br />  x: 5<br />  y: 5<br />  width: 10<br />  height: 10</p>
-          
-          <p>Collision.rectangular(player, enemy)</p>
-          
-          <h1>=> true</h1>
-          
-          <p>Collision.rectangular(player, {x: 50, y: 40, width: 30, height: 30})</p>
-          
-          <h1>=> false</h1>
-          
-          <p></pre></code></p>
+          <p><code><pre><br />player = GameObject<br />  x: 0<br />  y: 0<br />  width: 10<br />  height: 10</p>&#x000A;&#x000A;<p>enemy = GameObject<br />  x: 5<br />  y: 5<br />  width: 10<br />  height: 10</p>&#x000A;&#x000A;<p>Collision.rectangular(player, enemy)</p>&#x000A;&#x000A;<h1>=> true</h1>&#x000A;&#x000A;<p>Collision.rectangular(player, {x: 50, y: 40, width: 30, height: 30})</p>&#x000A;&#x000A;<h1>=> false</h1>&#x000A;&#x000A;<p></pre></code></p>
         </section>
         <section class='parameters'>
           <h3>Parameters</h3>

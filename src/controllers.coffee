@@ -117,4 +117,3 @@ layouts[selectedLayout].each (actions, i) ->
 
 # Export gameControlData to parent Environment
 parent.gameControlData = gameControlData
-

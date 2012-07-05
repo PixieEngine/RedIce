@@ -163,14 +163,13 @@ Configurator = (I) ->
           x += I.width/12
 
           canvas.withTransform Matrix.translation(x, y), (canvas) ->
-            canvas.withTransform Matrix.scale(0.75), ->
-              # Draw Body Sprite
-              if bodySprite = teamSprites[player.teamStyle][player.bodyStyle].slow.front[0]
-                bodySprite.draw(canvas, -bodySprite.width/2 - 20, -bodySprite.height/2)
-    
-              # Draw Head Sprite
-              if headSprite = teamSprites[player.teamStyle][player.headStyle].normal[0]
-                headSprite?.draw(canvas, -headSprite.width/2 + 20, -headSprite.height/2 - 80)
+            # Draw Body Sprite
+            if bodySprite = teamSprites[player.teamStyle][player.bodyStyle].slow.front[0]
+              bodySprite.draw(canvas, -bodySprite.width/2 - 10, -bodySprite.height/2)
+  
+            # Draw Head Sprite
+            if headSprite = teamSprites[player.teamStyle][player.headStyle].normal[0]
+              headSprite?.draw(canvas, -headSprite.width/2 + 10, -headSprite.height/2 - 40)
 
   self.bind "step", ->
     I.maxPlayers.times (i) ->
@@ -190,7 +189,7 @@ Configurator = (I) ->
 
     readyPlayers = I.config.players.select((player) -> player.ready)
 
-    if readyPlayers.length == I.activePlayers# && readyPlayers.length > 0
+    if readyPlayers.length == I.activePlayers && readyPlayers.length > 0
       unbindTapEvents()
       self.trigger "done", finalizeConfig(I.config)
 

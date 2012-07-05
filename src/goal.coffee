@@ -7,18 +7,21 @@ Goal = (I) ->
   HEIGHT = 48
 
   $.reverseMerge I,
-    color: "green"
     height: HEIGHT
     width: WIDTH
     x: WALL_LEFT + ARENA_WIDTH/20 - WIDTH
     y: WALL_TOP + ARENA_HEIGHT/2 - HEIGHT/2
     spriteOffset: Point(0, 2 - HEIGHT/2)
     suddenDeath: false
+    team: "mutant"
 
-  I.color = Player.COLORS[I.team]
+  I.hflip = I.right
+  unless I.right
+    I.team = "hiss" 
+
   walls = []
 
-  if I.team
+  if I.right
     walls.push
       center: Point(I.x + I.width, I.y + I.height/2)
       halfWidth: WALL_RADIUS
@@ -91,12 +94,13 @@ Goal = (I) ->
       drawWall(wall, canvas)
 
   self.bind "step", ->
-    if I.team
-      I.sprite = tallSprites[7]      
-    else
-      I.sprite = tallSprites[6]
+    I.sprite = teamSprites[I.team].goal.back[0]
 
     I.zIndex = 1 + (I.y + I.height)/CANVAS_HEIGHT
+
+  self.bind "draw", (canvas) ->
+    if sprite = teamSprites[I.team].goal.front[0]
+      sprite.draw(canvas, -63, -72)
 
   self.attrReader "team"
   self.attrAccessor "suddenDeath"
