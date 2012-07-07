@@ -22,6 +22,12 @@ MatchState = (I={}) ->
 
     engine.add
       class: "Puck"
+        
+    2.times (i) ->
+      engine.add
+        class: "Fan"
+        x: i * 512
+        y: 0
 
     leftGoal = engine.add
       class: "Goal"
