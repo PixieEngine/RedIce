@@ -1,11 +1,8 @@
 Fan = (I) ->
-  $.reverseMerge I,
-    duration: 16 + rand(64)
+  Object.reverseMerge I,
     sprite: Fan.sprites.rand()
     width: 32
     height: 32
-    x: rand(App.width).snap(32)
-    y: rand(WALL_TOP).snap(32)
 
   self = GameObject(I).extend
     center: ->
@@ -22,4 +19,3 @@ Fan = (I) ->
 Fan.sprites ||= [
   Sprite.loadByName "fans_active"
 ]
-
