@@ -4,7 +4,7 @@ Goal = (I) ->
   DEBUG_DRAW = false
   WALL_RADIUS = 2
   WIDTH = 32
-  HEIGHT = 48
+  HEIGHT = 64
 
   Object.reverseMerge I,
     height: HEIGHT
