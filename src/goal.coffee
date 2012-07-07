@@ -5,6 +5,8 @@ Goal = (I) ->
   WALL_RADIUS = 2
   WIDTH = 32
   HEIGHT = 64
+  
+  Goal.netSprites ||= Sprite.loadSheet("goal_lasnet", 640, 640, 0.25)
 
   Object.reverseMerge I,
     height: HEIGHT
@@ -113,5 +115,3 @@ Goal = (I) ->
   self.attrAccessor "suddenDeath"
 
   return self
-
-Goal.netSprites = Sprite.loadSheet("goal_lasnet", 640, 640, 0.25)
