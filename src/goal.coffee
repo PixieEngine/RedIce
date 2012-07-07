@@ -103,7 +103,7 @@ Goal = (I) ->
       netSprite.draw(canvas, -netSprite.width/2, -netSprite.height/2)
     
     if sprite = teamSprites[I.team].goal.front[0]
-      sprite.draw(canvas, -63, -72)
+      sprite.draw(canvas, -sprite.width/2, sprite.height/2)
 
   self.attrReader "team"
   self.attrAccessor "suddenDeath"
