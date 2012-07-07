@@ -21,6 +21,7 @@ Player = (I) ->
     joystick: true
     maxShotPower: 20
     movementDirection: 0
+    movementSpeed: 2
     radius: 20
     width: 32
     height: 32
@@ -199,7 +200,7 @@ Player = (I) ->
 
     self.drawBloodStreaks()
 
-    movementScale = 0.625
+    movementScale = I.movementSpeed
 
     movement = Point(0, 0)
 
