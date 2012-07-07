@@ -11,7 +11,6 @@ Goal = (I) ->
     width: WIDTH
     x: WALL_LEFT + ARENA_WIDTH/20 - WIDTH
     y: WALL_TOP + ARENA_HEIGHT/2 - HEIGHT/2
-    spriteOffset: Point(0, 2 - HEIGHT/2)
     suddenDeath: false
     team: "mutant"
 
@@ -97,6 +96,8 @@ Goal = (I) ->
     I.sprite = teamSprites[I.team].goal.back[0]
 
     I.zIndex = 1 + (I.y + I.height)/CANVAS_HEIGHT
+
+  self.unbind "draw"
 
   self.bind "draw", (canvas) ->
     if sprite = teamSprites[I.team].goal.back[0]
