@@ -113,9 +113,6 @@ Rink = (I={}) ->
             color: red
             width: 2
 
-  fansSprite = Sprite.loadByName "fans", ->
-    fansSprite.fill(canvas, 0, 0, App.width, WALL_TOP)
-
   spriteSize = 64
 
   backBoardsCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />")
