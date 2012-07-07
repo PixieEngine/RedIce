@@ -26,7 +26,7 @@ MatchState = (I={}) ->
     2.times (i) ->
       engine.add
         class: "Fan"
-        x: i * 512
+        x: i * 512 + 256
         y: 0
 
     leftGoal = engine.add
