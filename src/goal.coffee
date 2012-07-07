@@ -13,7 +13,7 @@ Goal = (I) ->
     width: WIDTH
     x: WALL_LEFT + ARENA_WIDTH/20 - WIDTH
     y: WALL_TOP + ARENA_HEIGHT/2 - HEIGHT/2
-    spriteOffset: Point(2, -HEIGHT/2 - 5)
+    spriteOffset: Point(2, -HEIGHT/2 - 10)
     suddenDeath: false
     team: "mutant"
 
