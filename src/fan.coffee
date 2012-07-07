@@ -8,14 +8,9 @@ Fan = (I) ->
     center: ->
       Point(I.x + I.width/2, I.y + I.height/2)
 
-  if config.throwBottles && !rand(50)
-    engine.add
-      class: "Bottle"
-      x: I.x
-      y: I.y
-
   return self
 
 Fan.sprites ||= [
-  Sprite.loadByName "fans_active"
+  Sprite.loadByName "crowd_1_s"
+  Sprite.loadByName "crowd_2_s"
 ]
