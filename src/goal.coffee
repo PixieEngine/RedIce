@@ -4,7 +4,7 @@ Goal = (I) ->
   DEBUG_DRAW = false
   WALL_RADIUS = 2
   WIDTH = 32
-  HEIGHT = 64
+  HEIGHT = 60
   
   Goal.netSprites ||= Sprite.loadSheet("goal_lasnet", 640, 640, 0.25)
 
