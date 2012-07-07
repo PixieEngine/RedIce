@@ -6,7 +6,7 @@ Goal = (I) ->
   WIDTH = 32
   HEIGHT = 48
 
-  $.reverseMerge I,
+  Object.reverseMerge I,
     height: HEIGHT
     width: WIDTH
     x: WALL_LEFT + ARENA_WIDTH/20 - WIDTH
