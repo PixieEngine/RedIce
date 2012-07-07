@@ -4,7 +4,7 @@ Fan = (I) ->
     width: 32
     height: 32
     y: 128
-    zIndex: -1
+    zIndex: -10
 
   self = GameObject(I).extend
     center: ->
