@@ -21,7 +21,7 @@ Player = (I) ->
     joystick: true
     maxShotPower: 20
     movementDirection: 0
-    movementSpeed: 2
+    movementSpeed: 1.25
     radius: 20
     width: 32
     height: 32
