@@ -13657,7 +13657,7 @@ Configurator = function(I) {
           nameWidth = canvas.measureText(name);
           player.headStyle = TeamSheet.headStyles.wrap(player.headIndex) || "stubs";
           player.bodyStyle = TeamSheet.bodyStyles.wrap(player.bodyIndex) || "thick";
-          player.teamStyle = teamStyles.wrap(player.teamIndex) || 0;
+          player.teamStyle = teamStyles.wrap(player.teamIndex + 1) || 0;
           Configurator.images[player.teamStyle].background.draw(canvas, x, 0);
           if ((player.optionIndex != null) && !player.ready) {
             Configurator.active.draw(canvas, x, Configurator.options[player.optionIndex].y);
@@ -14196,30 +14196,22 @@ var Fan;
 
 Fan = function(I) {
   var self;
-  $.reverseMerge(I, {
-    duration: 16 + rand(64),
+  Object.reverseMerge(I, {
     sprite: Fan.sprites.rand(),
     width: 32,
     height: 32,
-    x: rand(App.width).snap(32),
-    y: rand(WALL_TOP).snap(32)
+    y: 128,
+    zIndex: -10
   });
   self = GameObject(I).extend({
     center: function() {
       return Point(I.x + I.width / 2, I.y + I.height / 2);
     }
   });
-  if (config.throwBottles && !rand(50)) {
-    engine.add({
-      "class": "Bottle",
-      x: I.x,
-      y: I.y
-    });
-  }
   return self;
 };
 
-Fan.sprites || (Fan.sprites = [Sprite.loadByName("fans_active")]);
+Fan.sprites || (Fan.sprites = [Sprite.loadByName("crowd_1_s"), Sprite.loadByName("crowd_2_s")]);
 
 var FrameEditorState;
 
@@ -14633,13 +14625,14 @@ Goal = function(I) {
   DEBUG_DRAW = false;
   WALL_RADIUS = 2;
   WIDTH = 32;
-  HEIGHT = 48;
-  $.reverseMerge(I, {
+  HEIGHT = 60;
+  Goal.netSprites || (Goal.netSprites = Sprite.loadSheet("goal_lasnet", 640, 640, 0.25));
+  Object.reverseMerge(I, {
     height: HEIGHT,
     width: WIDTH,
     x: WALL_LEFT + ARENA_WIDTH / 20 - WIDTH,
     y: WALL_TOP + ARENA_HEIGHT / 2 - HEIGHT / 2,
-    spriteOffset: Point(0, 2 - HEIGHT / 2),
+    spriteOffset: Point(6, -HEIGHT / 2 - 8),
     suddenDeath: false,
     team: "mutant"
   });
@@ -14724,10 +14717,17 @@ Goal = function(I) {
     I.sprite = teamSprites[I.team].goal.back[0];
     return I.zIndex = 1 + (I.y + I.height) / CANVAS_HEIGHT;
   });
+  self.unbind("draw");
   self.bind("draw", function(canvas) {
-    var sprite;
+    var netSprite, sprite;
+    if (sprite = teamSprites[I.team].goal.back[0]) {
+      sprite.draw(canvas, -sprite.width / 2, -sprite.height / 2);
+    }
     if (sprite = teamSprites[I.team].goal.front[0]) {
-      return sprite.draw(canvas, -63, -72);
+      sprite.draw(canvas, -sprite.width / 2, -sprite.height / 2);
+    }
+    if (netSprite = Goal.netSprites[0]) {
+      return netSprite.draw(canvas, -netSprite.width / 2, -netSprite.height / 2);
     }
   });
   self.attrReader("team");
@@ -16038,7 +16038,7 @@ var __slice = Array.prototype.slice;
 var Player;
 
 Player = function(I) {
-  var actionDown, addSprayParticleEffect, axisPosition, controller, particleSizes, self, shootPuck;
+  var actionDown, addSprayParticleEffect, axisPosition, controller, forceFacing, jitterSoak, particleSizes, self, setFacing, setFlip, shootPuck;
   $.reverseMerge(I, {
     blood: {
       face: 0,
@@ -16050,6 +16050,8 @@ Player = function(I) {
     boostMeter: 64,
     cooldown: {
       boost: 0,
+      facing: 0,
+      flip: 0,
       shoot: 0
     },
     collisionMargin: Point(2, 2),
@@ -16061,6 +16063,7 @@ Player = function(I) {
     joystick: true,
     maxShotPower: 20,
     movementDirection: 0,
+    movementSpeed: 1.25,
     radius: 20,
     width: 32,
     height: 32,
@@ -16115,6 +16118,25 @@ Player = function(I) {
         }
       }
     });
+  };
+  jitterSoak = 10;
+  setFacing = function(newFacing) {
+    if (!I.cooldown.facing) {
+      I.cooldown.facing = jitterSoak;
+      return I.facing = newFacing;
+    }
+  };
+  forceFacing = function(newFacing) {
+    I.facing = newFacing;
+    return I.cooldown.facing = jitterSoak;
+  };
+  setFlip = function(newFlip) {
+    if (I.hflip !== newFlip) {
+      if (!I.cooldown.flip) {
+        I.cooldown.flip = jitterSoak;
+        return I.hflip = newFlip;
+      }
+    }
   };
   self = Base(I).extend({
     bloody: function() {
@@ -16214,7 +16236,7 @@ Player = function(I) {
       I.heading = Point.direction(Point(0, 0), I.velocity);
     }
     self.drawBloodStreaks();
-    movementScale = 0.625;
+    movementScale = I.movementSpeed;
     movement = Point(0, 0);
     if (I.cpu) {
       movement = self.computeDirection();
@@ -16276,14 +16298,14 @@ Player = function(I) {
     var angleSprites, cycleDelay, headDirection, headIndexOffset, headPosition, power, speed, spriteSheet, _ref;
     Object.extend(I, teamSprites[I.teamStyle][I.bodyStyle].characterData);
     I.headAction = "normal";
-    I.hflip = I.heading > 2 * Math.TAU / 8 || I.heading < -2 * Math.TAU / 8;
+    setFlip(I.heading > 2 * Math.TAU / 8 || I.heading < -2 * Math.TAU / 8);
     spriteSheet = self.spriteSheet();
     speed = I.velocity.magnitude();
     cycleDelay = 16;
     if ((0 <= (_ref = I.heading) && _ref <= Math.TAU / 2)) {
-      I.facing = "front";
+      setFacing("front");
     } else {
-      I.facing = "back";
+      setFacing("back");
     }
     if (speed < 1) {
       I.action = "idle";
@@ -16295,12 +16317,12 @@ Player = function(I) {
       cycleDelay = 3;
     }
     if (I.wipeout) {
-      I.facing = "front";
+      forceFacing("front");
       I.action = "fall";
       I.headAction = "pain";
       I.frame = ((25 - I.wipeout) / 3).floor().clamp(0, 5);
     } else if (power = I.shootPower) {
-      I.facing = "front";
+      forceFacing("front");
       I.action = "shoot";
       if (power < I.maxShotPower) {
         I.frame = ((power * I.shootHoldFrame + 1) / I.maxShotPower).floor();
@@ -16310,7 +16332,7 @@ Player = function(I) {
       }
     } else if (I.cooldown.shoot) {
       I.action = "shoot";
-      I.facing = "front";
+      setFacing("front");
       I.frame = 10 - I.cooldown.shoot;
     } else {
       I.frame = (I.age / cycleDelay).floor();
@@ -16390,7 +16412,7 @@ PlayerDrawing = function(I, self) {
     };
     t = Matrix.IDENTITY;
     if (I.hflip) {
-      t = t.concat(Matrix.HORIZONTAL_FLIP);
+      t = Matrix.HORIZONTAL_FLIP;
       headRotation = -headRotation;
     }
     currentHeadOffset = t.transformPoint(headOffset.scale(assetScale));
@@ -16783,7 +16805,7 @@ Puck = function(I) {
 var Rink;
 
 Rink = function(I) {
-  var backBoardsCanvas, blue, canvas, faceOffCircleRadius, faceOffSpotRadius, fansSprite, frontBoardsCanvas, red, rinkCornerRadius, self, spriteSize, x, y, _i, _len, _ref;
+  var backBoardsCanvas, blue, canvas, faceOffCircleRadius, faceOffSpotRadius, frontBoardsCanvas, red, rinkCornerRadius, self, spriteSize, x, y, _i, _len, _ref;
   if (I == null) I = {};
   Object.reverseMerge(I, {
     team: "smiley",
@@ -16897,9 +16919,6 @@ Rink = function(I) {
         });
       }
     });
-  });
-  fansSprite = Sprite.loadByName("fans", function() {
-    return fansSprite.fill(canvas, 0, 0, App.width, WALL_TOP);
   });
   spriteSize = 64;
   backBoardsCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").appendTo("body").css({
@@ -17459,8 +17478,8 @@ TeamSheet = function(I) {
   });
   self = {};
   self.goal = {
-    back: Sprite.loadSheet("" + I.team + "_goal_back", 640, 640, 0.2),
-    front: Sprite.loadSheet("" + I.team + "_goal_front", 640, 640, 0.2)
+    back: Sprite.loadSheet("" + I.team + "_goal_back", 640, 640, 0.25),
+    front: Sprite.loadSheet("" + I.team + "_goal_front", 640, 640, 0.25)
   };
   TeamSheet.bodyStyles.each(function(style) {
     return self[style] = CharacterSheet({
@@ -17638,7 +17657,7 @@ window.tallSprites = Sprite.loadSheet("sprites", 32, 96);
 
 window.teamSprites = {};
 
-["mutant", "hiss"].each(function(name) {
+["hiss", "mutant"].each(function(name) {
   return teamSprites[name] = TeamSheet({
     team: name
   });
