@@ -99,6 +99,9 @@ Goal = (I) ->
     I.zIndex = 1 + (I.y + I.height)/CANVAS_HEIGHT
 
   self.bind "draw", (canvas) ->
+    if sprite = teamSprites[I.team].goal.back[0]
+      sprite.draw(canvas, -sprite.width/2, sprite.height/2)
+    
     if netSprite = Goal.netSprites[0]
       netSprite.draw(canvas, -netSprite.width/2, -netSprite.height/2)
     
