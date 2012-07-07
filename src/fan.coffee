@@ -3,7 +3,7 @@ Fan = (I) ->
     sprite: Fan.sprites.rand()
     width: 32
     height: 32
-    y: 256
+    y: 128
     zIndex: -1
 
   self = GameObject(I).extend
