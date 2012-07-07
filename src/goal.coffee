@@ -107,3 +107,4 @@ Goal = (I) ->
 
   return self
 
+Goal.netSprites = Sprite.loadSheet("goal_lasnet", 640, 640, 0.25)
