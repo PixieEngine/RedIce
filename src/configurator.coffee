@@ -15,7 +15,7 @@ Configurator = (I) ->
   verticalPadding = 24
   horizontalPadding = 0
 
-  teamStyles = ["hiss", "mutant"]
+  teamStyles = ["mutant", "hiss"]
 
   join = (id) ->
     player = I.config.players[id]
