@@ -1,4 +1,4 @@
-MatchSetupState = (I={}) ->
+MainMenuState = (I={}) ->
   # Inherit from game object
   self = GameState(I)
 
