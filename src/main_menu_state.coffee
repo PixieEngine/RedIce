@@ -6,7 +6,7 @@ MainMenuState = (I={}) ->
   self.bind "update", ->
     if keydown.return
       engine.setState(MatchSetupState())
-      
+
   self.bind "enter", ->
     engine.add 
       class: "Menu"
