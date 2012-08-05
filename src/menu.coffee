@@ -29,7 +29,7 @@ Menu = (I={}) ->
     sprite = Menu.bottomSprite
     sprite.draw canvas, -sprite.width/2, 96
     
-    canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
+    canvas.font("bold 48px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
     I.options.each (option, i) ->
       canvas.centerText
         text: option
