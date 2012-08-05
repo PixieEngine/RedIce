@@ -8,6 +8,8 @@ MainMenuState = (I={}) ->
       engine.setState(MatchSetupState())
 
   self.bind "enter", ->
+    rink.hide()
+
     engine.add 
       class: "Menu"
 
