@@ -3,7 +3,6 @@ Menu = (I={}) ->
   Object.reverseMerge I,
     x: App.width/2
     y: App.height/2
-    color: "blue"
     sprite: "menu_border_1" # Use the name of a sprite in the images folder
 
   # Inherit from game object
