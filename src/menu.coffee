@@ -14,9 +14,9 @@ Menu = (I={}) ->
     # Add update method behavior
     
   self.unbind "draw"
-  
+
   self.bind "draw", (canvas) ->
-    I.sprite.draw
+    I.sprite.draw canvas, -I.sprite.width/2, -I.sprite.height/2
 
   # We must always return self as the last line
   return self
