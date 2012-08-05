@@ -29,8 +29,12 @@ Menu = (I={}) ->
     sprite = Menu.bottomSprite
     sprite.draw canvas, -sprite.width/2, 96
     
-    I.options.each (option) ->
-      
+    canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
+    I.options.each (option, i) ->
+      canvas.centerText
+        text: option
+        x: I.x
+        y: I.y + i * 24
     
   # We must always return self as the last line
   return self
