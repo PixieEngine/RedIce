@@ -35,7 +35,7 @@ Menu = (I={}) ->
         text: option
         x: 0
         y: i * 64
-        color: "black"
+        color: "white"
     
   # We must always return self as the last line
   return self
