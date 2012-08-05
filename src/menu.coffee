@@ -2,7 +2,7 @@ Menu = (I={}) ->
   # Set some default properties
   Object.reverseMerge I,
     x: App.width/2
-    y: 2*App.height/3 + 60
+    y: 2*App.height/3 + 64
     sprite: "menu_border_1" # Use the name of a sprite in the images folder
     options: [
       "Versus"
