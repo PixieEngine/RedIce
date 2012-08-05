@@ -34,7 +34,7 @@ Menu = (I={}) ->
       canvas.centerText
         text: option
         x: 0
-        y: i * 24
+        y: i * 64
         color: "white"
     
   # We must always return self as the last line
