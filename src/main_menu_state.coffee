@@ -14,7 +14,7 @@ MainMenuState = (I={}) ->
     engine.add
       sprite: "title_text"
       x: App.width/2
-      y: App.height/6
+      y: App.height/3
 
   # We must always return self as the last line
   return self
