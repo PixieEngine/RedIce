@@ -15,7 +15,18 @@ Menu = (I={}) ->
   self.unbind "draw"
 
   self.bind "draw", (canvas) ->
-    I.sprite.draw canvas, -I.sprite.width/2, -I.sprite.height/2
+    sprite = Menu.topSprite
+    sprite.draw canvas, -sprite.width/2, -sprite.height/2
+    
+    sprite = Menu.middleSprite
+    sprite.draw canvas, -sprite.width/2, 0
 
+    sprite = Menu.bottomSprite
+    sprite.draw canvas, -sprite.width/2, sprite.height/2
+    
   # We must always return self as the last line
   return self
+
+Menu.topSprite = Sprite.loadByName "menu_border_1"
+Menu.middleSprite = Sprite.loadByName "menu_border_2"
+Menu.bottomSprite = Sprite.loadByName "menu_border_3"
