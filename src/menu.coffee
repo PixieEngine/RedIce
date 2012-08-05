@@ -33,8 +33,8 @@ Menu = (I={}) ->
     I.options.each (option, i) ->
       canvas.centerText
         text: option
-        x: I.x
-        y: I.y + i * 24
+        x: 0
+        y: i * 24
         color: "white"
     
   # We must always return self as the last line
