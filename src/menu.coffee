@@ -16,13 +16,13 @@ Menu = (I={}) ->
 
   self.bind "draw", (canvas) ->
     sprite = Menu.topSprite
-    sprite.draw canvas, -sprite.width/2, -sprite.height/2
+    sprite.draw canvas, -sprite.width/2, -sprite.height
     
     sprite = Menu.middleSprite
     sprite.draw canvas, -sprite.width/2, 0
 
     sprite = Menu.bottomSprite
-    sprite.draw canvas, -sprite.width/2, sprite.height/2
+    sprite.draw canvas, -sprite.width/2, 96
     
   # We must always return self as the last line
   return self
