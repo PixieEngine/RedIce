@@ -4,6 +4,11 @@ Menu = (I={}) ->
     x: App.width/2
     y: App.height/2
     sprite: "menu_border_1" # Use the name of a sprite in the images folder
+    options: [
+      "Versus"
+      "Mini-Games"
+      "Options"
+    ]
 
   # Inherit from game object
   self = GameObject(I)
@@ -23,6 +28,9 @@ Menu = (I={}) ->
 
     sprite = Menu.bottomSprite
     sprite.draw canvas, -sprite.width/2, 96
+    
+    I.options.each (option) ->
+      
     
   # We must always return self as the last line
   return self
