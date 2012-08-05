@@ -8,7 +8,7 @@ MainMenuState = (I={}) ->
       engine.setState(MatchSetupState())
       
   self.bind "enter", ->
-    
+    engine.add "Menu"
 
   # We must always return self as the last line
   return self
