@@ -36,7 +36,7 @@ Menu = (I={}) ->
     sprite.draw canvas, -sprite.width/2, 0
 
     sprite = Menu.bottomSprite
-    sprite.draw canvas, -sprite.width/2, 96
+    sprite.draw canvas, -sprite.width/2, 128
     
     canvas.font("bold 48px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
     I.options.each (option, i) ->
