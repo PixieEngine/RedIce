@@ -57,7 +57,7 @@ Menu = (I={}) ->
     canvas.font("bold 48px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
     I.options.each (option, i) ->
       canvas.centerText
-        text: option
+        text: option.text
         x: 0
         y: i * 64
         color: "white"
