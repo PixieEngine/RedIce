@@ -47,7 +47,7 @@ Menu = (I={}) ->
         color: "white"
         
       if i is I.selectedOption
-        canvas.fillRect
+        canvas.drawRect
           x: -128
           y: i * 64
           width: 256
