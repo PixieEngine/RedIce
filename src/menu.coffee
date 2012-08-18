@@ -6,9 +6,17 @@ Menu = (I={}) ->
     sprite: "menu_border_1" # Use the name of a sprite in the images folder
     selectedOption: 0
     options: [
-      "Versus"
-      "Mini-Games"
-      "Options"
+      {
+        text: "Versus"
+        action: ->
+          engine.setState(MatchSetupState())
+      }, {
+        text: "Mini-Games"
+        action: ->
+      }, {
+        text: "Options"
+        action: ->
+      }
     ]
 
   # Inherit from game object
@@ -18,6 +26,9 @@ Menu = (I={}) ->
     I.selectedOption += change
     I.selectedOption = I.selectedOption.mod(I.options.length)
 
+  choose = ->
+    I.options[I.selectedOption].action()
+
   # Add events and methods here
   self.bind "update", ->
     # Add update method behavior
@@ -26,7 +37,8 @@ Menu = (I={}) ->
     if justPressed.down
       moveSelection(1)
       
-    if justPressed.enter
+    if justPressed.return
+      choose()
     
     #TOOD Joystick Input
 
