@@ -4,6 +4,7 @@ Menu = (I={}) ->
     x: App.width/2
     y: 2*App.height/3 + 64
     sprite: "menu_border_1" # Use the name of a sprite in the images folder
+    selectedOption: 0
     options: [
       "Versus"
       "Mini-Games"
@@ -12,11 +13,19 @@ Menu = (I={}) ->
 
   # Inherit from game object
   self = GameObject(I)
+  
+  moveSelection = (change) ->
+    I.selectedOption += change
+    I.selectedOption = I.selectedOption.mod(I.options.length)
 
   # Add events and methods here
   self.bind "update", ->
     # Add update method behavior
-    
+    if justPressed.up
+      moveSelection(-1)
+    if justPressed.down
+      moveSelection(1)
+
   self.unbind "draw"
 
   self.bind "draw", (canvas) ->
@@ -43,3 +52,4 @@ Menu = (I={}) ->
 Menu.topSprite = Sprite.loadByName "menu_border_1"
 Menu.middleSprite = Sprite.loadByName "menu_border_2"
 Menu.bottomSprite = Sprite.loadByName "menu_border_3"
+
