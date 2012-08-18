@@ -49,7 +49,7 @@ Menu = (I={}) ->
       if i is I.selectedOption
         canvas.drawRect
           x: -128
-          y: i * 64
+          y: i * 64 - 64
           width: 256
           height: 32
           color: "rgba(255, 0, 255, 0.25)"
