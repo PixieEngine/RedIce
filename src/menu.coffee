@@ -45,7 +45,15 @@ Menu = (I={}) ->
         x: 0
         y: i * 64
         color: "white"
-    
+        
+      if i is selectedOption
+        canvas.fillRect
+          x: -128
+          y: i * 64
+          width: 256
+          height: 32
+          color: "rgba(255, 0, 255, 0.25)"
+  
   # We must always return self as the last line
   return self
 
