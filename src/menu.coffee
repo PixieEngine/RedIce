@@ -25,6 +25,10 @@ Menu = (I={}) ->
       moveSelection(-1)
     if justPressed.down
       moveSelection(1)
+      
+    if justPressed
+    
+    #TOOD Joystick Input
 
   self.unbind "draw"
 
