@@ -26,7 +26,7 @@ Menu = (I={}) ->
     if justPressed.down
       moveSelection(1)
       
-    if justPressed
+    if justPressed.enter
     
     #TOOD Joystick Input
 
