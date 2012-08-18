@@ -47,6 +47,7 @@ Menu = (I={}) ->
         color: "white"
         
       if i is I.selectedOption
+        # TODO Sprite/Animation rather than solid color
         canvas.drawRect
           x: -128
           y: i * 64 - 30
