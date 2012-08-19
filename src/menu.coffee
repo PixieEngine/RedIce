@@ -31,7 +31,7 @@ Menu = (I={}) ->
 
   # Add events and methods here
   self.bind "update", ->
-    # Add update method behavior
+    # Keyboard input
     if justPressed.up
       moveSelection(-1)
     if justPressed.down
@@ -39,8 +39,18 @@ Menu = (I={}) ->
       
     if justPressed.return
       choose()
+      
+    # Joystick Input
+    MAX_PLAYERS.times (i) ->
+      joystick = Joysticks.getController(I.id)
+      
+      if joystick.justTapped?.up
+        moveSelection(-1)
+      if joystick.justTapped?.down
+        moveSelection(1)
+      if joystick.buttonPressed "A"
+        choose()
     
-    #TOOD Joystick Input
 
   self.unbind "draw"
 
