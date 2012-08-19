@@ -27,7 +27,7 @@ AI = (I, self) ->
     youth: ->
       if I.hasPuck
         opposingGoal = engine.find("Goal").select (goal) ->
-          goal.team() != I.team
+          goal.team() != I.teamStyle
         .first()
 
         if opposingGoal
