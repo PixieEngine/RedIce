@@ -38,7 +38,7 @@ Physics = ->
       quadrant: -2
   }]
 
-  threshold = 9
+  threshold = 20
 
   resolveCollision = (A, B) ->
     normal = B.center().subtract(A.center()).norm()
