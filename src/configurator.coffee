@@ -66,11 +66,9 @@ Configurator = (I) ->
             else
               player[currentOption.name] += p.x
 
-      engine.controller(id).bind "tap", player.tapListener
-
   unbindTapEvents = ->
     I.config.players.each (player) ->
-      engine.controller(player.id).unbind "tap", player.tapListener
+      player.tapListener = null
 
   finalizeConfig = (config) ->
     [cpus, humans] = config.players.partition (playerData) ->
@@ -177,6 +175,8 @@ Configurator = (I) ->
 
       if controller.actionDown "ANY"
         join(i)
+
+      controller.tapListener?(controller.tap())
 
       if (player = I.config.players[i])
         if (currentOption = Configurator.options[player.optionIndex])
