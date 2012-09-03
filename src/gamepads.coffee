@@ -2,6 +2,12 @@ Gamepads = (I={}) ->
   state = {} # holds current and previous states
   controllers = [] # controller cache
 
+  # Capture the current gamepad state
+  snapshot = ->
+    Array::map.call navigator.webkitGamepads, (x) -> 
+      axes: x.axes
+      buttons: x.buttons
+
   controller: (index=0) ->
     controllers[index] ||= Gamepads.Controller
       index: index
@@ -9,7 +15,7 @@ Gamepads = (I={}) ->
 
   update: ->
     state.previous = state.current
-    state.current = navigator.webkitGamepads
-    
+    state.current = snapshot()
+
     controllers.each (controller) ->
       controller?.update()
