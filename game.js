@@ -13216,7 +13216,7 @@ AI = function(I, self) {
       var opposingGoal, targetPosition, _ref;
       if (I.hasPuck) {
         opposingGoal = engine.find("Goal").select(function(goal) {
-          return goal.team() !== I.team;
+          return goal.team() !== I.teamStyle;
         }).first();
         if (opposingGoal) targetPosition = opposingGoal.center();
       } else {
@@ -13582,7 +13582,7 @@ Configurator = function(I) {
       nameEntry.destroy();
       player.name = name;
       player.optionIndex = 0;
-      player.tapListener = function(p) {
+      return player.tapListener = function(p) {
         var currentOption;
         if (player.ready) return;
         if (p.y) {
@@ -13595,12 +13595,11 @@ Configurator = function(I) {
           }
         }
       };
-      return engine.controller(id).bind("tap", player.tapListener);
     });
   };
   unbindTapEvents = function() {
     return I.config.players.each(function(player) {
-      return engine.controller(player.id).unbind("tap", player.tapListener);
+      return player.tapListener = null;
     });
   };
   finalizeConfig = function(config) {
@@ -13704,6 +13703,9 @@ Configurator = function(I) {
       controller = engine.controller(i);
       if (controller.actionDown("ANY")) join(i);
       if ((player = I.config.players[i])) {
+        if (typeof player.tapListener === "function") {
+          player.tapListener(controller.tap());
+        }
         if ((currentOption = Configurator.options[player.optionIndex])) {
           if (currentOption.action === "toggle") {
             if (controller.actionDown("A")) player[currentOption.name] = true;
@@ -14179,6 +14181,56 @@ parent.gameControlData = gameControlData;
   return (typeof exports !== "undefined" && exports !== null ? exports : this)["Engine"] = Engine;
 })();
 
+/**
+The <code>Gamepads</code> module gives the engine access to gamepads.
+
+    # First you need to add the `Gamepads` module to the engine
+    Engine.defaultModules.push "Gamepads"
+    
+    window.engine = Engine
+      ...
+    
+    # Then you need to get a controller reference
+    # id = 0 for player 1, etc.
+    controller = engine.controller(id)
+    
+    # Point indicating direction primary axis is held
+    direction = controller.position()
+    
+    # Check if buttons are held
+    controller.actionDown("A")
+    controller.actionDown("B")
+    controller.actionDown("X")
+    controller.actionDown("Y")
+
+@name Gamepads
+@fieldOf Engine
+@module
+
+@param {Object} I Instance variables
+@param {Object} self Reference to the engine
+*/
+Engine.Gamepads = function(I, self) {
+  var gamepads;
+  gamepads = Gamepads();
+  self.bind("beforeUpdate", function() {
+    return gamepads.update();
+  });
+  return {
+    /**
+    Get a controller for a given id.
+    
+    @name controller
+    @methodOf Engine.Gamepads#
+    
+    @param {Number} index The index to get a controller for.
+    */
+    controller: function(index) {
+      return gamepads.controller(index);
+    }
+  };
+};
+
 
 Engine.Stats = function(I, self) {
   var stats;
@@ -14617,6 +14669,181 @@ FrameEditorState = function(I) {
   return self;
 };
 
+var Gamepads;
+
+Gamepads = function(I) {
+  var controllers, snapshot, state;
+  if (I == null) I = {};
+  state = {};
+  controllers = [];
+  snapshot = function() {
+    return Array.prototype.map.call(navigator.webkitGamepads, function(x) {
+      return {
+        axes: x.axes,
+        buttons: x.buttons
+      };
+    });
+  };
+  return {
+    controller: function(index) {
+      if (index == null) index = 0;
+      return controllers[index] || (controllers[index] = Gamepads.Controller({
+        index: index,
+        state: state
+      }));
+    },
+    update: function() {
+      state.previous = state.current;
+      state.current = snapshot();
+      return controllers.each(function(controller) {
+        return controller != null ? controller.update() : void 0;
+      });
+    }
+  };
+};
+
+var __slice = Array.prototype.slice;
+
+Gamepads.Controller = function(I) {
+  var AXIS_MAX, BUTTON_THRESHOLD, DEAD_ZONE, MAX_BUFFER, TRIP_HIGH, TRIP_LOW, axisTrips, buttonMapping, currentState, previousState, processTaps, self, tap;
+  if (I == null) I = {};
+  Object.reverseMerge(I, {
+    debugColor: "#000"
+  });
+  MAX_BUFFER = 0.03;
+  AXIS_MAX = 1 - MAX_BUFFER;
+  DEAD_ZONE = AXIS_MAX * 0.2;
+  TRIP_HIGH = AXIS_MAX * 0.75;
+  TRIP_LOW = AXIS_MAX * 0.5;
+  BUTTON_THRESHOLD = 0.5;
+  buttonMapping = {
+    "A": 0,
+    "B": 1,
+    "C": 2,
+    "D": 3,
+    "X": 2,
+    "Y": 3,
+    "L": 4,
+    "LB": 4,
+    "L1": 4,
+    "R": 5,
+    "RB": 5,
+    "R1": 5,
+    "SELECT": 6,
+    "BACK": 6,
+    "START": 7,
+    "HOME": 8,
+    "GUIDE": 8,
+    "TL": 9,
+    "TR": 10
+  };
+  currentState = function() {
+    var _ref;
+    return (_ref = I.state.current) != null ? _ref[I.index] : void 0;
+  };
+  previousState = function() {
+    var _ref;
+    return (_ref = I.state.previous) != null ? _ref[I.index] : void 0;
+  };
+  axisTrips = [];
+  tap = Point(0, 0);
+  processTaps = function() {
+    var x, y, _ref;
+    _ref = [0, 1].map(function(n) {
+      if (!axisTrips[n] && self.axis(n).abs() > TRIP_HIGH) {
+        axisTrips[n] = true;
+        return self.axis(n).sign();
+      }
+      if (axisTrips[n] && self.axis(n).abs() < TRIP_LOW) axisTrips[n] = false;
+      return 0;
+    }), x = _ref[0], y = _ref[1];
+    return tap = Point(x, y);
+  };
+  return self = Core().include(Bindable).extend({
+    actionDown: function() {
+      var buttons, state;
+      buttons = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      if (state = currentState()) {
+        return buttons.inject(false, function(down, button) {
+          return down || (button === "ANY" ? state.buttons.inject(false, function(down, button) {
+            return down || (button > BUTTON_THRESHOLD);
+          }) : state.buttons[buttonMapping[button]] > BUTTON_THRESHOLD);
+        });
+      } else {
+        return false;
+      }
+    },
+    buttonPressed: function(button) {
+      var buttonId;
+      buttonId = buttonMapping[button];
+      return (self.buttons()[buttonId] > BUTTON_THRESHOLD) && !(previousState().buttons[buttonId] > BUTTON_THRESHOLD);
+    },
+    position: function(stick) {
+      var magnitude, p, ratio, state;
+      if (stick == null) stick = 0;
+      if (state = currentState()) {
+        p = Point(self.axis(2 * stick), self.axis(2 * stick + 1));
+        magnitude = p.magnitude();
+        if (magnitude > AXIS_MAX) {
+          return p.norm();
+        } else if (magnitude < DEAD_ZONE) {
+          return Point(0, 0);
+        } else {
+          ratio = magnitude / AXIS_MAX;
+          return p.scale(ratio / AXIS_MAX);
+        }
+      } else {
+        return Point(0, 0);
+      }
+    },
+    axis: function(n) {
+      return self.axes()[n] || 0;
+    },
+    axes: function() {
+      var state;
+      if (state = currentState()) {
+        return state.axes;
+      } else {
+        return [];
+      }
+    },
+    buttons: function() {
+      var state;
+      if (state = currentState()) {
+        return state.buttons;
+      } else {
+        return [];
+      }
+    },
+    tap: function() {
+      return tap;
+    },
+    update: function() {
+      return processTaps();
+    },
+    drawDebug: function(canvas) {
+      var lineHeight;
+      lineHeight = 18;
+      self.axes().each(function(axis, i) {
+        return canvas.drawText({
+          color: I.debugColor,
+          text: axis,
+          x: 0,
+          y: i * lineHeight
+        });
+      });
+      return self.buttons().each(function(button, i) {
+        return canvas.drawText({
+          color: I.debugColor,
+          text: button,
+          x: 250,
+          y: i * lineHeight
+        });
+      });
+    }
+  });
+};
+
 var Goal;
 
 Goal = function(I) {
@@ -14770,6 +14997,26 @@ HeadSheet = function(I) {
 };
 
 
+var MainMenuState;
+
+MainMenuState = function(I) {
+  var self;
+  if (I == null) I = {};
+  self = GameState(I);
+  self.bind("enter", function() {
+    rink.hide();
+    engine.add({
+      "class": "Menu"
+    });
+    return engine.add({
+      sprite: "title_text",
+      x: App.width / 2,
+      y: App.height / 3 - 50
+    });
+  });
+  return self;
+};
+
 var MatchSetupState;
 
 MatchSetupState = function(I) {
@@ -14886,6 +15133,89 @@ MatchState = function(I) {
   });
   return self;
 };
+
+var Menu;
+
+Menu = function(I) {
+  var choose, moveSelection, self;
+  if (I == null) I = {};
+  Object.reverseMerge(I, {
+    x: App.width / 2,
+    y: 2 * App.height / 3 + 32,
+    sprite: "menu_border_1",
+    selectedOption: 0,
+    options: [
+      {
+        text: "Versus",
+        action: function() {
+          return engine.setState(MatchSetupState());
+        }
+      }, {
+        text: "Mini-Games",
+        action: function() {}
+      }, {
+        text: "Options",
+        action: function() {}
+      }
+    ]
+  });
+  self = GameObject(I);
+  moveSelection = function(change) {
+    I.selectedOption += change;
+    return I.selectedOption = I.selectedOption.mod(I.options.length);
+  };
+  choose = function() {
+    return I.options[I.selectedOption].action();
+  };
+  self.bind("update", function() {
+    if (justPressed.up) moveSelection(-1);
+    if (justPressed.down) moveSelection(1);
+    if (justPressed["return"]) choose();
+    return MAX_PLAYERS.times(function(i) {
+      var joystick;
+      joystick = engine.controller(i);
+      moveSelection(joystick.tap().y);
+      if (joystick.buttonPressed("A")) return choose();
+    });
+  });
+  self.unbind("draw");
+  self.bind("draw", function(canvas) {
+    var sprite;
+    sprite = Menu.topSprite;
+    sprite.draw(canvas, -sprite.width / 2, -sprite.height);
+    sprite = Menu.middleSprite;
+    sprite.draw(canvas, -sprite.width / 2, 0);
+    sprite = Menu.bottomSprite;
+    sprite.draw(canvas, -sprite.width / 2, 128);
+    canvas.font("bold 48px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
+    return I.options.each(function(option, i) {
+      var width;
+      canvas.centerText({
+        text: option.text,
+        x: 0,
+        y: i * 64,
+        color: "white"
+      });
+      if (i === I.selectedOption) {
+        width = 256 + 128;
+        return canvas.drawRect({
+          x: -width / 2,
+          y: i * 64 - 30,
+          width: width,
+          height: 32,
+          color: "rgba(255, 0, 255, 0.25)"
+        });
+      }
+    });
+  });
+  return self;
+};
+
+Menu.topSprite = Sprite.loadByName("menu_border_1");
+
+Menu.middleSprite = Sprite.loadByName("menu_border_2");
+
+Menu.bottomSprite = Sprite.loadByName("menu_border_3");
 
 var NameEntry;
 
@@ -15086,11 +15416,6 @@ NameEntry = function(I) {
       });
     }
   });
-  if (controller != null) {
-    controller.bind("tap", function(direction) {
-      return move(direction);
-    });
-  }
   self.bind("step", function() {
     if (justPressed.left) move(Point(-1, 0));
     if (justPressed.right) move(Point(1, 0));
@@ -15103,8 +15428,9 @@ NameEntry = function(I) {
     }
     if (controller != null ? controller.buttonPressed("B") : void 0) {
       I.name = I.name.substring(0, I.name.length - 1);
-      return self.trigger("change", I.name);
+      self.trigger("change", I.name);
     }
+    if (controller) return move(controller.tap());
   });
   return self;
 };
@@ -15153,7 +15479,7 @@ Physics = function() {
       quadrant: -2
     }
   ];
-  threshold = 5;
+  threshold = 12;
   resolveCollision = function(A, B) {
     var massA, massB, max, normal, powA, powB, pushA, pushB, relativeVelocity, totalMass;
     normal = B.center().subtract(A.center()).norm();
@@ -16081,7 +16407,7 @@ Player = function(I) {
     zIndex: 1
   });
   if (I.joystick) {
-    controller = Joysticks.getController(I.id);
+    controller = engine.controller(I.id);
     actionDown = controller.actionDown;
     axisPosition = controller.axis;
   } else {
@@ -17710,7 +18036,7 @@ canvas = $("canvas").pixieCanvas();
 
 window.engine = Engine({
   canvas: canvas,
-  includedModules: ["Joysticks"],
+  includedModules: ["Gamepads"],
   showFPS: true,
   zSort: true,
   FPS: 30
@@ -17775,7 +18101,7 @@ engine.bind("afterUpdate", function(canvas) {
   return updateDuration = (+(new Date)) - updateStartTime;
 });
 
-engine.setState(MatchSetupState());
+engine.setState(MainMenuState());
 
 engine.start();
  });
