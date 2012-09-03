@@ -176,9 +176,9 @@ Configurator = (I) ->
       if controller.actionDown "ANY"
         join(i)
 
-      player.tapListener?(controller.tap())
-
       if (player = I.config.players[i])
+        player.tapListener?(controller.tap())
+
         if (currentOption = Configurator.options[player.optionIndex])
           if currentOption.action == "toggle"
             if controller.actionDown("A")
