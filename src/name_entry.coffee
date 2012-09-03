@@ -177,9 +177,6 @@ NameEntry = (I) ->
         textArea.draw(canvas)
         menuArea.draw(canvas)
 
-  controller?.bind "tap", (direction) ->
-    move(direction)
-
   self.bind "step", ->
     if justPressed.left
       move(Point(-1, 0))
