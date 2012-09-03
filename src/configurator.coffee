@@ -176,7 +176,7 @@ Configurator = (I) ->
       if controller.actionDown "ANY"
         join(i)
 
-      controller.tapListener?(controller.tap())
+      controller.tapListener(controller.tap())
 
       if (player = I.config.players[i])
         if (currentOption = Configurator.options[player.optionIndex])
