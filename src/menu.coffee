@@ -42,13 +42,10 @@ Menu = (I={}) ->
       
     # Joystick Input
     MAX_PLAYERS.times (i) ->
-      joystick = Joysticks.getController(i)
-      
+      joystick = engine.controller(i)
+
       # TOOD Implement this on joysticks side
-      if joystick.justTapped?.up
-        moveSelection(-1)
-      if joystick.justTapped?.down
-        moveSelection(1)
+      moveSelection(joystick.tap().y)
   
       if joystick.buttonPressed "A"
         choose()
