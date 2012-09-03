@@ -204,5 +204,7 @@ NameEntry = (I) ->
 
       self.trigger "change", I.name
 
+    move(controller.tap()) if controller
+
   return self
 
