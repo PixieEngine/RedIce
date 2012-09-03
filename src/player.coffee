@@ -39,7 +39,7 @@ Player = (I) ->
     zIndex: 1
 
   if I.joystick
-    controller = Joysticks.getController(I.id)
+    controller = engine.controller(I.id)
     actionDown = controller.actionDown
     axisPosition = controller.axis
   else
