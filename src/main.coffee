@@ -51,7 +51,7 @@ canvas = $("canvas").pixieCanvas()
 
 window.engine = Engine
   canvas: canvas
-  includedModules: ["Engine.Gamepads"]#, "Stats"]
+  includedModules: ["Gamepads"]#, "Stats"]
   showFPS: true
   zSort: true
   FPS: 30
