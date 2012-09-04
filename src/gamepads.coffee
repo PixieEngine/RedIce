@@ -4,7 +4,7 @@ Gamepads = (I={}) ->
 
   # Capture the current gamepad state
   snapshot = ->
-    Array::map.call navigator.webkitGamepads, (x) -> 
+    Array::map.call navigator.webkitGamepads || navigator.webkitGetGamepads(), (x) -> 
       axes: x.axes
       buttons: x.buttons
 
