@@ -78,7 +78,7 @@ Gamepads.Controller = (I={}) ->
     buttonPressed: (button) ->
       buttonId = buttonMapping[button]
 
-      return (self.buttons()[buttonId] > BUTTON_THRESHOLD) && !(previousState().buttons[buttonId] > BUTTON_THRESHOLD)
+      return (self.buttons()[buttonId] > BUTTON_THRESHOLD) && !(previousState()?.buttons[buttonId] > BUTTON_THRESHOLD)
 
     position: (stick=0) ->
       if state = currentState()
