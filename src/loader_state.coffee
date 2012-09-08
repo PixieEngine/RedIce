@@ -2,13 +2,14 @@ do ->
   outstandingAssets = 0
   loadedAssets = 0
 
-  Sprite.load = do (oldLoad=Sprite.load) ->
+  Sprite.load = ((oldLoad) ->
     (url, callback) ->
       outstandingAssets += 1
       oldLoad url, (sprite) ->
         loadedAssets += 1
         callback?(sprite)
-  
+  )(Sprite.load)
+
   window.LoaderState = (I={}) ->
     self = GameState(I)
     
