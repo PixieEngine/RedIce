@@ -45,12 +45,12 @@ do ->
         y: App.height/2 + 50
         color: "#FFF"
         
-      canvas.font("bold 20px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
+      canvas.font("bold 10px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
         
       assetList.each (asset, i) ->
         canvas.drawText
           x: 12
-          y: (i + 1) * 24
+          y: (i + 1) * 14
           text: asset
   
     # We must always return self as the last line
