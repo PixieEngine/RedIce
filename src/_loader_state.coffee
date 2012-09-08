@@ -1,10 +1,11 @@
 do ->
-  outstandingAssets = 0
   loadedAssets = 0
+  assetList = []
 
   Sprite.load = ((oldLoad) ->
     (url, callback) ->
-      outstandingAssets += 1
+      assetList.push url
+
       oldLoad url, (sprite) ->
         loadedAssets += 1
         callback?(sprite)
@@ -12,7 +13,7 @@ do ->
   
   Sprite.loadSheet = ((oldLoad) ->
     (name, tileWidth, tileHeight, scale, callback) ->
-      outstandingAssets += 1
+      assetList.push name
 
       oldLoad name, tileWidth, tileHeight, scale, (sprites) ->
         loadedAssets += 1
@@ -43,6 +44,14 @@ do ->
         text: "#{loadedAssets} / #{outstandingAssets}"
         y: App.height/2 + 50
         color: "#FFF"
+        
+      canvas.font("bold 20px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
+        
+      assetList.each (asset, i) ->
+        canvas.drawText
+          x: 12
+          y: (i + 1) * 24
+          text: asset
   
     # We must always return self as the last line
     return self
