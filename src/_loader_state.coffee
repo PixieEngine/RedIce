@@ -24,7 +24,7 @@ do ->
     self = GameState(I)
     
     loadingComplete = ->
-      loadedAssets >= outstandingAssets
+      loadedAssets >= assetList.length
   
     # Add events and methods here
     self.bind "update", ->
@@ -41,7 +41,7 @@ do ->
         color: "#FFF"
         
       canvas.centerText
-        text: "#{loadedAssets} / #{outstandingAssets}"
+        text: "#{loadedAssets} / #{assetList.length}"
         y: App.height/2 + 50
         color: "#FFF"
         
