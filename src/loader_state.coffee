@@ -32,7 +32,7 @@ do ->
         
       canvas.centerText
         text: "#{loadedAssets} / #{outstandingAssets}"
-        y: App.height/2
+        y: App.height/2 + 50
         color: "#FFF"
   
     # We must always return self as the last line
