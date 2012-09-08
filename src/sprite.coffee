@@ -80,7 +80,7 @@ draw anything to the screen until the image has been loaded.
   @param {Number} tileHeight Height of each sprite in the sheet
   @returns {Array} An array of sprite objects
   ###
-  Sprite.loadSheet = (name, tileWidth, tileHeight, scale=1) ->
+  Sprite.loadSheet = (name, tileWidth, tileHeight, scale=1, callback) ->
     url = ResourceLoader.urlFor("images", name)
 
     sprites = []
@@ -105,6 +105,8 @@ draw anything to the screen until the image has been loaded.
       (height / tileHeight).times (row) ->
         (width / tileWidth).times (col) ->
           sprites.push(Sprite(imgElement, col * tileWidth, row * tileHeight, tileWidth, tileHeight))
+
+      callback?(sprites)
 
     image.src = url
 
