@@ -10,14 +10,14 @@ do ->
         callback?(sprite)
   )(Sprite.load)
   
-  Sprite.loadSheet = ((oldLoad) ->
-    (name, tileWidth, tileHeight, scale, callback) ->
-      outstandingAssets += 1
-
-      oldLoad name, tileWidth, tileHeight, scale, (sprites) ->
-        loadedAssets += 1
-        callback?(sprites)
-  )(Sprite.loadSheet)
+  #Sprite.loadSheet = ((oldLoad) ->
+    #(name, tileWidth, tileHeight, scale, callback) ->
+      #outstandingAssets += 1
+#
+      #oldLoad name, tileWidth, tileHeight, scale, (sprites) ->
+        #loadedAssets += 1
+        #callback?(sprites)
+  #)(Sprite.loadSheet)
 
   window.LoaderState = (I={}) ->
     self = GameState(I)
