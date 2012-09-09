@@ -85,6 +85,8 @@ draw anything to the screen until the image has been loaded.
 
     sprites = []
     image = new Image()
+    
+    callback?(sprites) # TODO: Remove after done testing
 
     image.onload = ->
       imgElement = this
