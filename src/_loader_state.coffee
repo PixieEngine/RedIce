@@ -29,7 +29,7 @@ do ->
     # Add events and methods here
     self.bind "update", ->
       loadedList.sort()
-      assestList.sort()
+      assetList.sort()
 
       # Add update method behavior
       if loadingComplete()
