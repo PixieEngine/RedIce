@@ -1,13 +1,13 @@
 do ->
-  loadedAssets = 0
   assetList = []
+  loadedList = []
 
   Sprite.load = ((oldLoad) ->
     (url, callback) ->
       assetList.push url
 
       oldLoad url, (sprite) ->
-        loadedAssets += 1
+        loadedList.push url
         callback?(sprite)
   )(Sprite.load)
   
@@ -16,7 +16,7 @@ do ->
       assetList.push name
 
       oldLoad name, tileWidth, tileHeight, scale, (sprites) ->
-        loadedAssets += 1
+        loadedList.push name
         callback?(sprites)
   )(Sprite.loadSheet)
 
@@ -24,10 +24,13 @@ do ->
     self = GameState(I)
     
     loadingComplete = ->
-      loadedAssets >= assetList.length
+      loadedList.length >= assetList.length
   
     # Add events and methods here
     self.bind "update", ->
+      loadedList.sort()
+      assestList.sort()
+
       # Add update method behavior
       if loadingComplete()
         engine.setState(MainMenuState())
@@ -41,7 +44,7 @@ do ->
         color: "#FFF"
         
       canvas.centerText
-        text: "#{loadedAssets} / #{assetList.length}"
+        text: "#{loadedList.length} / #{assetList.length}"
         y: App.height/2 + 50
         color: "#FFF"
         
@@ -50,6 +53,12 @@ do ->
       assetList.each (asset, i) ->
         canvas.drawText
           x: 12
+          y: (i + 1) * 14
+          text: asset
+          
+      loadedList.each (asset, i) ->
+        canvas.drawText
+          x: 12 + App.width/2
           y: (i + 1) * 14
           text: asset
   
