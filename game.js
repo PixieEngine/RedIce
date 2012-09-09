@@ -13188,6 +13188,260 @@ Framerate = function(options) {
 
 }(this, this.document));
 
+/**
+The Sprite class provides a way to load images for use in games.
+
+By default, images are loaded asynchronously. A proxy object is 
+returned immediately. Even though it has a draw method it will not
+draw anything to the screen until the image has been loaded.
+
+@name Sprite
+@constructor
+*/
+(function() {
+  var LoaderProxy, Sprite, spriteCache;
+  LoaderProxy = function() {
+    return {
+      draw: function() {},
+      fill: function() {},
+      frame: function() {},
+      update: function() {},
+      width: null,
+      height: null
+    };
+  };
+  spriteCache = {};
+  Sprite = function(image, sourceX, sourceY, width, height) {
+    sourceX || (sourceX = 0);
+    sourceY || (sourceY = 0);
+    width || (width = image.width);
+    height || (height = image.height);
+    return {
+      /**
+      Draw this sprite on the given canvas at the given position.
+      
+      @name draw
+      @methodOf Sprite#
+      @param {PowerCanvas} canvas Reference to the canvas to draw the sprite on
+      @param {Number} x Position on the x axis to draw the sprite
+      @param {Number} y Position on the y axis to draw the sprite
+      */
+      draw: function(canvas, x, y) {
+        return canvas.drawImage(image, sourceX, sourceY, width, height, x, y, width, height);
+      },
+      /**
+      Draw this sprite on the given canvas tiled to the x, y, 
+      width, and height dimensions specified.
+      
+      @name fill
+      @methodOf Sprite#
+      @param {PowerCanvas} canvas Reference to the canvas to draw the sprite on
+      @param {Number} x Position on the x axis to draw the sprite
+      @param {Number} y Position on the y axis to draw the sprite
+      @param {Number} width How far to tile the sprite on the x-axis
+      @param {Number} height How far to tile the sprite on the y-axis
+      @param {String} repeat Repeat options. Can be `repeat-x`, `repeat-y`, `no-repeat`, or `repeat`. Defaults to `repeat`
+      */
+      fill: function(canvas, x, y, width, height, repeat) {
+        var pattern;
+        if (repeat == null) repeat = "repeat";
+        pattern = canvas.createPattern(image, repeat);
+        return canvas.drawRect({
+          x: x,
+          y: y,
+          width: width,
+          height: height,
+          color: pattern
+        });
+      },
+      width: width,
+      height: height
+    };
+  };
+  /**
+  Loads all sprites from a sprite sheet found in
+  your images directory, specified by the name passed in.
+  
+  @name loadSheet
+  @methodOf Sprite
+  @param {String} name Name of the spriteSheet image in your images directory
+  @param {Number} tileWidth Width of each sprite in the sheet
+  @param {Number} tileHeight Height of each sprite in the sheet
+  @returns {Array} An array of sprite objects
+  */
+  Sprite.loadSheet = function(name, tileWidth, tileHeight, scale, callback) {
+    var image, sprites, url;
+    if (scale == null) scale = 1;
+    url = ResourceLoader.urlFor("images", name);
+    sprites = [];
+    image = new Image();
+    image.onload = function() {
+      var context, height, imgElement, width;
+      imgElement = this;
+      width = this.width * scale;
+      height = this.height * scale;
+      tileWidth *= scale;
+      tileHeight *= scale;
+      if (scale !== 1) {
+        imgElement = $("<canvas width=" + width + " height=" + height + ">").get(0);
+        context = imgElement.getContext('2d');
+        context.drawImage(this, 0, 0, this.width, this.height, 0, 0, width, height);
+      }
+      (height / tileHeight).times(function(row) {
+        return (width / tileWidth).times(function(col) {
+          return sprites.push(Sprite(imgElement, col * tileWidth, row * tileHeight, tileWidth, tileHeight));
+        });
+      });
+      return typeof callback === "function" ? callback(sprites) : void 0;
+    };
+    image.src = url;
+    return sprites;
+  };
+  /**
+  Loads a sprite from a given url.
+  
+  @name load
+  @methodOf Sprite
+  @param {String} url
+  @param {Function} [loadedCallback]
+  @returns {Sprite} A sprite object
+  */
+  Sprite.load = function(url, loadedCallback) {
+    var img, proxy, sprite;
+    if (sprite = spriteCache[url]) {
+      if (loadedCallback != null) loadedCallback.defer(sprite);
+      return sprite;
+    }
+    img = new Image();
+    proxy = LoaderProxy();
+    img.onload = function() {
+      spriteCache[url] = Object.extend(proxy, Sprite(this));
+      return typeof loadedCallback === "function" ? loadedCallback(proxy) : void 0;
+    };
+    img.src = url;
+    return proxy;
+  };
+  /**
+  Loads a sprite with the given pixie id.
+  
+  @name fromPixieId
+  @methodOf Sprite
+  @param {Number} id Pixie Id of the sprite to load
+  @param {Function} [callback] Function to execute once the image is loaded. The sprite proxy data is passed to this as a parameter.
+  @returns {Sprite}
+  */
+  Sprite.fromPixieId = function(id, callback) {
+    return Sprite.load("http://pixieengine.com/s3/sprites/" + id + "/original.png", callback);
+  };
+  /**
+  A sprite that draws nothing.
+  
+  @name EMPTY
+  @fieldOf Sprite
+  @constant
+  @returns {Sprite}
+  */
+  /**
+  A sprite that draws nothing.
+  
+  @name NONE
+  @fieldOf Sprite
+  @constant
+  @returns {Sprite}
+  */
+  Sprite.EMPTY = Sprite.NONE = LoaderProxy();
+  /**
+  Loads a sprite from a given url.
+  
+  @name fromURL
+  @methodOf Sprite
+  @param {String} url The url where the image to load is located
+  @param {Function} [callback] Function to execute once the image is loaded. The sprite proxy data is passed to this as a parameter.
+  @returns {Sprite}
+  */
+  Sprite.fromURL = Sprite.load;
+  /**
+  Loads a sprite with the given name.
+  
+  @name loadByName
+  @methodOf Sprite
+  @param {String} name The name of the image in your images directory
+  @param {Function} [callback] Function to execute once the image is loaded. The sprite proxy data is passed to this as a parameter.
+  @returns {Sprite}
+  */
+  Sprite.loadByName = function(name, callback) {
+    return Sprite.load(ResourceLoader.urlFor("images", name), callback);
+  };
+  return (typeof exports !== "undefined" && exports !== null ? exports : this)["Sprite"] = Sprite;
+})();
+
+
+(function() {
+  var assetList, loadedList;
+  assetList = [];
+  loadedList = [];
+  Sprite.load = (function(oldLoad) {
+    return function(url, callback) {
+      assetList.push(url);
+      return oldLoad(url, function(sprite) {
+        loadedList.push(url);
+        return typeof callback === "function" ? callback(sprite) : void 0;
+      });
+    };
+  })(Sprite.load);
+  Sprite.loadSheet = (function(oldLoad) {
+    return function(name, tileWidth, tileHeight, scale, callback) {
+      assetList.push(name);
+      return oldLoad(name, tileWidth, tileHeight, scale, function(sprites) {
+        loadedList.push(name);
+        return typeof callback === "function" ? callback(sprites) : void 0;
+      });
+    };
+  })(Sprite.loadSheet);
+  return window.LoaderState = function(I) {
+    var loadingComplete, self;
+    if (I == null) I = {};
+    self = GameState(I);
+    loadingComplete = function() {
+      return loadedList.length >= assetList.length;
+    };
+    self.bind("update", function() {
+      loadedList.sort();
+      assetList.sort();
+      if (loadingComplete()) return engine.setState(MainMenuState());
+    });
+    self.bind("overlay", function(canvas) {
+      canvas.font("bold 48px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
+      canvas.centerText({
+        text: "Loading",
+        y: App.height / 2,
+        color: "#FFF"
+      });
+      canvas.centerText({
+        text: "" + loadedList.length + " / " + assetList.length,
+        y: App.height / 2 + 50,
+        color: "#FFF"
+      });
+      canvas.font("bold 10px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
+      assetList.each(function(asset, i) {
+        return canvas.drawText({
+          x: 12,
+          y: (i + 1) * 14,
+          text: asset
+        });
+      });
+      return loadedList.each(function(asset, i) {
+        return canvas.drawText({
+          x: 12 + App.width / 2,
+          y: (i + 1) * 14,
+          text: asset
+        });
+      });
+    });
+    return self;
+  };
+})();
+
 var AI;
 
 AI = function(I, self) {
@@ -13898,6 +14152,23 @@ layouts[selectedLayout].each(function(actions, i) {
 });
 
 parent.gameControlData = gameControlData;
+
+var __slice = Array.prototype.slice;
+
+Function.prototype.delay = function() {
+  var args, func, wait;
+  wait = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+  func = this;
+  return setTimeout(function() {
+    return func.apply(null, args);
+  }, wait);
+};
+
+Function.prototype.defer = function() {
+  var args;
+  args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+  return this.delay.apply(this, [1].concat(args));
+};
 
 
 (function() {
@@ -14677,7 +14948,7 @@ Gamepads = function(I) {
   state = {};
   controllers = [];
   snapshot = function() {
-    return Array.prototype.map.call(navigator.webkitGamepads, function(x) {
+    return Array.prototype.map.call(navigator.webkitGamepads || navigator.webkitGetGamepads(), function(x) {
       return {
         axes: x.axes,
         buttons: x.buttons
@@ -14774,9 +15045,9 @@ Gamepads.Controller = function(I) {
       }
     },
     buttonPressed: function(button) {
-      var buttonId;
+      var buttonId, _ref;
       buttonId = buttonMapping[button];
-      return (self.buttons()[buttonId] > BUTTON_THRESHOLD) && !(previousState().buttons[buttonId] > BUTTON_THRESHOLD);
+      return (self.buttons()[buttonId] > BUTTON_THRESHOLD) && !(((_ref = previousState()) != null ? _ref.buttons[buttonId] : void 0) > BUTTON_THRESHOLD);
     },
     position: function(stick) {
       var magnitude, p, ratio, state;
@@ -17607,192 +17878,6 @@ SideBoards = function(I) {
   return self;
 };
 
-/**
-The Sprite class provides a way to load images for use in games.
-
-By default, images are loaded asynchronously. A proxy object is 
-returned immediately. Even though it has a draw method it will not
-draw anything to the screen until the image has been loaded.
-
-@name Sprite
-@constructor
-*/
-(function() {
-  var LoaderProxy, Sprite, spriteCache;
-  LoaderProxy = function() {
-    return {
-      draw: function() {},
-      fill: function() {},
-      frame: function() {},
-      update: function() {},
-      width: null,
-      height: null
-    };
-  };
-  spriteCache = {};
-  Sprite = function(image, sourceX, sourceY, width, height) {
-    sourceX || (sourceX = 0);
-    sourceY || (sourceY = 0);
-    width || (width = image.width);
-    height || (height = image.height);
-    return {
-      /**
-      Draw this sprite on the given canvas at the given position.
-      
-      @name draw
-      @methodOf Sprite#
-      @param {PowerCanvas} canvas Reference to the canvas to draw the sprite on
-      @param {Number} x Position on the x axis to draw the sprite
-      @param {Number} y Position on the y axis to draw the sprite
-      */
-      draw: function(canvas, x, y) {
-        return canvas.drawImage(image, sourceX, sourceY, width, height, x, y, width, height);
-      },
-      /**
-      Draw this sprite on the given canvas tiled to the x, y, 
-      width, and height dimensions specified.
-      
-      @name fill
-      @methodOf Sprite#
-      @param {PowerCanvas} canvas Reference to the canvas to draw the sprite on
-      @param {Number} x Position on the x axis to draw the sprite
-      @param {Number} y Position on the y axis to draw the sprite
-      @param {Number} width How far to tile the sprite on the x-axis
-      @param {Number} height How far to tile the sprite on the y-axis
-      @param {String} repeat Repeat options. Can be `repeat-x`, `repeat-y`, `no-repeat`, or `repeat`. Defaults to `repeat`
-      */
-      fill: function(canvas, x, y, width, height, repeat) {
-        var pattern;
-        if (repeat == null) repeat = "repeat";
-        pattern = canvas.createPattern(image, repeat);
-        return canvas.drawRect({
-          x: x,
-          y: y,
-          width: width,
-          height: height,
-          color: pattern
-        });
-      },
-      width: width,
-      height: height
-    };
-  };
-  /**
-  Loads all sprites from a sprite sheet found in
-  your images directory, specified by the name passed in.
-  
-  @name loadSheet
-  @methodOf Sprite
-  @param {String} name Name of the spriteSheet image in your images directory
-  @param {Number} tileWidth Width of each sprite in the sheet
-  @param {Number} tileHeight Height of each sprite in the sheet
-  @returns {Array} An array of sprite objects
-  */
-  Sprite.loadSheet = function(name, tileWidth, tileHeight, scale) {
-    var image, sprites, url;
-    if (scale == null) scale = 1;
-    url = ResourceLoader.urlFor("images", name);
-    sprites = [];
-    image = new Image();
-    image.onload = function() {
-      var context, height, imgElement, width;
-      imgElement = this;
-      width = this.width * scale;
-      height = this.height * scale;
-      tileWidth *= scale;
-      tileHeight *= scale;
-      if (scale !== 1) {
-        imgElement = $("<canvas width=" + width + " height=" + height + ">").get(0);
-        context = imgElement.getContext('2d');
-        context.drawImage(this, 0, 0, this.width, this.height, 0, 0, width, height);
-      }
-      return (height / tileHeight).times(function(row) {
-        return (width / tileWidth).times(function(col) {
-          return sprites.push(Sprite(imgElement, col * tileWidth, row * tileHeight, tileWidth, tileHeight));
-        });
-      });
-    };
-    image.src = url;
-    return sprites;
-  };
-  /**
-  Loads a sprite from a given url.
-  
-  @name load
-  @methodOf Sprite
-  @param {String} url
-  @param {Function} [loadedCallback]
-  @returns {Sprite} A sprite object
-  */
-  Sprite.load = function(url, loadedCallback) {
-    var img, proxy, sprite;
-    if (sprite = spriteCache[url]) {
-      if (loadedCallback != null) loadedCallback.defer(sprite);
-      return sprite;
-    }
-    img = new Image();
-    proxy = LoaderProxy();
-    img.onload = function() {
-      spriteCache[url] = Object.extend(proxy, Sprite(this));
-      return typeof loadedCallback === "function" ? loadedCallback(proxy) : void 0;
-    };
-    img.src = url;
-    return proxy;
-  };
-  /**
-  Loads a sprite with the given pixie id.
-  
-  @name fromPixieId
-  @methodOf Sprite
-  @param {Number} id Pixie Id of the sprite to load
-  @param {Function} [callback] Function to execute once the image is loaded. The sprite proxy data is passed to this as a parameter.
-  @returns {Sprite}
-  */
-  Sprite.fromPixieId = function(id, callback) {
-    return Sprite.load("http://pixieengine.com/s3/sprites/" + id + "/original.png", callback);
-  };
-  /**
-  A sprite that draws nothing.
-  
-  @name EMPTY
-  @fieldOf Sprite
-  @constant
-  @returns {Sprite}
-  */
-  /**
-  A sprite that draws nothing.
-  
-  @name NONE
-  @fieldOf Sprite
-  @constant
-  @returns {Sprite}
-  */
-  Sprite.EMPTY = Sprite.NONE = LoaderProxy();
-  /**
-  Loads a sprite from a given url.
-  
-  @name fromURL
-  @methodOf Sprite
-  @param {String} url The url where the image to load is located
-  @param {Function} [callback] Function to execute once the image is loaded. The sprite proxy data is passed to this as a parameter.
-  @returns {Sprite}
-  */
-  Sprite.fromURL = Sprite.load;
-  /**
-  Loads a sprite with the given name.
-  
-  @name loadByName
-  @methodOf Sprite
-  @param {String} name The name of the image in your images directory
-  @param {Function} [callback] Function to execute once the image is loaded. The sprite proxy data is passed to this as a parameter.
-  @returns {Sprite}
-  */
-  Sprite.loadByName = function(name, callback) {
-    return Sprite.load(ResourceLoader.urlFor("images", name), callback);
-  };
-  return (typeof exports !== "undefined" && exports !== null ? exports : this)["Sprite"] = Sprite;
-})();
-
 var TeamSheet;
 
 TeamSheet = function(I) {
@@ -18101,7 +18186,7 @@ engine.bind("afterUpdate", function(canvas) {
   return updateDuration = (+(new Date)) - updateStartTime;
 });
 
-engine.setState(MainMenuState());
+engine.setState(LoaderState());
 
 engine.start();
  });
