@@ -14,16 +14,20 @@ do ->
 
   window.AssetGroup = ->
     assetList = []
+    loading = false
 
-    add: (asset) ->
-      assetList.push asset
-
-    loadAll: ->
-      assetList.invoke "load"
-
-    status: ->
-      loadedAssetCount = assetList.pluck("loaded").sum()
-      "#{loadedAssetCount} / #{assetList.length}"
+    self =
+      add: (asset) ->
+        assetList.push asset
+        asset.load() if loading
+    
+      loadAll: ->
+        assetList.invoke "load"
+        loading = true
+    
+      status: ->
+        loadedAssetCount = assetList.pluck("loaded").sum()
+        "#{loadedAssetCount} / #{assetList.length}"
 
   window.AssetLoader =
     group: (name, callback) ->
@@ -31,6 +35,9 @@ do ->
       currentAssetGroup = name
       callback()
       currentAssetGroup = oldAssetGroup
+
+    load: (groupName="default") ->
+      assetGroups[]
 
   oldSpriteLoad = Sprite.load
   
