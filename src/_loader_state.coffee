@@ -48,7 +48,7 @@ do ->
         fn()
 
   Sprite.load = (url, callback) ->
-    currentGroup.add(Asset loadSpriteFnGenerator(url, callback))
+    currentGroup().add(Asset loadSpriteFnGenerator(url, callback))
   
   oldSpriteLoadSheet = Sprite.loadSheet
   
@@ -59,7 +59,7 @@ do ->
         fn()
 
   Sprite.loadSheet = (name, tileWidth, tileHeight, scale, callback) ->
-    currentGroup.add(Asset loadSpriteSheetFnGenerator(name, tileWidth, tileHeight, scale, callback))
+    currentGroup().add(Asset loadSpriteSheetFnGenerator(name, tileWidth, tileHeight, scale, callback))
 
   window.LoaderState = (I={}) ->
     Object.reverseMerge I,
