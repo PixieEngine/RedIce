@@ -44,7 +44,6 @@ Menu = (I={}) ->
     MAX_PLAYERS.times (i) ->
       joystick = engine.controller(i)
 
-      # TOOD Implement this on joysticks side
       moveSelection(joystick.tap().y)
   
       if joystick.buttonPressed "A"
