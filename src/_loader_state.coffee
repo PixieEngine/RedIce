@@ -29,6 +29,9 @@ do ->
         loadedAssetCount = assetList.pluck("loaded").sum()
         "#{loadedAssetCount} / #{assetList.length}"
 
+      loadingComplete: ->
+        assetList.pluck("loaded").sum() is assetList.length
+
   window.AssetLoader =
     group: (name, callback) ->
       oldAssetGroup = currentAssetGroup
@@ -64,19 +67,15 @@ do ->
   window.LoaderState = (I={}) ->
     Object.reverseMerge I,
       assetGroup: "default"
+      
+    assetGroup = assetGroups[I.assetGroup]
 
     self = GameState(I)
-    
-    loadingComplete = ->
-      loadedList.length >= assetList.length
-  
+
     # Add events and methods here
     self.bind "update", ->
-      loadedList.sort()
-      assetList.sort()
-
       # Add update method behavior
-      if loadingComplete()
+      if assetGroup.loadingComplete()
         engine.setState(MainMenuState())
         
     self.bind "overlay", (canvas) ->
@@ -88,23 +87,9 @@ do ->
         color: "#FFF"
         
       canvas.centerText
-        text: "#{loadedList.length} / #{assetList.length}"
+        text: assetGroup.status
         y: App.height/2 + 50
         color: "#FFF"
-        
-      canvas.font("bold 10px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
-        
-      assetList.each (asset, i) ->
-        canvas.drawText
-          x: 12
-          y: (i + 1) * 14
-          text: asset
-          
-      loadedList.each (asset, i) ->
-        canvas.drawText
-          x: 12 + App.width/2
-          y: (i + 1) * 14
-          text: asset
   
     # We must always return self as the last line
     return self
