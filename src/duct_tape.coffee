@@ -9,3 +9,7 @@ Function::delay = (wait, args...) ->
 
 Function::defer = (args...) ->
   this.delay.apply this, [1].concat(args)
+
+Array::pluck = (property) ->
+  @map (item) ->
+    item[property]
