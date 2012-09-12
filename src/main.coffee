@@ -95,5 +95,7 @@ engine.bind "beforeUpdate", ->
 engine.bind "afterUpdate", (canvas) ->
   updateDuration = (+new Date) - updateStartTime
 
-engine.setState(LoaderState())
+engine.setState(LoaderState(
+  assetGroup: "main_menu"
+))
 engine.start()

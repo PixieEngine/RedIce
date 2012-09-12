@@ -1,26 +1,63 @@
 do ->
-  assetList = []
-  loadedList = []
+  currentAssetGroup = undefined
+  assetGroups = {}
 
-  Sprite.load = ((oldLoad) ->
-    (url, callback) ->
-      assetList.push url
+  currentGroup = ->
+    (assetGroups[currentAssetGroup || "default"] ||= AssetGroup())
 
-      oldLoad url, (sprite) ->
-        loadedList.push url
-        callback?(sprite)
-  )(Sprite.load)
+  Asset = (loadFn) ->
+    self =
+      load: ->
+        loadFn ->
+          self.loaded = true
+      loaded: false
+
+  window.AssetGroup = ->
+    assetList = []
+
+    add: (asset) ->
+      assetList.push asset
+
+    loadAll: ->
+      assetList.invoke "load"
+
+    status: ->
+      loadedAssetCount = assetList.pluck("loaded").sum()
+      "#{loadedAssetCount} / #{assetList.length}"
+
+  window.AssetLoader =
+    group: (name, callback) ->
+      oldAssetGroup = currentAssetGroup
+      currentAssetGroup = name
+      callback()
+      currentAssetGroup = oldAssetGroup
+
+  oldSpriteLoad = Sprite.load
   
-  Sprite.loadSheet = ((oldLoad) ->
-    (name, tileWidth, tileHeight, scale, callback) ->
-      assetList.push name
+  loadSpriteFnGenerator = (url, callback) ->
+    (fn) ->
+      oldSpriteLoad url, (sprite) ->
+        callback?(sprite)
+        fn()
 
-      oldLoad name, tileWidth, tileHeight, scale, (sprites) ->
-        loadedList.push name
+  Sprite.load = (url, callback) ->
+    currentGroup.add(Asset loadSpriteFnGenerator(url, callback))
+  
+  oldSpriteLoadSheet = Sprite.loadSheet
+  
+  loadSpriteSheetFnGenerator = (name, tileWidth, tileHeight, scale, callback) ->
+    (fn) ->
+      oldSpriteLoadSheet name, tileWidth, tileHeight, scale, (sprites) ->
         callback?(sprites)
-  )(Sprite.loadSheet)
+        fn()
+
+  Sprite.loadSheet = (name, tileWidth, tileHeight, scale, callback) ->
+    currentGroup.add(Asset loadSpriteSheetFnGenerator(name, tileWidth, tileHeight, scale, callback))
 
   window.LoaderState = (I={}) ->
+    Object.reverseMerge I,
+      assetGroup: "default"
+
     self = GameState(I)
     
     loadingComplete = ->
