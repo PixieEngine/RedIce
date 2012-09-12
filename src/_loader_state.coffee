@@ -35,7 +35,7 @@ do ->
       currentAssetGroup = name
       callback()
       currentAssetGroup = oldAssetGroup
-
+    
     load: (groupName="default") ->
       assetGroups[]
 
