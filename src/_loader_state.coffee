@@ -37,7 +37,7 @@ do ->
       currentAssetGroup = oldAssetGroup
     
     load: (groupName="default") ->
-      assetGroups[]
+      assetGroups[groupName].loadAll()
 
   oldSpriteLoad = Sprite.load
   
