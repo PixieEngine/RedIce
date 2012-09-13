@@ -52,8 +52,12 @@ do ->
         fn()
 
   Sprite.load = (url, callback) ->
-    currentGroup().add(Asset loadSpriteFnGenerator(url, callback))
-  
+    proxy = Sprite.LoaderProxy()
+
+    currentGroup().add(Asset loadSpriteFnGenerator(url, (sprite) ->
+      Object.extend(proxy, sprite)
+    ))
+
   oldSpriteLoadSheet = Sprite.loadSheet
   
   loadSpriteSheetFnGenerator = (name, tileWidth, tileHeight, scale, callback) ->
