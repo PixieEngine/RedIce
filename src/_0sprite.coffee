@@ -191,5 +191,7 @@ draw anything to the screen until the image has been loaded.
   Sprite.loadByName = (name, callback) ->
     Sprite.load(ResourceLoader.urlFor("images", name), callback)
 
+  Sprite.LoaderProxy = LoaderProxy
+
   (exports ? this)["Sprite"] = Sprite
 )()
