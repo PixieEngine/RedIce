@@ -88,7 +88,7 @@ do ->
         color: "#FFF"
         
       canvas.centerText
-        text: assetGroup.status
+        text: assetGroup.status()
         y: App.height/2 + 50
         color: "#FFF"
   
