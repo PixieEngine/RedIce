@@ -57,6 +57,8 @@ do ->
     currentGroup().add(Asset loadSpriteFnGenerator(url, (sprite) ->
       Object.extend(proxy, sprite)
     ))
+    
+    return proxy
 
   oldSpriteLoadSheet = Sprite.loadSheet
   
