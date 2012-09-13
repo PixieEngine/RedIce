@@ -28,7 +28,7 @@ do ->
       status: ->
         loadedAssetCount = assetList.pluck("loaded").sum()
 
-        "#{loadedAssetCount} / #{assetList.length}"
+        "#{loadedAssetCount}/#{assetList.length}"
 
       loadingComplete: ->
         assetList.pluck("loaded").sum() is assetList.length
