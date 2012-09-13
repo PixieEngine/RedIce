@@ -57,7 +57,7 @@ do ->
     currentGroup().add(Asset loadSpriteFnGenerator(url, (sprite) ->
       Object.extend(proxy, sprite)
     ))
-    
+
     return proxy
 
   oldSpriteLoadSheet = Sprite.loadSheet
@@ -69,7 +69,14 @@ do ->
         fn()
 
   Sprite.loadSheet = (name, tileWidth, tileHeight, scale, callback) ->
-    currentGroup().add(Asset loadSpriteSheetFnGenerator(name, tileWidth, tileHeight, scale, callback))
+    proxy = []
+
+    currentGroup().add(Asset loadSpriteSheetFnGenerator(name, tileWidth, tileHeight, scale, (sprites) ->
+      sprites.each (sprite) ->
+        proxy.push sprite
+    ))
+
+    return proxy
 
   window.LoaderState = (I={}) ->
     Object.reverseMerge I,
