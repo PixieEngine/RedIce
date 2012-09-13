@@ -56,6 +56,7 @@ do ->
 
     currentGroup().add(Asset loadSpriteFnGenerator(url, (sprite) ->
       Object.extend(proxy, sprite)
+      callback?(sprite)
     ))
 
     return proxy
@@ -73,8 +74,8 @@ do ->
 
     currentGroup().add(Asset loadSpriteSheetFnGenerator(name, tileWidth, tileHeight, scale, (sprites) ->
       sprites.each (sprite) ->
-        callback?()
         proxy.push sprite
+      callback?(sprites)
     ))
 
     return proxy
