@@ -70,6 +70,7 @@ do ->
       assetGroup: "default"
       
     assetGroup = assetGroups[I.assetGroup]
+    assetGroup.loadAll()
 
     self = GameState(I)
 
