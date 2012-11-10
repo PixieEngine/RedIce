@@ -7,8 +7,6 @@ MatchState = (I={}) ->
   self.bind "enter", ->
     engine.clear(true)
 
-    rink.show()
-
     scoreboard = engine.add
       class: "Scoreboard"
       # periodTime: 120
@@ -41,6 +39,10 @@ MatchState = (I={}) ->
 
     if config.music
       Music.play "music1"
+
+  self.bind "beforeDraw", (canvas) ->
+    rink.drawBase(canvas)
+    rink.drawBack(canvas)
 
   # Add events and methods here
   self.bind "update", ->
