@@ -181,6 +181,12 @@ Rink = (I={}) ->
     hide: ->
       [canvas, frontBoardsCanvas, backBoardsCanvas].each (c) ->
         $(c.element()).hide()
+    drawBase: (canvas) ->
+      canvas.context().drawImage(canvas.element(), 0, 0)
+    drawBack: (canvas) ->
+      canvas.context().drawImage(backBoardsCanvas.element(), 0, 0)
+    drawFront: (canvas) ->
+      canvas.context().drawImage(frontBoardsCanvas.element(), 0, 0)
 
   return self
 
