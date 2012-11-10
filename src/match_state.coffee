@@ -44,7 +44,7 @@ MatchState = (I={}) ->
     rink.drawBase(canvas)
     rink.drawBack(canvas)
 
-  self.bind "afterDraw", (canvas) ->
+  self.bind "overlay", (canvas) ->
     rink.drawFront(canvas)
 
   # Add events and methods here
