@@ -3,8 +3,6 @@ MainMenuState = (I={}) ->
   self = GameState(I)
 
   self.bind "enter", ->
-    rink.hide()
-
     engine.add
       class: "Menu"
 
