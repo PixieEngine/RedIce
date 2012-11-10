@@ -175,7 +175,7 @@ Rink = (I={}) ->
     drawBase: (canvas) ->
       canvas.context().drawImage(canvas.element(), 0, 0)
     drawBack: (canvas) ->
-      canvas.context().drawImage(canvas.element(), 0, 0)
+      canvas.context().drawImage(backBoardsCanvas.element(), 0, 0)
     drawFront: (canvas) ->
       canvas.context().drawImage(frontBoardsCanvas.element(), 0, 0)
 
