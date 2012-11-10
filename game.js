@@ -13372,43 +13372,115 @@ draw anything to the screen until the image has been loaded.
   Sprite.loadByName = function(name, callback) {
     return Sprite.load(ResourceLoader.urlFor("images", name), callback);
   };
+  Sprite.LoaderProxy = LoaderProxy;
   return (typeof exports !== "undefined" && exports !== null ? exports : this)["Sprite"] = Sprite;
 })();
 
 
 (function() {
-  var assetList, loadedList;
-  assetList = [];
-  loadedList = [];
-  Sprite.load = (function(oldLoad) {
-    return function(url, callback) {
-      assetList.push(url);
-      return oldLoad(url, function(sprite) {
-        loadedList.push(url);
-        return typeof callback === "function" ? callback(sprite) : void 0;
+  var Asset, assetGroups, currentAssetGroup, currentGroup, loadSpriteFnGenerator, loadSpriteSheetFnGenerator, oldSpriteLoad, oldSpriteLoadSheet;
+  currentAssetGroup = void 0;
+  assetGroups = {};
+  currentGroup = function() {
+    var _name;
+    return assetGroups[_name = currentAssetGroup || "default"] || (assetGroups[_name] = AssetGroup());
+  };
+  Asset = function(loadFn) {
+    var self;
+    return self = {
+      load: function() {
+        return loadFn(function() {
+          return self.loaded = true;
+        });
+      },
+      loaded: false
+    };
+  };
+  window.AssetGroup = function() {
+    var assetList, loading, self;
+    assetList = [];
+    loading = false;
+    return self = {
+      add: function(asset) {
+        assetList.push(asset);
+        if (loading) return asset.load();
+      },
+      loadAll: function() {
+        assetList.invoke("load");
+        return loading = true;
+      },
+      status: function() {
+        var loadedAssetCount;
+        loadedAssetCount = assetList.pluck("loaded").sum();
+        return "" + loadedAssetCount + " / " + assetList.length;
+      },
+      loadingComplete: function() {
+        return assetList.pluck("loaded").sum() === assetList.length;
+      }
+    };
+  };
+  window.AssetLoader = {
+    group: function(name, callback) {
+      var oldAssetGroup;
+      oldAssetGroup = currentAssetGroup;
+      currentAssetGroup = name;
+      callback();
+      return currentAssetGroup = oldAssetGroup;
+    },
+    load: function(groupName) {
+      if (groupName == null) groupName = "default";
+      return assetGroups[groupName].loadAll();
+    }
+  };
+  oldSpriteLoad = Sprite.load;
+  loadSpriteFnGenerator = function(url, callback) {
+    return function(fn) {
+      return oldSpriteLoad(url, function(sprite) {
+        if (typeof callback === "function") callback(sprite);
+        return fn();
       });
     };
-  })(Sprite.load);
-  Sprite.loadSheet = (function(oldLoad) {
-    return function(name, tileWidth, tileHeight, scale, callback) {
-      assetList.push(name);
-      return oldLoad(name, tileWidth, tileHeight, scale, function(sprites) {
-        loadedList.push(name);
-        return typeof callback === "function" ? callback(sprites) : void 0;
+  };
+  Sprite.load = function(url, callback) {
+    var proxy;
+    proxy = Sprite.LoaderProxy();
+    currentGroup().add(Asset(loadSpriteFnGenerator(url, function(sprite) {
+      Object.extend(proxy, sprite);
+      return typeof callback === "function" ? callback(sprite) : void 0;
+    })));
+    return proxy;
+  };
+  oldSpriteLoadSheet = Sprite.loadSheet;
+  loadSpriteSheetFnGenerator = function(name, tileWidth, tileHeight, scale, callback) {
+    return function(fn) {
+      return oldSpriteLoadSheet(name, tileWidth, tileHeight, scale, function(sprites) {
+        if (typeof callback === "function") callback(sprites);
+        return fn();
       });
     };
-  })(Sprite.loadSheet);
+  };
+  Sprite.loadSheet = function(name, tileWidth, tileHeight, scale, callback) {
+    var proxy;
+    proxy = [];
+    currentGroup().add(Asset(loadSpriteSheetFnGenerator(name, tileWidth, tileHeight, scale, function(sprites) {
+      sprites.each(function(sprite) {
+        return proxy.push(sprite);
+      });
+      return typeof callback === "function" ? callback(sprites) : void 0;
+    })));
+    return proxy;
+  };
   return window.LoaderState = function(I) {
-    var loadingComplete, self;
+    var assetGroup, self;
     if (I == null) I = {};
+    Object.reverseMerge(I, {
+      assetGroup: "default"
+    });
+    assetGroup = assetGroups[I.assetGroup];
+    assetGroup.loadAll();
     self = GameState(I);
-    loadingComplete = function() {
-      return loadedList.length >= assetList.length;
-    };
     self.bind("update", function() {
-      loadedList.sort();
-      assetList.sort();
-      if (loadingComplete()) return engine.setState(MainMenuState());
+      if (assetGroup.loadingComplete()) return engine.setState(MainMenuState());
     });
     self.bind("overlay", function(canvas) {
       canvas.font("bold 48px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
@@ -13417,25 +13489,10 @@ draw anything to the screen until the image has been loaded.
         y: App.height / 2,
         color: "#FFF"
       });
-      canvas.centerText({
-        text: "" + loadedList.length + " / " + assetList.length,
+      return canvas.centerText({
+        text: assetGroup.status(),
         y: App.height / 2 + 50,
         color: "#FFF"
-      });
-      canvas.font("bold 10px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
-      assetList.each(function(asset, i) {
-        return canvas.drawText({
-          x: 12,
-          y: (i + 1) * 14,
-          text: asset
-        });
-      });
-      return loadedList.each(function(asset, i) {
-        return canvas.drawText({
-          x: 12 + App.width / 2,
-          y: (i + 1) * 14,
-          text: asset
-        });
       });
     });
     return self;
@@ -14168,6 +14225,12 @@ Function.prototype.defer = function() {
   var args;
   args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
   return this.delay.apply(this, [1].concat(args));
+};
+
+Array.prototype.pluck = function(property) {
+  return this.map(function(item) {
+    return item[property];
+  });
 };
 
 
@@ -15275,7 +15338,6 @@ MainMenuState = function(I) {
   if (I == null) I = {};
   self = GameState(I);
   self.bind("enter", function() {
-    rink.hide();
     engine.add({
       "class": "Menu"
     });
@@ -15318,7 +15380,6 @@ MatchSetupState = function(I) {
   self.bind("enter", function() {
     var configurator;
     engine.clear(false);
-    rink.hide();
     if (config.music) {
       Music.volume(0.4);
       Music.play("title_screen");
@@ -15345,7 +15406,6 @@ MatchState = function(I) {
   self.bind("enter", function() {
     var leftGoal, rightGoal, scoreboard;
     engine.clear(true);
-    rink.show();
     scoreboard = engine.add({
       "class": "Scoreboard"
     });
@@ -15375,6 +15435,13 @@ MatchState = function(I) {
       return scoreboard.score("away");
     });
     if (config.music) return Music.play("music1");
+  });
+  self.bind("beforeDraw", function(canvas) {
+    rink.drawBase(canvas);
+    return rink.drawBack(canvas);
+  });
+  self.bind("overlay", function(canvas) {
+    return rink.drawFront(canvas);
   });
   self.bind("update", function() {
     var objects, players, playersAndPucks, pucks, zambonis;
@@ -17402,24 +17469,23 @@ Puck = function(I) {
 var Rink;
 
 Rink = function(I) {
-  var backBoardsCanvas, blue, canvas, faceOffCircleRadius, faceOffSpotRadius, frontBoardsCanvas, red, rinkCornerRadius, self, spriteSize, x, y, _i, _len, _ref;
+  var backBoardsCanvas, blue, faceOffCircleRadius, faceOffSpotRadius, frontBoardsCanvas, iceCanvas, red, rinkCornerRadius, self, spriteSize, x, y, _i, _len, _ref;
   if (I == null) I = {};
   Object.reverseMerge(I, {
     team: "smiley",
     spriteSize: 64
   });
-  canvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").appendTo("body").css({
+  iceCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").css({
     position: "absolute",
     top: 0,
-    left: 0,
-    zIndex: "-10"
+    left: 0
   }).pixieCanvas();
   red = "red";
   blue = "blue";
   faceOffSpotRadius = 5;
   faceOffCircleRadius = 38;
   rinkCornerRadius = Rink.CORNER_RADIUS;
-  canvas.drawRoundRect({
+  iceCanvas.drawRoundRect({
     color: "white",
     x: WALL_LEFT,
     y: WALL_TOP,
@@ -17431,7 +17497,7 @@ Rink = function(I) {
   for (_i = 0, _len = _ref.length; _i < _len; _i++) {
     x = _ref[_i];
     x += WALL_LEFT;
-    canvas.drawLine({
+    iceCanvas.drawLine({
       color: blue,
       start: Point(x, WALL_TOP),
       end: Point(x, WALL_BOTTOM),
@@ -17439,7 +17505,7 @@ Rink = function(I) {
     });
   }
   x = WALL_LEFT + ARENA_WIDTH / 2;
-  canvas.drawLine({
+  iceCanvas.drawLine({
     color: red,
     start: Point(x, WALL_TOP),
     end: Point(x, WALL_BOTTOM),
@@ -17447,13 +17513,13 @@ Rink = function(I) {
   });
   x = WALL_LEFT + ARENA_WIDTH / 2;
   y = WALL_TOP + ARENA_HEIGHT / 2;
-  canvas.drawCircle({
+  iceCanvas.drawCircle({
     x: x,
     y: y,
     radius: faceOffSpotRadius,
     color: blue
   });
-  canvas.drawCircle({
+  iceCanvas.drawCircle({
     x: x,
     y: y,
     radius: faceOffCircleRadius,
@@ -17463,13 +17529,13 @@ Rink = function(I) {
     }
   });
   x = WALL_LEFT + ARENA_WIDTH / 10;
-  canvas.drawLine({
+  iceCanvas.drawLine({
     start: Point(x, WALL_TOP),
     end: Point(x, WALL_BOTTOM),
     width: 1,
     color: red
   });
-  canvas.drawRect({
+  iceCanvas.drawRect({
     x: x,
     y: WALL_TOP + ARENA_HEIGHT / 2 - 16,
     width: 16,
@@ -17479,13 +17545,13 @@ Rink = function(I) {
     }
   });
   x = WALL_LEFT + ARENA_WIDTH * 9 / 10;
-  canvas.drawLine({
+  iceCanvas.drawLine({
     start: Point(x, WALL_TOP),
     end: Point(x, WALL_BOTTOM),
     width: 1,
     color: red
   });
-  canvas.drawRect({
+  iceCanvas.drawRect({
     x: x - 16,
     y: WALL_TOP + ARENA_HEIGHT / 2 - 16,
     width: 16,
@@ -17498,14 +17564,14 @@ Rink = function(I) {
     y = WALL_TOP + verticalQuarter / 4 * ARENA_HEIGHT;
     return [1 / 5, 1 / 3 + 1 / 40, 2 / 3 - 1 / 40, 4 / 5].each(function(faceOffX, i) {
       x = WALL_LEFT + faceOffX * ARENA_WIDTH;
-      canvas.drawCircle({
+      iceCanvas.drawCircle({
         x: x,
         y: y,
         radius: faceOffSpotRadius,
         color: red
       });
       if (i === 0 || i === 3) {
-        return canvas.drawCircle({
+        return iceCanvas.drawCircle({
           x: x,
           y: y,
           radius: faceOffCircleRadius,
@@ -17518,53 +17584,65 @@ Rink = function(I) {
     });
   });
   spriteSize = 64;
-  backBoardsCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").appendTo("body").css({
+  backBoardsCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").css({
     position: "absolute",
     top: 0,
-    left: 0,
-    zIndex: "-4"
+    left: 0
   }).pixieCanvas();
-  Sprite.loadByName("" + I.spriteSize + "/" + I.team + "_wall_n", function(sprite) {
+  Sprite.loadSheet("" + I.team + "_wall_n", 512, 512, 0.125, function(sprites) {
+    var sprite;
+    sprite = sprites[0];
     return backBoardsCanvas.withTransform(Matrix.translation(WALL_LEFT + 128, WALL_TOP - 64), function() {
       return sprite.fill(backBoardsCanvas, 0, 0, I.spriteSize * 12, I.spriteSize);
     });
   });
-  Sprite.loadByName("" + I.spriteSize + "/" + I.team + "_wall_nw", function(sprite) {
+  Sprite.loadSheet("" + I.team + "_wall_nw", 1024, 1024, 0.125, function(sprites) {
+    var sprite;
+    sprite = sprites[0];
     return backBoardsCanvas.withTransform(Matrix.translation(WALL_LEFT, WALL_TOP - 64), function() {
       return sprite.draw(backBoardsCanvas, 0, 0);
     });
   });
-  Sprite.loadByName("" + I.spriteSize + "/" + I.team + "_wall_nw", function(sprite) {
+  Sprite.loadSheet("" + I.team + "_wall_nw", 1024, 1024, 0.125, function(sprites) {
+    var sprite;
+    sprite = sprites[0];
     return backBoardsCanvas.withTransform(Matrix.translation(WALL_RIGHT, WALL_TOP - 64), function() {
       return backBoardsCanvas.withTransform(Matrix.scale(-1, 1), function() {
         return sprite.draw(backBoardsCanvas, 0, 0);
       });
     });
   });
-  frontBoardsCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").appendTo("body").css({
+  frontBoardsCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").css({
     position: "absolute",
     top: 0,
-    left: 0,
-    zIndex: "1"
+    left: 0
   }).pixieCanvas();
-  Sprite.loadByName("" + I.spriteSize + "/" + I.team + "_wall_sw", function(sprite) {
+  Sprite.loadSheet("" + I.team + "_wall_sw", 1024, 1024, 0.125, function(sprites) {
+    var sprite;
+    sprite = sprites[0];
     return frontBoardsCanvas.withTransform(Matrix.translation(WALL_LEFT, WALL_BOTTOM - 112), function() {
       return sprite.draw(frontBoardsCanvas, 0, 0);
     });
   });
-  Sprite.loadByName("" + I.spriteSize + "/" + I.team + "_wall_sw", function(sprite) {
+  Sprite.loadSheet("" + I.team + "_wall_sw", 1024, 1024, 0.125, function(sprites) {
+    var sprite;
+    sprite = sprites[0];
     return frontBoardsCanvas.withTransform(Matrix.translation(WALL_RIGHT, WALL_BOTTOM - 112), function() {
       return frontBoardsCanvas.withTransform(Matrix.scale(-1, 1), function() {
         return sprite.draw(frontBoardsCanvas, 0, 0);
       });
     });
   });
-  Sprite.loadByName("" + I.spriteSize + "/" + I.team + "_wall_s", function(sprite) {
+  Sprite.loadSheet("" + I.team + "_wall_s", 512, 512, 0.125, function(sprites) {
+    var sprite;
+    sprite = sprites[0];
     return frontBoardsCanvas.withTransform(Matrix.translation(WALL_LEFT + 128, WALL_BOTTOM - 48), function() {
       return sprite.fill(frontBoardsCanvas, 0, 0, I.spriteSize * 12, I.spriteSize);
     });
   });
-  Sprite.loadByName("" + I.spriteSize + "/norm_wall_w", function(sprite) {
+  Sprite.loadSheet("norm_wall_w", 512, 512, 0.125, function(sprites) {
+    var sprite;
+    sprite = sprites[0];
     frontBoardsCanvas.withTransform(Matrix.translation(WALL_LEFT, WALL_TOP + 96), function(canvas) {
       return sprite.fill(canvas, -I.spriteSize / 2, -I.spriteSize / 2, I.spriteSize, I.spriteSize * 6);
     });
@@ -17575,15 +17653,14 @@ Rink = function(I) {
     });
   });
   self = {
-    show: function() {
-      return [canvas, frontBoardsCanvas, backBoardsCanvas].each(function(c) {
-        return $(c.element()).show();
-      });
+    drawBase: function(canvas) {
+      return canvas.context().drawImage(iceCanvas.element(), 0, 0);
     },
-    hide: function() {
-      return [canvas, frontBoardsCanvas, backBoardsCanvas].each(function(c) {
-        return $(c.element()).hide();
-      });
+    drawBack: function(canvas) {
+      return canvas.context().drawImage(backBoardsCanvas.element(), 0, 0);
+    },
+    drawFront: function(canvas) {
+      return canvas.context().drawImage(frontBoardsCanvas.element(), 0, 0);
     }
   };
   return self;

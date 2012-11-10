@@ -72,28 +72,28 @@
         <section class='usage'>
           <h3>Usage</h3>
           <p>Binds a default draw listener to draw a rectangle or a sprite, if one exists.</p>
-          
-          <p>Binds a step listener to update the transform of the object.</p>
-          
-          <p>Autoloads the sprite specified in I.spriteName, if any.</p>
-          
-          <p><code><pre><br />player = Core<br />  x: 15<br />  y: 30<br />  width: 5<br />  height: 5<br />  sprite: "my_cool_sprite"</p>
-          
-          <p>engine.bind 'draw', (canvas) -><br />  player.draw(canvas) </p>
-          
-          <h1>=> Uncaught TypeError: Object has no method 'draw'</h1>
-          
-          <p>player.include(Drawable)</p>
-          
-          <p>engine.bind 'draw', (canvas) -><br />  player.draw(canvas)</p>
-          
-          <h1>=> if you have a sprite named "my_cool_sprite" in your images folder</h1>
-          
-          <h1>then it will be drawn. Otherwise, a rectangle positioned at x: 15 and</h1>
-          
-          <h1>y: 30 with width and height 5 will be drawn.</h1>
-          
-          <p></pre></code></p>
+
+<p>Binds a step listener to update the transform of the object.</p>
+
+<p>Autoloads the sprite specified in I.spriteName, if any.</p>
+
+<p><code><pre><br />player = Core<br />  x: 15<br />  y: 30<br />  width: 5<br />  height: 5<br />  sprite: "my_cool_sprite"</p>
+
+<p>engine.bind 'draw', (canvas) -><br />  player.draw(canvas) </p>
+
+<h1>=> Uncaught TypeError: Object has no method 'draw'</h1>
+
+<p>player.include(Drawable)</p>
+
+<p>engine.bind 'draw', (canvas) -><br />  player.draw(canvas)</p>
+
+<h1>=> if you have a sprite named "my_cool_sprite" in your images folder</h1>
+
+<h1>then it will be drawn. Otherwise, a rectangle positioned at x: 15 and</h1>
+
+<h1>y: 30 with width and height 5 will be drawn.</h1>
+
+<p></pre></code></p>
         </section>
       </div>
       <hr />
