@@ -124,7 +124,8 @@ Rink = (I={}) ->
       zIndex: "-4"
     .pixieCanvas()
 
-  Sprite.loadByName "#{I.team}_wall_n", (sprite) ->
+  Sprite.loadSheet "#{I.team}_wall_n", 512, 512, 0.25, (sprites) ->
+    sprite = sprites[0]
     backBoardsCanvas.withTransform Matrix.translation(WALL_LEFT + 128, WALL_TOP - 64), ->
       sprite.fill(backBoardsCanvas, 0, 0, I.spriteSize * 12, I.spriteSize)
 
