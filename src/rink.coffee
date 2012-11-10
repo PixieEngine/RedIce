@@ -129,12 +129,12 @@ Rink = (I={}) ->
     backBoardsCanvas.withTransform Matrix.translation(WALL_LEFT + 128, WALL_TOP - 64), ->
       sprite.fill(backBoardsCanvas, 0, 0, I.spriteSize * 12, I.spriteSize)
 
-  Sprite.loadByName "#{I.team}_wall_nw", 512, 512, 1, (sprites) ->
+  Sprite.loadSheet "#{I.team}_wall_nw", 512, 512, 0.125, (sprites) ->
     sprite = sprites[0]
     backBoardsCanvas.withTransform Matrix.translation(WALL_LEFT, WALL_TOP - 64), ->
       sprite.draw(backBoardsCanvas, 0, 0)
 
-  Sprite.loadByName "#{I.team}_wall_nw", 512, 512, 1, (sprites) ->
+  Sprite.loadSheet "#{I.team}_wall_nw", 512, 512, 0.125, (sprites) ->
     sprite = sprites[0]
     backBoardsCanvas.withTransform Matrix.translation(WALL_RIGHT, WALL_TOP - 64), ->
       backBoardsCanvas.withTransform Matrix.scale(-1, 1), ->
@@ -149,23 +149,23 @@ Rink = (I={}) ->
       zIndex: "1"
     .pixieCanvas()
 
-  Sprite.loadByName "#{I.team}_wall_sw", 512, 512, 0.125, (sprites) ->
+  Sprite.loadSheet "#{I.team}_wall_sw", 512, 512, 0.125, (sprites) ->
     sprite = sprites[0]
     frontBoardsCanvas.withTransform Matrix.translation(WALL_LEFT, WALL_BOTTOM - 112), ->
       sprite.draw(frontBoardsCanvas, 0, 0)
 
-  Sprite.loadByName "#{I.team}_wall_sw", 512, 512, 0.125, (sprites) ->
+  Sprite.loadSheet "#{I.team}_wall_sw", 512, 512, 0.125, (sprites) ->
     sprite = sprites[0]
     frontBoardsCanvas.withTransform Matrix.translation(WALL_RIGHT, WALL_BOTTOM - 112), ->
       frontBoardsCanvas.withTransform Matrix.scale(-1, 1), ->
         sprite.draw(frontBoardsCanvas, 0, 0)
 
-  Sprite.loadByName "#{I.team}_wall_s", 512, 512, 0.125, (sprites) ->
+  Sprite.loadSheet "#{I.team}_wall_s", 512, 512, 0.125, (sprites) ->
     sprite = sprites[0]
     frontBoardsCanvas.withTransform Matrix.translation(WALL_LEFT + 128, WALL_BOTTOM - 48), ->
       sprite.fill(frontBoardsCanvas, 0, 0, I.spriteSize * 12, I.spriteSize)
 
-  Sprite.loadByName "norm_wall_w", 512, 512, 0.125, (sprites) ->
+  Sprite.loadSheet "norm_wall_w", 512, 512, 0.125, (sprites) ->
     sprite = sprites[0]
     frontBoardsCanvas.withTransform Matrix.translation(WALL_LEFT, WALL_TOP + 96), (canvas) ->
       sprite.fill(canvas, -I.spriteSize/2, -I.spriteSize/2, I.spriteSize, I.spriteSize * 6)
