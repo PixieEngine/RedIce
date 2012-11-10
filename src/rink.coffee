@@ -149,12 +149,12 @@ Rink = (I={}) ->
       zIndex: "1"
     .pixieCanvas()
 
-  Sprite.loadSheet "#{I.team}_wall_sw", 512, 512, 0.125, (sprites) ->
+  Sprite.loadSheet "#{I.team}_wall_sw", 1024, 1024, 0.125, (sprites) ->
     sprite = sprites[0]
     frontBoardsCanvas.withTransform Matrix.translation(WALL_LEFT, WALL_BOTTOM - 112), ->
       sprite.draw(frontBoardsCanvas, 0, 0)
 
-  Sprite.loadSheet "#{I.team}_wall_sw", 512, 512, 0.125, (sprites) ->
+  Sprite.loadSheet "#{I.team}_wall_sw", 1024, 1024, 0.125, (sprites) ->
     sprite = sprites[0]
     frontBoardsCanvas.withTransform Matrix.translation(WALL_RIGHT, WALL_BOTTOM - 112), ->
       frontBoardsCanvas.withTransform Matrix.scale(-1, 1), ->
