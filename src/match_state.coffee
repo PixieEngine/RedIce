@@ -44,6 +44,9 @@ MatchState = (I={}) ->
     rink.drawBase(canvas)
     rink.drawBack(canvas)
 
+  self.bind "afterDraw", (canvas) ->
+    rink.drawFront(canvas)
+
   # Add events and methods here
   self.bind "update", ->
     pucks = engine.find("Puck")
