@@ -4,7 +4,6 @@ Rink = (I={}) ->
     spriteSize: 64
 
   canvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />")
-    .appendTo("body")
     .css
       position: "absolute"
       top: 0
@@ -116,7 +115,6 @@ Rink = (I={}) ->
   spriteSize = 64
 
   backBoardsCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />")
-    .appendTo("body")
     .css
       position: "absolute"
       top: 0
@@ -141,7 +139,6 @@ Rink = (I={}) ->
         sprite.draw(backBoardsCanvas, 0, 0)
 
   frontBoardsCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />")
-    .appendTo("body")
     .css
       position: "absolute"
       top: 0
@@ -175,12 +172,6 @@ Rink = (I={}) ->
         sprite.fill(canvas, -I.spriteSize/2, -I.spriteSize/2, I.spriteSize, I.spriteSize * 6)
 
   self =
-    show: ->
-      [canvas, frontBoardsCanvas, backBoardsCanvas].each (c) ->
-        $(c.element()).show()
-    hide: ->
-      [canvas, frontBoardsCanvas, backBoardsCanvas].each (c) ->
-        $(c.element()).hide()
     drawBase: (canvas) ->
       canvas.context().drawImage(canvas.element(), 0, 0)
     drawBack: (canvas) ->
