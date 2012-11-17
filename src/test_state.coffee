@@ -24,7 +24,7 @@ TestState = (I={}) ->
       x: WALL_LEFT + ARENA_WIDTH*9/10
 
   self.bind "overlay", (canvas) ->
-    canvas.withTransform Matrix.translation(0, 0), (canvas) ->
+    canvas.withTransform Matrix.translation(50, 50), (canvas) ->
       controller.drawDebug(canvas)
 
     # Add events and methods here
