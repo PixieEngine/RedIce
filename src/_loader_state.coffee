@@ -93,7 +93,7 @@ do ->
     self.bind "update", ->
       # Add update method behavior
       if assetGroup.loadingComplete()
-        engine.setState(TestState())
+        engine.setState(MainMenuState())
         
     self.bind "overlay", (canvas) ->
       canvas.font("bold 48px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
