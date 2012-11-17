@@ -4,7 +4,8 @@ TestState = (I={}) ->
 
   physics = Physics()
   
-  controller = Gamepads.KeyboardController()
+  controller = Gamepads.KeyboardController
+    debugColor: "#FFF"
 
   self.bind "enter", ->
     engine.clear(true)
