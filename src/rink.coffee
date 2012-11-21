@@ -169,10 +169,14 @@ Rink = (I={}) ->
         sprite.fill(canvas, -I.spriteSize/2, -I.spriteSize/2, I.spriteSize, I.spriteSize * 6)
 
   fans = []
-  
+  8.times (x) ->
+    fans.push Fan
+      x: x * 128
+      y: 0
 
   self =
     drawBase: (canvas) ->
+      fans.invoke("draw", canvas)
       canvas.context().drawImage(iceCanvas.element(), 0, 0)
       canvas.context().drawImage(bloodCanvas.element(), 0, 0)
     drawBack: (canvas) ->
