@@ -41,6 +41,7 @@ MatchState = (I={}) ->
       Music.play "music1"
 
   self.bind "beforeDraw", (canvas) ->
+    fans.invoke("draw", canvas)
     rink.drawBase(canvas)
     rink.drawBack(canvas)
 
