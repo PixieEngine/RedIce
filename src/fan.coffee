@@ -20,7 +20,7 @@ Fan = (I) ->
       xOffset = 0
 
     I.x = startX + xOffset
-    I.y = startY + (I.age / 10).floor() % 2
+    I.y = startY + (I.age / 11).floor() % 2
 
   return self
 
