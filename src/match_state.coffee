@@ -17,7 +17,7 @@ MatchState = (I={}) ->
     if x % 2
       fans.push Fan
         x: (x + 0.5) * fanSize + 12
-        y: fanSize/2 + (x % 2) * 36 - 128
+        y: fanSize/2 + (x % 2) * 36 - 64
         age: x * 7
 
   4.times (x) ->
@@ -31,7 +31,7 @@ MatchState = (I={}) ->
     if x % 2
       fans.push Fan
         x: (x + 0.5) * fanSize + 12 + App.width - 400
-        y: fanSize/2 + (x % 2) * 36 - 128
+        y: fanSize/2 + (x % 2) * 36 - 64
         age: x * 7
 
   self.bind "enter", ->
