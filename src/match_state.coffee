@@ -15,7 +15,7 @@ MatchState = (I={}) ->
       age: x * 7
       
     if x % 2
-      fans.push
+      fans.push Fan
         x: (x + 0.5) * fanSize + 12
         y: fanSize/2 + (x % 2) * 36 - 128
         age: x * 7
