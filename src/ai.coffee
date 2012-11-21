@@ -2,12 +2,14 @@ AI = (I, self) ->
   arenaCenter = Point(WALL_LEFT + WALL_RIGHT, WALL_TOP + WALL_BOTTOM).scale(0.5)
 
   roles = [
-    "youth"
-    "goalie"
-    "youth"
+    "none"
+    "none"
+    "none"
   ]
 
-  directionAI = 
+  directionAI =
+    none: ->
+
     goalie: ->
       ownGoal = engine.find("Goal").select (goal) ->
         goal.team() == I.teamStyle
@@ -41,12 +43,13 @@ AI = (I, self) ->
   I.role = roles[I.slot]
 
   computeDirection: ->
-    I.AI_TARGET = targetPosition = directionAI[I.role]()
+    if I.AI_TARGET = targetPosition = directionAI[I.role]()
 
-    deltaPosition = targetPosition.subtract(self.center())
+      deltaPosition = targetPosition.subtract(self.center())
 
-    if deltaPosition.length() > 1
-      deltaPosition.norm()
+      if deltaPosition.length() > 1
+        deltaPosition.norm()
+      else
+        deltaPosition
     else
-      deltaPosition
-
+      Point.ZERO
