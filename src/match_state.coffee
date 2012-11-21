@@ -3,6 +3,13 @@ MatchState = (I={}) ->
   self = GameState(I)
 
   physics = Physics()
+  
+  fans = []
+  fanSize = 128
+  8.times (x) ->
+    fans.push Fan
+      x: (x + 0.5) * fanSize
+      y: fanSize/2
 
   self.bind "enter", ->
     engine.clear(true)
