@@ -3,36 +3,8 @@ MatchState = (I={}) ->
   self = GameState(I)
 
   physics = Physics()
-  
-  fans = []
-  fanSize = 100
-  4.times (x) ->
-    y = fanSize/2 + (x % 2) * 36
 
-    fans.push Fan
-      x: (x + 0.5) * fanSize + 12
-      y: y
-      age: x * 7
-      
-    if x % 2
-      fans.push Fan
-        x: (x + 0.5) * fanSize + 12
-        y: fanSize/2 + (x % 2) * 36 - 64
-        age: x * 14
-
-  4.times (x) ->
-    y = fanSize/2 + (x % 2) * 36
-
-    fans.push Fan
-      x: (x + 0.5) * fanSize + 12 + App.width - 400
-      y: y
-      age: x * 7
-
-    if x % 2
-      fans.push Fan
-        x: (x + 0.5) * fanSize + 12 + App.width - 400
-        y: fanSize/2 + (x % 2) * 36 - 64
-        age: x * 14
+  fans = Fan.generateCrowd()
 
   self.bind "enter", ->
     engine.clear(true)

@@ -1,14 +1,15 @@
 Fan = (I) ->
   Object.reverseMerge I,
-    sprites: Fan.sprites.rand()
+    sprites: Fan.sprites[[0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2].rand()]
     width: 128
     height: 128
-    zIndex: -10
 
   self = GameObject(I)
 
   startX = I.x
   startY = I.y
+
+  I.zIndex = I.y
 
   fov = (1/4).rotations
 
@@ -32,6 +33,26 @@ Fan = (I) ->
 
   return self
 
-Fan.sprites ||= [1, 2].map (n) ->
-  ["e", "s", "w"].map (d) ->
+Fan.sprites ||= [1, 2, 3].map (n) ->
+  ["e", "s", "w", "cheer"].map (d) ->
     Sprite.loadSheet "crowd_#{n}_#{d}", 512, 512, 0.25
+
+Fan.generateCrowd = ->
+  fans = []
+  fanSize = 100
+
+  addFanSection = (xOffset) ->
+    4.times (x) ->
+      2.times (y) ->
+        fans.push Fan
+          x: (x + 0.5) * fanSize + xOffset
+          y: (y + (x % 2) / 2) * 64 + 25
+          age: x * 7 + y * 9
+
+  addFanSection(12)
+  addFanSection(12 + App.width - 400)
+
+  fans.sort (a, b) ->
+    a.I.y - b.I.y
+
+  return fans
