@@ -6,10 +6,10 @@ MatchState = (I={}) ->
   
   fans = []
   fanSize = 100
-  9.times (x) ->
+  10.times (x) ->
     fans.push Fan
-      x: (x + 0.5) * fanSize
-      y: fanSize/2
+      x: (x + 0.5) * fanSize + 12
+      y: fanSize/2 + (x % 2) * 36
       age: x * 7
 
   self.bind "enter", ->
