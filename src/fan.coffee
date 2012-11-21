@@ -1,18 +1,17 @@
 Fan = (I) ->
   Object.reverseMerge I,
-    sprite: Fan.sprites.rand()
-    width: 32
-    height: 32
-    y: 128
+    sprites: Fan.sprites.rand()
+    width: 128
+    height: 128
     zIndex: -10
 
-  self = GameObject(I).extend
-    center: ->
-      Point(I.x + I.width/2, I.y + I.height/2)
+  self = GameObject(I)
+
+  self.bind "update", ->
+    I.sprite = I.sprites[1][0]
 
   return self
 
-Fan.sprites ||= [
-  Sprite.loadByName "crowd_1_s"
-  Sprite.loadByName "crowd_2_s"
-]
+Fan.sprites ||= [1, 2].map (n) ->
+  ["e", "s", "w"].map (d) ->
+    Sprite.loadSheet "crowd_#{n}_#{d}", 512, 512, 0.25
