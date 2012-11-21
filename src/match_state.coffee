@@ -5,8 +5,8 @@ MatchState = (I={}) ->
   physics = Physics()
   
   fans = []
-  fanSize = 128
-  8.times (x) ->
+  fanSize = 100
+  9.times (x) ->
     fans.push Fan
       x: (x + 0.5) * fanSize
       y: fanSize/2
