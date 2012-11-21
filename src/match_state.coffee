@@ -18,7 +18,7 @@ MatchState = (I={}) ->
       fans.push Fan
         x: (x + 0.5) * fanSize + 12
         y: fanSize/2 + (x % 2) * 36 - 64
-        age: x * 7
+        age: x * 14
 
   4.times (x) ->
     y = fanSize/2 + (x % 2) * 36
@@ -32,7 +32,7 @@ MatchState = (I={}) ->
       fans.push Fan
         x: (x + 0.5) * fanSize + 12 + App.width - 400
         y: fanSize/2 + (x % 2) * 36 - 64
-        age: x * 7
+        age: x * 14
 
   self.bind "enter", ->
     engine.clear(true)
