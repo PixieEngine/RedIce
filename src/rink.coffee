@@ -169,10 +169,11 @@ Rink = (I={}) ->
         sprite.fill(canvas, -I.spriteSize/2, -I.spriteSize/2, I.spriteSize, I.spriteSize * 6)
 
   fans = []
+  fanSize = 128
   8.times (x) ->
     fans.push Fan
-      x: x * 128
-      y: 0
+      x: (x + 0.5) * fanSize
+      y: fanSize/2
 
   self =
     drawBase: (canvas) ->
