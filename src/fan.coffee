@@ -13,7 +13,14 @@ Fan = (I) ->
   self.bind "update", ->
     I.sprite = I.sprites[1][0]
     
-    I.x = startX + (I.age / 6).floor() % 4
+    # bob back and forth
+    xOffset = (I.age / 6).floor() % 5 - 1
+
+    if xOffset > 1 
+      xOffset = 0
+
+    I.x = startX + xOffset
+    I.y = startY + (I.age / 5).floor() % 2
 
   return self
 
