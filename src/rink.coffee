@@ -171,6 +171,7 @@ Rink = (I={}) ->
   self =
     drawBase: (canvas) ->
       canvas.context().drawImage(iceCanvas.element(), 0, 0)
+      canvas.context().drawImage(bloodCanvas.element(), 0, 0)
     drawBack: (canvas) ->
       canvas.context().drawImage(backBoardsCanvas.element(), 0, 0)
     drawFront: (canvas) ->
