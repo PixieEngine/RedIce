@@ -6,9 +6,14 @@ Fan = (I) ->
     zIndex: -10
 
   self = GameObject(I)
+  
+  startX = I.x
+  startY = I.y
 
   self.bind "update", ->
     I.sprite = I.sprites[1][0]
+    
+    I.x = startX + (I.age / 6).floor() % 4
 
   return self
 
