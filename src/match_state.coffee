@@ -57,6 +57,8 @@ MatchState = (I={}) ->
 
   # Add events and methods here
   self.bind "update", ->
+    fans.invoke("update")
+
     pucks = engine.find("Puck")
     players = engine.find("Player").shuffle()
     zambonis = engine.find("Zamboni")
