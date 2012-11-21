@@ -10,6 +10,7 @@ MatchState = (I={}) ->
     fans.push Fan
       x: (x + 0.5) * fanSize
       y: fanSize/2
+      age: x * 7
 
   self.bind "enter", ->
     engine.clear(true)
