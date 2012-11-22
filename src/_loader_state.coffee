@@ -83,6 +83,7 @@ do ->
   window.LoaderState = (I={}) ->
     Object.reverseMerge I,
       assetGroup: "default"
+      nextState: MatchSetupState
 
     assetGroup = assetGroups[I.assetGroup]
     assetGroup.loadAll()
@@ -93,7 +94,7 @@ do ->
     self.bind "update", ->
       # Add update method behavior
       if assetGroup.loadingComplete()
-        engine.setState(MainMenuState())
+        engine.setState(I.nextState?())
 
     self.bind "overlay", (canvas) ->
       canvas.font("bold 48px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")

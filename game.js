@@ -13498,14 +13498,15 @@ var AI, Base, Blood, Boards, Bottle, CONTROLLERS, CharacterSheet, Configurator, 
       I = {};
     }
     Object.reverseMerge(I, {
-      assetGroup: "default"
+      assetGroup: "default",
+      nextState: MatchSetupState
     });
     assetGroup = assetGroups[I.assetGroup];
     assetGroup.loadAll();
     self = GameState(I);
     self.bind("update", function() {
       if (assetGroup.loadingComplete()) {
-        return engine.setState(MainMenuState());
+        return engine.setState(typeof I.nextState === "function" ? I.nextState() : void 0);
       }
     });
     self.bind("overlay", function(canvas) {
