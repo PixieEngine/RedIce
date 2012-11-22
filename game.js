@@ -14632,37 +14632,79 @@ Engine.Stats = function(I, self) {
 Fan = function(I) {
   var fov, self, startX, startY;
   Object.reverseMerge(I, {
-    sprites: Fan.sprites.rand(),
+    sprites: Fan.sprites[[0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2].rand()],
     width: 128,
     height: 128,
-    zIndex: -10
+    cheer: 0
   });
   self = GameObject(I);
   startX = I.x;
   startY = I.y;
+  I.zIndex = I.y;
   fov = (1 / 4).rotations;
   I.sprite = I.sprites[1][0];
   self.bind("update", function() {
     var lookDirection, puck, xOffset;
+    I.cheer = I.cheer.approach(0, 1);
     xOffset = (I.age / 12).floor() % 5 - 1;
     if (xOffset > 1) {
       xOffset = 0;
     }
     I.x = startX + xOffset;
     I.y = startY + (I.age / 11).floor() % 2;
-    if (puck = engine.find("Puck").first()) {
+    if (I.cheer) {
+      return I.sprite = I.sprites[3][0];
+    } else if (puck = engine.find("Puck").first()) {
       lookDirection = ((puck.position().subtract(self.position()).direction() + fov / 2) / fov).floor().clamp(0, 2);
       return I.sprite = I.sprites[lookDirection][0];
     }
   });
+  self.cheer = function() {
+    return I.cheer = 35;
+  };
   return self;
 };
 
-Fan.sprites || (Fan.sprites = [1, 2].map(function(n) {
-  return ["e", "s", "w"].map(function(d) {
+Fan.sprites || (Fan.sprites = [1, 2, 3].map(function(n) {
+  return ["e", "s", "w", "cheer"].map(function(d) {
     return Sprite.loadSheet("crowd_" + n + "_" + d, 512, 512, 0.25);
   });
 }));
+
+Fan.generateCrowd = function() {
+  var addFanSection, fanSize, fans;
+  fans = [];
+  fanSize = 100;
+  addFanSection = function(xOffset) {
+    return 4..times(function(x) {
+      return 2..times(function(y) {
+        return fans.push(Fan({
+          x: (x + 0.5) * fanSize + xOffset,
+          y: (y + (x % 2) / 2) * 64 + 25,
+          age: x * 7 + y * 9
+        }));
+      });
+    });
+  };
+  addFanSection(12);
+  addFanSection(12 + App.width - 400);
+  fans.sort(function(a, b) {
+    return a.I.y - b.I.y;
+  });
+  return fans;
+};
+
+Fan.crowd = [];
+
+Fan.cheer = function(n) {
+  if (n == null) {
+    n = 1;
+  }
+  return n.times(function() {
+    var _ref;
+    return (_ref = Fan.crowd.rand()) != null ? _ref.cheer() : void 0;
+  });
+};
 
 FrameEditorState = function(I) {
   var activeTool, addEventComponent, adjustComponentPosition, adjustComponentRotation, adjustComponentScale, characterActions, characterBodies, characterFacings, characterHeads, componentAt, constrainIndices, currentAction, currentAnimation, currentBody, currentFacing, currentFrameData, currentHead, currentTeam, data, defaultHeadData, drawBodySprite, drawComponentInfo, extractEventsData, extractHeadData, headDataObject, headPositions, helpInfo, lineHeight, loadFrameData, loadFromServer, namespace, p, saveToServer, screenCenter, selectedComponent, self, showHelp, storeFrameData, teamList, tools;
@@ -15423,6 +15465,7 @@ Goal = function(I) {
     },
     score: function() {
       self.trigger("score");
+      Fan.cheer(6);
       Sound.play("crowd" + (rand(3)));
       Sound.play("siren");
       if (I.suddenDeath) {
@@ -15568,46 +15611,13 @@ MatchSetupState = function(I) {
 };
 
 MatchState = function(I) {
-  var fanSize, fans, physics, self;
+  var physics, self;
   if (I == null) {
     I = {};
   }
   self = GameState(I);
   physics = Physics();
-  fans = [];
-  fanSize = 100;
-  4..times(function(x) {
-    var y;
-    y = fanSize / 2 + (x % 2) * 36;
-    fans.push(Fan({
-      x: (x + 0.5) * fanSize + 12,
-      y: y,
-      age: x * 7
-    }));
-    if (x % 2) {
-      return fans.push(Fan({
-        x: (x + 0.5) * fanSize + 12,
-        y: fanSize / 2 + (x % 2) * 36 - 64,
-        age: x * 14
-      }));
-    }
-  });
-  4..times(function(x) {
-    var y;
-    y = fanSize / 2 + (x % 2) * 36;
-    fans.push(Fan({
-      x: (x + 0.5) * fanSize + 12 + App.width - 400,
-      y: y,
-      age: x * 7
-    }));
-    if (x % 2) {
-      return fans.push(Fan({
-        x: (x + 0.5) * fanSize + 12 + App.width - 400,
-        y: fanSize / 2 + (x % 2) * 36 - 64,
-        age: x * 14
-      }));
-    }
-  });
+  Fan.crowd = Fan.generateCrowd();
   self.bind("enter", function() {
     var leftGoal, rightGoal, scoreboard;
     engine.clear(true);
@@ -15644,7 +15654,7 @@ MatchState = function(I) {
     }
   });
   self.bind("beforeDraw", function(canvas) {
-    fans.invoke("draw", canvas);
+    Fan.crowd.invoke("draw", canvas);
     rink.drawBase(canvas);
     return rink.drawBack(canvas);
   });
@@ -15653,7 +15663,7 @@ MatchState = function(I) {
   });
   self.bind("update", function() {
     var objects, players, playersAndPucks, pucks, zambonis;
-    fans.invoke("update");
+    Fan.crowd.invoke("update");
     pucks = engine.find("Puck");
     players = engine.find("Player").shuffle();
     zambonis = engine.find("Zamboni");
@@ -17153,6 +17163,7 @@ Player = function(I) {
       push = push.norm().scale(30);
       Sound.play("hit" + (rand(4)));
       Sound.play("crowd" + (rand(3)));
+      Fan.cheer(1);
       addSprayParticleEffect(push);
       return engine.add({
         "class": "Blood",

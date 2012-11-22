@@ -1,7 +1,12 @@
 Red Ice
+=======
 
 The hockey game that bleeds fun.
 
-6 Player Local with Joysticks
 
+To Play
+=======
 
+Plug in some gamepads.
+
+Open `build/run.html` in Google Chrome
