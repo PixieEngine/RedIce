@@ -5,7 +5,7 @@ Goal = (I) ->
   WALL_RADIUS = 2
   WIDTH = 32
   HEIGHT = 60
-  
+
   Goal.netSprites ||= Sprite.loadSheet("goal_lasnet", 640, 640, 0.25)
 
   Object.reverseMerge I,
@@ -19,7 +19,7 @@ Goal = (I) ->
 
   I.hflip = I.right
   unless I.right
-    I.team = "hiss" 
+    I.team = "hiss"
 
   walls = []
 
@@ -51,7 +51,7 @@ Goal = (I) ->
   drawWall = (wall, canvas) ->
     canvas.drawRect
       color: "#0F0"
-      x: wall.center.x - wall.halfWidth, 
+      x: wall.center.x - wall.halfWidth,
       y: wall.center.y - wall.halfHeight,
       width: 2 * wall.halfWidth,
       height: 2 * wall.halfHeight
@@ -72,6 +72,7 @@ Goal = (I) ->
 
     score: ->
       self.trigger "score"
+      Fan.cheer(6)
       Sound.play("crowd#{rand(3)}")
       Sound.play("siren")
 
@@ -105,10 +106,10 @@ Goal = (I) ->
   self.bind "draw", (canvas) ->
     if sprite = teamSprites[I.team].goal.back[0]
       sprite.draw(canvas, -sprite.width/2, -sprite.height/2)
-    
+
     if sprite = teamSprites[I.team].goal.front[0]
       sprite.draw(canvas, -sprite.width/2, -sprite.height/2)
-    
+
     if netSprite = Goal.netSprites[0]
       netSprite.draw(canvas, -netSprite.width/2, -netSprite.height/2)
 

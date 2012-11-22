@@ -72,9 +72,9 @@ Player = (I) ->
           Point.fromAngle(Random.angle()).scale(rand(5) + 1).add(push)
         width: (n) ->
           particleSizes.wrap(n)
-          
+
   jitterSoak = 10
-          
+
   setFacing = (newFacing) ->
     unless I.cooldown.facing
       I.cooldown.facing = jitterSoak
@@ -83,7 +83,7 @@ Player = (I) ->
   forceFacing = (newFacing) ->
     I.facing = newFacing
     I.cooldown.facing = jitterSoak
-    
+
   setFlip = (newFlip) ->
     if I.hflip != newFlip
       unless I.cooldown.flip
@@ -102,7 +102,7 @@ Player = (I) ->
       if I.cpu
         Color(Player.CPU_COLOR)
       else
-        # Adjust the lightness of each player's name tag slightly, 
+        # Adjust the lightness of each player's name tag slightly,
         # based on team and team slot
         Color(Player.COLORS[I.team]).lighten((I.slot - 1) * 0.1)
 
@@ -147,6 +147,7 @@ Player = (I) ->
 
       Sound.play("hit#{rand(4)}")
       Sound.play("crowd#{rand(3)}")
+      Fan.cheer(1)
 
       addSprayParticleEffect(push)
 

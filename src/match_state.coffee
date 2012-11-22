@@ -4,7 +4,7 @@ MatchState = (I={}) ->
 
   physics = Physics()
 
-  fans = Fan.generateCrowd()
+  Fan.crowd = Fan.generateCrowd()
 
   self.bind "enter", ->
     engine.clear(true)
@@ -43,7 +43,7 @@ MatchState = (I={}) ->
       Music.play "music1"
 
   self.bind "beforeDraw", (canvas) ->
-    fans.invoke("draw", canvas)
+    Fan.crowd.invoke("draw", canvas)
     rink.drawBase(canvas)
     rink.drawBack(canvas)
 
@@ -52,7 +52,7 @@ MatchState = (I={}) ->
 
   # Add events and methods here
   self.bind "update", ->
-    fans.invoke("update")
+    Fan.crowd.invoke("update")
 
     pucks = engine.find("Puck")
     players = engine.find("Player").shuffle()

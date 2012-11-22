@@ -3,6 +3,7 @@ Fan = (I) ->
     sprites: Fan.sprites[[0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2].rand()]
     width: 128
     height: 128
+    cheer: 0
 
   self = GameObject(I)
 
@@ -17,6 +18,8 @@ Fan = (I) ->
   I.sprite = I.sprites[1][0]
 
   self.bind "update", ->
+    I.cheer = I.cheer.approach(0, 1)
+
     # bob back and forth
     xOffset = (I.age / 12).floor() % 5 - 1
 
@@ -26,10 +29,15 @@ Fan = (I) ->
     I.x = startX + xOffset
     I.y = startY + (I.age / 11).floor() % 2
 
-    if puck = engine.find("Puck").first()
+    if I.cheer
+      I.sprite = I.sprites[3][0]
+    else if puck = engine.find("Puck").first()
       lookDirection = ((puck.position().subtract(self.position()).direction() + fov / 2) / fov).floor().clamp(0, 2)
 
       I.sprite = I.sprites[lookDirection][0]
+
+  self.cheer = ->
+    I.cheer = 35
 
   return self
 
@@ -56,3 +64,9 @@ Fan.generateCrowd = ->
     a.I.y - b.I.y
 
   return fans
+
+Fan.crowd = []
+
+Fan.cheer = (n=1) ->
+  n.times ->
+    Fan.crowd.rand()?.cheer()
