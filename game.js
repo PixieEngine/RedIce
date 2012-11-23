@@ -13195,7 +13195,7 @@ draw anything to the screen until the image has been loaded.
 @constructor
 */
 
-var AI, Base, Blood, Boards, Bottle, CONTROLLERS, CharacterSheet, Configurator, Controller, DEBUG_DRAW, Fan, FrameEditorState, Gamepads, Goal, HeadSheet, MainMenuState, MatchSetupState, MatchState, Menu, NameEntry, Physics, Player, PlayerDrawing, PlayerState, Puck, Rink, Scoreboard, Shockwave, SideBoards, TeamSheet, TestState, Zamboni, canvas, drawStartTime, gameControlData, keyActionNames, layouts, selectedLayout, updateDuration, updateStartTime,
+var AI, Base, Blood, Boards, Bottle, CONTROLLERS, CharacterSheet, Configurator, Controller, DEBUG_DRAW, Fan, FrameEditorState, Gamepads, Goal, HeadSheet, MainMenuState, MatchSetupState, MatchState, Menu, NameEntry, Physics, Player, PlayerDrawing, PlayerState, Puck, Rink, Scoreboard, Shockwave, SideBoards, TeamSheet, TestState, Zamboni, canvas, drawStartTime, gameControlData, keyActionNames, layouts, selectedLayout, teams, updateDuration, updateStartTime,
   __slice = [].slice;
 
 (function() {
@@ -17821,7 +17821,7 @@ Rink = function(I) {
     I = {};
   }
   Object.reverseMerge(I, {
-    team: "smiley",
+    team: "hiss",
     spriteSize: 64
   });
   iceCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").css({
@@ -18026,7 +18026,7 @@ Scoreboard = function(I) {
       home: 0,
       away: 0
     },
-    period: 2,
+    period: 0,
     periodTime: 1 * 60 * 30,
     reverse: false,
     time: 0,
@@ -18041,7 +18041,7 @@ Scoreboard = function(I) {
     periodYDelta: 0,
     imageOffset: Point(0, -48),
     textColor: "#DDE",
-    team: "smiley"
+    team: "hiss"
   });
   endGameChecks = function() {
     if (I.period >= 4) {
@@ -18612,7 +18612,9 @@ window.tallSprites = Sprite.loadSheet("sprites", 32, 96);
 
 window.teamSprites = {};
 
-["hiss", "mutant"].each(function(name) {
+teams = ["hiss", "mutant"];
+
+teams.each(function(name) {
   return teamSprites[name] = TeamSheet({
     team: name
   });
@@ -18646,7 +18648,9 @@ window.config = {
   joysticks: true
 };
 
-window.rink = Rink();
+window.rink = Rink({
+  team: teams.first()
+});
 
 window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").appendTo("body").css({
   position: "absolute",

@@ -4,7 +4,9 @@ window.tallSprites = Sprite.loadSheet("sprites", 32, 96)
 
 window.teamSprites = {}
 
-["hiss", "mutant"].each (name) ->
+teams = ["hiss", "mutant"]
+
+teams.each (name) ->
   teamSprites[name] = TeamSheet
     team: name
 
@@ -30,7 +32,8 @@ window.config =
   joysticks: true
 
 #TODO Manage these extra canvases better
-window.rink = Rink()
+window.rink = Rink
+  team: teams.first()
 window.bloodCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />")
   .appendTo("body")
   .css

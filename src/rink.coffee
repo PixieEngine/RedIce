@@ -1,6 +1,6 @@
 Rink = (I={}) ->
   Object.reverseMerge I,
-    team: "smiley"
+    team: "hiss"
     spriteSize: 64
 
   iceCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />")
@@ -46,13 +46,13 @@ Rink = (I={}) ->
   x = WALL_LEFT + ARENA_WIDTH/2
   y = WALL_TOP + ARENA_HEIGHT/2
   iceCanvas.drawCircle
-    x: x 
+    x: x
     y: y
     radius: faceOffSpotRadius
     color: blue
 
   iceCanvas.drawCircle
-    x: x 
+    x: x
     y: y
     radius: faceOffCircleRadius
     stroke:

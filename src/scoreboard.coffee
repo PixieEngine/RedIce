@@ -4,7 +4,7 @@ Scoreboard = (I) ->
     score:
       home: 0
       away: 0
-    period: 2
+    period: 0
     periodTime: 1 * 60 * 30
     reverse: false
     time: 0
@@ -19,7 +19,7 @@ Scoreboard = (I) ->
     periodYDelta: 0
     imageOffset: Point(0, -48)
     textColor: "#DDE"
-    team: "smiley"
+    team: "hiss"
 
   endGameChecks = ->
     if I.period >= 4
