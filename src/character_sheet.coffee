@@ -27,9 +27,9 @@ CharacterSheet = (I={}) ->
     idle:
       front: loadStrip(IDLE, FRONT, 2)
       back: loadStrip(IDLE, BACK, 2)
-    fall: 
+    fall:
       front: loadStrip(FALL, FRONT, 6)
-    shoot: 
+    shoot:
       front: loadStrip(SHOOT, FRONT, 11)
 
   self.characterData =
@@ -44,11 +44,7 @@ CharacterSheet = (I={}) ->
     self.characterData.shootHoldFrame = 5
     self.characterData.shootCooldownFrameCount = 6
 
-  metadataUrl = ResourceLoader.urlFor("data", "#{I.team}_#{I.character}")
-
-  # TODO: Guarantee this metadata is ready to go
-  # using preloading
-  $.getJSON metadataUrl, (data) ->
+  if data = Data["#{I.team}_#{I.character}"]
     Object.extend self.data, data
 
   return self

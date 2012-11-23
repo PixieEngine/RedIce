@@ -6,5 +6,24 @@ task :build do
 
   sh "mkdir -p build"
   sh "coffee", "-bcj", "build/src.js", *src_files
-  sh "cat build/app.js lib/*.js build/src.js > game.js"
+  sh "cat build/app.js build/data.js lib/*.js build/src.js > game.js"
+end
+
+task :build_data do
+  require 'json'
+
+  sh "mkdir -p build"
+
+  data_files = Dir["data/*.json"]
+
+  data = {}
+  data_files.each do |filename|
+    name = File.basename(filename, ".json")
+    data[name] = JSON.parse(File.read(filename))
+  end
+
+  File.open "build/data.js", "w" do |f|
+    f << "Data = "
+    f << JSON.dump(data)
+  end
 end
