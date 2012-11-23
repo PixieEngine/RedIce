@@ -18030,12 +18030,14 @@ Scoreboard = function(I) {
     period: 0,
     periodTime: 1 * 60 * 30,
     reverse: false,
-    sprite: Sprite.loadByName("scoreboard"),
     time: 0,
-    x: rand(App.width).snap(32),
-    y: rand(WALL_TOP).snap(32),
     zamboniInterval: 30 * 30,
-    zIndex: 10
+    zIndex: 10,
+    timeY: 104,
+    scoreY: 132,
+    scoreX: 62,
+    periodY: 134,
+    textColor: "#DDE"
   });
   endGameChecks = function() {
     if (I.period >= 4) {
@@ -18062,8 +18064,10 @@ Scoreboard = function(I) {
   nextPeriod();
   self = GameObject(I).extend({
     draw: function(canvas) {
-      var color, minutes, seconds, time;
-      I.sprite.draw(canvas, WALL_LEFT + (ARENA_WIDTH - I.sprite.width) / 2, 16);
+      var color, minutes, seconds, time, _ref;
+      if ((_ref = I.sprite) != null) {
+        _ref.draw(canvas, WALL_LEFT + (ARENA_WIDTH - I.sprite.width) / 2, -50);
+      }
       time = Math.max(I.time, 0);
       minutes = (time / 30 / 60).floor();
       seconds = ((time / 30).floor() % 60).toString();
@@ -18072,28 +18076,30 @@ Scoreboard = function(I) {
       }
       canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
       canvas.drawText({
-        color: "red",
+        color: I.textColor,
         text: "" + minutes + ":" + seconds,
-        x: WALL_LEFT + ARENA_WIDTH / 2 - 22,
-        y: 46
+        x: WALL_LEFT + ARENA_WIDTH / 2 - 27,
+        y: I.timeY
       });
-      canvas.drawText({
-        color: "red",
-        text: I.period,
-        x: WALL_LEFT + ARENA_WIDTH / 2 + 18,
-        y: 84
+      I.period.clamp(1, 3).times(function(i) {
+        return canvas.drawCircle({
+          color: "#0F0",
+          radius: 2.5,
+          x: WALL_LEFT + ARENA_WIDTH / 2 + (i - 1) * 16,
+          y: I.periodY
+        });
       });
-      canvas.drawText({
-        color: "red",
+      canvas.centerText({
+        color: I.textColor,
         text: I.score.away,
-        x: WALL_LEFT + ARENA_WIDTH / 2 - 72,
-        y: 60
+        x: WALL_LEFT + ARENA_WIDTH / 2 - I.scoreX,
+        y: I.scoreY
       });
-      canvas.drawText({
-        color: "red",
+      canvas.centerText({
+        color: I.textColor,
         text: I.score.home,
-        x: WALL_LEFT + ARENA_WIDTH / 2 + 90,
-        y: 60
+        x: WALL_LEFT + ARENA_WIDTH / 2 + I.scoreX,
+        y: I.scoreY
       });
       if (I.gameOver) {
         canvas.centerText({
@@ -18127,6 +18133,7 @@ Scoreboard = function(I) {
     }
   });
   self.bind("update", function() {
+    I.sprite = Scoreboard.sprites["spike"][0];
     if (I.time % I.zamboniInterval === 0) {
       if (!(I.time === I.periodTime && I.period === 1)) {
         I.reverse = !I.reverse;
@@ -18154,6 +18161,10 @@ Scoreboard = function(I) {
   });
   self.attrReader("gameOver");
   return self;
+};
+
+Scoreboard.sprites = {
+  spike: Sprite.loadSheet("scoreboard_spike", 512, 512, 0.5)
 };
 
 Shockwave = function(I) {
