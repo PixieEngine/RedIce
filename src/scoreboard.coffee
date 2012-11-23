@@ -1,21 +1,25 @@
 Scoreboard = (I) ->
   $.reverseMerge I,
     gameOver: false
-    score: {
+    score:
       home: 0
       away: 0
-    }
-    period: 0
+    period: 2
     periodTime: 1 * 60 * 30
     reverse: false
     time: 0
     zamboniInterval: 30 * 30
     zIndex: 10
-    timeY: 104
-    scoreY: 132
+    timeY: 106
+    scoreY: 134
     scoreX: 62
-    periodY: 134
+    periodY: 136
+    periodX: 16
+    periodRadiusDelta: 0
+    periodYDelta: 0
+    imageOffset: Point(0, -48)
     textColor: "#DDE"
+    team: "smiley"
 
   endGameChecks = ->
     if I.period >= 4
@@ -41,7 +45,7 @@ Scoreboard = (I) ->
 
   self = GameObject(I).extend
     draw: (canvas) ->
-      I.sprite?.draw(canvas, WALL_LEFT + (ARENA_WIDTH - I.sprite.width)/2, -50)
+      I.sprite?.draw(canvas, WALL_LEFT + (ARENA_WIDTH - I.sprite.width)/2 + I.imageOffset.x, I.imageOffset.y)
 
       time = Math.max(I.time, 0)
 
@@ -62,9 +66,9 @@ Scoreboard = (I) ->
       I.period.clamp(1, 3).times (i) ->
         canvas.drawCircle
           color: "#0F0"
-          radius: 2.5
-          x: WALL_LEFT + ARENA_WIDTH/2 + (i - 1) * 16
-          y: I.periodY
+          radius: 2.5 + I.periodRadiusDelta * i
+          x: WALL_LEFT + ARENA_WIDTH/2 + (i - 1) * I.periodX
+          y: I.periodY + I.periodYDelta * i
 
       canvas.centerText
         color: I.textColor
@@ -105,7 +109,8 @@ Scoreboard = (I) ->
       endGameChecks()
 
   self.bind "update", ->
-    I.sprite = Scoreboard.sprites["spike"][0]
+    Object.extend I, Scoreboard[I.team]
+    I.sprite = I.sprite[0]
 
     if I.time % I.zamboniInterval == 0
       # No Zamboni very second
@@ -134,5 +139,23 @@ Scoreboard = (I) ->
 
   return self
 
-Scoreboard.sprites =
-  spike: Sprite.loadSheet("scoreboard_spike", 512, 512, 0.5)
+Object.extend Scoreboard,
+  hiss:
+    timeY: 108
+    periodY: 131
+    periodX: 17
+  mutant:
+    scoreY: 132
+    imageOffset: Point(-4, -48)
+    periodY: 133
+    periodX: 16
+  smiley:
+    scoreY: 144
+    periodY: 146
+    periodYDelta: -2
+    periodRadiusDelta: 1.5
+    timeY: 116
+  spike: {}
+
+["hiss", "mutant", "smiley", "spike"].each (team) ->
+  Scoreboard[team].sprite = Sprite.loadSheet("#{team}_scoreboard", 512, 512, 0.5)
