@@ -9,4 +9,10 @@ To Play
 
 Plug in some gamepads.
 
-Open `build/run.html` in Google Chrome
+Open `run.html` in Google Chrome
+
+
+Contact
+=======
+
+Email: daniel@pixieengine.com
