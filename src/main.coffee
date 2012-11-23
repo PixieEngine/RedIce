@@ -1,12 +1,12 @@
-window.sprites = Sprite.loadSheet("sprites", 32, 48)
-window.wideSprites = Sprite.loadSheet("sprites", 64, 48)
-window.tallSprites = Sprite.loadSheet("sprites", 32, 96)
+window.config =
+  teams: ["hiss", "mutant"]
+  players: []
+  particleEffects: false
+  music: false
+  joysticks: true
 
 window.teamSprites = {}
-
-teams = ["hiss", "mutant"]
-
-teams.each (name) ->
+config.teams.each (name) ->
   teamSprites[name] = TeamSheet
     team: name
 
@@ -24,16 +24,9 @@ window.ARENA_HEIGHT = WALL_BOTTOM - WALL_TOP
 window.BLOOD_COLOR = "#BA1A19"
 window.ICE_COLOR = "rgba(192, 255, 255, 0.2)"
 
-window.config =
-  throwBottles: true
-  players: []
-  particleEffects: false
-  music: false
-  joysticks: true
-
 #TODO Manage these extra canvases better
 window.rink = Rink
-  team: teams.first()
+  team: config.teams.first()
 window.bloodCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />")
   .appendTo("body")
   .css

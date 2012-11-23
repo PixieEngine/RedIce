@@ -13195,7 +13195,7 @@ draw anything to the screen until the image has been loaded.
 @constructor
 */
 
-var AI, Base, Blood, Boards, Bottle, CONTROLLERS, CharacterSheet, Configurator, Controller, DEBUG_DRAW, Fan, FrameEditorState, Gamepads, Goal, HeadSheet, MainMenuState, MatchSetupState, MatchState, Menu, NameEntry, Physics, Player, PlayerDrawing, PlayerState, Puck, Rink, Scoreboard, Shockwave, SideBoards, TeamSheet, TestState, Zamboni, canvas, drawStartTime, gameControlData, keyActionNames, layouts, selectedLayout, teams, updateDuration, updateStartTime,
+var AI, Base, Blood, Boards, Bottle, CONTROLLERS, CharacterSheet, Configurator, Controller, DEBUG_DRAW, Fan, FrameEditorState, Gamepads, Goal, HeadSheet, MainMenuState, MatchSetupState, MatchState, Menu, NameEntry, Physics, Player, PlayerDrawing, PlayerState, Puck, Rink, Scoreboard, Shockwave, SideBoards, TeamSheet, TestState, Zamboni, canvas, drawStartTime, gameControlData, keyActionNames, layouts, selectedLayout, updateDuration, updateStartTime,
   __slice = [].slice;
 
 (function() {
@@ -17681,20 +17681,19 @@ Puck = function(I) {
   var DEBUG_DRAW, DEFAULT_FRICTION, addParticleEffect, drawBloodStreaks, heading, lastPosition, particleSizes, self;
   DEBUG_DRAW = false;
   DEFAULT_FRICTION = 0.05;
-  $.reverseMerge(I, {
+  Object.reverseMerge(I, {
     blood: 0,
     color: "black",
     strength: 0.5,
     radius: 8,
-    width: 16,
-    height: 8,
+    width: 24,
+    height: 24,
     x: 512 - 8,
     y: (WALL_BOTTOM + WALL_TOP) / 2 - 4,
     friction: DEFAULT_FRICTION,
     mass: 0.01,
     superMassive: false,
-    zIndex: 10,
-    spriteOffset: Point(-2, -12)
+    zIndex: 10
   });
   self = Base(I).extend({
     bloody: function() {
@@ -17794,7 +17793,7 @@ Puck = function(I) {
     });
   });
   self.bind("update", function() {
-    return I.sprite = sprites[39];
+    return I.sprite = Puck.sprites[0];
   });
   self.bind("wallCollision", function() {
     I.superMassive = false;
@@ -17814,6 +17813,8 @@ Puck = function(I) {
   };
   return self;
 };
+
+Puck.sprites = Sprite.loadSheet("puck_norm", 24, 24);
 
 Rink = function(I) {
   var backBoardsCanvas, blue, faceOffCircleRadius, faceOffSpotRadius, frontBoardsCanvas, iceCanvas, red, rinkCornerRadius, self, spriteSize, x, y, _i, _len, _ref;
@@ -18604,17 +18605,17 @@ Zamboni.sprites = {};
   };
 });
 
-window.sprites = Sprite.loadSheet("sprites", 32, 48);
-
-window.wideSprites = Sprite.loadSheet("sprites", 64, 48);
-
-window.tallSprites = Sprite.loadSheet("sprites", 32, 96);
+window.config = {
+  teams: ["hiss", "mutant"],
+  players: [],
+  particleEffects: false,
+  music: false,
+  joysticks: true
+};
 
 window.teamSprites = {};
 
-teams = ["hiss", "mutant"];
-
-teams.each(function(name) {
+config.teams.each(function(name) {
   return teamSprites[name] = TeamSheet({
     team: name
   });
@@ -18640,16 +18641,8 @@ window.BLOOD_COLOR = "#BA1A19";
 
 window.ICE_COLOR = "rgba(192, 255, 255, 0.2)";
 
-window.config = {
-  throwBottles: true,
-  players: [],
-  particleEffects: false,
-  music: false,
-  joysticks: true
-};
-
 window.rink = Rink({
-  team: teams.first()
+  team: config.teams.first()
 });
 
 window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").appendTo("body").css({

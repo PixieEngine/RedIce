@@ -2,20 +2,19 @@ Puck = (I) ->
   DEBUG_DRAW = false
   DEFAULT_FRICTION = 0.05
 
-  $.reverseMerge I,
+  Object.reverseMerge I,
     blood: 0
     color: "black"
     strength: 0.5
     radius: 8
-    width: 16
-    height: 8
+    width: 24
+    height: 24
     x: 512 - 8
     y: (WALL_BOTTOM + WALL_TOP)/2 - 4
     friction: DEFAULT_FRICTION
     mass: 0.01
     superMassive: false
     zIndex: 10
-    spriteOffset: Point(-2, -12)
 
   self = Base(I).extend
     bloody: ->
@@ -62,7 +61,7 @@ Puck = (I) ->
       bloodCanvas.drawLine
         color: BLOOD_COLOR
         start: lastPosition
-        end: currentPos, 
+        end: currentPos,
         width: (blood/20).clamp(1, 6)
 
     lastPosition = currentPos
@@ -107,7 +106,7 @@ Puck = (I) ->
             class: "Puck"
 
   self.bind "update", ->
-    I.sprite = sprites[39]
+    I.sprite = Puck.sprites[0]
 
   self.bind "wallCollision", ->
     I.superMassive = false
@@ -126,3 +125,4 @@ Puck = (I) ->
 
   self
 
+Puck.sprites = Sprite.loadSheet "puck_norm", 24, 24
