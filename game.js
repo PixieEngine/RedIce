@@ -13469,7 +13469,7 @@ Gib = function(I) {
     I = {};
   }
   Object.reverseMerge(I, {
-    duration: 60,
+    duration: 90,
     rotation: 0,
     rotationalVelocity: rand() * 0.2 - 0.1,
     width: 32,
