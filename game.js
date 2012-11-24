@@ -11955,7 +11955,7 @@ Configurator = function(I) {
   lineHeight = 11;
   verticalPadding = 24;
   horizontalPadding = 0;
-  teamStyles = ["mutant", "hiss"];
+  teamStyles = config.teams;
   join = function(id) {
     var player;
     player = I.config.players[id];
@@ -12039,13 +12039,13 @@ Configurator = function(I) {
       red.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (reds.length + 1);
       red.x = WALL_LEFT + ARENA_WIDTH / 2 + ARENA_WIDTH / 6;
       red.heading = 0.5.rotations;
-      return red.teamStyle = teamStyles[0];
+      return red.teamStyle = teamStyles[1];
     });
     blues.each(function(blue, i) {
       blue.slot = i;
       blue.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (blues.length + 1);
       blue.x = WALL_LEFT + ARENA_WIDTH / 2 - ARENA_WIDTH / 6;
-      return blue.teamStyle = teamStyles[1];
+      return blue.teamStyle = teamStyles[0];
     });
     return config;
   };
@@ -13382,6 +13382,9 @@ Gib = function(I) {
     if (I.z <= 0) {
       I.z = 0;
       I.zVelocity = -I.zVelocity * 0.8;
+      I.friction = 0.1;
+    } else {
+      I.friction = 0;
     }
     physics.wallCollisions([self], 1);
     return self.updatePosition(1);
@@ -13425,12 +13428,9 @@ Goal = function(I) {
     y: WALL_TOP + ARENA_HEIGHT / 2 - HEIGHT / 2,
     spriteOffset: Point(6, -HEIGHT / 2 - 8),
     suddenDeath: false,
-    team: "mutant"
+    team: "smiley"
   });
   I.hflip = I.right;
-  if (!I.right) {
-    I.team = "hiss";
-  }
   walls = [];
   if (I.right) {
     walls.push({
@@ -13630,18 +13630,20 @@ MatchSetupState = function(I) {
 };
 
 MatchState = function(I) {
-  var self;
+  var awayTeam, homeTeam, self, _ref;
   if (I == null) {
     I = {};
   }
   self = GameState(I);
   window.physics = Physics();
   Fan.crowd = Fan.generateCrowd();
+  _ref = config.teams, homeTeam = _ref[0], awayTeam = _ref[1];
   self.bind("enter", function() {
     var leftGoal, rightGoal, scoreboard;
     engine.clear(true);
     scoreboard = engine.add({
-      "class": "Scoreboard"
+      "class": "Scoreboard",
+      team: homeTeam
     });
     scoreboard.bind("restart", function() {
       return engine.setState(MatchSetupState());
@@ -13655,6 +13657,7 @@ MatchState = function(I) {
     leftGoal = engine.add({
       "class": "Goal",
       right: false,
+      team: homeTeam,
       x: WALL_LEFT + ARENA_WIDTH / 10 - 32
     });
     leftGoal.bind("score", function() {
@@ -13663,6 +13666,7 @@ MatchState = function(I) {
     rightGoal = engine.add({
       "class": "Goal",
       right: true,
+      team: awayTeam,
       x: WALL_LEFT + ARENA_WIDTH * 9 / 10
     });
     rightGoal.bind("score", function() {
@@ -15819,7 +15823,7 @@ Rink = function(I) {
     I = {};
   }
   Object.reverseMerge(I, {
-    team: "hiss",
+    team: config.teams[0],
     spriteSize: 64
   });
   iceCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEIGHT + " />").css({
@@ -16542,7 +16546,7 @@ Zamboni.sprites = {};
 });
 
 window.config = {
-  teams: ["hiss", "mutant"],
+  teams: ["mutant", "spike"],
   players: [],
   particleEffects: false,
   music: false,

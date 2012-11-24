@@ -6,11 +6,15 @@ MatchState = (I={}) ->
 
   Fan.crowd = Fan.generateCrowd()
 
+  [homeTeam, awayTeam] = config.teams
+
+
   self.bind "enter", ->
     engine.clear(true)
 
     scoreboard = engine.add
       class: "Scoreboard"
+      team: homeTeam
       # periodTime: 120
       # period: 3
 
@@ -26,6 +30,7 @@ MatchState = (I={}) ->
     leftGoal = engine.add
       class: "Goal"
       right: false
+      team: homeTeam
       x: WALL_LEFT + ARENA_WIDTH/10 - 32
 
     leftGoal.bind "score", ->
@@ -34,6 +39,7 @@ MatchState = (I={}) ->
     rightGoal = engine.add
       class: "Goal"
       right: true
+      team: awayTeam
       x: WALL_LEFT + ARENA_WIDTH*9/10
 
     rightGoal.bind "score", ->

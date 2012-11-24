@@ -39,6 +39,9 @@ Gib = (I={}) ->
     if I.z <= 0
       I.z = 0
       I.zVelocity = -I.zVelocity * 0.8
+      I.friction = 0.1
+    else
+      I.friction = 0
 
     physics.wallCollisions([self], 1)
     self.updatePosition(1)

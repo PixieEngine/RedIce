@@ -1,6 +1,6 @@
 Rink = (I={}) ->
   Object.reverseMerge I,
-    team: "hiss"
+    team: config.teams[0]
     spriteSize: 64
 
   iceCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />")

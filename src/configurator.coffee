@@ -15,7 +15,7 @@ Configurator = (I) ->
   verticalPadding = 24
   horizontalPadding = 0
 
-  teamStyles = ["mutant", "hiss"]
+  teamStyles = config.teams
 
   join = (id) ->
     player = I.config.players[id]
@@ -101,13 +101,13 @@ Configurator = (I) ->
       red.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (reds.length + 1)
       red.x = WALL_LEFT + ARENA_WIDTH/2 + ARENA_WIDTH / 6
       red.heading = 0.5.rotations
-      red.teamStyle = teamStyles[0]
+      red.teamStyle = teamStyles[1]
 
     blues.each (blue, i) ->
       blue.slot = i
       blue.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (blues.length + 1)
       blue.x = WALL_LEFT + ARENA_WIDTH/2 - ARENA_WIDTH / 6
-      blue.teamStyle = teamStyles[1]
+      blue.teamStyle = teamStyles[0]
 
     return config
 
@@ -164,7 +164,7 @@ Configurator = (I) ->
             # Draw Body Sprite
             if bodySprite = teamSprites[player.teamStyle][player.bodyStyle].slow.front[0]
               bodySprite.draw(canvas, -bodySprite.width/2 - 10, -bodySprite.height/2)
-  
+
             # Draw Head Sprite
             if headSprite = teamSprites[player.teamStyle][player.headStyle].normal[0]
               headSprite?.draw(canvas, -headSprite.width/2 + 10, -headSprite.height/2 - 40)

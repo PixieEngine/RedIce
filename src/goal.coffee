@@ -15,11 +15,9 @@ Goal = (I) ->
     y: WALL_TOP + ARENA_HEIGHT/2 - HEIGHT/2
     spriteOffset: Point(6, -HEIGHT/2 - 8)
     suddenDeath: false
-    team: "mutant"
+    team: "smiley"
 
   I.hflip = I.right
-  unless I.right
-    I.team = "hiss"
 
   walls = []
 
