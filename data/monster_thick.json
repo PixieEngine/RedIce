@@ -1,0 +1,465 @@
+{
+  "fast": {
+    "front": [
+      {
+        "head": {
+          "x": 54,
+          "y": -62,
+          "scale": 0.75,
+          "rotation": 0.04908738521234057
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 54,
+          "y": -65,
+          "scale": 0.75,
+          "rotation": 0
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 55,
+          "y": -66,
+          "scale": 0.75,
+          "rotation": 0.04908738521234057
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 57,
+          "y": -65,
+          "scale": 0.75,
+          "rotation": 0
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 61,
+          "y": -60,
+          "scale": 0.75,
+          "rotation": 0.04908738521234057
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 56,
+          "y": -64,
+          "scale": 0.75,
+          "rotation": -0.04908738521234046
+        },
+        "events": []
+      }
+    ],
+    "back": [
+      {
+        "head": {
+          "x": 52,
+          "y": -68,
+          "scale": 0.75,
+          "rotation": 0.04908738521234052
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 52,
+          "y": -72,
+          "scale": 0.75,
+          "rotation": 0
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 57,
+          "y": -68,
+          "scale": 0.75,
+          "rotation": 0.04908738521234052
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 58,
+          "y": -67,
+          "scale": 0.75,
+          "rotation": 0.04908738521234052
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 58,
+          "y": -71,
+          "scale": 0.75,
+          "rotation": 0.09817477042468103
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 56,
+          "y": -71,
+          "scale": 0.75,
+          "rotation": 0.04908738521234052
+        },
+        "events": []
+      }
+    ]
+  },
+  "slow": {
+    "front": [
+      {
+        "head": {
+          "x": 56,
+          "y": -72,
+          "scale": 0.75,
+          "rotation": 0
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 55,
+          "y": -72,
+          "scale": 0.75,
+          "rotation": 0
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 56,
+          "y": -72,
+          "scale": 0.75,
+          "rotation": -0.04908738521234052
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 58,
+          "y": -71,
+          "scale": 0.75,
+          "rotation": 0
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 58,
+          "y": -75,
+          "scale": 0.75,
+          "rotation": 0.04908738521234052
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 54,
+          "y": -72,
+          "scale": 0.75,
+          "rotation": 0.04908738521234052
+        },
+        "events": []
+      }
+    ],
+    "back": [
+      {
+        "head": {
+          "x": 58,
+          "y": -77,
+          "scale": 0.7,
+          "rotation": 0
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 57,
+          "y": -75,
+          "scale": 0.7,
+          "rotation": 0
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 57,
+          "y": -72,
+          "scale": 0.7,
+          "rotation": 0
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 59,
+          "y": -71,
+          "scale": 0.7,
+          "rotation": 0
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 60,
+          "y": -72,
+          "scale": 0.7,
+          "rotation": 0
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 58,
+          "y": -74,
+          "scale": 0.7,
+          "rotation": 0
+        },
+        "events": []
+      }
+    ]
+  },
+  "idle": {
+    "front": [
+      {
+        "head": {
+          "x": 54,
+          "y": -68,
+          "scale": 0.75,
+          "rotation": 0
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 52,
+          "y": -72,
+          "scale": 0.75,
+          "rotation": 0
+        },
+        "events": []
+      }
+    ],
+    "back": [
+      {
+        "head": {
+          "x": 52,
+          "y": -77,
+          "scale": 0.7,
+          "rotation": 0
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 49,
+          "y": -81,
+          "scale": 0.7,
+          "rotation": 0
+        },
+        "events": []
+      }
+    ]
+  },
+  "shoot": {
+    "front": [
+      {
+        "head": {
+          "x": 52,
+          "y": -61,
+          "scale": 0.75,
+          "rotation": 0
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 48,
+          "y": -60,
+          "scale": 0.75,
+          "rotation": 0
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 1,
+          "y": -77,
+          "scale": 0.75,
+          "rotation": 0.14726215563702155
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": -16,
+          "y": -101,
+          "scale": 0.75,
+          "rotation": 0
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": -21,
+          "y": -92,
+          "scale": 0.75,
+          "rotation": -0.04908738521234052
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": -21,
+          "y": -92,
+          "scale": 0.75,
+          "rotation": -0.04908738521234052
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 13,
+          "y": -109,
+          "scale": 0.75,
+          "rotation": 0.3436116964863836
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 52,
+          "y": -33,
+          "scale": 0.75,
+          "rotation": 0.14726215563702155
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 47,
+          "y": -31,
+          "scale": 0.75,
+          "rotation": -0.09817477042468103
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 51,
+          "y": -38,
+          "scale": 0.75,
+          "rotation": 0
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 51,
+          "y": -42,
+          "scale": 0.75,
+          "rotation": 0
+        },
+        "events": []
+      }
+    ],
+    "back": [
+      {
+        "head": {
+          "x": 32,
+          "y": -65,
+          "scale": 0.75,
+          "rotation": 0
+        }
+      },
+      null,
+      null,
+      null,
+      null,
+      {
+        "head": {
+          "x": 27,
+          "y": -89,
+          "scale": 0.75,
+          "rotation": 0.39269908169872414
+        }
+      }
+    ]
+  },
+  "fall": {
+    "front": [
+      {
+        "head": {
+          "x": -11,
+          "y": -86,
+          "scale": 0.75,
+          "rotation": -0.09817477042468103
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": -16,
+          "y": -89,
+          "scale": 0.75,
+          "rotation": 0
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": -16,
+          "y": -87,
+          "scale": 0.75,
+          "rotation": 0.09817477042468103
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 60,
+          "y": -13,
+          "scale": 0.75,
+          "rotation": 0
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 55,
+          "y": -18,
+          "scale": 0.75,
+          "rotation": -0.09817477042468103
+        },
+        "events": []
+      },
+      {
+        "head": {
+          "x": 52,
+          "y": -19,
+          "scale": 0.75,
+          "rotation": 0
+        },
+        "events": []
+      }
+    ],
+    "back": [
+      {
+        "head": {
+          "x": 32,
+          "y": -65,
+          "scale": 0.75,
+          "rotation": 0
+        }
+      }
+    ]
+  }
+}
