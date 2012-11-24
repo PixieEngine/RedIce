@@ -8603,3819 +8603,7 @@ draw anything to the screen until the image has been loaded.
 })();
 ;
 ;
-;
-;
 
-document.oncontextmenu = function() {
-  return false;
-};
-
-$(document).bind("keydown", function(event) {
-  if (!$(event.target).is("input")) return event.preventDefault();
-});
-;
-
-/**
-This error handler captures any runtime errors and reports them to the IDE
-if present.
-*/
-
-window.onerror = function(message, url, lineNumber) {
-  var errorContext;
-  errorContext = $('script').last().text().split('\n').slice(lineNumber - 5, (lineNumber + 4) + 1 || 9e9);
-  errorContext[4] = "<b style='font-weight: bold; text-decoration: underline;'>" + errorContext[4] + "</b>";
-  return typeof displayRuntimeError === "function" ? displayRuntimeError("<code>" + message + "</code> <br /><br />(Sometimes this context may be wrong.)<br /><code><pre>" + (errorContext.join('\n')) + "</pre></code>") : void 0;
-};
-;
-var Joysticks;
-var __slice = Array.prototype.slice;
-
-Joysticks = (function() {
-  var AXIS_MAX, Controller, DEAD_ZONE, MAX_BUFFER, TRIP_HIGH, TRIP_LOW, axisMappingDefault, axisMappingOSX, buttonMappingDefault, buttonMappingOSX, controllers, displayInstallPrompt, joysticks, plugin, previousJoysticks, type;
-  type = "application/x-boomstickjavascriptjoysticksupport";
-  plugin = null;
-  MAX_BUFFER = 2000;
-  AXIS_MAX = 32767 - MAX_BUFFER;
-  DEAD_ZONE = AXIS_MAX * 0.2;
-  TRIP_HIGH = AXIS_MAX * 0.75;
-  TRIP_LOW = AXIS_MAX * 0.5;
-  previousJoysticks = [];
-  joysticks = [];
-  controllers = [];
-  buttonMappingDefault = {
-    "A": 1,
-    "B": 2,
-    "C": 4,
-    "D": 8,
-    "X": 4,
-    "Y": 8,
-    "R": 32,
-    "RB": 32,
-    "R1": 32,
-    "L": 16,
-    "LB": 16,
-    "L1": 16,
-    "SELECT": 64,
-    "BACK": 64,
-    "START": 128,
-    "HOME": 256,
-    "GUIDE": 256,
-    "TL": 512,
-    "TR": 1024,
-    "ANY": 0xFFFFFF
-  };
-  buttonMappingOSX = {
-    "A": 2048,
-    "B": 4096,
-    "C": 8192,
-    "D": 16384,
-    "X": 8192,
-    "Y": 16384,
-    "R": 512,
-    "L": 256,
-    "SELECT": 32,
-    "BACK": 32,
-    "START": 16,
-    "HOME": 1024,
-    "LT": 64,
-    "TR": 128,
-    "ANY": 0xFFFFFF0
-  };
-  axisMappingDefault = {
-    0: 0,
-    1: 1,
-    2: 2,
-    3: 3,
-    4: 4,
-    5: 5
-  };
-  axisMappingOSX = {
-    0: 2,
-    1: 3,
-    2: 4,
-    3: 5,
-    4: 0,
-    5: 1
-  };
-  displayInstallPrompt = function(text, url) {
-    return $("<a />", {
-      css: {
-        backgroundColor: "yellow",
-        boxSizing: "border-box",
-        color: "#000",
-        display: "block",
-        fontWeight: "bold",
-        left: 0,
-        padding: "1em",
-        position: "absolute",
-        textDecoration: "none",
-        top: 0,
-        width: "100%",
-        zIndex: 2000
-      },
-      href: url,
-      target: "_blank",
-      text: text
-    }).appendTo("body");
-  };
-  Controller = function(i, remapOSX) {
-    var axisMapping, axisTrips, buttonMapping, currentState, previousState, self;
-    if (remapOSX === void 0) remapOSX = navigator.platform.match(/^Mac/);
-    if (remapOSX) {
-      buttonMapping = buttonMappingOSX;
-      axisMapping = axisMappingOSX;
-    } else {
-      buttonMapping = buttonMappingDefault;
-      axisMapping = axisMappingDefault;
-    }
-    currentState = function() {
-      return joysticks[i];
-    };
-    previousState = function() {
-      return previousJoysticks[i];
-    };
-    axisTrips = [];
-    return self = Core().include(Bindable).extend({
-      actionDown: function() {
-        var buttons, state;
-        buttons = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        if (state = currentState()) {
-          return buttons.inject(false, function(down, button) {
-            return down || state.buttons & buttonMapping[button];
-          });
-        } else {
-          return false;
-        }
-      },
-      buttonPressed: function(button) {
-        var buttonId;
-        buttonId = buttonMapping[button];
-        return (self.buttons() & buttonId) && !(previousState().buttons & buttonId);
-      },
-      position: function(stick) {
-        var magnitude, p, ratio, state;
-        if (stick == null) stick = 0;
-        if (state = currentState()) {
-          p = Point(self.axis(2 * stick), self.axis(2 * stick + 1));
-          magnitude = p.magnitude();
-          if (magnitude > AXIS_MAX) {
-            return p.norm();
-          } else if (magnitude < DEAD_ZONE) {
-            return Point(0, 0);
-          } else {
-            ratio = magnitude / AXIS_MAX;
-            return p.scale(ratio / AXIS_MAX);
-          }
-        } else {
-          return Point(0, 0);
-        }
-      },
-      axis: function(n) {
-        n = axisMapping[n];
-        return self.axes()[n] || 0;
-      },
-      axes: function() {
-        var state;
-        if (state = currentState()) {
-          return state.axes;
-        } else {
-          return [];
-        }
-      },
-      buttons: function() {
-        var state;
-        if (state = currentState()) return state.buttons;
-      },
-      processEvents: function() {
-        var x, y, _ref;
-        _ref = [0, 1].map(function(n) {
-          if (!axisTrips[n] && self.axis(n).abs() > TRIP_HIGH) {
-            axisTrips[n] = true;
-            return self.axis(n).sign();
-          }
-          if (axisTrips[n] && self.axis(n).abs() < TRIP_LOW) axisTrips[n] = false;
-          return 0;
-        }), x = _ref[0], y = _ref[1];
-        if (!x || !y) return self.trigger("tap", Point(x, y));
-      },
-      drawDebug: function(canvas) {
-        var axis, i, lineHeight, _len, _ref;
-        lineHeight = 18;
-        canvas.fillColor("#FFF");
-        _ref = self.axes();
-        for (i = 0, _len = _ref.length; i < _len; i++) {
-          axis = _ref[i];
-          canvas.fillText(axis, 0, i * lineHeight);
-        }
-        return canvas.fillText(self.buttons(), 0, i * lineHeight);
-      }
-    });
-  };
-  return {
-    getController: function(i) {
-      return controllers[i] || (controllers[i] = Controller(i));
-    },
-    init: function() {
-      var periodicCheck, promptElement;
-      if (!plugin) {
-        plugin = document.createElement("object");
-        plugin.type = type;
-        plugin.width = 0;
-        plugin.height = 0;
-        $("body").append(plugin);
-        plugin.maxAxes = 6;
-        if (!plugin.status) {
-          promptElement = displayInstallPrompt("Your browser does not yet handle joysticks, please click here to install the Boomstick plugin!", "https://github.com/STRd6/Boomstick/wiki");
-          periodicCheck = function() {
-            if (plugin.status) {
-              return promptElement.remove();
-            } else {
-              return setTimeout(periodicCheck, 500);
-            }
-          };
-          return periodicCheck();
-        }
-      }
-    },
-    status: function() {
-      return plugin != null ? plugin.status : void 0;
-    },
-    update: function() {
-      var controller, _i, _len, _results;
-      if (plugin.joysticksJSON) {
-        previousJoysticks = joysticks;
-        joysticks = JSON.parse(plugin.joysticksJSON());
-      }
-      _results = [];
-      for (_i = 0, _len = controllers.length; _i < _len; _i++) {
-        controller = controllers[_i];
-        _results.push(controller != null ? controller.processEvents() : void 0);
-      }
-      return _results;
-    },
-    joysticks: function() {
-      return joysticks;
-    }
-  };
-})();
-;
-
-/**
-jQuery Hotkeys Plugin
-Copyright 2010, John Resig
-Dual licensed under the MIT or GPL Version 2 licenses.
-
-Based upon the plugin by Tzury Bar Yochay:
-http://github.com/tzuryby/hotkeys
-
-Original idea by:
-Binny V A, http://www.openjs.com/scripts/events/keyboard_shortcuts/
-*/
-
-(function(jQuery) {
-  var isFunctionKey, isTextAcceptingInput, keyHandler;
-  isTextAcceptingInput = function(element) {
-    return /textarea|select/i.test(element.nodeName) || element.type === "text" || element.type === "password";
-  };
-  isFunctionKey = function(event) {
-    var _ref;
-    return (event.type !== "keypress") && ((112 <= (_ref = event.which) && _ref <= 123));
-  };
-  jQuery.hotkeys = {
-    version: "0.8",
-    specialKeys: {
-      8: "backspace",
-      9: "tab",
-      13: "return",
-      16: "shift",
-      17: "ctrl",
-      18: "alt",
-      19: "pause",
-      20: "capslock",
-      27: "esc",
-      32: "space",
-      33: "pageup",
-      34: "pagedown",
-      35: "end",
-      36: "home",
-      37: "left",
-      38: "up",
-      39: "right",
-      40: "down",
-      45: "insert",
-      46: "del",
-      96: "0",
-      97: "1",
-      98: "2",
-      99: "3",
-      100: "4",
-      101: "5",
-      102: "6",
-      103: "7",
-      104: "8",
-      105: "9",
-      106: "*",
-      107: "+",
-      109: "-",
-      110: ".",
-      111: "/",
-      112: "f1",
-      113: "f2",
-      114: "f3",
-      115: "f4",
-      116: "f5",
-      117: "f6",
-      118: "f7",
-      119: "f8",
-      120: "f9",
-      121: "f10",
-      122: "f11",
-      123: "f12",
-      144: "numlock",
-      145: "scroll",
-      186: ";",
-      187: "=",
-      188: ",",
-      189: "-",
-      190: ".",
-      191: "/",
-      219: "[",
-      220: "\\",
-      221: "]",
-      222: "'",
-      224: "meta"
-    },
-    shiftNums: {
-      "`": "~",
-      "1": "!",
-      "2": "@",
-      "3": "#",
-      "4": "$",
-      "5": "%",
-      "6": "^",
-      "7": "&",
-      "8": "*",
-      "9": "(",
-      "0": ")",
-      "-": "_",
-      "=": "+",
-      ";": ":",
-      "'": "\"",
-      ",": "<",
-      ".": ">",
-      "/": "?",
-      "\\": "|"
-    }
-  };
-  keyHandler = function(handleObj) {
-    var keys, origHandler;
-    if (typeof handleObj.data !== "string") return;
-    origHandler = handleObj.handler;
-    keys = handleObj.data.toLowerCase().split(" ");
-    return handleObj.handler = function(event) {
-      var character, key, modif, possible, special, target, _i, _len;
-      special = event.type !== "keypress" && jQuery.hotkeys.specialKeys[event.which];
-      character = String.fromCharCode(event.which).toLowerCase();
-      modif = "";
-      possible = {};
-      target = event.target;
-      if (event.altKey && special !== "alt") modif += "alt+";
-      if (event.ctrlKey && special !== "ctrl") modif += "ctrl+";
-      if (event.metaKey && !event.ctrlKey && special !== "meta") modif += "meta+";
-      if (this !== target) {
-        if (isTextAcceptingInput(target) && !modif && !isFunctionKey(event)) {
-          return;
-        }
-      }
-      if (event.shiftKey && special !== "shift") modif += "shift+";
-      if (special) {
-        possible[modif + special] = true;
-      } else {
-        possible[modif + character] = true;
-        possible[modif + jQuery.hotkeys.shiftNums[character]] = true;
-        if (modif === "shift+") {
-          possible[jQuery.hotkeys.shiftNums[character]] = true;
-        }
-      }
-      for (_i = 0, _len = keys.length; _i < _len; _i++) {
-        key = keys[_i];
-        if (possible[key]) return origHandler.apply(this, arguments);
-      }
-    };
-  };
-  return jQuery.each(["keydown", "keyup", "keypress"], function() {
-    return jQuery.event.special[this] = {
-      add: keyHandler
-    };
-  });
-})(jQuery);
-;
-
-/**
-Merges properties from objects into target without overiding.
-First come, first served.
-
-@name reverseMerge
-@methodOf jQuery#
-
-@param {Object} target the object to merge the given properties onto
-@param {Object} objects... one or more objects whose properties are merged onto target
-
-@return {Object} target
-*/
-
-var __slice = Array.prototype.slice;
-
-jQuery.extend({
-  reverseMerge: function() {
-    var name, object, objects, target, _i, _len;
-    target = arguments[0], objects = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    for (_i = 0, _len = objects.length; _i < _len; _i++) {
-      object = objects[_i];
-      for (name in object) {
-        if (!target.hasOwnProperty(name)) target[name] = object[name];
-      }
-    }
-    return target;
-  }
-});
-;
-
-$(function() {
-  /**
-  The global keydown property lets your query the status of keys.
-
-  <code><pre>
-  if keydown.left
-    moveLeft()
-
-  if keydown.a or keydown.space
-    attack()
-
-  if keydown.return
-    confirm()
-
-  if keydown.esc
-    cancel()
-  </pre></code>
-
-  @name keydown
-  @namespace
-  */
-  /**
-  The global justPressed property lets your query the status of keys. However, 
-  unlike keydown it will only trigger once for each time the key is pressed.
-
-  <code><pre>
-  if justPressed.left
-    moveLeft()
-
-  if justPressed.a or justPressed.space
-    attack()
-
-  if justPressed.return
-    confirm()
-
-  if justPressed.esc
-    cancel()
-  </pre></code>
-
-  @name justPressed
-  @namespace
-  */
-  var keyName, prevKeysDown;
-  window.keydown = {};
-  window.justPressed = {};
-  prevKeysDown = {};
-  keyName = function(event) {
-    return jQuery.hotkeys.specialKeys[event.which] || String.fromCharCode(event.which).toLowerCase();
-  };
-  $(document).bind("keydown", function(event) {
-    var key;
-    key = keyName(event);
-    return keydown[key] = true;
-  });
-  $(document).bind("keyup", function(event) {
-    var key;
-    key = keyName(event);
-    return keydown[key] = false;
-  });
-  return window.updateKeys = function() {
-    var key, value, _results;
-    window.justPressed = {};
-    for (key in keydown) {
-      value = keydown[key];
-      if (!prevKeysDown[key]) justPressed[key] = value;
-    }
-    prevKeysDown = {};
-    _results = [];
-    for (key in keydown) {
-      value = keydown[key];
-      _results.push(prevKeysDown[key] = value);
-    }
-    return _results;
-  };
-});
-;
-
-/**
-The Music object provides an easy API to play
-songs from your sounds project directory. By
-default, the track is looped.
-
-<code><pre>
-  Music.play('intro_theme')
-</pre></code>
-
-@name Music
-@namespace
-*/
-
-var Music;
-
-Music = (function() {
-  var track;
-  track = $("<audio />", {
-    loop: "loop"
-  }).appendTo('body').get(0);
-  track.volume = 1;
-  return {
-    play: function(name) {
-      track.src = "" + BASE_URL + "/sounds/" + name + ".mp3";
-      return track.play();
-    },
-    volume: function(newVolume) {
-      if (newVolume != null) {
-        track.volume = newVolume;
-        return this;
-      } else {
-        return track.volume;
-      }
-    }
-  };
-})();
-;
-var __slice = Array.prototype.slice;
-
-(function($) {
-  return $.fn.pixieCanvas = function(options) {
-    var $canvas, canvas, canvasAttrAccessor, context, contextAttrAccessor;
-    options || (options = {});
-    canvas = this.get(0);
-    context = void 0;
-    /**
-    PixieCanvas provides a convenient wrapper for working with Context2d.
-
-    Methods try to be as flexible as possible as to what arguments they take.
-
-    Non-getter methods return `this` for method chaining.
-
-    @name PixieCanvas
-    @constructor
-    */
-    $canvas = $(canvas).extend({
-      /**
-      Passes this canvas to the block with the given matrix transformation
-      applied. All drawing methods called within the block will draw
-      into the canvas with the transformation applied. The transformation
-      is removed at the end of the block, even if the block throws an error.
-
-      @name withTransform
-      @methodOf PixieCanvas#
-
-      @param {Matrix} matrix
-      @param {Function} block
-
-      @returns {PixieCanvas} this
-      */
-      withTransform: function(matrix, block) {
-        context.save();
-        context.transform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
-        try {
-          block(this);
-        } finally {
-          context.restore();
-        }
-        return this;
-      },
-      /**
-      Clear the canvas (or a portion of it).
-
-      Clear the entire canvas
-
-      <code><pre>
-      canvas.clear()
-      </pre></code>
-
-      Clear a portion of the canvas
-
-      <code class="run"><pre>
-      # Set up: Fill canvas with blue
-      canvas.fill("blue")  
-
-      # Clear a portion of the canvas
-      canvas.clear
-        x: 50
-        y: 50
-        width: 50
-        height: 50
-      </pre></code>
-
-      You can also clear the canvas by passing x, y, width height as
-      unnamed parameters:
-
-      <code><pre>
-      canvas.clear(25, 25, 50, 50)
-      </pre></code>
-
-      @name clear
-      @methodOf PixieCanvas#
-
-      @param {Number} [x] where to start clearing on the x axis
-      @param {Number} [y] where to start clearing on the y axis
-      @param {Number} [width] width of area to clear
-      @param {Number} [height] height of area to clear
-
-      @returns {PixieCanvas} this
-      */
-      clear: function(x, y, width, height) {
-        var _ref;
-        if (x == null) x = {};
-        if (y == null) {
-          _ref = x, x = _ref.x, y = _ref.y, width = _ref.width, height = _ref.height;
-        }
-        x || (x = 0);
-        y || (y = 0);
-        if (width == null) width = canvas.width;
-        if (height == null) height = canvas.height;
-        context.clearRect(x, y, width, height);
-        return this;
-      },
-      /**
-      Fills the entire canvas (or a specified section of it) with
-      the given color.
-
-      <code class="run"><pre>
-      # Paint the town (entire canvas) red
-      canvas.fill "red"
-
-      # Fill a section of the canvas white (#FFF)
-      canvas.fill
-        x: 50
-        y: 50
-        width: 50
-        height: 50
-        color: "#FFF"
-      </pre></code>
-
-      @name fill
-      @methodOf PixieCanvas#
-
-      @param {Number} [x=0] Optional x position to fill from
-      @param {Number} [y=0] Optional y position to fill from
-      @param {Number} [width=canvas.width] Optional width of area to fill
-      @param {Number} [height=canvas.height] Optional height of area to fill 
-      @param {Bounds} [bounds] bounds object to fill
-      @param {String|Color} [color] color of area to fill
-
-      @returns {PixieCanvas} this
-      */
-      fill: function(color) {
-        var bounds, height, width, x, y, _ref;
-        if (color == null) color = {};
-        if (!((typeof color.isString === "function" ? color.isString() : void 0) || color.channels)) {
-          _ref = color, x = _ref.x, y = _ref.y, width = _ref.width, height = _ref.height, bounds = _ref.bounds, color = _ref.color;
-        }
-        if (bounds) {
-          x = bounds.x, y = bounds.y, width = bounds.width, height = bounds.height;
-        }
-        x || (x = 0);
-        y || (y = 0);
-        if (width == null) width = canvas.width;
-        if (height == null) height = canvas.height;
-        this.fillColor(color);
-        context.fillRect(x, y, width, height);
-        return this;
-      },
-      /**
-      A direct map to the Context2d draw image. `GameObject`s
-      that implement drawable will have this wrapped up nicely,
-      so there is a good chance that you will not have to deal with
-      it directly.
-
-      @name drawImage
-      @methodOf PixieCanvas#
-
-      @param image
-      @param {Number} sx
-      @param {Number} sy
-      @param {Number} sWidth
-      @param {Number} sHeight
-      @param {Number} dx
-      @param {Number} dy
-      @param {Number} dWidth
-      @param {Number} dHeight
-
-      @returns {PixieCanvas} this
-      */
-      drawImage: function(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) {
-        context.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-        return this;
-      },
-      /**
-      Draws a circle at the specified position with the specified
-      radius and color.
-
-      <code class="run"><pre>
-      # Draw a large orange circle
-      canvas.drawCircle
-        radius: 30
-        position: Point(100, 75)
-        color: "orange"
-
-      # Draw a blue circle with radius 10 at (25, 50)
-      # and a red stroke
-      canvas.drawCircle
-        x: 25
-        y: 50
-        radius: 10
-        color: "blue"
-        stroke:
-          color: "red"
-          width: 1
-
-      # Create a circle object to set up the next examples
-      circle =
-        radius: 20
-        x: 50
-        y: 50
-
-      # Draw a given circle in yellow
-      canvas.drawCircle
-        circle: circle
-        color: "yellow"
-
-      # Draw the circle in green at a different position
-      canvas.drawCircle
-        circle: circle
-        position: Point(25, 75)
-        color: "green"
-
-      # Draw an outline circle in purple.
-      canvas.drawCircle
-        x: 50
-        y: 75
-        radius: 10
-        stroke:
-          color: "purple"
-          width: 2
-      </pre></code>
-
-      @name drawCircle
-      @methodOf PixieCanvas#
-
-      @param {Number} [x] location on the x axis to start drawing
-      @param {Number} [y] location on the y axis to start drawing
-      @param {Point} [position] position object of location to start drawing. This will override x and y values passed
-      @param {Number} [radius] length of the radius of the circle
-      @param {Color|String} [color] color of the circle
-      @param {Circle} [circle] circle object that contains position and radius. Overrides x, y, and radius if passed
-      @param {Stroke} [stroke] stroke object that specifies stroke color and stroke width
-
-      @returns {PixieCanvas} this
-      */
-      drawCircle: function(_arg) {
-        var circle, color, position, radius, stroke, x, y;
-        x = _arg.x, y = _arg.y, radius = _arg.radius, position = _arg.position, color = _arg.color, stroke = _arg.stroke, circle = _arg.circle;
-        if (circle) x = circle.x, y = circle.y, radius = circle.radius;
-        if (position) x = position.x, y = position.y;
-        context.beginPath();
-        context.arc(x, y, radius, 0, Math.TAU, true);
-        context.closePath();
-        if (color) {
-          this.fillColor(color);
-          context.fill();
-        }
-        if (stroke) {
-          this.strokeColor(stroke.color);
-          this.lineWidth(stroke.width);
-          context.stroke();
-        }
-        return this;
-      },
-      /**
-      Draws a rectangle at the specified position with given 
-      width and height. Optionally takes a position, bounds
-      and color argument.
-
-      <code class="run"><pre>
-      # Draw a red rectangle using x, y, width and height
-      canvas.drawRect
-        x: 50
-        y: 50
-        width: 50
-        height: 50
-        color: "#F00"
-
-      # Draw a blue rectangle using position, width and height
-      # and throw in a stroke for good measure
-      canvas.drawRect
-        position: Point(0, 0)
-        width: 50
-        height: 50
-        color: "blue"
-        stroke:
-          color: "orange"
-          width: 3
-
-      # Set up a bounds object for the next examples
-      bounds =
-        x: 100
-        y: 0
-        width: 100
-        height: 100
-
-      # Draw a purple rectangle using bounds
-      canvas.drawRect
-        bounds: bounds
-        color: "green"
-
-      # Draw the outline of the same bounds, but at a different position
-      canvas.drawRect
-        bounds: bounds
-        position: Point(0, 50)
-        stroke:
-          color: "purple"
-          width: 2
-      </pre></code>
-
-      @name drawRect
-      @methodOf PixieCanvas#
-
-      @param {Number} [x] location on the x axis to start drawing
-      @param {Number} [y] location on the y axis to start drawing
-      @param {Number} [width] width of rectangle to draw
-      @param {Number} [height] height of rectangle to draw
-      @param {Point} [position] position to start drawing. Overrides x and y if passed
-      @param {Color|String} [color] color of rectangle
-      @param {Bounds} [bounds] bounds of rectangle. Overrides x, y, width, height if passed
-      @param {Stroke} [stroke] stroke object that specifies stroke color and stroke width
-
-      @returns {PixieCanvas} this
-      */
-      drawRect: function(_arg) {
-        var bounds, color, height, position, stroke, width, x, y;
-        x = _arg.x, y = _arg.y, width = _arg.width, height = _arg.height, position = _arg.position, bounds = _arg.bounds, color = _arg.color, stroke = _arg.stroke;
-        if (bounds) {
-          x = bounds.x, y = bounds.y, width = bounds.width, height = bounds.height;
-        }
-        if (position) x = position.x, y = position.y;
-        if (color) {
-          this.fillColor(color);
-          context.fillRect(x, y, width, height);
-        }
-        if (stroke) {
-          this.strokeColor(stroke.color);
-          this.lineWidth(stroke.width);
-          context.strokeRect(x, y, width, height);
-        }
-        return this;
-      },
-      /**
-      Draw a line from `start` to `end`.
-
-      <code class="run"><pre>
-      # Draw a sweet diagonal
-      canvas.drawLine
-        start: Point(0, 0)
-        end: Point(200, 200)
-        color: "purple"
-
-      # Draw another sweet diagonal
-      canvas.drawLine
-        start: Point(200, 0)
-        end: Point(0, 200)
-        color: "red"
-        width: 6
-
-      # Now draw a sweet horizontal with a direction and a length
-      canvas.drawLine
-        start: Point(0, 100)
-        length: 200
-        direction: Point(1, 0)
-        color: "orange"
-
-      </pre></code>
-
-      @name drawLine
-      @methodOf PixieCanvas#
-
-      @param {Point} start position to start drawing from
-      @param {Point} [end] position to stop drawing
-      @param {Number} [width] width of the line
-      @param {String|Color} [color] color of the line
-
-      @returns {PixieCanvas} this
-      */
-      drawLine: function(_arg) {
-        var color, direction, end, length, start, width;
-        start = _arg.start, end = _arg.end, width = _arg.width, color = _arg.color, direction = _arg.direction, length = _arg.length;
-        width || (width = 3);
-        if (direction) end = direction.norm(length).add(start);
-        this.lineWidth(width);
-        this.strokeColor(color);
-        context.beginPath();
-        context.moveTo(start.x, start.y);
-        context.lineTo(end.x, end.y);
-        context.closePath();
-        context.stroke();
-        return this;
-      },
-      /**
-      Draw a polygon.
-
-      <code class="run"><pre>
-      # Draw a sweet rhombus
-      canvas.drawPoly
-        points: [
-          Point(50, 25)
-          Point(75, 50)
-          Point(50, 75)
-          Point(25, 50)
-        ]
-        color: "purple"
-        stroke:
-          color: "red"
-          width: 2
-      </pre></code>
-
-      @name drawPoly
-      @methodOf PixieCanvas#
-
-      @param {Point[]} [points] collection of points that define the vertices of the polygon
-      @param {String|Color} [color] color of the polygon
-      @param {Stroke} [stroke] stroke object that specifies stroke color and stroke width
-
-      @returns {PixieCanvas} this
-      */
-      drawPoly: function(_arg) {
-        var color, points, stroke;
-        points = _arg.points, color = _arg.color, stroke = _arg.stroke;
-        context.beginPath();
-        points.each(function(point, i) {
-          if (i === 0) {
-            return context.moveTo(point.x, point.y);
-          } else {
-            return context.lineTo(point.x, point.y);
-          }
-        });
-        context.lineTo(points[0].x, points[0].y);
-        if (color) {
-          this.fillColor(color);
-          context.fill();
-        }
-        if (stroke) {
-          this.strokeColor(stroke.color);
-          this.lineWidth(stroke.width);
-          context.stroke();
-        }
-        return this;
-      },
-      /**
-      Draw a rounded rectangle.
-
-      Adapted from http://js-bits.blogspot.com/2010/07/canvas-rounded-corner-rectangles.html
-
-      <code class="run"><pre>
-      # Draw a purple rounded rectangle with a red outline
-      canvas.drawRoundRect
-        position: Point(25, 25)
-        radius: 10
-        width: 150
-        height: 100
-        color: "purple"
-        stroke:
-          color: "red"
-          width: 2
-      </pre></code>
-
-      @name drawRoundRect
-      @methodOf PixieCanvas#
-
-      @param {Number} [x] location on the x axis to start drawing
-      @param {Number} [y] location on the y axis to start drawing
-      @param {Number} [width] width of the rounded rectangle
-      @param {Number} [height] height of the rounded rectangle
-      @param {Number} [radius=5] radius to round the rectangle corners
-      @param {Point} [position] position to start drawing. Overrides x and y if passed
-      @param {Color|String} [color] color of the rounded rectangle
-      @param {Bounds} [bounds] bounds of the rounded rectangle. Overrides x, y, width, and height if passed
-      @param {Stroke} [stroke] stroke object that specifies stroke color and stroke width
-
-      @returns {PixieCanvas} this
-      */
-      drawRoundRect: function(_arg) {
-        var bounds, color, height, position, radius, stroke, width, x, y;
-        x = _arg.x, y = _arg.y, width = _arg.width, height = _arg.height, radius = _arg.radius, position = _arg.position, bounds = _arg.bounds, color = _arg.color, stroke = _arg.stroke;
-        if (radius == null) radius = 5;
-        if (bounds) {
-          x = bounds.x, y = bounds.y, width = bounds.width, height = bounds.height;
-        }
-        if (position) x = position.x, y = position.y;
-        context.beginPath();
-        context.moveTo(x + radius, y);
-        context.lineTo(x + width - radius, y);
-        context.quadraticCurveTo(x + width, y, x + width, y + radius);
-        context.lineTo(x + width, y + height - radius);
-        context.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-        context.lineTo(x + radius, y + height);
-        context.quadraticCurveTo(x, y + height, x, y + height - radius);
-        context.lineTo(x, y + radius);
-        context.quadraticCurveTo(x, y, x + radius, y);
-        context.closePath();
-        if (color) {
-          this.fillColor(color);
-          context.fill();
-        }
-        if (stroke) {
-          this.lineWidth(stroke.width);
-          this.strokeColor(stroke.color);
-          context.stroke();
-        }
-        return this;
-      },
-      /**
-      Draws text on the canvas at the given position, in the given color.
-      If no color is given then the previous fill color is used.
-
-      <code class="run"><pre>
-      # Fill canvas to indicate bounds
-      canvas.fill
-        color: '#eee'
-
-      # A line to indicate the baseline
-      canvas.drawLine
-        start: Point(25, 50)
-        end: Point(125, 50)
-        color: "#333"
-        width: 1
-
-      # Draw some text, note the position of the baseline
-      canvas.drawText
-        position: Point(25, 50)
-        color: "red"
-        text: "It's dangerous to go alone"
-
-      </pre></code>
-
-      @name drawText
-      @methodOf PixieCanvas#
-
-      @param {Number} [x] location on x axis to start printing
-      @param {Number} [y] location on y axis to start printing
-      @param {String} text text to print
-      @param {Point} [position] position to start printing. Overrides x and y if passed
-      @param {String|Color} [color] color of text to start printing
-
-      @returns {PixieCanvas} this
-      */
-      drawText: function(_arg) {
-        var color, position, text, x, y;
-        x = _arg.x, y = _arg.y, text = _arg.text, position = _arg.position, color = _arg.color;
-        if (position) x = position.x, y = position.y;
-        this.fillColor(color);
-        context.fillText(text, x, y);
-        return this;
-      },
-      /**
-      Centers the given text on the canvas at the given y position. An x position
-      or point position can also be given in which case the text is centered at the
-      x, y or position value specified.
-
-      <code class="run"><pre>
-      # Fill canvas to indicate bounds
-      canvas.fill
-        color: "#eee"
-
-      # A line to indicate the baseline
-      canvas.drawLine
-        start: Point(25, 25)
-        end: Point(125, 25)
-        color: "#333"
-        width: 1
-
-      # Center text on the screen at y value 25
-      canvas.centerText
-        y: 25
-        color: "red"
-        text: "It's dangerous to go alone"
-
-      # Center text at point (75, 75)
-      canvas.centerText
-        position: Point(75, 75)
-        color: "green"
-        text: "take this"
-
-      </pre></code>
-
-      @name centerText
-      @methodOf PixieCanvas#
-
-      @param {String} text Text to print
-      @param {Number} [y] location on the y axis to start printing
-      @param {Number} [x] location on the x axis to start printing. Overrides the default centering behavior if passed
-      @param {Point} [position] position to start printing. Overrides x and y if passed
-      @param {String|Color} [color] color of text to print
-
-      @returns {PixieCanvas} this
-      */
-      centerText: function(_arg) {
-        var color, position, text, textWidth, x, y;
-        text = _arg.text, x = _arg.x, y = _arg.y, position = _arg.position, color = _arg.color;
-        if (position) x = position.x, y = position.y;
-        if (x == null) x = canvas.width / 2;
-        textWidth = this.measureText(text);
-        return this.drawText({
-          text: text,
-          color: color,
-          x: x - textWidth / 2,
-          y: y
-        });
-      },
-      /**
-      A getter / setter method to set the canvas fillColor.
-
-      <code><pre>
-      # Set the fill color
-      canvas.fillColor('#FF0000')
-
-      # Passing no arguments returns the fillColor
-      canvas.fillColor()
-      # => '#FF0000'
-
-      # You can also pass a Color object
-      canvas.fillColor(Color('sky blue'))
-      </pre></code>      
-
-      @name fillColor
-      @methodOf PixieCanvas#
-
-      @param {String|Color} [color] color to make the canvas fillColor 
-
-      @returns {PixieCanvas} this
-      */
-      fillColor: function(color) {
-        if (color) {
-          if (color.channels) {
-            context.fillStyle = color.toString();
-          } else {
-            context.fillStyle = color;
-          }
-          return this;
-        } else {
-          return context.fillStyle;
-        }
-      },
-      /**
-      A getter / setter method to set the canvas strokeColor.
-
-      <code><pre>
-      # Set the stroke color
-      canvas.strokeColor('#FF0000')
-
-      # Passing no arguments returns the strokeColor
-      canvas.strokeColor()
-      # => '#FF0000'
-
-      # You can also pass a Color object
-      canvas.strokeColor(Color('sky blue'))
-      </pre></code>      
-
-      @name strokeColor
-      @methodOf PixieCanvas#
-
-      @param {String|Color} [color] color to make the canvas strokeColor 
-
-      @returns {PixieCanvas} this
-      */
-      strokeColor: function(color) {
-        if (color) {
-          if (color.channels) {
-            context.strokeStyle = color.toString();
-          } else {
-            context.strokeStyle = color;
-          }
-          return this;
-        } else {
-          return context.strokeStyle;
-        }
-      },
-      /**
-      Determine how wide some text is.
-
-      <code><pre>
-      canvas.measureText('Hello World!')
-      # => 55
-      </pre></code>      
-
-      @name measureText
-      @methodOf PixieCanvas#
-
-      @param {String} [text] the text to measure 
-
-      @returns {PixieCanvas} this
-      */
-      measureText: function(text) {
-        return context.measureText(text).width;
-      },
-      putImageData: function(imageData, x, y) {
-        context.putImageData(imageData, x, y);
-        return this;
-      },
-      context: function() {
-        return context;
-      },
-      element: function() {
-        return canvas;
-      },
-      createPattern: function(image, repitition) {
-        return context.createPattern(image, repitition);
-      },
-      clip: function(x, y, width, height) {
-        context.beginPath();
-        context.rect(x, y, width, height);
-        context.clip();
-        return this;
-      }
-    });
-    contextAttrAccessor = function() {
-      var attrs;
-      attrs = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return attrs.each(function(attr) {
-        return $canvas[attr] = function(newVal) {
-          if (newVal != null) {
-            context[attr] = newVal;
-            return this;
-          } else {
-            return context[attr];
-          }
-        };
-      });
-    };
-    canvasAttrAccessor = function() {
-      var attrs;
-      attrs = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return attrs.each(function(attr) {
-        return $canvas[attr] = function(newVal) {
-          if (newVal != null) {
-            canvas[attr] = newVal;
-            return this;
-          } else {
-            return canvas[attr];
-          }
-        };
-      });
-    };
-    contextAttrAccessor("font", "globalAlpha", "globalCompositeOperation", "lineWidth", "textAlign");
-    canvasAttrAccessor("height", "width");
-    if (canvas != null ? canvas.getContext : void 0) {
-      context = canvas.getContext('2d');
-      if (options.init) options.init($canvas);
-      return $canvas;
-    }
-  };
-})(jQuery);
-;
-var __slice = Array.prototype.slice;
-
-(function($) {
-  return $.fn.powerCanvas = function(options) {
-    var $canvas, canvas, context;
-    options || (options = {});
-    canvas = this.get(0);
-    context = void 0;
-    /**
-    * PowerCanvas provides a convenient wrapper for working with Context2d.
-    * @name PowerCanvas
-    * @deprecated Use {@link PixieCanvas} instead
-    * @constructor
-    */
-    $canvas = $(canvas).extend({
-      /**
-       * Passes this canvas to the block with the given matrix transformation
-       * applied. All drawing methods called within the block will draw
-       * into the canvas with the transformation applied. The transformation
-       * is removed at the end of the block, even if the block throws an error.
-       *
-       * @name withTransform
-       * @methodOf PowerCanvas#
-       *
-       * @param {Matrix} matrix
-       * @param {Function} block
-       * @returns this
-      */
-      withTransform: function(matrix, block) {
-        context.save();
-        context.transform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
-        try {
-          block(this);
-        } finally {
-          context.restore();
-        }
-        return this;
-      },
-      clear: function() {
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        return this;
-      },
-      clearRect: function(x, y, width, height) {
-        context.clearRect(x, y, width, height);
-        return this;
-      },
-      context: function() {
-        return context;
-      },
-      element: function() {
-        return canvas;
-      },
-      globalAlpha: function(newVal) {
-        if (newVal != null) {
-          context.globalAlpha = newVal;
-          return this;
-        } else {
-          return context.globalAlpha;
-        }
-      },
-      compositeOperation: function(newVal) {
-        if (newVal != null) {
-          context.globalCompositeOperation = newVal;
-          return this;
-        } else {
-          return context.globalCompositeOperation;
-        }
-      },
-      createLinearGradient: function(x0, y0, x1, y1) {
-        return context.createLinearGradient(x0, y0, x1, y1);
-      },
-      createRadialGradient: function(x0, y0, r0, x1, y1, r1) {
-        return context.createRadialGradient(x0, y0, r0, x1, y1, r1);
-      },
-      buildRadialGradient: function(c1, c2, stops) {
-        var color, gradient, position;
-        gradient = context.createRadialGradient(c1.x, c1.y, c1.radius, c2.x, c2.y, c2.radius);
-        for (position in stops) {
-          color = stops[position];
-          gradient.addColorStop(position, color);
-        }
-        return gradient;
-      },
-      createPattern: function(image, repitition) {
-        return context.createPattern(image, repitition);
-      },
-      drawImage: function(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) {
-        context.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-        return this;
-      },
-      drawLine: function(x1, y1, x2, y2, width) {
-        if (arguments.length === 3) {
-          width = x2;
-          x2 = y1.x;
-          y2 = y1.y;
-          y1 = x1.y;
-          x1 = x1.x;
-        }
-        width || (width = 3);
-        context.lineWidth = width;
-        context.beginPath();
-        context.moveTo(x1, y1);
-        context.lineTo(x2, y2);
-        context.closePath();
-        context.stroke();
-        return this;
-      },
-      fill: function(color) {
-        $canvas.fillColor(color);
-        context.fillRect(0, 0, canvas.width, canvas.height);
-        return this;
-      },
-      /**
-       * Fills a circle at the specified position with the specified
-       * radius and color.
-       *
-       * @name fillCircle
-       * @methodOf PowerCanvas#
-       *
-       * @param {Number} x
-       * @param {Number} y
-       * @param {Number} radius
-       * @param {Number} color
-       * @see PowerCanvas#fillColor 
-       * @returns this
-      */
-      fillCircle: function(x, y, radius, color) {
-        $canvas.fillColor(color);
-        context.beginPath();
-        context.arc(x, y, radius, 0, Math.TAU, true);
-        context.closePath();
-        context.fill();
-        return this;
-      },
-      /**
-       * Fills a rectangle with the current fillColor
-       * at the specified position with the specified
-       * width and height 
-
-       * @name fillRect
-       * @methodOf PowerCanvas#
-       *
-       * @param {Number} x
-       * @param {Number} y
-       * @param {Number} width
-       * @param {Number} height
-       * @see PowerCanvas#fillColor 
-       * @returns this
-      */
-      fillRect: function(x, y, width, height) {
-        context.fillRect(x, y, width, height);
-        return this;
-      },
-      fillShape: function() {
-        var points;
-        points = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        context.beginPath();
-        points.each(function(point, i) {
-          if (i === 0) {
-            return context.moveTo(point.x, point.y);
-          } else {
-            return context.lineTo(point.x, point.y);
-          }
-        });
-        context.lineTo(points[0].x, points[0].y);
-        return context.fill();
-      },
-      /**
-      * Adapted from http://js-bits.blogspot.com/2010/07/canvas-rounded-corner-rectangles.html
-      */
-      fillRoundRect: function(x, y, width, height, radius, strokeWidth) {
-        radius || (radius = 5);
-        context.beginPath();
-        context.moveTo(x + radius, y);
-        context.lineTo(x + width - radius, y);
-        context.quadraticCurveTo(x + width, y, x + width, y + radius);
-        context.lineTo(x + width, y + height - radius);
-        context.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-        context.lineTo(x + radius, y + height);
-        context.quadraticCurveTo(x, y + height, x, y + height - radius);
-        context.lineTo(x, y + radius);
-        context.quadraticCurveTo(x, y, x + radius, y);
-        context.closePath();
-        if (strokeWidth) {
-          context.lineWidth = strokeWidth;
-          context.stroke();
-        }
-        context.fill();
-        return this;
-      },
-      fillText: function(text, x, y) {
-        context.fillText(text, x, y);
-        return this;
-      },
-      centerText: function(text, y) {
-        var textWidth;
-        textWidth = $canvas.measureText(text);
-        return $canvas.fillText(text, (canvas.width - textWidth) / 2, y);
-      },
-      fillWrappedText: function(text, x, y, width) {
-        var lineHeight, tokens, tokens2;
-        tokens = text.split(" ");
-        tokens2 = text.split(" ");
-        lineHeight = 16;
-        if ($canvas.measureText(text) > width) {
-          if (tokens.length % 2 === 0) {
-            tokens2 = tokens.splice(tokens.length / 2, tokens.length / 2, "");
-          } else {
-            tokens2 = tokens.splice(tokens.length / 2 + 1, (tokens.length / 2) + 1, "");
-          }
-          context.fillText(tokens.join(" "), x, y);
-          return context.fillText(tokens2.join(" "), x, y + lineHeight);
-        } else {
-          return context.fillText(tokens.join(" "), x, y + lineHeight);
-        }
-      },
-      fillColor: function(color) {
-        if (color) {
-          if (color.channels) {
-            context.fillStyle = color.toString();
-          } else {
-            context.fillStyle = color;
-          }
-          return this;
-        } else {
-          return context.fillStyle;
-        }
-      },
-      font: function(font) {
-        if (font != null) {
-          context.font = font;
-          return this;
-        } else {
-          return context.font;
-        }
-      },
-      measureText: function(text) {
-        return context.measureText(text).width;
-      },
-      putImageData: function(imageData, x, y) {
-        context.putImageData(imageData, x, y);
-        return this;
-      },
-      strokeColor: function(color) {
-        if (color) {
-          if (color.channels) {
-            context.strokeStyle = color.toString();
-          } else {
-            context.strokeStyle = color;
-          }
-          return this;
-        } else {
-          return context.strokeStyle;
-        }
-      },
-      strokeCircle: function(x, y, radius, color) {
-        $canvas.strokeColor(color);
-        context.beginPath();
-        context.arc(x, y, radius, 0, Math.TAU, true);
-        context.closePath();
-        context.stroke();
-        return this;
-      },
-      strokeRect: function(x, y, width, height) {
-        context.strokeRect(x, y, width, height);
-        return this;
-      },
-      textAlign: function(textAlign) {
-        context.textAlign = textAlign;
-        return this;
-      },
-      height: function() {
-        return canvas.height;
-      },
-      width: function() {
-        return canvas.width;
-      }
-    });
-    if (canvas != null ? canvas.getContext : void 0) {
-      context = canvas.getContext('2d');
-      if (options.init) options.init($canvas);
-      return $canvas;
-    }
-  };
-})(jQuery);
-;
-
-/**
-A browser polyfill so you can consistently 
-call requestAnimationFrame. Using 
-requestAnimationFrame is preferred to 
-setInterval for main game loops.
-
-http://paulirish.com/2011/requestanimationframe-for-smart-animating/
-
-@name requestAnimationFrame
-@namespace
-*/
-
-window.requestAnimationFrame || (window.requestAnimationFrame = window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback, element) {
-  return window.setTimeout(function() {
-    return callback(+new Date());
-  }, 1000 / 60);
-});
-;
-
-(function($) {
-  /**
-  A simple interface for playing sounds in games.
-
-  @name Sound
-  @namespace
-  */
-  var Sound, directory, format, loadSoundChannel, sounds, _ref;
-  directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.sounds : void 0 : void 0) || "sounds";
-  format = "wav";
-  sounds = {};
-  loadSoundChannel = function(name) {
-    var sound, url;
-    url = "" + BASE_URL + "/" + directory + "/" + name + "." + format;
-    return sound = $('<audio />', {
-      autobuffer: true,
-      preload: 'auto',
-      src: url
-    }).get(0);
-  };
-  Sound = function(id, maxChannels) {
-    return {
-      play: function() {
-        return Sound.play(id, maxChannels);
-      },
-      stop: function() {
-        return Sound.stop(id);
-      }
-    };
-  };
-  return Object.extend(Sound, {
-    /**
-    Play a sound from your sounds 
-    directory with the name of `id`.
-
-    <code><pre>
-    # plays a sound called explode from your sounds directory
-    Sound.play('explode')
-    </pre></code>
-
-    @name play
-    @methodOf Sound
-
-    @param {String} id id or name of the sound file to play
-    @param {String} maxChannels max number of sounds able to be played simultaneously
-    */
-    play: function(id, maxChannels) {
-      var channel, channels, freeChannels, sound;
-      maxChannels || (maxChannels = 4);
-      if (!sounds[id]) sounds[id] = [loadSoundChannel(id)];
-      channels = sounds[id];
-      freeChannels = $.grep(channels, function(sound) {
-        return sound.currentTime === sound.duration || sound.currentTime === 0;
-      });
-      if (channel = freeChannels.first()) {
-        try {
-          channel.currentTime = 0;
-        } catch (_error) {}
-        return channel.play();
-      } else {
-        if (!maxChannels || channels.length < maxChannels) {
-          sound = loadSoundChannel(id);
-          channels.push(sound);
-          return sound.play();
-        }
-      }
-    },
-    /**
-    Play a sound from the given
-    url with the name of `id`.
-
-    <code><pre>
-    # plays the sound at the specified url
-    Sound.playFromUrl('http://YourSoundWebsite.com/explode.wav')
-    </pre></code>
-
-    @name playFromUrl
-    @methodOf Sound
-
-    @param {String} url location of sound file to play
-
-    @returns {Sound} this sound object
-    */
-    playFromUrl: function(url) {
-      var sound;
-      sound = $('<audio />').get(0);
-      sound.src = url;
-      sound.play();
-      return sound;
-    },
-    /**
-    Stop a sound while it is playing.
-
-    <code><pre>
-    # stops the sound 'explode' from 
-    # playing if it is currently playing 
-    Sound.stop('explode')
-    </pre></code>
-
-    @name stop
-    @methodOf Sound
-
-    @param {String} id id or name of sound to stop playing.
-    */
-    stop: function(id) {
-      var _ref2;
-      return (_ref2 = sounds[id]) != null ? _ref2.stop() : void 0;
-    }
-  }, (typeof exports !== "undefined" && exports !== null ? exports : this)["Sound"] = Sound);
-})(jQuery);
-;
-
-(function() {
-  /**
-  A wrapper on the Local Storage API 
-
-  @name Local
-  @namespace
-  */
-  /**
-  Store an object in local storage.
-
-  <code><pre>
-  # you can store strings
-  Local.set('name', 'Matt')
-
-  # and numbers
-  Local.set('age', 26)
-
-  # and even objects
-  Local.set('person', {name: 'Matt', age: 26})
-  </pre></code>
-
-  @name set
-  @methodOf Local
-
-  @param {String} key string used to identify the object you are storing
-  @param {Object} value value of the object you are storing
-
-  @returns {Object} value
-  */
-  var retrieve, store;
-  store = function(key, value) {
-    localStorage[key] = JSON.stringify(value);
-    return value;
-  };
-  /**
-  Retrieve an object from local storage.
-
-  <code><pre>
-  Local.get('name')
-  # => 'Matt'
-
-  Local.get('age')
-  # => 26
-
-  Local.get('person')
-  # => { age: 26, name: 'Matt' }
-  </pre></code>
-
-  @name get
-  @methodOf Local
-
-  @param {String} key string that identifies the stored object
-
-  @returns {Object} The object that was stored or undefined if no object was stored.
-  */
-  retrieve = function(key) {
-    var value;
-    value = localStorage[key];
-    if (value != null) return JSON.parse(value);
-  };
-  return (typeof exports !== "undefined" && exports !== null ? exports : this)["Local"] = {
-    get: retrieve,
-    set: store,
-    put: store,
-    /**
-    Access an instance of Local with a specified prefix.
-
-    @name new
-    @methodOf Local
-
-    @param {String} prefix 
-    @returns {Local} An interface to local storage with the given prefix applied.
-    */
-    "new": function(prefix) {
-      prefix || (prefix = "");
-      return {
-        get: function(key) {
-          return retrieve("" + prefix + "_" + key);
-        },
-        set: function(key, value) {
-          return store("" + prefix + "_" + key, value);
-        },
-        put: function(key, value) {
-          return store("" + prefix + "_" + key, value);
-        }
-      };
-    }
-  };
-})();
-;
-;
-;
-;
-/**
-The Animated module, when included in a GameObject, gives the object 
-methods to transition from one animation state to another
-
-@name Animated
-@module
-@constructor
-
-@param {Object} I Instance variables
-@param {Object} self Reference to including object
-*/var Animated;
-Animated = function(I, self) {
-  var advanceFrame, find, initializeState, loadByName, updateSprite, _name, _ref;
-  I || (I = {});
-  $.reverseMerge(I, {
-    animationName: (_ref = I["class"]) != null ? _ref.underscore() : void 0,
-    data: {
-      version: "",
-      tileset: [
-        {
-          id: 0,
-          src: "",
-          title: "",
-          circles: [
-            {
-              x: 0,
-              y: 0,
-              radius: 0
-            }
-          ]
-        }
-      ],
-      animations: [
-        {
-          name: "",
-          complete: "",
-          interruptible: false,
-          speed: "",
-          transform: [
-            {
-              hflip: false,
-              vflip: false
-            }
-          ],
-          triggers: {
-            "0": ["a trigger"]
-          },
-          frames: [0],
-          transform: [void 0]
-        }
-      ]
-    },
-    activeAnimation: {
-      name: "",
-      complete: "",
-      interruptible: false,
-      speed: "",
-      transform: [
-        {
-          hflip: false,
-          vflip: false
-        }
-      ],
-      triggers: {
-        "0": [""]
-      },
-      frames: [0]
-    },
-    currentFrameIndex: 0,
-    debugAnimation: false,
-    hflip: false,
-    vflip: false,
-    lastUpdate: new Date().getTime(),
-    useTimer: false
-  });
-  loadByName = function(name, callback) {
-    var url;
-    url = "" + BASE_URL + "/animations/" + name + ".animation?" + (new Date().getTime());
-    $.getJSON(url, function(data) {
-      I.data = data;
-      return typeof callback === "function" ? callback(data) : void 0;
-    });
-    return I.data;
-  };
-  initializeState = function() {
-    I.activeAnimation = I.data.animations.first();
-    return I.spriteLookup = I.data.tileset.map(function(spriteData) {
-      return Sprite.fromURL(spriteData.src);
-    });
-  };
-  window[_name = "" + I.animationName + "SpriteLookup"] || (window[_name] = []);
-  if (!window["" + I.animationName + "SpriteLookup"].length) {
-    window["" + I.animationName + "SpriteLookup"] = I.data.tileset.map(function(spriteData) {
-      return Sprite.fromURL(spriteData.src);
-    });
-  }
-  I.spriteLookup = window["" + I.animationName + "SpriteLookup"];
-  if (I.data.animations.first().name !== "") {
-    initializeState();
-  } else if (I.animationName) {
-    loadByName(I.animationName, function() {
-      return initializeState();
-    });
-  } else {
-    throw "No animation data provided. Use animationName to specify an animation to load from the project or pass in raw JSON to the data key.";
-  }
-  advanceFrame = function() {
-    var frames, nextState, sprite;
-    frames = I.activeAnimation.frames;
-    if (I.currentFrameIndex === frames.indexOf(frames.last())) {
-      self.trigger("Complete");
-      if (nextState = I.activeAnimation.complete) {
-        I.activeAnimation = find(nextState) || I.activeAnimation;
-        I.currentFrameIndex = 0;
-      }
-    } else {
-      I.currentFrameIndex = (I.currentFrameIndex + 1) % frames.length;
-    }
-    sprite = I.spriteLookup[frames[I.currentFrameIndex]];
-    return updateSprite(sprite);
-  };
-  find = function(name) {
-    var nameLower, result;
-    result = null;
-    nameLower = name.toLowerCase();
-    I.data.animations.each(function(animation) {
-      if (animation.name.toLowerCase() === nameLower) {
-        return result = animation;
-      }
-    });
-    return result;
-  };
-  updateSprite = function(spriteData) {
-    I.sprite = spriteData;
-    I.width = spriteData.width;
-    return I.height = spriteData.height;
-  };
-  return {
-    /**
-    Transitions to a new active animation. Will not transition if the new state
-    has the same name as the current one or if the active animation is marked as locked.
-
-    @param {String} newState The name of the target state you wish to transition to.
-    */
-    transition: function(newState, force) {
-      var toNextState;
-      if (newState === I.activeAnimation.name) {
-        return;
-      }
-      toNextState = function(state) {
-        var firstFrame, firstSprite, nextState;
-        if (nextState = find(state)) {
-          I.activeAnimation = nextState;
-          firstFrame = I.activeAnimation.frames.first();
-          firstSprite = I.spriteLookup[firstFrame];
-          I.currentFrameIndex = 0;
-          return updateSprite(firstSprite);
-        } else {
-          if (I.debugAnimation) {
-            return warn("Could not find animation state '" + newState + "'. The current transition will be ignored");
-          }
-        }
-      };
-      if (force) {
-        return toNextState(newState);
-      } else {
-        if (!I.activeAnimation.interruptible) {
-          if (I.debugAnimation) {
-            warn("Cannot transition to '" + newState + "' because '" + I.activeAnimation.name + "' is locked");
-          }
-          return;
-        }
-        return toNextState(newState);
-      }
-    },
-    before: {
-      update: function() {
-        var time, triggers, updateFrame, _ref2, _ref3;
-        if (I.useTimer) {
-          time = new Date().getTime();
-          if (updateFrame = (time - I.lastUpdate) >= I.activeAnimation.speed) {
-            I.lastUpdate = time;
-            if (triggers = (_ref2 = I.activeAnimation.triggers) != null ? _ref2[I.currentFrameIndex] : void 0) {
-              triggers.each(function(event) {
-                return self.trigger(event);
-              });
-            }
-            return advanceFrame();
-          }
-        } else {
-          if (triggers = (_ref3 = I.activeAnimation.triggers) != null ? _ref3[I.currentFrameIndex] : void 0) {
-            triggers.each(function(event) {
-              return self.trigger(event);
-            });
-          }
-          return advanceFrame();
-        }
-      }
-    }
-  };
-};;
-(function() {
-  var Animation, fromPixieId;
-  Animation = function(data) {
-    var activeAnimation, advanceFrame, currentSprite, spriteLookup;
-    spriteLookup = {};
-    activeAnimation = data.animations[0];
-    currentSprite = data.animations[0].frames[0];
-    advanceFrame = function(animation) {
-      var frames;
-      frames = animation.frames;
-      return currentSprite = frames[(frames.indexOf(currentSprite) + 1) % frames.length];
-    };
-    data.tileset.each(function(spriteData, i) {
-      return spriteLookup[i] = Sprite.fromURL(spriteData.src);
-    });
-    return $.extend(data, {
-      currentSprite: function() {
-        return currentSprite;
-      },
-      draw: function(canvas, x, y) {
-        return canvas.withTransform(Matrix.translation(x, y), function() {
-          return spriteLookup[currentSprite].draw(canvas, 0, 0);
-        });
-      },
-      frames: function() {
-        return activeAnimation.frames;
-      },
-      update: function() {
-        return advanceFrame(activeAnimation);
-      },
-      active: function(name) {
-        if (name !== void 0) {
-          if (data.animations[name]) {
-            return currentSprite = data.animations[name].frames[0];
-          }
-        } else {
-          return activeAnimation;
-        }
-      }
-    });
-  };
-  window.Animation = function(name, callback) {
-    return fromPixieId(App.Animations[name], callback);
-  };
-  fromPixieId = function(id, callback) {
-    var proxy, url;
-    url = "http://pixie.strd6.com/s3/animations/" + id + "/data.json";
-    proxy = {
-      active: $.noop,
-      draw: $.noop
-    };
-    $.getJSON(url, function(data) {
-      $.extend(proxy, Animation(data));
-      return typeof callback === "function" ? callback(proxy) : void 0;
-    });
-    return proxy;
-  };
-  return window.Animation.fromPixieId = fromPixieId;
-})();;
-(function($) {
-  /**
-  The <code>Developer</code> module provides a debug overlay and methods for debugging and live coding.
-
-  @name Developer
-  @fieldOf Engine
-  @module
-
-  @param {Object} I Instance variables
-  @param {Object} self Reference to the engine
-  */  var developerHotkeys, developerMode, developerModeMousedown, namespace, objectToUpdate;
-  Engine.Developer = function(I, self) {
-    var boxHeight, boxWidth, font, lineHeight, margin, screenHeight, screenWidth, textStart;
-    screenWidth = (typeof App !== "undefined" && App !== null ? App.width : void 0) || 480;
-    screenHeight = (typeof App !== "undefined" && App !== null ? App.height : void 0) || 320;
-    margin = 10;
-    boxWidth = 240;
-    boxHeight = 60;
-    textStart = screenWidth - boxWidth + margin;
-    font = "bold 9pt arial";
-    lineHeight = 16;
-    self.bind("draw", function(canvas) {
-      if (I.paused) {
-        canvas.withTransform(I.cameraTransform, function(canvas) {
-          return I.objects.each(function(object) {
-            canvas.fillColor('rgba(255, 0, 0, 0.5)');
-            return canvas.fillRect(object.bounds().x, object.bounds().y, object.bounds().width, object.bounds().height);
-          });
-        });
-        canvas.font(font);
-        canvas.fillColor('rgba(0, 0, 0, 0.5)');
-        canvas.fillRect(screenWidth - boxWidth, 0, boxWidth, boxHeight);
-        canvas.fillColor('#fff');
-        canvas.fillText("Developer Mode. Press Esc to resume", textStart, margin + 5);
-        canvas.fillText("Shift+Left click to add boxes", textStart, margin + 5 + lineHeight);
-        return canvas.fillText("Right click red boxes to edit properties", textStart, margin + 5 + 2 * lineHeight);
-      }
-    });
-    self.bind("init", function() {
-      var fn, key, _results;
-      window.updateObjectProperties = function(newProperties) {
-        if (objectToUpdate) {
-          return Object.extend(objectToUpdate, GameObject.construct(newProperties));
-        }
-      };
-      $(document).unbind("." + namespace);
-      $(document).bind("mousedown." + namespace, developerModeMousedown);
-      _results = [];
-      for (key in developerHotkeys) {
-        fn = developerHotkeys[key];
-        _results.push((function(key, fn) {
-          return $(document).bind("keydown." + namespace, key, function(event) {
-            event.preventDefault();
-            return fn();
-          });
-        })(key, fn));
-      }
-      return _results;
-    });
-    return {};
-  };
-  namespace = "engine_developer";
-  developerMode = false;
-  objectToUpdate = null;
-  developerModeMousedown = function(event) {
-    var object;
-    if (developerMode) {
-      console.log(event.which);
-      if (event.which === 3) {
-        if (object = engine.objectAt(event.pageX, event.pageY)) {
-          parent.editProperties(object.I);
-          objectToUpdate = object;
-        }
-        return console.log(object);
-      } else if (event.which === 2 || keydown.shift) {
-        return typeof window.developerAddObject === "function" ? window.developerAddObject(event) : void 0;
-      }
-    }
-  };
-  return developerHotkeys = {
-    esc: function() {
-      developerMode = !developerMode;
-      if (developerMode) {
-        return engine.pause();
-      } else {
-        return engine.play();
-      }
-    },
-    f3: function() {
-      return Local.set("level", engine.saveState());
-    },
-    f4: function() {
-      return engine.loadState(Local.get("level"));
-    },
-    f5: function() {
-      return engine.reload();
-    }
-  };
-})(jQuery);;
-/**
-The <code>FPSCounter</code> module tracks and displays the framerate.
-
-<code><pre>
-window.engine = Engine
-  ...
-  includedModules: ["FPSCounter"]
-  FPSColor: "#080"
-</pre></code>
-
-@name FPSCounter
-@fieldOf Engine
-@module
-
-@param {Object} I Instance variables
-@param {Object} self Reference to the engine
-*/Engine.FPSCounter = function(I, self) {
-  var framerate;
-  Object.reverseMerge(I, {
-    showFPS: true,
-    FPSColor: "#FFF"
-  });
-  framerate = Framerate({
-    noDOM: true
-  });
-  return self.bind("overlay", function(canvas) {
-    if (I.showFPS) {
-      canvas.font("bold 9pt consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
-      canvas.drawText({
-        color: I.FPSColor,
-        position: Point(6, 18),
-        text: "fps: " + framerate.fps
-      });
-    }
-    return framerate.rendered();
-  });
-};;
-/**
-The <code>HUD</code> module provides an extra canvas to draw to. GameObjects that respond to the
-<code>drawHUD</code> method will draw to the HUD canvas. The HUD canvas is not cleared each frame, it is
-the responsibility of the objects drawing on it to manage that themselves.
-
-@name HUD
-@fieldOf Engine
-@module
-
-@param {Object} I Instance variables
-@param {Object} self Reference to the engine
-*/Engine.HUD = function(I, self) {
-  var hudCanvas;
-  hudCanvas = $("<canvas width=" + App.width + " height=" + App.height + " />").powerCanvas();
-  hudCanvas.font("bold 9pt consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
-  self.bind("draw", function(canvas) {
-    var hud;
-    I.objects.each(function(object) {
-      return typeof object.drawHUD === "function" ? object.drawHUD(hudCanvas) : void 0;
-    });
-    hud = hudCanvas.element();
-    return canvas.drawImage(hud, 0, 0, hud.width, hud.height, 0, 0, hud.width, hud.height);
-  });
-  return {};
-};;
-(function($) {
-  /**
-  The <code>Joysticks</code> module gives the engine access to joysticks.
-
-  <code><pre>
-  # First you need to add the joysticks module to the engine
-  window.engine = Engine
-    ...
-    includedModules: ["Joysticks"]
-  # Then you need to get a controller reference
-  # id = 0 for player 1, etc.
-  controller = engine.controller(id)
-
-  # Point indicating direction primary axis is held
-  direction = controller.position()
-
-  # Check if buttons are held
-  controller.actionDown("A")
-  controller.actionDown("B")
-  controller.actionDown("X")
-  controller.actionDown("Y")
-  </pre></code>
-
-  @name Joysticks
-  @fieldOf Engine
-  @module
-
-  @param {Object} I Instance variables
-  @param {Object} self Reference to the engine
-  */  return Engine.Joysticks = function(I, self) {
-    Joysticks.init();
-    self.bind("update", function() {
-      Joysticks.init();
-      return Joysticks.update();
-    });
-    return {
-      /**
-      Get a controller for a given joystick id.
-
-      @name controller
-      @methodOf Engine.Joysticks#
-
-      @param {Number} i The joystick id to get the controller of.
-      */
-      controller: function(i) {
-        return Joysticks.getController(i);
-      }
-    };
-  };
-})();;
-/**
-The <code>Shadows</code> module provides a lighting extension to the Engine. Objects that have
-an illuminate method will add light to the scene. Objects that have an true opaque attribute will cast
-shadows.
-
-@name Shadows
-@fieldOf Engine
-@module
-
-@param {Object} I Instance variables
-@param {Object} self Reference to the engine
-*/Engine.Shadows = function(I, self) {
-  var shadowCanvas;
-  shadowCanvas = $("<canvas width=640 height=480 />").powerCanvas();
-  self.bind("draw", function(canvas) {
-    var shadows;
-    if (I.ambientLight < 1) {
-      shadowCanvas.compositeOperation("source-over");
-      shadowCanvas.clear();
-      shadowCanvas.fill("rgba(0, 0, 0, " + (1 - I.ambientLight) + ")");
-      shadowCanvas.compositeOperation("destination-out");
-      shadowCanvas.withTransform(I.cameraTransform, function(shadowCanvas) {
-        return I.objects.each(function(object, i) {
-          if (object.illuminate) {
-            shadowCanvas.globalAlpha(1);
-            return object.illuminate(shadowCanvas);
-          }
-        });
-      });
-      shadows = shadowCanvas.element();
-      return canvas.drawImage(shadows, 0, 0, shadows.width, shadows.height, 0, 0, shadows.width, shadows.height);
-    }
-  });
-  return {};
-};;
-/**
-The <code>Tilemap</code> module provides a way to load tilemaps in the engine.
-
-@name Tilemap
-@fieldOf Engine
-@module
-
-@param {Object} I Instance variables
-@param {Object} self Reference to the engine
-*/Engine.Tilemap = function(I, self) {
-  var clearObjects, map, updating;
-  map = null;
-  updating = false;
-  clearObjects = false;
-  self.bind("preDraw", function(canvas) {
-    return map != null ? map.draw(canvas) : void 0;
-  });
-  self.bind("update", function() {
-    return updating = true;
-  });
-  self.bind("afterUpdate", function() {
-    updating = false;
-    if (clearObjects) {
-      I.objects.clear();
-      return clearObjects = false;
-    }
-  });
-  return {
-    /**
-    Loads a new may and unloads any existing map or entities.
-
-    @name loadMap
-    @methodOf Engine#
-    */
-    loadMap: function(name, complete) {
-      clearObjects = updating;
-      return map = Tilemap.load({
-        name: name,
-        complete: complete,
-        entity: self.add
-      });
-    }
-  };
-};;
-/**
-This object keeps track of framerate and displays it by creating and appending an
-html element to the DOM.
-
-Once created you call snapshot at the end of every rendering cycle.
-
-@name Framerate
-@constructor
-*/var Framerate;
-Framerate = function(options) {
-  var element, framerateUpdateInterval, framerates, numFramerates, renderTime, self, updateFramerate;
-  options || (options = {});
-  if (!options.noDOM) {
-    element = $("<div>", {
-      css: {
-        color: "#FFF",
-        fontFamily: "consolas, 'Courier New', 'andale mono', 'lucida console', monospace",
-        fontWeight: "bold",
-        paddingLeft: 4,
-        position: "fixed",
-        top: 0,
-        left: 0
-      }
-    }).appendTo('body').get(0);
-  }
-  numFramerates = 15;
-  framerateUpdateInterval = 250;
-  renderTime = -1;
-  framerates = [];
-  updateFramerate = function() {
-    var framerate, rate, tot, _i, _len;
-    tot = 0;
-    for (_i = 0, _len = framerates.length; _i < _len; _i++) {
-      rate = framerates[_i];
-      tot += rate;
-    }
-    framerate = (tot / framerates.length).round();
-    self.fps = framerate;
-    if (element) {
-      return element.innerHTML = "fps: " + framerate;
-    }
-  };
-  setInterval(updateFramerate, framerateUpdateInterval);
-  /**
-  Call this method everytime you render.
-
-  @name rendered
-  @methodOf Framerate#
-  */
-  return self = {
-    rendered: function() {
-      var framerate, newTime, t;
-      if (renderTime < 0) {
-        return renderTime = new Date().getTime();
-      } else {
-        newTime = new Date().getTime();
-        t = newTime - renderTime;
-        framerate = 1000 / t;
-        framerates.push(framerate);
-        while (framerates.length > numFramerates) {
-          framerates.shift();
-        }
-        return renderTime = newTime;
-      }
-    }
-  };
-};;
-(function() {
-  var Map, Tilemap, fromPixieId, loadByName;
-  Map = function(data, entityCallback) {
-    var entity, loadEntities, spriteLookup, tileHeight, tileWidth, uuid, _ref;
-    tileHeight = data.tileHeight;
-    tileWidth = data.tileWidth;
-    spriteLookup = {};
-    _ref = App.entities;
-    for (uuid in _ref) {
-      entity = _ref[uuid];
-      spriteLookup[uuid] = Sprite.fromURL(entity.tileSrc);
-    }
-    loadEntities = function() {
-      if (!entityCallback) {
-        return;
-      }
-      return data.layers.each(function(layer, layerIndex) {
-        var entities, entity, entityData, x, y, _i, _len, _results;
-        if (layer.name.match(/entities/i)) {
-          if (entities = layer.entities) {
-            _results = [];
-            for (_i = 0, _len = entities.length; _i < _len; _i++) {
-              entity = entities[_i];
-              x = entity.x, y = entity.y, uuid = entity.uuid;
-              entityData = Object.extend({
-                layer: layerIndex,
-                sprite: spriteLookup[uuid],
-                x: x,
-                y: y
-              }, App.entities[uuid], entity.properties);
-              _results.push(entityCallback(entityData));
-            }
-            return _results;
-          }
-        }
-      });
-    };
-    loadEntities();
-    return Object.extend(data, {
-      draw: function(canvas, x, y) {
-        return canvas.withTransform(Matrix.translation(x, y), function() {
-          return data.layers.each(function(layer) {
-            if (layer.name.match(/entities/i)) {
-              return;
-            }
-            return layer.tiles.each(function(row, y) {
-              return row.each(function(uuid, x) {
-                var sprite;
-                if (sprite = spriteLookup[uuid]) {
-                  return sprite.draw(canvas, x * tileWidth, y * tileHeight);
-                }
-              });
-            });
-          });
-        });
-      }
-    });
-  };
-  Tilemap = function(name, callback, entityCallback) {
-    return fromPixieId(App.Tilemaps[name], callback, entityCallback);
-  };
-  fromPixieId = function(id, callback, entityCallback) {
-    var proxy, url;
-    url = "http://pixieengine.com/s3/tilemaps/" + id + "/data.json";
-    proxy = {
-      draw: function() {}
-    };
-    $.getJSON(url, function(data) {
-      Object.extend(proxy, Map(data, entityCallback));
-      return typeof callback === "function" ? callback(proxy) : void 0;
-    });
-    return proxy;
-  };
-  loadByName = function(name, callback, entityCallback) {
-    var directory, proxy, url, _ref;
-    directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.tilemaps : void 0 : void 0) || "data";
-    url = "" + BASE_URL + "/" + directory + "/" + name + ".tilemap?" + (new Date().getTime());
-    proxy = {
-      draw: function() {}
-    };
-    $.getJSON(url, function(data) {
-      Object.extend(proxy, Map(data, entityCallback));
-      return typeof callback === "function" ? callback(proxy) : void 0;
-    });
-    return proxy;
-  };
-  Tilemap.fromPixieId = fromPixieId;
-  Tilemap.load = function(options) {
-    if (options.pixieId) {
-      return fromPixieId(options.pixieId, options.complete, options.entity);
-    } else if (options.name) {
-      return loadByName(options.name, options.complete, options.entity);
-    }
-  };
-  return (typeof exports !== "undefined" && exports !== null ? exports : this)["Tilemap"] = Tilemap;
-})();;
-;
-/**
- *  WebGL-2D.js - HTML5 Canvas2D API in a WebGL context
- *
- *  Created by Corban Brook <corbanbrook@gmail.com> on 2011-03-02.
- *  Amended to by Bobby Richter <secretrobotron@gmail.com> on 2011-03-03
- *  CubicVR.js by Charles Cliffe <cj@cubicproductions.com> on 2011-03-03
- *
- */
-
-/*
- *  Copyright (c) 2011 Corban Brook
- *
- *  Permission is hereby granted, free of charge, to any person obtaining
- *  a copy of this software and associated documentation files (the
- *  "Software"), to deal in the Software without restriction, including
- *  without limitation the rights to use, copy, modify, merge, publish,
- *  distribute, sublicense, and/or sell copies of the Software, and to
- *  permit persons to whom the Software is furnished to do so, subject to
- *  the following conditions:
- *
- *  The above copyright notice and this permission notice shall be
- *  included in all copies or substantial portions of the Software.
- *
- *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- *  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- *  LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- *  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- *  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *
- */
-
-/**
- * Usage:
- *
- *    var cvs = document.getElementById("myCanvas");
- *
- *    WebGL2D.enable(cvs); // adds "webgl-2d" to cvs
- *
- *    cvs.getContext("webgl-2d");
- *
- */
-
-(function(Math, undefined) {
-
-  // Vector & Matrix libraries from CubicVR.js
-  var M_PI = 3.1415926535897932384626433832795028841968;
-  var M_TWO_PI = 2.0 * M_PI;
-  var M_HALF_PI = M_PI / 2.0;
-
-  function isPOT(value) {
-    return value > 0 && ((value - 1) & value) === 0;
-  }
-
-  var vec3 = {
-    length: function(pt) {
-      return Math.sqrt(pt[0] * pt[0] + pt[1] * pt[1] + pt[2] * pt[2]);
-    },
-
-    normalize: function(pt) {
-      var d = Math.sqrt((pt[0] * pt[0]) + (pt[1] * pt[1]) + (pt[2] * pt[2]));
-      if (d === 0) {
-        return [0, 0, 0];
-      }
-      return [pt[0] / d, pt[1] / d, pt[2] / d];
-    },
-
-    dot: function(v1, v2) {
-      return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
-    },
-
-    angle: function(v1, v2) {
-      return Math.acos((v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]) / (Math.sqrt(v1[0] * v1[0] + v1[1] * v1[1] + v1[2] * v1[2]) * Math.sqrt(v2[0] * v2[0] + v2[1] * v2[1] + v2[2] * v2[2])));
-    },
-
-    cross: function(vectA, vectB) {
-      return [vectA[1] * vectB[2] - vectB[1] * vectA[2], vectA[2] * vectB[0] - vectB[2] * vectA[0], vectA[0] * vectB[1] - vectB[0] * vectA[1]];
-    },
-
-    multiply: function(vectA, constB) {
-      return [vectA[0] * constB, vectA[1] * constB, vectA[2] * constB];
-    },
-
-    add: function(vectA, vectB) {
-      return [vectA[0] + vectB[0], vectA[1] + vectB[1], vectA[2] + vectB[2]];
-    },
-
-    subtract: function(vectA, vectB) {
-      return [vectA[0] - vectB[0], vectA[1] - vectB[1], vectA[2] - vectB[2]];
-    },
-
-    equal: function(a, b) {
-      var epsilon = 0.0000001;
-      if ((a === undefined) && (b === undefined)) {
-        return true;
-      }
-      if ((a === undefined) || (b === undefined)) {
-        return false;
-      }
-      return (Math.abs(a[0] - b[0]) < epsilon && Math.abs(a[1] - b[1]) < epsilon && Math.abs(a[2] - b[2]) < epsilon);
-    }
-  };
-
-  var mat3 = {
-    identity: [1.0, 0.0, 0.0,
-               0.0, 1.0, 0.0,
-               0.0, 0.0, 1.0],
-
-    multiply: function (m1, m2) {
-      var m10 = m1[0], m11 = m1[1], m12 = m1[2], m13 = m1[3], m14 = m1[4], m15 = m1[5], m16 = m1[6], m17 = m1[7], m18 = m1[8],
-          m20 = m2[0], m21 = m2[1], m22 = m2[2], m23 = m2[3], m24 = m2[4], m25 = m2[5], m26 = m2[6], m27 = m2[7], m28 = m2[8];
-
-      m2[0] = m20 * m10 + m23 * m11 + m26 * m12;
-      m2[1] = m21 * m10 + m24 * m11 + m27 * m12;
-      m2[2] = m22 * m10 + m25 * m11 + m28 * m12;
-      m2[3] = m20 * m13 + m23 * m14 + m26 * m15;
-      m2[4] = m21 * m13 + m24 * m14 + m27 * m15;
-      m2[5] = m22 * m13 + m25 * m14 + m28 * m15;
-      m2[6] = m20 * m16 + m23 * m17 + m26 * m18;
-      m2[7] = m21 * m16 + m24 * m17 + m27 * m18;
-      m2[8] = m22 * m16 + m25 * m17 + m28 * m18;
-    },
-
-    vec2_multiply: function (m1, m2) {
-      var mOut = [];
-      mOut[0] = m2[0] * m1[0] + m2[3] * m1[1] + m2[6];
-      mOut[1] = m2[1] * m1[0] + m2[4] * m1[1] + m2[7];
-      return mOut;
-    },
-
-    transpose: function (m) {
-      return [m[0], m[3], m[6], m[1], m[4], m[7], m[2], m[5], m[8]];
-    }
-  }; //mat3
-
-  // Transform library from CubicVR.js
-  function Transform(mat) {
-    return this.clearStack(mat);
-  }
-
-  var STACK_DEPTH_LIMIT = 16;
-
-  Transform.prototype.clearStack = function(init_mat) {
-    this.m_stack = [];
-    this.m_cache = [];
-    this.c_stack = 0;
-    this.valid = 0;
-    this.result = null;
-
-    for (var i = 0; i < STACK_DEPTH_LIMIT; i++) {
-      this.m_stack[i] = this.getIdentity();
-    }
-
-    if (init_mat !== undefined) {
-      this.m_stack[0] = init_mat;
-    } else {
-      this.setIdentity();
-    }
-  }; //clearStack
-
-  Transform.prototype.setIdentity = function() {
-    this.m_stack[this.c_stack] = this.getIdentity();
-    if (this.valid === this.c_stack && this.c_stack) {
-      this.valid--;
-    }
-  };
-
-  Transform.prototype.getIdentity = function() {
-    return [1.0, 0.0, 0.0,
-            0.0, 1.0, 0.0,
-            0.0, 0.0, 1.0];
-  };
-
-  Transform.prototype.getResult = function() {
-    if (!this.c_stack) {
-      return this.m_stack[0];
-    }
-
-    var m = mat3.identity;
-
-    if (this.valid > this.c_stack-1) { this.valid = this.c_stack-1; }
-
-    for (var i = this.valid; i < this.c_stack+1; i++) {
-      m = mat3.multiply(this.m_stack[i],m);
-      this.m_cache[i] = m;
-    }
-
-    this.valid = this.c_stack-1;
-
-    this.result = this.m_cache[this.c_stack];
-
-    return this.result;
-  };
-
-  Transform.prototype.pushMatrix = function() {
-    this.c_stack++;
-    this.m_stack[this.c_stack] = this.getIdentity();
-  };
-
-  Transform.prototype.popMatrix = function() {
-    if (this.c_stack === 0) { return; }
-    this.c_stack--;
-  };
-
-  var translateMatrix = Transform.prototype.getIdentity();
-
-  Transform.prototype.translate = function(x, y) {
-    translateMatrix[6] = x;
-    translateMatrix[7] = y;
-
-    mat3.multiply(translateMatrix, this.m_stack[this.c_stack]);
-
-    /*
-    if (this.valid === this.c_stack && this.c_stack) {
-      this.valid--;
-    }
-    */
-  };
-
-  var scaleMatrix = Transform.prototype.getIdentity();
-
-  Transform.prototype.scale = function(x, y) {
-    scaleMatrix[0] = x;
-    scaleMatrix[4] = y;
-
-    mat3.multiply(scaleMatrix, this.m_stack[this.c_stack]);
-
-    /*
-    if (this.valid === this.c_stack && this.c_stack) {
-      this.valid--;
-    }
-    */
-  };
-
-  var rotateMatrix = Transform.prototype.getIdentity();
-
-  Transform.prototype.rotate = function(ang) {
-    var sAng, cAng;
-
-    sAng = Math.sin(-ang);
-    cAng = Math.cos(-ang);
-
-    rotateMatrix[0] = cAng;
-    rotateMatrix[3] = sAng;
-    rotateMatrix[1] = -sAng;
-    rotateMatrix[4] = cAng;
-
-    mat3.multiply(rotateMatrix, this.m_stack[this.c_stack]);
-
-    /*
-    if (this.valid === this.c_stack && this.c_stack) {
-      this.valid--;
-    }
-    */
-  };
-
-  var WebGL2D = this.WebGL2D = function WebGL2D(canvas, options) {
-    this.canvas         = canvas;
-    this.options        = options || {};
-    this.gl             = undefined;
-    this.fs             = undefined;
-    this.vs             = undefined;
-    this.shaderProgram  = undefined;
-    this.transform      = new Transform();
-    this.shaderPool     = [];
-    this.maxTextureSize = undefined;
-
-    // Save a reference to the WebGL2D instance on the canvas object
-    canvas.gl2d         = this;
-
-    // Store getContext function for later use
-    canvas.$getContext  = canvas.getContext;
-
-    // Override getContext function with "webgl-2d" enabled version
-    canvas.getContext = (function(gl2d) {
-      return function(context) {
-        if ((gl2d.options.force || context === "webgl-2d") && !(canvas.width === 0 || canvas.height === 0)) {
-          if (gl2d.gl) { return gl2d.gl; }
-
-          var gl = gl2d.gl = gl2d.canvas.$getContext("experimental-webgl");
-
-          gl2d.initShaders();
-          gl2d.initBuffers();
-
-          // Append Canvas2D API features to the WebGL context
-          gl2d.initCanvas2DAPI();
-
-          gl.viewport(0, 0, gl2d.canvas.width, gl2d.canvas.height);
-
-          // Default white background
-          gl.clearColor(1, 1, 1, 1);
-          gl.clear(gl.COLOR_BUFFER_BIT); // | gl.DEPTH_BUFFER_BIT);
-
-          // Disables writing to dest-alpha
-          gl.colorMask(1,1,1,0);
-
-          // Depth options
-          //gl.enable(gl.DEPTH_TEST);
-          //gl.depthFunc(gl.LEQUAL);
-
-          // Blending options
-          gl.enable(gl.BLEND);
-          gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-
-          gl2d.maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
-
-          return gl;
-        } else {
-          return gl2d.canvas.$getContext(context);
-        }
-      };
-    }(this));
-
-    this.postInit();
-  };
-
-  // Enables WebGL2D on your canvas
-  WebGL2D.enable = function(canvas, options) {
-    return canvas.gl2d || new WebGL2D(canvas, options);
-  };
-
-
-  // Shader Pool BitMasks, i.e. sMask = (shaderMask.texture+shaderMask.stroke)
-  var shaderMask = {
-    texture: 1,
-    crop: 2,
-    path: 4
-  };
-
-
-  // Fragment shader source
-  WebGL2D.prototype.getFragmentShaderSource = function getFragmentShaderSource(sMask) {
-    var fsSource = [
-      "#ifdef GL_ES",
-        "precision highp float;",
-      "#endif",
-
-      "#define hasTexture " + ((sMask&shaderMask.texture) ? "1" : "0"),
-      "#define hasCrop " + ((sMask&shaderMask.crop) ? "1" : "0"),
-
-      "varying vec4 vColor;",
-
-      "#if hasTexture",
-        "varying vec2 vTextureCoord;",
-        "uniform sampler2D uSampler;",
-        "#if hasCrop",
-          "uniform vec4 uCropSource;",
-        "#endif",
-      "#endif",
-
-      "void main(void) {",
-        "#if hasTexture",
-          "#if hasCrop",
-            "gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.x * uCropSource.z, vTextureCoord.y * uCropSource.w) + uCropSource.xy);",
-          "#else",
-            "gl_FragColor = texture2D(uSampler, vTextureCoord);",
-          "#endif",
-        "#else",
-          "gl_FragColor = vColor;",
-        "#endif",
-      "}"
-    ].join("\n");
-
-    return fsSource;
-  };
-
-  WebGL2D.prototype.getVertexShaderSource = function getVertexShaderSource(stackDepth,sMask) {
-    var w = 2 / this.canvas.width, h = -2 / this.canvas.height;
-
-    stackDepth = stackDepth || 1;
-
-    var vsSource = [
-      "#define hasTexture " + ((sMask&shaderMask.texture) ? "1" : "0"),
-      "attribute vec4 aVertexPosition;",
-
-      "#if hasTexture",
-      "varying vec2 vTextureCoord;",
-      "#endif",
-
-      "uniform vec4 uColor;",
-      "uniform mat3 uTransforms[" + stackDepth + "];",
-
-      "varying vec4 vColor;",
-
-      "const mat4 pMatrix = mat4(" + w + ",0,0,0, 0," + h + ",0,0, 0,0,1.0,1.0, -1.0,1.0,0,0);",
-
-      "mat3 crunchStack(void) {",
-        "mat3 result = uTransforms[0];",
-        "for (int i = 1; i < " + stackDepth + "; ++i) {",
-          "result = uTransforms[i] * result;",
-        "}",
-        "return result;",
-      "}",
-
-      "void main(void) {",
-        "vec3 position = crunchStack() * vec3(aVertexPosition.x, aVertexPosition.y, 1.0);",
-        "gl_Position = pMatrix * vec4(position, 1.0);",
-        "vColor = uColor;",
-        "#if hasTexture",
-          "vTextureCoord = aVertexPosition.zw;",
-        "#endif",
-      "}"
-    ].join("\n");
-    return vsSource;
-  };
-
-
-  // Initialize fragment and vertex shaders
-  WebGL2D.prototype.initShaders = function initShaders(transformStackDepth,sMask) {
-    var gl = this.gl;
-
-    transformStackDepth = transformStackDepth || 1;
-    sMask = sMask || 0;
-    var storedShader = this.shaderPool[transformStackDepth];
-
-    if (!storedShader) { storedShader = this.shaderPool[transformStackDepth] = []; }
-    storedShader = storedShader[sMask];
-
-    if (storedShader) {
-      gl.useProgram(storedShader);
-      this.shaderProgram = storedShader;
-      return storedShader;
-    } else {
-      var fs = this.fs = gl.createShader(gl.FRAGMENT_SHADER);
-      gl.shaderSource(this.fs, this.getFragmentShaderSource(sMask));
-      gl.compileShader(this.fs);
-
-      if (!gl.getShaderParameter(this.fs, gl.COMPILE_STATUS)) {
-        throw "fragment shader error: "+gl.getShaderInfoLog(this.fs);
-      }
-
-      var vs = this.vs = gl.createShader(gl.VERTEX_SHADER);
-      gl.shaderSource(this.vs, this.getVertexShaderSource(transformStackDepth,sMask));
-      gl.compileShader(this.vs);
-
-      if (!gl.getShaderParameter(this.vs, gl.COMPILE_STATUS)) {
-        throw "vertex shader error: "+gl.getShaderInfoLog(this.vs);
-      }
-
-
-      var shaderProgram = this.shaderProgram = gl.createProgram();
-      shaderProgram.stackDepth = transformStackDepth;
-      gl.attachShader(shaderProgram, fs);
-      gl.attachShader(shaderProgram, vs);
-      gl.linkProgram(shaderProgram);
-
-      if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-        throw "Could not initialise shaders.";
-      }
-
-      gl.useProgram(shaderProgram);
-
-      shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
-      gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-
-      shaderProgram.uColor   = gl.getUniformLocation(shaderProgram, 'uColor');
-      shaderProgram.uSampler = gl.getUniformLocation(shaderProgram, 'uSampler');
-      shaderProgram.uCropSource = gl.getUniformLocation(shaderProgram, 'uCropSource');
-
-      shaderProgram.uTransforms = [];
-      for (var i=0; i<transformStackDepth; ++i) {
-        shaderProgram.uTransforms[i] = gl.getUniformLocation(shaderProgram, 'uTransforms[' + i + ']');
-      } //for
-      this.shaderPool[transformStackDepth][sMask] = shaderProgram;
-      return shaderProgram;
-    } //if
-  };
-
-  var rectVertexPositionBuffer;
-  var rectVertexColorBuffer;
-
-  var pathVertexPositionBuffer;
-  var pathVertexColorBuffer;
-
-  // 2D Vertices and Texture UV coords
-  var rectVerts = new Float32Array([
-      0,0, 0,0,
-      0,1, 0,1,
-      1,1, 1,1,
-      1,0, 1,0
-  ]);
-
-  WebGL2D.prototype.initBuffers = function initBuffers() {
-    var gl = this.gl;
-
-    rectVertexPositionBuffer  = gl.createBuffer();
-    rectVertexColorBuffer     = gl.createBuffer();
-
-    pathVertexPositionBuffer  = gl.createBuffer();
-    pathVertexColorBuffer     = gl.createBuffer();
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, rectVertexPositionBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, rectVerts, gl.STATIC_DRAW);
-  };
-
-  // Maintains an array of all WebGL2D instances
-  WebGL2D.instances = [];
-
-  WebGL2D.prototype.postInit = function() {
-    WebGL2D.instances.push(this);
-  };
-
-  // Extends gl context with Canvas2D API
-  WebGL2D.prototype.initCanvas2DAPI = function initCanvas2DAPI() {
-    var gl2d = this,
-        gl   = this.gl;
-
-
-    // Rendering Canvas for text fonts
-    var textCanvas    = document.createElement("canvas");
-    textCanvas.width  = gl2d.canvas.width;
-    textCanvas.height = gl2d.canvas.height;
-    var textCtx       = textCanvas.getContext("2d");
-
-    var reRGBAColor = /^rgb(a)?\(\s*(-?[\d]+)(%)?\s*,\s*(-?[\d]+)(%)?\s*,\s*(-?[\d]+)(%)?\s*,?\s*(-?[\d\.]+)?\s*\)$/;
-    var reHSLAColor = /^hsl(a)?\(\s*(-?[\d\.]+)\s*,\s*(-?[\d\.]+)%\s*,\s*(-?[\d\.]+)%\s*,?\s*(-?[\d\.]+)?\s*\)$/;
-    var reHex6Color = /^#([0-9A-Fa-f]{6})$/;
-    var reHex3Color = /^#([0-9A-Fa-f])([0-9A-Fa-f])([0-9A-Fa-f])$/;
-
-    function HSLAToRGBA(h, s, l, a) {
-      var r, g, b, m1, m2;
-
-      // Clamp and Normalize values
-      h = (((h % 360) + 360) % 360) / 360;
-      s = s > 100 ? 1 : s / 100;
-      s = s <   0 ? 0 : s;
-      l = l > 100 ? 1 : l / 100;
-      l = l <   0 ? 0 : l;
-
-      m2 = l <= 0.5 ? l * (s + 1) : l + s - l * s;
-      m1 = l * 2 - m2;
-
-      function getHue(value) {
-        var hue;
-
-        if (value * 6 < 1) {
-          hue = m1 + (m2 - m1) * value * 6;
-        } else if (value * 2 < 1) {
-          hue = m2;
-        } else if (value * 3 < 2) {
-          hue = m1 + (m2 - m1) * (2/3 - value) * 6;
-        } else {
-          hue = m1;
-        }
-
-        return hue;
-      }
-
-      r = getHue(h + 1/3);
-      g = getHue(h);
-      b = getHue(h - 1/3);
-
-      return [r, g, b, a];
-    }
-
-
-    // Converts rgb(a) color string to gl color vector
-    function colorStringToVec4(value) {
-      var result = [], match, channel, isPercent, hasAlpha, alphaChannel, sameType;
-
-      if ((match = reRGBAColor.exec(value))) {
-        hasAlpha = match[1], alphaChannel = parseFloat(match[8]);
-
-        if ((hasAlpha && isNaN(alphaChannel)) || (!hasAlpha && !isNaN(alphaChannel))) {
-          return false;
-        }
-
-        sameType = match[3];
-
-        for (var i = 2; i < 8; i+=2) {
-          channel = match[i], isPercent = match[i+1];
-
-          if (isPercent !== sameType) {
-            return false;
-          }
-
-          // Clamp and normalize values
-          if (isPercent) {
-            channel = channel > 100 ? 1 : channel / 100;
-            channel = channel <   0 ? 0 : channel;
-          } else {
-            channel = channel > 255 ? 1 : channel / 255;
-            channel = channel <   0 ? 0 : channel;
-          }
-
-          result.push(channel);
-        }
-
-        result.push(hasAlpha ? alphaChannel : 1.0);
-      } else if ((match = reHSLAColor.exec(value))) {
-        hasAlpha = match[1], alphaChannel = parseFloat(match[5]);
-        result = HSLAToRGBA(match[2], match[3], match[4], parseFloat(hasAlpha && alphaChannel ? alphaChannel : 1.0));
-      } else if ((match = reHex6Color.exec(value))) {
-        var colorInt = parseInt(match[1], 16);
-        result = [((colorInt & 0xFF0000) >> 16) / 255, ((colorInt & 0x00FF00) >> 8) / 255, (colorInt & 0x0000FF) / 255, 1.0];
-      } else if ((match = reHex3Color.exec(value))) {
-        var hexString = "#" + [match[1], match[1], match[2], match[2], match[3], match[3]].join("");
-        result = colorStringToVec4(hexString);
-      } else if (value.toLowerCase() in colorKeywords) {
-        result = colorStringToVec4(colorKeywords[value.toLowerCase()]);
-      } else if (value.toLowerCase() === "transparent") {
-        result = [0, 0, 0, 0];
-      } else {
-        // Color keywords not yet implemented, ie "orange", return hot pink
-        return false;
-      }
-
-      return result;
-    }
-
-    function colorVecToString(vec4) {
-      return "rgba(" + (vec4[0] * 255) + ", " + (vec4[1] * 255) + ", " + (vec4[2] * 255) + ", " + parseFloat(vec4[3]) + ")";
-    }
-
-    var colorKeywords = {
-      aliceblue:            "#f0f8ff",
-      antiquewhite:         "#faebd7",
-      aqua:                 "#00ffff",
-      aquamarine:           "#7fffd4",
-      azure:                "#f0ffff",
-      beige:                "#f5f5dc",
-      bisque:               "#ffe4c4",
-      black:                "#000000",
-      blanchedalmond:       "#ffebcd",
-      blue:                 "#0000ff",
-      blueviolet:           "#8a2be2",
-      brown:                "#a52a2a",
-      burlywood:            "#deb887",
-      cadetblue:            "#5f9ea0",
-      chartreuse:           "#7fff00",
-      chocolate:            "#d2691e",
-      coral:                "#ff7f50",
-      cornflowerblue:       "#6495ed",
-      cornsilk:             "#fff8dc",
-      crimson:              "#dc143c",
-      cyan:                 "#00ffff",
-      darkblue:             "#00008b",
-      darkcyan:             "#008b8b",
-      darkgoldenrod:        "#b8860b",
-      darkgray:             "#a9a9a9",
-      darkgreen:            "#006400",
-      darkkhaki:            "#bdb76b",
-      darkmagenta:          "#8b008b",
-      darkolivegreen:       "#556b2f",
-      darkorange:           "#ff8c00",
-      darkorchid:           "#9932cc",
-      darkred:              "#8b0000",
-      darksalmon:           "#e9967a",
-      darkseagreen:         "#8fbc8f",
-      darkslateblue:        "#483d8b",
-      darkslategray:        "#2f4f4f",
-      darkturquoise:        "#00ced1",
-      darkviolet:           "#9400d3",
-      deeppink:             "#ff1493",
-      deepskyblue:          "#00bfff",
-      dimgray:              "#696969",
-      dodgerblue:           "#1e90ff",
-      firebrick:            "#b22222",
-      floralwhite:          "#fffaf0",
-      forestgreen:          "#228b22",
-      fuchsia:              "#ff00ff",
-      gainsboro:            "#dcdcdc",
-      ghostwhite:           "#f8f8ff",
-      gold:                 "#ffd700",
-      goldenrod:            "#daa520",
-      gray:                 "#808080",
-      green:                "#008000",
-      greenyellow:          "#adff2f",
-      grey:                 "#808080",
-      honeydew:             "#f0fff0",
-      hotpink:              "#ff69b4",
-      indianred:            "#cd5c5c",
-      indigo:               "#4b0082",
-      ivory:                "#fffff0",
-      khaki:                "#f0e68c",
-      lavender:             "#e6e6fa",
-      lavenderblush:        "#fff0f5",
-      lawngreen:            "#7cfc00",
-      lemonchiffon:         "#fffacd",
-      lightblue:            "#add8e6",
-      lightcoral:           "#f08080",
-      lightcyan:            "#e0ffff",
-      lightgoldenrodyellow: "#fafad2",
-      lightgrey:            "#d3d3d3",
-      lightgreen:           "#90ee90",
-      lightpink:            "#ffb6c1",
-      lightsalmon:          "#ffa07a",
-      lightseagreen:        "#20b2aa",
-      lightskyblue:         "#87cefa",
-      lightslategray:       "#778899",
-      lightsteelblue:       "#b0c4de",
-      lightyellow:          "#ffffe0",
-      lime:                 "#00ff00",
-      limegreen:            "#32cd32",
-      linen:                "#faf0e6",
-      magenta:              "#ff00ff",
-      maroon:               "#800000",
-      mediumaquamarine:     "#66cdaa",
-      mediumblue:           "#0000cd",
-      mediumorchid:         "#ba55d3",
-      mediumpurple:         "#9370d8",
-      mediumseagreen:       "#3cb371",
-      mediumslateblue:      "#7b68ee",
-      mediumspringgreen:    "#00fa9a",
-      mediumturquoise:      "#48d1cc",
-      mediumvioletred:      "#c71585",
-      midnightblue:         "#191970",
-      mintcream:            "#f5fffa",
-      mistyrose:            "#ffe4e1",
-      moccasin:             "#ffe4b5",
-      navajowhite:          "#ffdead",
-      navy:                 "#000080",
-      oldlace:              "#fdf5e6",
-      olive:                "#808000",
-      olivedrab:            "#6b8e23",
-      orange:               "#ffa500",
-      orangered:            "#ff4500",
-      orchid:               "#da70d6",
-      palegoldenrod:        "#eee8aa",
-      palegreen:            "#98fb98",
-      paleturquoise:        "#afeeee",
-      palevioletred:        "#d87093",
-      papayawhip:           "#ffefd5",
-      peachpuff:            "#ffdab9",
-      peru:                 "#cd853f",
-      pink:                 "#ffc0cb",
-      plum:                 "#dda0dd",
-      powderblue:           "#b0e0e6",
-      purple:               "#800080",
-      red:                  "#ff0000",
-      rosybrown:            "#bc8f8f",
-      royalblue:            "#4169e1",
-      saddlebrown:          "#8b4513",
-      salmon:               "#fa8072",
-      sandybrown:           "#f4a460",
-      seagreen:             "#2e8b57",
-      seashell:             "#fff5ee",
-      sienna:               "#a0522d",
-      silver:               "#c0c0c0",
-      skyblue:              "#87ceeb",
-      slateblue:            "#6a5acd",
-      slategray:            "#708090",
-      snow:                 "#fffafa",
-      springgreen:          "#00ff7f",
-      steelblue:            "#4682b4",
-      tan:                  "#d2b48c",
-      teal:                 "#008080",
-      thistle:              "#d8bfd8",
-      tomato:               "#ff6347",
-      turquoise:            "#40e0d0",
-      violet:               "#ee82ee",
-      wheat:                "#f5deb3",
-      white:                "#ffffff",
-      whitesmoke:           "#f5f5f5",
-      yellow:               "#ffff00",
-      yellowgreen:          "#9acd32"
-    };
-
-    // Maintain drawing state params during gl.save and gl.restore. see saveDrawState() and restoreDrawState()
-    var drawState = {}, drawStateStack = [];
-
-    // A fast simple shallow clone
-    function cloneObject(obj) {
-      var target = {};
-      for (var i in obj) {
-        if (obj.hasOwnProperty(i)) {
-          target[i] = obj[i];
-        }
-      }
-      return target;
-    }
-
-    function saveDrawState() {
-      var bakedDrawState = {
-        fillStyle:                [drawState.fillStyle[0],   drawState.fillStyle[1],   drawState.fillStyle[2],   drawState.fillStyle[3]],
-        strokeStyle:              [drawState.strokeStyle[0], drawState.strokeStyle[1], drawState.strokeStyle[2], drawState.strokeStyle[3]],
-        globalAlpha:              drawState.globalAlpha,
-        globalCompositeOperation: drawState.globalCompositeOperation,
-        lineCap:                  drawState.lineCap,
-        lineJoin:                 drawState.lineJoin,
-        lineWidth:                drawState.lineWidth,
-        miterLimit:               drawState.miterLimit,
-        shadowColor:              drawState.shadowColor,
-        shadowBlur:               drawState.shadowBlur,
-        shadowOffsetX:            drawState.shadowOffsetX,
-        shadowOffsetY:            drawState.shadowOffsetY,
-        textAlign:                drawState.textAlign,
-        font:                     drawState.font,
-        textBaseline:             drawState.textBaseline
-      };
-
-      drawStateStack.push(bakedDrawState);
-    }
-
-    function restoreDrawState() {
-      if (drawStateStack.length) {
-        drawState = drawStateStack.pop();
-      }
-    }
-
-    // WebGL requires colors as a vector while Canvas2D sets colors as an rgba string
-    // These getters and setters store the original rgba string as well as convert to a vector
-    drawState.fillStyle = [0, 0, 0, 1]; // default black
-
-    Object.defineProperty(gl, "fillStyle", {
-      get: function() { return colorVecToString(drawState.fillStyle); },
-      set: function(value) {
-        drawState.fillStyle = colorStringToVec4(value) || drawState.fillStyle;
-      }
-    });
-
-    drawState.strokeStyle = [0, 0, 0, 1]; // default black
-
-    Object.defineProperty(gl, "strokeStyle", {
-      get: function() { return colorVecToString(drawState.strokeStyle); },
-      set: function(value) {
-        drawState.strokeStyle = colorStringToVec4(value) || drawStyle.strokeStyle;
-      }
-    });
-
-    // WebGL already has a lineWidth() function but Canvas2D requires a lineWidth property
-    // Store the original lineWidth() function for later use
-    gl.$lineWidth = gl.lineWidth;
-    drawState.lineWidth = 1.0;
-
-    Object.defineProperty(gl, "lineWidth", {
-      get: function() { return drawState.lineWidth; },
-      set: function(value) {
-        gl.$lineWidth(value);
-        drawState.lineWidth = value;
-      }
-    });
-
-    // Currently unsupported attributes and their default values
-    drawState.lineCap = "butt";
-
-    Object.defineProperty(gl, "lineCap", {
-      get: function() { return drawState.lineCap; },
-      set: function(value) {
-        drawState.lineCap = value;
-      }
-    });
-
-    drawState.lineJoin = "miter";
-
-    Object.defineProperty(gl, "lineJoin", {
-      get: function() { return drawState.lineJoin; },
-      set: function(value) {
-        drawState.lineJoin = value;
-      }
-    });
-
-    drawState.miterLimit = 10;
-
-    Object.defineProperty(gl, "miterLimit", {
-      get: function() { return drawState.miterLimit; },
-      set: function(value) {
-        drawState.miterLimit = value;
-      }
-    });
-
-    drawState.shadowOffsetX = 0;
-
-    Object.defineProperty(gl, "shadowOffsetX", {
-      get: function() { return drawState.shadowOffsetX; },
-      set: function(value) {
-        drawState.shadowOffsetX = value;
-      }
-    });
-
-    drawState.shadowOffsetY = 0;
-
-    Object.defineProperty(gl, "shadowOffsetY", {
-      get: function() { return drawState.shadowOffsetY; },
-      set: function(value) {
-        drawState.shadowOffsetY = value;
-      }
-    });
-
-    drawState.shadowBlur = 0;
-
-    Object.defineProperty(gl, "shadowBlur", {
-      get: function() { return drawState.shadowBlur; },
-      set: function(value) {
-        drawState.shadowBlur = value;
-      }
-    });
-
-    drawState.shadowColor = "rgba(0, 0, 0, 0.0)";
-
-    Object.defineProperty(gl, "shadowColor", {
-      get: function() { return drawState.shadowColor; },
-      set: function(value) {
-        drawState.shadowColor = value;
-      }
-    });
-
-    drawState.font = "10px sans-serif";
-
-    Object.defineProperty(gl, "font", {
-      get: function() { return drawState.font; },
-      set: function(value) {
-        textCtx.font = value;
-        drawState.font = value;
-      }
-    });
-
-    drawState.textAlign = "start";
-
-    Object.defineProperty(gl, "textAlign", {
-      get: function() { return drawState.textAlign; },
-      set: function(value) {
-        drawState.textAlign = value;
-      }
-    });
-
-    drawState.textBaseline = "alphabetic";
-
-    Object.defineProperty(gl, "textBaseline", {
-      get: function() { return drawState.textBaseline; },
-      set: function(value) {
-        drawState.textBaseline = value;
-      }
-    });
-
-    // This attribute will need to control global alpha of objects drawn.
-    drawState.globalAlpha = 1.0;
-
-    Object.defineProperty(gl, "globalAlpha", {
-      get: function() { return drawState.globalAlpha; },
-      set: function(value) {
-        drawState.globalAlpha = value;
-      }
-    });
-
-    // This attribute will need to set the gl.blendFunc mode
-    drawState.globalCompositeOperation = "source-over";
-
-    Object.defineProperty(gl, "globalCompositeOperation", {
-      get: function() { return drawState.globalCompositeOperation; },
-      set: function(value) {
-        drawState.globalCompositeOperation = value;
-      }
-    });
-
-    // Need a solution for drawing text that isnt stupid slow
-    gl.fillText = function fillText(text, x, y) {
-      /*
-      textCtx.clearRect(0, 0, gl2d.canvas.width, gl2d.canvas.height);
-      textCtx.fillStyle = gl.fillStyle;
-      textCtx.fillText(text, x, y);
-
-      gl.drawImage(textCanvas, 0, 0);
-      */
-    };
-
-    gl.strokeText = function strokeText() {};
-
-    gl.measureText = function measureText() { return 1; };
-
-    var tempCanvas = document.createElement('canvas');
-    var tempCtx = tempCanvas.getContext('2d');
-
-    gl.save = function save() {
-      gl2d.transform.pushMatrix();
-      saveDrawState();
-    };
-
-    gl.restore = function restore() {
-      gl2d.transform.popMatrix();
-      restoreDrawState();
-    };
-
-    gl.translate = function translate(x, y) {
-      gl2d.transform.translate(x, y);
-    };
-
-    gl.rotate = function rotate(a) {
-      gl2d.transform.rotate(a);
-    };
-
-    gl.scale = function scale(x, y) {
-      gl2d.transform.scale(x, y);
-    };
-
-    gl.createImageData = function createImageData(width, height) {
-      return tempCtx.createImageData(width, height);
-    };
-
-    gl.getImageData = function getImageData(x, y, width, height) {
-      var data = tempCtx.createImageData(width, height);
-      var buffer = new Uint8Array(width*height*4);
-      gl.readPixels(x, y, width, height, gl.RGBA, gl.UNSIGNED_BYTE, buffer);
-      var w=width*4, h=height;
-      for (var i=0, maxI=h/2; i<maxI; ++i) {
-        for (var j=0, maxJ=w; j<maxJ; ++j) {
-          var index1 = i * w + j;
-          var index2 = (h-i-1) * w + j;
-          data.data[index1] = buffer[index2];
-          data.data[index2] = buffer[index1];
-        } //for
-      } //for
-
-      return data;
-    };
-
-    gl.putImageData = function putImageData(imageData, x, y) {
-      gl.drawImage(imageData, x, y);
-    };
-
-    gl.transform = function transform(m11, m12, m21, m22, dx, dy) {
-      var m = gl2d.transform.m_stack[gl2d.transform.c_stack];
-
-      m[0] *= m11;
-      m[1] *= m21;
-      m[2] *= dx;
-      m[3] *= m12;
-      m[4] *= m22;
-      m[5] *= dy;
-      m[6] = 0;
-      m[7] = 0;
-    };
-
-    function sendTransformStack(sp) {
-      var stack = gl2d.transform.m_stack;
-      for (var i = 0, maxI = gl2d.transform.c_stack + 1; i < maxI; ++i) {
-        gl.uniformMatrix3fv(sp.uTransforms[i], false, stack[maxI-1-i]);
-      } //for
-    }
-
-    gl.setTransform = function setTransform(m11, m12, m21, m22, dx, dy) {
-      gl2d.transform.setIdentity();
-      gl.transform.apply(this, arguments);
-    };
-
-    gl.fillRect = function fillRect(x, y, width, height) {
-      var transform = gl2d.transform;
-      var shaderProgram = gl2d.initShaders(transform.c_stack+2,0);
-
-      gl.bindBuffer(gl.ARRAY_BUFFER, rectVertexPositionBuffer);
-      gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 4, gl.FLOAT, false, 0, 0);
-
-      transform.pushMatrix();
-
-      transform.translate(x, y);
-      transform.scale(width, height);
-
-      sendTransformStack(shaderProgram);
-
-      gl.uniform4f(shaderProgram.uColor, drawState.fillStyle[0], drawState.fillStyle[1], drawState.fillStyle[2], drawState.fillStyle[3]);
-
-      gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
-
-      transform.popMatrix();
-    };
-
-    gl.strokeRect = function strokeRect(x, y, width, height) {
-      var transform = gl2d.transform;
-      var shaderProgram = gl2d.initShaders(transform.c_stack + 2,0);
-
-      gl.bindBuffer(gl.ARRAY_BUFFER, rectVertexPositionBuffer);
-      gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 4, gl.FLOAT, false, 0, 0);
-
-      transform.pushMatrix();
-
-      transform.translate(x, y);
-      transform.scale(width, height);
-
-      sendTransformStack(shaderProgram);
-
-      gl.uniform4f(shaderProgram.uColor, drawState.strokeStyle[0], drawState.strokeStyle[1], drawState.strokeStyle[2], drawState.strokeStyle[3]);
-
-      gl.drawArrays(gl.LINE_LOOP, 0, 4);
-
-      transform.popMatrix();
-    };
-
-    gl.clearRect = function clearRect(x, y, width, height) {};
-
-    var subPaths = [];
-
-    function SubPath(x, y) {
-      this.closed = false;
-      this.verts = [x, y, 0, 0];
-    }
-
-    // Empty the list of subpaths so that the context once again has zero subpaths
-    gl.beginPath = function beginPath() {
-      subPaths.length = 0;
-    };
-
-    // Mark last subpath as closed and create a new subpath with the same starting point as the previous subpath
-    gl.closePath = function closePath() {
-      if (subPaths.length) {
-        // Mark last subpath closed.
-        var prevPath = subPaths[subPaths.length -1], startX = prevPath.verts[0], startY = prevPath.verts[1];
-        prevPath.closed = true;
-
-        // Create new subpath using the starting position of previous subpath
-        var newPath = new SubPath(startX, startY);
-        subPaths.push(newPath);
-      }
-    };
-
-    // Create a new subpath with the specified point as its first (and only) point
-    gl.moveTo = function moveTo(x, y) {
-      subPaths.push(new SubPath(x, y));
-    };
-
-    gl.lineTo = function lineTo(x, y) {
-      if (subPaths.length) {
-        subPaths[subPaths.length -1].verts.push(x, y, 0, 0);
-      } else {
-        // Create a new subpath if none currently exist
-        gl.moveTo(x, y);
-      }
-    };
-
-    gl.quadraticCurveTo = function quadraticCurveTo(cp1x, cp1y, x, y) {};
-
-    gl.bezierCurveTo = function bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y) {};
-
-    gl.arcTo = function arcTo() {};
-
-    // Adds a closed rect subpath and creates a new subpath
-    gl.rect = function rect(x, y, w, h) {
-      gl.moveTo(x, y);
-      gl.lineTo(x + w, y);
-      gl.lineTo(x + w, y + h);
-      gl.lineTo(x, y + h);
-      gl.closePath();
-    };
-
-    gl.arc = function arc(x, y, radius, startAngle, endAngle, anticlockwise) {};
-
-    function fillSubPath(index) {
-      var transform = gl2d.transform;
-      var shaderProgram = gl2d.initShaders(transform.c_stack + 2,0);
-
-      var subPath = subPaths[index];
-      var verts = subPath.verts;
-
-      gl.bindBuffer(gl.ARRAY_BUFFER, pathVertexPositionBuffer);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verts), gl.STATIC_DRAW);
-
-      gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 4, gl.FLOAT, false, 0, 0);
-
-      transform.pushMatrix();
-
-      sendTransformStack(shaderProgram);
-
-      gl.uniform4f(shaderProgram.uColor, drawState.fillStyle[0], drawState.fillStyle[1], drawState.fillStyle[2], drawState.fillStyle[3]);
-
-      gl.drawArrays(gl.TRIANGLE_FAN, 0, verts.length/4);
-
-      transform.popMatrix();
-    }
-
-    gl.fill = function fill() {
-      for(var i = 0; i < subPaths.length; i++) {
-        fillSubPath(i);
-      }
-    };
-
-    function strokeSubPath(index) {
-      var transform = gl2d.transform;
-      var shaderProgram = gl2d.initShaders(transform.c_stack + 2,0);
-
-      var subPath = subPaths[index];
-      var verts = subPath.verts;
-
-      gl.bindBuffer(gl.ARRAY_BUFFER, pathVertexPositionBuffer);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verts), gl.STATIC_DRAW);
-
-      gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 4, gl.FLOAT, false, 0, 0);
-
-      transform.pushMatrix();
-
-      sendTransformStack(shaderProgram);
-
-      gl.uniform4f(shaderProgram.uColor, drawState.strokeStyle[0], drawState.strokeStyle[1], drawState.strokeStyle[2], drawState.strokeStyle[3]);
-
-      if (subPath.closed) {
-        gl.drawArrays(gl.LINE_LOOP, 0, verts.length/4);
-      } else {
-        gl.drawArrays(gl.LINE_STRIP, 0, verts.length/4);
-      }
-
-      transform.popMatrix();
-    }
-
-    gl.stroke = function stroke() {
-      for(var i = 0; i < subPaths.length; i++) {
-        strokeSubPath(i);
-      }
-    };
-
-    gl.clip = function clip() {};
-
-    gl.isPointInPath = function isPointInPath() {};
-
-    gl.drawFocusRing = function drawFocusRing() {};
-
-
-
-    var imageCache = [], textureCache = [];
-
-    function Texture(image) {
-      this.obj   = gl.createTexture();
-      this.index = textureCache.push(this);
-
-      imageCache.push(image);
-
-      // we may wish to consider tiling large images like this instead of scaling and
-      // adjust appropriately (flip to next texture source and tile offset) when drawing
-      if (image.width > gl2d.maxTextureSize || image.height > gl2d.maxTextureSize) {
-        var canvas = document.createElement("canvas");
-
-        canvas.width  = (image.width  > gl2d.maxTextureSize) ? gl2d.maxTextureSize : image.width;
-        canvas.height = (image.height > gl2d.maxTextureSize) ? gl2d.maxTextureSize : image.height;
-
-        var ctx = canvas.getContext("2d");
-
-        ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, canvas.width, canvas.height);
-
-        image = canvas;
-      }
-
-      gl.bindTexture(gl.TEXTURE_2D, this.obj);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-
-      // Enable Mip mapping on power-of-2 textures
-      if (isPOT(image.width) && isPOT(image.height)) {
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-        gl.generateMipmap(gl.TEXTURE_2D);
-      } else {
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-      }
-
-      // Unbind texture
-      gl.bindTexture(gl.TEXTURE_2D, null);
-    }
-
-    gl.drawImage = function drawImage(image, a, b, c, d, e, f, g, h) {
-      var transform = gl2d.transform;
-
-      transform.pushMatrix();
-
-      var sMask = shaderMask.texture;
-      var doCrop = false;
-
-      //drawImage(image, dx, dy)
-      if (arguments.length === 3) {
-        transform.translate(a, b);
-        transform.scale(image.width, image.height);
-      }
-
-      //drawImage(image, dx, dy, dw, dh)
-      else if (arguments.length === 5) {
-        transform.translate(a, b);
-        transform.scale(c, d);
-      }
-
-      //drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
-      else if (arguments.length === 9) {
-        transform.translate(e, f);
-        transform.scale(g, h);
-        sMask = sMask|shaderMask.crop;
-        doCrop = true;
-      }
-
-      var shaderProgram = gl2d.initShaders(transform.c_stack, sMask);
-
-      var texture, cacheIndex = imageCache.indexOf(image);
-
-      if (cacheIndex !== -1) {
-        texture = textureCache[cacheIndex];
-      } else {
-        texture = new Texture(image);
-      }
-
-      if (doCrop) {
-        gl.uniform4f(shaderProgram.uCropSource, a/image.width, b/image.height, c/image.width, d/image.height);
-      }
-
-      gl.bindBuffer(gl.ARRAY_BUFFER, rectVertexPositionBuffer);
-      gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 4, gl.FLOAT, false, 0, 0);
-
-      gl.bindTexture(gl.TEXTURE_2D, texture.obj);
-      gl.activeTexture(gl.TEXTURE0);
-
-      gl.uniform1i(shaderProgram.uSampler, 0);
-
-      sendTransformStack(shaderProgram);
-      gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
-
-      transform.popMatrix();
-    };
-  };
-
-}(Math));
 /*!
  * xStats.js v1.0.0-pre
  * Copyright 2011-2012 John-David Dalton <http://allyoucanleet.com/>
@@ -13183,6 +9371,1890 @@ Framerate = function(options) {
     '.xstats{cursor:pointer;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-o-user-select:none;user-select:none}');
 
 }(this, this.document));
+
+
+document.oncontextmenu = function() {
+  return false;
+};
+
+$(document).bind("keydown", function(event) {
+  if (!$(event.target).is("input")) return event.preventDefault();
+});
+
+/**
+The <code>Gamepads</code> module gives the engine access to gamepads.
+
+    # First you need to add the `Gamepads` module to the engine
+    Engine.defaultModules.push "Gamepads"
+
+    window.engine = Engine
+      ...
+
+    # Then you need to get a controller reference
+    # id = 0 for player 1, etc.
+    controller = engine.controller(id)
+
+    # Point indicating direction primary axis is held
+    direction = controller.position()
+
+    # Check if buttons are held
+    controller.actionDown("A")
+    controller.actionDown("B")
+    controller.actionDown("X")
+    controller.actionDown("Y")
+
+@name Gamepads
+@fieldOf Engine
+@module
+
+@param {Object} I Instance variables
+@param {Object} self Reference to the engine
+*/
+Engine.Gamepads = function(I, self) {
+  var gamepads;
+  gamepads = Gamepads();
+  self.bind("beforeUpdate", function() {
+    return gamepads.update();
+  });
+  return {
+    /**
+    Get a controller for a given id.
+
+    @name controller
+    @methodOf Engine.Gamepads#
+
+    @param {Number} index The index to get a controller for.
+    */
+    controller: function(index) {
+      return gamepads.controller(index);
+    }
+  };
+};
+
+
+Engine.Stats = function(I, self) {
+  var stats;
+  if (I == null) I = {};
+  stats = xStats();
+  $(stats.element).css({
+    position: "absolute",
+    right: 0,
+    top: 0
+  }).appendTo("body");
+  return {};
+};
+
+/**
+This error handler captures any runtime errors and reports them to the IDE
+if present.
+*/
+window.onerror = function(message, url, lineNumber) {
+  var errorContext;
+  errorContext = $('script').last().text().split('\n').slice(lineNumber - 5, (lineNumber + 4) + 1 || 9e9);
+  errorContext[4] = "<b style='font-weight: bold; text-decoration: underline;'>" + errorContext[4] + "</b>";
+  return typeof displayRuntimeError === "function" ? displayRuntimeError("<code>" + message + "</code> <br /><br />(Sometimes this context may be wrong.)<br /><code><pre>" + (errorContext.join('\n')) + "</pre></code>") : void 0;
+};
+
+var root;
+
+(function() {}, root = typeof exports !== "undefined" && exports !== null ? exports : this, root.gameKeys = function(keyMap) {
+  return parent.postMessage({
+    type: 'controls',
+    data: keyMap
+  }, 'http://pixieengine.com');
+})();
+
+var Gamepads;
+
+Gamepads = function(I) {
+  var controllers, snapshot, state;
+  if (I == null) I = {};
+  state = {};
+  controllers = [];
+  snapshot = function() {
+    return Array.prototype.map.call(navigator.webkitGamepads || navigator.webkitGetGamepads(), function(x) {
+      return {
+        axes: x.axes,
+        buttons: x.buttons
+      };
+    });
+  };
+  return {
+    controller: function(index) {
+      if (index == null) index = 0;
+      return controllers[index] || (controllers[index] = Gamepads.Controller({
+        index: index,
+        state: state
+      }));
+    },
+    update: function() {
+      state.previous = state.current;
+      state.current = snapshot();
+      return controllers.each(function(controller) {
+        return controller != null ? controller.update() : void 0;
+      });
+    }
+  };
+};
+
+var __slice = Array.prototype.slice;
+
+Gamepads.Controller = function(I) {
+  var AXIS_MAX, BUTTON_THRESHOLD, DEAD_ZONE, MAX_BUFFER, TRIP_HIGH, TRIP_LOW, axisTrips, buttonMapping, currentState, previousState, processTaps, self, tap;
+  if (I == null) I = {};
+  Object.reverseMerge(I, {
+    debugColor: "#000"
+  });
+  MAX_BUFFER = 0.03;
+  AXIS_MAX = 1 - MAX_BUFFER;
+  DEAD_ZONE = AXIS_MAX * 0.2;
+  TRIP_HIGH = AXIS_MAX * 0.75;
+  TRIP_LOW = AXIS_MAX * 0.5;
+  BUTTON_THRESHOLD = 0.5;
+  buttonMapping = {
+    "A": 0,
+    "B": 1,
+    "C": 2,
+    "D": 3,
+    "X": 2,
+    "Y": 3,
+    "L": 4,
+    "LB": 4,
+    "L1": 4,
+    "R": 5,
+    "RB": 5,
+    "R1": 5,
+    "SELECT": 6,
+    "BACK": 6,
+    "START": 7,
+    "HOME": 8,
+    "GUIDE": 8,
+    "TL": 9,
+    "TR": 10
+  };
+  currentState = function() {
+    var _ref;
+    return (_ref = I.state.current) != null ? _ref[I.index] : void 0;
+  };
+  previousState = function() {
+    var _ref;
+    return (_ref = I.state.previous) != null ? _ref[I.index] : void 0;
+  };
+  axisTrips = [];
+  tap = Point(0, 0);
+  processTaps = function() {
+    var x, y, _ref;
+    _ref = [0, 1].map(function(n) {
+      if (!axisTrips[n] && self.axis(n).abs() > TRIP_HIGH) {
+        axisTrips[n] = true;
+        return self.axis(n).sign();
+      }
+      if (axisTrips[n] && self.axis(n).abs() < TRIP_LOW) axisTrips[n] = false;
+      return 0;
+    }), x = _ref[0], y = _ref[1];
+    return tap = Point(x, y);
+  };
+  return self = Core().include(Bindable).extend({
+    actionDown: function() {
+      var buttons, state;
+      buttons = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      if (state = currentState()) {
+        return buttons.inject(false, function(down, button) {
+          return down || (button === "ANY" ? state.buttons.inject(false, function(down, button) {
+            return down || (button > BUTTON_THRESHOLD);
+          }) : state.buttons[buttonMapping[button]] > BUTTON_THRESHOLD);
+        });
+      } else {
+        return false;
+      }
+    },
+    buttonPressed: function(button) {
+      var buttonId, _ref;
+      buttonId = buttonMapping[button];
+      return (self.buttons()[buttonId] > BUTTON_THRESHOLD) && !(((_ref = previousState()) != null ? _ref.buttons[buttonId] : void 0) > BUTTON_THRESHOLD);
+    },
+    position: function(stick) {
+      var magnitude, p, ratio, state;
+      if (stick == null) stick = 0;
+      if (state = currentState()) {
+        p = Point(self.axis(2 * stick), self.axis(2 * stick + 1));
+        magnitude = p.magnitude();
+        if (magnitude > AXIS_MAX) {
+          return p.norm();
+        } else if (magnitude < DEAD_ZONE) {
+          return Point(0, 0);
+        } else {
+          ratio = magnitude / AXIS_MAX;
+          return p.scale(ratio / AXIS_MAX);
+        }
+      } else {
+        return Point(0, 0);
+      }
+    },
+    axis: function(n) {
+      return self.axes()[n] || 0;
+    },
+    axes: function() {
+      var state;
+      if (state = currentState()) {
+        return state.axes;
+      } else {
+        return [];
+      }
+    },
+    buttons: function() {
+      var state;
+      if (state = currentState()) {
+        return state.buttons;
+      } else {
+        return [];
+      }
+    },
+    tap: function() {
+      return tap;
+    },
+    update: function() {
+      return processTaps();
+    },
+    drawDebug: function(canvas) {
+      var lineHeight;
+      lineHeight = 18;
+      self.axes().each(function(axis, i) {
+        return canvas.drawText({
+          color: I.debugColor,
+          text: axis,
+          x: 0,
+          y: i * lineHeight
+        });
+      });
+      return self.buttons().each(function(button, i) {
+        return canvas.drawText({
+          color: I.debugColor,
+          text: button,
+          x: 250,
+          y: i * lineHeight
+        });
+      });
+    }
+  });
+};
+
+var Joysticks,
+  __slice = Array.prototype.slice;
+
+Joysticks = (function() {
+  var AXIS_MAX, Controller, DEAD_ZONE, MAX_BUFFER, TRIP_HIGH, TRIP_LOW, axisMappingDefault, axisMappingOSX, buttonMappingDefault, buttonMappingOSX, controllers, displayInstallPrompt, joysticks, plugin, previousJoysticks, type;
+  type = "application/x-boomstickjavascriptjoysticksupport";
+  plugin = null;
+  MAX_BUFFER = 2000;
+  AXIS_MAX = 32767 - MAX_BUFFER;
+  DEAD_ZONE = AXIS_MAX * 0.2;
+  TRIP_HIGH = AXIS_MAX * 0.75;
+  TRIP_LOW = AXIS_MAX * 0.5;
+  previousJoysticks = [];
+  joysticks = [];
+  controllers = [];
+  buttonMappingDefault = {
+    "A": 1,
+    "B": 2,
+    "C": 4,
+    "D": 8,
+    "X": 4,
+    "Y": 8,
+    "R": 32,
+    "RB": 32,
+    "R1": 32,
+    "L": 16,
+    "LB": 16,
+    "L1": 16,
+    "SELECT": 64,
+    "BACK": 64,
+    "START": 128,
+    "HOME": 256,
+    "GUIDE": 256,
+    "TL": 512,
+    "TR": 1024,
+    "ANY": 0xFFFFFF
+  };
+  buttonMappingOSX = {
+    "A": 2048,
+    "B": 4096,
+    "C": 8192,
+    "D": 16384,
+    "X": 8192,
+    "Y": 16384,
+    "R": 512,
+    "L": 256,
+    "SELECT": 32,
+    "BACK": 32,
+    "START": 16,
+    "HOME": 1024,
+    "LT": 64,
+    "TR": 128,
+    "ANY": 0xFFFFFF0
+  };
+  axisMappingDefault = {
+    0: 0,
+    1: 1,
+    2: 2,
+    3: 3,
+    4: 4,
+    5: 5
+  };
+  axisMappingOSX = {
+    0: 2,
+    1: 3,
+    2: 4,
+    3: 5,
+    4: 0,
+    5: 1
+  };
+  displayInstallPrompt = function(text, url) {
+    return $("<a />", {
+      css: {
+        backgroundColor: "yellow",
+        boxSizing: "border-box",
+        color: "#000",
+        display: "block",
+        fontWeight: "bold",
+        left: 0,
+        padding: "1em",
+        position: "absolute",
+        textDecoration: "none",
+        top: 0,
+        width: "100%",
+        zIndex: 2000
+      },
+      href: url,
+      target: "_blank",
+      text: text
+    }).appendTo("body");
+  };
+  Controller = function(i, remapOSX) {
+    var axisMapping, axisTrips, buttonMapping, currentState, previousState, self;
+    if (remapOSX === void 0) remapOSX = navigator.platform.match(/^Mac/);
+    if (remapOSX) {
+      buttonMapping = buttonMappingOSX;
+      axisMapping = axisMappingOSX;
+    } else {
+      buttonMapping = buttonMappingDefault;
+      axisMapping = axisMappingDefault;
+    }
+    currentState = function() {
+      return joysticks[i];
+    };
+    previousState = function() {
+      return previousJoysticks[i];
+    };
+    axisTrips = [];
+    return self = Core().include(Bindable).extend({
+      actionDown: function() {
+        var buttons, state;
+        buttons = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        if (state = currentState()) {
+          return buttons.inject(false, function(down, button) {
+            return down || state.buttons & buttonMapping[button];
+          });
+        } else {
+          return false;
+        }
+      },
+      buttonPressed: function(button) {
+        var buttonId;
+        buttonId = buttonMapping[button];
+        return (self.buttons() & buttonId) && !(previousState().buttons & buttonId);
+      },
+      position: function(stick) {
+        var magnitude, p, ratio, state;
+        if (stick == null) stick = 0;
+        if (state = currentState()) {
+          p = Point(self.axis(2 * stick), self.axis(2 * stick + 1));
+          magnitude = p.magnitude();
+          if (magnitude > AXIS_MAX) {
+            return p.norm();
+          } else if (magnitude < DEAD_ZONE) {
+            return Point(0, 0);
+          } else {
+            ratio = magnitude / AXIS_MAX;
+            return p.scale(ratio / AXIS_MAX);
+          }
+        } else {
+          return Point(0, 0);
+        }
+      },
+      axis: function(n) {
+        n = axisMapping[n];
+        return self.axes()[n] || 0;
+      },
+      axes: function() {
+        var state;
+        if (state = currentState()) {
+          return state.axes;
+        } else {
+          return [];
+        }
+      },
+      buttons: function() {
+        var state;
+        if (state = currentState()) return state.buttons;
+      },
+      processEvents: function() {
+        var x, y, _ref;
+        _ref = [0, 1].map(function(n) {
+          if (!axisTrips[n] && self.axis(n).abs() > TRIP_HIGH) {
+            axisTrips[n] = true;
+            return self.axis(n).sign();
+          }
+          if (axisTrips[n] && self.axis(n).abs() < TRIP_LOW) axisTrips[n] = false;
+          return 0;
+        }), x = _ref[0], y = _ref[1];
+        if (!x || !y) return self.trigger("tap", Point(x, y));
+      },
+      drawDebug: function(canvas) {
+        var axis, i, lineHeight, _len, _ref;
+        lineHeight = 18;
+        canvas.fillColor("#FFF");
+        _ref = self.axes();
+        for (i = 0, _len = _ref.length; i < _len; i++) {
+          axis = _ref[i];
+          canvas.fillText(axis, 0, i * lineHeight);
+        }
+        return canvas.fillText(self.buttons(), 0, i * lineHeight);
+      }
+    });
+  };
+  return {
+    getController: function(i) {
+      return controllers[i] || (controllers[i] = Controller(i));
+    },
+    init: function() {
+      var periodicCheck, promptElement;
+      if (!plugin) {
+        plugin = document.createElement("object");
+        plugin.type = type;
+        plugin.width = 0;
+        plugin.height = 0;
+        $("body").append(plugin);
+        plugin.maxAxes = 6;
+        if (!plugin.status) {
+          promptElement = displayInstallPrompt("Your browser does not yet handle joysticks, please click here to install the Boomstick plugin!", "https://github.com/STRd6/Boomstick/wiki");
+          periodicCheck = function() {
+            if (plugin.status) {
+              return promptElement.remove();
+            } else {
+              return setTimeout(periodicCheck, 500);
+            }
+          };
+          return periodicCheck();
+        }
+      }
+    },
+    status: function() {
+      return plugin != null ? plugin.status : void 0;
+    },
+    update: function() {
+      var controller, _i, _len, _results;
+      if (plugin.joysticksJSON) {
+        previousJoysticks = joysticks;
+        joysticks = JSON.parse(plugin.joysticksJSON());
+      }
+      _results = [];
+      for (_i = 0, _len = controllers.length; _i < _len; _i++) {
+        controller = controllers[_i];
+        _results.push(controller != null ? controller.processEvents() : void 0);
+      }
+      return _results;
+    },
+    joysticks: function() {
+      return joysticks;
+    }
+  };
+})();
+
+/**
+jQuery Hotkeys Plugin
+Copyright 2010, John Resig
+Dual licensed under the MIT or GPL Version 2 licenses.
+
+Based upon the plugin by Tzury Bar Yochay:
+http://github.com/tzuryby/hotkeys
+
+Original idea by:
+Binny V A, http://www.openjs.com/scripts/events/keyboard_shortcuts/
+*/
+(function(jQuery) {
+  var isFunctionKey, isTextAcceptingInput, keyHandler;
+  isTextAcceptingInput = function(element) {
+    return /textarea|select/i.test(element.nodeName) || element.type === "text" || element.type === "password";
+  };
+  isFunctionKey = function(event) {
+    var _ref;
+    return (event.type !== "keypress") && ((112 <= (_ref = event.which) && _ref <= 123));
+  };
+  jQuery.hotkeys = {
+    version: "0.8",
+    specialKeys: {
+      8: "backspace",
+      9: "tab",
+      13: "return",
+      16: "shift",
+      17: "ctrl",
+      18: "alt",
+      19: "pause",
+      20: "capslock",
+      27: "esc",
+      32: "space",
+      33: "pageup",
+      34: "pagedown",
+      35: "end",
+      36: "home",
+      37: "left",
+      38: "up",
+      39: "right",
+      40: "down",
+      45: "insert",
+      46: "del",
+      96: "0",
+      97: "1",
+      98: "2",
+      99: "3",
+      100: "4",
+      101: "5",
+      102: "6",
+      103: "7",
+      104: "8",
+      105: "9",
+      106: "*",
+      107: "+",
+      109: "-",
+      110: ".",
+      111: "/",
+      112: "f1",
+      113: "f2",
+      114: "f3",
+      115: "f4",
+      116: "f5",
+      117: "f6",
+      118: "f7",
+      119: "f8",
+      120: "f9",
+      121: "f10",
+      122: "f11",
+      123: "f12",
+      144: "numlock",
+      145: "scroll",
+      186: ";",
+      187: "=",
+      188: ",",
+      189: "-",
+      190: ".",
+      191: "/",
+      219: "[",
+      220: "\\",
+      221: "]",
+      222: "'",
+      224: "meta"
+    },
+    shiftNums: {
+      "`": "~",
+      "1": "!",
+      "2": "@",
+      "3": "#",
+      "4": "$",
+      "5": "%",
+      "6": "^",
+      "7": "&",
+      "8": "*",
+      "9": "(",
+      "0": ")",
+      "-": "_",
+      "=": "+",
+      ";": ":",
+      "'": "\"",
+      ",": "<",
+      ".": ">",
+      "/": "?",
+      "\\": "|"
+    }
+  };
+  keyHandler = function(handleObj) {
+    var keys, origHandler;
+    if (typeof handleObj.data !== "string") return;
+    origHandler = handleObj.handler;
+    keys = handleObj.data.toLowerCase().split(" ");
+    return handleObj.handler = function(event) {
+      var character, key, modif, possible, special, target, _i, _len;
+      special = event.type !== "keypress" && jQuery.hotkeys.specialKeys[event.which];
+      character = String.fromCharCode(event.which).toLowerCase();
+      modif = "";
+      possible = {};
+      target = event.target;
+      if (event.altKey && special !== "alt") modif += "alt+";
+      if (event.ctrlKey && special !== "ctrl") modif += "ctrl+";
+      if (event.metaKey && !event.ctrlKey && special !== "meta") modif += "meta+";
+      if (this !== target) {
+        if (isTextAcceptingInput(target) && !modif && !isFunctionKey(event)) {
+          return;
+        }
+      }
+      if (event.shiftKey && special !== "shift") modif += "shift+";
+      if (special) {
+        possible[modif + special] = true;
+      } else {
+        possible[modif + character] = true;
+        possible[modif + jQuery.hotkeys.shiftNums[character]] = true;
+        if (modif === "shift+") {
+          possible[jQuery.hotkeys.shiftNums[character]] = true;
+        }
+      }
+      for (_i = 0, _len = keys.length; _i < _len; _i++) {
+        key = keys[_i];
+        if (possible[key]) return origHandler.apply(this, arguments);
+      }
+    };
+  };
+  return jQuery.each(["keydown", "keyup", "keypress"], function() {
+    return jQuery.event.special[this] = {
+      add: keyHandler
+    };
+  });
+})(jQuery);
+
+/**
+Merges properties from objects into target without overiding.
+First come, first served.
+
+@name reverseMerge
+@methodOf jQuery#
+
+@param {Object} target the object to merge the given properties onto
+@param {Object} objects... one or more objects whose properties are merged onto target
+
+@return {Object} target
+*/
+var __slice = Array.prototype.slice;
+
+jQuery.extend({
+  reverseMerge: function() {
+    var name, object, objects, target, _i, _len;
+    target = arguments[0], objects = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+    for (_i = 0, _len = objects.length; _i < _len; _i++) {
+      object = objects[_i];
+      for (name in object) {
+        if (!target.hasOwnProperty(name)) target[name] = object[name];
+      }
+    }
+    return target;
+  }
+});
+
+
+$(function() {
+  /**
+  The global keydown property lets your query the status of keys.
+
+  <code><pre>
+  if keydown.left
+    moveLeft()
+
+  if keydown.a or keydown.space
+    attack()
+
+  if keydown.return
+    confirm()
+
+  if keydown.esc
+    cancel()
+  </pre></code>
+
+  @name keydown
+  @namespace
+  */
+  /**
+  The global justPressed property lets your query the status of keys. However,
+  unlike keydown it will only trigger once for each time the key is pressed.
+
+  <code><pre>
+  if justPressed.left
+    moveLeft()
+
+  if justPressed.a or justPressed.space
+    attack()
+
+  if justPressed.return
+    confirm()
+
+  if justPressed.esc
+    cancel()
+  </pre></code>
+
+  @name justPressed
+  @namespace
+  */
+  var keyName, prevKeysDown;
+  window.keydown = {};
+  window.justPressed = {};
+  prevKeysDown = {};
+  keyName = function(event) {
+    return jQuery.hotkeys.specialKeys[event.which] || String.fromCharCode(event.which).toLowerCase();
+  };
+  $(document).bind("keydown", function(event) {
+    var key;
+    key = keyName(event);
+    return keydown[key] = true;
+  });
+  $(document).bind("keyup", function(event) {
+    var key;
+    key = keyName(event);
+    return keydown[key] = false;
+  });
+  return window.updateKeys = function() {
+    var key, value, _results;
+    window.justPressed = {};
+    keydown.any = false;
+    for (key in keydown) {
+      value = keydown[key];
+      if (!prevKeysDown[key]) justPressed[key] = value;
+      if (justPressed[key] || mousePressed.left || mousePressed.right) {
+        justPressed.any = true;
+      }
+      if (value || mouseDown.left || mouseDown.right) keydown.any = true;
+    }
+    prevKeysDown = {};
+    _results = [];
+    for (key in keydown) {
+      value = keydown[key];
+      _results.push(prevKeysDown[key] = value);
+    }
+    return _results;
+  };
+});
+
+
+$(function() {
+  /**
+  The global mouseDown property lets your query the status of mouse buttons.
+
+  <code><pre>
+  if mouseDown.left
+    moveLeft()
+
+  if mouseDown.right
+    attack()
+  </pre></code>
+
+  @name mouseDown
+  @namespace
+  */
+  /**
+  The global mousePressed property lets your query the status of mouse buttons.
+  However, unlike mouseDown it will only trigger the first time the button
+  pressed.
+
+  <code><pre>
+  if mousePressed.left
+    moveLeft()
+
+  if mousePressed.right
+    attack()
+  </pre></code>
+
+  @name mousePressed
+  @namespace
+  */
+  var buttonName, buttonNames, prevButtonsDown;
+  window.mouseDown = {};
+  window.mousePressed = {};
+  window.mousePosition = Point(0, 0);
+  prevButtonsDown = {};
+  buttonNames = {
+    1: "left",
+    2: "middle",
+    3: "right"
+  };
+  buttonName = function(event) {
+    return buttonNames[event.which];
+  };
+  $(document).bind("mousemove", function(event) {
+    mousePosition.x = event.pageX;
+    return mousePosition.y = event.pageY;
+  });
+  $(document).bind("mousedown", function(event) {
+    return mouseDown[buttonName(event)] = true;
+  });
+  $(document).bind("mouseup", function(event) {
+    return mouseDown[buttonName(event)] = false;
+  });
+  return window.updateMouse = function() {
+    var button, value, _results;
+    window.mousePressed = {};
+    for (button in mouseDown) {
+      value = mouseDown[button];
+      if (!prevButtonsDown[button]) mousePressed[button] = value;
+    }
+    prevButtonsDown = {};
+    _results = [];
+    for (button in mouseDown) {
+      value = mouseDown[button];
+      _results.push(prevButtonsDown[button] = value);
+    }
+    return _results;
+  };
+});
+
+/**
+The Music object provides an easy API to play
+songs from your sounds project directory. By
+default, the track is looped.
+
+<code><pre>
+  Music.play('intro_theme')
+</pre></code>
+
+@name Music
+@namespace
+*/
+var Music;
+
+Music = (function() {
+  var globalMusicVolume, track, trackVolume, updateTrackVolume;
+  globalMusicVolume = 1;
+  trackVolume = 1;
+  track = $("<audio />", {
+    loop: "loop"
+  }).appendTo('body').get(0);
+  updateTrackVolume = function() {
+    return track.volume = globalMusicVolume * trackVolume;
+  };
+  return {
+    /**
+    Set the global volume modifier for all music.
+
+    Any value set is clamped between 0 and 1. This is multiplied
+    into each individual track that plays.
+
+    If no argument is given return the current global music volume.
+
+    @name globalVolume
+    @methodOf Music
+    @param {Number} [newVolume] The volume to set
+    */
+    globalVolume: function(newVolume) {
+      if (newVolume != null) {
+        globalMusicVolume = newVolume.clamp(0, 1);
+        updateTrackVolume();
+      }
+      return globalMusicVolume;
+    },
+    /**
+    Plays a music track.
+
+    @name play
+    @methodOf Music
+    @param {String} name The name of the track to play.
+    */
+    play: function(name) {
+      updateTrackVolume();
+      track.src = "" + BASE_URL + "/sounds/" + name + ".mp3";
+      return track.play();
+    },
+    /**
+    Get or set the current music volume. Any value passed is
+    clamped between 0 and 1. Use this to adjust the volume of
+    individual tracks or to increase or decrease volume during
+    gameplay.
+
+    @name volume
+    @methodOf Music
+    @param {Number} [newVolume] The volume to set to.
+    */
+    volume: function(newVolume) {
+      if (newVolume != null) {
+        trackVolume = newVolume.clamp(0, 1);
+        updateTrackVolume();
+        return this;
+      } else {
+        return trackVolume;
+      }
+    }
+  };
+})();
+
+var __slice = Array.prototype.slice;
+
+(function($) {
+  return $.fn.pixieCanvas = function(options) {
+    var $canvas, canvas, canvasAttrAccessor, context, contextAttrAccessor;
+    if (options == null) options = {};
+    canvas = this.get(0);
+    context = void 0;
+    /**
+    PixieCanvas provides a convenient wrapper for working with Context2d.
+
+    Methods try to be as flexible as possible as to what arguments they take.
+
+    Non-getter methods return `this` for method chaining.
+
+    @name PixieCanvas
+    @constructor
+    */
+    $canvas = $(canvas).extend({
+      /**
+      Passes this canvas to the block with the given matrix transformation
+      applied. All drawing methods called within the block will draw
+      into the canvas with the transformation applied. The transformation
+      is removed at the end of the block, even if the block throws an error.
+
+      @name withTransform
+      @methodOf PixieCanvas#
+
+      @param {Matrix} matrix
+      @param {Function} block
+
+      @returns {PixieCanvas} this
+      */
+      withTransform: function(matrix, block) {
+        context.save();
+        context.transform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
+        try {
+          block(this);
+        } finally {
+          context.restore();
+        }
+        return this;
+      },
+      /**
+      Clear the canvas (or a portion of it).
+
+      Clear the entire canvas
+
+      <code><pre>
+      canvas.clear()
+      </pre></code>
+
+      Clear a portion of the canvas
+
+      <code class="run"><pre>
+      # Set up: Fill canvas with blue
+      canvas.fill("blue")
+
+      # Clear a portion of the canvas
+      canvas.clear
+        x: 50
+        y: 50
+        width: 50
+        height: 50
+      </pre></code>
+
+      You can also clear the canvas by passing x, y, width height as
+      unnamed parameters:
+
+      <code><pre>
+      canvas.clear(25, 25, 50, 50)
+      </pre></code>
+
+      @name clear
+      @methodOf PixieCanvas#
+
+      @param {Number} [x] where to start clearing on the x axis
+      @param {Number} [y] where to start clearing on the y axis
+      @param {Number} [width] width of area to clear
+      @param {Number} [height] height of area to clear
+
+      @returns {PixieCanvas} this
+      */
+      clear: function(x, y, width, height) {
+        var _ref;
+        if (x == null) x = {};
+        if (y == null) {
+          _ref = x, x = _ref.x, y = _ref.y, width = _ref.width, height = _ref.height;
+        }
+        x || (x = 0);
+        y || (y = 0);
+        if (width == null) width = canvas.width;
+        if (height == null) height = canvas.height;
+        context.clearRect(x, y, width, height);
+        return this;
+      },
+      /**
+      Fills the entire canvas (or a specified section of it) with
+      the given color.
+
+      <code class="run"><pre>
+      # Paint the town (entire canvas) red
+      canvas.fill "red"
+
+      # Fill a section of the canvas white (#FFF)
+      canvas.fill
+        x: 50
+        y: 50
+        width: 50
+        height: 50
+        color: "#FFF"
+      </pre></code>
+
+      @name fill
+      @methodOf PixieCanvas#
+
+      @param {Number} [x=0] Optional x position to fill from
+      @param {Number} [y=0] Optional y position to fill from
+      @param {Number} [width=canvas.width] Optional width of area to fill
+      @param {Number} [height=canvas.height] Optional height of area to fill
+      @param {Bounds} [bounds] bounds object to fill
+      @param {String|Color} [color] color of area to fill
+
+      @returns {PixieCanvas} this
+      */
+      fill: function(color) {
+        var bounds, height, width, x, y, _ref;
+        if (color == null) color = {};
+        if (!((typeof color.isString === "function" ? color.isString() : void 0) || color.channels)) {
+          _ref = color, x = _ref.x, y = _ref.y, width = _ref.width, height = _ref.height, bounds = _ref.bounds, color = _ref.color;
+        }
+        if (bounds) {
+          x = bounds.x, y = bounds.y, width = bounds.width, height = bounds.height;
+        }
+        x || (x = 0);
+        y || (y = 0);
+        if (width == null) width = canvas.width;
+        if (height == null) height = canvas.height;
+        this.fillColor(color);
+        context.fillRect(x, y, width, height);
+        return this;
+      },
+      /**
+      A direct map to the Context2d draw image. `GameObject`s
+      that implement drawable will have this wrapped up nicely,
+      so there is a good chance that you will not have to deal with
+      it directly.
+
+      @name drawImage
+      @methodOf PixieCanvas#
+
+      @param image
+      @param {Number} sx
+      @param {Number} sy
+      @param {Number} sWidth
+      @param {Number} sHeight
+      @param {Number} dx
+      @param {Number} dy
+      @param {Number} dWidth
+      @param {Number} dHeight
+
+      @returns {PixieCanvas} this
+      */
+      drawImage: function(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) {
+        context.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+        return this;
+      },
+      /**
+      Draws a circle at the specified position with the specified
+      radius and color.
+
+      <code class="run"><pre>
+      # Draw a large orange circle
+      canvas.drawCircle
+        radius: 30
+        position: Point(100, 75)
+        color: "orange"
+
+      # Draw a blue circle with radius 10 at (25, 50)
+      # and a red stroke
+      canvas.drawCircle
+        x: 25
+        y: 50
+        radius: 10
+        color: "blue"
+        stroke:
+          color: "red"
+          width: 1
+
+      # Create a circle object to set up the next examples
+      circle =
+        radius: 20
+        x: 50
+        y: 50
+
+      # Draw a given circle in yellow
+      canvas.drawCircle
+        circle: circle
+        color: "yellow"
+
+      # Draw the circle in green at a different position
+      canvas.drawCircle
+        circle: circle
+        position: Point(25, 75)
+        color: "green"
+
+      # Draw an outline circle in purple.
+      canvas.drawCircle
+        x: 50
+        y: 75
+        radius: 10
+        stroke:
+          color: "purple"
+          width: 2
+      </pre></code>
+
+      @name drawCircle
+      @methodOf PixieCanvas#
+
+      @param {Number} [x] location on the x axis to start drawing
+      @param {Number} [y] location on the y axis to start drawing
+      @param {Point} [position] position object of location to start drawing. This will override x and y values passed
+      @param {Number} [radius] length of the radius of the circle
+      @param {Color|String} [color] color of the circle
+      @param {Circle} [circle] circle object that contains position and radius. Overrides x, y, and radius if passed
+      @param {Stroke} [stroke] stroke object that specifies stroke color and stroke width
+
+      @returns {PixieCanvas} this
+      */
+      drawCircle: function(_arg) {
+        var circle, color, position, radius, stroke, x, y;
+        x = _arg.x, y = _arg.y, radius = _arg.radius, position = _arg.position, color = _arg.color, stroke = _arg.stroke, circle = _arg.circle;
+        if (circle) x = circle.x, y = circle.y, radius = circle.radius;
+        if (position) x = position.x, y = position.y;
+        context.beginPath();
+        context.arc(x, y, radius, 0, Math.TAU, true);
+        context.closePath();
+        if (color) {
+          this.fillColor(color);
+          context.fill();
+        }
+        if (stroke) {
+          this.strokeColor(stroke.color);
+          this.lineWidth(stroke.width);
+          context.stroke();
+        }
+        return this;
+      },
+      /**
+      Draws a rectangle at the specified position with given
+      width and height. Optionally takes a position, bounds
+      and color argument.
+
+      <code class="run"><pre>
+      # Draw a red rectangle using x, y, width and height
+      canvas.drawRect
+        x: 50
+        y: 50
+        width: 50
+        height: 50
+        color: "#F00"
+
+      # Draw a blue rectangle using position, width and height
+      # and throw in a stroke for good measure
+      canvas.drawRect
+        position: Point(0, 0)
+        width: 50
+        height: 50
+        color: "blue"
+        stroke:
+          color: "orange"
+          width: 3
+
+      # Set up a bounds object for the next examples
+      bounds =
+        x: 100
+        y: 0
+        width: 100
+        height: 100
+
+      # Draw a purple rectangle using bounds
+      canvas.drawRect
+        bounds: bounds
+        color: "green"
+
+      # Draw the outline of the same bounds, but at a different position
+      canvas.drawRect
+        bounds: bounds
+        position: Point(0, 50)
+        stroke:
+          color: "purple"
+          width: 2
+      </pre></code>
+
+      @name drawRect
+      @methodOf PixieCanvas#
+
+      @param {Number} [x] location on the x axis to start drawing
+      @param {Number} [y] location on the y axis to start drawing
+      @param {Number} [width] width of rectangle to draw
+      @param {Number} [height] height of rectangle to draw
+      @param {Point} [position] position to start drawing. Overrides x and y if passed
+      @param {Color|String} [color] color of rectangle
+      @param {Bounds} [bounds] bounds of rectangle. Overrides x, y, width, height if passed
+      @param {Stroke} [stroke] stroke object that specifies stroke color and stroke width
+
+      @returns {PixieCanvas} this
+      */
+      drawRect: function(_arg) {
+        var bounds, color, height, position, stroke, width, x, y;
+        x = _arg.x, y = _arg.y, width = _arg.width, height = _arg.height, position = _arg.position, bounds = _arg.bounds, color = _arg.color, stroke = _arg.stroke;
+        if (bounds) {
+          x = bounds.x, y = bounds.y, width = bounds.width, height = bounds.height;
+        }
+        if (position) x = position.x, y = position.y;
+        if (color) {
+          this.fillColor(color);
+          context.fillRect(x, y, width, height);
+        }
+        if (stroke) {
+          this.strokeColor(stroke.color);
+          this.lineWidth(stroke.width);
+          context.strokeRect(x, y, width, height);
+        }
+        return this;
+      },
+      /**
+      Draw a line from `start` to `end`.
+
+      <code class="run"><pre>
+      # Draw a sweet diagonal
+      canvas.drawLine
+        start: Point(0, 0)
+        end: Point(200, 200)
+        color: "purple"
+
+      # Draw another sweet diagonal
+      canvas.drawLine
+        start: Point(200, 0)
+        end: Point(0, 200)
+        color: "red"
+        width: 6
+
+      # Now draw a sweet horizontal with a direction and a length
+      canvas.drawLine
+        start: Point(0, 100)
+        length: 200
+        direction: Point(1, 0)
+        color: "orange"
+
+      </pre></code>
+
+      @name drawLine
+      @methodOf PixieCanvas#
+
+      @param {Point} start position to start drawing from
+      @param {Point} [end] position to stop drawing
+      @param {Number} [width] width of the line
+      @param {String|Color} [color] color of the line
+
+      @returns {PixieCanvas} this
+      */
+      drawLine: function(_arg) {
+        var color, direction, end, length, start, width;
+        start = _arg.start, end = _arg.end, width = _arg.width, color = _arg.color, direction = _arg.direction, length = _arg.length;
+        width || (width = 3);
+        if (direction) end = direction.norm(length).add(start);
+        this.lineWidth(width);
+        this.strokeColor(color);
+        context.beginPath();
+        context.moveTo(start.x, start.y);
+        context.lineTo(end.x, end.y);
+        context.closePath();
+        context.stroke();
+        return this;
+      },
+      /**
+      Draw a polygon.
+
+      <code class="run"><pre>
+      # Draw a sweet rhombus
+      canvas.drawPoly
+        points: [
+          Point(50, 25)
+          Point(75, 50)
+          Point(50, 75)
+          Point(25, 50)
+        ]
+        color: "purple"
+        stroke:
+          color: "red"
+          width: 2
+      </pre></code>
+
+      @name drawPoly
+      @methodOf PixieCanvas#
+
+      @param {Point[]} [points] collection of points that define the vertices of the polygon
+      @param {String|Color} [color] color of the polygon
+      @param {Stroke} [stroke] stroke object that specifies stroke color and stroke width
+
+      @returns {PixieCanvas} this
+      */
+      drawPoly: function(_arg) {
+        var color, points, stroke;
+        points = _arg.points, color = _arg.color, stroke = _arg.stroke;
+        context.beginPath();
+        points.each(function(point, i) {
+          if (i === 0) {
+            return context.moveTo(point.x, point.y);
+          } else {
+            return context.lineTo(point.x, point.y);
+          }
+        });
+        context.lineTo(points[0].x, points[0].y);
+        if (color) {
+          this.fillColor(color);
+          context.fill();
+        }
+        if (stroke) {
+          this.strokeColor(stroke.color);
+          this.lineWidth(stroke.width);
+          context.stroke();
+        }
+        return this;
+      },
+      /**
+      Draw a rounded rectangle.
+
+      Adapted from http://js-bits.blogspot.com/2010/07/canvas-rounded-corner-rectangles.html
+
+      <code class="run"><pre>
+      # Draw a purple rounded rectangle with a red outline
+      canvas.drawRoundRect
+        position: Point(25, 25)
+        radius: 10
+        width: 150
+        height: 100
+        color: "purple"
+        stroke:
+          color: "red"
+          width: 2
+      </pre></code>
+
+      @name drawRoundRect
+      @methodOf PixieCanvas#
+
+      @param {Number} [x] location on the x axis to start drawing
+      @param {Number} [y] location on the y axis to start drawing
+      @param {Number} [width] width of the rounded rectangle
+      @param {Number} [height] height of the rounded rectangle
+      @param {Number} [radius=5] radius to round the rectangle corners
+      @param {Point} [position] position to start drawing. Overrides x and y if passed
+      @param {Color|String} [color] color of the rounded rectangle
+      @param {Bounds} [bounds] bounds of the rounded rectangle. Overrides x, y, width, and height if passed
+      @param {Stroke} [stroke] stroke object that specifies stroke color and stroke width
+
+      @returns {PixieCanvas} this
+      */
+      drawRoundRect: function(_arg) {
+        var bounds, color, height, position, radius, stroke, width, x, y;
+        x = _arg.x, y = _arg.y, width = _arg.width, height = _arg.height, radius = _arg.radius, position = _arg.position, bounds = _arg.bounds, color = _arg.color, stroke = _arg.stroke;
+        if (radius == null) radius = 5;
+        if (bounds) {
+          x = bounds.x, y = bounds.y, width = bounds.width, height = bounds.height;
+        }
+        if (position) x = position.x, y = position.y;
+        context.beginPath();
+        context.moveTo(x + radius, y);
+        context.lineTo(x + width - radius, y);
+        context.quadraticCurveTo(x + width, y, x + width, y + radius);
+        context.lineTo(x + width, y + height - radius);
+        context.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+        context.lineTo(x + radius, y + height);
+        context.quadraticCurveTo(x, y + height, x, y + height - radius);
+        context.lineTo(x, y + radius);
+        context.quadraticCurveTo(x, y, x + radius, y);
+        context.closePath();
+        if (color) {
+          this.fillColor(color);
+          context.fill();
+        }
+        if (stroke) {
+          this.lineWidth(stroke.width);
+          this.strokeColor(stroke.color);
+          context.stroke();
+        }
+        return this;
+      },
+      /**
+      Draws text on the canvas at the given position, in the given color.
+      If no color is given then the previous fill color is used.
+
+      <code class="run"><pre>
+      # Fill canvas to indicate bounds
+      canvas.fill
+        color: '#eee'
+
+      # A line to indicate the baseline
+      canvas.drawLine
+        start: Point(25, 50)
+        end: Point(125, 50)
+        color: "#333"
+        width: 1
+
+      # Draw some text, note the position of the baseline
+      canvas.drawText
+        position: Point(25, 50)
+        color: "red"
+        text: "It's dangerous to go alone"
+
+      </pre></code>
+
+      @name drawText
+      @methodOf PixieCanvas#
+
+      @param {Number} [x] location on x axis to start printing
+      @param {Number} [y] location on y axis to start printing
+      @param {String} text text to print
+      @param {Point} [position] position to start printing. Overrides x and y if passed
+      @param {String|Color} [color] color of text to start printing
+      @param {String} [font] font of text to print
+
+      @returns {PixieCanvas} this
+      */
+      drawText: function(_arg) {
+        var color, font, position, text, x, y;
+        x = _arg.x, y = _arg.y, text = _arg.text, position = _arg.position, color = _arg.color, font = _arg.font;
+        if (position) x = position.x, y = position.y;
+        this.fillColor(color);
+        if (font) this.font(font);
+        context.fillText(text, x, y);
+        return this;
+      },
+      /**
+      Centers the given text on the canvas at the given y position. An x position
+      or point position can also be given in which case the text is centered at the
+      x, y or position value specified.
+
+      <code class="run"><pre>
+      # Fill canvas to indicate bounds
+      canvas.fill
+        color: "#eee"
+
+      # A line to indicate the baseline
+      canvas.drawLine
+        start: Point(25, 25)
+        end: Point(125, 25)
+        color: "#333"
+        width: 1
+
+      # Center text on the screen at y value 25
+      canvas.centerText
+        y: 25
+        color: "red"
+        text: "It's dangerous to go alone"
+
+      # Center text at point (75, 75)
+      canvas.centerText
+        position: Point(75, 75)
+        color: "green"
+        text: "take this"
+
+      </pre></code>
+
+      @name centerText
+      @methodOf PixieCanvas#
+
+      @param {String} text Text to print
+      @param {Number} [y] location on the y axis to start printing
+      @param {Number} [x] location on the x axis to start printing. Overrides the default centering behavior if passed
+      @param {Point} [position] position to start printing. Overrides x and y if passed
+      @param {String|Color} [color] color of text to print
+      @param {String} [font] font of text to print
+
+      @returns {PixieCanvas} this
+      */
+      centerText: function(_arg) {
+        var color, font, position, text, textWidth, x, y;
+        text = _arg.text, x = _arg.x, y = _arg.y, position = _arg.position, color = _arg.color, font = _arg.font;
+        if (position) x = position.x, y = position.y;
+        if (x == null) x = canvas.width / 2;
+        textWidth = this.measureText(text);
+        return this.drawText({
+          text: text,
+          color: color,
+          font: font,
+          x: x - textWidth / 2,
+          y: y
+        });
+      },
+      /**
+      A getter / setter method to set the canvas fillColor.
+
+      <code><pre>
+      # Set the fill color
+      canvas.fillColor('#FF0000')
+
+      # Passing no arguments returns the fillColor
+      canvas.fillColor()
+      # => '#FF0000'
+
+      # You can also pass a Color object
+      canvas.fillColor(Color('sky blue'))
+      </pre></code>
+
+      @name fillColor
+      @methodOf PixieCanvas#
+
+      @param {String|Color} [color] color to make the canvas fillColor
+
+      @returns {PixieCanvas} this
+      */
+      fillColor: function(color) {
+        if (color) {
+          if (color.channels) {
+            context.fillStyle = color.toString();
+          } else {
+            context.fillStyle = color;
+          }
+          return this;
+        } else {
+          return context.fillStyle;
+        }
+      },
+      /**
+      A getter / setter method to set the canvas strokeColor.
+
+      <code><pre>
+      # Set the stroke color
+      canvas.strokeColor('#FF0000')
+
+      # Passing no arguments returns the strokeColor
+      canvas.strokeColor()
+      # => '#FF0000'
+
+      # You can also pass a Color object
+      canvas.strokeColor(Color('sky blue'))
+      </pre></code>
+
+      @name strokeColor
+      @methodOf PixieCanvas#
+
+      @param {String|Color} [color] color to make the canvas strokeColor
+
+      @returns {PixieCanvas} this
+      */
+      strokeColor: function(color) {
+        if (color) {
+          if (color.channels) {
+            context.strokeStyle = color.toString();
+          } else {
+            context.strokeStyle = color;
+          }
+          return this;
+        } else {
+          return context.strokeStyle;
+        }
+      },
+      /**
+      Determine how wide some text is.
+
+      <code><pre>
+      canvas.measureText('Hello World!')
+      # => 55
+      </pre></code>
+
+      @name measureText
+      @methodOf PixieCanvas#
+
+      @param {String} [text] the text to measure
+
+      @returns {PixieCanvas} this
+      */
+      measureText: function(text) {
+        return context.measureText(text).width;
+      },
+      putImageData: function(imageData, x, y) {
+        context.putImageData(imageData, x, y);
+        return this;
+      },
+      context: function() {
+        return context;
+      },
+      element: function() {
+        return canvas;
+      },
+      createPattern: function(image, repitition) {
+        return context.createPattern(image, repitition);
+      },
+      clip: function(x, y, width, height) {
+        context.beginPath();
+        context.rect(x, y, width, height);
+        context.clip();
+        return this;
+      }
+    });
+    contextAttrAccessor = function() {
+      var attrs;
+      attrs = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return attrs.each(function(attr) {
+        return $canvas[attr] = function(newVal) {
+          if (newVal != null) {
+            context[attr] = newVal;
+            return this;
+          } else {
+            return context[attr];
+          }
+        };
+      });
+    };
+    canvasAttrAccessor = function() {
+      var attrs;
+      attrs = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return attrs.each(function(attr) {
+        return $canvas[attr] = function(newVal) {
+          if (newVal != null) {
+            canvas[attr] = newVal;
+            return this;
+          } else {
+            return canvas[attr];
+          }
+        };
+      });
+    };
+    contextAttrAccessor("font", "globalAlpha", "globalCompositeOperation", "lineWidth", "textAlign");
+    canvasAttrAccessor("height", "width");
+    if (canvas != null ? canvas.getContext : void 0) {
+      context = canvas.getContext('2d');
+      if (options.init) options.init($canvas);
+      return $canvas;
+    }
+  };
+})(jQuery);
+
+/**
+A browser polyfill so you can consistently
+call requestAnimationFrame. Using
+requestAnimationFrame is preferred to
+setInterval for main game loops.
+
+http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+
+@name requestAnimationFrame
+@namespace
+*/
+window.requestAnimationFrame || (window.requestAnimationFrame = window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback, element) {
+  return window.setTimeout(function() {
+    return callback(+new Date());
+  }, 1000 / 60);
+});
+
+
+(function($) {
+  /**
+  A simple interface for playing sounds in games.
+
+  @name Sound
+  @namespace
+  */
+  var Sound, directory, format, globalVolume, loadSoundChannel, sounds, _ref;
+  directory = (typeof App !== "undefined" && App !== null ? (_ref = App.directories) != null ? _ref.sounds : void 0 : void 0) || "sounds";
+  format = "wav";
+  sounds = {};
+  globalVolume = 1;
+  loadSoundChannel = function(name) {
+    var sound, url;
+    url = "" + BASE_URL + "/" + directory + "/" + name + "." + format;
+    return sound = $('<audio />', {
+      autobuffer: true,
+      preload: 'auto',
+      src: url
+    }).get(0);
+  };
+  Sound = function(id, maxChannels) {
+    return {
+      play: function() {
+        return Sound.play(id, maxChannels);
+      },
+      stop: function() {
+        return Sound.stop(id);
+      }
+    };
+  };
+  return Object.extend(Sound, {
+    /**
+    Set the global volume modifier for all sound effects.
+
+    Any value set is clamped between 0 and 1. This is multiplied
+    into each individual effect that plays.
+
+    If no argument is given return the current global sound effect volume.
+
+    @name globalVolume
+    @methodOf Sound
+    @param {Number} [newVolume] The volume to set
+    */
+    globalVolume: function(newVolume) {
+      if (newVolume != null) globalVolume = newVolume.clamp(0, 1);
+      return globalVolume;
+    },
+    /**
+    Play a sound from your sounds
+    directory with the name of `id`.
+
+    <code><pre>
+    # plays a sound called explode from your sounds directory
+    Sound.play('explode')
+    </pre></code>
+
+    @name play
+    @methodOf Sound
+
+    @param {String} id id or name of the sound file to play
+    @param {String} maxChannels max number of sounds able to be played simultaneously
+    */
+    play: function(id, maxChannels) {
+      var channel, channels, freeChannels, sound;
+      maxChannels || (maxChannels = 4);
+      if (!sounds[id]) sounds[id] = [loadSoundChannel(id)];
+      channels = sounds[id];
+      freeChannels = $.grep(channels, function(sound) {
+        return sound.currentTime === sound.duration || sound.currentTime === 0;
+      });
+      if (channel = freeChannels.first()) {
+        try {
+          channel.currentTime = 0;
+        } catch (_error) {}
+        channel.volume = globalVolume;
+        return channel.play();
+      } else {
+        if (!maxChannels || channels.length < maxChannels) {
+          sound = loadSoundChannel(id);
+          channels.push(sound);
+          sound.play();
+          return sound.volume = globalVolume;
+        }
+      }
+    },
+    /**
+    Play a sound from the given
+    url with the name of `id`.
+
+    <code><pre>
+    # plays the sound at the specified url
+    Sound.playFromUrl('http://YourSoundWebsite.com/explode.wav')
+    </pre></code>
+
+    @name playFromUrl
+    @methodOf Sound
+
+    @param {String} url location of sound file to play
+
+    @returns {Sound} this sound object
+    */
+    playFromUrl: function(url) {
+      var sound;
+      sound = $('<audio />').get(0);
+      sound.src = url;
+      sound.play();
+      sound.volume = globalVolume;
+      return sound;
+    },
+    /**
+    Stop a sound while it is playing.
+
+    <code><pre>
+    # stops the sound 'explode' from
+    # playing if it is currently playing
+    Sound.stop('explode')
+    </pre></code>
+
+    @name stop
+    @methodOf Sound
+
+    @param {String} id id or name of sound to stop playing.
+    */
+    stop: function(id) {
+      var _ref2;
+      return (_ref2 = sounds[id]) != null ? _ref2.stop() : void 0;
+    }
+  }, (typeof exports !== "undefined" && exports !== null ? exports : this)["Sound"] = Sound);
+})(jQuery);
+
+
+(function() {
+  /**
+  A wrapper on the Local Storage API
+
+  @name Local
+  @namespace
+  */
+  /**
+  Store an object in local storage.
+
+  <code><pre>
+  # you can store strings
+  Local.set('name', 'Matt')
+
+  # and numbers
+  Local.set('age', 26)
+
+  # and even objects
+  Local.set('person', {name: 'Matt', age: 26})
+  </pre></code>
+
+  @name set
+  @methodOf Local
+
+  @param {String} key string used to identify the object you are storing
+  @param {Object} value value of the object you are storing
+
+  @returns {Object} value
+  */
+  var retrieve, store;
+  store = function(key, value) {
+    localStorage[key] = JSON.stringify(value);
+    return value;
+  };
+  /**
+  Retrieve an object from local storage.
+
+  <code><pre>
+  Local.get('name')
+  # => 'Matt'
+
+  Local.get('age')
+  # => 26
+
+  Local.get('person')
+  # => { age: 26, name: 'Matt' }
+  </pre></code>
+
+  @name get
+  @methodOf Local
+
+  @param {String} key string that identifies the stored object
+
+  @returns {Object} The object that was stored or undefined if no object was stored.
+  */
+  retrieve = function(key) {
+    var value;
+    value = localStorage[key];
+    if (value != null) return JSON.parse(value);
+  };
+  return (typeof exports !== "undefined" && exports !== null ? exports : this)["Local"] = {
+    get: retrieve,
+    set: store,
+    put: store,
+    /**
+    Access an instance of Local with a specified prefix.
+
+    @name new
+    @methodOf Local
+
+    @param {String} prefix
+    @returns {Local} An interface to local storage with the given prefix applied.
+    */
+    "new": function(prefix) {
+      prefix || (prefix = "");
+      return {
+        get: function(key) {
+          return retrieve("" + prefix + "_" + key);
+        },
+        set: function(key, value) {
+          return store("" + prefix + "_" + key, value);
+        },
+        put: function(key, value) {
+          return store("" + prefix + "_" + key, value);
+        }
+      };
+    }
+  };
+})();
+
 // Generated by CoffeeScript 1.4.0
 /**
 The Sprite class provides a way to load images for use in games.
@@ -18031,7 +16103,7 @@ Scoreboard = function(I) {
     periodTime: 1 * 60 * 30,
     reverse: false,
     time: 0,
-    zamboniInterval: 30 * 30,
+    zamboniInterval: 30 * 1,
     zIndex: 10,
     timeY: 106,
     scoreY: 134,
@@ -18146,7 +16218,7 @@ Scoreboard = function(I) {
         engine.add({
           "class": "Zamboni",
           reverse: I.reverse,
-          team: ["smiley", "spike"].rand()
+          team: config.teams[0 | I.reverse]
         });
       }
     }
@@ -18462,7 +16534,6 @@ Zamboni = function(I) {
     width: 96,
     height: 48,
     speed: 8,
-    scale: 0.375,
     x: 0,
     y: ARENA_HEIGHT / 2 + WALL_TOP,
     velocity: Point(1, 0),
@@ -18581,7 +16652,7 @@ Zamboni = function(I) {
       } else if ((-Math.TAU / 8 > heading && heading > -3 * Math.TAU / 8)) {
         facing = "n";
       }
-      return I.sprite = Zamboni.sprites[I.team][facing];
+      return I.sprite = Zamboni.sprites[I.team][facing][(I.age / 4).floor().mod(2)];
     }
   });
   self.bind("destroy", function() {
@@ -18597,12 +16668,12 @@ Zamboni = function(I) {
 
 Zamboni.sprites = {};
 
-["smiley", "spike"].each(function(team) {
-  return Zamboni.sprites[team] = {
-    n: Sprite.loadByName("" + team + "_zamboni_drive_n"),
-    s: Sprite.loadByName("" + team + "_zamboni_drive_s"),
-    e: Sprite.loadByName("" + team + "_zamboni_drive_e")
-  };
+["smiley", "spike", "hiss", "mutant"].each(function(team) {
+  var sheet;
+  sheet = Zamboni.sprites[team] = {};
+  return ["n", "s", "e"].each(function(direction) {
+    return sheet[direction] = Sprite.loadSheet("" + team + "_zamboni_drive_" + direction + "_2", 512, 512, 0.375);
+  });
 });
 
 window.config = {
@@ -18651,6 +16722,8 @@ window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEI
   left: 0,
   zIndex: "-5"
 }).pixieCanvas();
+
+Sound.globalVolume(0);
 
 bloodCanvas.strokeColor(BLOOD_COLOR);
 

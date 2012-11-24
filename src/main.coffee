@@ -36,6 +36,8 @@ window.bloodCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />
     zIndex: "-5"
   .pixieCanvas()
 
+Sound.globalVolume(0)
+
 bloodCanvas.strokeColor(BLOOD_COLOR)
 # bloodCanvas.fill(BLOOD_COLOR) # For zamboni testing
 
@@ -43,7 +45,7 @@ window.MAX_PLAYERS = 6
 window.activePlayers = 0
 
 canvas = $("canvas").pixieCanvas()
-# canvas.context().imageSmoothingEnabled = false
+# canvas.context().webkitImageSmoothingEnabled = false
 
 window.engine = Engine
   canvas: canvas

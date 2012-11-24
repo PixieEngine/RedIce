@@ -8,7 +8,7 @@ Scoreboard = (I) ->
     periodTime: 1 * 60 * 30
     reverse: false
     time: 0
-    zamboniInterval: 30 * 30
+    zamboniInterval: 30 * 1# 30
     zIndex: 10
     timeY: 106
     scoreY: 134
@@ -119,7 +119,7 @@ Scoreboard = (I) ->
         engine.add
           class: "Zamboni"
           reverse: I.reverse
-          team: ["smiley", "spike"].rand()
+          team: config.teams[0|I.reverse]
 
     I.time -= 1
 

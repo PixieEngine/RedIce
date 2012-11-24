@@ -10,7 +10,6 @@ Zamboni = (I) ->
     width: 96
     height: 48
     speed: 8
-    scale: 0.375
     x: 0
     y: ARENA_HEIGHT/2 + WALL_TOP
     velocity: Point(1, 0)
@@ -27,8 +26,8 @@ Zamboni = (I) ->
   path = []
 
   generatePath = () ->
-    horizontalPoints = ARENA_WIDTH / SWEEPER_SIZE 
-    verticalPoints = ARENA_HEIGHT / SWEEPER_SIZE 
+    horizontalPoints = ARENA_WIDTH / SWEEPER_SIZE
+    verticalPoints = ARENA_HEIGHT / SWEEPER_SIZE
 
     # Start at middle
     path.push Point(0, verticalPoints/2)
@@ -136,7 +135,7 @@ Zamboni = (I) ->
       else if -Math.TAU/8 > heading > -3*Math.TAU/8
         facing = "n"
 
-      I.sprite = Zamboni.sprites[I.team][facing]
+      I.sprite = Zamboni.sprites[I.team][facing][(I.age/4).floor().mod(2)]
 
   self.bind "destroy", ->
     engine.add
@@ -149,9 +148,7 @@ Zamboni = (I) ->
 
 Zamboni.sprites = {}
 
-["smiley", "spike"].each (team) ->
-  Zamboni.sprites[team] = 
-    n: Sprite.loadByName("#{team}_zamboni_drive_n")
-    s: Sprite.loadByName("#{team}_zamboni_drive_s")
-    e: Sprite.loadByName("#{team}_zamboni_drive_e")
-
+["smiley", "spike", "hiss", "mutant"].each (team) ->
+  sheet = Zamboni.sprites[team] = {}
+  ["n", "s", "e"].each (direction) ->
+    sheet[direction] = Sprite.loadSheet("#{team}_zamboni_drive_#{direction}_2", 512, 512, 0.375)
