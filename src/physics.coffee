@@ -1,6 +1,6 @@
 Physics = ->
   overlapX = (wall, circle) ->
-    (circle.x - wall.center.x).abs() < wall.halfWidth + circle.radius 
+    (circle.x - wall.center.x).abs() < wall.halfWidth + circle.radius
 
   overlapY = (wall, circle) ->
     (circle.y - wall.center.y).abs() < wall.halfHeight + circle.radius
@@ -141,7 +141,7 @@ Physics = ->
         switch corner.quadrant
           when 0
             return unless center.x < position.x && center.y < position.y
-          when 1 
+          when 1
             return unless center.x > position.x && center.y < position.y
           when -1
             return unless center.x < position.x && center.y > position.y
@@ -205,6 +205,7 @@ Physics = ->
 
       return
 
+  wallCollisions: wallCollisions
   process: (objects) ->
     steps = 5
 

@@ -144,6 +144,15 @@ Zamboni = (I) ->
       y: I.y + I.height/2
       velocity: I.velocity
 
+    if I.team is "mutant"
+      Gibber "mutantZamboni",
+        x: I.x
+        y: I.y
+    else
+      Gibber "zamboni",
+        x: I.x
+        y: I.y
+
   self
 
 Zamboni.sprites = {}

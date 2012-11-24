@@ -11267,7 +11267,7 @@ draw anything to the screen until the image has been loaded.
 @constructor
 */
 
-var AI, Base, Blood, Boards, Bottle, CONTROLLERS, CharacterSheet, Configurator, Controller, DEBUG_DRAW, Fan, FrameEditorState, Gamepads, Goal, HeadSheet, MainMenuState, MatchSetupState, MatchState, Menu, NameEntry, Physics, Player, PlayerDrawing, PlayerState, Puck, Rink, Scoreboard, Shockwave, SideBoards, TeamSheet, TestState, Zamboni, canvas, drawStartTime, gameControlData, keyActionNames, layouts, selectedLayout, updateDuration, updateStartTime,
+var AI, Base, Blood, Boards, Bottle, CONTROLLERS, CharacterSheet, Configurator, Controller, DEBUG_DRAW, Fan, FrameEditorState, Gamepads, Gib, Gibber, Goal, HeadSheet, MainMenuState, MatchSetupState, MatchState, Menu, NameEntry, Physics, Player, PlayerDrawing, PlayerState, Puck, Rink, Scoreboard, Shockwave, SideBoards, TeamSheet, TestState, Zamboni, canvas, drawStartTime, gameControlData, keyActionNames, layouts, selectedLayout, updateDuration, updateStartTime,
   __slice = [].slice;
 
 (function() {
@@ -13463,6 +13463,77 @@ Gamepads.KeyboardController = function(I) {
   });
 };
 
+Gib = function(I) {
+  var self;
+  if (I == null) {
+    I = {};
+  }
+  Object.reverseMerge(I, {
+    duration: 60,
+    rotation: 0,
+    rotationalVelocity: rand() * 0.2 - 0.1,
+    width: 32,
+    height: 32,
+    x: App.width / 2,
+    y: App.width / 2,
+    velocity: Point.fromAngle(Random.angle()).scale(6 + rand(5)),
+    z: 48,
+    zVelocity: rand(10) - 1,
+    gravity: -0.25,
+    radius: 16
+  });
+  self = Base(I).extend({
+    draw: function(canvas) {
+      var bonusRadius, center, shadowColor, transform;
+      center = self.center();
+      shadowColor = "rgba(0, 0, 0, 0.25)";
+      bonusRadius = (-4 + 256 / I.z).clamp(-4, 4);
+      canvas.drawCircle({
+        position: center,
+        radius: I.radius + bonusRadius,
+        color: shadowColor
+      });
+      transform = Matrix.translation(I.x + I.width / 2, I.y + I.height / 2 - I.z).concat(Matrix.rotation(I.rotation)).concat(Matrix.translation(-I.width / 2, -I.height / 2));
+      return canvas.withTransform(transform, function() {
+        return I.sprite.draw(canvas, -I.sprite.width / 2, -I.sprite.height / 2);
+      });
+    }
+  });
+  self.bind("update", function() {
+    I.rotation += I.rotationalVelocity;
+    I.z += I.zVelocity;
+    I.zVelocity += I.gravity;
+    if (I.z <= 0) {
+      I.z = 0;
+      I.zVelocity = -I.zVelocity * 0.8;
+    }
+    physics.wallCollisions([self], 1);
+    return self.updatePosition(1);
+  });
+  return self;
+};
+
+Gibber = function(name, options) {
+  if (options == null) {
+    options = {};
+  }
+  return Gib.sprites[name].each(function(sprite) {
+    return engine.add(Object.extend({
+      "class": "Gib",
+      sprite: sprite[0]
+    }, options));
+  });
+};
+
+Gib.sprites = {
+  zamboni: [1, 2, 3, 4, 5, 6].map(function(i) {
+    return Sprite.loadSheet("gibs/zamboni_parts/" + i, 512, 512, 0.5);
+  }),
+  mutantZamboni: [6, 7, 8, 9, 10, 11, 12].map(function(i) {
+    return Sprite.loadSheet("gibs/zamboni_parts/" + i, 512, 512, 0.5);
+  })
+};
+
 Goal = function(I) {
   var DEBUG_DRAW, HEIGHT, WALL_RADIUS, WIDTH, drawWall, self, walls;
   I || (I = {});
@@ -13683,12 +13754,12 @@ MatchSetupState = function(I) {
 };
 
 MatchState = function(I) {
-  var physics, self;
+  var self;
   if (I == null) {
     I = {};
   }
   self = GameState(I);
-  physics = Physics();
+  window.physics = Physics();
   Fan.crowd = Fan.generateCrowd();
   self.bind("enter", function() {
     var leftGoal, rightGoal, scoreboard;
@@ -14292,6 +14363,7 @@ Physics = function() {
     });
   };
   return {
+    wallCollisions: wallCollisions,
     process: function(objects) {
       var dt, steps;
       steps = 5;
@@ -16585,12 +16657,23 @@ Zamboni = function(I) {
     }
   });
   self.bind("destroy", function() {
-    return engine.add({
+    engine.add({
       "class": "Shockwave",
       x: I.x + I.width / 2,
       y: I.y + I.height / 2,
       velocity: I.velocity
     });
+    if (I.team === "mutant") {
+      return Gibber("mutantZamboni", {
+        x: I.x,
+        y: I.y
+      });
+    } else {
+      return Gibber("zamboni", {
+        x: I.x,
+        y: I.y
+      });
+    }
   });
   return self;
 };
