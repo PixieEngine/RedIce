@@ -178,21 +178,6 @@ NameEntry = (I) ->
         menuArea.draw(canvas)
 
   self.bind "step", ->
-    if justPressed.left
-      move(Point(-1, 0))
-    if justPressed.right
-      move(Point(1, 0))
-    if justPressed.up
-      move(Point(0, -1))
-    if justPressed.down
-      move(Point(0, 1))
-
-    if justPressed.return
-      addCharacter()
-
-    if justPressed.backspace
-      I.name = I.name.substring(0, I.name.length - 1)
-
     if controller?.buttonPressed "A"
       addCharacter()
 

@@ -11267,7 +11267,7 @@ draw anything to the screen until the image has been loaded.
 @constructor
 */
 
-var AI, Base, Blood, Boards, Bottle, CONTROLLERS, CharacterSheet, Configurator, Controller, DEBUG_DRAW, Fan, FrameEditorState, Gamepads, Gib, Gibber, Goal, HeadSheet, MainMenuState, MatchSetupState, MatchState, Menu, NameEntry, Physics, Player, PlayerDrawing, PlayerState, Puck, Rink, Scoreboard, Shockwave, SideBoards, TeamSheet, TestState, Zamboni, canvas, drawStartTime, gameControlData, keyActionNames, layouts, selectedLayout, updateDuration, updateStartTime,
+var AI, Base, Blood, Boards, Bottle, CharacterSheet, Configurator, DEBUG_DRAW, Fan, FrameEditorState, Gamepads, Gib, Gibber, Goal, HeadSheet, MainMenuState, MatchSetupState, MatchState, Menu, NameEntry, Physics, Player, PlayerDrawing, PlayerState, Puck, Rink, Scoreboard, Shockwave, SideBoards, TeamSheet, TestState, Zamboni, canvas, drawStartTime, updateDuration, updateStartTime,
   __slice = [].slice;
 
 (function() {
@@ -12179,138 +12179,6 @@ Configurator.options = [
   }
 ];
 
-Controller = function(actions) {
-  actions || (actions = {
-    up: "up",
-    right: "right",
-    down: "down",
-    left: "left",
-    A: "home",
-    B: "end",
-    C: "pageup",
-    D: "pagedown"
-  });
-  return {
-    actionDown: function() {
-      var triggers;
-      triggers = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return triggers.inject(false, function(down, action) {
-        return down || keydown[actions[action]];
-      });
-    }
-  };
-};
-
-gameControlData = {};
-
-keyActionNames = {
-  A: "SHOOT",
-  B: "BOOST",
-  C: "?",
-  D: "??"
-};
-
-CONTROLLERS = [];
-
-selectedLayout = Local.get("controls") || "qwerty_keyboard";
-
-layouts = {
-  dvorak_wiimotes: [
-    {
-      up: "up",
-      right: "right",
-      down: "down",
-      left: "left",
-      A: "end",
-      B: "home",
-      C: "pagedown",
-      D: "pageup"
-    }, {
-      up: "o",
-      right: "q",
-      down: ";",
-      left: "a",
-      A: "2",
-      B: "1",
-      C: ",",
-      D: "'"
-    }, {
-      up: "u",
-      right: "k",
-      down: "j",
-      left: "e",
-      A: "4",
-      B: "3",
-      C: "p",
-      D: "."
-    }, {
-      up: "d",
-      right: "b",
-      down: "x",
-      left: "i",
-      A: "6",
-      B: "5",
-      C: "f",
-      D: "y"
-    }, {
-      up: "t",
-      right: "w",
-      down: "m",
-      left: "h",
-      A: "8",
-      B: "7",
-      C: "c",
-      D: "g"
-    }, {
-      up: "s",
-      right: "z",
-      down: "v",
-      left: "n",
-      A: "0",
-      B: "9",
-      C: "l",
-      D: "r"
-    }, {
-      up: "=",
-      right: "return",
-      down: "-",
-      left: "/",
-      A: "]",
-      B: "[",
-      C: "\\",
-      D: "backspace"
-    }
-  ],
-  qwerty_keyboard: [
-    {
-      up: "up",
-      right: "right",
-      down: "down",
-      left: "left",
-      A: "'",
-      B: ";"
-    }, {
-      up: "w",
-      right: "d",
-      down: "s",
-      left: "a",
-      A: "b",
-      B: "space"
-    }, {}, {}, {}, {}, {}
-  ]
-};
-
-layouts[selectedLayout].each(function(actions, i) {
-  var action, key;
-  for (action in actions) {
-    key = actions[action];
-    gameControlData["P" + (i + 1) + ": " + (keyActionNames[action] || action)] = key;
-  }
-  return CONTROLLERS[i] = Controller(actions);
-});
-
-parent.gameControlData = gameControlData;
-
 Function.prototype.delay = function() {
   var args, func, wait;
   wait = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
@@ -13212,10 +13080,10 @@ Gamepads = function(I) {
       if (index == null) {
         index = 0;
       }
-      return controllers[index] || (controllers[index] = Gamepads.Controller({
+      return controllers[index] || (controllers[index] = index < 5 ? Gamepads.Controller({
         index: index,
         state: state
-      }));
+      }) : Gamepads.KeyboardController());
     },
     update: function() {
       state.previous = state.current;
@@ -13396,6 +13264,14 @@ Gamepads.KeyboardController = function(I) {
   buttonKeys = Object.keys(I.buttonMapping);
   buttonValues = buttonKeys.map(function(key) {
     return I.buttonMapping[key];
+  });
+  I.axisMapping.each(function(axis) {
+    return axis.each(function(key) {
+      return keydown[key] = false;
+    });
+  });
+  buttonKeys.each(function(key) {
+    return keydown[key] = false;
   });
   processTaps = function() {
     var x, y, _ref;
@@ -14129,24 +14005,6 @@ NameEntry = function(I) {
     }
   });
   self.bind("step", function() {
-    if (justPressed.left) {
-      move(Point(-1, 0));
-    }
-    if (justPressed.right) {
-      move(Point(1, 0));
-    }
-    if (justPressed.up) {
-      move(Point(0, -1));
-    }
-    if (justPressed.down) {
-      move(Point(0, 1));
-    }
-    if (justPressed["return"]) {
-      addCharacter();
-    }
-    if (justPressed.backspace) {
-      I.name = I.name.substring(0, I.name.length - 1);
-    }
     if (controller != null ? controller.buttonPressed("A") : void 0) {
       addCharacter();
     }
@@ -15196,14 +15054,9 @@ Player = function(I) {
     velocity: Point(),
     zIndex: 1
   });
-  if (I.joystick) {
-    controller = engine.controller(I.id);
-    actionDown = controller.actionDown;
-    axisPosition = controller.axis;
-  } else {
-    actionDown = CONTROLLERS[I.controller].actionDown;
-    axisPosition = $.noop;
-  }
+  controller = engine.controller(I.id);
+  actionDown = controller.actionDown;
+  axisPosition = controller.axis || $.noop;
   particleSizes = [5, 4, 3];
   addSprayParticleEffect = function(push, color) {
     if (color == null) {

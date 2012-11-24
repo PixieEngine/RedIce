@@ -4,14 +4,18 @@ Gamepads = (I={}) ->
 
   # Capture the current gamepad state
   snapshot = ->
-    Array::map.call navigator.webkitGamepads || navigator.webkitGetGamepads(), (x) -> 
+    Array::map.call navigator.webkitGamepads || navigator.webkitGetGamepads(), (x) ->
       axes: x.axes
       buttons: x.buttons
 
   controller: (index=0) ->
-    controllers[index] ||= Gamepads.Controller
-      index: index
-      state: state
+    controllers[index] ||=
+      if index < 5
+        Gamepads.Controller
+          index: index
+          state: state
+      else
+        Gamepads.KeyboardController()
 
   update: ->
     state.previous = state.current

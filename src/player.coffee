@@ -38,13 +38,9 @@ Player = (I) ->
     velocity: Point()
     zIndex: 1
 
-  if I.joystick
-    controller = engine.controller(I.id)
-    actionDown = controller.actionDown
-    axisPosition = controller.axis
-  else
-    actionDown = CONTROLLERS[I.controller].actionDown
-    axisPosition = $.noop
+  controller = engine.controller(I.id)
+  actionDown = controller.actionDown
+  axisPosition = controller.axis || $.noop
 
   particleSizes = [5, 4, 3]
   addSprayParticleEffect = (push, color=BLOOD_COLOR) ->

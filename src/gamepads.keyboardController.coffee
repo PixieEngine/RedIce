@@ -7,13 +7,13 @@ Gamepads.KeyboardController = (I={}) ->
     buttonMapping:
       "A": 'z'
       "B": 'x'
-  
+
       # X/C, Y/D are interchangeable
       "C": 'c'
       "D": 'v'
       "X": 'c'
       "Y": 'v'
-  
+
       "SELECT": "shift"
       "START": "return"
 
@@ -23,6 +23,14 @@ Gamepads.KeyboardController = (I={}) ->
   buttonKeys = Object.keys(I.buttonMapping)
   buttonValues = buttonKeys.map (key) ->
     I.buttonMapping[key]
+
+  # Init any keys used
+  I.axisMapping.each (axis) ->
+    axis.each (key) ->
+      keydown[key] = false
+
+  buttonKeys.each (key) ->
+    keydown[key] = false
 
   processTaps = ->
     [x, y] = I.axisMapping.map ([negative, positive]) ->
@@ -61,7 +69,7 @@ Gamepads.KeyboardController = (I={}) ->
       lineHeight = 18
 
       p = self.position()
-      
+
       ["x", "y"].each (key, i) ->
         canvas.drawText
           color: I.debugColor
