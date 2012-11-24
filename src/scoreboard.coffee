@@ -144,6 +144,7 @@ Object.extend Scoreboard,
     timeY: 108
     periodY: 131
     periodX: 17
+  monster: {}
   mutant:
     scoreY: 132
     imageOffset: Point(-4, -48)
@@ -157,5 +158,5 @@ Object.extend Scoreboard,
     timeY: 116
   spike: {}
 
-["hiss", "mutant", "smiley", "spike"].each (team) ->
+["hiss", "mutant", "smiley", "spike", "monster"].each (team) ->
   Scoreboard[team].sprite = Sprite.loadSheet("#{team}_scoreboard", 512, 512, 0.5)

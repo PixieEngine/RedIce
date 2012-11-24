@@ -60,3 +60,5 @@ Gib.sprites =
     Sprite.loadSheet("gibs/zamboni_parts/#{i}", 512, 512, 0.5)
   mutantZamboni: [6..12].map (i) ->
     Sprite.loadSheet("gibs/zamboni_parts/#{i}", 512, 512, 0.5)
+  monsterZamboni: [13..16].map (i) ->
+    Sprite.loadSheet("gibs/zamboni_parts/#{i}", 512, 512, 0.5)

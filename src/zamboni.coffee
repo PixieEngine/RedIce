@@ -16,6 +16,7 @@ Zamboni = (I) ->
     mass: 10
     team: "smiley"
     zIndex: 10
+    cleanColor: "#000"
 
   SWEEPER_SIZE = 48
   bounds = 256
@@ -24,6 +25,10 @@ Zamboni = (I) ->
     I.x = App.width
 
   path = []
+
+  if I.team is "monster"
+    I.cleanColor = BLOOD_COLOR
+    I.spriteOffset = Point(0, -40)
 
   generatePath = () ->
     horizontalPoints = ARENA_WIDTH / SWEEPER_SIZE
@@ -79,16 +84,16 @@ Zamboni = (I) ->
     ].map (p) ->
       self.transform().transformPoint(p)
 
-    bloodCanvas.globalCompositeOperation "destination-out"
+    bloodCanvas.globalCompositeOperation "destination-out" unless I.team is "monster"
     bloodCanvas.globalAlpha 0.25
 
     bloodCanvas.drawCircle
       position: currentPos
       radius: SWEEPER_SIZE/2
-      color: "#000"
+      color: I.cleanColor
     bloodCanvas.drawPoly
       points: boxPoints
-      color: "#000"
+      color: I.cleanColor
 
     bloodCanvas.globalAlpha 1
     bloodCanvas.globalCompositeOperation "source-over"
@@ -148,6 +153,10 @@ Zamboni = (I) ->
       Gibber "mutantZamboni",
         x: I.x
         y: I.y
+    else if I.team is "monster"
+      Gibber "monsterZamboni",
+        x: I.x
+        y: I.y
     else
       Gibber "zamboni",
         x: I.x
@@ -157,7 +166,7 @@ Zamboni = (I) ->
 
 Zamboni.sprites = {}
 
-["smiley", "spike", "hiss", "mutant"].each (team) ->
+["smiley", "spike", "hiss", "mutant", "monster"].each (team) ->
   sheet = Zamboni.sprites[team] = {}
   ["n", "s", "e"].each (direction) ->
     sheet[direction] = Sprite.loadSheet("#{team}_zamboni_drive_#{direction}_2", 512, 512, 0.375)

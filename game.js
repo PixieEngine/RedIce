@@ -12144,7 +12144,7 @@ Configurator = function(I) {
 
 Configurator.images = {};
 
-[["blue", "smiley"], ["red", "spike"], ["purple", "mutant"], ["green", "hiss"]].map(function(_arg) {
+[["blue", "smiley"], ["red", "spike"], ["purple", "mutant"], ["green", "hiss"], ["orange", "monster"]].map(function(_arg) {
   var style, team;
   team = _arg[0], style = _arg[1];
   return Configurator.images[style] = {
@@ -13409,6 +13409,9 @@ Gib.sprites = {
     return Sprite.loadSheet("gibs/zamboni_parts/" + i, 512, 512, 0.5);
   }),
   mutantZamboni: [6, 7, 8, 9, 10, 11, 12].map(function(i) {
+    return Sprite.loadSheet("gibs/zamboni_parts/" + i, 512, 512, 0.5);
+  }),
+  monsterZamboni: [13, 14, 15, 16].map(function(i) {
     return Sprite.loadSheet("gibs/zamboni_parts/" + i, 512, 512, 0.5);
   })
 };
@@ -16176,6 +16179,7 @@ Object.extend(Scoreboard, {
     periodY: 131,
     periodX: 17
   },
+  monster: {},
   mutant: {
     scoreY: 132,
     imageOffset: Point(-4, -48),
@@ -16192,7 +16196,7 @@ Object.extend(Scoreboard, {
   spike: {}
 });
 
-["hiss", "mutant", "smiley", "spike"].each(function(team) {
+["hiss", "mutant", "smiley", "spike", "monster"].each(function(team) {
   return Scoreboard[team].sprite = Sprite.loadSheet("" + team + "_scoreboard", 512, 512, 0.5);
 });
 
@@ -16397,7 +16401,8 @@ Zamboni = function(I) {
     velocity: Point(1, 0),
     mass: 10,
     team: "smiley",
-    zIndex: 10
+    zIndex: 10,
+    cleanColor: "#000"
   });
   SWEEPER_SIZE = 48;
   bounds = 256;
@@ -16405,6 +16410,10 @@ Zamboni = function(I) {
     I.x = App.width;
   }
   path = [];
+  if (I.team === "monster") {
+    I.cleanColor = BLOOD_COLOR;
+    I.spriteOffset = Point(0, -40);
+  }
   generatePath = function() {
     var horizontalPoints, verticalPoints;
     horizontalPoints = ARENA_WIDTH / SWEEPER_SIZE;
@@ -16456,16 +16465,18 @@ Zamboni = function(I) {
     boxPoints = [Point(SWEEPER_SIZE / 2, 0), Point(SWEEPER_SIZE, 0), Point(SWEEPER_SIZE, SWEEPER_SIZE), Point(SWEEPER_SIZE / 2, SWEEPER_SIZE)].map(function(p) {
       return self.transform().transformPoint(p);
     });
-    bloodCanvas.globalCompositeOperation("destination-out");
+    if (I.team !== "monster") {
+      bloodCanvas.globalCompositeOperation("destination-out");
+    }
     bloodCanvas.globalAlpha(0.25);
     bloodCanvas.drawCircle({
       position: currentPos,
       radius: SWEEPER_SIZE / 2,
-      color: "#000"
+      color: I.cleanColor
     });
     bloodCanvas.drawPoly({
       points: boxPoints,
-      color: "#000"
+      color: I.cleanColor
     });
     bloodCanvas.globalAlpha(1);
     return bloodCanvas.globalCompositeOperation("source-over");
@@ -16525,6 +16536,11 @@ Zamboni = function(I) {
         x: I.x,
         y: I.y
       });
+    } else if (I.team === "monster") {
+      return Gibber("monsterZamboni", {
+        x: I.x,
+        y: I.y
+      });
     } else {
       return Gibber("zamboni", {
         x: I.x,
@@ -16537,7 +16553,7 @@ Zamboni = function(I) {
 
 Zamboni.sprites = {};
 
-["smiley", "spike", "hiss", "mutant"].each(function(team) {
+["smiley", "spike", "hiss", "mutant", "monster"].each(function(team) {
   var sheet;
   sheet = Zamboni.sprites[team] = {};
   return ["n", "s", "e"].each(function(direction) {
@@ -16546,7 +16562,7 @@ Zamboni.sprites = {};
 });
 
 window.config = {
-  teams: ["mutant", "spike"],
+  teams: ["monster", "spike"],
   players: [],
   particleEffects: false,
   music: false,

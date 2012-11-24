@@ -1,5 +1,5 @@
 window.config =
-  teams: ["mutant", "spike"]
+  teams: ["monster", "spike"]
   players: []
   particleEffects: false
   music: false
