@@ -12739,7 +12739,7 @@ Fan = function(I) {
 
 Fan.sprites || (Fan.sprites = [1, 2, 3].map(function(n) {
   return ["e", "s", "w", "cheer"].map(function(d) {
-    return Sprite.loadSheet("crowd_" + n + "_" + d, 512, 512, 0.25);
+    return Sprite.loadSheet("crowd/" + n + "_" + d, 512, 512, 0.25);
   });
 }));
 

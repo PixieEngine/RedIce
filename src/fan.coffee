@@ -43,7 +43,7 @@ Fan = (I) ->
 
 Fan.sprites ||= [1, 2, 3].map (n) ->
   ["e", "s", "w", "cheer"].map (d) ->
-    Sprite.loadSheet "crowd_#{n}_#{d}", 512, 512, 0.25
+    Sprite.loadSheet "crowd/#{n}_#{d}", 512, 512, 0.25
 
 Fan.generateCrowd = ->
   fans = []
