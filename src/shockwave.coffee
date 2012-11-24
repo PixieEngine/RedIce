@@ -1,96 +1,24 @@
-Shockwave = (I) ->
-  I ||= {}
-
-  $.reverseMerge I,
+Shockwave = (I={}) ->
+  Object.reverseMerge I,
     radius: 10
     maxRadius: 150
-    offsetHeight: -12
     zIndex: 3
 
-  flameStartColor = "rgba(64, 8, 4, 0.5)"
-  flameMiddleColor = "rgba(192, 128, 64, 0.9)"
-  flameEndColor = "rgba(192, 32, 16, 1)"
-  transparentColor = "rgba(0, 0, 0, 0)"
-  shadowColor = "rgba(0, 0, 0, 0.5)"
-
   drawScorch = ->
-    scorch = Shockwave.scorchSprite
-
-    bloodCanvas.withTransform Matrix.translation(I.x - scorch.width/2, I.y - scorch.height/2), ->
-      scorch.draw bloodCanvas, 0, 0
-
-  particleSizes = [8, 4, 8, 16, 24, 12]
-  particleColors = ["rgba(255, 0, 128, 0.75)", "#333"]
-  addParticleEffect = ->
-    v = I.velocity.norm(5)
-
-    engine.add
-      class: "Emitter"
-      duration: 21
-      sprite: Sprite.EMPTY
-      velocity: I.velocity
-      particleCount: 9
-      batchSize: 5
-      x: I.x
-      y: I.y
-      zIndex: 3
-      generator:
-        color: (n) ->
-          particleColors.wrap(n)
-        duration: 20
-        height: (n) ->
-          particleSizes.wrap(n)
-        maxSpeed: 50
-        velocity: (n) ->
-          Point.fromAngle(Random.angle()).scale(5).add(v)
-        width: (n) ->
-          particleSizes.wrap(n)
-
-  constructGradient = (context, min, max, shadow=false) ->
-    if shadow
-      y = I.y
-    else
-      y = I.y + I.offsetHeight
-
-    radialGradient = context.createRadialGradient(I.x, y, 0, I.x, y, max)
-
-    if min > 0
-      radialGradient.addColorStop(0, transparentColor)
-      radialGradient.addColorStop((min - 1)/max, transparentColor)
-
-    if shadow
-      radialGradient.addColorStop(min / max, shadowColor)
-      radialGradient.addColorStop(1, shadowColor)
-    else
-      radialGradient.addColorStop(min / max, flameStartColor)
-      radialGradient.addColorStop((min + max) / (2 * max), flameMiddleColor)
-      radialGradient.addColorStop(1, flameEndColor)
-
-    return radialGradient
+    if scorch = Shockwave.sprites.scorch[0]
+      bloodCanvas.withTransform Matrix.translation(I.x - scorch.width/2, I.y - scorch.height/2), ->
+        scorch.draw bloodCanvas, 0, 0
 
   #TODO: Get the create binding to be more legit
   I.create = ->
     Sound.play "explosion"
-    addParticleEffect()
+    # addParticleEffect()
     drawScorch()
 
   self = GameObject(I).extend
     draw: (canvas) ->
-      min = Math.max(I.radius - 20, 0)
-      max = I.radius
-
-      g = constructGradient(canvas.context(), min, max, true)
-      canvas.drawCircle
-        position: I
-        radius: max
-        color: g
-
-      g = constructGradient(canvas.context(), min, max)
-      canvas.drawCircle
-        x: I.x
-        y: I.y + I.offsetHeight
-        radius: max
-        color: g
+      sprite = Shockwave.sprites.explosion[(I.age).clamp(0, 6)]
+      sprite?.draw(canvas, I.x - sprite.width / 2, I.y - sprite.height / 2)
 
   self.bind "step", ->
     maxCircle = I
@@ -106,12 +34,13 @@ Shockwave = (I) ->
         object.wipeout(shockwaveForce)
         object.I.velocity = object.I.velocity.add(shockwaveForce)
 
-    I.radius += 10
+    I.radius += 20
 
     if I.radius > I.maxRadius
       self.destroy()
 
-  self
+  return self
 
-Shockwave.scorchSprite = Sprite.loadByName("scorch")
-
+Shockwave.sprites = {}
+Shockwave.sprites.scorch = Sprite.loadSheet("gibs/floor_decals/15", 512, 512, 0.5)
+Shockwave.sprites.explosion = Sprite.loadSheet("explosion_7_small", 256, 256)

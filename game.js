@@ -16103,7 +16103,7 @@ Scoreboard = function(I) {
     periodTime: 1 * 60 * 30,
     reverse: false,
     time: 0,
-    zamboniInterval: 30 * 1,
+    zamboniInterval: 30 * 30,
     zIndex: 10,
     timeY: 106,
     scoreY: 134,
@@ -16268,107 +16268,32 @@ Object.extend(Scoreboard, {
 });
 
 Shockwave = function(I) {
-  var addParticleEffect, constructGradient, drawScorch, flameEndColor, flameMiddleColor, flameStartColor, particleColors, particleSizes, self, shadowColor, transparentColor;
-  I || (I = {});
-  $.reverseMerge(I, {
+  var drawScorch, self;
+  if (I == null) {
+    I = {};
+  }
+  Object.reverseMerge(I, {
     radius: 10,
     maxRadius: 150,
-    offsetHeight: -12,
     zIndex: 3
   });
-  flameStartColor = "rgba(64, 8, 4, 0.5)";
-  flameMiddleColor = "rgba(192, 128, 64, 0.9)";
-  flameEndColor = "rgba(192, 32, 16, 1)";
-  transparentColor = "rgba(0, 0, 0, 0)";
-  shadowColor = "rgba(0, 0, 0, 0.5)";
   drawScorch = function() {
     var scorch;
-    scorch = Shockwave.scorchSprite;
-    return bloodCanvas.withTransform(Matrix.translation(I.x - scorch.width / 2, I.y - scorch.height / 2), function() {
-      return scorch.draw(bloodCanvas, 0, 0);
-    });
-  };
-  particleSizes = [8, 4, 8, 16, 24, 12];
-  particleColors = ["rgba(255, 0, 128, 0.75)", "#333"];
-  addParticleEffect = function() {
-    var v;
-    v = I.velocity.norm(5);
-    return engine.add({
-      "class": "Emitter",
-      duration: 21,
-      sprite: Sprite.EMPTY,
-      velocity: I.velocity,
-      particleCount: 9,
-      batchSize: 5,
-      x: I.x,
-      y: I.y,
-      zIndex: 3,
-      generator: {
-        color: function(n) {
-          return particleColors.wrap(n);
-        },
-        duration: 20,
-        height: function(n) {
-          return particleSizes.wrap(n);
-        },
-        maxSpeed: 50,
-        velocity: function(n) {
-          return Point.fromAngle(Random.angle()).scale(5).add(v);
-        },
-        width: function(n) {
-          return particleSizes.wrap(n);
-        }
-      }
-    });
-  };
-  constructGradient = function(context, min, max, shadow) {
-    var radialGradient, y;
-    if (shadow == null) {
-      shadow = false;
+    if (scorch = Shockwave.sprites.scorch[0]) {
+      return bloodCanvas.withTransform(Matrix.translation(I.x - scorch.width / 2, I.y - scorch.height / 2), function() {
+        return scorch.draw(bloodCanvas, 0, 0);
+      });
     }
-    if (shadow) {
-      y = I.y;
-    } else {
-      y = I.y + I.offsetHeight;
-    }
-    radialGradient = context.createRadialGradient(I.x, y, 0, I.x, y, max);
-    if (min > 0) {
-      radialGradient.addColorStop(0, transparentColor);
-      radialGradient.addColorStop((min - 1) / max, transparentColor);
-    }
-    if (shadow) {
-      radialGradient.addColorStop(min / max, shadowColor);
-      radialGradient.addColorStop(1, shadowColor);
-    } else {
-      radialGradient.addColorStop(min / max, flameStartColor);
-      radialGradient.addColorStop((min + max) / (2 * max), flameMiddleColor);
-      radialGradient.addColorStop(1, flameEndColor);
-    }
-    return radialGradient;
   };
   I.create = function() {
     Sound.play("explosion");
-    addParticleEffect();
     return drawScorch();
   };
   self = GameObject(I).extend({
     draw: function(canvas) {
-      var g, max, min;
-      min = Math.max(I.radius - 20, 0);
-      max = I.radius;
-      g = constructGradient(canvas.context(), min, max, true);
-      canvas.drawCircle({
-        position: I,
-        radius: max,
-        color: g
-      });
-      g = constructGradient(canvas.context(), min, max);
-      return canvas.drawCircle({
-        x: I.x,
-        y: I.y + I.offsetHeight,
-        radius: max,
-        color: g
-      });
+      var sprite;
+      sprite = Shockwave.sprites.explosion[I.age.clamp(0, 6)];
+      return sprite != null ? sprite.draw(canvas, I.x - sprite.width / 2, I.y - sprite.height / 2) : void 0;
     }
   });
   self.bind("step", function() {
@@ -16388,7 +16313,7 @@ Shockwave = function(I) {
         return object.I.velocity = object.I.velocity.add(shockwaveForce);
       }
     });
-    I.radius += 10;
+    I.radius += 20;
     if (I.radius > I.maxRadius) {
       return self.destroy();
     }
@@ -16396,7 +16321,11 @@ Shockwave = function(I) {
   return self;
 };
 
-Shockwave.scorchSprite = Sprite.loadByName("scorch");
+Shockwave.sprites = {};
+
+Shockwave.sprites.scorch = Sprite.loadSheet("gibs/floor_decals/15", 512, 512, 0.5);
+
+Shockwave.sprites.explosion = Sprite.loadSheet("explosion_7_small", 256, 256);
 
 SideBoards = function(I) {
   var self;
