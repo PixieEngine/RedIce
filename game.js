@@ -11267,7 +11267,7 @@ draw anything to the screen until the image has been loaded.
 @constructor
 */
 
-var AI, Base, Blood, Boards, Bottle, CharacterSheet, Configurator, DEBUG_DRAW, Fan, FrameEditorState, Gamepads, Gib, Gibber, Goal, HeadSheet, MainMenuState, MatchSetupState, MatchState, Menu, NameEntry, Physics, Player, PlayerDrawing, PlayerState, Puck, Rink, Scoreboard, Shockwave, SideBoards, TeamSheet, TestState, Zamboni, canvas, drawStartTime, updateDuration, updateStartTime,
+var AI, Base, Blood, Boards, Bottle, CharacterSheet, Configurator, DEBUG_DRAW, DebugDrawable, Fan, FrameEditorState, Gamepads, Gib, Gibber, Goal, HeadSheet, MainMenuState, MatchSetupState, MatchState, Menu, NameEntry, Particle, ParticleEffect, Physics, Player, PlayerDrawing, PlayerState, Puck, Rink, Scoreboard, Shockwave, SideBoards, TeamSheet, TestState, Zamboni, canvas, drawStartTime, updateDuration, updateStartTime,
   __slice = [].slice;
 
 (function() {
@@ -11721,17 +11721,7 @@ Base = function(I) {
   self.bind("update", function() {
     return I.zIndex = 1 + (I.y + I.height) / CANVAS_HEIGHT;
   });
-  self.bind("drawDebug", function(canvas) {
-    var center;
-    if (I.radius) {
-      center = self.center();
-      return canvas.drawCircle({
-        position: center,
-        radius: I.radius,
-        color: "rgba(255, 0, 255, 0.5)"
-      });
-    }
-  });
+  self.include(DebugDrawable);
   self.attrReader("mass");
   I.center = Point(I.x + I.width / 2, I.y + I.height / 2);
   return self;
@@ -11739,13 +11729,15 @@ Base = function(I) {
 
 Blood = function(I) {
   var self;
-  $.reverseMerge(I, {
+  if (I == null) {
+    I = {};
+  }
+  Object.reverseMerge(I, {
     blood: 1,
     duration: 300,
-    radius: 2,
+    radius: 5,
     sprite: Sprite.NONE,
-    width: 32,
-    height: 32
+    debugColor: "rgba(0, 255, 0, 0.5)"
   });
   self = GameObject(I).extend({
     circle: function() {
@@ -11755,11 +11747,19 @@ Blood = function(I) {
       return c;
     }
   });
-  Blood.sprites.rand().draw(bloodCanvas, I.x, I.y);
+  self.bind("create", function() {
+    var sprite;
+    if (sprite = Blood.sprites.rand()[0]) {
+      return sprite.draw(bloodCanvas, I.x - sprite.width / 2, I.y - sprite.height / 2);
+    }
+  });
+  self.include(DebugDrawable);
   return self;
 };
 
-Blood.sprites || (Blood.sprites = [Sprite.loadByName("blood")]);
+Blood.sprites = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(function(n) {
+  return Sprite.loadSheet("gibs/floor_decals/" + n, 512, 512, 0.25);
+});
 
 Boards = function(I) {
   var self;
@@ -12178,6 +12178,27 @@ Configurator.options = [
     y: 650
   }
 ];
+
+DebugDrawable = function(I, self) {
+  if (I == null) {
+    I = {};
+  }
+  Object.reverseMerge(I, {
+    debugColor: "rgba(255, 0, 255, 0.5)"
+  });
+  self.bind("drawDebug", function(canvas) {
+    var center;
+    if (I.radius) {
+      center = self.center();
+      return canvas.drawCircle({
+        position: center,
+        radius: I.radius,
+        color: I.debugColor
+      });
+    }
+  });
+  return {};
+};
 
 Function.prototype.delay = function() {
   var args, func, wait;
@@ -14026,6 +14047,69 @@ NameEntry = function(I) {
   return self;
 };
 
+ParticleEffect = {
+  bloodSpray: function(options) {
+    var push, x, y;
+    x = options.x, y = options.y, push = options.push;
+    return [2, 3, 4].rand().times(function() {
+      var sprite, velocity;
+      if (sprite = ParticleEffect.sprites.blood.rand()[0]) {
+        velocity = Point.fromAngle(Random.angle()).scale((rand(5) + 1) * 2).add(push).scale(0.5);
+        return engine.add({
+          "class": "Particle",
+          duration: 12,
+          x: x,
+          y: y,
+          velocity: velocity,
+          sprite: sprite
+        });
+      }
+    });
+  },
+  iceSpray: function(options) {
+    var push, x, y;
+    x = options.x, y = options.y, push = options.push;
+    return [1, 2, 3].rand().times(function() {
+      var sprite, velocity;
+      if (sprite = ParticleEffect.sprites.ice.rand()[0]) {
+        velocity = Point.fromAngle(Random.angle()).scale(rand(5) + 1).add(push).scale(1);
+        return engine.add({
+          "class": "Particle",
+          duration: 12,
+          x: x,
+          y: y,
+          velocity: velocity,
+          sprite: sprite
+        });
+      }
+    });
+  }
+};
+
+ParticleEffect.sprites = {
+  blood: [1, 2, 3, 4, 5].map(function(n) {
+    return Sprite.loadSheet("gibs/blood_particles/" + n, 512, 512, 0.25);
+  }),
+  ice: [2, 4, 5, 6].map(function(n) {
+    return Sprite.loadSheet("gibs/ice_particles/" + n, 512, 512, 0.25);
+  })
+};
+
+Particle = function(I) {
+  var self;
+  if (I == null) {
+    I = {};
+  }
+  self = GameObject(I);
+  I.rotation = I.velocity.direction();
+  self.bind("update", function() {
+    I.x += I.velocity.x;
+    I.y += I.velocity.y;
+    return I.zIndex = I.y + 64;
+  });
+  return self;
+};
+
 Physics = function() {
   var cornerRadius, corners, overlapX, overlapY, rectangularOverlap, resolveCollision, resolveCollisions, threshold, wallCollisions, walls;
   overlapX = function(wall, circle) {
@@ -15019,7 +15103,7 @@ Physics = function() {
 })(jQuery);
 
 Player = function(I) {
-  var actionDown, addSprayParticleEffect, axisPosition, controller, forceFacing, jitterSoak, particleSizes, self, setFacing, setFlip, shootPuck;
+  var actionDown, axisPosition, controller, forceFacing, jitterSoak, self, setFacing, setFlip, shootPuck;
   $.reverseMerge(I, {
     blood: {
       face: 0,
@@ -15064,41 +15148,6 @@ Player = function(I) {
   controller = engine.controller(I.id);
   actionDown = controller.actionDown;
   axisPosition = controller.axis || $.noop;
-  particleSizes = [5, 4, 3];
-  addSprayParticleEffect = function(push, color) {
-    if (color == null) {
-      color = BLOOD_COLOR;
-    }
-    if (!config.particleEffects) {
-      return;
-    }
-    push = push.norm(13);
-    return engine.add({
-      "class": "Emitter",
-      duration: 9,
-      sprite: Sprite.EMPTY,
-      velocity: I.velocity,
-      particleCount: 5,
-      batchSize: 5,
-      x: I.x + I.width / 2 + push.x,
-      y: I.y + I.height / 2 + push.y,
-      zIndex: 1 + (I.y + I.height + 1) / CANVAS_HEIGHT,
-      generator: {
-        color: color,
-        duration: 8,
-        height: function(n) {
-          return particleSizes.wrap(n);
-        },
-        maxSpeed: 50,
-        velocity: function(n) {
-          return Point.fromAngle(Random.angle()).scale(rand(5) + 1).add(push);
-        },
-        width: function(n) {
-          return particleSizes.wrap(n);
-        }
-      }
-    });
-  };
   jitterSoak = 10;
   setFacing = function(newFacing) {
     if (!I.cooldown.facing) {
@@ -15168,11 +15217,15 @@ Player = function(I) {
       Sound.play("hit" + (rand(4)));
       Sound.play("crowd" + (rand(3)));
       Fan.cheer(1);
-      addSprayParticleEffect(push);
+      ParticleEffect.bloodSpray({
+        push: push,
+        x: I.center.x + push.x,
+        y: I.center.y + push.y
+      });
       return engine.add({
         "class": "Blood",
-        x: I.x + push.x,
-        y: I.y + push.y
+        x: I.center.x + push.x,
+        y: I.center.y + push.y
       });
     }
   });
@@ -15285,7 +15338,11 @@ Player = function(I) {
       velocityLength = I.velocity.length();
       movementLength = movement.length();
       if ((velocityLength > 4) && (movement.dot(velocityNorm) < (-0.95) * movementLength)) {
-        addSprayParticleEffect(I.velocity, "rgba(128, 202, 255, 1)");
+        ParticleEffect.iceSpray({
+          push: I.velocity,
+          x: I.center.x,
+          y: I.center.y
+        });
         I.velocity.x = 0;
         I.velocity.y = 0;
       } else {
@@ -16562,9 +16619,9 @@ Zamboni.sprites = {};
 });
 
 window.config = {
-  teams: ["monster", "hiss"],
+  teams: ["smiley", "spike"],
   players: [],
-  particleEffects: false,
+  particleEffects: true,
   music: false,
   joysticks: true
 };
@@ -16642,7 +16699,7 @@ $(document).bind("keydown", "0", function() {
 
 engine.bind("draw", function(canvas) {
   if (DEBUG_DRAW) {
-    return engine.find("Player, Puck, Goal, Bottle, Zamboni").each(function(object) {
+    return engine.find("Player, Puck, Goal, Bottle, Zamboni, Blood").each(function(object) {
       return object.trigger("drawDebug", canvas);
     });
   }

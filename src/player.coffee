@@ -42,33 +42,6 @@ Player = (I) ->
   actionDown = controller.actionDown
   axisPosition = controller.axis || $.noop
 
-  particleSizes = [5, 4, 3]
-  addSprayParticleEffect = (push, color=BLOOD_COLOR) ->
-    return unless config.particleEffects
-
-    push = push.norm(13)
-
-    engine.add
-      class: "Emitter"
-      duration: 9
-      sprite: Sprite.EMPTY
-      velocity: I.velocity
-      particleCount: 5
-      batchSize: 5
-      x: I.x + I.width/2 + push.x
-      y: I.y + I.height/2 + push.y
-      zIndex: 1 + (I.y + I.height + 1)/CANVAS_HEIGHT
-      generator:
-        color: color
-        duration: 8
-        height: (n) ->
-          particleSizes.wrap(n)
-        maxSpeed: 50
-        velocity: (n) ->
-          Point.fromAngle(Random.angle()).scale(rand(5) + 1).add(push)
-        width: (n) ->
-          particleSizes.wrap(n)
-
   jitterSoak = 10
 
   setFacing = (newFacing) ->
@@ -145,12 +118,15 @@ Player = (I) ->
       Sound.play("crowd#{rand(3)}")
       Fan.cheer(1)
 
-      addSprayParticleEffect(push)
+      ParticleEffect.bloodSpray
+        push: push
+        x: I.center.x + push.x
+        y: I.center.y + push.y
 
       engine.add
         class: "Blood"
-        x: I.x + push.x
-        y: I.y + push.y
+        x: I.center.x + push.x
+        y: I.center.y + push.y
 
   shootPuck = (direction) ->
     puck = engine.find("Puck").first()
@@ -260,7 +236,10 @@ Player = (I) ->
       movementLength = movement.length()
 
       if (velocityLength > 4) && (movement.dot(velocityNorm) < (-0.95) * movementLength)
-        addSprayParticleEffect(I.velocity, "rgba(128, 202, 255, 1)")
+        ParticleEffect.iceSpray
+          push: I.velocity
+          x: I.center.x
+          y: I.center.y
 
         I.velocity.x = 0
         I.velocity.y = 0

@@ -69,14 +69,7 @@ Base = (I) ->
   self.bind "update", ->
     I.zIndex = 1 + (I.y + I.height)/CANVAS_HEIGHT
 
-  self.bind "drawDebug", (canvas) ->
-    if I.radius
-      center = self.center()
-
-      canvas.drawCircle
-        position: center
-        radius: I.radius
-        color: "rgba(255, 0, 255, 0.5)"
+  self.include DebugDrawable
 
   self.attrReader "mass"
 

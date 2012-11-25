@@ -1,11 +1,10 @@
-Blood = (I) ->
-  $.reverseMerge I,
+Blood = (I={}) ->
+  Object.reverseMerge I,
     blood: 1
     duration: 300
-    radius: 2
+    radius: 5
     sprite: Sprite.NONE
-    width: 32
-    height: 32
+    debugColor: "rgba(0, 255, 0, 0.5)"
 
   self = GameObject(I).extend
     circle: () ->
@@ -14,11 +13,13 @@ Blood = (I) ->
 
       return c
 
-  Blood.sprites.rand().draw(bloodCanvas, I.x, I.y)
+  self.bind "create", ->
+    if sprite = Blood.sprites.rand()[0]
+      sprite.draw(bloodCanvas, I.x - sprite.width/2, I.y - sprite.height/2)
+
+  self.include DebugDrawable
 
   self
 
-Blood.sprites ||= [
-  Sprite.loadByName "blood"
-]
-
+Blood.sprites = [1..12].map (n) ->
+  Sprite.loadSheet "gibs/floor_decals/#{n}", 512, 512, 0.25
