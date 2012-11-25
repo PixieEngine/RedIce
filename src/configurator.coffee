@@ -74,38 +74,38 @@ Configurator = (I) ->
     [cpus, humans] = config.players.partition (playerData) ->
       playerData.cpu
 
-    [reds, blues] = humans.partition (playerData) ->
+    [away, home] = humans.partition (playerData) ->
       playerData.team = playerData.teamIndex.mod(teamStyles.length)
 
     # Rebalance CPU players as needed
-    while (blues.length < I.maxPlayers / 2) && cpus.length
+    while (home.length < I.maxPlayers / 2) && cpus.length
       cpu = cpus.pop()
       cpu.team = 0
 
-      blues.push cpu
+      home.push cpu
 
-    while (reds.length < I.maxPlayers / 2) && cpus.length
+    while (away.length < I.maxPlayers / 2) && cpus.length
       cpu = cpus.pop()
       cpu.team = 1
 
-      reds.push cpu
+      away.push cpu
 
     # Repartition now that we've balanced
-    [reds, blues] = config.players.partition (playerData) ->
+    [away, home] = config.players.partition (playerData) ->
       playerData.team
 
     #TODO Add in team style data
 
-    reds.each (red, i) ->
+    away.each (red, i) ->
       red.slot = i
-      red.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (reds.length + 1)
+      red.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (away.length + 1)
       red.x = WALL_LEFT + ARENA_WIDTH/2 + ARENA_WIDTH / 6
       red.heading = 0.5.rotations
       red.teamStyle = teamStyles[1]
 
-    blues.each (blue, i) ->
+    home.each (blue, i) ->
       blue.slot = i
-      blue.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (blues.length + 1)
+      blue.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (home.length + 1)
       blue.x = WALL_LEFT + ARENA_WIDTH/2 - ARENA_WIDTH / 6
       blue.teamStyle = teamStyles[0]
 
@@ -132,7 +132,7 @@ Configurator = (I) ->
 
           player.headStyle = TeamSheet.headStyles.wrap(player.headIndex) || "stubs"
           player.bodyStyle = TeamSheet.bodyStyles.wrap(player.bodyIndex) || "thick"
-          player.teamStyle = teamStyles.wrap(player.teamIndex + 1) || 0
+          player.teamStyle = teamStyles.wrap(player.teamIndex) || 0
 
           Configurator.images[player.teamStyle].background.draw(canvas, x, 0)
           if player.optionIndex? and !player.ready

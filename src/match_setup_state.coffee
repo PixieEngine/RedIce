@@ -2,10 +2,10 @@ MatchSetupState = (I={}) ->
   # Inherit from game object
   self = GameState(I)
 
-  # (Re-)Initialize Player data between matches 
+  # (Re-)Initialize Player data between matches
   initPlayerData = ->
     MAX_PLAYERS.times (i) ->
-      $.reverseMerge config.players[i] ||= {},
+      Object.reverseMerge config.players[i] ||= {},
         class: "Player"
         color: Player.COLORS[i]
         id: i
@@ -16,7 +16,7 @@ MatchSetupState = (I={}) ->
         bodyIndex: rand(TeamSheet.bodyStyles.length)
         headIndex: rand(TeamSheet.headStyles.length)
 
-      $.extend config.players[i],
+      Object.extend config.players[i],
         ready: false
         cpu: true
 

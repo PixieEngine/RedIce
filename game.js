@@ -12017,36 +12017,36 @@ Configurator = function(I) {
     });
   };
   finalizeConfig = function(config) {
-    var blues, cpu, cpus, humans, reds, _ref, _ref1, _ref2;
+    var away, cpu, cpus, home, humans, _ref, _ref1, _ref2;
     _ref = config.players.partition(function(playerData) {
       return playerData.cpu;
     }), cpus = _ref[0], humans = _ref[1];
     _ref1 = humans.partition(function(playerData) {
       return playerData.team = playerData.teamIndex.mod(teamStyles.length);
-    }), reds = _ref1[0], blues = _ref1[1];
-    while ((blues.length < I.maxPlayers / 2) && cpus.length) {
+    }), away = _ref1[0], home = _ref1[1];
+    while ((home.length < I.maxPlayers / 2) && cpus.length) {
       cpu = cpus.pop();
       cpu.team = 0;
-      blues.push(cpu);
+      home.push(cpu);
     }
-    while ((reds.length < I.maxPlayers / 2) && cpus.length) {
+    while ((away.length < I.maxPlayers / 2) && cpus.length) {
       cpu = cpus.pop();
       cpu.team = 1;
-      reds.push(cpu);
+      away.push(cpu);
     }
     _ref2 = config.players.partition(function(playerData) {
       return playerData.team;
-    }), reds = _ref2[0], blues = _ref2[1];
-    reds.each(function(red, i) {
+    }), away = _ref2[0], home = _ref2[1];
+    away.each(function(red, i) {
       red.slot = i;
-      red.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (reds.length + 1);
+      red.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (away.length + 1);
       red.x = WALL_LEFT + ARENA_WIDTH / 2 + ARENA_WIDTH / 6;
       red.heading = 0.5.rotations;
       return red.teamStyle = teamStyles[1];
     });
-    blues.each(function(blue, i) {
+    home.each(function(blue, i) {
       blue.slot = i;
-      blue.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (blues.length + 1);
+      blue.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (home.length + 1);
       blue.x = WALL_LEFT + ARENA_WIDTH / 2 - ARENA_WIDTH / 6;
       return blue.teamStyle = teamStyles[0];
     });
@@ -12070,7 +12070,7 @@ Configurator = function(I) {
           nameWidth = canvas.measureText(name);
           player.headStyle = TeamSheet.headStyles.wrap(player.headIndex) || "stubs";
           player.bodyStyle = TeamSheet.bodyStyles.wrap(player.bodyIndex) || "thick";
-          player.teamStyle = teamStyles.wrap(player.teamIndex + 1) || 0;
+          player.teamStyle = teamStyles.wrap(player.teamIndex) || 0;
           Configurator.images[player.teamStyle].background.draw(canvas, x, 0);
           if ((player.optionIndex != null) && !player.ready) {
             Configurator.active.draw(canvas, x, Configurator.options[player.optionIndex].y);
@@ -13712,7 +13712,7 @@ MatchSetupState = function(I) {
   initPlayerData = function() {
     MAX_PLAYERS.times(function(i) {
       var _base;
-      $.reverseMerge((_base = config.players)[i] || (_base[i] = {}), {
+      Object.reverseMerge((_base = config.players)[i] || (_base[i] = {}), {
         "class": "Player",
         color: Player.COLORS[i],
         id: i,
@@ -13723,7 +13723,7 @@ MatchSetupState = function(I) {
         bodyIndex: rand(TeamSheet.bodyStyles.length),
         headIndex: rand(TeamSheet.headStyles.length)
       });
-      return $.extend(config.players[i], {
+      return Object.extend(config.players[i], {
         ready: false,
         cpu: true
       });
