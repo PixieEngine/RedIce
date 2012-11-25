@@ -63,8 +63,9 @@ MatchState = (I={}) ->
     pucks = engine.find("Puck")
     players = engine.find("Player").shuffle()
     zambonis = engine.find("Zamboni")
+    gibs = engine.find("Gib")
 
-    objects = players.concat zambonis, pucks
+    objects = players.concat zambonis, pucks, gibs
     playersAndPucks = players.concat pucks
 
     # Puck handling

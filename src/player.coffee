@@ -1,5 +1,5 @@
-Player = (I) ->
-  $.reverseMerge I,
+Player = (I={}) ->
+  Object.reverseMerge I,
     blood:
       face: 0
       body: 0
@@ -36,7 +36,6 @@ Player = (I) ->
     bodyStyle: "tubs"
     wipeout: 0
     velocity: Point()
-    zIndex: 1
 
   controller = engine.controller(I.id)
   actionDown = controller.actionDown
@@ -147,16 +146,16 @@ Player = (I) ->
     # Hitting people
     else
       hit = false
-      engine.find("Player").without([self]).each (player) ->
+      engine.find("Player, Gib, Zamboni").without([self]).each (entity) ->
         return if hit
-        if Collision.circular(circle, player.circle())
+        if Collision.circular(circle, entity.circle())
           hit = true
           p = Point.fromAngle(direction).scale(power)
 
-          if power > 10
-            player.wipeout(p)
+          if power > entity.toughness()
+            entity.wipeout(p)
 
-          player.I.velocity = player.I.velocity.add(p)
+          entity.I.velocity = entity.I.velocity.add(p)
 
     I.shootPower = 0
 

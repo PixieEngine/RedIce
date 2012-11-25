@@ -4,17 +4,17 @@ Zamboni = (I) ->
     careening: false
     color: "yellow"
     fuse: 30
-    strength: 5
+    fortitude: 2
+    strength: 4
     radius: 50
     rotation: 0
-    width: 96
-    height: 48
+    heading: 0
     speed: 8
     x: 0
     y: ARENA_HEIGHT/2 + WALL_TOP
     velocity: Point(1, 0)
     mass: 10
-    team: "smiley"
+    team: config.teams.rand()
     zIndex: 10
     cleanColor: "#000"
 
@@ -69,8 +69,6 @@ Zamboni = (I) ->
       else
         I.careening = true
 
-  heading = 0
-  lastPosition = null
   pathIndex = 0
 
   cleanIce = ->
@@ -114,6 +112,17 @@ Zamboni = (I) ->
 
       I.velocity = nextTarget.subtract(center).norm().scale(I.speed)
 
+  setSprite = ->
+    I.hflip = (I.heading > 2*Math.TAU/8 || I.heading < -2*Math.TAU/8)
+
+    facing = "e"
+    if Math.TAU/8 < I.heading < 3*Math.TAU/8
+      facing = "s"
+    else if -Math.TAU/8 > I.heading > -3*Math.TAU/8
+      facing = "n"
+
+    I.sprite = Zamboni.sprites[I.team][facing][(I.age/4).floor().mod(2)]
+
   self.bind "step", ->
     if I.x < -bounds || I.x > App.width + bounds
       I.active = false
@@ -127,26 +136,17 @@ Zamboni = (I) ->
     else
       pathfind()
 
-      heading = Point.direction(Point(0, 0), I.velocity)
+      I.heading = Point.direction(Point(0, 0), I.velocity)
 
       cleanIce() unless I.age < 1
 
-      I.hflip = (heading > 2*Math.TAU/8 || heading < -2*Math.TAU/8)
-
-      facing = "e"
-
-      if Math.TAU/8 < heading < 3*Math.TAU/8
-        facing = "s"
-      else if -Math.TAU/8 > heading > -3*Math.TAU/8
-        facing = "n"
-
-      I.sprite = Zamboni.sprites[I.team][facing][(I.age/4).floor().mod(2)]
+      setSprite()
 
   self.bind "destroy", ->
     engine.add
       class: "Shockwave"
-      x: I.x + I.width/2
-      y: I.y + I.height/2
+      x: I.x
+      y: I.y
       velocity: I.velocity
 
     if I.team is "mutant"
@@ -162,7 +162,9 @@ Zamboni = (I) ->
         x: I.x
         y: I.y
 
-  self
+  setSprite()
+
+  return self
 
 Zamboni.sprites = {}
 

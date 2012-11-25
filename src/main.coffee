@@ -1,5 +1,5 @@
 window.config =
-  teams: ["smiley", "spike"]
+  teams: ["mutant", "monster"]
   players: []
   particleEffects: true
   music: false
@@ -64,9 +64,13 @@ DEBUG_DRAW = false
 $(document).bind "keydown", "0", ->
   DEBUG_DRAW = !DEBUG_DRAW
 
+$(document).bind "keydown", "1", ->
+  engine.add
+    class: "Zamboni"
+
 engine.bind "draw", (canvas) ->
   if DEBUG_DRAW
-    engine.find("Player, Puck, Goal, Bottle, Zamboni, Blood").each (object) ->
+    engine.find("Player, Puck, Goal, Bottle, Zamboni, Blood, Gib").each (object) ->
       object.trigger("drawDebug", canvas)
 
 # Timing Draw and update

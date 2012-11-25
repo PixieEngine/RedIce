@@ -11685,6 +11685,9 @@ Base = function(I) {
     collidesWithWalls: function() {
       return true;
     },
+    toughness: function() {
+      return I.fortitude * 10;
+    },
     collisionPower: function(normal) {
       return (I.velocity.dot(normal) + I.fortitude) * I.strength;
     },
@@ -13361,36 +13364,52 @@ Gamepads.KeyboardController = function(I) {
 };
 
 Gib = function(I) {
-  var self;
+  var buffer, outOfArena, self, wallHeight;
   if (I == null) {
     I = {};
   }
+  wallHeight = 64;
   Object.reverseMerge(I, {
-    duration: 90,
     rotation: 0,
     rotationalVelocity: rand() * 0.2 - 0.1,
-    width: 32,
-    height: 32,
+    width: 0,
+    height: 0,
     x: App.width / 2,
     y: App.width / 2,
     velocity: Point.fromAngle(Random.angle()).scale(6 + rand(5)),
-    z: 48,
+    z: 1.5 * wallHeight,
     zVelocity: rand(10) - 1,
     gravity: -0.25,
     radius: 16
   });
+  buffer = 10;
+  outOfArena = function() {
+    return I.y < WALL_TOP - buffer || I.y > WALL_BOTTOM + buffer || I.x < WALL_LEFT - buffer || I.x > WALL_RIGHT + buffer;
+  };
   self = Base(I).extend({
+    collidesWithWalls: function() {
+      return self.collides();
+    },
+    collides: function() {
+      return I.z <= wallHeight;
+    },
+    wipeout: function() {
+      if (I.z === 0) {
+        I.zVelocity = 3 + rand(10);
+      }
+      return I.rotationalVelocity += rand() * 0.2 - 0.1;
+    },
     draw: function(canvas) {
-      var bonusRadius, center, shadowColor, transform;
+      var center, radiusMultiple, shadowColor, transform;
       center = self.center();
       shadowColor = "rgba(0, 0, 0, 0.25)";
-      bonusRadius = (-4 + 256 / I.z).clamp(-4, 4);
+      radiusMultiple = 1 / (1 + I.z / 100);
       canvas.drawCircle({
         position: center,
-        radius: I.radius + bonusRadius,
+        radius: I.radius * radiusMultiple,
         color: shadowColor
       });
-      transform = Matrix.translation(I.x + I.width / 2, I.y + I.height / 2 - I.z).concat(Matrix.rotation(I.rotation)).concat(Matrix.translation(-I.width / 2, -I.height / 2));
+      transform = Matrix.translation(I.x, I.y - I.z).concat(Matrix.rotation(I.rotation));
       return canvas.withTransform(transform, function() {
         return I.sprite.draw(canvas, -I.sprite.width / 2, -I.sprite.height / 2);
       });
@@ -13402,13 +13421,24 @@ Gib = function(I) {
     I.zVelocity += I.gravity;
     if (I.z <= 0) {
       I.z = 0;
-      I.zVelocity = -I.zVelocity * 0.8;
+      if (I.zVelocity <= 0.5) {
+        I.zVelocity = 0;
+      } else {
+        I.zVelocity = -I.zVelocity * 0.8;
+      }
       I.friction = 0.1;
+      I.rotationalVelocity *= 0.8;
+      if (I.rotationalVelocity <= 0.01) {
+        I.rotationalVelocity = 0;
+      }
     } else {
       I.friction = 0;
     }
-    physics.wallCollisions([self], 1);
-    return self.updatePosition(1);
+    if (I.z <= wallHeight) {
+      if (outOfArena()) {
+        return self.destroy();
+      }
+    }
   });
   return self;
 };
@@ -13417,25 +13447,91 @@ Gibber = function(name, options) {
   if (options == null) {
     options = {};
   }
-  return Gib.sprites[name].each(function(sprite) {
-    return engine.add(Object.extend({
+  return Gib.data[name].each(function(data) {
+    return engine.add(Object.extend({}, data, {
       "class": "Gib",
-      sprite: sprite[0]
+      sprite: data.sprite[0]
     }, options));
   });
 };
 
-Gib.sprites = {
-  zamboni: [1, 2, 3, 4, 5, 6].map(function(i) {
+(function() {
+  var fromPart;
+  fromPart = function(i) {
     return Sprite.loadSheet("gibs/zamboni_parts/" + i, 512, 512, 0.5);
-  }),
-  mutantZamboni: [6, 7, 8, 9, 10, 11, 12].map(function(i) {
-    return Sprite.loadSheet("gibs/zamboni_parts/" + i, 512, 512, 0.5);
-  }),
-  monsterZamboni: [13, 14, 15, 16].map(function(i) {
-    return Sprite.loadSheet("gibs/zamboni_parts/" + i, 512, 512, 0.5);
-  })
-};
+  };
+  return Gib.data = {
+    zamboni: [
+      {
+        sprite: fromPart(1)
+      }, {
+        sprite: fromPart(2),
+        mass: 4,
+        radius: 32
+      }, {
+        sprite: fromPart(3),
+        mass: 2
+      }, {
+        sprite: fromPart(4),
+        mass: 0.5,
+        radius: 12
+      }, {
+        sprite: fromPart(5),
+        radius: 8
+      }, {
+        sprite: fromPart(6),
+        mass: 0.6,
+        radius: 12,
+        strength: 2
+      }
+    ],
+    mutantZamboni: [
+      {
+        sprite: fromPart(7)
+      }, {
+        sprite: fromPart(8),
+        mass: 3
+      }, {
+        sprite: fromPart(9),
+        mass: 2
+      }, {
+        sprite: fromPart(10),
+        mass: 2,
+        radius: 12,
+        strength: 3
+      }, {
+        sprite: fromPart(11),
+        mass: 0.5
+      }, {
+        sprite: fromPart(12),
+        mass: 0.75,
+        radius: 12,
+        strength: 2
+      }
+    ],
+    monsterZamboni: [
+      {
+        sprite: fromPart(13),
+        mass: 3,
+        strength: 2
+      }, {
+        sprite: fromPart(14),
+        mass: 1,
+        radius: 12,
+        strength: 2
+      }, {
+        sprite: fromPart(15),
+        mass: 2,
+        strength: 2
+      }, {
+        sprite: fromPart(16),
+        mass: 0.5,
+        radius: 12,
+        strength: 2
+      }
+    ]
+  };
+})();
 
 Goal = function(I) {
   var DEBUG_DRAW, HEIGHT, WALL_RADIUS, WIDTH, drawWall, self, walls;
@@ -13709,12 +13805,13 @@ MatchState = function(I) {
     return rink.drawFront(canvas);
   });
   self.bind("update", function() {
-    var objects, players, playersAndPucks, pucks, zambonis;
+    var gibs, objects, players, playersAndPucks, pucks, zambonis;
     Fan.crowd.invoke("update");
     pucks = engine.find("Puck");
     players = engine.find("Player").shuffle();
     zambonis = engine.find("Zamboni");
-    objects = players.concat(zambonis, pucks);
+    gibs = engine.find("Gib");
+    objects = players.concat(zambonis, pucks, gibs);
     playersAndPucks = players.concat(pucks);
     players.each(function(player) {
       if (player.I.wipeout) {
@@ -15104,7 +15201,10 @@ Physics = function() {
 
 Player = function(I) {
   var actionDown, axisPosition, controller, forceFacing, jitterSoak, self, setFacing, setFlip, shootPuck;
-  $.reverseMerge(I, {
+  if (I == null) {
+    I = {};
+  }
+  Object.reverseMerge(I, {
     blood: {
       face: 0,
       body: 0,
@@ -15142,8 +15242,7 @@ Player = function(I) {
     teamStyle: "spike",
     bodyStyle: "tubs",
     wipeout: 0,
-    velocity: Point(),
-    zIndex: 1
+    velocity: Point()
   });
   controller = engine.controller(I.id);
   actionDown = controller.actionDown;
@@ -15244,17 +15343,17 @@ Player = function(I) {
       puck.I.velocity = puck.I.velocity.add(p);
     } else {
       hit = false;
-      engine.find("Player").without([self]).each(function(player) {
+      engine.find("Player, Gib, Zamboni").without([self]).each(function(entity) {
         if (hit) {
           return;
         }
-        if (Collision.circular(circle, player.circle())) {
+        if (Collision.circular(circle, entity.circle())) {
           hit = true;
           p = Point.fromAngle(direction).scale(power);
-          if (power > 10) {
-            player.wipeout(p);
+          if (power > entity.toughness()) {
+            entity.wipeout(p);
           }
-          return player.I.velocity = player.I.velocity.add(p);
+          return entity.I.velocity = entity.I.velocity.add(p);
         }
       });
     }
@@ -15736,8 +15835,7 @@ Puck = function(I) {
     y: (WALL_BOTTOM + WALL_TOP) / 2 - 4,
     friction: DEFAULT_FRICTION,
     mass: 0.01,
-    superMassive: false,
-    zIndex: 10
+    superMassive: false
   });
   self = Base(I).extend({
     bloody: function() {
@@ -16424,23 +16522,23 @@ TestState = function(I) {
 };
 
 Zamboni = function(I) {
-  var SWEEPER_SIZE, bounds, cleanIce, generatePath, heading, lastPosition, path, pathIndex, pathfind, self;
+  var SWEEPER_SIZE, bounds, cleanIce, generatePath, path, pathIndex, pathfind, self, setSprite;
   $.reverseMerge(I, {
     blood: 0,
     careening: false,
     color: "yellow",
     fuse: 30,
-    strength: 5,
+    fortitude: 2,
+    strength: 4,
     radius: 50,
     rotation: 0,
-    width: 96,
-    height: 48,
+    heading: 0,
     speed: 8,
     x: 0,
     y: ARENA_HEIGHT / 2 + WALL_TOP,
     velocity: Point(1, 0),
     mass: 10,
-    team: "smiley",
+    team: config.teams.rand(),
     zIndex: 10,
     cleanColor: "#000"
   });
@@ -16496,8 +16594,6 @@ Zamboni = function(I) {
       }
     }
   });
-  heading = 0;
-  lastPosition = null;
   pathIndex = 0;
   cleanIce = function() {
     var boxPoints, currentPos;
@@ -16537,8 +16633,18 @@ Zamboni = function(I) {
       return I.velocity = nextTarget.subtract(center).norm().scale(I.speed);
     }
   };
+  setSprite = function() {
+    var facing, _ref, _ref1;
+    I.hflip = I.heading > 2 * Math.TAU / 8 || I.heading < -2 * Math.TAU / 8;
+    facing = "e";
+    if ((Math.TAU / 8 < (_ref = I.heading) && _ref < 3 * Math.TAU / 8)) {
+      facing = "s";
+    } else if ((-Math.TAU / 8 > (_ref1 = I.heading) && _ref1 > -3 * Math.TAU / 8)) {
+      facing = "n";
+    }
+    return I.sprite = Zamboni.sprites[I.team][facing][(I.age / 4).floor().mod(2)];
+  };
   self.bind("step", function() {
-    var facing;
     if (I.x < -bounds || I.x > App.width + bounds) {
       I.active = false;
     }
@@ -16550,25 +16656,18 @@ Zamboni = function(I) {
       }
     } else {
       pathfind();
-      heading = Point.direction(Point(0, 0), I.velocity);
+      I.heading = Point.direction(Point(0, 0), I.velocity);
       if (!(I.age < 1)) {
         cleanIce();
       }
-      I.hflip = heading > 2 * Math.TAU / 8 || heading < -2 * Math.TAU / 8;
-      facing = "e";
-      if ((Math.TAU / 8 < heading && heading < 3 * Math.TAU / 8)) {
-        facing = "s";
-      } else if ((-Math.TAU / 8 > heading && heading > -3 * Math.TAU / 8)) {
-        facing = "n";
-      }
-      return I.sprite = Zamboni.sprites[I.team][facing][(I.age / 4).floor().mod(2)];
+      return setSprite();
     }
   });
   self.bind("destroy", function() {
     engine.add({
       "class": "Shockwave",
-      x: I.x + I.width / 2,
-      y: I.y + I.height / 2,
+      x: I.x,
+      y: I.y,
       velocity: I.velocity
     });
     if (I.team === "mutant") {
@@ -16588,6 +16687,7 @@ Zamboni = function(I) {
       });
     }
   });
+  setSprite();
   return self;
 };
 
@@ -16602,7 +16702,7 @@ Zamboni.sprites = {};
 });
 
 window.config = {
-  teams: ["smiley", "spike"],
+  teams: ["mutant", "monster"],
   players: [],
   particleEffects: true,
   music: false,
@@ -16680,9 +16780,15 @@ $(document).bind("keydown", "0", function() {
   return DEBUG_DRAW = !DEBUG_DRAW;
 });
 
+$(document).bind("keydown", "1", function() {
+  return engine.add({
+    "class": "Zamboni"
+  });
+});
+
 engine.bind("draw", function(canvas) {
   if (DEBUG_DRAW) {
-    return engine.find("Player, Puck, Goal, Bottle, Zamboni, Blood").each(function(object) {
+    return engine.find("Player, Puck, Goal, Bottle, Zamboni, Blood, Gib").each(function(object) {
       return object.trigger("drawDebug", canvas);
     });
   }

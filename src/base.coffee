@@ -30,6 +30,9 @@ Base = (I) ->
     collidesWithWalls: ->
       true
 
+    toughness: ->
+      I.fortitude * 10
+
     # The "Power Rating" for determining who gets wrecked during collisions
     # Fundamentally: I.velocity.dot(normal)
     collisionPower: (normal) ->

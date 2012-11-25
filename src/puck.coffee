@@ -14,7 +14,6 @@ Puck = (I) ->
     friction: DEFAULT_FRICTION
     mass: 0.01
     superMassive: false
-    zIndex: 10
 
   self = Base(I).extend
     bloody: ->
