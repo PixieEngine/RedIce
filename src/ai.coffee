@@ -17,11 +17,23 @@ AI = (I, self) ->
 
       if ownGoal
         targetPosition = ownGoal.center()
-        targetPosition = targetPosition.add((arenaCenter.subtract(targetPosition)).norm(24))
+        towardsCenter = arenaCenter.subtract(targetPosition).norm(48)
+
+        if puck = engine.find("Puck").first()
+          puckPosition = puck.position()
+
+          towardsPuck = puckPosition.subtract(targetPosition)
+
+          if towardsPuck.dot(towardsCenter) > 0
+            targetPosition = targetPosition.add(towardsPuck.norm(48))
+          else
+          targetPosition = targetPosition.add(towardsCenter)
+        else
+          targetPosition = targetPosition.add(towardsCenter)
       else
         targetPosition = self.center()
 
-      if targetPosition.subtract(self.center()).length() < 1
+      if targetPosition.subtract(self.center()).length() < 10
         self.center()
       else
         targetPosition
