@@ -15971,7 +15971,7 @@ Puck = function(I) {
 Puck.sprites = Sprite.loadSheet("puck_norm", 24, 24);
 
 Rink = function(I) {
-  var backBoardsCanvas, blue, faceOffCircleRadius, faceOffSpotRadius, frontBoardsCanvas, iceCanvas, red, rinkCornerRadius, self, spriteSize, x, y, _i, _len, _ref;
+  var backBoardsCanvas, blue, faceOffCircleRadius, faceOffSpotRadius, frontBoardsCanvas, iceCanvas, perspective, perspectiveRatio, red, rinkCornerRadius, self, spriteSize, x, _i, _len, _ref;
   if (I == null) {
     I = {};
   }
@@ -15984,6 +15984,8 @@ Rink = function(I) {
     top: 0,
     left: 0
   }).pixieCanvas();
+  perspectiveRatio = 4 / 3;
+  perspective = Matrix.scale(1, 1 / perspectiveRatio);
   red = "red";
   blue = "blue";
   faceOffSpotRadius = 5;
@@ -16015,22 +16017,25 @@ Rink = function(I) {
     end: Point(x, WALL_BOTTOM),
     width: 2
   });
-  x = WALL_LEFT + ARENA_WIDTH / 2;
-  y = WALL_TOP + ARENA_HEIGHT / 2;
-  iceCanvas.drawCircle({
-    x: x,
-    y: y,
-    radius: faceOffSpotRadius,
-    color: blue
-  });
-  iceCanvas.drawCircle({
-    x: x,
-    y: y,
-    radius: faceOffCircleRadius,
-    stroke: {
-      color: blue,
-      width: 2
-    }
+  iceCanvas.withTransform(perspective, function() {
+    var y;
+    x = WALL_LEFT + ARENA_WIDTH / 2;
+    y = WALL_TOP + ARENA_HEIGHT / 2;
+    iceCanvas.drawCircle({
+      x: x,
+      y: y * perspectiveRatio,
+      radius: faceOffSpotRadius,
+      color: blue
+    });
+    return iceCanvas.drawCircle({
+      x: x,
+      y: y * perspectiveRatio,
+      radius: faceOffCircleRadius,
+      stroke: {
+        color: blue,
+        width: 2
+      }
+    });
   });
   x = WALL_LEFT + ARENA_WIDTH / 10;
   iceCanvas.drawLine({
@@ -16064,27 +16069,30 @@ Rink = function(I) {
       color: red
     }
   });
-  [1, 3].each(function(verticalQuarter) {
-    y = WALL_TOP + verticalQuarter / 4 * ARENA_HEIGHT;
-    return [1 / 5, 1 / 3 + 1 / 40, 2 / 3 - 1 / 40, 4 / 5].each(function(faceOffX, i) {
-      x = WALL_LEFT + faceOffX * ARENA_WIDTH;
-      iceCanvas.drawCircle({
-        x: x,
-        y: y,
-        radius: faceOffSpotRadius,
-        color: red
-      });
-      if (i === 0 || i === 3) {
-        return iceCanvas.drawCircle({
+  iceCanvas.withTransform(perspective, function() {
+    return [1, 3].each(function(verticalQuarter) {
+      var y;
+      y = WALL_TOP + verticalQuarter / 4 * ARENA_HEIGHT;
+      return [1 / 5, 1 / 3 + 1 / 40, 2 / 3 - 1 / 40, 4 / 5].each(function(faceOffX, i) {
+        x = WALL_LEFT + faceOffX * ARENA_WIDTH;
+        iceCanvas.drawCircle({
           x: x,
-          y: y,
-          radius: faceOffCircleRadius,
-          stroke: {
-            color: red,
-            width: 2
-          }
+          y: y * perspectiveRatio,
+          radius: faceOffSpotRadius,
+          color: red
         });
-      }
+        if (i === 0 || i === 3) {
+          return iceCanvas.drawCircle({
+            x: x,
+            y: y * perspectiveRatio,
+            radius: faceOffCircleRadius,
+            stroke: {
+              color: red,
+              width: 2
+            }
+          });
+        }
+      });
     });
   });
   spriteSize = 64;

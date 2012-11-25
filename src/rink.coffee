@@ -10,6 +10,9 @@ Rink = (I={}) ->
       left: 0
     .pixieCanvas()
 
+  perspectiveRatio = 4/3
+  perspective = Matrix.scale(1, 1/perspectiveRatio)
+
   red = "red"
   blue = "blue"
   faceOffSpotRadius = 5
@@ -42,22 +45,23 @@ Rink = (I={}) ->
     end: Point(x, WALL_BOTTOM)
     width: 2
 
-  # Center Circle
-  x = WALL_LEFT + ARENA_WIDTH/2
-  y = WALL_TOP + ARENA_HEIGHT/2
-  iceCanvas.drawCircle
-    x: x
-    y: y
-    radius: faceOffSpotRadius
-    color: blue
-
-  iceCanvas.drawCircle
-    x: x
-    y: y
-    radius: faceOffCircleRadius
-    stroke:
+  iceCanvas.withTransform perspective, ->
+    # Center Circle
+    x = WALL_LEFT + ARENA_WIDTH/2
+    y = WALL_TOP + ARENA_HEIGHT/2
+    iceCanvas.drawCircle
+      x: x
+      y: y * perspectiveRatio
+      radius: faceOffSpotRadius
       color: blue
-      width: 2
+
+    iceCanvas.drawCircle
+      x: x
+      y: y * perspectiveRatio
+      radius: faceOffCircleRadius
+      stroke:
+        color: blue
+        width: 2
 
   # Goal Lines
   x = WALL_LEFT + ARENA_WIDTH/10
@@ -90,26 +94,27 @@ Rink = (I={}) ->
     stroke:
       color: red
 
-  [1, 3].each (verticalQuarter) ->
-    y = WALL_TOP + verticalQuarter/4 * ARENA_HEIGHT
+  iceCanvas.withTransform perspective, ->
+    [1, 3].each (verticalQuarter) ->
+      y = WALL_TOP + verticalQuarter/4 * ARENA_HEIGHT
 
-    [1/5, 1/3 + 1/40, 2/3 - 1/40, 4/5].each (faceOffX, i) ->
-      x = WALL_LEFT + faceOffX * ARENA_WIDTH
+      [1/5, 1/3 + 1/40, 2/3 - 1/40, 4/5].each (faceOffX, i) ->
+        x = WALL_LEFT + faceOffX * ARENA_WIDTH
 
-      iceCanvas.drawCircle
-        x: x
-        y: y
-        radius: faceOffSpotRadius
-        color: red
-
-      if i == 0 || i == 3
         iceCanvas.drawCircle
           x: x
-          y: y
-          radius: faceOffCircleRadius
-          stroke:
-            color: red
-            width: 2
+          y: y * perspectiveRatio
+          radius: faceOffSpotRadius
+          color: red
+
+        if i == 0 || i == 3
+          iceCanvas.drawCircle
+            x: x
+            y: y * perspectiveRatio
+            radius: faceOffCircleRadius
+            stroke:
+              color: red
+              width: 2
 
   spriteSize = 64
 
