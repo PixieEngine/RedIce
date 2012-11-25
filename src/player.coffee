@@ -185,24 +185,9 @@ Player = (I) ->
         I.cpu = false
     else if controller
       movement = controller.position()
-    else
-      if actionDown "left"
-        movement = movement.add(Point(-1, 0))
-      if actionDown "right"
-        movement = movement.add(Point(1, 0))
-      if actionDown "up"
-        movement = movement.add(Point(0, -1))
-      if actionDown "down"
-        movement = movement.add(Point(0, 1))
-
-      movement = movement.norm()
 
     if movement.x || movement.y
       I.movementDirection = movement.direction()
-
-    # Testing wipeout animation
-    if actionDown("BACK")
-      self.wipeout(Point(1, 0))
 
     if I.wipeout
       I.lastLeftSkatePos = null
