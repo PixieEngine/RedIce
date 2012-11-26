@@ -16722,7 +16722,7 @@ Zamboni.sprites = {};
 });
 
 window.config = {
-  teams: ["mutant", "monster"],
+  teams: ["smiley", "spike"],
   players: [],
   particleEffects: true,
   music: false,
@@ -16767,8 +16767,6 @@ window.bloodCanvas = $("<canvas width=" + CANVAS_WIDTH + " height=" + CANVAS_HEI
   left: 0,
   zIndex: "-5"
 }).pixieCanvas();
-
-Sound.globalVolume(0);
 
 bloodCanvas.strokeColor(BLOOD_COLOR);
 

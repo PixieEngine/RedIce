@@ -1,5 +1,5 @@
 window.config =
-  teams: ["mutant", "monster"]
+  teams: ["smiley", "spike"]
   players: []
   particleEffects: true
   music: false
@@ -36,7 +36,7 @@ window.bloodCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />
     zIndex: "-5"
   .pixieCanvas()
 
-Sound.globalVolume(0)
+# Sound.globalVolume(0)
 
 bloodCanvas.strokeColor(BLOOD_COLOR)
 # bloodCanvas.fill(BLOOD_COLOR) # For zamboni testing
