@@ -166,10 +166,9 @@ Zamboni = (I) ->
 
   return self
 
-Zamboni.scale = 0.375
 Zamboni.sprites = {}
 
 ["smiley", "spike", "hiss", "mutant", "monster"].each (team) ->
   sheet = Zamboni.sprites[team] = {}
   ["n", "s", "e"].each (direction) ->
-    sheet[direction] = Sprite.loadSheet("#{team}_zamboni_drive_#{direction}_2", 512, 512, Zamboni.scale)
+    sheet[direction] = Sprite.loadSheet("#{team}_zamboni_drive_#{direction}_2", 512, 512, ZAMBONI_SCALE)
