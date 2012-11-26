@@ -11601,7 +11601,7 @@ var AI, Base, Blood, Boards, Bottle, CharacterSheet, Configurator, DEBUG_DRAW, D
 AI = function(I, self) {
   var arenaCenter, directionAI, roles;
   arenaCenter = Point(WALL_LEFT + WALL_RIGHT, WALL_TOP + WALL_BOTTOM).scale(0.5);
-  roles = ["youth", "youth", "goalie"];
+  roles = ["none", "none", "none"];
   directionAI = {
     none: function() {},
     goalie: function() {
@@ -11668,13 +11668,16 @@ AI = function(I, self) {
 
 Base = function(I) {
   var self;
-  I || (I = {});
-  $.reverseMerge(I, {
+  if (I == null) {
+    I = {};
+  }
+  Object.reverseMerge(I, {
     fortitude: 1,
     friction: 0,
     strength: 1,
     mass: 1,
-    velocity: Point(0, 0)
+    velocity: Point(0, 0),
+    maxSpeed: 50
   });
   self = GameObject(I).extend({
     bloody: $.noop,
@@ -11734,7 +11737,10 @@ Base = function(I) {
     I.velocity = Point(I.velocity.x, I.velocity.y);
   }
   self.bind("update", function() {
-    return I.zIndex = I.y;
+    I.zIndex = I.y;
+    if (I.velocity.length() > I.maxSpeed) {
+      return I.velocity = I.velocity.norm(I.maxSpeed);
+    }
   });
   self.include(DebugDrawable);
   self.attrReader("mass");
@@ -13390,8 +13396,8 @@ Gib = function(I) {
     y: App.width / 2,
     velocity: Point.fromAngle(Random.angle()).scale(6 + rand(5)),
     z: 1.5 * wallHeight,
-    zVelocity: rand(10) - 1,
-    gravity: -0.25,
+    zVelocity: rand(20),
+    gravity: -0.8,
     radius: 16
   });
   buffer = 10;
@@ -13405,9 +13411,12 @@ Gib = function(I) {
     collides: function() {
       return I.z <= wallHeight;
     },
-    wipeout: function() {
+    crush: function() {
+      return I.zVelocity += rand(12);
+    },
+    wipeout: function(push) {
       if (I.z === 0) {
-        I.zVelocity = 3 + rand(10);
+        I.zVelocity = 3 + rand(12);
       }
       return I.rotationalVelocity += rand() * 0.2 - 0.1;
     },
@@ -13478,21 +13487,19 @@ Gibber = function(name, options) {
         sprite: fromPart(1)
       }, {
         sprite: fromPart(2),
-        mass: 4,
+        mass: 3,
         radius: 32
       }, {
         sprite: fromPart(3),
         mass: 2
       }, {
         sprite: fromPart(4),
-        mass: 0.5,
         radius: 12
       }, {
         sprite: fromPart(5),
         radius: 8
       }, {
         sprite: fromPart(6),
-        mass: 0.6,
         radius: 12,
         strength: 2
       }
@@ -13502,21 +13509,19 @@ Gibber = function(name, options) {
         sprite: fromPart(7)
       }, {
         sprite: fromPart(8),
-        mass: 3
+        mass: 1.5
       }, {
         sprite: fromPart(9),
-        mass: 2
+        mass: 1.25
       }, {
         sprite: fromPart(10),
-        mass: 2,
+        mass: 1.25,
         radius: 12,
         strength: 3
       }, {
-        sprite: fromPart(11),
-        mass: 0.5
+        sprite: fromPart(11)
       }, {
         sprite: fromPart(12),
-        mass: 0.75,
         radius: 12,
         strength: 2
       }
@@ -13528,7 +13533,6 @@ Gibber = function(name, options) {
         strength: 2
       }, {
         sprite: fromPart(14),
-        mass: 1,
         radius: 12,
         strength: 2
       }, {
@@ -13537,7 +13541,6 @@ Gibber = function(name, options) {
         strength: 2
       }, {
         sprite: fromPart(16),
-        mass: 0.5,
         radius: 12,
         strength: 2
       }
@@ -13627,8 +13630,8 @@ Goal = function(I) {
   self.bind("destroy", function() {
     return engine.add({
       "class": "Shockwave",
-      x: I.x + I.width / 2,
-      y: I.y + I.height / 2,
+      x: I.x,
+      y: I.y,
       velocity: Point(0, 1)
     });
   });
@@ -13643,7 +13646,7 @@ Goal = function(I) {
   });
   self.bind("step", function() {
     I.sprite = teamSprites[I.team].goal.back[0];
-    return I.zIndex = 1 + (I.y + I.height) / CANVAS_HEIGHT;
+    return I.zIndex = I.y + I.height / 2;
   });
   self.unbind("draw");
   self.bind("draw", function(canvas) {
@@ -15238,6 +15241,7 @@ Player = function(I) {
     friction: 0.1,
     heading: 0,
     joystick: true,
+    powerMultiplier: 1,
     maxShotPower: 20,
     movementDirection: 0,
     movementSpeed: 1.25,
@@ -15256,6 +15260,7 @@ Player = function(I) {
     wipeout: 0,
     velocity: Point()
   });
+  Object.extend(I, Player.bodyData[I.bodyStyle]);
   controller = engine.controller(I.id);
   actionDown = controller.actionDown;
   axisPosition = controller.axis || $.noop;
@@ -15351,7 +15356,7 @@ Player = function(I) {
       if (I.shootPower >= 2 * I.maxShotPower) {
         puck.trigger("superCharge");
       }
-      p = Point.fromAngle(direction).scale(baseShotPower + power * 2);
+      p = Point.fromAngle(direction).scale(baseShotPower + power * I.powerMultiplier);
       puck.I.velocity = puck.I.velocity.add(p);
     } else {
       hit = false;
@@ -15361,7 +15366,7 @@ Player = function(I) {
         }
         if (Collision.circular(circle, entity.circle())) {
           hit = true;
-          p = Point.fromAngle(direction).scale(power);
+          p = Point.fromAngle(direction).scale(power * I.powerMultiplier / entity.mass());
           if (power > entity.toughness()) {
             entity.wipeout(p);
           }
@@ -15521,6 +15526,26 @@ Player = function(I) {
 Player.COLORS = ["#0246E3", "#EB070E", "#388326", "#F69508", "#563495", "#58C4F5", "#FFDE49"];
 
 Player.CPU_COLOR = "#888";
+
+Player.bodyData = {
+  skinny: {
+    mass: 1.5,
+    movementSpeed: 1.25,
+    powerMultiplier: 2,
+    radius: 18
+  },
+  thick: {
+    mass: 2,
+    movementSpeed: 1.1,
+    powerMultiplier: 3
+  },
+  tubs: {
+    mass: 4,
+    movementSpeed: 1,
+    powerMultiplier: 2.5,
+    radius: 22
+  }
+};
 
 PlayerDrawing = function(I, self) {
   var assetScale, drawBody;

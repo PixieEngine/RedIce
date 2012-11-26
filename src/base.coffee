@@ -1,12 +1,11 @@
-Base = (I) ->
-  I ||= {}
-
-  $.reverseMerge I,
+Base = (I={}) ->
+  Object.reverseMerge I,
     fortitude: 1
     friction: 0
     strength: 1
     mass: 1
     velocity: Point(0, 0)
+    maxSpeed: 50
 
   self = GameObject(I).extend
     bloody: $.noop
@@ -71,6 +70,9 @@ Base = (I) ->
 
   self.bind "update", ->
     I.zIndex = I.y
+
+    if I.velocity.length() > I.maxSpeed
+      I.velocity = I.velocity.norm(I.maxSpeed)
 
   self.include DebugDrawable
 

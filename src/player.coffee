@@ -19,6 +19,7 @@ Player = (I={}) ->
     friction: 0.1
     heading: 0
     joystick: true
+    powerMultiplier: 1
     maxShotPower: 20
     movementDirection: 0
     movementSpeed: 1.25
@@ -36,6 +37,8 @@ Player = (I={}) ->
     bodyStyle: "tubs"
     wipeout: 0
     velocity: Point()
+
+  Object.extend I, Player.bodyData[I.bodyStyle]
 
   controller = engine.controller(I.id)
   actionDown = controller.actionDown
@@ -140,7 +143,7 @@ Player = (I={}) ->
       if I.shootPower >= 2 * I.maxShotPower
         puck.trigger "superCharge"
 
-      p = Point.fromAngle(direction).scale(baseShotPower + power * 2)
+      p = Point.fromAngle(direction).scale(baseShotPower + power * I.powerMultiplier)
       puck.I.velocity = puck.I.velocity.add(p)
 
     # Hitting people
@@ -150,7 +153,7 @@ Player = (I={}) ->
         return if hit
         if Collision.circular(circle, entity.circle())
           hit = true
-          p = Point.fromAngle(direction).scale(power)
+          p = Point.fromAngle(direction).scale(power * I.powerMultiplier / entity.mass())
 
           if power > entity.toughness()
             entity.wipeout(p)
@@ -324,3 +327,18 @@ Player.COLORS = [
 
 Player.CPU_COLOR = "#888"
 
+Player.bodyData =
+  skinny:
+    mass: 1.5
+    movementSpeed: 1.25
+    powerMultiplier: 2
+    radius: 18
+  thick:
+    mass: 2
+    movementSpeed: 1.1
+    powerMultiplier: 3
+  tubs:
+    mass: 4
+    movementSpeed: 1
+    powerMultiplier: 2.5
+    radius: 22

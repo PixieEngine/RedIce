@@ -10,8 +10,8 @@ Gib = (I={}) ->
     y: App.width/2
     velocity: Point.fromAngle(Random.angle()).scale(6 + rand(5))
     z: 1.5 * wallHeight
-    zVelocity: rand(10) - 1
-    gravity: -0.25
+    zVelocity: rand(20)
+    gravity: -0.8
     radius: 16
 
   buffer = 10
@@ -28,9 +28,13 @@ Gib = (I={}) ->
     collides: ->
       I.z <= wallHeight
 
-    wipeout: ->
+    crush: ->
+      # Bounce up into the air when hitting things
+      I.zVelocity += rand(12)
+
+    wipeout: (push) ->
       if I.z is 0
-        I.zVelocity = 3 + rand(10)
+        I.zVelocity = 3 + rand(12)
 
       I.rotationalVelocity += rand() * 0.2 - 0.1
 
@@ -95,21 +99,19 @@ do ->
       sprite: fromPart(1)
     }, {
       sprite: fromPart(2)
-      mass: 4
+      mass: 3
       radius: 32
     }, {
       sprite: fromPart(3)
       mass: 2
     }, {
       sprite: fromPart(4)
-      mass: 0.5
       radius: 12
     }, {
       sprite: fromPart(5)
       radius: 8
     }, {
       sprite: fromPart(6)
-      mass: 0.6
       radius: 12
       strength: 2
     }]
@@ -117,21 +119,19 @@ do ->
       sprite: fromPart(7)
     }, {
       sprite: fromPart(8)
-      mass: 3
+      mass: 1.5
     }, {
       sprite: fromPart(9)
-      mass: 2
+      mass: 1.25
     }, {
       sprite: fromPart(10)
-      mass: 2
+      mass: 1.25
       radius: 12
       strength: 3
     }, {
       sprite: fromPart(11)
-      mass: 0.5
     }, {
       sprite: fromPart(12)
-      mass: 0.75
       radius: 12
       strength: 2
     }]
@@ -141,7 +141,6 @@ do ->
       strength: 2
     }, {
       sprite: fromPart(14)
-      mass: 1
       radius: 12
       strength: 2
     }, {
@@ -150,7 +149,6 @@ do ->
       strength: 2
     }, {
       sprite: fromPart(16)
-      mass: 0.5
       radius: 12
       strength: 2
     }]
