@@ -11620,7 +11620,7 @@ draw anything to the screen until the image has been loaded.
 AI = function(I, self) {
   var arenaCenter, directionAI, roles;
   arenaCenter = Point(WALL_LEFT + WALL_RIGHT, WALL_TOP + WALL_BOTTOM).scale(0.5);
-  roles = ["none", "none", "none"];
+  roles = ["youth", "goalie", "youth"];
   directionAI = {
     none: function() {},
     goalie: function() {
