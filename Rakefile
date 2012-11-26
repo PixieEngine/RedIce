@@ -50,8 +50,13 @@ task :dist => [:build_data, :build] do
 end
 
 task :package do
+  # Package for newgrounds
   `rm build/#{dist_name}.zip`
   sh "cd #{dist_dir} && zip -r #{dist_name}.zip . && mv #{dist_name}.zip .."
+
+  # TODO Package for Chrome webstore
+
+  # TODO Package for direct download
 end
 
 def dist_name
