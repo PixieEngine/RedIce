@@ -96,7 +96,7 @@ PlayerDrawing = (I, self) ->
       cycle = I.age % 30
       if 1 < cycle < 14
         I.lastLeftSkatePos = null
-      if 15 < cycle < 29 
+      if 15 < cycle < 29
         I.lastRightSkatePos = null
 
       if I.lastLeftSkatePos
@@ -115,7 +115,7 @@ PlayerDrawing = (I, self) ->
           width: thickness
           color: color
 
-      if I.lastRightSkatePos 
+      if I.lastRightSkatePos
         if skateBlood = I.blood.rightSkate
           I.blood.rightSkate -= 1
 
@@ -125,7 +125,7 @@ PlayerDrawing = (I, self) ->
           color = ICE_COLOR
           thickness = 1
 
-        bloodCanvas.strokeColor(color)        
+        bloodCanvas.strokeColor(color)
         bloodCanvas.drawLine
           start: I.lastRightSkatePos
           end: currentRightSkatePos
@@ -162,7 +162,7 @@ PlayerDrawing = (I, self) ->
     backgroundColor = self.color()
     backgroundColor.a = 0.5
 
-    yOffset = 80
+    yOffset = -32
 
     center = self.center()
 
@@ -190,12 +190,12 @@ PlayerDrawing = (I, self) ->
     height = 4
 
     center = self.center()
-    start = center.add(Point(-maxWidth/2, 24))
+    start = center.add(Point(-maxWidth/2, 8))
 
     canvas.drawRoundRect
       color: "#000"
       x: start.x - padding
-      y: start.y - padding 
+      y: start.y - padding
       width: maxWidth + 2*padding
       height: height + 2*padding
       radius: 2

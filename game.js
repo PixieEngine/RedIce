@@ -15706,7 +15706,7 @@ PlayerDrawing = function(I, self) {
       textWidth = canvas.measureText(name);
       backgroundColor = self.color();
       backgroundColor.a = 0.5;
-      yOffset = 80;
+      yOffset = -32;
       center = self.center();
       topLeft = center.subtract(Point(textWidth / 2 + padding, lineHeight / 2 + padding + yOffset));
       rectWidth = textWidth + 2 * padding;
@@ -15732,7 +15732,7 @@ PlayerDrawing = function(I, self) {
       maxWidth = 48;
       height = 4;
       center = self.center();
-      start = center.add(Point(-maxWidth / 2, 24));
+      start = center.add(Point(-maxWidth / 2, 8));
       canvas.drawRoundRect({
         color: "#000",
         x: start.x - padding,
