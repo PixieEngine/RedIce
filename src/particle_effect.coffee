@@ -8,6 +8,7 @@ ParticleEffect =
 
         engine.add
           class: "Particle"
+          blood: true
           duration: 12
           x: x
           y: y
@@ -36,6 +37,9 @@ ParticleEffect.sprites =
     Sprite.loadSheet "gibs/ice_particles/#{n}", 512, 512, 0.25
 
 Particle = (I={}) ->
+  Object.reverseMerge I,
+    spriteOffset: Point(-32, 0)
+
   self = GameObject(I)
 
   I.rotation = I.velocity.direction()
@@ -46,4 +50,25 @@ Particle = (I={}) ->
 
     I.zIndex = I.y
 
+    if I.blood
+      if WALL_LEFT + 128 < I.x < WALL_RIGHT - 128
+        if I.y < WALL_TOP
+          rink.paintBackWall
+            x: I.x
+            y: WALL_TOP - 16 - rand(32)
+            sprite: Particle.wallSplats.rand()[0]
+
+          self.destroy()
+
+        if I.y > WALL_BOTTOM
+          rink.paintFrontWall
+            x: I.x
+            y: WALL_BOTTOM - 16 - rand(32)
+            sprite: Particle.wallSplats.rand()[0]
+
+          self.destroy()
+
   return self
+
+Particle.wallSplats = [1..4].map (n) ->
+  Sprite.loadSheet "gibs/wall_decals/#{n}", 512, 512, 0.0625

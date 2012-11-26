@@ -14189,6 +14189,7 @@ ParticleEffect = {
         velocity = Point.fromAngle(Random.angle()).scale((rand(5) + 1) * 2).add(push).scale(0.5);
         return engine.add({
           "class": "Particle",
+          blood: true,
           duration: 12,
           x: x,
           y: y,
@@ -14232,15 +14233,43 @@ Particle = function(I) {
   if (I == null) {
     I = {};
   }
+  Object.reverseMerge(I, {
+    spriteOffset: Point(-32, 0)
+  });
   self = GameObject(I);
   I.rotation = I.velocity.direction();
   self.bind("update", function() {
+    var _ref;
     I.x += I.velocity.x;
     I.y += I.velocity.y;
-    return I.zIndex = I.y;
+    I.zIndex = I.y;
+    if (I.blood) {
+      if ((WALL_LEFT + 128 < (_ref = I.x) && _ref < WALL_RIGHT - 128)) {
+        if (I.y < WALL_TOP) {
+          rink.paintBackWall({
+            x: I.x,
+            y: WALL_TOP - 16 - rand(32),
+            sprite: Particle.wallSplats.rand()[0]
+          });
+          self.destroy();
+        }
+        if (I.y > WALL_BOTTOM) {
+          rink.paintFrontWall({
+            x: I.x,
+            y: WALL_BOTTOM - 16 - rand(32),
+            sprite: Particle.wallSplats.rand()[0]
+          });
+          return self.destroy();
+        }
+      }
+    }
   });
   return self;
 };
+
+Particle.wallSplats = [1, 2, 3, 4].map(function(n) {
+  return Sprite.loadSheet("gibs/wall_decals/" + n, 512, 512, 0.0625);
+});
 
 Physics = function() {
   var cornerRadius, corners, overlapX, overlapY, rectangularOverlap, resolveCollision, resolveCollisions, threshold, wallCollisions, walls;
@@ -16016,7 +16045,7 @@ Puck = function(I) {
 Puck.sprites = Sprite.loadSheet("puck_norm", 24, 24);
 
 Rink = function(I) {
-  var backBoardsCanvas, blue, faceOffCircleRadius, faceOffSpotRadius, frontBoardsCanvas, iceCanvas, perspective, perspectiveRatio, red, rinkCornerRadius, self, spriteSize, x, _i, _len, _ref;
+  var backBoardsCanvas, blue, faceOffCircleRadius, faceOffSpotRadius, frontBoardsCanvas, iceCanvas, paintCanvas, perspective, perspectiveRatio, red, rinkCornerRadius, self, spriteSize, x, _i, _len, _ref;
   if (I == null) {
     I = {};
   }
@@ -16209,7 +16238,24 @@ Rink = function(I) {
       });
     });
   });
+  paintCanvas = function(sprite, canvas, x, y) {
+    if (sprite) {
+      return sprite.draw(canvas, x - sprite.width / 2, y - sprite.height / 2);
+    }
+  };
   self = {
+    paintFrontWall: function(_arg) {
+      var sprite, x, y;
+      sprite = _arg.sprite, x = _arg.x, y = _arg.y;
+      frontBoardsCanvas.globalCompositeOperation("destination-over");
+      paintCanvas(sprite, frontBoardsCanvas, x, y);
+      return frontBoardsCanvas.globalCompositeOperation("source-over");
+    },
+    paintBackWall: function(_arg) {
+      var sprite, x, y;
+      sprite = _arg.sprite, x = _arg.x, y = _arg.y;
+      return paintCanvas(sprite, backBoardsCanvas, x, y);
+    },
     drawBase: function(canvas) {
       canvas.context().drawImage(iceCanvas.element(), 0, 0);
       return canvas.context().drawImage(bloodCanvas.element(), 0, 0);

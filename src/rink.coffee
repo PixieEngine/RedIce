@@ -173,7 +173,19 @@ Rink = (I={}) ->
       canvas.withTransform Matrix.scale(-1, 1), ->
         sprite.fill(canvas, -I.spriteSize/2, -I.spriteSize/2, I.spriteSize, I.spriteSize * 6)
 
+  paintCanvas = (sprite, canvas, x, y) ->
+    if sprite
+      sprite.draw(canvas, x - sprite.width / 2, y - sprite.height / 2)
+
   self =
+    paintFrontWall: ({sprite, x, y}) ->
+      frontBoardsCanvas.globalCompositeOperation "destination-over"
+      paintCanvas(sprite, frontBoardsCanvas, x, y)
+      frontBoardsCanvas.globalCompositeOperation "source-over"
+
+    paintBackWall: ({sprite, x, y}) ->
+      paintCanvas(sprite, backBoardsCanvas, x, y)
+
     drawBase: (canvas) ->
       canvas.context().drawImage(iceCanvas.element(), 0, 0)
       canvas.context().drawImage(bloodCanvas.element(), 0, 0)
