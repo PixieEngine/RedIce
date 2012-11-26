@@ -10,24 +10,10 @@ config.teams.each (name) ->
   teamSprites[name] = TeamSheet
     team: name
 
-window.CANVAS_WIDTH = App.width
-window.CANVAS_HEIGHT = App.height
-
-window.WALL_LEFT = 0
-window.WALL_RIGHT = CANVAS_WIDTH - WALL_LEFT
-window.WALL_TOP = 192
-window.WALL_BOTTOM = CANVAS_HEIGHT - (WALL_TOP - 128)
-
-window.ARENA_WIDTH = WALL_RIGHT - WALL_LEFT
-window.ARENA_HEIGHT = WALL_BOTTOM - WALL_TOP
-
-window.BLOOD_COLOR = "#BA1A19"
-window.ICE_COLOR = "rgba(192, 255, 255, 0.2)"
-
 #TODO Manage these extra canvases better
 window.rink = Rink
   team: config.teams.first()
-window.bloodCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />")
+window.bloodCanvas = $("<canvas width=#{App.width} height=#{App.height} />")
   .appendTo("body")
   .css
     position: "absolute"

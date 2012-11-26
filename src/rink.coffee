@@ -3,7 +3,7 @@ Rink = (I={}) ->
     team: config.teams[0]
     spriteSize: 64
 
-  iceCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />")
+  iceCanvas = $("<canvas width=#{App.width} height=#{App.height} />")
     .css
       position: "absolute"
       top: 0
@@ -118,7 +118,7 @@ Rink = (I={}) ->
 
   spriteSize = 64
 
-  backBoardsCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />")
+  backBoardsCanvas = $("<canvas width=#{App.width} height=#{App.height} />")
     .css
       position: "absolute"
       top: 0
@@ -141,7 +141,7 @@ Rink = (I={}) ->
       backBoardsCanvas.withTransform Matrix.scale(-1, 1), ->
         sprite.draw(backBoardsCanvas, 0, 0)
 
-  frontBoardsCanvas = $("<canvas width=#{CANVAS_WIDTH} height=#{CANVAS_HEIGHT} />")
+  frontBoardsCanvas = $("<canvas width=#{App.width} height=#{App.height} />")
     .css
       position: "absolute"
       top: 0
