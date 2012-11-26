@@ -80,8 +80,8 @@ Goal = (I) ->
   self.bind "destroy", ->
     engine.add
       class: "Shockwave"
-      x: I.x + I.width/2
-      y: I.y + I.height/2
+      x: I.x
+      y: I.y
       velocity: Point(0, 1)
 
   self.bind "drawDebug", (canvas) ->
@@ -97,7 +97,7 @@ Goal = (I) ->
   self.bind "step", ->
     I.sprite = teamSprites[I.team].goal.back[0]
 
-    I.zIndex = 1 + (I.y + I.height)/CANVAS_HEIGHT
+    I.zIndex = I.y + I.height/2
 
   self.unbind "draw"
 
