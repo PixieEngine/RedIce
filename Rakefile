@@ -6,7 +6,7 @@ task :build do
 
   sh "mkdir -p build"
   sh "coffee", "-bcj", "build/src.js", *src_files
-  sh "cat build/app.js build/data.js lib/*.js build/src.js > game.js"
+  sh "cat build/data.js lib/*.js build/src.js > game.js"
 end
 
 task :build_data do
@@ -25,5 +25,39 @@ task :build_data do
   File.open "build/data.js", "w" do |f|
     f << "Data = "
     f << JSON.dump(data)
+    f << ";\n"
   end
+end
+
+task :dist => [:build_data, :build] do
+  `rm -r #{dist_dir}`
+  sh "mkdir -p #{dist_dir}"
+  sh "cp run.html #{dist_dir}/index.html"
+
+  %w[images stylesheets sounds].each do |dir|
+    sh "cp -R #{dir} #{dist_dir}/#{dir}"
+  end
+
+  %w[jquery.min.js game.js].each do |file|
+    sh "cp #{file} #{dist_dir}/#{file}"
+  end
+
+  # Minify js
+  # require 'uglifier'
+  # File.open "#{dist_dir}/game.js", "w" do |f|
+  #   f << Uglifier.compile(File.read("game.js"))
+  # end
+end
+
+task :package do
+  `rm build/#{dist_name}.zip`
+  sh "cd #{dist_dir} && zip -r #{dist_name}.zip . && mv #{dist_name}.zip .."
+end
+
+def dist_name
+  "Red-Ice"
+end
+
+def dist_dir
+  "build/#{dist_name}"
 end
