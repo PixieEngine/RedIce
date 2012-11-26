@@ -15946,7 +15946,7 @@ Puck = function(I) {
       batchSize: 3,
       x: I.x + I.width / 2,
       y: I.y + I.height / 2,
-      zIndex: 1 + (I.y + I.height + 1) / CANVAS_HEIGHT,
+      zIndex: I.y,
       generator: {
         color: color,
         duration: 8,
