@@ -8,7 +8,6 @@ MatchState = (I={}) ->
 
   [homeTeam, awayTeam] = config.teams
 
-
   self.bind "enter", ->
     engine.clear(true)
 
@@ -21,8 +20,13 @@ MatchState = (I={}) ->
     scoreboard.bind "restart", ->
       engine.setState(MatchSetupState())
 
+    # Draw the front Rink Boards at the correct zIndex
+    engine.add
+      class: "RinkBoardsProxy"
+
+    # Add each player to game based on config data
     config.players.each (playerData) ->
-      engine.add $.extend({}, playerData)
+      engine.add Object.extend({}, playerData)
 
     engine.add
       class: "Puck"
@@ -52,9 +56,6 @@ MatchState = (I={}) ->
     Fan.crowd.invoke("draw", canvas)
     rink.drawBase(canvas)
     rink.drawBack(canvas)
-
-  self.bind "overlay", (canvas) ->
-    rink.drawFront(canvas)
 
   # Add events and methods here
   self.bind "update", ->

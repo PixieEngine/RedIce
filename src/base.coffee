@@ -70,7 +70,7 @@ Base = (I) ->
     I.velocity = Point(I.velocity.x, I.velocity.y)
 
   self.bind "update", ->
-    I.zIndex = 1 + (I.y + I.height)/CANVAS_HEIGHT
+    I.zIndex = I.y
 
   self.include DebugDrawable
 

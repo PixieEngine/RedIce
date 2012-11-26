@@ -44,6 +44,6 @@ Particle = (I={}) ->
     I.x += I.velocity.x
     I.y += I.velocity.y
 
-    I.zIndex = I.y + 64
+    I.zIndex = I.y
 
   return self

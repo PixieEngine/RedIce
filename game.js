@@ -11267,7 +11267,7 @@ draw anything to the screen until the image has been loaded.
 @constructor
 */
 
-var AI, Base, Blood, Boards, Bottle, CharacterSheet, Configurator, DEBUG_DRAW, DebugDrawable, Fan, FrameEditorState, Gamepads, Gib, Gibber, Goal, HeadSheet, MainMenuState, MatchSetupState, MatchState, Menu, NameEntry, Particle, ParticleEffect, Physics, Player, PlayerDrawing, PlayerState, Puck, Rink, Scoreboard, Shockwave, SideBoards, TeamSheet, TestState, Zamboni, canvas, drawStartTime, updateDuration, updateStartTime,
+var AI, Base, Blood, Boards, Bottle, CharacterSheet, Configurator, DEBUG_DRAW, DebugDrawable, Fan, FrameEditorState, Gamepads, Gib, Gibber, Goal, HeadSheet, MainMenuState, MatchSetupState, MatchState, Menu, NameEntry, Particle, ParticleEffect, Physics, Player, PlayerDrawing, PlayerState, Puck, Rink, RinkBoardsProxy, Scoreboard, Shockwave, SideBoards, TeamSheet, TestState, Zamboni, canvas, drawStartTime, updateDuration, updateStartTime,
   __slice = [].slice;
 
 (function() {
@@ -11734,7 +11734,7 @@ Base = function(I) {
     I.velocity = Point(I.velocity.x, I.velocity.y);
   }
   self.bind("update", function() {
-    return I.zIndex = 1 + (I.y + I.height) / CANVAS_HEIGHT;
+    return I.zIndex = I.y;
   });
   self.include(DebugDrawable);
   self.attrReader("mass");
@@ -13780,8 +13780,11 @@ MatchState = function(I) {
     scoreboard.bind("restart", function() {
       return engine.setState(MatchSetupState());
     });
+    engine.add({
+      "class": "RinkBoardsProxy"
+    });
     config.players.each(function(playerData) {
-      return engine.add($.extend({}, playerData));
+      return engine.add(Object.extend({}, playerData));
     });
     engine.add({
       "class": "Puck"
@@ -13812,9 +13815,6 @@ MatchState = function(I) {
     Fan.crowd.invoke("draw", canvas);
     rink.drawBase(canvas);
     return rink.drawBack(canvas);
-  });
-  self.bind("overlay", function(canvas) {
-    return rink.drawFront(canvas);
   });
   self.bind("update", function() {
     var gibs, objects, players, playersAndPucks, pucks, zambonis;
@@ -14214,7 +14214,7 @@ Particle = function(I) {
   self.bind("update", function() {
     I.x += I.velocity.x;
     I.y += I.velocity.y;
-    return I.zIndex = I.y + 64;
+    return I.zIndex = I.y;
   });
   return self;
 };
@@ -16180,6 +16180,21 @@ Rink = function(I) {
 };
 
 Rink.CORNER_RADIUS = 96;
+
+RinkBoardsProxy = function(I) {
+  var self;
+  if (I == null) {
+    I = {};
+  }
+  Object.reverseMerge(I, {
+    zIndex: WALL_BOTTOM
+  });
+  return self = GameObject(I).extend({
+    draw: function(canvas) {
+      return rink.drawFront(canvas);
+    }
+  });
+};
 
 Scoreboard = function(I) {
   var endGameChecks, nextPeriod, self;
