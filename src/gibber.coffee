@@ -92,7 +92,7 @@ Gibber = (name, options={}) ->
 
 do ->
   fromPart = (i) ->
-    Sprite.loadSheet("gibs/zamboni_parts/#{i}", 512, 512, 0.5)
+    Sprite.loadSheet("gibs/zamboni_parts/#{i}", 512, 512, ZAMBONI_SCALE)
 
   Gib.data =
     zamboni: [{
