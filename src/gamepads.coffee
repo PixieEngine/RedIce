@@ -4,7 +4,7 @@ Gamepads = (I={}) ->
 
   # Capture the current gamepad state
   snapshot = ->
-    Array::map.call navigator.webkitGamepads || navigator.webkitGetGamepads(), (x) ->
+    Array::map.call navigator.webkitGamepads || navigator.webkitGetGamepads?() || [], (x) ->
       axes: x.axes
       buttons: x.buttons
 
@@ -23,3 +23,6 @@ Gamepads = (I={}) ->
 
     controllers.each (controller) ->
       controller?.update()
+
+window.addEventListener "MozGamepadConnected", (event) ->
+  console.log event

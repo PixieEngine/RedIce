@@ -13130,7 +13130,7 @@ Gamepads = function(I) {
   state = {};
   controllers = [];
   snapshot = function() {
-    return Array.prototype.map.call(navigator.webkitGamepads || navigator.webkitGetGamepads(), function(x) {
+    return Array.prototype.map.call(navigator.webkitGamepads || (typeof navigator.webkitGetGamepads === "function" ? navigator.webkitGetGamepads() : void 0) || [], function(x) {
       return {
         axes: x.axes,
         buttons: x.buttons
@@ -13156,6 +13156,10 @@ Gamepads = function(I) {
     }
   };
 };
+
+window.addEventListener("MozGamepadConnected", function(event) {
+  return console.log(event);
+});
 
 Gamepads.Controller = function(I) {
   var AXIS_MAX, BUTTON_THRESHOLD, DEAD_ZONE, MAX_BUFFER, TRIP_HIGH, TRIP_LOW, axisTrips, buttonMapping, currentState, previousState, processTaps, self, tap;
