@@ -15,6 +15,14 @@ Puck = (I) ->
     mass: 0.01
     superMassive: false
 
+  setSprite = ->
+    if I.superMassive
+      I.sprite = Puck.sprites[1]
+    else
+      I.sprite = Puck.sprites[0]
+
+  setSprite()
+
   self = Base(I).extend
     bloody: ->
       I.blood = (I.blood + 30).clamp(0, 120)
@@ -104,8 +112,7 @@ Puck = (I) ->
           engine.add
             class: "Puck"
 
-  self.bind "update", ->
-    I.sprite = Puck.sprites[0]
+  self.bind "update", setSprite
 
   self.bind "wallCollision", ->
     I.superMassive = false
@@ -124,4 +131,5 @@ Puck = (I) ->
 
   self
 
-Puck.sprites = Sprite.loadSheet "puck_norm", 24, 24
+Puck.sprites = ["norm", "charge"].map (type) ->
+  Sprite.loadByName "puck_#{type}", 24, 24

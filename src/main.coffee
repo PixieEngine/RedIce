@@ -27,9 +27,6 @@ window.bloodCanvas = $("<canvas width=#{App.width} height=#{App.height} />")
 bloodCanvas.strokeColor(BLOOD_COLOR)
 # bloodCanvas.fill(BLOOD_COLOR) # For zamboni testing
 
-window.MAX_PLAYERS = 6
-window.activePlayers = 0
-
 canvas = $("canvas").pixieCanvas()
 # canvas.context().webkitImageSmoothingEnabled = false
 

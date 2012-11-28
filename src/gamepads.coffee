@@ -10,7 +10,7 @@ Gamepads = (I={}) ->
 
   controller: (index=0) ->
     controllers[index] ||=
-      if index < 5
+      if index < 3
         Gamepads.Controller
           index: index
           state: state
