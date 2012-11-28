@@ -121,7 +121,7 @@ Zamboni = (I) ->
     else if -Math.TAU/8 > I.heading > -3*Math.TAU/8
       facing = "n"
 
-    I.sprite = Zamboni.sprites[I.team][facing][(I.age/4).floor().mod(2)]
+    I.sprite = teamSprites[I.team].zamboni[facing][(I.age/4).floor().mod(2)]
 
   self.bind "step", ->
     if I.x < -bounds || I.x > App.width + bounds
@@ -165,10 +165,3 @@ Zamboni = (I) ->
   setSprite()
 
   return self
-
-Zamboni.sprites = {}
-
-["smiley", "spike", "hiss", "mutant", "monster"].each (team) ->
-  sheet = Zamboni.sprites[team] = {}
-  ["n", "s", "e"].each (direction) ->
-    sheet[direction] = Sprite.loadSheet("#{team}_zamboni_drive_#{direction}_2", 512, 512, ZAMBONI_SCALE)

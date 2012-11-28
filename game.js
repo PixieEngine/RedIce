@@ -11932,7 +11932,7 @@ CharacterSheet = function(I) {
     size: 512
   });
   loadStrip = function(action, facing, cells) {
-    return Sprite.loadSheet("" + I.team + "_" + I.character + "_" + action + "_" + facing + "_" + cells, I.size, I.size, 0.5);
+    return Sprite.loadSheet("" + I.team + "/" + I.character + "_" + action + "_" + facing + "_" + cells, I.size, I.size, 0.5);
   };
   FRONT = "se";
   BACK = "ne";
@@ -13711,9 +13711,9 @@ HeadSheet = function(I) {
   });
   loadStrip = function(action, cells) {
     if (action) {
-      return Sprite.loadSheet("" + I.team + "_" + I.character + "_" + action + "_" + cells, I.size, I.size, 0.5);
+      return Sprite.loadSheet("" + I.team + "/" + I.character + "_" + action + "_" + cells, I.size, I.size, 0.5);
     } else {
-      return Sprite.loadSheet("" + I.team + "_" + I.character + "_" + cells, I.size, I.size, 0.5);
+      return Sprite.loadSheet("" + I.team + "/" + I.character + "_" + cells, I.size, I.size, 0.5);
     }
   };
   actions = ["charged", "pain"];
@@ -16189,21 +16189,21 @@ Rink = function(I) {
     top: 0,
     left: 0
   }).pixieCanvas();
-  Sprite.loadSheet("" + I.team + "_wall_n", 512, 512, 0.125, function(sprites) {
+  Sprite.loadSheet("" + I.team + "/wall_n", 512, 512, 0.125, function(sprites) {
     var sprite;
     sprite = sprites[0];
     return backBoardsCanvas.withTransform(Matrix.translation(WALL_LEFT + 128, WALL_TOP - 64), function() {
       return sprite.fill(backBoardsCanvas, 0, 0, I.spriteSize * 12, I.spriteSize);
     });
   });
-  Sprite.loadSheet("" + I.team + "_wall_nw", 1024, 1024, 0.125, function(sprites) {
+  Sprite.loadSheet("" + I.team + "/wall_nw", 1024, 1024, 0.125, function(sprites) {
     var sprite;
     sprite = sprites[0];
     return backBoardsCanvas.withTransform(Matrix.translation(WALL_LEFT, WALL_TOP - 64), function() {
       return sprite.draw(backBoardsCanvas, 0, 0);
     });
   });
-  Sprite.loadSheet("" + I.team + "_wall_nw", 1024, 1024, 0.125, function(sprites) {
+  Sprite.loadSheet("" + I.team + "/wall_nw", 1024, 1024, 0.125, function(sprites) {
     var sprite;
     sprite = sprites[0];
     return backBoardsCanvas.withTransform(Matrix.translation(WALL_RIGHT, WALL_TOP - 64), function() {
@@ -16217,14 +16217,14 @@ Rink = function(I) {
     top: 0,
     left: 0
   }).pixieCanvas();
-  Sprite.loadSheet("" + I.team + "_wall_sw", 1024, 1024, 0.125, function(sprites) {
+  Sprite.loadSheet("" + I.team + "/wall_sw", 1024, 1024, 0.125, function(sprites) {
     var sprite;
     sprite = sprites[0];
     return frontBoardsCanvas.withTransform(Matrix.translation(WALL_LEFT, WALL_BOTTOM - 112), function() {
       return sprite.draw(frontBoardsCanvas, 0, 0);
     });
   });
-  Sprite.loadSheet("" + I.team + "_wall_sw", 1024, 1024, 0.125, function(sprites) {
+  Sprite.loadSheet("" + I.team + "/wall_sw", 1024, 1024, 0.125, function(sprites) {
     var sprite;
     sprite = sprites[0];
     return frontBoardsCanvas.withTransform(Matrix.translation(WALL_RIGHT, WALL_BOTTOM - 112), function() {
@@ -16233,7 +16233,7 @@ Rink = function(I) {
       });
     });
   });
-  Sprite.loadSheet("" + I.team + "_wall_s", 512, 512, 0.125, function(sprites) {
+  Sprite.loadSheet("" + I.team + "/wall_s", 512, 512, 0.125, function(sprites) {
     var sprite;
     sprite = sprites[0];
     return frontBoardsCanvas.withTransform(Matrix.translation(WALL_LEFT + 128, WALL_BOTTOM - 48), function() {
@@ -16303,7 +16303,7 @@ RinkBoardsProxy = function(I) {
 
 Scoreboard = function(I) {
   var endGameChecks, nextPeriod, self;
-  $.reverseMerge(I, {
+  Object.reverseMerge(I, {
     gameOver: false,
     score: {
       home: 0,
@@ -16326,6 +16326,8 @@ Scoreboard = function(I) {
     textColor: "#DDE",
     team: "hiss"
   });
+  Object.extend(I, Scoreboard[I.team]);
+  I.sprite = teamSprites[I.team].scoreboard[0];
   endGameChecks = function() {
     if (I.period >= 4) {
       if (I.score.home > I.score.away) {
@@ -16420,8 +16422,6 @@ Scoreboard = function(I) {
     }
   });
   self.bind("update", function() {
-    Object.extend(I, Scoreboard[I.team]);
-    I.sprite = I.sprite[0];
     if (I.time % I.zamboniInterval === 0) {
       if (!(I.time === I.periodTime && I.period === 1)) {
         I.reverse = !I.reverse;
@@ -16472,10 +16472,6 @@ Object.extend(Scoreboard, {
     timeY: 116
   },
   spike: {}
-});
-
-["hiss", "mutant", "smiley", "spike", "monster"].each(function(team) {
-  return Scoreboard[team].sprite = Sprite.loadSheet("" + team + "_scoreboard", 512, 512, 0.5);
 });
 
 Shockwave = function(I) {
@@ -16574,11 +16570,17 @@ TeamSheet = function(I) {
     team: "spike",
     size: 512
   });
-  self = {};
-  self.goal = {
-    back: Sprite.loadSheet("" + I.team + "_goal_back", 640, 640, 0.25),
-    front: Sprite.loadSheet("" + I.team + "_goal_front", 640, 640, 0.25)
+  self = {
+    goal: {
+      back: Sprite.loadSheet("" + I.team + "/goal_back", 640, 640, 0.25),
+      front: Sprite.loadSheet("" + I.team + "/goal_front", 640, 640, 0.25)
+    },
+    scoreboard: Sprite.loadSheet("" + I.team + "/scoreboard", 512, 512, 0.5),
+    zamboni: {}
   };
+  ["n", "s", "e"].each(function(direction) {
+    return self.zamboni[direction] = Sprite.loadSheet("" + I.team + "/zamboni_drive_" + direction + "_2", 512, 512, ZAMBONI_SCALE);
+  });
   TeamSheet.bodyStyles.each(function(style) {
     return self[style] = CharacterSheet({
       team: I.team,
@@ -16782,7 +16784,7 @@ Zamboni = function(I) {
     } else if ((-Math.TAU / 8 > (_ref1 = I.heading) && _ref1 > -3 * Math.TAU / 8)) {
       facing = "n";
     }
-    return I.sprite = Zamboni.sprites[I.team][facing][(I.age / 4).floor().mod(2)];
+    return I.sprite = teamSprites[I.team].zamboni[facing][(I.age / 4).floor().mod(2)];
   };
   self.bind("step", function() {
     if (I.x < -bounds || I.x > App.width + bounds) {
@@ -16830,16 +16832,6 @@ Zamboni = function(I) {
   setSprite();
   return self;
 };
-
-Zamboni.sprites = {};
-
-["smiley", "spike", "hiss", "mutant", "monster"].each(function(team) {
-  var sheet;
-  sheet = Zamboni.sprites[team] = {};
-  return ["n", "s", "e"].each(function(direction) {
-    return sheet[direction] = Sprite.loadSheet("" + team + "_zamboni_drive_" + direction + "_2", 512, 512, ZAMBONI_SCALE);
-  });
-});
 
 window.config = {
   teams: ["smiley", "spike"],

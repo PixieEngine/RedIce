@@ -7,9 +7,9 @@ HeadSheet = (I={}) ->
 
   loadStrip = (action, cells) ->
     if action
-      Sprite.loadSheet("#{I.team}_#{I.character}_#{action}_#{cells}", I.size, I.size, 0.5)
+      Sprite.loadSheet("#{I.team}/#{I.character}_#{action}_#{cells}", I.size, I.size, 0.5)
     else
-      Sprite.loadSheet("#{I.team}_#{I.character}_#{cells}", I.size, I.size, 0.5)
+      Sprite.loadSheet("#{I.team}/#{I.character}_#{cells}", I.size, I.size, 0.5)
 
   actions = [
     "charged"

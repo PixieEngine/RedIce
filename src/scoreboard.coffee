@@ -1,5 +1,5 @@
 Scoreboard = (I) ->
-  $.reverseMerge I,
+  Object.reverseMerge I,
     gameOver: false
     score:
       home: 0
@@ -20,6 +20,9 @@ Scoreboard = (I) ->
     imageOffset: Point(0, -48)
     textColor: "#DDE"
     team: "hiss"
+
+  Object.extend I, Scoreboard[I.team]
+  I.sprite = teamSprites[I.team].scoreboard[0]
 
   endGameChecks = ->
     if I.period >= 4
@@ -109,9 +112,6 @@ Scoreboard = (I) ->
       endGameChecks()
 
   self.bind "update", ->
-    Object.extend I, Scoreboard[I.team]
-    I.sprite = I.sprite[0]
-
     if I.time % I.zamboniInterval == 0
       # No Zamboni very second
       unless I.time == I.periodTime && I.period == 1
@@ -157,6 +157,3 @@ Object.extend Scoreboard,
     periodRadiusDelta: 1.5
     timeY: 116
   spike: {}
-
-["hiss", "mutant", "smiley", "spike", "monster"].each (team) ->
-  Scoreboard[team].sprite = Sprite.loadSheet("#{team}_scoreboard", 512, 512, 0.5)

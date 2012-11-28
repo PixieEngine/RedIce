@@ -59,6 +59,12 @@ task :package do
   # TODO Package for direct download
 end
 
+task :team_image_rename do
+  %w[spike smiley mutant monster hiss].each do |team|
+    `cd images && mkdir #{team}; for f in #{team}_*; do git mv $f #{team}/${f/#{team}_}; done`
+  end
+end
+
 def dist_name
   "Red-Ice"
 end

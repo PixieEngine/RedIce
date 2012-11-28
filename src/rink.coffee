@@ -125,17 +125,17 @@ Rink = (I={}) ->
       left: 0
     .pixieCanvas()
 
-  Sprite.loadSheet "#{I.team}_wall_n", 512, 512, 0.125, (sprites) ->
+  Sprite.loadSheet "#{I.team}/wall_n", 512, 512, 0.125, (sprites) ->
     sprite = sprites[0]
     backBoardsCanvas.withTransform Matrix.translation(WALL_LEFT + 128, WALL_TOP - 64), ->
       sprite.fill(backBoardsCanvas, 0, 0, I.spriteSize * 12, I.spriteSize)
 
-  Sprite.loadSheet "#{I.team}_wall_nw", 1024, 1024, 0.125, (sprites) ->
+  Sprite.loadSheet "#{I.team}/wall_nw", 1024, 1024, 0.125, (sprites) ->
     sprite = sprites[0]
     backBoardsCanvas.withTransform Matrix.translation(WALL_LEFT, WALL_TOP - 64), ->
       sprite.draw(backBoardsCanvas, 0, 0)
 
-  Sprite.loadSheet "#{I.team}_wall_nw", 1024, 1024, 0.125, (sprites) ->
+  Sprite.loadSheet "#{I.team}/wall_nw", 1024, 1024, 0.125, (sprites) ->
     sprite = sprites[0]
     backBoardsCanvas.withTransform Matrix.translation(WALL_RIGHT, WALL_TOP - 64), ->
       backBoardsCanvas.withTransform Matrix.scale(-1, 1), ->
@@ -148,18 +148,18 @@ Rink = (I={}) ->
       left: 0
     .pixieCanvas()
 
-  Sprite.loadSheet "#{I.team}_wall_sw", 1024, 1024, 0.125, (sprites) ->
+  Sprite.loadSheet "#{I.team}/wall_sw", 1024, 1024, 0.125, (sprites) ->
     sprite = sprites[0]
     frontBoardsCanvas.withTransform Matrix.translation(WALL_LEFT, WALL_BOTTOM - 112), ->
       sprite.draw(frontBoardsCanvas, 0, 0)
 
-  Sprite.loadSheet "#{I.team}_wall_sw", 1024, 1024, 0.125, (sprites) ->
+  Sprite.loadSheet "#{I.team}/wall_sw", 1024, 1024, 0.125, (sprites) ->
     sprite = sprites[0]
     frontBoardsCanvas.withTransform Matrix.translation(WALL_RIGHT, WALL_BOTTOM - 112), ->
       frontBoardsCanvas.withTransform Matrix.scale(-1, 1), ->
         sprite.draw(frontBoardsCanvas, 0, 0)
 
-  Sprite.loadSheet "#{I.team}_wall_s", 512, 512, 0.125, (sprites) ->
+  Sprite.loadSheet "#{I.team}/wall_s", 512, 512, 0.125, (sprites) ->
     sprite = sprites[0]
     frontBoardsCanvas.withTransform Matrix.translation(WALL_LEFT + 128, WALL_BOTTOM - 48), ->
       sprite.fill(frontBoardsCanvas, 0, 0, I.spriteSize * 12, I.spriteSize)
