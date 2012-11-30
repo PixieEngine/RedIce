@@ -60,8 +60,8 @@ task :package do
 end
 
 task :team_image_rename do
-  %w[spike smiley mutant monster hiss].each do |team|
-    `cd images && mkdir #{team}; for f in #{team}_*; do git mv $f #{team}/${f/#{team}_}; done`
+  %w[spike smiley mutant monster hiss robo].each do |team|
+    `cd images && mkdir -p #{team}; for f in #{team}_*; do git mv -f $f #{team}/${f/#{team}_}; done`
   end
 end
 
