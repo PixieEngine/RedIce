@@ -198,7 +198,14 @@ Configurator = (I) ->
   return self
 
 Configurator.images = {}
-[["blue", "smiley"], ["red", "spike"], ["purple", "mutant"], ["green", "hiss"], ["orange", "monster"]].map ([team, style]) ->
+[
+  ["blue", "smiley"]
+  ["red", "spike"]
+  ["purple", "mutant"]
+  ["green", "hiss"]
+  ["orange", "monster"]
+  ["cyan", "robo"]
+].map ([team, style]) ->
   Configurator.images[style] =
     background: Sprite.loadByName("gameselect_back_#{team}")
     nameBubble: Sprite.loadByName("gameselect_namebubble_#{team}")
