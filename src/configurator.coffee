@@ -1,4 +1,6 @@
 Configurator = (I) ->
+  slotWidth = App.width / 6
+
   Object.reverseMerge I,
     activePlayers: 0
     font: "bold 32px 'Monaco', 'Inconsolata', 'consolas', 'Courier New', 'andale mono', 'lucida console', 'monospace'"
@@ -8,7 +10,7 @@ Configurator = (I) ->
       "1": Color("#EB070E")
     width: App.width
     height: App.height
-    x: 0
+    x: (App.width - slotWidth * config.players.length) / 2
     y: 0
 
   lineHeight = 11
@@ -42,8 +44,8 @@ Configurator = (I) ->
       controller: id
       cursorColor: cursorColor
       name: player.name
-      x:  id * (App.width / I.maxPlayers) + 4
-      y:  40
+      x: I.x + id * slotWidth + 4
+      y: I.y + 40
 
     nameEntry.bind "change", (name) ->
       player.name = name
@@ -120,7 +122,7 @@ Configurator = (I) ->
       canvas.withTransform Matrix.translation(I.x, I.y), ->
         I.config.players.each (player, i) ->
           y = 0
-          x = player.id * App.width / MAX_PLAYERS
+          x = player.id * slotWidth
 
           if player.cpu
             name = "CPU"

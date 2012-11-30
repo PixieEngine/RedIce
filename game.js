@@ -11981,7 +11981,8 @@ CharacterSheet = function(I) {
 };
 
 Configurator = function(I) {
-  var addNameEntry, finalizeConfig, horizontalPadding, join, lineHeight, self, teamStyles, unbindTapEvents, verticalPadding;
+  var addNameEntry, finalizeConfig, horizontalPadding, join, lineHeight, self, slotWidth, teamStyles, unbindTapEvents, verticalPadding;
+  slotWidth = App.width / 6;
   Object.reverseMerge(I, {
     activePlayers: 0,
     font: "bold 32px 'Monaco', 'Inconsolata', 'consolas', 'Courier New', 'andale mono', 'lucida console', 'monospace'",
@@ -11992,7 +11993,7 @@ Configurator = function(I) {
     },
     width: App.width,
     height: App.height,
-    x: 0,
+    x: (App.width - slotWidth * config.players.length) / 2,
     y: 0
   });
   lineHeight = 11;
@@ -12022,8 +12023,8 @@ Configurator = function(I) {
       controller: id,
       cursorColor: cursorColor,
       name: player.name,
-      x: id * (App.width / I.maxPlayers) + 4,
-      y: 40
+      x: I.x + id * slotWidth + 4,
+      y: I.y + 40
     });
     nameEntry.bind("change", function(name) {
       return player.name = name;
@@ -12100,7 +12101,7 @@ Configurator = function(I) {
         return I.config.players.each(function(player, i) {
           var color, name, nameWidth, x, y;
           y = 0;
-          x = player.id * App.width / MAX_PLAYERS;
+          x = player.id * slotWidth;
           if (player.cpu) {
             name = "CPU";
             color = Color(Player.CPU_COLOR);
