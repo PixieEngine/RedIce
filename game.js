@@ -14067,6 +14067,54 @@ Minigames.Paint = function(I) {
   return self;
 };
 
+Minigames.PushOut = function(I) {
+  var arenaRadius, center, physics, self;
+  if (I == null) {
+    I = {};
+  }
+  self = GameState(I);
+  physics = Physics();
+  arenaRadius = 300;
+  center = Point(App.width / 2, App.height / 2);
+  self.bind("enter", function() {
+    var n;
+    engine.clear(true);
+    n = 4;
+    n.times(function(i) {
+      var p;
+      p = Point.fromAngle(i * Math.TAU / 4).scale(100).add(center);
+      return engine.add({
+        "class": "Player",
+        id: i,
+        x: p.x,
+        y: p.y
+      });
+    });
+    config.players.each(function(playerData) {
+      return engine.add(Object.extend({}, playerData));
+    });
+    if (config.music) {
+      return Music.play("music1");
+    }
+  });
+  self.bind("beforeDraw", function(canvas) {
+    return canvas.drawCircle({
+      x: center.x,
+      y: center.y,
+      color: "white",
+      radius: arenaRadius
+    });
+  });
+  self.bind("update", function() {
+    var objects, players, zambonis;
+    players = engine.find("Player").shuffle();
+    zambonis = engine.find("Zamboni");
+    objects = players.concat(zambonis);
+    return physics.process(objects);
+  });
+  return self;
+};
+
 NameEntry = function(I) {
   var addCharacter, characterAtCursor, cols, controller, horizontalPadding, lineHeight, margin, menuArea, move, nameArea, rows, self, textArea, textAreaHeight, verticalPadding, width;
   $.reverseMerge(I, {
@@ -17077,7 +17125,7 @@ engine.bind("draw", function(canvas) {
 });
 
 engine.setState(LoaderState({
-  nextState: MatchSetupState
+  nextState: Minigames.PushOut
 }));
 
 engine.start();
