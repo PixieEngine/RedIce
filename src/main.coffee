@@ -32,7 +32,7 @@ canvas = $("canvas").pixieCanvas()
 
 window.engine = Engine
   canvas: canvas
-  includedModules: ["Gamepads"]#, "Stats"]
+  includedModules: ["Gamepads", "Timing"]#, "Stats"]
   showFPS: true
   zSort: true
   FPS: 30
@@ -56,31 +56,7 @@ engine.bind "draw", (canvas) ->
     engine.find("Player, Puck, Goal, Bottle, Zamboni, Blood, Gib").each (object) ->
       object.trigger("drawDebug", canvas)
 
-# Timing Draw and update
-drawStartTime = null
-updateDuration = null
-engine.bind "beforeDraw", ->
-  drawStartTime = +new Date
-engine.bind "overlay", (canvas) ->
-  drawDuration = (+new Date) - drawStartTime
-  if DEBUG_DRAW
-    canvas.drawText
-      color: "white"
-      text: "ms/draw: #{drawDuration}"
-      x: 10
-      y: 30
-    canvas.drawText
-      color: "white"
-      text: "ms/update: #{updateDuration}"
-      x: 10
-      y: 50
-updateStartTime = null
-engine.bind "beforeUpdate", ->
-  updateStartTime = +new Date
-engine.bind "afterUpdate", (canvas) ->
-  updateDuration = (+new Date) - updateStartTime
-
 engine.setState(LoaderState(
-  nextState: Minigames.Paint
+  nextState: MatchSetupState
 ))
 engine.start()
