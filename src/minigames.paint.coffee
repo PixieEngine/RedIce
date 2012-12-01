@@ -11,6 +11,29 @@ Minigames.Paint = (I={}) ->
     engine.add
       class: "RinkBoardsProxy"
 
+    # TODO: TEst only
+    p = engine.add
+      class: "Player"
+      id: 3
+
+    p.include Player.Paint
+
+    n = 8
+    i = 0
+
+    ["0", "F"].each (r) ->
+      ["0", "F"].each (g) ->
+        ["0", "F"].each (b) ->
+          color = ["#", r, g, b].join("")
+
+          engine.add
+            class: "Paint"
+            y: WALL_TOP
+            x: WALL_LEFT + (i + 0.5) * (WALL_RIGHT - WALL_LEFT) / n
+            color: color
+
+          i += 1
+
     # Add each player to game based on config data
     config.players.each (playerData) ->
       engine.add Object.extend({}, playerData)
@@ -27,28 +50,10 @@ Minigames.Paint = (I={}) ->
   self.bind "update", ->
     players = engine.find("Player").shuffle()
     zambonis = engine.find("Zamboni")
-    gibs = engine.find("Gib")
 
-    objects = players.concat zambonis, gibs
-    playersAndPucks = players.concat pucks
-
-    # Puck handling
-    players.each (player) ->
-      return if player.I.wipeout
-
-      pucks.each (puck) ->
-        if Collision.circular(player.controlCircle(), puck.circle())
-          player.controlPuck(puck)
+    objects = players.concat zambonis
 
     physics.process(objects)
-
-    playersAndPucks.each (player) ->
-      # Blood Collisions
-      splats = engine.find("Blood")
-
-      splats.each (splat) ->
-        if Collision.circular(player.circle(), splat.circle())
-          player.bloody()
 
   # We must always return self as the last line
   return self

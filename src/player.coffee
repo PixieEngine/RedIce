@@ -21,8 +21,8 @@ Player = (I={}) ->
     radius: 20
     width: 32
     height: 32
-    x: 192
-    y: 128
+    x: App.width/2
+    y: App.height/2
     slot: 0
     shootPower: 0
     shootHoldFrame: 5

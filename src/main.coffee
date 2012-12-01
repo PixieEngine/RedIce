@@ -80,5 +80,7 @@ engine.bind "beforeUpdate", ->
 engine.bind "afterUpdate", (canvas) ->
   updateDuration = (+new Date) - updateStartTime
 
-engine.setState(LoaderState())
+engine.setState(LoaderState(
+  nextState: Minigames.Paint
+))
 engine.start()
