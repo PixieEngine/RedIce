@@ -13839,8 +13839,12 @@ MatchState = function(I) {
   Fan.crowd = Fan.generateCrowd();
   _ref = config.teams, homeTeam = _ref[0], awayTeam = _ref[1];
   self.bind("enter", function() {
-    var leftGoal, rightGoal, scoreboard;
+    var leftGoal, rightGoal, rink, scoreboard;
     engine.clear(true);
+    rink = engine.add({
+      "class": "Rink",
+      team: config.teams.first()
+    });
     scoreboard = engine.add({
       "class": "Scoreboard",
       team: homeTeam
@@ -13849,7 +13853,8 @@ MatchState = function(I) {
       return engine.setState(MatchSetupState());
     });
     engine.add({
-      "class": "RinkBoardsProxy"
+      "class": "RinkBoardsProxy",
+      rink: rink
     });
     config.players.each(function(playerData) {
       return engine.add(Object.extend({}, playerData));
@@ -13878,11 +13883,6 @@ MatchState = function(I) {
     if (config.music) {
       return Music.play("music1");
     }
-  });
-  self.bind("beforeDraw", function(canvas) {
-    Fan.crowd.invoke("draw", canvas);
-    rink.drawBase(canvas);
-    return rink.drawBack(canvas);
   });
   self.bind("update", function() {
     var gibs, objects, players, playersAndPucks, pucks, zambonis;
@@ -14018,16 +14018,11 @@ Minigames.Paint = function(I) {
   self = GameState(I);
   window.physics = Physics();
   self.bind("enter", function() {
-    var i, n, p;
+    var i, n;
     engine.clear(true);
     engine.add({
       "class": "RinkBoardsProxy"
     });
-    p = engine.add({
-      "class": "Player",
-      id: 3
-    });
-    p.include(Player.Paint);
     n = 8;
     i = 0;
     ["0", "F"].each(function(r) {
@@ -14045,8 +14040,22 @@ Minigames.Paint = function(I) {
         });
       });
     });
+    config.players = [];
+    n = 4;
+    n.times(function(i) {
+      var p;
+      p = Point.fromAngle(i * Math.TAU / 4).scale(100).add(Point(App.width / 2, App.height / 2));
+      return config.players.push({
+        "class": "Player",
+        id: i,
+        x: p.x,
+        y: p.y
+      });
+    });
     config.players.each(function(playerData) {
-      return engine.add(Object.extend({}, playerData));
+      var player;
+      player = engine.add(Object.extend({}, playerData));
+      return player.include(Player.Paint);
     });
     if (config.music) {
       return Music.play("music1");
@@ -14423,10 +14432,13 @@ Particle = function(I) {
   self = GameObject(I);
   I.rotation = I.velocity.direction();
   self.bind("update", function() {
-    var _ref;
+    var rink, _ref;
     I.x += I.velocity.x;
     I.y += I.velocity.y;
     I.zIndex = I.y;
+    if (!(rink = engine.find("Rink").first())) {
+      return;
+    }
     if (I.blood) {
       if ((WALL_LEFT + 128 < (_ref = I.x) && _ref < WALL_RIGHT - 128)) {
         if (I.y < WALL_TOP) {
@@ -14727,7 +14739,7 @@ Physics = function() {
       
       <code class="run"><pre>
       # Set up: Fill canvas with blue
-      canvas.fill("blue")  
+      canvas.fill("blue")
       
       # Clear a portion of the canvas
       canvas.clear
@@ -14797,7 +14809,7 @@ Physics = function() {
       @param {Number} [x=0] Optional x position to fill from
       @param {Number} [y=0] Optional y position to fill from
       @param {Number} [width=canvas.width] Optional width of area to fill
-      @param {Number} [height=canvas.height] Optional height of area to fill 
+      @param {Number} [height=canvas.height] Optional height of area to fill
       @param {Bounds} [bounds] bounds object to fill
       @param {String|Color} [color] color of area to fill
       
@@ -14940,7 +14952,7 @@ Physics = function() {
         return this;
       },
       /**
-      Draws a rectangle at the specified position with given 
+      Draws a rectangle at the specified position with given
       width and height. Optionally takes a position, bounds
       and color argument.
       
@@ -15058,8 +15070,8 @@ Physics = function() {
       */
 
       drawLine: function(_arg) {
-        var color, direction, end, length, start, width;
-        start = _arg.start, end = _arg.end, width = _arg.width, color = _arg.color, direction = _arg.direction, length = _arg.length;
+        var color, direction, end, length, lineCap, start, width;
+        start = _arg.start, end = _arg.end, width = _arg.width, color = _arg.color, direction = _arg.direction, length = _arg.length, lineCap = _arg.lineCap;
         width || (width = 3);
         if (direction) {
           end = direction.norm(length).add(start);
@@ -15069,7 +15081,9 @@ Physics = function() {
         context.beginPath();
         context.moveTo(start.x, start.y);
         context.lineTo(end.x, end.y);
-        context.closePath();
+        if (lineCap) {
+          context.lineCap = lineCap;
+        }
         context.stroke();
         return this;
       },
@@ -15311,12 +15325,12 @@ Physics = function() {
       
       # You can also pass a Color object
       canvas.fillColor(Color('sky blue'))
-      </pre></code>      
+      </pre></code>
       
       @name fillColor
       @methodOf PixieCanvas#
       
-      @param {String|Color} [color] color to make the canvas fillColor 
+      @param {String|Color} [color] color to make the canvas fillColor
       
       @returns {PixieCanvas} this
       */
@@ -15346,12 +15360,12 @@ Physics = function() {
       
       # You can also pass a Color object
       canvas.strokeColor(Color('sky blue'))
-      </pre></code>      
+      </pre></code>
       
       @name strokeColor
       @methodOf PixieCanvas#
       
-      @param {String|Color} [color] color to make the canvas strokeColor 
+      @param {String|Color} [color] color to make the canvas strokeColor
       
       @returns {PixieCanvas} this
       */
@@ -15374,12 +15388,12 @@ Physics = function() {
       <code><pre>
       canvas.measureText('Hello World!')
       # => 55
-      </pre></code>      
+      </pre></code>
       
       @name measureText
       @methodOf PixieCanvas#
       
-      @param {String} [text] the text to measure 
+      @param {String} [text] the text to measure
       
       @returns {PixieCanvas} this
       */
@@ -15759,7 +15773,7 @@ Player.Paint = function(I, self) {
   var actionDown, controller, lastPosition, painting;
   Object.reverseMerge(I, {
     paintColor: "white",
-    paintWidth: 5
+    paintWidth: 15
   });
   controller = engine.controller(I.id);
   actionDown = controller.actionDown;
@@ -15771,6 +15785,7 @@ Player.Paint = function(I, self) {
     if (actionDown("A", "Y")) {
       if (lastPosition) {
         bloodCanvas.drawLine({
+          lineCap: "round",
           start: lastPosition,
           end: p,
           width: I.paintWidth,
@@ -16292,7 +16307,12 @@ Rink = function(I) {
   }
   Object.reverseMerge(I, {
     team: config.teams[0],
-    spriteSize: 64
+    spriteSize: 64,
+    zIndex: WALL_TOP,
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0
   });
   iceCanvas = $("<canvas width=" + App.width + " height=" + App.height + " />").css({
     position: "absolute",
@@ -16484,7 +16504,7 @@ Rink = function(I) {
       return sprite.draw(canvas, x - sprite.width / 2, y - sprite.height / 2);
     }
   };
-  self = {
+  self = GameObject(I).extend({
     paintFrontWall: function(_arg) {
       var sprite, x, y;
       sprite = _arg.sprite, x = _arg.x, y = _arg.y;
@@ -16497,17 +16517,18 @@ Rink = function(I) {
       sprite = _arg.sprite, x = _arg.x, y = _arg.y;
       return paintCanvas(sprite, backBoardsCanvas, x, y);
     },
-    drawBase: function(canvas) {
-      canvas.context().drawImage(iceCanvas.element(), 0, 0);
-      return canvas.context().drawImage(bloodCanvas.element(), 0, 0);
-    },
-    drawBack: function(canvas) {
+    draw: function(canvas) {
       return canvas.context().drawImage(backBoardsCanvas.element(), 0, 0);
     },
     drawFront: function(canvas) {
       return canvas.context().drawImage(frontBoardsCanvas.element(), 0, 0);
     }
-  };
+  });
+  self.bind("beforeDraw", function(canvas) {
+    Fan.crowd.invoke("draw", canvas);
+    canvas.context().drawImage(iceCanvas.element(), 0, 0);
+    return canvas.context().drawImage(bloodCanvas.element(), 0, 0);
+  });
   return self;
 };
 
@@ -16523,7 +16544,7 @@ RinkBoardsProxy = function(I) {
   });
   return self = GameObject(I).extend({
     draw: function(canvas) {
-      return rink.drawFront(canvas);
+      return I.rink.drawFront(canvas);
     }
   });
 };
@@ -16541,7 +16562,7 @@ Scoreboard = function(I) {
     reverse: false,
     time: 0,
     zamboniInterval: 30 * 30,
-    zIndex: 10,
+    zIndex: App.height / 2,
     timeY: 106,
     scoreY: 134,
     scoreX: 62,
@@ -17076,10 +17097,6 @@ config.teams.each(function(name) {
   });
 });
 
-window.rink = Rink({
-  team: config.teams.first()
-});
-
 window.bloodCanvas = $("<canvas width=" + App.width + " height=" + App.height + " />").appendTo("body").css({
   position: "absolute",
   top: 0,
@@ -17119,6 +17136,10 @@ $(document).bind("keydown", "1", function() {
   });
 });
 
+engine.bind("beforeDraw", function(canvas) {
+  return engine.objects().invoke("trigger", "beforeDraw", canvas);
+});
+
 engine.bind("draw", function(canvas) {
   if (DEBUG_DRAW) {
     return engine.find("Player, Puck, Goal, Bottle, Zamboni, Blood, Gib").each(function(object) {
@@ -17128,7 +17149,7 @@ engine.bind("draw", function(canvas) {
 });
 
 engine.setState(LoaderState({
-  nextState: Minigames.PushOut
+  nextState: MatchSetupState
 }));
 
 engine.start();

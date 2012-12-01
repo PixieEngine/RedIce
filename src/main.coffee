@@ -10,9 +10,6 @@ config.teams.each (name) ->
   teamSprites[name] = TeamSheet
     team: name
 
-#TODO Manage these extra canvases better
-window.rink = Rink
-  team: config.teams.first()
 window.bloodCanvas = $("<canvas width=#{App.width} height=#{App.height} />")
   .appendTo("body")
   .css
@@ -51,12 +48,16 @@ $(document).bind "keydown", "1", ->
   engine.add
     class: "Zamboni"
 
+# TODO: Move this into default engine behavior
+engine.bind "beforeDraw", (canvas) ->
+  engine.objects().invoke "trigger", "beforeDraw", canvas
+
 engine.bind "draw", (canvas) ->
   if DEBUG_DRAW
     engine.find("Player, Puck, Goal, Bottle, Zamboni, Blood, Gib").each (object) ->
       object.trigger("drawDebug", canvas)
 
 engine.setState(LoaderState(
-  nextState: Minigames.PushOut
+  nextState: MatchSetupState
 ))
 engine.start()

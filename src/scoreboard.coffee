@@ -9,7 +9,7 @@ Scoreboard = (I) ->
     reverse: false
     time: 0
     zamboniInterval: 30 * 30
-    zIndex: 10
+    zIndex: App.height / 2
     timeY: 106
     scoreY: 134
     scoreX: 62

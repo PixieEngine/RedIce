@@ -4,4 +4,4 @@ RinkBoardsProxy = (I={}) ->
 
   self = GameObject(I).extend
     draw: (canvas) ->
-      rink.drawFront(canvas)
+      I.rink.drawFront(canvas)

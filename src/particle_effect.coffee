@@ -50,6 +50,8 @@ Particle = (I={}) ->
 
     I.zIndex = I.y
 
+    return unless rink = engine.find("Rink").first()
+
     if I.blood
       if WALL_LEFT + 128 < I.x < WALL_RIGHT - 128
         if I.y < WALL_TOP

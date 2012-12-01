@@ -11,6 +11,10 @@ MatchState = (I={}) ->
   self.bind "enter", ->
     engine.clear(true)
 
+    rink = engine.add
+      class: "Rink"
+      team: config.teams.first()
+
     scoreboard = engine.add
       class: "Scoreboard"
       team: homeTeam
@@ -23,6 +27,7 @@ MatchState = (I={}) ->
     # Draw the front Rink Boards at the correct zIndex
     engine.add
       class: "RinkBoardsProxy"
+      rink: rink
 
     # Add each player to game based on config data
     config.players.each (playerData) ->
@@ -51,11 +56,6 @@ MatchState = (I={}) ->
 
     if config.music
       Music.play "music1"
-
-  self.bind "beforeDraw", (canvas) ->
-    Fan.crowd.invoke("draw", canvas)
-    rink.drawBase(canvas)
-    rink.drawBack(canvas)
 
   # Add events and methods here
   self.bind "update", ->

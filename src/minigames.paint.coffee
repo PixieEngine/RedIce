@@ -11,13 +11,6 @@ Minigames.Paint = (I={}) ->
     engine.add
       class: "RinkBoardsProxy"
 
-    # TODO: TEst only
-    p = engine.add
-      class: "Player"
-      id: 3
-
-    p.include Player.Paint
-
     n = 8
     i = 0
 
@@ -34,9 +27,21 @@ Minigames.Paint = (I={}) ->
 
           i += 1
 
+    # TODO: TEst only, get real data for configurator
+    config.players = []
+    n = 4
+    n.times (i) ->
+      p = Point.fromAngle(i * Math.TAU/4).scale(100).add(Point(App.width/2, App.height/2))
+      config.players.push
+        class: "Player"
+        id: i
+        x: p.x
+        y: p.y
+
     # Add each player to game based on config data
     config.players.each (playerData) ->
-      engine.add Object.extend({}, playerData)
+      player = engine.add Object.extend({}, playerData)
+      player.include Player.Paint
 
     if config.music
       Music.play "music1"

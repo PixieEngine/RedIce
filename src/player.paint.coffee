@@ -1,7 +1,7 @@
 Player.Paint = (I, self) ->
   Object.reverseMerge I,
     paintColor: "white"
-    paintWidth: 5
+    paintWidth: 15
 
   controller = engine.controller(I.id)
   actionDown = controller.actionDown
@@ -14,6 +14,7 @@ Player.Paint = (I, self) ->
     if actionDown "A", "Y"
       if lastPosition
         bloodCanvas.drawLine
+          lineCap: "round"
           start: lastPosition
           end: p
           width: I.paintWidth

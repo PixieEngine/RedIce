@@ -2,6 +2,11 @@ Rink = (I={}) ->
   Object.reverseMerge I,
     team: config.teams[0]
     spriteSize: 64
+    zIndex: WALL_TOP
+    x: 0
+    y: 0
+    width: 0
+    height: 0
 
   iceCanvas = $("<canvas width=#{App.width} height=#{App.height} />")
     .css
@@ -177,7 +182,7 @@ Rink = (I={}) ->
     if sprite
       sprite.draw(canvas, x - sprite.width / 2, y - sprite.height / 2)
 
-  self =
+  self = GameObject(I).extend
     paintFrontWall: ({sprite, x, y}) ->
       frontBoardsCanvas.globalCompositeOperation "destination-over"
       paintCanvas(sprite, frontBoardsCanvas, x, y)
@@ -186,13 +191,16 @@ Rink = (I={}) ->
     paintBackWall: ({sprite, x, y}) ->
       paintCanvas(sprite, backBoardsCanvas, x, y)
 
-    drawBase: (canvas) ->
-      canvas.context().drawImage(iceCanvas.element(), 0, 0)
-      canvas.context().drawImage(bloodCanvas.element(), 0, 0)
-    drawBack: (canvas) ->
+    draw: (canvas) ->
       canvas.context().drawImage(backBoardsCanvas.element(), 0, 0)
+
     drawFront: (canvas) ->
       canvas.context().drawImage(frontBoardsCanvas.element(), 0, 0)
+
+  self.bind "beforeDraw", (canvas) ->
+    Fan.crowd.invoke("draw", canvas)
+    canvas.context().drawImage(iceCanvas.element(), 0, 0)
+    canvas.context().drawImage(bloodCanvas.element(), 0, 0)
 
   return self
 
