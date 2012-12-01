@@ -57,14 +57,6 @@ Player = (I={}) ->
         I.hflip = newFlip
 
   self = Base(I).extend
-    color: ->
-      if I.cpu
-        Color(Player.CPU_COLOR)
-      else
-        # Adjust the lightness of each player's name tag slightly,
-        # based on team and team slot
-        Color(Player.COLORS[I.team]).lighten((I.slot - 1) * 0.1)
-
     controlCircle: ->
       p = Point.fromAngle(I.heading).scale(I.controlRadius)
 
@@ -301,18 +293,6 @@ Player = (I={}) ->
   self.include Player.Streaks
 
   self
-
-Player.COLORS = [
-  "#0246E3" # Blue
-  "#EB070E" # Red
-  "#388326" # Green
-  "#F69508" # Orange
-  "#563495" # Purple
-  "#58C4F5" # Cyan
-  "#FFDE49" # Yellow
-]
-
-Player.CPU_COLOR = "#888"
 
 Player.bodyData =
   skinny:

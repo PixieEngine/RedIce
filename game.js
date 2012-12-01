@@ -15391,13 +15391,6 @@ Player = function(I) {
     }
   };
   self = Base(I).extend({
-    color: function() {
-      if (I.cpu) {
-        return Color(Player.CPU_COLOR);
-      } else {
-        return Color(Player.COLORS[I.team]).lighten((I.slot - 1) * 0.1);
-      }
-    },
     controlCircle: function() {
       var c, p, speed;
       p = Point.fromAngle(I.heading).scale(I.controlRadius);
@@ -15622,10 +15615,6 @@ Player = function(I) {
   return self;
 };
 
-Player.COLORS = ["#0246E3", "#EB070E", "#388326", "#F69508", "#563495", "#58C4F5", "#FFDE49"];
-
-Player.CPU_COLOR = "#888";
-
 Player.bodyData = {
   skinny: {
     mass: 1.5,
@@ -15825,6 +15814,13 @@ PlayerDrawing = function(I, self) {
     return self.drawFloatingNameTag(canvas);
   });
   return {
+    color: function() {
+      if (I.cpu) {
+        return Color(Player.CPU_COLOR);
+      } else {
+        return Color(Player.COLORS[I.team]).lighten((I.slot - 1) * 0.1);
+      }
+    },
     drawShadow: function(canvas) {
       var base;
       base = self.center().add(0, I.height / 2 + 4);
@@ -15960,6 +15956,10 @@ PlayerDrawing.shootArrow = Sprite.loadSheet("arrow_3", 512, 512);
 PlayerDrawing.chargedArrow = Sprite.loadSheet("arrow_charged_3", 512, 512);
 
 PlayerDrawing.chargeAura = Sprite.loadSheet("charge_aura_strip2", 512, 512);
+
+Player.COLORS = ["#0246E3", "#EB070E", "#388326", "#F69508", "#563495", "#58C4F5", "#FFDE49"];
+
+Player.CPU_COLOR = "#888";
 
 PlayerState = function(I, self) {
   if (I == null) {

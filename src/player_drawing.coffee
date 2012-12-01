@@ -59,6 +59,14 @@ PlayerDrawing = (I, self) ->
     self.drawPowerMeters(canvas)
     self.drawFloatingNameTag(canvas)
 
+  color: ->
+    if I.cpu
+      Color(Player.CPU_COLOR)
+    else
+      # Adjust the lightness of each player's name tag slightly,
+      # based on team and team slot
+      Color(Player.COLORS[I.team]).lighten((I.slot - 1) * 0.1)
+
   drawShadow: (canvas) ->
     base = self.center().add(0, I.height/2 + 4)
 
@@ -185,3 +193,14 @@ PlayerDrawing.shootArrow = Sprite.loadSheet("arrow_3", 512, 512)
 PlayerDrawing.chargedArrow = Sprite.loadSheet("arrow_charged_3", 512, 512)
 PlayerDrawing.chargeAura = Sprite.loadSheet("charge_aura_strip2", 512, 512)
 
+Player.COLORS = [
+  "#0246E3" # Blue
+  "#EB070E" # Red
+  "#388326" # Green
+  "#F69508" # Orange
+  "#563495" # Purple
+  "#58C4F5" # Cyan
+  "#FFDE49" # Yellow
+]
+
+Player.CPU_COLOR = "#888"
