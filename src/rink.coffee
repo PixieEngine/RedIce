@@ -202,6 +202,12 @@ Rink = (I={}) ->
     canvas.context().drawImage(iceCanvas.element(), 0, 0)
     canvas.context().drawImage(bloodCanvas.element(), 0, 0)
 
+  self.bind "create", ->
+    # Draw the front Rink Boards at the correct zIndex
+    engine.add
+      class: "RinkBoardsProxy"
+      rink: self
+
   return self
 
 Rink.CORNER_RADIUS = 96

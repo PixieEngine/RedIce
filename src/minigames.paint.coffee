@@ -7,9 +7,8 @@ Minigames.Paint = (I={}) ->
   self.bind "enter", ->
     engine.clear(true)
 
-    # Draw the front Rink Boards at the correct zIndex
     engine.add
-      class: "RinkBoardsProxy"
+      class: "Rink"
 
     n = 8
     i = 0
@@ -45,11 +44,6 @@ Minigames.Paint = (I={}) ->
 
     if config.music
       Music.play "music1"
-
-  self.bind "beforeDraw", (canvas) ->
-    Fan.crowd.invoke("draw", canvas)
-    rink.drawBase(canvas)
-    rink.drawBack(canvas)
 
   # Add events and methods here
   self.bind "update", ->

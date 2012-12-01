@@ -24,11 +24,6 @@ MatchState = (I={}) ->
     scoreboard.bind "restart", ->
       engine.setState(MatchSetupState())
 
-    # Draw the front Rink Boards at the correct zIndex
-    engine.add
-      class: "RinkBoardsProxy"
-      rink: rink
-
     # Add each player to game based on config data
     config.players.each (playerData) ->
       engine.add Object.extend({}, playerData)

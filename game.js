@@ -13852,10 +13852,6 @@ MatchState = function(I) {
     scoreboard.bind("restart", function() {
       return engine.setState(MatchSetupState());
     });
-    engine.add({
-      "class": "RinkBoardsProxy",
-      rink: rink
-    });
     config.players.each(function(playerData) {
       return engine.add(Object.extend({}, playerData));
     });
@@ -14021,7 +14017,7 @@ Minigames.Paint = function(I) {
     var i, n;
     engine.clear(true);
     engine.add({
-      "class": "RinkBoardsProxy"
+      "class": "Rink"
     });
     n = 8;
     i = 0;
@@ -14060,11 +14056,6 @@ Minigames.Paint = function(I) {
     if (config.music) {
       return Music.play("music1");
     }
-  });
-  self.bind("beforeDraw", function(canvas) {
-    Fan.crowd.invoke("draw", canvas);
-    rink.drawBase(canvas);
-    return rink.drawBack(canvas);
   });
   self.bind("update", function() {
     var objects, players, zambonis;
@@ -16529,6 +16520,12 @@ Rink = function(I) {
     canvas.context().drawImage(iceCanvas.element(), 0, 0);
     return canvas.context().drawImage(bloodCanvas.element(), 0, 0);
   });
+  self.bind("create", function() {
+    return engine.add({
+      "class": "RinkBoardsProxy",
+      rink: self
+    });
+  });
   return self;
 };
 
@@ -17149,7 +17146,7 @@ engine.bind("draw", function(canvas) {
 });
 
 engine.setState(LoaderState({
-  nextState: MatchSetupState
+  nextState: Minigames.Paint
 }));
 
 engine.start();
