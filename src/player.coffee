@@ -1,10 +1,5 @@
 Player = (I={}) ->
   Object.reverseMerge I,
-    blood:
-      face: 0
-      body: 0
-      leftSkate: 0
-      rightSkate: 0
     boost: 0
     boostMeter: 64
     cooldown:
@@ -62,13 +57,6 @@ Player = (I={}) ->
         I.hflip = newFlip
 
   self = Base(I).extend
-    bloody: ->
-      if I.wipeout
-        I.blood.body += rand(5)
-      else
-        I.blood.leftSkate = (I.blood.leftSkate + rand(10)).clamp(0, 60)
-        I.blood.rightSkate = (I.blood.rightSkate + rand(10)).clamp(0, 60)
-
     color: ->
       if I.cpu
         Color(Player.CPU_COLOR)
@@ -106,11 +94,9 @@ Player = (I={}) ->
 
       puck.I.velocity = puck.I.velocity.add(positionDelta)
 
-
     wipeout: (push) ->
       I.falls += 1
       I.wipeout = 25
-      I.blood.face += rand(20) + rand(20) + rand(20) + I.falls
 
       I.shootPower = 0
 
@@ -129,6 +115,8 @@ Player = (I={}) ->
         class: "Blood"
         x: I.center.x + push.x
         y: I.center.y + push.y
+
+      self.trigger "wipeout"
 
   shootPuck = (direction) ->
     puck = engine.find("Puck").first()
@@ -172,8 +160,6 @@ Player = (I={}) ->
 
     unless I.velocity.magnitude() == 0
       I.heading = Point.direction(Point(0, 0), I.velocity)
-
-    self.drawBloodStreaks()
 
     movementScale = I.movementSpeed
 
@@ -312,6 +298,7 @@ Player = (I={}) ->
 
   self.include PlayerState
   self.include PlayerDrawing
+  self.include Player.Streaks
 
   self
 
