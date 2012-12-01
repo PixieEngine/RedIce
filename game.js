@@ -14068,21 +14068,21 @@ Minigames.Paint = function(I) {
 };
 
 Minigames.PushOut = function(I) {
-  var arenaRadius, center, physics, self;
+  var arena, physics, self;
   if (I == null) {
     I = {};
   }
   self = GameState(I);
   physics = Physics();
-  arenaRadius = 300;
-  center = Point(App.width / 2, App.height / 2);
+  arena = Point(App.width / 2, App.height / 2);
+  arena.radius = 300;
   self.bind("enter", function() {
     var n;
     engine.clear(true);
     n = 4;
     n.times(function(i) {
       var p;
-      p = Point.fromAngle(i * Math.TAU / 4).scale(100).add(center);
+      p = Point.fromAngle(i * Math.TAU / 4).scale(100).add(arena);
       return engine.add({
         "class": "Player",
         id: i,
@@ -14099,10 +14099,8 @@ Minigames.PushOut = function(I) {
   });
   self.bind("beforeDraw", function(canvas) {
     return canvas.drawCircle({
-      x: center.x,
-      y: center.y,
-      color: "white",
-      radius: arenaRadius
+      circle: arena,
+      color: "white"
     });
   });
   self.bind("update", function() {
@@ -14110,7 +14108,12 @@ Minigames.PushOut = function(I) {
     players = engine.find("Player").shuffle();
     zambonis = engine.find("Zamboni");
     objects = players.concat(zambonis);
-    return physics.process(objects);
+    physics.process(objects);
+    return players.each(function(player) {
+      if (!Collision.circular(player.circle(), arena)) {
+        return player.destroy();
+      }
+    });
   });
   return self;
 };

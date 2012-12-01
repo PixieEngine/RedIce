@@ -6,8 +6,9 @@ Minigames.PushOut = (I={}) ->
   # TODO Parameterize rink
   physics = Physics()
 
-  arenaRadius = 300
-  center = Point(App.width/2, App.height/2)
+
+  arena = Point(App.width/2, App.height/2)
+  arena.radius = 300
 
   self.bind "enter", ->
     engine.clear(true)
@@ -15,7 +16,7 @@ Minigames.PushOut = (I={}) ->
     # TODO: TEst only
     n = 4
     n.times (i) ->
-      p = Point.fromAngle(i * Math.TAU/4).scale(100).add(center)
+      p = Point.fromAngle(i * Math.TAU/4).scale(100).add(arena)
       engine.add
         class: "Player"
         id: i
@@ -30,12 +31,9 @@ Minigames.PushOut = (I={}) ->
       Music.play "music1"
 
   self.bind "beforeDraw", (canvas) ->
-    canvas.drawCircle(
-      x: center.x
-      y: center.y
+    canvas.drawCircle
+      circle: arena
       color: "white"
-      radius: arenaRadius
-    )
 
   # Add events and methods here
   self.bind "update", ->
@@ -45,6 +43,9 @@ Minigames.PushOut = (I={}) ->
     objects = players.concat zambonis
 
     physics.process(objects)
+
+    players.each (player) ->
+      player.destroy() unless Collision.circular(player.circle(), arena)
 
   # We must always return self as the last line
   return self
