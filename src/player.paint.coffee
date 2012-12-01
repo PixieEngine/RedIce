@@ -24,4 +24,5 @@ Player.Paint = (I, self) ->
   self.bind "paint", (color) ->
     I.paintColor = color
 
-  return {}
+  color: ->
+    I.paintColor

@@ -15694,7 +15694,11 @@ Player.Paint = function(I, self) {
   self.bind("paint", function(color) {
     return I.paintColor = color;
   });
-  return {};
+  return {
+    color: function() {
+      return I.paintColor;
+    }
+  };
 };
 
 Player.Streaks = function(I, self) {
