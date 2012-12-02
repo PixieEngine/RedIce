@@ -17073,7 +17073,7 @@ Zamboni = function(I) {
 };
 
 window.config = {
-  teams: ["robo", "spike"],
+  teams: ["smiley", "spike"],
   players: [],
   particleEffects: true,
   music: false,
