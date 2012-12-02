@@ -65,8 +65,8 @@ PlayerState = (I={}, self) ->
         I.frame = I.shootHoldFrame + (I.age / 6).floor() % 2
     else if I.cooldown.shoot
       I.action = "shoot"
-      setFacing "front"
-      I.frame = 10 - I.cooldown.shoot
+      forceFacing "front"
+      I.frame = (10 - I.cooldown.shoot/I.shootCooldownFrameDelay).floor()
     else
       I.frame = (I.age / cycleDelay).floor()
 

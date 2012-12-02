@@ -31,6 +31,7 @@ Player = (I={}) ->
     teamStyle: "spike"
     bodyStyle: "tubs"
     wipeout: 0
+    shootCooldownFrameDelay: 3
     velocity: Point()
 
   Object.extend I, Player.bodyData[I.bodyStyle]
@@ -165,10 +166,10 @@ Player = (I={}) ->
 
         movementScale = 0.1
       else if I.cooldown.shoot
-        if I.cooldown.shoot == I.shootCooldownFrameCount - 2 # Shoot on second frame
+        if (I.cooldown.shoot / I.shootCooldownFrameDelay).floor() == I.shootCooldownFrameCount - 2 # Shoot on second frame
           shootPuck(I.movementDirection)
       else if I.shootPower
-        I.cooldown.shoot = I.shootCooldownFrameCount
+        I.cooldown.shoot = I.shootCooldownFrameCount * I.shootCooldownFrameDelay
       else if I.cooldown.boost < I.boostMeter && (actionDown("A", "L", "R") || (axisPosition(4) > 0) || (axisPosition(5) > 0))
         if I.cooldown.boost == 0
           bonus = 10

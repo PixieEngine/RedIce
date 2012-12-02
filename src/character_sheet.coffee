@@ -34,7 +34,7 @@ CharacterSheet = (I={}) ->
 
   self.characterData =
     shootHoldFrame: 5
-    shootCooldownFrameCount: 5
+    shootCooldownFrameCount: 4
 
   if I.character == "skinny"
     self.characterData.shootHoldFrame = 3
@@ -42,7 +42,7 @@ CharacterSheet = (I={}) ->
 
   if I.character == "thick"
     self.characterData.shootHoldFrame = 5
-    self.characterData.shootCooldownFrameCount = 6
+    self.characterData.shootCooldownFrameCount = 5
 
   if data = Data["#{I.team}_#{I.character}"]
     Object.extend self.data, data

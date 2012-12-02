@@ -11964,7 +11964,7 @@ CharacterSheet = function(I) {
   };
   self.characterData = {
     shootHoldFrame: 5,
-    shootCooldownFrameCount: 5
+    shootCooldownFrameCount: 4
   };
   if (I.character === "skinny") {
     self.characterData.shootHoldFrame = 3;
@@ -11972,7 +11972,7 @@ CharacterSheet = function(I) {
   }
   if (I.character === "thick") {
     self.characterData.shootHoldFrame = 5;
-    self.characterData.shootCooldownFrameCount = 6;
+    self.characterData.shootCooldownFrameCount = 5;
   }
   if (data = Data["" + I.team + "_" + I.character]) {
     Object.extend(self.data, data);
@@ -15481,6 +15481,7 @@ Player = function(I) {
     teamStyle: "spike",
     bodyStyle: "tubs",
     wipeout: 0,
+    shootCooldownFrameDelay: 3,
     velocity: Point()
   });
   Object.extend(I, Player.bodyData[I.bodyStyle]);
@@ -15607,11 +15608,11 @@ Player = function(I) {
         }
         movementScale = 0.1;
       } else if (I.cooldown.shoot) {
-        if (I.cooldown.shoot === I.shootCooldownFrameCount - 2) {
+        if ((I.cooldown.shoot / I.shootCooldownFrameDelay).floor() === I.shootCooldownFrameCount - 2) {
           shootPuck(I.movementDirection);
         }
       } else if (I.shootPower) {
-        I.cooldown.shoot = I.shootCooldownFrameCount;
+        I.cooldown.shoot = I.shootCooldownFrameCount * I.shootCooldownFrameDelay;
       } else if (I.cooldown.boost < I.boostMeter && (actionDown("A", "L", "R") || (axisPosition(4) > 0) || (axisPosition(5) > 0))) {
         if (I.cooldown.boost === 0) {
           bonus = 10;
@@ -15980,7 +15981,7 @@ PlayerDrawing = function(I, self) {
         arrowAnimation = PlayerDrawing.shootArrow;
         if (superChargeRatio === 1) {
           arrowAnimation = PlayerDrawing.chargedArrow;
-          canvas.withTransform(Matrix.translation(center.x - 5, center.y - 40).scale(0.375), function(canvas) {
+          canvas.withTransform(Matrix.translation(center.x - 5, center.y - 40).scale(0.5), function(canvas) {
             var _ref;
             return (_ref = PlayerDrawing.chargeAura.rand()) != null ? _ref.draw(canvas, -256, -256) : void 0;
           });
@@ -16097,8 +16098,8 @@ PlayerState = function(I, self) {
       }
     } else if (I.cooldown.shoot) {
       I.action = "shoot";
-      setFacing("front");
-      I.frame = 10 - I.cooldown.shoot;
+      forceFacing("front");
+      I.frame = (10 - I.cooldown.shoot / I.shootCooldownFrameDelay).floor();
     } else {
       I.frame = (I.age / cycleDelay).floor();
     }
