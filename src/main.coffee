@@ -58,6 +58,6 @@ engine.bind "draw", (canvas) ->
       object.trigger("drawDebug", canvas)
 
 engine.setState(LoaderState(
-  nextState: Minigames.Paint
+  nextState: MainMenuState
 ))
 engine.start()

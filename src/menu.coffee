@@ -21,7 +21,7 @@ Menu = (I={}) ->
 
   # Inherit from game object
   self = GameObject(I)
-  
+
   moveSelection = (change) ->
     I.selectedOption += change
     I.selectedOption = I.selectedOption.mod(I.options.length)
@@ -31,37 +31,28 @@ Menu = (I={}) ->
 
   # Add events and methods here
   self.bind "update", ->
-    # Keyboard input
-    if justPressed.up
-      moveSelection(-1)
-    if justPressed.down
-      moveSelection(1)
-      
-    if justPressed.return
-      choose()
-      
     # Joystick Input
     MAX_PLAYERS.times (i) ->
       joystick = engine.controller(i)
 
       moveSelection(joystick.tap().y)
-  
-      if joystick.buttonPressed "A"
+
+      if joystick.buttonPressed "A", "START"
         choose()
-    
+
 
   self.unbind "draw"
 
   self.bind "draw", (canvas) ->
     sprite = Menu.topSprite
     sprite.draw canvas, -sprite.width/2, -sprite.height
-    
+
     sprite = Menu.middleSprite
     sprite.draw canvas, -sprite.width/2, 0
 
     sprite = Menu.bottomSprite
     sprite.draw canvas, -sprite.width/2, 128
-    
+
     canvas.font("bold 48px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
     I.options.each (option, i) ->
       canvas.centerText
@@ -69,7 +60,7 @@ Menu = (I={}) ->
         x: 0
         y: i * 64
         color: "white"
-        
+
       if i is I.selectedOption
         width = 256 + 128
         # TODO Sprite/Animation rather than solid color
@@ -79,7 +70,7 @@ Menu = (I={}) ->
           width: width
           height: 32
           color: "rgba(255, 0, 255, 0.25)"
-  
+
   # We must always return self as the last line
   return self
 

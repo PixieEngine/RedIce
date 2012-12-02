@@ -13947,20 +13947,11 @@ Menu = function(I) {
     return I.options[I.selectedOption].action();
   };
   self.bind("update", function() {
-    if (justPressed.up) {
-      moveSelection(-1);
-    }
-    if (justPressed.down) {
-      moveSelection(1);
-    }
-    if (justPressed["return"]) {
-      choose();
-    }
     return MAX_PLAYERS.times(function(i) {
       var joystick;
       joystick = engine.controller(i);
       moveSelection(joystick.tap().y);
-      if (joystick.buttonPressed("A")) {
+      if (joystick.buttonPressed("A", "START")) {
         return choose();
       }
     });
@@ -17146,7 +17137,7 @@ engine.bind("draw", function(canvas) {
 });
 
 engine.setState(LoaderState({
-  nextState: Minigames.Paint
+  nextState: MainMenuState
 }));
 
 engine.start();
