@@ -13,6 +13,7 @@ Menu = (I={}) ->
       }, {
         text: "Mini-Games"
         action: ->
+          engine.setState(Minigames.PushOut())
       }, {
         text: "Options"
         action: ->

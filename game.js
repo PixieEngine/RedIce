@@ -13931,7 +13931,9 @@ Menu = function(I) {
         }
       }, {
         text: "Mini-Games",
-        action: function() {}
+        action: function() {
+          return engine.setState(Minigames.PushOut());
+        }
       }, {
         text: "Options",
         action: function() {}
