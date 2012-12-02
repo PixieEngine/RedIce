@@ -15536,7 +15536,7 @@ Player = function(I) {
     }
   });
   shootPuck = function(direction) {
-    var baseShotPower, circle, hit, p, power, puck;
+    var baseShotPower, circle, p, power, puck;
     puck = engine.find("Puck").first();
     power = Math.min(I.shootPower, I.maxShotPower);
     circle = self.controlCircle();
@@ -15549,13 +15549,8 @@ Player = function(I) {
       p = Point.fromAngle(direction).scale(baseShotPower + power * I.powerMultiplier);
       puck.I.velocity = puck.I.velocity.add(p);
     } else {
-      hit = false;
       engine.find("Player, Gib, Zamboni").without([self]).each(function(entity) {
-        if (hit) {
-          return;
-        }
         if (Collision.circular(circle, entity.circle())) {
-          hit = true;
           p = Point.fromAngle(direction).scale(power * I.powerMultiplier / entity.mass());
           if (power > entity.toughness()) {
             entity.wipeout(p);

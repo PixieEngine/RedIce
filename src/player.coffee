@@ -112,12 +112,10 @@ Player = (I={}) ->
 
     # Hitting people
     else
-      hit = false
+      # Hit everyting in your way!
+      # TODO Maybe distribute power evenly
       engine.find("Player, Gib, Zamboni").without([self]).each (entity) ->
-        return if hit
-
         if Collision.circular(circle, entity.circle())
-          hit = true
           p = Point.fromAngle(direction).scale(power * I.powerMultiplier / entity.mass())
 
           if power > entity.toughness()
