@@ -16704,7 +16704,13 @@ Object.extend(Scoreboard, {
     periodRadiusDelta: 1.5,
     timeY: 116
   },
-  spike: {}
+  spike: {},
+  robo: {
+    periodY: 128,
+    timeY: 98,
+    scoreY: 128,
+    scoreX: 66
+  }
 });
 
 Shockwave = function(I) {
