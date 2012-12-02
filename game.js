@@ -15444,7 +15444,7 @@ Physics = function() {
 })(jQuery);
 
 Player = function(I) {
-  var actionDown, axisPosition, controller, forceFacing, jitterSoak, self, setFacing, setFlip, shootPuck;
+  var actionDown, axisPosition, controller, self, shootPuck;
   if (I == null) {
     I = {};
   }
@@ -15487,25 +15487,6 @@ Player = function(I) {
   controller = engine.controller(I.id);
   actionDown = controller.actionDown;
   axisPosition = controller.axis || $.noop;
-  jitterSoak = 10;
-  setFacing = function(newFacing) {
-    if (!I.cooldown.facing) {
-      I.cooldown.facing = jitterSoak;
-      return I.facing = newFacing;
-    }
-  };
-  forceFacing = function(newFacing) {
-    I.facing = newFacing;
-    return I.cooldown.facing = jitterSoak;
-  };
-  setFlip = function(newFlip) {
-    if (I.hflip !== newFlip) {
-      if (!I.cooldown.flip) {
-        I.cooldown.flip = jitterSoak;
-        return I.hflip = newFlip;
-      }
-    }
-  };
   self = Base(I).extend({
     controlCircle: function() {
       var c, p, speed;
@@ -15657,70 +15638,6 @@ Player = function(I) {
       }
       return I.hasPuck = false;
     }
-  });
-  self.bind("update", function() {
-    var angleSprites, cycleDelay, headDirection, headIndexOffset, headPosition, power, speed, spriteSheet, _ref;
-    Object.extend(I, teamSprites[I.teamStyle][I.bodyStyle].characterData);
-    I.headAction = "normal";
-    setFlip(I.heading > 2 * Math.TAU / 8 || I.heading < -2 * Math.TAU / 8);
-    spriteSheet = self.spriteSheet();
-    speed = I.velocity.magnitude();
-    cycleDelay = 16;
-    if ((0 <= (_ref = I.heading) && _ref <= Math.TAU / 2)) {
-      setFacing("front");
-    } else {
-      setFacing("back");
-    }
-    if (speed < 1) {
-      I.action = "idle";
-    } else if (speed < 6) {
-      I.action = "slow";
-      cycleDelay = 4;
-    } else {
-      I.action = "fast";
-      cycleDelay = 3;
-    }
-    if (I.wipeout) {
-      forceFacing("front");
-      I.action = "fall";
-      I.headAction = "pain";
-      I.frame = ((25 - I.wipeout) / 3).floor().clamp(0, 5);
-    } else if (power = I.shootPower) {
-      forceFacing("front");
-      I.action = "shoot";
-      if (power < I.maxShotPower) {
-        I.frame = ((power * I.shootHoldFrame + 1) / I.maxShotPower).floor();
-      } else {
-        I.headAction = "charged";
-        I.frame = I.shootHoldFrame + (I.age / 6).floor() % 2;
-      }
-    } else if (I.cooldown.shoot) {
-      I.action = "shoot";
-      setFacing("front");
-      I.frame = 10 - I.cooldown.shoot;
-    } else {
-      I.frame = (I.age / cycleDelay).floor();
-    }
-    if (I.facing === "front") {
-      headDirection = I.heading.constrainRotation();
-      if (headDirection < -Math.TAU / 4) {
-        headDirection = Math.TAU / 2;
-      } else if (headDirection < 0) {
-        headDirection = 0;
-      }
-    } else {
-      headDirection = I.heading;
-    }
-    angleSprites = 8;
-    headIndexOffset = 2;
-    headPosition = ((angleSprites * -headDirection / Math.TAU).round() + headIndexOffset).mod(angleSprites);
-    if (headPosition >= 5) {
-      headPosition = 8 - headPosition;
-      I.headFlip = true;
-    } else {
-      I.headFlip = false;
-    }
-    return I.headSprite = teamSprites[I.teamStyle][I.headStyle][I.headAction][headPosition];
   });
   if (I.cpu) {
     self.include(AI);
@@ -16114,6 +16031,7 @@ Player.COLORS = ["#0246E3", "#EB070E", "#388326", "#F69508", "#563495", "#58C4F5
 Player.CPU_COLOR = "#888";
 
 PlayerState = function(I, self) {
+  var forceFacing, jitterSoak, setFacing, setFlip;
   if (I == null) {
     I = {};
   }
@@ -16121,6 +16039,89 @@ PlayerState = function(I, self) {
     frame: 0,
     action: "idle",
     facing: "front"
+  });
+  jitterSoak = 10;
+  setFacing = function(newFacing) {
+    if (!I.cooldown.facing) {
+      I.cooldown.facing = jitterSoak;
+      return I.facing = newFacing;
+    }
+  };
+  forceFacing = function(newFacing) {
+    I.facing = newFacing;
+    return I.cooldown.facing = jitterSoak;
+  };
+  setFlip = function(newFlip) {
+    if (I.hflip !== newFlip) {
+      if (!I.cooldown.flip) {
+        I.cooldown.flip = jitterSoak;
+        return I.hflip = newFlip;
+      }
+    }
+  };
+  self.bind("update", function() {
+    var angleSprites, cycleDelay, headDirection, headIndexOffset, headPosition, power, speed, spriteSheet, _ref;
+    Object.extend(I, teamSprites[I.teamStyle][I.bodyStyle].characterData);
+    I.headAction = "normal";
+    setFlip(I.heading > 2 * Math.TAU / 8 || I.heading < -2 * Math.TAU / 8);
+    spriteSheet = self.spriteSheet();
+    speed = I.velocity.magnitude();
+    cycleDelay = 16;
+    if ((0 <= (_ref = I.heading) && _ref <= Math.TAU / 2)) {
+      setFacing("front");
+    } else {
+      setFacing("back");
+    }
+    if (speed < 1) {
+      I.action = "idle";
+    } else if (speed < 6) {
+      I.action = "slow";
+      cycleDelay = 4;
+    } else {
+      I.action = "fast";
+      cycleDelay = 3;
+    }
+    if (I.wipeout) {
+      forceFacing("front");
+      I.action = "fall";
+      I.headAction = "pain";
+      I.frame = ((25 - I.wipeout) / 3).floor().clamp(0, 5);
+    } else if (power = I.shootPower) {
+      forceFacing("front");
+      I.action = "shoot";
+      if (power < I.maxShotPower) {
+        I.frame = ((power * I.shootHoldFrame + 1) / I.maxShotPower).floor();
+      } else {
+        I.headAction = "charged";
+        I.frame = I.shootHoldFrame + (I.age / 6).floor() % 2;
+      }
+    } else if (I.cooldown.shoot) {
+      I.action = "shoot";
+      setFacing("front");
+      I.frame = 10 - I.cooldown.shoot;
+    } else {
+      I.frame = (I.age / cycleDelay).floor();
+    }
+    if (I.facing === "front") {
+      headDirection = I.heading.constrainRotation();
+      if (headDirection < -Math.TAU / 4) {
+        headDirection = Math.TAU / 2;
+      } else if (headDirection < 0) {
+        headDirection = 0;
+      }
+    } else {
+      headDirection = I.heading;
+    }
+    angleSprites = 8;
+    headIndexOffset = 2;
+    headPosition = ((angleSprites * -headDirection / Math.TAU).round() + headIndexOffset).mod(angleSprites);
+    if (headPosition >= 5) {
+      headPosition = angleSprites - headPosition;
+      I.headFlip = true;
+    } else {
+      I.headFlip = false;
+    }
+    return I.headSprite = teamSprites[I.teamStyle][I.headStyle][I.headAction][headPosition];
   });
   self.bind("update", function() {
     return I.sprite = self.spriteSheet()[I.action][I.facing].wrap(I.frame);
