@@ -13914,39 +13914,61 @@ MatchState = function(I) {
 };
 
 Menu = function(I) {
-  var choose, moveSelection, self;
+  var back, choose, item, minigame, moveSelection, options, popSubMenu, selectedOption, self, submenu;
   if (I == null) {
     I = {};
   }
+  item = function(text, fn) {
+    return {
+      text: text,
+      action: fn
+    };
+  };
+  popSubMenu = function() {
+    var prevMenu;
+    if (I.menus.length !== 1) {
+      return prevMenu = I.menus.pop();
+    }
+  };
+  minigame = function(name) {
+    return item(name, function() {
+      return engine.setState(Minigames[name]());
+    });
+  };
+  back = item("Back", popSubMenu);
+  submenu = function() {
+    var menuOptions, name;
+    name = arguments[0], menuOptions = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+    return item(name, function() {
+      return I.menus.push([back].concat(menuOptions));
+    });
+  };
   Object.reverseMerge(I, {
     x: App.width / 2,
     y: 2 * App.height / 3 + 32,
     sprite: "menu_border_1",
-    selectedOption: 0,
-    options: [
-      {
-        text: "Versus",
-        action: function() {
+    menus: [
+      [
+        item("Versus", function() {
           return engine.setState(MatchSetupState());
-        }
-      }, {
-        text: "Mini-Games",
-        action: function() {
-          return engine.setState(Minigames.PushOut());
-        }
-      }, {
-        text: "Options",
-        action: function() {}
-      }
+        }), submenu("Mini-Games", minigame("PushOut"), minigame("Paint")), submenu("Options", item("Coming Soon", function() {}))
+      ]
     ]
   });
   self = GameObject(I);
+  options = function() {
+    return I.menus.last();
+  };
+  selectedOption = function() {
+    return options()[options().selectedIndex || 0];
+  };
   moveSelection = function(change) {
-    I.selectedOption += change;
-    return I.selectedOption = I.selectedOption.mod(I.options.length);
+    var index;
+    index = options().selectedIndex || 0;
+    return options().selectedIndex = (index + change).mod(options().length);
   };
   choose = function() {
-    return I.options[I.selectedOption].action();
+    return selectedOption().action();
   };
   self.bind("update", function() {
     return MAX_PLAYERS.times(function(i) {
@@ -13968,7 +13990,7 @@ Menu = function(I) {
     sprite = Menu.bottomSprite;
     sprite.draw(canvas, -sprite.width / 2, 128);
     canvas.font("bold 48px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
-    return I.options.each(function(option, i) {
+    return options().each(function(option, i) {
       var width;
       canvas.centerText({
         text: option.text,
@@ -13976,7 +13998,7 @@ Menu = function(I) {
         y: i * 64,
         color: "white"
       });
-      if (i === I.selectedOption) {
+      if (option === selectedOption()) {
         width = 256 + 128;
         return canvas.drawRect({
           x: -width / 2,
