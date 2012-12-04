@@ -9,6 +9,10 @@ Minigames.Paint = (I={}) ->
 
     engine.add
       class: "Rink"
+      wallTop: 0
+      wallBottom: App.height
+      wallLeft: 0
+      wallRight: App.width
 
     n = 8
     i = 0
@@ -20,8 +24,8 @@ Minigames.Paint = (I={}) ->
 
           engine.add
             class: "Paint"
-            y: WALL_TOP
-            x: WALL_LEFT + (i + 0.5) * (WALL_RIGHT - WALL_LEFT) / n
+            y: 0
+            x: (i + 0.5) * App.width / n
             color: color
 
           i += 1

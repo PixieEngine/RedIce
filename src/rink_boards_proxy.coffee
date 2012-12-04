@@ -1,6 +1,5 @@
 RinkBoardsProxy = (I={}) ->
-  Object.reverseMerge I,
-    zIndex: WALL_BOTTOM
+  Object.reverseMerge I, {}
 
   self = GameObject(I).extend
     draw: (canvas) ->

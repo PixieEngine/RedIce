@@ -123,6 +123,9 @@ Player = (I={}) ->
 
           entity.I.velocity = entity.I.velocity.add(p)
 
+    if I.shootPower > 0
+      self.trigger "shoot", {power, direction}
+
     I.shootPower = 0
 
   self.bind "step", ->

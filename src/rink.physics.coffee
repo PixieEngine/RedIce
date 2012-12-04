@@ -1,9 +1,5 @@
 Rink.Physics = (I={}, self) ->
   Object.reverseMerge I,
-    wallLeft: WALL_LEFT
-    wallRight: WALL_RIGHT
-    wallTop: WALL_TOP
-    wallBottom: WALL_BOTTOM
     cornerRadius: Rink.CORNER_RADIUS
 
   walls = [{

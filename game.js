@@ -14032,7 +14032,11 @@ Minigames.Paint = function(I) {
     var i, n;
     engine.clear(true);
     engine.add({
-      "class": "Rink"
+      "class": "Rink",
+      wallTop: 0,
+      wallBottom: App.height,
+      wallLeft: 0,
+      wallRight: App.width
     });
     n = 8;
     i = 0;
@@ -14043,8 +14047,8 @@ Minigames.Paint = function(I) {
           color = ["#", r, g, b].join("");
           engine.add({
             "class": "Paint",
-            y: WALL_TOP,
-            x: WALL_LEFT + (i + 0.5) * (WALL_RIGHT - WALL_LEFT) / n,
+            y: 0,
+            x: (i + 0.5) * App.width / n,
             color: color
           });
           return i += 1;
@@ -15564,6 +15568,12 @@ Player = function(I) {
         }
       });
     }
+    if (I.shootPower > 0) {
+      self.trigger("shoot", {
+        power: power,
+        direction: direction
+      });
+    }
     return I.shootPower = 0;
   };
   self.bind("step", function() {
@@ -15697,6 +15707,17 @@ Player.Paint = function(I, self) {
   });
   self.bind("paint", function(color) {
     return I.paintColor = color;
+  });
+  self.bind("shoot", function(_arg) {
+    var direction, power;
+    power = _arg.power, direction = _arg.direction;
+    return bloodCanvas.drawLine({
+      lineCap: "round",
+      start: self.position(),
+      end: self.position().add(Point.fromAngle(direction).scale(1000)),
+      width: I.paintWidth,
+      color: I.paintColor
+    });
   });
   return {
     color: function() {
@@ -16290,19 +16311,29 @@ Puck.sprites = ["norm", "charge"].map(function(type) {
 });
 
 Rink = function(I) {
-  var backBoardsCanvas, blue, faceOffCircleRadius, faceOffSpotRadius, frontBoardsCanvas, iceCanvas, paintCanvas, perspective, perspectiveRatio, red, rinkCornerRadius, self, spriteSize, x, _i, _len, _ref;
+  var arenaHeight, arenaWidth, backBoardsCanvas, blue, faceOffCircleRadius, faceOffSpotRadius, frontBoardsCanvas, iceCanvas, paintCanvas, perspective, perspectiveRatio, red, rinkCornerRadius, self, spriteSize, x, _i, _len, _ref;
   if (I == null) {
     I = {};
   }
   Object.reverseMerge(I, {
     team: config.teams[0],
     spriteSize: 64,
-    zIndex: WALL_TOP,
     x: 0,
     y: 0,
     width: 0,
-    height: 0
+    height: 0,
+    wallLeft: WALL_LEFT,
+    wallRight: WALL_RIGHT,
+    wallTop: WALL_TOP,
+    wallBottom: WALL_BOTTOM
   });
+  I.zIndex = I.wallTop;
+  arenaWidth = function() {
+    return I.wallRight - I.wallLeft;
+  };
+  arenaHeight = function() {
+    return I.wallBottom - I.wallTop;
+  };
   iceCanvas = $("<canvas width=" + App.width + " height=" + App.height + " />").css({
     position: "absolute",
     top: 0,
@@ -16317,34 +16348,34 @@ Rink = function(I) {
   rinkCornerRadius = Rink.CORNER_RADIUS;
   iceCanvas.drawRoundRect({
     color: "white",
-    x: WALL_LEFT,
-    y: WALL_TOP,
-    width: ARENA_WIDTH,
-    height: ARENA_HEIGHT,
+    x: I.wallLeft,
+    y: I.wallTop,
+    width: arenaWidth(),
+    height: arenaHeight(),
     radius: rinkCornerRadius
   });
-  _ref = [ARENA_WIDTH / 3, ARENA_WIDTH * 2 / 3];
+  _ref = [arenaWidth() / 3, arenaWidth() * 2 / 3];
   for (_i = 0, _len = _ref.length; _i < _len; _i++) {
     x = _ref[_i];
-    x += WALL_LEFT;
+    x += I.wallLeft;
     iceCanvas.drawLine({
       color: blue,
-      start: Point(x, WALL_TOP),
-      end: Point(x, WALL_BOTTOM),
+      start: Point(x, I.wallTop),
+      end: Point(x, I.wallBottom),
       width: 4
     });
   }
-  x = WALL_LEFT + ARENA_WIDTH / 2;
+  x = I.wallLeft + arenaWidth() / 2;
   iceCanvas.drawLine({
     color: red,
-    start: Point(x, WALL_TOP),
-    end: Point(x, WALL_BOTTOM),
+    start: Point(x, I.wallTop),
+    end: Point(x, I.wallBottom),
     width: 2
   });
   iceCanvas.withTransform(perspective, function() {
     var y;
-    x = WALL_LEFT + ARENA_WIDTH / 2;
-    y = WALL_TOP + ARENA_HEIGHT / 2;
+    x = I.wallLeft + arenaWidth() / 2;
+    y = I.wallTop + arenaHeight() / 2;
     iceCanvas.drawCircle({
       x: x,
       y: y * perspectiveRatio,
@@ -16361,32 +16392,32 @@ Rink = function(I) {
       }
     });
   });
-  x = WALL_LEFT + ARENA_WIDTH / 10;
+  x = I.wallLeft + arenaWidth() / 10;
   iceCanvas.drawLine({
-    start: Point(x, WALL_TOP),
-    end: Point(x, WALL_BOTTOM),
+    start: Point(x, I.wallTop),
+    end: Point(x, I.wallBottom),
     width: 1,
     color: red
   });
   iceCanvas.drawRect({
     x: x,
-    y: WALL_TOP + ARENA_HEIGHT / 2 - 16,
+    y: I.wallTop + arenaHeight() / 2 - 16,
     width: 16,
     height: 32,
     stroke: {
       color: red
     }
   });
-  x = WALL_LEFT + ARENA_WIDTH * 9 / 10;
+  x = I.wallLeft + arenaWidth() * 9 / 10;
   iceCanvas.drawLine({
-    start: Point(x, WALL_TOP),
-    end: Point(x, WALL_BOTTOM),
+    start: Point(x, I.wallTop),
+    end: Point(x, I.wallBottom),
     width: 1,
     color: red
   });
   iceCanvas.drawRect({
     x: x - 16,
-    y: WALL_TOP + ARENA_HEIGHT / 2 - 16,
+    y: I.wallTop + arenaHeight() / 2 - 16,
     width: 16,
     height: 32,
     stroke: {
@@ -16396,9 +16427,9 @@ Rink = function(I) {
   iceCanvas.withTransform(perspective, function() {
     return [1, 3].each(function(verticalQuarter) {
       var y;
-      y = WALL_TOP + verticalQuarter / 4 * ARENA_HEIGHT;
+      y = I.wallTop + verticalQuarter / 4 * arenaHeight();
       return [1 / 5, 1 / 3 + 1 / 40, 2 / 3 - 1 / 40, 4 / 5].each(function(faceOffX, i) {
-        x = WALL_LEFT + faceOffX * ARENA_WIDTH;
+        x = I.wallLeft + faceOffX * arenaWidth();
         iceCanvas.drawCircle({
           x: x,
           y: y * perspectiveRatio,
@@ -16428,21 +16459,21 @@ Rink = function(I) {
   Sprite.loadSheet("" + I.team + "/wall_n", 512, 512, 0.125, function(sprites) {
     var sprite;
     sprite = sprites[0];
-    return backBoardsCanvas.withTransform(Matrix.translation(WALL_LEFT + 128, WALL_TOP - 64), function() {
+    return backBoardsCanvas.withTransform(Matrix.translation(I.wallLeft + 128, I.wallTop - 64), function() {
       return sprite.fill(backBoardsCanvas, 0, 0, I.spriteSize * 12, I.spriteSize);
     });
   });
   Sprite.loadSheet("" + I.team + "/wall_nw", 1024, 1024, 0.125, function(sprites) {
     var sprite;
     sprite = sprites[0];
-    return backBoardsCanvas.withTransform(Matrix.translation(WALL_LEFT, WALL_TOP - 64), function() {
+    return backBoardsCanvas.withTransform(Matrix.translation(I.wallLeft, I.wallTop - 64), function() {
       return sprite.draw(backBoardsCanvas, 0, 0);
     });
   });
   Sprite.loadSheet("" + I.team + "/wall_nw", 1024, 1024, 0.125, function(sprites) {
     var sprite;
     sprite = sprites[0];
-    return backBoardsCanvas.withTransform(Matrix.translation(WALL_RIGHT, WALL_TOP - 64), function() {
+    return backBoardsCanvas.withTransform(Matrix.translation(I.wallRight, I.wallTop - 64), function() {
       return backBoardsCanvas.withTransform(Matrix.scale(-1, 1), function() {
         return sprite.draw(backBoardsCanvas, 0, 0);
       });
@@ -16456,14 +16487,14 @@ Rink = function(I) {
   Sprite.loadSheet("" + I.team + "/wall_sw", 1024, 1024, 0.125, function(sprites) {
     var sprite;
     sprite = sprites[0];
-    return frontBoardsCanvas.withTransform(Matrix.translation(WALL_LEFT, WALL_BOTTOM - 112), function() {
+    return frontBoardsCanvas.withTransform(Matrix.translation(I.wallLeft, I.wallBottom - 112), function() {
       return sprite.draw(frontBoardsCanvas, 0, 0);
     });
   });
   Sprite.loadSheet("" + I.team + "/wall_sw", 1024, 1024, 0.125, function(sprites) {
     var sprite;
     sprite = sprites[0];
-    return frontBoardsCanvas.withTransform(Matrix.translation(WALL_RIGHT, WALL_BOTTOM - 112), function() {
+    return frontBoardsCanvas.withTransform(Matrix.translation(I.wallRight, I.wallBottom - 112), function() {
       return frontBoardsCanvas.withTransform(Matrix.scale(-1, 1), function() {
         return sprite.draw(frontBoardsCanvas, 0, 0);
       });
@@ -16472,17 +16503,17 @@ Rink = function(I) {
   Sprite.loadSheet("" + I.team + "/wall_s", 512, 512, 0.125, function(sprites) {
     var sprite;
     sprite = sprites[0];
-    return frontBoardsCanvas.withTransform(Matrix.translation(WALL_LEFT + 128, WALL_BOTTOM - 48), function() {
+    return frontBoardsCanvas.withTransform(Matrix.translation(I.wallLeft + 128, I.wallBottom - 48), function() {
       return sprite.fill(frontBoardsCanvas, 0, 0, I.spriteSize * 12, I.spriteSize);
     });
   });
   Sprite.loadSheet("norm_wall_w", 512, 512, 0.125, function(sprites) {
     var sprite;
     sprite = sprites[0];
-    frontBoardsCanvas.withTransform(Matrix.translation(WALL_LEFT, WALL_TOP + 96), function(canvas) {
+    frontBoardsCanvas.withTransform(Matrix.translation(I.wallLeft, I.wallTop + 96), function(canvas) {
       return sprite.fill(canvas, -I.spriteSize / 2, -I.spriteSize / 2, I.spriteSize, I.spriteSize * 6);
     });
-    return frontBoardsCanvas.withTransform(Matrix.translation(WALL_RIGHT, WALL_TOP + 96), function(canvas) {
+    return frontBoardsCanvas.withTransform(Matrix.translation(I.wallRight, I.wallTop + 96), function(canvas) {
       return canvas.withTransform(Matrix.scale(-1, 1), function() {
         return sprite.fill(canvas, -I.spriteSize / 2, -I.spriteSize / 2, I.spriteSize, I.spriteSize * 6);
       });
@@ -16521,7 +16552,8 @@ Rink = function(I) {
   self.bind("create", function() {
     return engine.add({
       "class": "RinkBoardsProxy",
-      rink: self
+      rink: self,
+      zIndex: I.wallBottom
     });
   });
   self.include(Rink.Physics);
@@ -16536,10 +16568,6 @@ Rink.Physics = function(I, self) {
     I = {};
   }
   Object.reverseMerge(I, {
-    wallLeft: WALL_LEFT,
-    wallRight: WALL_RIGHT,
-    wallTop: WALL_TOP,
-    wallBottom: WALL_BOTTOM,
     cornerRadius: Rink.CORNER_RADIUS
   });
   walls = [
@@ -16590,9 +16618,7 @@ RinkBoardsProxy = function(I) {
   if (I == null) {
     I = {};
   }
-  Object.reverseMerge(I, {
-    zIndex: WALL_BOTTOM
-  });
+  Object.reverseMerge(I, {});
   return self = GameObject(I).extend({
     draw: function(canvas) {
       return I.rink.drawFront(canvas);

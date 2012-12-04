@@ -25,5 +25,13 @@ Player.Paint = (I, self) ->
   self.bind "paint", (color) ->
     I.paintColor = color
 
+  self.bind "shoot", ({power, direction}) ->
+    bloodCanvas.drawLine
+      lineCap: "round"
+      start: self.position()
+      end: self.position().add(Point.fromAngle(direction).scale(1000))
+      width: I.paintWidth
+      color: I.paintColor
+
   color: ->
     I.paintColor
