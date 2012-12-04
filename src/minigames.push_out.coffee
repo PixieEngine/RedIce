@@ -2,10 +2,7 @@ Minigames.PushOut = (I={}) ->
   # Inherit from game object
   self = GameState(I)
 
-  # TODO Parameterize physics
-  # TODO Parameterize rink
   physics = Physics()
-
 
   arena = Point(App.width/2, App.height/2)
   arena.radius = 300
