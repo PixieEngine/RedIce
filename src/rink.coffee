@@ -208,6 +208,8 @@ Rink = (I={}) ->
       class: "RinkBoardsProxy"
       rink: self
 
+  self.include Rink.Physics
+
   return self
 
 Rink.CORNER_RADIUS = 96

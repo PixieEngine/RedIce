@@ -1,4 +1,4 @@
-Physics = ->
+Physics = (I={}) ->
   overlapX = (wall, circle) ->
     (circle.x - wall.center.x).abs() < wall.halfWidth + circle.radius
 
@@ -7,36 +7,6 @@ Physics = ->
 
   rectangularOverlap = (wall, circle) ->
     return overlapX(wall, circle) && overlapY(wall, circle)
-
-  # Arena walls
-  walls = [{
-      normal: Point(1, 0)
-      position: WALL_LEFT
-    }, {
-      normal: Point(-1, 0)
-      position: -WALL_RIGHT
-    }, {
-      normal: Point(0, 1)
-      position: WALL_TOP
-    }, {
-      normal: Point(0, -1)
-      position: -WALL_BOTTOM
-  }]
-
-  cornerRadius = Rink.CORNER_RADIUS
-  corners = [{
-      position: Point(WALL_LEFT + cornerRadius, WALL_TOP + cornerRadius)
-      quadrant: 0
-    }, {
-      position: Point(WALL_RIGHT - cornerRadius, WALL_TOP + cornerRadius)
-      quadrant: 1
-    }, {
-      position: Point(WALL_LEFT + cornerRadius, WALL_BOTTOM - cornerRadius)
-      quadrant: -1
-    }, {
-      position: Point(WALL_RIGHT - cornerRadius, WALL_BOTTOM - cornerRadius)
-      quadrant: -2
-  }]
 
   threshold = 12
 
@@ -80,6 +50,11 @@ Physics = ->
         resolveCollision(a, b)
 
   wallCollisions = (objects, dt) ->
+    goalWallCollisions(objects, dt)
+    rinkCornerCollisions(objects, dt)
+    rinkWallCollisions(objects, dt)
+
+  goalWallCollisions = (objects, dt) ->
     # Goal wall segments
     wallSegments = engine.find("Goal").map (goal) ->
       goal.walls()
@@ -120,11 +95,15 @@ Physics = ->
         object.I.velocity = velocity
         object.updatePosition(dt, true)
 
-        object.trigger "wallCollision"
-
-        Sound.play "clink0" if object.puck()
+        object.trigger "wallCollision", "goal"
 
       return
+
+  rinkCornerCollisions = (objects, dt) ->
+    return unless rink = engine.find("Rink").first()
+
+    corners = rink.corners()
+    cornerRadius = rink.cornerRadius()
 
     # Rounded rink collisions
     objects.each (object) ->
@@ -167,9 +146,10 @@ Physics = ->
 
             object.trigger "wallCollision"
 
-            Sound.play "thud0" if object.puck()
-
       return
+
+  rinkWallCollisions = (objects, dt) ->
+    return unless walls = engine.find("Rink").first()?.walls()
 
     # Rink Walls
     objects.each (object) ->
@@ -201,11 +181,8 @@ Physics = ->
 
         object.trigger "wallCollision"
 
-        Sound.play "thud0" if object.puck()
-
       return
 
-  wallCollisions: wallCollisions
   process: (objects) ->
     steps = 5
 

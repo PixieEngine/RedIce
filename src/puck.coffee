@@ -114,9 +114,14 @@ Puck = (I) ->
 
   self.bind "update", setSprite
 
-  self.bind "wallCollision", ->
+  self.bind "wallCollision", (type) ->
     I.superMassive = false
     I.friction = DEFAULT_FRICTION
+
+    if type is "goal"
+      Sound.play "clink0"
+    else
+      Sound.play "thud0"
 
   self.bind "superCharge", ->
     I.superMassive = true

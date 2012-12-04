@@ -14473,8 +14473,11 @@ Particle.wallSplats = [1, 2, 3, 4].map(function(n) {
   return Sprite.loadSheet("gibs/wall_decals/" + n, 512, 512, 0.0625);
 });
 
-Physics = function() {
-  var cornerRadius, corners, overlapX, overlapY, rectangularOverlap, resolveCollision, resolveCollisions, threshold, wallCollisions, walls;
+Physics = function(I) {
+  var goalWallCollisions, overlapX, overlapY, rectangularOverlap, resolveCollision, resolveCollisions, rinkCornerCollisions, rinkWallCollisions, threshold, wallCollisions;
+  if (I == null) {
+    I = {};
+  }
   overlapX = function(wall, circle) {
     return (circle.x - wall.center.x).abs() < wall.halfWidth + circle.radius;
   };
@@ -14484,37 +14487,6 @@ Physics = function() {
   rectangularOverlap = function(wall, circle) {
     return overlapX(wall, circle) && overlapY(wall, circle);
   };
-  walls = [
-    {
-      normal: Point(1, 0),
-      position: WALL_LEFT
-    }, {
-      normal: Point(-1, 0),
-      position: -WALL_RIGHT
-    }, {
-      normal: Point(0, 1),
-      position: WALL_TOP
-    }, {
-      normal: Point(0, -1),
-      position: -WALL_BOTTOM
-    }
-  ];
-  cornerRadius = Rink.CORNER_RADIUS;
-  corners = [
-    {
-      position: Point(WALL_LEFT + cornerRadius, WALL_TOP + cornerRadius),
-      quadrant: 0
-    }, {
-      position: Point(WALL_RIGHT - cornerRadius, WALL_TOP + cornerRadius),
-      quadrant: 1
-    }, {
-      position: Point(WALL_LEFT + cornerRadius, WALL_BOTTOM - cornerRadius),
-      quadrant: -1
-    }, {
-      position: Point(WALL_RIGHT - cornerRadius, WALL_BOTTOM - cornerRadius),
-      quadrant: -2
-    }
-  ];
   threshold = 12;
   resolveCollision = function(A, B) {
     var massA, massB, max, normal, powA, powB, pushA, pushB, relativeVelocity, totalMass;
@@ -14551,11 +14523,16 @@ Physics = function() {
     });
   };
   wallCollisions = function(objects, dt) {
+    goalWallCollisions(objects, dt);
+    rinkCornerCollisions(objects, dt);
+    return rinkWallCollisions(objects, dt);
+  };
+  goalWallCollisions = function(objects, dt) {
     var wallSegments;
     wallSegments = engine.find("Goal").map(function(goal) {
       return goal.walls();
     }).flatten();
-    objects.each(function(object) {
+    return objects.each(function(object) {
       var center, circle, collided, radius, velocity;
       if (!object.collidesWithWalls()) {
         return;
@@ -14588,13 +14565,18 @@ Physics = function() {
       if (collided) {
         object.I.velocity = velocity;
         object.updatePosition(dt, true);
-        object.trigger("wallCollision");
-        if (object.puck()) {
-          Sound.play("clink0");
-        }
+        object.trigger("wallCollision", "goal");
       }
     });
-    objects.each(function(object) {
+  };
+  rinkCornerCollisions = function(objects, dt) {
+    var cornerRadius, corners, rink;
+    if (!(rink = engine.find("Rink").first())) {
+      return;
+    }
+    corners = rink.corners();
+    cornerRadius = rink.cornerRadius();
+    return objects.each(function(object) {
       var center, radius, velocity;
       if (!object.collidesWithWalls()) {
         return;
@@ -14636,14 +14618,17 @@ Physics = function() {
             velocity = velocity.subtract(normal.scale(2 * velocityProjection));
             object.I.velocity = velocity;
             object.updatePosition(dt, true);
-            object.trigger("wallCollision");
-            if (object.puck()) {
-              return Sound.play("thud0");
-            }
+            return object.trigger("wallCollision");
           }
         }
       });
     });
+  };
+  rinkWallCollisions = function(objects, dt) {
+    var walls, _ref;
+    if (!(walls = (_ref = engine.find("Rink").first()) != null ? _ref.walls() : void 0)) {
+      return;
+    }
     return objects.each(function(object) {
       var center, collided, radius, velocity;
       if (!object.collidesWithWalls()) {
@@ -14668,14 +14653,10 @@ Physics = function() {
         object.I.velocity = velocity;
         object.updatePosition(dt, true);
         object.trigger("wallCollision");
-        if (object.puck()) {
-          Sound.play("thud0");
-        }
       }
     });
   };
   return {
-    wallCollisions: wallCollisions,
     process: function(objects) {
       var dt, steps;
       steps = 5;
@@ -16280,9 +16261,14 @@ Puck = function(I) {
     });
   });
   self.bind("update", setSprite);
-  self.bind("wallCollision", function() {
+  self.bind("wallCollision", function(type) {
     I.superMassive = false;
-    return I.friction = DEFAULT_FRICTION;
+    I.friction = DEFAULT_FRICTION;
+    if (type === "goal") {
+      return Sound.play("clink0");
+    } else {
+      return Sound.play("thud0");
+    }
   });
   self.bind("superCharge", function() {
     I.superMassive = true;
@@ -16538,10 +16524,66 @@ Rink = function(I) {
       rink: self
     });
   });
+  self.include(Rink.Physics);
   return self;
 };
 
 Rink.CORNER_RADIUS = 96;
+
+Rink.Physics = function(I, self) {
+  var corners, walls;
+  if (I == null) {
+    I = {};
+  }
+  Object.reverseMerge(I, {
+    wallLeft: WALL_LEFT,
+    wallRight: WALL_RIGHT,
+    wallTop: WALL_TOP,
+    wallBottom: WALL_BOTTOM,
+    cornerRadius: Rink.CORNER_RADIUS
+  });
+  walls = [
+    {
+      normal: Point(1, 0),
+      position: I.wallLeft
+    }, {
+      normal: Point(-1, 0),
+      position: -I.wallRight
+    }, {
+      normal: Point(0, 1),
+      position: I.wallTop
+    }, {
+      normal: Point(0, -1),
+      position: -I.wallBottom
+    }
+  ];
+  corners = [
+    {
+      position: Point(I.wallLeft + I.cornerRadius, I.wallTop + I.cornerRadius),
+      quadrant: 0
+    }, {
+      position: Point(I.wallRight - I.cornerRadius, I.wallTop + I.cornerRadius),
+      quadrant: 1
+    }, {
+      position: Point(I.wallLeft + I.cornerRadius, I.wallBottom - I.cornerRadius),
+      quadrant: -1
+    }, {
+      position: Point(I.wallRight - I.cornerRadius, I.wallBottom - I.cornerRadius),
+      quadrant: -2
+    }
+  ];
+  return {
+    walls: function() {
+      return walls;
+    },
+    corners: function() {
+      return corners;
+    },
+    cornerRadius: function() {
+      return I.cornerRadius;
+    }
+  };
+};
 
 RinkBoardsProxy = function(I) {
   var self;
