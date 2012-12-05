@@ -13920,7 +13920,7 @@ Menu = function(I) {
   }
   item = function(text, fn) {
     return {
-      text: text,
+      text: text.toUpperCase(),
       action: fn
     };
   };
@@ -13947,6 +13947,10 @@ Menu = function(I) {
     x: App.width / 2,
     y: 2 * App.height / 3 + 32,
     sprite: "menu_border_1",
+    textColor: "#CCA",
+    highlightTextColor: "#FF8",
+    shadowColor: "#113",
+    font: "48px 'Orbitron'",
     menus: [
       [
         item("Versus", function() {
@@ -13982,32 +13986,39 @@ Menu = function(I) {
   });
   self.unbind("draw");
   self.bind("draw", function(canvas) {
-    var sprite;
+    var sprite, spriteWidth, textOffsetY, x, xOffset;
+    spriteWidth = 512;
+    xOffset = 15;
+    x = -spriteWidth / 2 + xOffset;
     sprite = Menu.topSprite;
-    sprite.draw(canvas, -sprite.width / 2, -sprite.height);
+    sprite.draw(canvas, x, -sprite.height);
     sprite = Menu.middleSprite;
-    sprite.draw(canvas, -sprite.width / 2, 0);
+    sprite.draw(canvas, x, 0);
     sprite = Menu.bottomSprite;
-    sprite.draw(canvas, -sprite.width / 2, 128);
-    canvas.font("bold 48px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
+    sprite.draw(canvas, x, 128);
+    canvas.font(I.font);
+    textOffsetY = 10;
     return options().each(function(option, i) {
-      var width;
+      var textColor, y;
+      textColor = I.textColor;
+      y = i * 64 + textOffsetY;
+      if (option === selectedOption()) {
+        textColor = I.highlightTextColor;
+        sprite = Menu.highlightSprite;
+        sprite.draw(canvas, 0 - sprite.width / 2, y - sprite.height / 2 - 24);
+      }
       canvas.centerText({
         text: option.text,
-        x: 0,
-        y: i * 64,
-        color: "white"
+        x: 2,
+        y: y + 2,
+        color: I.shadowColor
       });
-      if (option === selectedOption()) {
-        width = 256 + 128;
-        return canvas.drawRect({
-          x: -width / 2,
-          y: i * 64 - 30,
-          width: width,
-          height: 32,
-          color: "rgba(255, 0, 255, 0.25)"
-        });
-      }
+      return canvas.centerText({
+        text: option.text,
+        x: 0,
+        y: y,
+        color: textColor
+      });
     });
   });
   return self;
@@ -14018,6 +14029,8 @@ Menu.topSprite = Sprite.loadByName("menu_border_1");
 Menu.middleSprite = Sprite.loadByName("menu_border_2");
 
 Menu.bottomSprite = Sprite.loadByName("menu_border_3");
+
+Menu.highlightSprite = Sprite.loadByName("gibs/wall_decals/4");
 
 Minigames = {};
 

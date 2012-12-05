@@ -1,7 +1,7 @@
 Menu = (I={}) ->
   # DSLs4Life
   item = (text, fn) ->
-    text: text
+    text: text.toUpperCase()
     action: fn
 
   popSubMenu = ->
@@ -24,6 +24,10 @@ Menu = (I={}) ->
     x: App.width/2
     y: 2*App.height/3 + 32
     sprite: "menu_border_1" # Use the name of a sprite in the images folder
+    textColor: "#CCA"
+    highlightTextColor: "#FF8"
+    shadowColor: "#113"
+    font: "48px 'Orbitron'"
     menus: [[
       item "Versus", -> engine.setState(MatchSetupState())
       submenu "Mini-Games",
@@ -64,33 +68,44 @@ Menu = (I={}) ->
   self.unbind "draw"
 
   self.bind "draw", (canvas) ->
+    spriteWidth = 512
+    xOffset = 15
+    x = -spriteWidth/2 + xOffset
+
     sprite = Menu.topSprite
-    sprite.draw canvas, -sprite.width/2, -sprite.height
+    sprite.draw canvas, x, -sprite.height
 
     sprite = Menu.middleSprite
-    sprite.draw canvas, -sprite.width/2, 0
+    sprite.draw canvas, x, 0
 
     sprite = Menu.bottomSprite
-    sprite.draw canvas, -sprite.width/2, 128
+    sprite.draw canvas, x, 128
 
-    canvas.font("bold 48px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
+    canvas.font(I.font)
+
+    textOffsetY = 10
 
     options().each (option, i) ->
+      textColor = I.textColor
+      y = i * 64 + textOffsetY
+
+      if option is selectedOption()
+        textColor = I.highlightTextColor
+        sprite = Menu.highlightSprite
+
+        sprite.draw(canvas, 0 - sprite.width / 2, y - sprite.height / 2 - 24)
+
+      canvas.centerText
+        text: option.text
+        x: 2
+        y: y + 2
+        color: I.shadowColor
+
       canvas.centerText
         text: option.text
         x: 0
-        y: i * 64
-        color: "white"
-
-      if option is selectedOption()
-        width = 256 + 128
-        # TODO Sprite/Animation rather than solid color
-        canvas.drawRect
-          x: -width/2
-          y: i * 64 - 30
-          width: width
-          height: 32
-          color: "rgba(255, 0, 255, 0.25)"
+        y: y
+        color: textColor
 
   # We must always return self as the last line
   return self
@@ -99,3 +114,4 @@ Menu.topSprite = Sprite.loadByName "menu_border_1"
 Menu.middleSprite = Sprite.loadByName "menu_border_2"
 Menu.bottomSprite = Sprite.loadByName "menu_border_3"
 
+Menu.highlightSprite = Sprite.loadByName "gibs/wall_decals/4"
