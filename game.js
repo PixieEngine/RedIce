@@ -14042,7 +14042,7 @@ Minigames.Paint = function(I) {
   self = GameState(I);
   window.physics = Physics();
   self.bind("enter", function() {
-    var i, n;
+    var colors, i, n;
     engine.clear(true);
     engine.add({
       "class": "Rink",
@@ -14051,21 +14051,14 @@ Minigames.Paint = function(I) {
       wallLeft: 0,
       wallRight: App.width
     });
-    n = 8;
     i = 0;
-    ["0", "F"].each(function(r) {
-      return ["0", "F"].each(function(g) {
-        return ["0", "F"].each(function(b) {
-          var color;
-          color = ["#", r, g, b].join("");
-          engine.add({
-            "class": "Paint",
-            y: 0,
-            x: (i + 0.5) * App.width / n,
-            color: color
-          });
-          return i += 1;
-        });
+    colors = ["#000000", "#FFFFFF", "#666666", "#DCDCDC", "#EB070E", "#F69508", "#FFDE49", "#388326", "#0246E3", "#563495", "#58C4F5", "#E5AC99", "#5B4635", "#FFFEE9"];
+    colors.each(function(color, i) {
+      return engine.add({
+        "class": "Paint",
+        y: 0,
+        x: (i + 0.5) * App.width / colors.length,
+        color: color
       });
     });
     config.players = [];
@@ -14373,7 +14366,8 @@ Paint = function(I) {
   }
   Object.reverseMerge(I, {
     color: "red",
-    radius: 30
+    radius: 30,
+    zIndex: -1
   });
   self = GameObject(I);
   self.unbind("draw");

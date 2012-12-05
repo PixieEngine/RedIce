@@ -14,21 +14,30 @@ Minigames.Paint = (I={}) ->
       wallLeft: 0
       wallRight: App.width
 
-    n = 8
     i = 0
+    colors = [
+      "#000000"
+      "#FFFFFF"
+      "#666666"
+      "#DCDCDC"
+      "#EB070E"
+      "#F69508"
+      "#FFDE49"
+      "#388326"
+      "#0246E3"
+      "#563495"
+      "#58C4F5"
+      "#E5AC99"
+      "#5B4635"
+      "#FFFEE9"
+    ]
 
-    ["0", "F"].each (r) ->
-      ["0", "F"].each (g) ->
-        ["0", "F"].each (b) ->
-          color = ["#", r, g, b].join("")
-
-          engine.add
-            class: "Paint"
-            y: 0
-            x: (i + 0.5) * App.width / n
-            color: color
-
-          i += 1
+    colors.each (color, i) ->
+      engine.add
+        class: "Paint"
+        y: 0
+        x: (i + 0.5) * App.width / colors.length
+        color: color
 
     # TODO: TEst only, get real data for configurator
     config.players = []

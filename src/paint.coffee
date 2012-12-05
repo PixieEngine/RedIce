@@ -2,6 +2,7 @@ Paint = (I={}) ->
   Object.reverseMerge I,
     color: "red"
     radius: 30
+    zIndex: -1
 
   self = GameObject(I)
 
