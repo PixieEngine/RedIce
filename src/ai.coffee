@@ -2,8 +2,8 @@ AI = (I, self) ->
   arenaCenter = Point(WALL_LEFT + WALL_RIGHT, WALL_TOP + WALL_BOTTOM).scale(0.5)
 
   roles = [
-    "youth"
-    "goalie"
+    "none"
+    "none"
     "youth"
   ]
 

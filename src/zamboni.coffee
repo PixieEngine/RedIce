@@ -2,7 +2,6 @@ Zamboni = (I) ->
   $.reverseMerge I,
     blood: 0
     careening: false
-    color: "yellow"
     fuse: 30
     fortitude: 2
     strength: 4
@@ -13,9 +12,8 @@ Zamboni = (I) ->
     x: 0
     y: ARENA_HEIGHT/2 + WALL_TOP
     velocity: Point(1, 0)
-    mass: 10
+    mass: 60
     team: config.teams.rand()
-    zIndex: 10
     cleanColor: "#000"
 
   SWEEPER_SIZE = 48
@@ -56,11 +54,7 @@ Zamboni = (I) ->
   generatePath()
 
   self = Base(I).extend
-    controlCircle: ->
-      self.circle()
     crush: (other) ->
-      I.blood = (I.blood + 1).clamp(0, 6) unless other.puck()
-    controlPuck: $.noop
     collidesWithWalls: ->
       I.careening
     wipeout: ->

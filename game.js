@@ -11623,7 +11623,7 @@ draw anything to the screen until the image has been loaded.
 AI = function(I, self) {
   var arenaCenter, directionAI, roles;
   arenaCenter = Point(WALL_LEFT + WALL_RIGHT, WALL_TOP + WALL_BOTTOM).scale(0.5);
-  roles = ["youth", "goalie", "youth"];
+  roles = ["none", "none", "youth"];
   directionAI = {
     none: function() {},
     goalie: function() {
@@ -11709,12 +11709,14 @@ Base = function(I) {
     },
     wipeout: $.noop,
     controlPuck: $.noop,
-    controlCircle: function() {
-      return {
-        x: 0,
-        y: 0,
-        radius: 0
-      };
+    controlCircles: function() {
+      return [];
+    },
+    puckControl: function() {
+      return false;
+    },
+    player: function() {
+      return false;
     },
     collides: function() {
       return !I.wipeout;
@@ -11726,7 +11728,7 @@ Base = function(I) {
       return I.fortitude * 10;
     },
     collisionPower: function(normal) {
-      return (I.velocity.dot(normal) + I.fortitude) * I.strength;
+      return (I.velocity.dot(normal) + 1) * I.strength;
     },
     center: function(newCenter) {
       if (newCenter != null) {
@@ -13183,10 +13185,10 @@ Gamepads = function(I) {
       if (index == null) {
         index = 0;
       }
-      return controllers[index] || (controllers[index] = index < 3 ? Gamepads.Controller({
+      return controllers[index] || (controllers[index] = Gamepads.Controller({
         index: index,
         state: state
-      }) : Gamepads.KeyboardController());
+      }));
     },
     update: function() {
       state.previous = state.current;
@@ -13488,13 +13490,15 @@ Gib = function(I) {
     draw: function(canvas) {
       var center, radiusMultiple, shadowColor, transform;
       center = self.center();
-      shadowColor = "rgba(0, 0, 0, 0.25)";
-      radiusMultiple = 1 / (1 + I.z / 100);
-      canvas.drawCircle({
-        position: center,
-        radius: I.radius * radiusMultiple,
-        color: shadowColor
-      });
+      if (I.z > 0) {
+        shadowColor = "rgba(0, 0, 0, 0.25)";
+        radiusMultiple = 1 / (1 + I.z / 100);
+        canvas.drawCircle({
+          position: center,
+          radius: I.radius * radiusMultiple,
+          color: shadowColor
+        });
+      }
       transform = Matrix.translation(I.x, I.y - I.z).concat(Matrix.rotation(I.rotation));
       return canvas.withTransform(transform, function() {
         return I.sprite.draw(canvas, -I.sprite.width / 2, -I.sprite.height / 2);
@@ -13890,13 +13894,17 @@ MatchState = function(I) {
     objects = players.concat(zambonis, pucks, gibs);
     playersAndPucks = players.concat(pucks);
     players.each(function(player) {
+      var controlCircles;
       if (player.I.wipeout) {
         return;
       }
+      controlCircles = player.controlCircles();
       return pucks.each(function(puck) {
-        if (Collision.circular(player.controlCircle(), puck.circle())) {
-          return player.controlPuck(puck);
-        }
+        return controlCircles.each(function(circle) {
+          if (Collision.circular(circle, puck.circle())) {
+            return player.controlPuck(puck);
+          }
+        });
       });
     });
     physics.process(objects);
@@ -14485,7 +14493,7 @@ Particle.wallSplats = [1, 2, 3, 4].map(function(n) {
 });
 
 Physics = function(I) {
-  var goalWallCollisions, overlapX, overlapY, rectangularOverlap, resolveCollision, resolveCollisions, rinkCornerCollisions, rinkWallCollisions, threshold, wallCollisions;
+  var goalWallCollisions, overlapX, overlapY, puckControlCheck, rectangularOverlap, resolveCollision, resolveCollisions, rinkCornerCollisions, rinkWallCollisions, threshold, wallCollisions;
   if (I == null) {
     I = {};
   }
@@ -14528,10 +14536,16 @@ Physics = function(I) {
       if (!(a.collides() && b.collides())) {
         return;
       }
+      if (puckControlCheck(a, b)) {
+        return;
+      }
       if (Collision.circular(a.circle(), b.circle())) {
         return resolveCollision(a, b);
       }
     });
+  };
+  puckControlCheck = function(a, b) {
+    return a.puckControl() && b.puckControl() && !(a.player() && b.player());
   };
   wallCollisions = function(objects, dt) {
     goalWallCollisions(objects, dt);
@@ -15460,7 +15474,7 @@ Physics = function(I) {
 })(jQuery);
 
 Player = function(I) {
-  var actionDown, axisPosition, controller, self, shootPuck;
+  var actionDown, axisPosition, controller, key, self, shootPuck, value, _ref;
   if (I == null) {
     I = {};
   }
@@ -15475,12 +15489,13 @@ Player = function(I) {
     },
     collisionMargin: Point(2, 2),
     controller: 0,
-    controlRadius: 30,
+    controlRadius: 50,
     falls: 0,
-    friction: 0.1,
+    friction: 0.075,
     heading: 0,
     joystick: true,
     powerMultiplier: 1,
+    mass: 10,
     maxShotPower: 20,
     movementDirection: 0,
     movementSpeed: 1.25,
@@ -15498,6 +15513,7 @@ Player = function(I) {
     bodyStyle: "tubs",
     wipeout: 0,
     shootCooldownFrameDelay: 3,
+    puckLead: 75,
     velocity: Point()
   });
   Object.extend(I, Player.bodyData[I.bodyStyle]);
@@ -15505,22 +15521,26 @@ Player = function(I) {
   actionDown = controller.actionDown;
   axisPosition = controller.axis || $.noop;
   self = Base(I).extend({
-    controlCircle: function() {
-      var c, p, speed;
-      p = Point.fromAngle(I.heading).scale(I.controlRadius);
-      c = self.center().add(p);
-      speed = I.velocity.magnitude();
-      c.radius = I.controlRadius + ((100 - speed * speed) / 100 * 8).clamp(-7, 8);
-      return c;
+    player: function() {
+      return true;
+    },
+    controlCircles: function() {
+      var c1, c2, p;
+      p = Point.fromAngle(I.heading).scale((I.controlRadius + I.puckLead) / 2);
+      c1 = self.center().add(p);
+      c1.radius = I.controlRadius;
+      c2 = self.center();
+      c2.radius = I.controlRadius * 2;
+      return [c1, c2];
     },
     controlPuck: function(puck) {
       var maxPuckForce, p, positionDelta, puckControl, puckVelocity, targetPuckPosition;
       if (I.cooldown.shoot) {
         return;
       }
-      puckControl = 0.04;
+      puckControl = 2;
       maxPuckForce = puckControl / puck.mass();
-      p = Point.fromAngle(I.heading).scale(48);
+      p = Point.fromAngle(I.heading).scale(I.puckLead);
       targetPuckPosition = self.center().add(p);
       puckVelocity = puck.I.velocity;
       positionDelta = targetPuckPosition.subtract(puck.center().add(puckVelocity));
@@ -15529,6 +15549,9 @@ Player = function(I) {
       }
       I.hasPuck = true;
       return puck.I.velocity = puck.I.velocity.add(positionDelta);
+    },
+    puckControl: function() {
+      return I.hasPuck;
     },
     wipeout: function(push) {
       I.falls += 1;
@@ -15552,30 +15575,27 @@ Player = function(I) {
     }
   });
   shootPuck = function(direction) {
-    var baseShotPower, circle, p, power, puck;
+    var baseShotPower, circle, power, puck;
     puck = engine.find("Puck").first();
-    power = Math.min(I.shootPower, I.maxShotPower);
-    circle = self.controlCircle();
+    power = Math.min(I.shootPower, I.maxShotPower) * I.powerMultiplier;
+    circle = self.controlCircles().first();
     circle.radius *= 2;
     baseShotPower = 15;
-    if (puck && Collision.circular(circle, puck.circle())) {
-      if (I.shootPower >= 2 * I.maxShotPower) {
-        puck.trigger("superCharge");
-      }
-      p = Point.fromAngle(direction).scale(baseShotPower + power * I.powerMultiplier);
-      puck.I.velocity = puck.I.velocity.add(p);
-    } else {
-      engine.find("Player, Gib, Zamboni").without([self]).each(function(entity) {
+    if (I.shootPower > 0) {
+      engine.find("Player, Gib, Zamboni, Puck").without([self]).each(function(entity) {
+        var mass, p;
         if (Collision.circular(circle, entity.circle())) {
-          p = Point.fromAngle(direction).scale(power * I.powerMultiplier / entity.mass());
+          mass = entity.mass();
+          if (entity.player()) {
+            mass = mass / 10;
+          }
+          p = Point.fromAngle(direction).scale(power / mass);
           if (power > entity.toughness()) {
             entity.wipeout(p);
           }
           return entity.I.velocity = entity.I.velocity.add(p);
         }
       });
-    }
-    if (I.shootPower > 0) {
       self.trigger("shoot", {
         power: power,
         direction: direction
@@ -15663,26 +15683,63 @@ Player = function(I) {
   self.include(PlayerState);
   self.include(PlayerDrawing);
   self.include(Player.Streaks);
+  _ref = Player.teamData[I.teamStyle];
+  for (key in _ref) {
+    value = _ref[key];
+    I[key] += value;
+  }
   return self;
 };
 
 Player.bodyData = {
   skinny: {
-    mass: 1.5,
+    mass: 15,
     movementSpeed: 1.25,
     powerMultiplier: 2,
     radius: 18
   },
   thick: {
-    mass: 2,
+    mass: 20,
     movementSpeed: 1.1,
+    friction: 0.09,
     powerMultiplier: 3
   },
   tubs: {
-    mass: 4,
-    movementSpeed: 1,
+    mass: 40,
+    movementSpeed: 1.2,
+    friction: 0.1,
     powerMultiplier: 2.5,
     radius: 22
+  }
+};
+
+Player.teamData = {
+  smiley: {
+    mass: -1
+  },
+  spike: {
+    strength: 2,
+    controlRadius: -10
+  },
+  hiss: {
+    movementSpeed: 0.3,
+    friction: 0.02
+  },
+  moster: {
+    mass: -2,
+    strength: 1,
+    speed: -0.1
+  },
+  mutant: {
+    movementSpeed: -0.1,
+    mass: 1,
+    friction: 0.01
+  },
+  robo: {
+    movementSpeed: 0.3,
+    friction: 0.01,
+    mass: 3,
+    powerMultiplier: 2
   }
 };
 
@@ -15905,7 +15962,7 @@ PlayerDrawing = function(I, self) {
         color: "rgba(255, 255, 0, 1)"
       });
     }
-    return self.drawControlCircle(canvas);
+    return self.drawControlCircles(canvas);
   });
   self.bind('afterTransform', function(canvas) {
     self.drawPowerMeters(canvas);
@@ -16023,14 +16080,15 @@ PlayerDrawing = function(I, self) {
       self.drawTurboMeter(canvas);
       return self.drawShootMeter(canvas);
     },
-    drawControlCircle: function(canvas) {
-      var circle, color;
+    drawControlCircles: function(canvas) {
+      var color;
       color = self.color().lighten(0.10);
       color.a = 0.25;
-      circle = self.controlCircle();
-      return canvas.drawCircle({
-        circle: circle,
-        color: color
+      return self.controlCircles().each(function(circle) {
+        return canvas.drawCircle({
+          circle: circle,
+          color: color
+        });
       });
     },
     transform: function() {
@@ -16167,7 +16225,7 @@ PlayerState = function(I, self) {
 };
 
 Puck = function(I) {
-  var DEBUG_DRAW, DEFAULT_FRICTION, addParticleEffect, drawBloodStreaks, heading, lastPosition, particleSizes, self, setSprite;
+  var DEBUG_DRAW, DEFAULT_FRICTION, heading, lastPosition, self, setSprite;
   DEBUG_DRAW = false;
   DEFAULT_FRICTION = 0.05;
   Object.reverseMerge(I, {
@@ -16180,8 +16238,10 @@ Puck = function(I) {
     x: 512 - 8,
     y: (WALL_BOTTOM + WALL_TOP) / 2 - 4,
     friction: DEFAULT_FRICTION,
-    mass: 0.01,
-    superMassive: false
+    mass: 0.5,
+    superMassive: false,
+    maxSpeed: 100,
+    previousPositions: []
   });
   setSprite = function() {
     if (I.superMassive) {
@@ -16192,60 +16252,13 @@ Puck = function(I) {
   };
   setSprite();
   self = Base(I).extend({
-    bloody: function() {
-      return I.blood = (I.blood + 30).clamp(0, 120);
+    puckControl: function() {
+      return I.velocity.length() > 20;
     },
     wipeout: $.noop
   });
   heading = 0;
   lastPosition = null;
-  particleSizes = [3, 4, 3];
-  addParticleEffect = function(push, color) {
-    if (color == null) {
-      color = "#EE0";
-    }
-    push = push.norm(4);
-    return engine.add({
-      "class": "Emitter",
-      duration: 9,
-      sprite: Sprite.EMPTY,
-      velocity: I.velocity,
-      particleCount: 3,
-      batchSize: 3,
-      x: I.x + I.width / 2,
-      y: I.y + I.height / 2,
-      zIndex: I.y,
-      generator: {
-        color: color,
-        duration: 8,
-        height: function(n) {
-          return particleSizes.wrap(n);
-        },
-        maxSpeed: 50,
-        velocity: function(n) {
-          return Point.fromAngle(Random.angle()).scale(rand(5) + 1).add(push);
-        },
-        width: function(n) {
-          return particleSizes.wrap(n);
-        }
-      }
-    });
-  };
-  drawBloodStreaks = function() {
-    var blood, currentPos;
-    heading = Point.direction(Point(0, 0), I.velocity);
-    currentPos = self.center();
-    if (lastPosition && (blood = I.blood)) {
-      I.blood -= 1;
-      bloodCanvas.drawLine({
-        color: BLOOD_COLOR,
-        start: lastPosition,
-        end: currentPos,
-        width: (blood / 20).clamp(1, 6)
-      });
-    }
-    return lastPosition = currentPos;
-  };
   self.bind("drawDebug", function(canvas) {
     var center, scaledVelocity, x, y;
     center = self.center();
@@ -16259,10 +16272,35 @@ Puck = function(I) {
     });
   });
   self.bind("step", function() {
-    drawBloodStreaks();
-    if (I.superMassive) {
-      return addParticleEffect(I.velocity.scale(-1));
-    }
+    I.previousPositions.unshift(self.center().copy());
+    return I.previousPositions.length = 10;
+  });
+  self.bind("beforeTransform", function(canvas) {
+    var color, n, positions, start, streakWidth;
+    positions = I.previousPositions.compact();
+    n = positions.length;
+    start = self.center();
+    color = "rgba(0, 0, 255, 0.5)";
+    streakWidth = 16;
+    return positions.each(function(position, i) {
+      var midpoint, scale;
+      midpoint = start.add(position).scale(1 / 2);
+      scale = (n - i) / n;
+      canvas.drawLine({
+        start: start,
+        end: midpoint,
+        width: scale * streakWidth,
+        color: color
+      });
+      scale = (n - (i + 0.5)) / n;
+      canvas.drawLine({
+        start: midpoint,
+        end: position,
+        width: scale * streakWidth,
+        color: color
+      });
+      return start = position;
+    });
   });
   self.bind("positionUpdated", function() {
     var circle;
@@ -17006,7 +17044,6 @@ Zamboni = function(I) {
   $.reverseMerge(I, {
     blood: 0,
     careening: false,
-    color: "yellow",
     fuse: 30,
     fortitude: 2,
     strength: 4,
@@ -17017,9 +17054,8 @@ Zamboni = function(I) {
     x: 0,
     y: ARENA_HEIGHT / 2 + WALL_TOP,
     velocity: Point(1, 0),
-    mass: 10,
+    mass: 60,
     team: config.teams.rand(),
-    zIndex: 10,
     cleanColor: "#000"
   });
   SWEEPER_SIZE = 48;
@@ -17054,15 +17090,7 @@ Zamboni = function(I) {
   };
   generatePath();
   self = Base(I).extend({
-    controlCircle: function() {
-      return self.circle();
-    },
-    crush: function(other) {
-      if (!other.puck()) {
-        return I.blood = (I.blood + 1).clamp(0, 6);
-      }
-    },
-    controlPuck: $.noop,
+    crush: function(other) {},
     collidesWithWalls: function() {
       return I.careening;
     },

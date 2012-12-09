@@ -9,12 +9,13 @@ Player = (I={}) ->
       shoot: 0
     collisionMargin: Point(2, 2)
     controller: 0
-    controlRadius: 30
+    controlRadius: 50
     falls: 0
-    friction: 0.1
+    friction: 0.075
     heading: 0
     joystick: true
     powerMultiplier: 1
+    mass: 10
     maxShotPower: 20
     movementDirection: 0
     movementSpeed: 1.25
@@ -32,6 +33,7 @@ Player = (I={}) ->
     bodyStyle: "tubs"
     wipeout: 0
     shootCooldownFrameDelay: 3
+    puckLead: 75
     velocity: Point()
 
   Object.extend I, Player.bodyData[I.bodyStyle]
@@ -41,22 +43,29 @@ Player = (I={}) ->
   axisPosition = controller.axis || $.noop
 
   self = Base(I).extend
-    controlCircle: ->
-      p = Point.fromAngle(I.heading).scale(I.controlRadius)
+    player: ->
+      true
 
-      c = self.center().add(p)
-      speed = I.velocity.magnitude()
-      c.radius = I.controlRadius + ((100 - speed * speed)/100 * 8).clamp(-7, 8)
+    controlCircles: ->
+      p = Point.fromAngle(I.heading).scale((I.controlRadius + I.puckLead)/2)
 
-      return c
+      # Forward Circle
+      c1 = self.center().add(p)
+      c1.radius = I.controlRadius
+
+      # Self Circle
+      c2 = self.center()
+      c2.radius = I.controlRadius * 2
+
+      return [c1, c2]
 
     controlPuck: (puck) ->
       return if I.cooldown.shoot
 
-      puckControl = 0.04
+      puckControl = 2
       maxPuckForce = puckControl / puck.mass()
 
-      p = Point.fromAngle(I.heading).scale(48)
+      p = Point.fromAngle(I.heading).scale(I.puckLead)
       targetPuckPosition = self.center().add(p)
 
       puckVelocity = puck.I.velocity
@@ -69,6 +78,9 @@ Player = (I={}) ->
       I.hasPuck = true
 
       puck.I.velocity = puck.I.velocity.add(positionDelta)
+
+    puckControl: ->
+      I.hasPuck
 
     wipeout: (push) ->
       I.falls += 1
@@ -97,33 +109,28 @@ Player = (I={}) ->
   shootPuck = (direction) ->
     puck = engine.find("Puck").first()
 
-    power = Math.min(I.shootPower, I.maxShotPower)
-    circle = self.controlCircle()
+    power = Math.min(I.shootPower, I.maxShotPower) * I.powerMultiplier
+    # TODO: Shot/hit circle
+    circle = self.controlCircles().first()
     circle.radius *= 2 # Shot hit radius is twice control circle radius
     baseShotPower = 15
 
-    # Shot or pass
-    if puck and Collision.circular(circle, puck.circle())
-      if I.shootPower >= 2 * I.maxShotPower
-        puck.trigger "superCharge"
-
-      p = Point.fromAngle(direction).scale(baseShotPower + power * I.powerMultiplier)
-      puck.I.velocity = puck.I.velocity.add(p)
-
-    # Hitting people
-    else
+    if I.shootPower > 0
       # Hit everyting in your way!
       # TODO Maybe distribute power evenly
-      engine.find("Player, Gib, Zamboni").without([self]).each (entity) ->
+      engine.find("Player, Gib, Zamboni, Puck").without([self]).each (entity) ->
         if Collision.circular(circle, entity.circle())
-          p = Point.fromAngle(direction).scale(power * I.powerMultiplier / entity.mass())
+          mass = entity.mass()
+          if entity.player()
+            mass = mass / 10 # Hits should launch players
+
+          p = Point.fromAngle(direction).scale(power / mass)
 
           if power > entity.toughness()
             entity.wipeout(p)
 
           entity.I.velocity = entity.I.velocity.add(p)
 
-    if I.shootPower > 0
       self.trigger "shoot", {power, direction}
 
     I.shootPower = 0
@@ -207,20 +214,50 @@ Player = (I={}) ->
   self.include PlayerDrawing
   self.include Player.Streaks
 
+  # Add in team specific mods
+  for key, value of Player.teamData[I.teamStyle]
+    I[key] += value
+
   self
 
 Player.bodyData =
   skinny:
-    mass: 1.5
+    mass: 15
     movementSpeed: 1.25
     powerMultiplier: 2
     radius: 18
   thick:
-    mass: 2
+    mass: 20
     movementSpeed: 1.1
+    friction: 0.09
     powerMultiplier: 3
   tubs:
-    mass: 4
-    movementSpeed: 1
+    mass: 40
+    movementSpeed: 1.2
+    friction: 0.1
     powerMultiplier: 2.5
     radius: 22
+
+# Team ability deltas
+Player.teamData =
+  smiley:
+    mass: -1
+  spike:
+    strength: 2
+    controlRadius: -10
+  hiss:
+    movementSpeed: 0.3
+    friction: 0.02
+  moster:
+    mass: -2
+    strength: 1
+    speed: -0.1
+  mutant:
+    movementSpeed: -0.1
+    mass: 1
+    friction: 0.01
+  robo:
+    movementSpeed: 0.3
+    friction: 0.01
+    mass: 3
+    powerMultiplier: 2

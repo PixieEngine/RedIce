@@ -45,9 +45,13 @@ Physics = (I={}) ->
   resolveCollisions = (objects) ->
     objects.eachPair (a, b) ->
       return unless a.collides() && b.collides()
+      return if puckControlCheck(a, b)
 
       if Collision.circular(a.circle(), b.circle())
         resolveCollision(a, b)
+
+  puckControlCheck = (a, b) ->
+    a.puckControl() && b.puckControl() && !(a.player() && b.player())
 
   wallCollisions = (objects, dt) ->
     goalWallCollisions(objects, dt)

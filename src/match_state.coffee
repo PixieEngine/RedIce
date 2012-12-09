@@ -68,9 +68,12 @@ MatchState = (I={}) ->
     players.each (player) ->
       return if player.I.wipeout
 
+      controlCircles = player.controlCircles()
+
       pucks.each (puck) ->
-        if Collision.circular(player.controlCircle(), puck.circle())
-          player.controlPuck(puck)
+        controlCircles.each (circle) ->
+          if Collision.circular(circle, puck.circle())
+            player.controlPuck(puck)
 
     physics.process(objects)
 

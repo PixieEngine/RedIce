@@ -18,10 +18,14 @@ Base = (I={}) ->
     wipeout: $.noop
 
     controlPuck: $.noop
-    controlCircle: ->
-      x: 0
-      y: 0
-      radius: 0
+    controlCircles: ->
+      []
+
+    puckControl: ->
+      false
+
+    player: ->
+      false
 
     collides: ->
       !I.wipeout
@@ -35,7 +39,7 @@ Base = (I={}) ->
     # The "Power Rating" for determining who gets wrecked during collisions
     # Fundamentally: I.velocity.dot(normal)
     collisionPower: (normal) ->
-      (I.velocity.dot(normal) + I.fortitude) * I.strength
+      (I.velocity.dot(normal) + 1) * I.strength
 
     center: (newCenter) ->
       if newCenter?

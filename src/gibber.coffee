@@ -41,12 +41,13 @@ Gib = (I={}) ->
     draw: (canvas) ->
       center = self.center()
 
-      shadowColor = "rgba(0, 0, 0, 0.25)"
-      radiusMultiple = 1 / (1 + I.z/100)
-      canvas.drawCircle
-        position: center
-        radius: I.radius * radiusMultiple
-        color: shadowColor
+      if I.z > 0
+        shadowColor = "rgba(0, 0, 0, 0.25)"
+        radiusMultiple = 1 / (1 + I.z/100)
+        canvas.drawCircle
+          position: center
+          radius: I.radius * radiusMultiple
+          color: shadowColor
 
       transform = Matrix.translation(I.x, I.y - I.z)
         .concat(Matrix.rotation(I.rotation))

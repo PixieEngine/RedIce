@@ -53,7 +53,7 @@ PlayerDrawing = (I, self) ->
         color: "rgba(255, 255, 0, 1)"
       }
 
-    self.drawControlCircle(canvas)
+    self.drawControlCircles(canvas)
 
   self.bind 'afterTransform', (canvas) ->
     self.drawPowerMeters(canvas)
@@ -165,16 +165,15 @@ PlayerDrawing = (I, self) ->
     self.drawTurboMeter(canvas)
     self.drawShootMeter(canvas)
 
-  drawControlCircle: (canvas) ->
+  drawControlCircles: (canvas) ->
     color = self.color().lighten(0.10)
     color.a = 0.25
 
-    circle = self.controlCircle()
-
-    canvas.drawCircle {
-      circle
-      color
-    }
+    self.controlCircles().each (circle) ->
+      canvas.drawCircle {
+        circle
+        color
+      }
 
   transform: ->
     center = self.center()

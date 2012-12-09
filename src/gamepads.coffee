@@ -10,12 +10,9 @@ Gamepads = (I={}) ->
 
   controller: (index=0) ->
     controllers[index] ||=
-      if index < 3
-        Gamepads.Controller
-          index: index
-          state: state
-      else
-        Gamepads.KeyboardController()
+      Gamepads.Controller
+        index: index
+        state: state
 
   update: ->
     state.previous = state.current
