@@ -11694,7 +11694,7 @@ Base = function(I) {
     I = {};
   }
   Object.reverseMerge(I, {
-    fortitude: 1,
+    toughness: 10,
     friction: 0,
     strength: 1,
     mass: 1,
@@ -11723,9 +11723,6 @@ Base = function(I) {
     },
     collidesWithWalls: function() {
       return true;
-    },
-    toughness: function() {
-      return I.fortitude * 10;
     },
     collisionPower: function(normal) {
       return (I.velocity.dot(normal) + 1) * I.strength;
@@ -11767,7 +11764,7 @@ Base = function(I) {
     }
   });
   self.include(DebugDrawable);
-  self.attrReader("mass");
+  self.attrReader("mass", "toughness");
   I.center = Point(I.x + I.width / 2, I.y + I.height / 2);
   return self;
 };
@@ -13900,6 +13897,9 @@ MatchState = function(I) {
       }
       controlCircles = player.controlCircles();
       return pucks.each(function(puck) {
+        if (!puck.puckControl()) {
+          return;
+        }
         return controlCircles.each(function(circle) {
           if (Collision.circular(circle, puck.circle())) {
             return player.controlPuck(puck);
@@ -15497,6 +15497,7 @@ Player = function(I) {
     powerMultiplier: 1,
     mass: 10,
     maxShotPower: 20,
+    minShotPower: 20,
     movementDirection: 0,
     movementSpeed: 1.25,
     radius: 20,
@@ -15575,12 +15576,12 @@ Player = function(I) {
     }
   });
   shootPuck = function(direction) {
-    var baseShotPower, circle, power, puck;
+    var circle, power, puck;
     puck = engine.find("Puck").first();
     power = Math.min(I.shootPower, I.maxShotPower) * I.powerMultiplier;
+    power = Math.max(power, I.minShotPower);
     circle = self.controlCircles().first();
     circle.radius *= 2;
-    baseShotPower = 15;
     if (I.shootPower > 0) {
       engine.find("Player, Gib, Zamboni, Puck").without([self]).each(function(entity) {
         var mass, p;
@@ -15590,7 +15591,7 @@ Player = function(I) {
             mass = mass / 10;
           }
           p = Point.fromAngle(direction).scale(power / mass);
-          if (power > entity.toughness()) {
+          if (power >= entity.toughness()) {
             entity.wipeout(p);
           }
           return entity.I.velocity = entity.I.velocity.add(p);
@@ -15696,20 +15697,23 @@ Player.bodyData = {
     mass: 15,
     movementSpeed: 1.25,
     powerMultiplier: 2,
-    radius: 18
+    radius: 18,
+    toughness: 20
   },
   thick: {
     mass: 20,
     movementSpeed: 1.1,
     friction: 0.09,
-    powerMultiplier: 3
+    powerMultiplier: 3,
+    toughness: 25
   },
   tubs: {
     mass: 40,
     movementSpeed: 1.2,
     friction: 0.1,
     powerMultiplier: 2.5,
-    radius: 22
+    radius: 22,
+    toughness: 40
   }
 };
 
@@ -16253,7 +16257,7 @@ Puck = function(I) {
   setSprite();
   self = Base(I).extend({
     puckControl: function() {
-      return I.velocity.length() > 20;
+      return I.velocity.length() < 40;
     },
     wipeout: $.noop
   });
@@ -17045,7 +17049,6 @@ Zamboni = function(I) {
     blood: 0,
     careening: false,
     fuse: 30,
-    fortitude: 2,
     strength: 4,
     radius: 50,
     rotation: 0,

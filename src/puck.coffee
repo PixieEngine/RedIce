@@ -27,7 +27,7 @@ Puck = (I) ->
 
   self = Base(I).extend
     puckControl: ->
-      I.velocity.length() > 20
+      I.velocity.length() < 40
 
     wipeout: $.noop
 

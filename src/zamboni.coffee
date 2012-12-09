@@ -3,7 +3,6 @@ Zamboni = (I) ->
     blood: 0
     careening: false
     fuse: 30
-    fortitude: 2
     strength: 4
     radius: 50
     rotation: 0

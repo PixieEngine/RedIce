@@ -1,6 +1,6 @@
 Base = (I={}) ->
   Object.reverseMerge I,
-    fortitude: 1
+    toughness: 10
     friction: 0
     strength: 1
     mass: 1
@@ -32,9 +32,6 @@ Base = (I={}) ->
 
     collidesWithWalls: ->
       true
-
-    toughness: ->
-      I.fortitude * 10
 
     # The "Power Rating" for determining who gets wrecked during collisions
     # Fundamentally: I.velocity.dot(normal)
@@ -80,7 +77,7 @@ Base = (I={}) ->
 
   self.include DebugDrawable
 
-  self.attrReader "mass"
+  self.attrReader "mass", "toughness"
 
   I.center = Point(I.x + I.width/2, I.y + I.height/2)
 

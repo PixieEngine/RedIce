@@ -71,6 +71,8 @@ MatchState = (I={}) ->
       controlCircles = player.controlCircles()
 
       pucks.each (puck) ->
+        return unless puck.puckControl() # This puck is out of control!
+
         controlCircles.each (circle) ->
           if Collision.circular(circle, puck.circle())
             player.controlPuck(puck)

@@ -17,6 +17,7 @@ Player = (I={}) ->
     powerMultiplier: 1
     mass: 10
     maxShotPower: 20
+    minShotPower: 20
     movementDirection: 0
     movementSpeed: 1.25
     radius: 20
@@ -109,11 +110,13 @@ Player = (I={}) ->
   shootPuck = (direction) ->
     puck = engine.find("Puck").first()
 
+    # TODO Redo power computation to basePower + charge * chargeRate, cap max
     power = Math.min(I.shootPower, I.maxShotPower) * I.powerMultiplier
+    power = Math.max(power, I.minShotPower)
+
     # TODO: Shot/hit circle
     circle = self.controlCircles().first()
     circle.radius *= 2 # Shot hit radius is twice control circle radius
-    baseShotPower = 15
 
     if I.shootPower > 0
       # Hit everyting in your way!
@@ -122,11 +125,11 @@ Player = (I={}) ->
         if Collision.circular(circle, entity.circle())
           mass = entity.mass()
           if entity.player()
-            mass = mass / 10 # Hits should launch players
+            mass = mass / 10 # Hits should launch players players
 
           p = Point.fromAngle(direction).scale(power / mass)
 
-          if power > entity.toughness()
+          if power >= entity.toughness()
             entity.wipeout(p)
 
           entity.I.velocity = entity.I.velocity.add(p)
@@ -226,17 +229,20 @@ Player.bodyData =
     movementSpeed: 1.25
     powerMultiplier: 2
     radius: 18
+    toughness: 20
   thick:
     mass: 20
     movementSpeed: 1.1
     friction: 0.09
     powerMultiplier: 3
+    toughness: 25
   tubs:
     mass: 40
     movementSpeed: 1.2
     friction: 0.1
     powerMultiplier: 2.5
     radius: 22
+    toughness: 40
 
 # Team ability deltas
 Player.teamData =
