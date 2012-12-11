@@ -12,3 +12,5 @@ BLOOD_COLOR = "#BA1A19"
 ICE_COLOR = "rgba(192, 255, 255, 0.2)"
 
 MAX_PLAYERS = 4
+
+TEAMS = ["smiley", "spike", "hiss", "mutant", "monster", "robo"]

@@ -192,7 +192,7 @@ Array.prototype.include = function(element) {
 
 /**
 Call the given iterator once for each element in the array,
-passing in the element as the first argument, the index of 
+passing in the element as the first argument, the index of
 the element as the second argument, and <code>this</code> array as the
 third argument.
 
@@ -233,8 +233,8 @@ Array.prototype.each = function(iterator, context) {
 };
 
 /**
-Call the given iterator once for each element in the array, 
-passing in the element as the first argument, the index of 
+Call the given iterator once for each element in the array,
+passing in the element as the first argument, the index of
 the element as the second argument, and `this` array as the
 third argument.
 
@@ -494,8 +494,8 @@ Array.prototype.extremes = function(fn) {
 };
 
 /**
-Pretend the array is a circle and grab a new array containing length elements. 
-If length is not given return the element at start, again assuming the array 
+Pretend the array is a circle and grab a new array containing length elements.
+If length is not given return the element at start, again assuming the array
 is a circle.
 
 <code><pre>
@@ -522,8 +522,9 @@ Array.prototype.wrap = function(start, length) {
     end = start + length;
     i = start;
     result = [];
-    while (i++ < end) {
+    while (i < end) {
       result.push(this[i.mod(this.length)]);
+      i++;
     }
     return result;
   } else {
@@ -617,7 +618,7 @@ Array.prototype.reject = function(iterator, context) {
 
 /**
 Combines all elements of the array by applying a binary operation.
-for each element in the arra the iterator is passed an accumulator 
+for each element in the arra the iterator is passed an accumulator
 value (memo) and the element.
 
 @name inject
@@ -760,7 +761,7 @@ Bindable = function() {
     # "someCustomEvent" while leaving the other events intact.
     yourObject.unbind "someCustomEvent", coolEventHandler
 
-    # removes all handlers attached to "anotherCustomEvent" 
+    # removes all handlers attached to "anotherCustomEvent"
     yourObject.unbind "anotherCustomEvent"
     </pre></code>
 
@@ -876,7 +877,7 @@ Core = function(I) {
 
     myObject = Core(I)
 
-    # a bad idea most of the time, but it's 
+    # a bad idea most of the time, but it's
     # pretty convenient to have available.
     myObject.I.r
     # => 255
@@ -893,7 +894,7 @@ Core = function(I) {
     */
     I: I,
     /**
-    Generates a public jQuery style getter / setter method for each 
+    Generates a public jQuery style getter / setter method for each
     String argument.
 
     <code><pre>
@@ -961,8 +962,8 @@ Core = function(I) {
       });
     },
     /**
-    Extends this object with methods from the passed in object. `before` and 
-    `after` are special option names that glue functionality before or after 
+    Extends this object with methods from the passed in object. `before` and
+    `after` are special option names that glue functionality before or after
     existing methods.
 
     <code><pre>
@@ -1041,11 +1042,11 @@ Function.prototype.withAfter = function(interception) {
 };
 
 /**
-Calling a debounced function will postpone its execution until after 
-wait milliseconds have elapsed since the last time the function was 
-invoked. Useful for implementing behavior that should only happen after 
-the input has stopped arriving. For example: rendering a preview of a 
-Markdown comment, recalculating a layout after the window has stopped 
+Calling a debounced function will postpone its execution until after
+wait milliseconds have elapsed since the last time the function was
+invoked. Useful for implementing behavior that should only happen after
+the input has stopped arriving. For example: rendering a preview of a
+Markdown comment, recalculating a layout after the window has stopped
 being resized...
 
 <code><pre>
@@ -1089,7 +1090,7 @@ Function.prototype.returning = function(x) {
 @name Logging
 @namespace
 
-Gives you some convenience methods for outputting data while developing. 
+Gives you some convenience methods for outputting data while developing.
 
 <code><pre>
   log "Testing123"
@@ -1112,7 +1113,7 @@ Gives you some convenience methods for outputting data while developing.
 
 /**
 * Matrix.js v1.3.0pre
-* 
+*
 * Copyright (c) 2010 STRd6
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -1200,7 +1201,7 @@ Gives you some convenience methods for outputting data while developing.
   Matrix.prototype = {
     /**
     Returns the result of this matrix multiplied by another matrix
-    combining the geometric effects of the two. In mathematical terms, 
+    combining the geometric effects of the two. In mathematical terms,
     concatenating two matrixes is the same as combining them using matrix multiplication.
     If this matrix is A and the matrix passed in is B, the resulting matrix is A x B
     http://mathworld.wolfram.com/MatrixMultiplication.html
@@ -1222,9 +1223,9 @@ Gives you some convenience methods for outputting data while developing.
       return Matrix(this.a, this.b, this.c, this.d, this.tx, this.ty);
     },
     /**
-    Given a point in the pretransform coordinate space, returns the coordinates of 
-    that point after the transformation occurs. Unlike the standard transformation 
-    applied using the transformPoint() method, the deltaTransformPoint() method 
+    Given a point in the pretransform coordinate space, returns the coordinates of
+    that point after the transformation occurs. Unlike the standard transformation
+    applied using the transformPoint() method, the deltaTransformPoint() method
     does not consider the translation parameters tx and ty.
     @name deltaTransformPoint
     @methodOf Matrix#
@@ -1284,7 +1285,7 @@ Gives you some convenience methods for outputting data while developing.
       return "Matrix(" + this.a + ", " + this.b + ", " + this.c + ", " + this.d + ", " + this.tx + ", " + this.ty + ")";
     },
     /**
-    Returns the result of applying the geometric transformation represented by the 
+    Returns the result of applying the geometric transformation represented by the
     Matrix object to the specified point.
     @name transformPoint
     @methodOf Matrix#
@@ -1381,7 +1382,7 @@ Gives you some convenience methods for outputting data while developing.
 })();
 ;
 
-/** 
+/**
 Returns the absolute value of this number.
 
 <code><pre>
@@ -1402,7 +1403,7 @@ Number.prototype.abs = function() {
 Returns the mathematical ceiling of this number.
 
 <code><pre>
-4.9.ceil() 
+4.9.ceil()
 # => 5
 
 4.2.ceil()
@@ -1546,7 +1547,7 @@ Returns true if this number is even (evenly divisible by 2).
 # => false
 
 0.even()
-# => true      
+# => true
 </pre></code>
 
 @name even
@@ -1569,7 +1570,7 @@ Returns true if this number is odd (has remainder of 1 when divided by 2).
 # => true
 
 0.odd()
-# => false     
+# => false
 </pre></code>
 
 @name odd
@@ -1586,8 +1587,8 @@ Number.prototype.odd = function() {
 };
 
 /**
-Calls iterator the specified number of times, passing in the number of the 
-current iteration as a parameter: 0 on first call, 1 on the second call, etc. 
+Calls iterator the specified number of times, passing in the number of the
+current iteration as a parameter: 0 on first call, 1 on the second call, etc.
 
 <code><pre>
 output = []
@@ -1616,16 +1617,16 @@ Number.prototype.times = function(iterator, context) {
 };
 
 /**
-Returns the the nearest grid resolution less than or equal to the number. 
+Returns the the nearest grid resolution less than or equal to the number.
 
 <code><pre>
-7.snap(8) 
+7.snap(8)
 # => 0
 
-4.snap(8) 
+4.snap(8)
 # => 0
 
-12.snap(8) 
+12.snap(8)
 # => 8
 </pre></code>
 
@@ -1686,7 +1687,7 @@ Number.prototype.primeFactors = function() {
 };
 
 /**
-Returns the two character hexidecimal 
+Returns the two character hexidecimal
 representation of numbers 0 through 255.
 
 <code><pre>
@@ -1776,7 +1777,7 @@ Number.prototype.approachRotation = function(target, maxDelta) {
 Constrains a rotation to between -PI and PI.
 
 <code><pre>
-(9/4 * Math.PI).constrainRotation() 
+(9/4 * Math.PI).constrainRotation()
 # => 0.7853981633974483 # this is (1/4) * Math.PI
 </pre></code>
 
@@ -1895,7 +1896,7 @@ Object.defineProperty(Number.prototype, 'degree', {
   }
 });
 
-/** 
+/**
 The mathematical circle constant of 1 turn.
 
 @name TAU
@@ -1964,7 +1965,7 @@ First come, first served.
 
   Object.reverseMerge I,
     c: 6
-    d: 4   
+    d: 4
 
   I # => {a: 1, b:2, c:3, d: 4}
 </pre></code>
@@ -2106,7 +2107,7 @@ var __slice = Array.prototype.slice;
     # => true
 
     point == pointCopy
-    # => false     
+    # => false
     </pre></code>
     */
     copy: function() {
@@ -2326,7 +2327,7 @@ var __slice = Array.prototype.slice;
     point.x
     # => 0.5547001962252291
 
-    point.y  
+    point.y
     # => 0.8320502943378437
 
     anotherPoint = Point(2, 3).norm(2)
@@ -2334,8 +2335,8 @@ var __slice = Array.prototype.slice;
     anotherPoint.x
     # => 1.1094003924504583
 
-    anotherPoint.y   
-    # => 1.6641005886756874    
+    anotherPoint.y
+    # => 1.6641005886756874
     </pre></code>
 
     @name norm
@@ -2356,7 +2357,7 @@ var __slice = Array.prototype.slice;
     point.x
     # => 0.5547001962252291
 
-    point.y  
+    point.y
     # => 0.8320502943378437
 
     anotherPoint = Point(2, 3).norm$(2)
@@ -2364,8 +2365,8 @@ var __slice = Array.prototype.slice;
     anotherPoint.x
     # => 1.1094003924504583
 
-    anotherPoint.y   
-    # => 1.6641005886756874    
+    anotherPoint.y
+    # => 1.6641005886756874
     </pre></code>
 
     @name norm$
@@ -2509,9 +2510,9 @@ var __slice = Array.prototype.slice;
       return this.x * other.x + this.y * other.y;
     },
     /**
-    Calculate the cross product of this point and another point (Vector). 
+    Calculate the cross product of this point and another point (Vector).
     Usually cross products are thought of as only applying to three dimensional vectors,
-    but z can be treated as zero. The result of this method is interpreted as the magnitude 
+    but z can be treated as zero. The result of this method is interpreted as the magnitude
     of the vector result of the cross product between [x1, y1, 0] x [x2, y2, 0]
     perpendicular to the xy plane.
 
@@ -3015,11 +3016,11 @@ String.prototype.underscore = function() {
 };
 
 /**
-Assumes the string is something like a file name and returns the 
+Assumes the string is something like a file name and returns the
 contents of the string without the extension.
 
 <code><pre>
-"neat.png".witouthExtension() 
+"neat.png".witouthExtension()
 # => "neat"
 </pre></code>
 
@@ -3089,7 +3090,7 @@ number.toLocaleString();
 */
 
 /**
-Returns a string representing the Number object to the specified precision. 
+Returns a string representing the Number object to the specified precision.
 
 <code><em>number</em>.toPrecision( [ <em>precision</em> ] )</code>
 @param precision An integer specifying the number of significant digits.
@@ -3225,12 +3226,12 @@ a string as a parameter" section below.
 place of the substring received from parameter #1). The arguments supplied to
 this function are described in the "Specifying a function as a parameter"
 section below.
-@param flags gimy 
+@param flags gimy
 
 Non-standardThe use of the flags parameter in the String.replace method is
 non-standard. For cross-browser compatibility, use a RegExp object with
 corresponding flags.A string containing any combination of the RegExp flags: g
-global match i ignore case m match over multiple lines y Non-standard     
+global match i ignore case m match over multiple lines y Non-standard
 sticky global matchignore casematch over multiple linesNon-standard     sticky
 @name replace
 @methodOf String#
@@ -4113,8 +4114,8 @@ Sets the hours for a specified date according to local time.
 <code>
 setHours(<i>hoursValue</i>[, <i>minutesValue</i>[, <i>secondsValue</i>[, <em>msValue</em>]]])
 </code>
-@param  hoursValue   An integer between 0 and 23, representing the hour. 
-@param  minutesValue   An integer between 0 and 59, representing the minutes. 
+@param  hoursValue   An integer between 0 and 23, representing the hour.
+@param  minutesValue   An integer between 0 and 59, representing the minutes.
 @param  secondsValue   An integer between 0 and 59, representing the seconds. If
 you specify the secondsValue parameter, you must also specify the minutesValue.
 @param  msValue   A number between 0 and 999, representing the milliseconds. If
@@ -4142,7 +4143,7 @@ Sets the minutes for a specified date according to local time.
 <code>
 setMinutes(<i>minutesValue</i>[, <i>secondsValue</i>[, <em>msValue</em>]])
 </code>
-@param  minutesValue   An integer between 0 and 59, representing the minutes. 
+@param  minutesValue   An integer between 0 and 59, representing the minutes.
 @param  secondsValue   An integer between 0 and 59, representing the seconds. If
 you specify the secondsValue parameter, you must also specify the minutesValue.
 @param  msValue   A number between 0 and 999, representing the milliseconds. If
@@ -4171,7 +4172,7 @@ Sets the seconds for a specified date according to local time.
 <code>
 setSeconds(<i>secondsValue</i>[, <em>msValue</em>])
 </code>
-@param  secondsValue   An integer between 0 and 59. 
+@param  secondsValue   An integer between 0 and 59.
 @param  msValue   A number between 0 and 999, representing the milliseconds.
 @name setSeconds
 @methodOf Date#
@@ -4224,8 +4225,8 @@ Sets the hour for a specified date according to universal time.
 <code>
 setUTCHours(<i>hoursValue</i>[, <i>minutesValue</i>[, <i>secondsValue</i>[, <em>msValue</em>]]])
 </code>
-@param  hoursValue   An integer between 0 and 23, representing the hour. 
-@param  minutesValue   An integer between 0 and 59, representing the minutes. 
+@param  hoursValue   An integer between 0 and 23, representing the hour.
+@param  minutesValue   An integer between 0 and 59, representing the minutes.
 @param  secondsValue   An integer between 0 and 59, representing the seconds. If
 you specify the secondsValue parameter, you must also specify the minutesValue.
 @param  msValue   A number between 0 and 999, representing the milliseconds. If
@@ -4253,7 +4254,7 @@ Sets the minutes for a specified date according to universal time.
 <code>
 setUTCMinutes(<i>minutesValue</i>[, <i>secondsValue</i>[, <em>msValue</em>]])
 </code>
-@param  minutesValue   An integer between 0 and 59, representing the minutes. 
+@param  minutesValue   An integer between 0 and 59, representing the minutes.
 @param  secondsValue   An integer between 0 and 59, representing the seconds. If
 you specify the secondsValue parameter, you must also specify the minutesValue.
 @param  msValue   A number between 0 and 999, representing the milliseconds. If
@@ -4282,7 +4283,7 @@ Sets the seconds for a specified date according to universal time.
 <code>
 setUTCSeconds(<i>secondsValue</i>[, <em>msValue</em>])
 </code>
-@param  secondsValue   An integer between 0 and 59. 
+@param  secondsValue   An integer between 0 and 59.
 @param  msValue   A number between 0 and 999, representing the milliseconds.
 @name setUTCSeconds
 @methodOf Date#
@@ -4456,7 +4457,7 @@ Generate a random uuid.
  */
 (function() {
   // Private array of chars to use
-  var CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split(''); 
+  var CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
 
   Math.uuid = function (len, radix) {
     var chars = CHARS, uuid = [];
@@ -4571,7 +4572,7 @@ Bounded = function(I, self) {
       x: 50
       y: 40
 
-    player.include(Bounded)      
+    player.include(Bounded)
 
     player.position()
     # => {x: 50, y: 40}
@@ -4605,7 +4606,7 @@ Bounded = function(I, self) {
       width: 20
       height: 20
 
-    player.include(Bounded)  
+    player.include(Bounded)
 
     player.collides({x: 5, y: 7, width: 20, height: 20})
     # => true
@@ -4625,7 +4626,7 @@ Bounded = function(I, self) {
 
     <code><pre>
     player = Core
-      collisionMargin: 
+      collisionMargin:
         x: -2
         y: -4
       x: 50
@@ -4644,7 +4645,7 @@ Bounded = function(I, self) {
 
     @name collisionBounds
     @methodOf Bounded#
-    @param {Number} xOffset the amount to shift the x position 
+    @param {Number} xOffset the amount to shift the x position
     @param {Number} yOffset the amount to shift the y position
     @returns {Object} The collision bounds
     */
@@ -4658,7 +4659,7 @@ Bounded = function(I, self) {
       return bounds;
     },
     /**
-    The bounds method returns infomation about the location 
+    The bounds method returns infomation about the location
     of the object and its dimensions with optional offsets.
 
     <code><pre>
@@ -4674,12 +4675,12 @@ Bounded = function(I, self) {
     # => {x: 3, y: 6, width: 2, height: 2}
 
     player.bounds(7, 4)
-    # => {x: 10, y: 10, width: 2, height: 2}   
+    # => {x: 10, y: 10, width: 2, height: 2}
     </pre></code>
 
     @name bounds
     @methodOf Bounded#
-    @param {Number} xOffset the amount to shift the x position 
+    @param {Number} xOffset the amount to shift the x position
     @param {Number} yOffset the amount to shift the y position
     */
     bounds: function(xOffset, yOffset) {
@@ -4733,7 +4734,7 @@ Bounded = function(I, self) {
       width: 10
       height: 30
 
-    player.include(Bounded)  
+    player.include(Bounded)
 
     player.center()
     # => {x: 30, y: 35}
@@ -4899,7 +4900,7 @@ Camera.Fade = function(I, self) {
   };
   return {
     /**
-    A convenient way to set the flash effect instance variables. This provides a shorthand for fading the screen in 
+    A convenient way to set the flash effect instance variables. This provides a shorthand for fading the screen in
     from a given color over a specified duration.
 
     <code><pre>
@@ -4908,7 +4909,7 @@ Camera.Fade = function(I, self) {
 
     engine.fadeIn('blue', 50)
     # => This effect will start off blue and fade to transparent over 50 frames.
-    </pre></code>  
+    </pre></code>
 
     @name fadeIn
     @methodOf Camera#
@@ -4921,7 +4922,7 @@ Camera.Fade = function(I, self) {
       return configureFade(duration, color, 0);
     },
     /**
-    A convenient way to set the flash effect instance variables. This provides a shorthand for fading 
+    A convenient way to set the flash effect instance variables. This provides a shorthand for fading
     the screen to a given color over a specified duration.
 
     <code><pre>
@@ -4930,7 +4931,7 @@ Camera.Fade = function(I, self) {
 
     camera.fadeOut('blue', 50)
     # => This effect will start off transparent and change to blue over 50 frames.
-    </pre></code>  
+    </pre></code>
 
     @name fadeOut
     @methodOf Camera#
@@ -4947,7 +4948,7 @@ Camera.Fade = function(I, self) {
 ;
 
 /**
-The <code>Flash</code> module allows you to flash a color onscreen and then fade to transparent over a time period. 
+The <code>Flash</code> module allows you to flash a color onscreen and then fade to transparent over a time period.
 This is nice for lightning type effects or to accentuate major game events.
 
 @name Flash
@@ -4999,8 +5000,8 @@ Camera.Flash = function(I, self) {
       color: Color(255, 0, 0, 0)
       duration: 20
       targetAlpha: 1
-    # => This flash effect will start off transparent and move toward red over 20 frames 
-    </pre></code>  
+    # => This flash effect will start off transparent and move toward red over 20 frames
+    </pre></code>
 
     @name flash
     @methodOf Camera#
@@ -5298,7 +5299,7 @@ Camera.ZSort = function(I, self) {
     @param {Object|Array|String} groupB An object or set of objects to check collisions with
     @param {Function} callback The callback to call when an object of groupA collides
     with an object of groupB: (a, b) ->
-    @param {Function} [detectionMethod] An optional detection method to determine when two 
+    @param {Function} [detectionMethod] An optional detection method to determine when two
     objects are colliding.
     */
     collide: function(groupA, groupB, callback, detectionMethod) {
@@ -5410,7 +5411,7 @@ Camera.ZSort = function(I, self) {
     @methodOf Collision
     @param {Point} source The starting position
     @param {Point} direction A vector from the point
-    @param {Object} target The circle 
+    @param {Object} target The circle
     @returns {Boolean} true if the line intersects the circle, false otherwise
     */
     rayCircle: function(source, direction, target) {
@@ -5685,8 +5686,8 @@ var __slice = Array.prototype.slice;
   };
   /**
   Create a new color. The constructor is very flexible. It accepts individual r, g, b, a values,
-  arrays of r, g, b values, hex strings, rgb strings, hsl strings, other Color objects, 
-  and even the named colors from the xkcd survey: http://blog.xkcd.com/2010/05/03/color-survey-results/. 
+  arrays of r, g, b values, hex strings, rgb strings, hsl strings, other Color objects,
+  and even the named colors from the xkcd survey: http://blog.xkcd.com/2010/05/03/color-survey-results/.
   If no arguments are given, defaults to transparent.
 
   <code class="run"><pre>
@@ -5707,11 +5708,11 @@ var __slice = Array.prototype.slice;
 
   # You have access to all sorts of weird colors.
   # We give you all the named colors the browser recognizes
-  # and the ones from this survey 
+  # and the ones from this survey
   # http://blog.xkcd.com/2010/05/03/color-survey-results/
   namedBrown = Color('Fuzzy Wuzzy Brown')
 
-  # Uutput color in Hex format 
+  # Uutput color in Hex format
   namedBrown.toHex()
   # => '#c45655'
 
@@ -5719,7 +5720,7 @@ var __slice = Array.prototype.slice;
   transparent = Color()
 
   transparent.toString()
-  # => 'rgba(0, 0, 0, 0)' 
+  # => 'rgba(0, 0, 0, 0)'
 
   # let's print out the colors on a canvas to see what they look like
   canvas.font('14px Helvetica')
@@ -5727,11 +5728,11 @@ var __slice = Array.prototype.slice;
     canvas.centerText
       color: eval(color)
       text: color
-      y: 20 * (index + 1)  
+      y: 20 * (index + 1)
   </pre></code>
 
   @name Color
-  @param {Array|Number|String|Color} args... An Array, r, g, b values, 
+  @param {Array|Number|String|Color} args... An Array, r, g, b values,
   a sequence of numbers defining r, g, b values, a hex or hsl string, another Color object, or a named color
   @constructor
   */
@@ -5803,7 +5804,7 @@ var __slice = Array.prototype.slice;
         x: 20 + (60 * index)
         y: 20 + (60 * index)
         width: 60
-        height: 60         
+        height: 60
     </pre></code>
 
     @name complement
@@ -5873,7 +5874,7 @@ var __slice = Array.prototype.slice;
         x: 20 + (60 * index)
         y: 20 + (60 * index)
         width: 60
-        height: 60         
+        height: 60
     </pre></code>
 
     @name darken
@@ -5926,7 +5927,7 @@ var __slice = Array.prototype.slice;
         x: 20 + (60 * index)
         y: 20 + (60 * index)
         width: 60
-        height: 60  
+        height: 60
     </pre></code>
 
     @name desaturate
@@ -6002,8 +6003,8 @@ var __slice = Array.prototype.slice;
         x: 20 + (60 * index)
         y: 20 + (60 * index)
         width: 60
-        height: 60 
-    </pre></code>    
+        height: 60
+    </pre></code>
 
     @name grayscale
     @methodOf Color#
@@ -6024,7 +6025,7 @@ var __slice = Array.prototype.slice;
 
     color.toString()
     # => 'rgba(128, 128, 128, 1)'
-    </pre></code>  
+    </pre></code>
 
     @name grayscale$
     @methodOf Color#
@@ -6039,7 +6040,7 @@ var __slice = Array.prototype.slice;
       return this;
     },
     /**
-    A getter / setter for the hue value of the color. Passing no argument returns the 
+    A getter / setter for the hue value of the color. Passing no argument returns the
     current hue value. Passing a value will set the hue to that value and return the color.
 
     <code class="run"><pre>
@@ -6054,11 +6055,11 @@ var __slice = Array.prototype.slice;
     # to see what it looks like
     canvas.drawRect
       color: magenta
-      x: 50 
-      y: 30 
+      x: 50
+      y: 30
       width: 80
-      height: 80 
-    </pre></code>  
+      height: 80
+    </pre></code>
 
     @name hue
     @methodOf Color#
@@ -6078,7 +6079,7 @@ var __slice = Array.prototype.slice;
       }
     },
     /**
-    A getter / setter for the lightness value of the color. Passing no argument returns the 
+    A getter / setter for the lightness value of the color. Passing no argument returns the
     current lightness value. Passing a value will set the lightness to that value and return the color.
 
     <code class="run"><pre>
@@ -6093,11 +6094,11 @@ var __slice = Array.prototype.slice;
     # to see what it looks like
     canvas.drawRect
       color: magenta
-      x: 50 
-      y: 30 
+      x: 50
+      y: 30
       width: 80
-      height: 80 
-    </pre></code>  
+      height: 80
+    </pre></code>
 
     @name lightness
     @methodOf Color#
@@ -6150,7 +6151,7 @@ var __slice = Array.prototype.slice;
         x: 20 + (60 * index)
         y: 20 + (60 * index)
         width: 60
-        height: 60 
+        height: 60
     </pre></code>
 
     @name shiftHue
@@ -6174,7 +6175,7 @@ var __slice = Array.prototype.slice;
     magenta.shiftHue$(120)
 
     # since magenta's hue is 300 we have wrapped
-    # around 360 to end up at 60. Also we have 
+    # around 360 to end up at 60. Also we have
     # modified magenta in place to become yellow
     magenta.hue()
     # => 60
@@ -6211,7 +6212,7 @@ var __slice = Array.prototype.slice;
         x: 20 + (60 * index)
         y: 20 + (60 * index)
         width: 60
-        height: 60 
+        height: 60
     </pre></code>
 
     @name lighten
@@ -6251,7 +6252,7 @@ var __slice = Array.prototype.slice;
       return this;
     },
     /**
-    A copy of the calling color mixed with `other` using `amount` as the 
+    A copy of the calling color mixed with `other` using `amount` as the
     mixing ratio. If amount is not passed, then the colors are mixed evenly.
 
     <code class="run"><pre>
@@ -6271,7 +6272,7 @@ var __slice = Array.prototype.slice;
         x: 20 + (60 * (index % 2))
         y: 20 + (60 * (if index > 1 then 1 else 0))
         width: 60
-        height: 60 
+        height: 60
     </pre></code>
 
     @name mixWith
@@ -6285,7 +6286,7 @@ var __slice = Array.prototype.slice;
       return this.copy().mixWith$(other, amount);
     },
     /**
-    A copy of the calling color mixed with `other` using `amount` as the 
+    A copy of the calling color mixed with `other` using `amount` as the
     mixing ratio. If amount is not passed, then the colors are mixed evenly.
 
     <code><pre>
@@ -6296,14 +6297,14 @@ var __slice = Array.prototype.slice;
     # With no amount argument the colors are mixed evenly
     red.mixWith$(yellow)
 
-    # We have modified red in place to be orange 
+    # We have modified red in place to be orange
     red.toString()
-    # => 'rgba(255, 128, 0, 1)'    
+    # => 'rgba(255, 128, 0, 1)'
 
     # With an amount of 0.3 we are mixing the color 30% red and 70% yellow
     anotherRed.mixWith$(yellow, 0.3)
 
-    # We have modified `anotherRed` in place to be somethingCloseToOrange 
+    # We have modified `anotherRed` in place to be somethingCloseToOrange
     anotherRed.toString()
     # => rgba(255, 179, 0, 1)
     </pre></code>
@@ -6347,7 +6348,7 @@ var __slice = Array.prototype.slice;
         x: 20 + (60 * index)
         y: 20 + (60 * index)
         width: 60
-        height: 60 
+        height: 60
     </pre></code>
 
     @name saturate
@@ -6392,7 +6393,7 @@ var __slice = Array.prototype.slice;
       return this;
     },
     /**
-    A getter / setter for the saturation value of the color. Passing no argument returns the 
+    A getter / setter for the saturation value of the color. Passing no argument returns the
     current saturation value. Passing a value will set the saturation to that value and return the color.
 
     <code class="run"><pre>
@@ -6406,10 +6407,10 @@ var __slice = Array.prototype.slice;
     # to see what it looks like
     canvas.drawRect
       color: yellow
-      x: 50 
-      y: 30 
+      x: 50
+      y: 30
       width: 80
-      height: 80     
+      height: 80
     </pre></code>
 
     @name saturation
@@ -6441,7 +6442,7 @@ var __slice = Array.prototype.slice;
       }
     },
     /**
-    returns the Hex representation of the color. Exclude the leading `#` by passing false. 
+    returns the Hex representation of the color. Exclude the leading `#` by passing false.
 
     <code><pre>
     color = Color('hsl(60, 1, 0.5)')
@@ -6482,14 +6483,14 @@ var __slice = Array.prototype.slice;
       }
     },
     /**
-    returns an array of the hue, saturation, lightness, and alpha values of the color. 
+    returns an array of the hue, saturation, lightness, and alpha values of the color.
 
     <code><pre>
     magenta = Color(255, 0, 255)
 
     magenta.toHsl()
     # => [300, 1, 0.5, 1]
-    </pre></code>  
+    </pre></code>
 
     @name toHsl
     @methodOf Color#
@@ -6557,7 +6558,7 @@ var __slice = Array.prototype.slice;
       return [h, s, v];
     },
     /**
-    returns string rgba representation of the color. 
+    returns string rgba representation of the color.
 
     <code><pre>
     red = Color('#ff0000')
@@ -6595,7 +6596,7 @@ var __slice = Array.prototype.slice;
         x: 20 + (60 * index)
         y: 20 + (60 * index)
         width: 60
-        height: 60     
+        height: 60
     </pre></code>
 
     @name transparentize
@@ -6652,7 +6653,7 @@ var __slice = Array.prototype.slice;
         x: 20 + (60 * index)
         y: 20 + (60 * index)
         width: 60
-        height: 60     
+        height: 60
     </pre></code>
 
     @name opacify
@@ -6724,7 +6725,7 @@ var __slice = Array.prototype.slice;
   orange = Color.mix(red, yellow)
 
   orange.toString()
-  # => 'rgba(255, 128, 0, 1)'    
+  # => 'rgba(255, 128, 0, 1)'
 
   # With an amount of 0.3 we are mixing the color 30% red and 70% yellow
   somethingCloseToOrange = Color.mix(red, yellow, 0.3)
@@ -6738,7 +6739,7 @@ var __slice = Array.prototype.slice;
   @see Color#mixWith
   @param {Color} color1 the first color to mix
   @param {Color} color2 the second color to mix
-  @param {Number} amount the ratio to mix the colors 
+  @param {Number} amount the ratio to mix the colors
 
   @returns {Color} A new color that is the two colors mixed at the ratio defined by `amount`
   */
@@ -6773,7 +6774,7 @@ player = Core
   sprite: "my_cool_sprite"
 
 engine.bind 'draw', (canvas) ->
-  player.draw(canvas) 
+  player.draw(canvas)
 # => Uncaught TypeError: Object has no method 'draw'
 
 player.include(Drawable)
@@ -6794,7 +6795,7 @@ engine.bind 'draw', (canvas) ->
 
 /**
 Triggered every time the object should be drawn. A canvas is passed as
-the first argument. 
+the first argument.
 
 <code><pre>
 player = Core
@@ -7067,15 +7068,15 @@ Emitterable = function(I, self) {
     zSort: false
   };
   /**
-  The Engine controls the game world and manages game state. Once you 
+  The Engine controls the game world and manages game state. Once you
   set it up and let it run it pretty much takes care of itself.
 
   You can use the engine to add or remove objects from the game world.
 
-  There are several modules that can include to add additional capabilities 
+  There are several modules that can include to add additional capabilities
   to the engine.
 
-  The engine fires events that you  may bind listeners to. Event listeners 
+  The engine fires events that you  may bind listeners to. Event listeners
   may be bound with <code>engine.bind(eventName, callback)</code>
 
   @name Engine
@@ -7083,7 +7084,7 @@ Emitterable = function(I, self) {
   @param {Object} I Instance variables of the engine
   */
   /**
-  Observe or modify the 
+  Observe or modify the
   entity data before it is added to the engine.
   @name beforeAdd
   @methodOf Engine#
@@ -7091,7 +7092,7 @@ Emitterable = function(I, self) {
   @param {Object} entityData
   */
   /**
-  Observe or configure a <code>gameObject</code> that has been added 
+  Observe or configure a <code>gameObject</code> that has been added
   to the engine.
   @name afterAdd
   @methodOf Engine#
@@ -7107,7 +7108,7 @@ Emitterable = function(I, self) {
   @event
   */
   /**
-  Called after the engine completes an update. Here it is 
+  Called after the engine completes an update. Here it is
   safe to modify the game objects array.
 
   @name afterUpdate
@@ -7131,7 +7132,7 @@ Emitterable = function(I, self) {
     canvas.drawText
       text: "Go this way =>"
       x: 200
-      y: 200 
+      y: 200
   </pre></code>
 
   @name draw
@@ -7389,7 +7390,7 @@ Engine.Collision = function(I, self) {
       });
     },
     /**
-    Detects collisions between a bounds and the game objects. 
+    Detects collisions between a bounds and the game objects.
     Returns an array of objects colliding with the bounds provided.
 
     @name collidesWith
@@ -7730,7 +7731,7 @@ Engine.Stats = function(I, self) {
 ;
 
 /**
-The <code>Fadeable</code> module provides a method to fade a sprite to transparent. 
+The <code>Fadeable</code> module provides a method to fade a sprite to transparent.
 You may also provide a callback function that is executed when the sprite has finished fading out.
 
 @name Fadeable
@@ -7770,7 +7771,7 @@ Fadeable = function(I, self) {
 
     fadedOut = false
 
-    # this will fade the player object out over the next 30 frames. 
+    # this will fade the player object out over the next 30 frames.
     # once the player is faded out the fadedOut variable will be set to true.
     player.fadeOut 30, (player) ->
       fadedOut = true
@@ -7798,7 +7799,7 @@ Fadeable = function(I, self) {
 ;
 
 /**
-The <code>Flickerable</code> module provides a method to flicker a sprite between solid and 50% opacity. 
+The <code>Flickerable</code> module provides a method to flicker a sprite between solid and 50% opacity.
 
 @name Flickerable
 @module
@@ -7841,7 +7842,7 @@ Flickerable = function(I, self) {
     player.include(Flickerable)
 
     player.flicker()
-    # => This causes the sprite to flicker between full opacity 
+    # => This causes the sprite to flicker between full opacity
     # => and 50% opacity every 3 frames for 30 frames
 
     player.flicker(90, 5, 0.3)
@@ -7870,7 +7871,7 @@ Flickerable = function(I, self) {
 /**
 The default base class for all objects you can add to the engine.
 
-GameObjects fire events that you may bind listeners to. Event listeners 
+GameObjects fire events that you may bind listeners to. Event listeners
 may be bound with <code>object.bind(eventName, callback)</code>
 
 @name GameObject
@@ -7898,7 +7899,7 @@ enemy.bind 'create', ->
 */
 
 /**
-Triggered when object is destroyed. Use 
+Triggered when object is destroyed. Use
 the destroy event to add particle effects, play sounds, etc.
 
 <code><pre>
@@ -7921,7 +7922,7 @@ Triggered during every update step.
 player = GameObject()
 
 player.bind 'step', ->
-  # check to see if keys are being pressed and 
+  # check to see if keys are being pressed and
   # change the player's velocity
   if keydown.left
     player.velocity(Point(-1, 0))
@@ -7942,10 +7943,10 @@ Triggered every update after the <code>step</code> event is triggered.
 <code><pre>
 player = GameObject()
 
-# we can really use the update and 
+# we can really use the update and
 # step events almost interchangebly
 player.bind 'update', ->
-  # check to see if keys are being pressed and 
+  # check to see if keys are being pressed and
   # change the player's velocity
   if keydown.left
     player.velocity(Point(-1, 0))
@@ -7982,7 +7983,7 @@ GameObject = function(I) {
   var autobindEvents, defaultModules, modules, self;
   I || (I = {});
   /**
-  @name {Object} I Instance variables 
+  @name {Object} I Instance variables
   @memberOf GameObject#
   */
   Object.reverseMerge(I, {
@@ -8084,7 +8085,7 @@ GameState = function(I) {
     <code><pre>
     # you can add arbitrary entityData and
     # the engine will make it into a GameObject
-    engine.add 
+    engine.add
       x: 50
       y: 30
       color: "red"
@@ -8214,7 +8215,7 @@ GameState.SaveState = function(I, self) {
         engine.loadState()
 
       if justPressed.o
-        # removes all game objects, then reinstantiates 
+        # removes all game objects, then reinstantiates
         # them with the entityData passed in
         engine.loadState([{x: 40, y: 50, class: "Player"}, {x: 0, y: 0, class: "Enemy"}, {x: 500, y: 400, class: "Boss"}])
     </pre></code>
@@ -8242,7 +8243,7 @@ GameState.SaveState = function(I, self) {
       object.I.y = 0
 
     # reload all objects to make sure
-    # they are at (0, 0)  
+    # they are at (0, 0)
     engine.reload()
     </pre></code>
 
@@ -8313,10 +8314,10 @@ player.include(Movable)
 # => `velocity is {x: 0, y: 0} and position is {x: 0, y: 0}`
 
 player.update()
-# => `velocity is {x: 1, y: 0} and position is {x: 1, y: 0}` 
+# => `velocity is {x: 1, y: 0} and position is {x: 1, y: 0}`
 
 player.update()
-# => `velocity is {x: 2, y: 0} and position is {x: 3, y: 0}`   
+# => `velocity is {x: 2, y: 0} and position is {x: 3, y: 0}`
 
 # we've hit our maxSpeed so our velocity won't increase
 player.update()
@@ -8445,7 +8446,7 @@ Rotatable = function(I, self) {
 /**
 The Sprite class provides a way to load images for use in games.
 
-By default, images are loaded asynchronously. A proxy object is 
+By default, images are loaded asynchronously. A proxy object is
 returned immediately. Even though it has a draw method it will not
 draw anything to the screen until the image has been loaded.
 
@@ -11257,7 +11258,7 @@ window.requestAnimationFrame || (window.requestAnimationFrame = window.webkitReq
 })();
 
 // Generated by CoffeeScript 1.4.0
-var AI, ARENA_HEIGHT, ARENA_WIDTH, BLOOD_COLOR, Base, Blood, Boards, Bottle, CharacterSheet, Configurator, DEBUG_DRAW, DebugDrawable, Fan, FrameEditorState, Gamepads, Gib, Gibber, Goal, HeadSheet, ICE_COLOR, MAX_PLAYERS, MainMenuState, MatchSetupState, MatchState, Menu, Minigames, NameEntry, Paint, Particle, ParticleEffect, Physics, Player, PlayerDrawing, PlayerState, Puck, Rink, RinkBoardsProxy, Scoreboard, Shockwave, SideBoards, TeamSheet, TestState, WALL_BOTTOM, WALL_LEFT, WALL_RIGHT, WALL_TOP, ZAMBONI_SCALE, Zamboni, canvas,
+var AI, ARENA_HEIGHT, ARENA_WIDTH, BLOOD_COLOR, Base, Blood, Boards, Bottle, CharacterSheet, Configurator, DEBUG_DRAW, DebugDrawable, Fan, FrameEditorState, Gamepads, Gib, Gibber, Goal, HeadSheet, ICE_COLOR, MAX_PLAYERS, MainMenuState, MatchSetupState, MatchState, Menu, Minigames, NameEntry, Paint, Particle, ParticleEffect, Physics, Player, PlayerDrawing, PlayerState, Puck, Rink, RinkBoardsProxy, Scoreboard, Shockwave, SideBoards, TEAMS, TeamSheet, TestState, WALL_BOTTOM, WALL_LEFT, WALL_RIGHT, WALL_TOP, ZAMBONI_SCALE, Zamboni, canvas, teamChoices,
   __slice = [].slice;
 
 ZAMBONI_SCALE = 0.375;
@@ -11279,6 +11280,8 @@ BLOOD_COLOR = "#BA1A19";
 ICE_COLOR = "rgba(192, 255, 255, 0.2)";
 
 MAX_PLAYERS = 4;
+
+TEAMS = ["smiley", "spike", "hiss", "mutant", "monster", "robo"];
 
 /**
 The Sprite class provides a way to load images for use in games.
@@ -12262,6 +12265,22 @@ Array.prototype.pluck = function(property) {
   return this.map(function(item) {
     return item[property];
   });
+};
+
+window.queryString = function() {
+  var decode, match, pl, query, search, urlParams;
+  urlParams = {};
+  match = void 0;
+  pl = /\+/g;
+  search = /([^&=]+)=?([^&]*)/g;
+  decode = function(s) {
+    return decodeURIComponent(s.replace(pl, " "));
+  };
+  query = window.location.search.substring(1);
+  while ((match = search.exec(query))) {
+    urlParams[decode(match[1])] = decode(match[2]);
+  }
+  return urlParams;
 };
 
 (function() {
@@ -17202,8 +17221,17 @@ Zamboni = function(I) {
   return self;
 };
 
+teamChoices = [];
+
+(function() {
+  var params;
+  params = queryString();
+  teamChoices = [params.team1, params.team2].compact();
+  return teamChoices = teamChoices.concat(TEAMS.without(teamChoices));
+})();
+
 window.config = {
-  teams: ["smiley", "spike"],
+  teams: teamChoices.wrap(0, 2),
   players: [],
   particleEffects: true,
   music: false,

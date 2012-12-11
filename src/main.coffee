@@ -1,5 +1,12 @@
+teamChoices = []
+
+do ->
+  params = queryString()
+  teamChoices = [params.team1, params.team2].compact()
+  teamChoices = teamChoices.concat(TEAMS.without(teamChoices))
+
 window.config =
-  teams: ["smiley", "spike"]
+  teams: teamChoices.wrap(0, 2)
   players: []
   particleEffects: true
   music: false
