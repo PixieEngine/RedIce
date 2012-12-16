@@ -14,3 +14,18 @@ ICE_COLOR = "rgba(192, 255, 255, 0.2)"
 MAX_PLAYERS = 4
 
 TEAMS = ["smiley", "spike", "hiss", "mutant", "monster", "robo"]
+
+ALL_MUSIC = [
+  "Spiked Punch"
+  "Snake Or Die"
+  "Monsters Don't Get Cold"
+  "Pure Robot Love Connection"
+]
+
+TEAM_MUSIC =
+  smiley: ALL_MUSIC
+  spike: ALL_MUSIC
+  hiss: ALL_MUSIC
+  mutant: ALL_MUSIC
+  monster: ALL_MUSIC
+  robo: ALL_MUSIC

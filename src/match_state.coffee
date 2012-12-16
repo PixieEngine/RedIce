@@ -49,8 +49,8 @@ MatchState = (I={}) ->
     rightGoal.bind "score", ->
       scoreboard.score "away"
 
-    if config.music
-      Music.play "music1"
+    Music.volume config.musicVolume
+    Music.play TEAM_MUSIC[homeTeam].rand()
 
   # Add events and methods here
   self.bind "update", ->

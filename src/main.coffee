@@ -9,7 +9,7 @@ window.config =
   teams: teamChoices.wrap(0, 2)
   players: []
   particleEffects: true
-  music: false
+  musicVolume: 0.5
 
 window.teamSprites = {}
 config.teams.each (name) ->
