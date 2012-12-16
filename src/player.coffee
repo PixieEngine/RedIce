@@ -13,7 +13,6 @@ Player = (I={}) ->
     falls: 0
     friction: 0.075
     heading: 0
-    joystick: true
     powerMultiplier: 1
     mass: 10
     maxShotPower: 20

@@ -9,6 +9,10 @@ Menu = (I={}) ->
     unless I.menus.length is 1
       prevMenu = I.menus.pop()
 
+  gamestate = (name, state) ->
+    item name, ->
+      engine.setState(state())
+
   minigame = (name) ->
     item name, ->
       engine.setState(Minigames[name]())
@@ -29,12 +33,14 @@ Menu = (I={}) ->
     shadowColor: "#113"
     font: "48px 'Orbitron'"
     menus: [[
-      item "Versus", -> engine.setState(MatchSetupState())
+      gamestate "Tournament", MapState
+      gamestate "Versus", MatchSetupState
       submenu "Mini-Games",
+        minigame "Zamboni Defense"
         minigame "PushOut"
         minigame "Paint"
       submenu "Options",
-        item "Coming Soon", ->
+        item "Config", ->
     ]]
 
   # Inherit from game object

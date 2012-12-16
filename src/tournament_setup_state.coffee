@@ -1,4 +1,4 @@
-MatchSetupState = (I={}) ->
+TournamentSetupState = (I={}) ->
   # Inherit from game object
   self = GameState(I)
 
@@ -11,7 +11,7 @@ MatchSetupState = (I={}) ->
         id: i
         name: ""
         teamIndex: Math.floor(2 * i / MAX_PLAYERS)
-        cpu: true
+        cpu: i != 0
         bodyIndex: rand(TeamSheet.bodyStyles.length)
         headIndex: rand(TeamSheet.headStyles.length)
 
@@ -24,10 +24,6 @@ MatchSetupState = (I={}) ->
   self.bind "enter", ->
     engine.clear(false)
 
-    if config.music
-      Music.volume 0.4
-      Music.play "title_screen"
-
     configurator = engine.add
       class: "Configurator"
       config: initPlayerData()
@@ -36,7 +32,6 @@ MatchSetupState = (I={}) ->
       configurator.destroy()
 
       #TODO We should use strings to set game states
-      engine.setState(MatchState())
+      engine.setState(MapState())
 
   return self
-

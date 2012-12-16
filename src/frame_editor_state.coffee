@@ -149,7 +149,7 @@ FrameEditorState = (I={}) ->
       # TODO load additional metadata
 
   storeFrameData = ->
-    dataToSave = 
+    dataToSave =
       head: extractHeadData()
       events: extractEventsData()
 
@@ -206,7 +206,6 @@ FrameEditorState = (I={}) ->
     p = engine.add
       id: 0
       class: "Player"
-      joystick: true
       x: -screenCenter.x + 128
       y: screenCenter.y - 128
 
@@ -274,7 +273,7 @@ FrameEditorState = (I={}) ->
       hotkeys[nextKey] = ->
         adjustIndexVariable(variableName, 1)
 
-      helpInfo[prevKey] = "Decrement #{variableName.underscore().humanize()}"      
+      helpInfo[prevKey] = "Decrement #{variableName.underscore().humanize()}"
       helpInfo[nextKey] = "Increment #{variableName.underscore().humanize()}"
 
     addCycle("headPositionIndex", ";", "q")

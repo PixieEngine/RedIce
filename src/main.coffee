@@ -10,7 +10,6 @@ window.config =
   players: []
   particleEffects: true
   music: false
-  joysticks: true
 
 window.teamSprites = {}
 config.teams.each (name) ->

@@ -1,8 +1,7 @@
-MatchSetupState = (I={}) ->
-  # Inherit from game object
+MapState = (I={}) ->
   self = GameState(I)
 
-  # (Re-)Initialize Player data between matches
+  # TODO: Set Opponent team data
   initPlayerData = ->
     MAX_PLAYERS.times (i) ->
       Object.reverseMerge config.players[i] ||= {},
@@ -11,7 +10,7 @@ MatchSetupState = (I={}) ->
         id: i
         name: ""
         teamIndex: Math.floor(2 * i / MAX_PLAYERS)
-        cpu: true
+        cpu: i != 0
         bodyIndex: rand(TeamSheet.bodyStyles.length)
         headIndex: rand(TeamSheet.headStyles.length)
 
@@ -22,21 +21,7 @@ MatchSetupState = (I={}) ->
     return config
 
   self.bind "enter", ->
-    engine.clear(false)
-
-    if config.music
-      Music.volume 0.4
-      Music.play "title_screen"
-
-    configurator = engine.add
-      class: "Configurator"
-      config: initPlayerData()
-
-    configurator.bind "done", (config) ->
-      configurator.destroy()
-
-      #TODO We should use strings to set game states
-      engine.setState(MatchState())
+    engine.add
+      class: "Map"
 
   return self
-
