@@ -11,5 +11,7 @@ MainMenuState = (I={}) ->
       x: App.width/2
       y: App.height/3 - 50
 
+    Music.play "Theme to Red Ice"
+
   # We must always return self as the last line
   return self

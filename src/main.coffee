@@ -11,6 +11,8 @@ window.config =
   particleEffects: true
   musicVolume: 0.5
 
+Music.volume config.musicVolume
+
 window.teamSprites = {}
 config.teams.each (name) ->
   teamSprites[name] = TeamSheet

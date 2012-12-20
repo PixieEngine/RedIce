@@ -24,9 +24,7 @@ MatchSetupState = (I={}) ->
   self.bind "enter", ->
     engine.clear(false)
 
-    if config.music
-      Music.volume 0.4
-      Music.play "title_screen"
+    Music.play "Theme to Red Ice"
 
     configurator = engine.add
       class: "Configurator"
