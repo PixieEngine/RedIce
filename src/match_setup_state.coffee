@@ -24,8 +24,6 @@ MatchSetupState = (I={}) ->
   self.bind "enter", ->
     engine.clear(false)
 
-    Music.play "Theme to Red Ice"
-
     configurator = engine.add
       class: "Configurator"
       config: initPlayerData()

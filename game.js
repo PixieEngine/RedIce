@@ -10257,8 +10257,16 @@ Music = (function() {
     */
     play: function(name) {
       updateTrackVolume();
-      track.src = "" + BASE_URL + "/music/" + name + ".ogg";
+
+      if(name) {
+        track.src = "" + BASE_URL + "/music/" + name + ".ogg";
+      }
+
       return track.play();
+    },
+
+    pause: function() {
+      track.pause();
     },
     /**
     Get or set the current music volume. Any value passed is
@@ -13709,8 +13717,7 @@ Goal = function(I) {
     score: function() {
       self.trigger("score");
       Fan.cheer(6);
-      Sound.play("crowd" + (rand(3)));
-      Sound.play("siren");
+      Sound.play("Crowd Cheers " + (rand(4) + 1));
       if (I.suddenDeath) {
         return self.destroy();
       }
@@ -13941,7 +13948,6 @@ MatchSetupState = function(I) {
   self.bind("enter", function() {
     var configurator;
     engine.clear(false);
-    Music.play("Theme to Red Ice");
     configurator = engine.add({
       "class": "Configurator",
       config: initPlayerData()
@@ -14087,7 +14093,7 @@ Menu = function(I) {
     highlightTextColor: "#FF8",
     shadowColor: "#113",
     font: "48px 'Orbitron'",
-    menus: [[gamestate("Tournament", MapState), gamestate("Versus", MatchSetupState), submenu("Mini-Games", minigame("Zamboni Defense"), minigame("PushOut"), minigame("Paint")), submenu("Options", item("Config", function() {}))]]
+    menus: [[gamestate("Versus", MatchSetupState), submenu("Mini-Games", minigame("PushOut"), minigame("Paint")), submenu("Options", item("Config", function() {}))]]
   });
   self = GameObject(I);
   options = function() {
@@ -14098,10 +14104,14 @@ Menu = function(I) {
   };
   moveSelection = function(change) {
     var index;
+    if (change) {
+      Sound.play("Menu Move Cursor 1");
+    }
     index = options().selectedIndex || 0;
     return options().selectedIndex = (index + change).mod(options().length);
   };
   choose = function() {
+    Sound.play("Menu Select 1");
     return selectedOption().action();
   };
   self.bind("update", function() {
@@ -15680,8 +15690,6 @@ Player = function(I) {
       I.wipeout = 25;
       I.shootPower = 0;
       push = push.norm().scale(30);
-      Sound.play("hit" + (rand(4)));
-      Sound.play("crowd" + (rand(3)));
       Fan.cheer(1);
       ParticleEffect.bloodSpray({
         push: push,
@@ -15715,7 +15723,8 @@ Player = function(I) {
           if (power >= entity.toughness()) {
             entity.wipeout(p);
           }
-          return entity.I.velocity = entity.I.velocity.add(p);
+          entity.I.velocity = entity.I.velocity.add(p);
+          return entity.trigger("struck");
         }
       });
       self.trigger("shoot", {
@@ -15761,6 +15770,9 @@ Player = function(I) {
     } else {
       if (!I.cooldown.shoot && actionDown("B", "X")) {
         if (I.shootPower < I.maxShotPower) {
+          if (I.shootPower === 0) {
+            self.trigger("shot_start");
+          }
           I.shootPower += 1;
         } else {
           I.shootPower += 2;
@@ -15785,6 +15797,7 @@ Player = function(I) {
       velocityLength = I.velocity.length();
       movementLength = movement.length();
       if ((velocityLength > 4) && (movement.dot(velocityNorm) < (-0.95) * movementLength)) {
+        self.trigger("slide_stop");
         ParticleEffect.iceSpray({
           push: I.velocity,
           x: I.center.x,
@@ -15805,6 +15818,7 @@ Player = function(I) {
   self.include(PlayerState);
   self.include(PlayerDrawing);
   self.include(Player.Streaks);
+  self.include(Player.Sounds);
   _ref = Player.teamData[I.teamStyle];
   for (key in _ref) {
     value = _ref[key];
@@ -16242,6 +16256,35 @@ Player.COLORS = ["#0246E3", "#EB070E", "#388326", "#F69508", "#563495", "#58C4F5
 
 Player.CPU_COLOR = "#888";
 
+Player.Sounds = function(I, self) {
+  var sfx;
+  sfx = function(name, n, m) {
+    if (m == null) {
+      m = "";
+    }
+    return Sound.play("" + name + " " + (rand(n) + 1) + m);
+  };
+  self.bind("wipeout", function() {
+    sfx("Body Hit", 4, "v");
+    if (rand(5)) {
+      sfx("Crowd Cheers", 4);
+    } else {
+      sfx("Crowd Jeers", 3);
+    }
+    return engine.delay(8, function() {
+      return sfx("Torso Slide", 2, "v");
+    });
+  });
+  self.bind("shoot", function() {
+    return sfx("Swing Release", 4);
+  });
+  self.bind("slide_stop", function() {
+    return sfx("Slide Stop", 3);
+  });
+  self.bind("shot_start", function() {});
+  return {};
+};
+
 PlayerState = function(I, self) {
   var forceFacing, jitterSoak, setFacing, setFlip;
   if (I == null) {
@@ -16455,16 +16498,20 @@ Puck = function(I) {
   self.bind("wallCollision", function(type) {
     I.superMassive = false;
     I.friction = DEFAULT_FRICTION;
-    if (type === "goal") {
-      return Sound.play("clink0");
-    } else {
-      return Sound.play("thud0");
+    if (I.velocity.length() > 10) {
+      if (type === "goal") {
+        return Sound.play("Puck Goalpost " + (rand(2) + 1));
+      } else {
+        return Sound.play("Puck Wall " + (rand(4) + 1));
+      }
     }
   });
   self.bind("superCharge", function() {
     I.superMassive = true;
-    I.friction = 0;
-    return Sound.play("super_power");
+    return I.friction = 0;
+  });
+  self.bind("struck", function() {
+    return Sound.play("Puck Hit " + (rand(4) + 1));
   });
   self.mass = function() {
     if (I.superMassive) {
@@ -16994,7 +17041,7 @@ Shockwave = function(I) {
     }
   };
   I.create = function() {
-    Sound.play("explosion");
+    Sound.play("Zamboni Explosion " + (rand(5)));
     return drawScorch();
   };
   self = GameObject(I).extend({
@@ -17409,10 +17456,13 @@ window.config = {
   teams: teamChoices.wrap(0, 2),
   players: [],
   particleEffects: true,
-  musicVolume: 0.5
+  musicVolume: 0.5,
+  sfxVolume: 0.5
 };
 
 Music.volume(config.musicVolume);
+
+Sound.globalVolume(config.sfxVolume);
 
 window.teamSprites = {};
 
@@ -17439,6 +17489,14 @@ window.engine = Engine({
   showFPS: true,
   zSort: true,
   FPS: 30
+});
+
+$(window).focus(function() {
+  return Music.play();
+});
+
+$(window).blur(function() {
+  return Music.pause();
 });
 
 $(document).bind("keydown", "f2", function() {

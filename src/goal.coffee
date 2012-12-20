@@ -71,8 +71,8 @@ Goal = (I) ->
     score: ->
       self.trigger "score"
       Fan.cheer(6)
-      Sound.play("crowd#{rand(3)}")
-      Sound.play("siren")
+
+      Sound.play("Crowd Cheers #{rand(4) + 1}")
 
       if I.suddenDeath
         self.destroy()

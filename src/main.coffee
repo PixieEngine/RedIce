@@ -10,8 +10,10 @@ window.config =
   players: []
   particleEffects: true
   musicVolume: 0.5
+  sfxVolume: 0.5
 
 Music.volume config.musicVolume
+Sound.globalVolume config.sfxVolume
 
 window.teamSprites = {}
 config.teams.each (name) ->
@@ -41,6 +43,13 @@ window.engine = Engine
   showFPS: true
   zSort: true
   FPS: 30
+
+$(window).focus ->
+  Music.play()
+
+$(window).blur ->
+  # TODO Pause game
+  Music.pause()
 
 $(document).bind "keydown", "f2", ->
   engine.setState(FrameEditorState())

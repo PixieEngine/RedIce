@@ -33,10 +33,10 @@ Menu = (I={}) ->
     shadowColor: "#113"
     font: "48px 'Orbitron'"
     menus: [[
-      gamestate "Tournament", MapState
+      # gamestate "Tournament", MapState
       gamestate "Versus", MatchSetupState
       submenu "Mini-Games",
-        minigame "Zamboni Defense"
+        # minigame "Zamboni Defense"
         minigame "PushOut"
         minigame "Paint"
       submenu "Options",
@@ -53,11 +53,16 @@ Menu = (I={}) ->
     options()[options().selectedIndex || 0]
 
   moveSelection = (change) ->
+    if change
+      Sound.play "Menu Move Cursor 1"
+
     index = options().selectedIndex || 0
 
     options().selectedIndex = (index + change).mod(options().length)
 
   choose = ->
+    Sound.play "Menu Select 1"
+
     selectedOption().action()
 
   # Add events and methods here

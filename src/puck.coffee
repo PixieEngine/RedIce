@@ -103,15 +103,18 @@ Puck = (I) ->
     I.superMassive = false
     I.friction = DEFAULT_FRICTION
 
-    if type is "goal"
-      Sound.play "clink0"
-    else
-      Sound.play "thud0"
+    if I.velocity.length() > 10
+      if type is "goal"
+        Sound.play "Puck Goalpost #{rand(2) + 1}"
+      else
+        Sound.play "Puck Wall #{rand(4) + 1}"
 
   self.bind "superCharge", ->
     I.superMassive = true
     I.friction = 0
-    Sound.play "super_power"
+
+  self.bind "struck", ->
+    Sound.play "Puck Hit #{rand(4) + 1}"
 
   self.mass = ->
     if I.superMassive

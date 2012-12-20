@@ -11,7 +11,7 @@ Shockwave = (I={}) ->
 
   #TODO: Get the create binding to be more legit
   I.create = ->
-    Sound.play "explosion"
+    Sound.play "Zamboni Explosion #{rand(5)}"
     # addParticleEffect()
     drawScorch()
 

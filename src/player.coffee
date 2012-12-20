@@ -90,8 +90,6 @@ Player = (I={}) ->
 
       push = push.norm().scale(30)
 
-      Sound.play("hit#{rand(4)}")
-      Sound.play("crowd#{rand(3)}")
       Fan.cheer(1)
 
       ParticleEffect.bloodSpray
@@ -133,6 +131,8 @@ Player = (I={}) ->
 
           entity.I.velocity = entity.I.velocity.add(p)
 
+          entity.trigger "struck"
+
       self.trigger "shoot", {power, direction}
 
     I.shootPower = 0
@@ -170,6 +170,9 @@ Player = (I={}) ->
     else
       if !I.cooldown.shoot && actionDown "B", "X"
         if I.shootPower < I.maxShotPower
+          if I.shootPower is 0
+            self.trigger "shot_start"
+
           I.shootPower += 1
         else
           I.shootPower += 2
@@ -196,6 +199,7 @@ Player = (I={}) ->
       movementLength = movement.length()
 
       if (velocityLength > 4) && (movement.dot(velocityNorm) < (-0.95) * movementLength)
+        self.trigger "slide_stop"
         ParticleEffect.iceSpray
           push: I.velocity
           x: I.center.x
@@ -215,6 +219,7 @@ Player = (I={}) ->
   self.include PlayerState
   self.include PlayerDrawing
   self.include Player.Streaks
+  self.include Player.Sounds
 
   # Add in team specific mods
   for key, value of Player.teamData[I.teamStyle]
