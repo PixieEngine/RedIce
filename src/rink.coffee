@@ -180,7 +180,7 @@ Rink = (I={}) ->
     frontBoardsCanvas.withTransform Matrix.translation(I.wallLeft + 128, I.wallBottom - 48), ->
       sprite.fill(frontBoardsCanvas, 0, 0, I.spriteSize * 12, I.spriteSize)
 
-  Sprite.loadSheet "norm_wall_w", 512, 512, 0.125, (sprites) ->
+  Sprite.loadSheet "#{I.team}/wall_w", 512, 512, 0.125, (sprites) ->
     sprite = sprites[0]
     frontBoardsCanvas.withTransform Matrix.translation(I.wallLeft, I.wallTop + 96), (canvas) ->
       sprite.fill(canvas, -I.spriteSize/2, -I.spriteSize/2, I.spriteSize, I.spriteSize * 6)

@@ -16724,7 +16724,7 @@ Rink = function(I) {
       return sprite.fill(frontBoardsCanvas, 0, 0, I.spriteSize * 12, I.spriteSize);
     });
   });
-  Sprite.loadSheet("norm_wall_w", 512, 512, 0.125, function(sprites) {
+  Sprite.loadSheet("" + I.team + "/wall_w", 512, 512, 0.125, function(sprites) {
     var sprite;
     sprite = sprites[0];
     frontBoardsCanvas.withTransform(Matrix.translation(I.wallLeft, I.wallTop + 96), function(canvas) {
