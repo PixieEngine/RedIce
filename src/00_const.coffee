@@ -20,6 +20,7 @@ ALL_MUSIC = [
   "Snake Or Die"
   "Monsters Don't Get Cold"
   "Pure Robot Love Connection"
+  "Carpe Mutante"
 ]
 
 TEAM_MUSIC =
