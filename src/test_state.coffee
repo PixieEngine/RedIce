@@ -1,15 +1,14 @@
 TestState = (I={}) ->
-  # Inherit from game object
   self = GameState(I)
 
   physics = Physics()
-  
+
   controller = Gamepads.KeyboardController
     debugColor: "#FFF"
 
   self.bind "enter", ->
     engine.clear(true)
-    
+
     engine.add
       class: "Puck"
 
@@ -27,7 +26,6 @@ TestState = (I={}) ->
     canvas.withTransform Matrix.translation(50, 50), (canvas) ->
       controller.drawDebug(canvas)
 
-    # Add events and methods here
   self.bind "update", ->
     pucks = engine.find("Puck")
     players = engine.find("Player").shuffle()

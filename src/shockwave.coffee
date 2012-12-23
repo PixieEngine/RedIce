@@ -9,16 +9,15 @@ Shockwave = (I={}) ->
       bloodCanvas.withTransform Matrix.translation(I.x - scorch.width/2, I.y - scorch.height/2), ->
         scorch.draw bloodCanvas, 0, 0
 
-  #TODO: Get the create binding to be more legit
-  I.create = ->
-    Sound.play "Zamboni #{rand(5)} N"
-    # addParticleEffect()
-    drawScorch()
-
   self = GameObject(I).extend
     draw: (canvas) ->
       sprite = Shockwave.sprites.explosion[(I.age).clamp(0, 6)]
       sprite?.draw(canvas, I.x - sprite.width / 2, I.y - sprite.height / 2)
+
+  self.bind "create", ->
+    Sound.play "Zamboni #{rand(5)} N"
+    # addParticleEffect()
+    drawScorch()
 
   self.bind "step", ->
     maxCircle = I

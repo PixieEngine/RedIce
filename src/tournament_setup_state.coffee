@@ -1,5 +1,4 @@
 TournamentSetupState = (I={}) ->
-  # Inherit from game object
   self = GameState(I)
 
   # (Re-)Initialize Player data between matches

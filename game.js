@@ -17149,16 +17149,16 @@ Shockwave = function(I) {
       });
     }
   };
-  I.create = function() {
-    Sound.play("Zamboni " + (rand(5)) + " N");
-    return drawScorch();
-  };
   self = GameObject(I).extend({
     draw: function(canvas) {
       var sprite;
       sprite = Shockwave.sprites.explosion[I.age.clamp(0, 6)];
       return sprite != null ? sprite.draw(canvas, I.x - sprite.width / 2, I.y - sprite.height / 2) : void 0;
     }
+  });
+  self.bind("create", function() {
+    Sound.play("Zamboni " + (rand(5)) + " N");
+    return drawScorch();
   });
   self.bind("step", function() {
     var maxCircle, minCircle;
