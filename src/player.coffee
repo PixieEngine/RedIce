@@ -8,7 +8,6 @@ Player = (I={}) ->
       flip: 0
       shoot: 0
     collisionMargin: Point(2, 2)
-    controller: 0
     controlRadius: 50
     falls: 0
     friction: 0.075
@@ -40,7 +39,7 @@ Player = (I={}) ->
 
   controller = engine.controller(I.id)
   actionDown = controller.actionDown
-  axisPosition = controller.axis || $.noop
+  axisPosition = controller.axis
 
   self = Base(I).extend
     player: ->

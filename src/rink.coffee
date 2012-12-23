@@ -26,7 +26,7 @@ Rink = (I={}) ->
       left: 0
     .pixieCanvas()
 
-  perspectiveRatio = 4/3
+  perspectiveRatio = PERSPECTIVE_RATIO
   perspective = Matrix.scale(1, 1/perspectiveRatio)
 
   red = "red"
