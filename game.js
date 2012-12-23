@@ -15969,8 +15969,8 @@ Player.teamData = {
     controlRadius: -10
   },
   hiss: {
-    movementSpeed: 0.3,
-    friction: 0.02
+    movementSpeed: 2,
+    friction: 0.125
   },
   moster: {
     mass: -2,

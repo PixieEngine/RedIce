@@ -16,7 +16,6 @@ Shockwave = (I={}) ->
 
   self.bind "create", ->
     Sound.play "Zamboni #{rand(5)} N"
-    # addParticleEffect()
     drawScorch()
 
   self.bind "step", ->
