@@ -1,4 +1,4 @@
-PlayerDrawing = (I, self) ->
+Player.Drawing = (I, self) ->
   Object.reverseMerge I,
     scale: 1
 
@@ -151,12 +151,12 @@ PlayerDrawing = (I, self) ->
       superChargeRatio = ((I.shootPower - I.maxShotPower) / I.maxShotPower).clamp(0, 1)
       center = self.center().floor()
 
-      arrowAnimation = PlayerDrawing.shootArrow
+      arrowAnimation = Player.Drawing.shootArrow
 
       if superChargeRatio is 1
-        arrowAnimation = PlayerDrawing.chargedArrow
+        arrowAnimation = Player.Drawing.chargedArrow
         canvas.withTransform Matrix.translation(center.x - 5, center.y - 40).scale(0.5), (canvas) ->
-          PlayerDrawing.chargeAura.rand()?.draw(canvas, -256, -256)
+          Player.Drawing.chargeAura.rand()?.draw(canvas, -256, -256)
 
       canvas.withTransform Matrix.translation(center.x, center.y).concat(Matrix.scale(0.125 + ratio * 0.375)).concat(Matrix.rotation(I.movementDirection)), (canvas) ->
         arrowAnimation.wrap((I.age/4).floor()).draw(canvas, -256, -256)
@@ -188,9 +188,9 @@ PlayerDrawing = (I, self) ->
 
     return transform
 
-PlayerDrawing.shootArrow = Sprite.loadSheet("arrow_3", 512, 512)
-PlayerDrawing.chargedArrow = Sprite.loadSheet("arrow_charged_3", 512, 512)
-PlayerDrawing.chargeAura = Sprite.loadSheet("charge_aura_strip2", 512, 512)
+Player.Drawing.shootArrow = Sprite.loadSheet("arrow_3", 512, 512)
+Player.Drawing.chargedArrow = Sprite.loadSheet("arrow_charged_3", 512, 512)
+Player.Drawing.chargeAura = Sprite.loadSheet("charge_aura_strip2", 512, 512)
 
 Player.COLORS = [
   "#0246E3" # Blue

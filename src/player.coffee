@@ -35,11 +35,9 @@ Player = (I={}) ->
     puckLead: 75
     velocity: Point()
 
-  Object.extend I, Player.bodyData[I.bodyStyle]
-
   controller = engine.controller(I.id)
   actionDown = controller.actionDown
-  axisPosition = controller.axis
+  axisPosition = controller.axis or ->
 
   self = Base(I).extend
     player: ->
@@ -103,6 +101,8 @@ Player = (I={}) ->
 
       self.trigger "wipeout"
 
+  self.include Player.Data
+
   shootPuck = (direction) ->
     puck = engine.find("Puck").first()
 
@@ -121,7 +121,7 @@ Player = (I={}) ->
         if Collision.circular(circle, entity.circle())
           mass = entity.mass()
           if entity.player()
-            mass = mass / 10 # Hits should launch players players
+            mass = mass / 10 # Hits should launch players
 
           p = Point.fromAngle(direction).scale(power / mass)
 
@@ -136,11 +136,11 @@ Player = (I={}) ->
 
     I.shootPower = 0
 
-  self.bind "step", ->
+  self.bind "update", ->
     for key, value of I.cooldown
       I.cooldown[key] = value.approach(0, 1)
 
-  self.bind "step", ->
+  self.bind "update", ->
     I.boost = I.boost.approach(0, 1)
     I.wipeout = I.wipeout.approach(0, 1)
 
@@ -215,58 +215,9 @@ Player = (I={}) ->
   if I.cpu
     self.include AI
 
-  self.include PlayerState
-  self.include PlayerDrawing
+  self.include Player.State
+  self.include Player.Drawing
   self.include Player.Streaks
   self.include Player.Sounds
 
-  # Add in team specific mods
-  for key, value of Player.teamData[I.teamStyle]
-    I[key] += value
-
   self
-
-Player.bodyData =
-  skinny:
-    mass: 15
-    movementSpeed: 1.25
-    powerMultiplier: 2
-    radius: 18
-    toughness: 20
-  thick:
-    mass: 20
-    movementSpeed: 1.1
-    friction: 0.09
-    powerMultiplier: 3
-    toughness: 25
-  tubs:
-    mass: 40
-    movementSpeed: 1.2
-    friction: 0.1
-    powerMultiplier: 2.5
-    radius: 22
-    toughness: 40
-
-# Team ability deltas
-Player.teamData =
-  smiley:
-    mass: -1
-  spike:
-    strength: 2
-    controlRadius: -10
-  hiss:
-    movementSpeed: 0.3
-    friction: 0.02
-  moster:
-    mass: -2
-    strength: 1
-    speed: -0.1
-  mutant:
-    movementSpeed: -0.1
-    mass: 1
-    friction: 0.01
-  robo:
-    movementSpeed: 0.3
-    friction: 0.01
-    mass: 3
-    powerMultiplier: 2

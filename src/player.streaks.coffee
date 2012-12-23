@@ -1,5 +1,6 @@
 Player.Streaks = (I={}, self) ->
   Object.reverseMerge I,
+    bloodColor: BLOOD_COLOR
     blood:
       face: 0
       body: 0
@@ -31,7 +32,7 @@ Player.Streaks = (I={}, self) ->
 
   drawBloodStreaks: ->
     if (blood = I.blood.face) && rand(2) == 0
-      color = Color(BLOOD_COLOR)
+      color = Color(I.bloodColor)
 
       currentPos = self.center()
       (rand(blood)/3).floor().clamp(0, 2).times ->
@@ -60,7 +61,7 @@ Player.Streaks = (I={}, self) ->
         if skateBlood = I.blood.leftSkate
           I.blood.leftSkate -= 1
 
-          color = BLOOD_COLOR
+          color = I.bloodColor
           thickness = (skateBlood/30).clamp(0, 1.5)
         else
           color = ICE_COLOR
@@ -76,7 +77,7 @@ Player.Streaks = (I={}, self) ->
         if skateBlood = I.blood.rightSkate
           I.blood.rightSkate -= 1
 
-          color = BLOOD_COLOR
+          color = I.bloodColor
           thickness = (skateBlood/30).clamp(0, 1.5)
         else
           color = ICE_COLOR

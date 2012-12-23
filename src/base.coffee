@@ -69,7 +69,9 @@ Base = (I={}) ->
   if I.velocity? && I.velocity.x? && I.velocity.y?
     I.velocity = Point(I.velocity.x, I.velocity.y)
 
-  self.bind "update", ->
+  self.on = self.bind # Alias bind as on
+
+  self.on "update", ->
     I.zIndex = I.y
 
     if I.velocity.length() > I.maxSpeed
@@ -82,4 +84,3 @@ Base = (I={}) ->
   I.center = Point(I.x + I.width/2, I.y + I.height/2)
 
   self
-

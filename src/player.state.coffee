@@ -1,4 +1,4 @@
-PlayerState = (I={}, self) ->
+Player.State = (I={}, self) ->
   # Set some default properties
   Object.reverseMerge I,
     frame: 0
