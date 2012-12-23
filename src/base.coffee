@@ -59,7 +59,7 @@ Base = (I={}) ->
       I.velocity.y *= frictionFactor
 
       I.x += I.velocity.x * dt
-      I.y += I.velocity.y * dt
+      I.y += I.velocity.y * dt / PERSPECTIVE_RATIO
 
       I.center.x = I.x + I.width/2
       I.center.y = I.y + I.height/2

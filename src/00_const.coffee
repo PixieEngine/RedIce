@@ -31,3 +31,5 @@ TEAM_MUSIC =
   mutant: ["Carpe Mutante"]
   monster: ["Monsters Don't Get Cold"]
   robo: ["Pure Robot Love Connection"]
+
+PERSPECTIVE_RATIO = 4/3
