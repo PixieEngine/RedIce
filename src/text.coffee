@@ -12,7 +12,7 @@ DialogBox = (I={}) ->
     paddingY: 24
     text: ""
     textColor: "#FFC"
-    width: App.width
+    width: App.width + 200
     x: 0
     y: 0
 

@@ -12210,7 +12210,7 @@ Cutscene = function(I) {
 AssetLoader.group("cutscenes", function() {
   return Cutscene.scenes = [
     Cutscene({
-      text: "Look out the window. And doesn't this remind you of when you were in the boat?\n\nAnd then later that night you were lying on the ice, looking up at the ceiling,\n\nand the water in your mind was not dissimilar from the skyscape, and you think to yourself,\n\n\"Why is it that the skyscape is moving, but the ice is still?\"\n\nAnd also-- Where is it that you're from?",
+      text: "Look out the window. And doesn't this remind you of when you were in the boat?\nAnd then later that night you were lying, looking up at the ceiling,\nand the static in your mind was not dissimilar from the sky, and you think to yourself,\n\"Why is it that the sky is moving, but the ice is still?\"\nAnd also-- Where is it that you're from?",
       sprite: Sprite.loadByName("cutscenes/train")
     })
   ];
@@ -17350,7 +17350,7 @@ DialogBox = function(I) {
     paddingY: 24,
     text: "",
     textColor: "#FFC",
-    width: App.width,
+    width: App.width + 200,
     x: 0,
     y: 0
   });

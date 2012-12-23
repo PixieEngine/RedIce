@@ -23,13 +23,9 @@ AssetLoader.group "cutscenes", ->
     Cutscene(
       text: """
         Look out the window. And doesn't this remind you of when you were in the boat?
-
-        And then later that night you were lying on the ice, looking up at the ceiling,
-
-        and the water in your mind was not dissimilar from the skyscape, and you think to yourself,
-
-        "Why is it that the skyscape is moving, but the ice is still?"
-
+        And then later that night you were lying, looking up at the ceiling,
+        and the static in your mind was not dissimilar from the sky, and you think to yourself,
+        "Why is it that the sky is moving, but the ice is still?"
         And also-- Where is it that you're from?
       """
       sprite: Sprite.loadByName "cutscenes/train"
