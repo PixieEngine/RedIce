@@ -110,3 +110,10 @@ body {
   font-weight: 700;
   src: local('Orbitron-Bold'), url(Orbitron.woff) format('woff');
 }
+
+@font-face {
+  font-family: 'Iceland';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Iceland'), local('Iceland-Regular'), url(Iceland.woff) format('woff');
+}

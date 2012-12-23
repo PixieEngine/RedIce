@@ -16,17 +16,18 @@ MAX_PLAYERS = 4
 TEAMS = ["smiley", "spike", "hiss", "mutant", "monster", "robo"]
 
 ALL_MUSIC = [
+  "Smiley Smile"
   "Spiked Punch"
   "Snake Or Die"
+  "Carpe Mutante"
   "Monsters Don't Get Cold"
   "Pure Robot Love Connection"
-  "Carpe Mutante"
 ]
 
 TEAM_MUSIC =
-  smiley: ALL_MUSIC
-  spike: ALL_MUSIC
-  hiss: ALL_MUSIC
-  mutant: ALL_MUSIC
-  monster: ALL_MUSIC
-  robo: ALL_MUSIC
+  smiley: ["Smiley Smile"]
+  spike: ["Spiked Punch"]
+  hiss: ["Snake Or Die"]
+  mutant: ["Carpe Mutante"]
+  monster: ["Monsters Don't Get Cold"]
+  robo: ["Pure Robot Love Connection"]

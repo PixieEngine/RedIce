@@ -77,4 +77,7 @@ engine.bind "draw", (canvas) ->
 engine.setState(LoaderState(
   nextState: MainMenuState
 ))
+
+# engine.setState Cutscene.scenes.first()
+
 engine.start()

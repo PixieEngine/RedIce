@@ -33,7 +33,7 @@ Menu = (I={}) ->
     shadowColor: "#113"
     font: "48px 'Orbitron'"
     menus: [[
-      # gamestate "Tournament", MapState
+      gamestate "Tournament", MapState
       gamestate "Versus", MatchSetupState
       submenu "Mini-Games",
         # minigame "Zamboni Defense"

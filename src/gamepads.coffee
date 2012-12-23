@@ -9,10 +9,22 @@ Gamepads = (I={}) ->
       buttons: x.buttons
 
   controller: (index=0) ->
-    controllers[index] ||=
+    if controller = controllers[index]
+      return controller
+
+    gamepadIndex = (index + 2) % 4 # Offsetting gamepads
+
+    gamepad =
       Gamepads.Controller
-        index: index
+        index: gamepadIndex
         state: state
+
+    if index < 1 # TODO Second keyboard controls
+      keyboardController = Gamepads.KeyboardController()
+
+      controllers[index] ||= Gamepads.CombinedController(gamepad, keyboardController)
+    else
+      controllers[index] ||= gamepad
 
   update: ->
     state.previous = state.current
