@@ -15,7 +15,7 @@ window.config =
 Music.volume config.musicVolume
 Sound.globalVolume config.sfxVolume
 
-window.teamSprites = {}
+# TODO move to preload just prior to usage
 config.teams.each (name) ->
   teamSprites[name] = TeamSheet
     team: name

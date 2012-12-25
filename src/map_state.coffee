@@ -1,27 +1,27 @@
 MapState = (I={}) ->
   self = GameState(I)
 
+  playerTeam = "smiley"
+  defeatedTeams = []
+  remainingTeams = TEAMS.without([playerTeam].concat(defeatedTeams))
+  lastTeam = [playerTeam].concat(defeatedTeams).last()
+  nextTeam = remainingTeams.first()
+
   # TODO: Set Opponent team data
-  initPlayerData = ->
-    MAX_PLAYERS.times (i) ->
-      Object.reverseMerge config.players[i] ||= {},
-        class: "Player"
-        color: Player.COLORS[i]
-        id: i
-        name: ""
-        teamIndex: Math.floor(2 * i / MAX_PLAYERS)
-        cpu: i != 0
-        bodyIndex: rand(TeamSheet.bodyStyles.length)
-        headIndex: rand(TeamSheet.headStyles.length)
+  setOpponentData = ->
+    [2, 3].each (i) ->
 
       Object.extend config.players[i],
         ready: false
         cpu: true
 
-    return config
+  # Preload Next Team
+  AssetLoader.load(nextTeam)
 
   self.bind "enter", ->
     engine.add
       class: "Map"
+      nextTeam: nextTeam
+      lastTeam: lastTeam
 
   return self

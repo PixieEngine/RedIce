@@ -11894,10 +11894,11 @@ CharacterSheet = function(I) {
   Object.reverseMerge(I, {
     character: "tubs",
     team: "spike",
-    size: 512
+    size: 512,
+    scale: 0.5
   });
   loadStrip = function(action, facing, cells) {
-    return Sprite.loadSheet("" + I.team + "/" + I.character + "_" + action + "_" + facing + "_" + cells, I.size, I.size, 0.5);
+    return Sprite.loadSheet("" + I.team + "/" + I.character + "_" + action + "_" + facing + "_" + cells, I.size, I.size, I.scale);
   };
   FRONT = "se";
   BACK = "ne";
@@ -13894,13 +13895,14 @@ HeadSheet = function(I) {
   Object.reverseMerge(I, {
     character: "bigeyes",
     team: "spike",
-    size: 512
+    size: 512,
+    scale: 0.5
   });
   loadStrip = function(action, cells) {
     if (action) {
-      return Sprite.loadSheet("" + I.team + "/" + I.character + "_" + action + "_" + cells, I.size, I.size, 0.5);
+      return Sprite.loadSheet("" + I.team + "/" + I.character + "_" + action + "_" + cells, I.size, I.size, I.scale);
     } else {
-      return Sprite.loadSheet("" + I.team + "/" + I.character + "_" + cells, I.size, I.size, 0.5);
+      return Sprite.loadSheet("" + I.team + "/" + I.character + "_" + cells, I.size, I.size, I.scale);
     }
   };
   actions = ["charged", "pain"];
@@ -14003,34 +14005,30 @@ Map.positions = {
 };
 
 MapState = function(I) {
-  var initPlayerData, self;
+  var defeatedTeams, lastTeam, nextTeam, playerTeam, remainingTeams, self, setOpponentData;
   if (I == null) {
     I = {};
   }
   self = GameState(I);
-  initPlayerData = function() {
-    MAX_PLAYERS.times(function(i) {
-      var _base;
-      Object.reverseMerge((_base = config.players)[i] || (_base[i] = {}), {
-        "class": "Player",
-        color: Player.COLORS[i],
-        id: i,
-        name: "",
-        teamIndex: Math.floor(2 * i / MAX_PLAYERS),
-        cpu: i !== 0,
-        bodyIndex: rand(TeamSheet.bodyStyles.length),
-        headIndex: rand(TeamSheet.headStyles.length)
-      });
+  playerTeam = "smiley";
+  defeatedTeams = [];
+  remainingTeams = TEAMS.without([playerTeam].concat(defeatedTeams));
+  lastTeam = [playerTeam].concat(defeatedTeams).last();
+  nextTeam = remainingTeams.first();
+  setOpponentData = function() {
+    return [2, 3].each(function(i) {
       return Object.extend(config.players[i], {
         ready: false,
         cpu: true
       });
     });
-    return config;
   };
+  AssetLoader.load(nextTeam);
   self.bind("enter", function() {
     return engine.add({
-      "class": "Map"
+      "class": "Map",
+      nextTeam: nextTeam,
+      lastTeam: lastTeam
     });
   });
   return self;
@@ -17288,18 +17286,19 @@ TeamSheet = function(I) {
   }
   Object.reverseMerge(I, {
     team: "spike",
-    size: 512
+    size: 512,
+    scale: 0.5
   });
   self = {
     goal: {
       back: Sprite.loadSheet("" + I.team + "/goal_back", 640, 640, 0.25),
       front: Sprite.loadSheet("" + I.team + "/goal_front", 640, 640, 0.25)
     },
-    scoreboard: Sprite.loadSheet("" + I.team + "/scoreboard", 512, 512, 0.5),
+    scoreboard: Sprite.loadSheet("" + I.team + "/scoreboard", I.size, I.size, I.scale),
     zamboni: {}
   };
   ["n", "s", "e"].each(function(direction) {
-    return self.zamboni[direction] = Sprite.loadSheet("" + I.team + "/zamboni_drive_" + direction + "_2", 512, 512, ZAMBONI_SCALE);
+    return self.zamboni[direction] = Sprite.loadSheet("" + I.team + "/zamboni_drive_" + direction + "_2", I.size, I.size, ZAMBONI_SCALE);
   });
   TeamSheet.bodyStyles.each(function(style) {
     return self[style] = CharacterSheet({
@@ -17319,6 +17318,16 @@ TeamSheet = function(I) {
 TeamSheet.bodyStyles = ["tubs", "skinny", "thick"];
 
 TeamSheet.headStyles = ["bigeyes", "jawhead", "longface", "roundhead", "stubs"];
+
+window.teamSprites = {};
+
+TEAMS.each(function(name) {
+  return AssetLoader.group(name, function() {
+    return teamSprites[name] = TeamSheet({
+      team: name
+    });
+  });
+});
 
 TestState = function(I) {
   var controller, physics, self;
@@ -17689,8 +17698,6 @@ window.config = {
 Music.volume(config.musicVolume);
 
 Sound.globalVolume(config.sfxVolume);
-
-window.teamSprites = {};
 
 config.teams.each(function(name) {
   return teamSprites[name] = TeamSheet({
