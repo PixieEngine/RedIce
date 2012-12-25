@@ -11727,6 +11727,9 @@ Airplane = function(I) {
   self = GameObject(I);
   easingX = Easing.quadraticInOut(I.start.x, I.destination.x);
   easingY = Easing.quadraticInOut(I.start.y, I.destination.y);
+  if (I.start.x > I.destination.x) {
+    I.hflip = true;
+  }
   self.bind("update", function() {
     var camera, t;
     I.sprite = Map.sprites.plane;
@@ -12186,13 +12189,22 @@ Configurator.options = [
 ];
 
 Cutscene = function(I) {
-  var self;
+  var dialog, next, self;
   if (I == null) {
     I = {};
   }
   Object.reverseMerge(I, {
-    text: "Go home and be a family man."
+    text: "Go home and be a family man.",
+    nextState: MapState
   });
+  dialog = null;
+  next = function() {
+    if (!dialog || dialog.complete()) {
+      return engine.setState(I.nextState());
+    } else {
+      return dialog.flush();
+    }
+  };
   self = GameState(I);
   self.bind("enter", function() {
     var img;
@@ -12201,25 +12213,33 @@ Cutscene = function(I) {
       x: App.width / 2,
       y: App.height / 3
     });
-    return engine.add({
+    return dialog = engine.add({
       "class": "DialogBox",
       text: I.text,
       y: 2 / 3 * App.height
     });
   });
+  self.bind("update", function() {
+    return engine.controllers().each(function(controller) {
+      if (controller.buttonPressed("A", "START")) {
+        return next();
+      }
+    });
+  });
   return self;
 };
 
-AssetLoader.group("cutscenes", function() {
-  return Cutscene.scenes = [
-    Cutscene({
-      text: "Look out the window. And doesn't this remind you of when you were in the boat?\nAnd then later that night you were lying, looking up at the ceiling,\nand the static in your mind was not dissimilar from the sky, and you think to yourself,\n\"Why is it that the sky is moving, but the ice is still?\"\nAnd also-- Where is it that you're from?",
-      sprite: Sprite.loadByName("cutscenes/train")
-    })
-  ];
+$(function() {
+  AssetLoader.group("cutscenes", function() {
+    return Cutscene.scenes = [
+      Cutscene({
+        text: "Look out the window. And doesn't this remind you of when you were in the boat?\nAnd then later that night you were lying, looking up at the ceiling,\nand the static in your mind was not dissimilar from the sky, and you think to yourself,\n\"Why is it that the sky is moving, but the ice is still?\"\nAnd also-- Where is it that you're from?",
+        sprite: Sprite.loadByName("cutscenes/train")
+      })
+    ];
+  });
+  return AssetLoader.load("cutscenes");
 });
-
-AssetLoader.load("cutscenes");
 
 DebugDrawable = function(I, self) {
   if (I == null) {
@@ -12642,17 +12662,17 @@ The <code>Gamepads</code> module gives the engine access to gamepads.
 
     # First you need to add the `Gamepads` module to the engine
     Engine.defaultModules.push "Gamepads"
-    
+
     window.engine = Engine
       ...
-    
+
     # Then you need to get a controller reference
     # id = 0 for player 1, etc.
     controller = engine.controller(id)
-    
+
     # Point indicating direction primary axis is held
     direction = controller.position()
-    
+
     # Check if buttons are held
     controller.actionDown("A")
     controller.actionDown("B")
@@ -12686,6 +12706,11 @@ Engine.Gamepads = function(I, self) {
 
     controller: function(index) {
       return gamepads.controller(index);
+    },
+    controllers: function() {
+      return [0, 1, 2, 3].map(function(i) {
+        return engine.controller(i);
+      });
     }
   };
 };
@@ -14185,7 +14210,13 @@ Menu = function(I) {
     highlightTextColor: "#FF8",
     shadowColor: "#113",
     font: "48px 'Orbitron'",
-    menus: [[gamestate("Tournament", MapState), gamestate("Versus", MatchSetupState), submenu("Mini-Games", minigame("PushOut"), minigame("Paint")), submenu("Options", item("Config", function() {}))]]
+    menus: [
+      [
+        item("Story", function() {
+          return engine.setState(Cutscene.scenes.first());
+        }), gamestate("Versus", MatchSetupState), submenu("Mini-Games", minigame("PushOut"), minigame("Paint")), submenu("Options", item("Config", function() {}))
+      ]
+    ]
   });
   self = GameObject(I);
   options = function() {

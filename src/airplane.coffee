@@ -11,6 +11,9 @@ Airplane = (I={}) ->
   easingX = Easing.quadraticInOut(I.start.x, I.destination.x)
   easingY = Easing.quadraticInOut(I.start.y, I.destination.y)
 
+  if I.start.x > I.destination.x
+    I.hflip = true
+
   self.bind "update", ->
     I.sprite = Map.sprites.plane
 
