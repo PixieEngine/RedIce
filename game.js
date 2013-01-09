@@ -11713,7 +11713,7 @@ AI = function(I, self) {
 };
 
 Airplane = function(I) {
-  var easingX, easingY, self;
+  var easingX, easingY, next, self;
   if (I == null) {
     I = {};
   }
@@ -11724,6 +11724,21 @@ Airplane = function(I) {
     destination: Point(App.width, App.height / 2 - 100),
     zIndex: 10
   });
+  next = function() {
+    var position, team, _ref;
+    if (I.choose) {
+      _ref = Map.positions;
+      for (team in _ref) {
+        position = _ref[team];
+        if (I.x === position.x && I.y === position.y) {
+          config.playerTeam = team;
+        }
+      }
+      return engine.setState(MapState());
+    } else {
+      return engine.setState(Cutscene.scenes[I.destinationTeam]);
+    }
+  };
   self = GameObject(I);
   easingX = Easing.quadraticInOut(I.start.x, I.destination.x);
   easingY = Easing.quadraticInOut(I.start.y, I.destination.y);
@@ -11733,22 +11748,32 @@ Airplane = function(I) {
   self.bind("update", function() {
     var camera, t;
     I.sprite = Map.sprites.plane;
-    t = I.age / 90;
-    if (t < 0) {
+    if (I.choose) {
       I.x = I.start.x;
       I.y = I.start.y;
-    } else if (t > 1) {
-      I.x = I.destination.x;
-      I.y = I.destination.y;
     } else {
-      I.x = easingX(t);
-      I.y = easingY(t);
+      t = I.age / 90;
+      if (t < 0) {
+        I.x = I.start.x;
+        I.y = I.start.y;
+      } else if (t > 1) {
+        I.x = I.destination.x;
+        I.y = I.destination.y;
+      } else {
+        I.x = easingX(t);
+        I.y = easingY(t);
+      }
+      if (I.moon) {
+        camera = engine.camera();
+        camera.I.cameraBounds.y = -App.height;
+        camera.follow(self);
+      }
     }
-    if (I.moon) {
-      camera = engine.camera();
-      camera.I.cameraBounds.y = -App.height;
-      return camera.follow(self);
-    }
+    return engine.controllers().each(function(controller) {
+      if (controller.buttonPressed("A", "START")) {
+        return next();
+      }
+    });
   });
   return self;
 };
@@ -12196,7 +12221,7 @@ Cutscene = function(I) {
   }
   Object.reverseMerge(I, {
     text: "Go home and be a family man.",
-    nextState: MapState
+    nextState: MatchState
   });
   dialog = null;
   next = function() {
@@ -12232,12 +12257,42 @@ Cutscene = function(I) {
 
 $(function() {
   AssetLoader.group("cutscenes", function() {
-    return Cutscene.scenes = [
-      Cutscene({
+    var data, name, _ref, _results;
+    Cutscene.scenes = {
+      intro: {
         text: "Look out the window. And doesn't this remind you of when you were in the boat?\nAnd then later that night you were lying, looking up at the ceiling,\nand the static in your mind was not dissimilar from the sky, and you think to yourself,\n\"Why is it that the sky is moving, but the ice is still?\"\nAnd also-- Where is it that you're from?",
-        sprite: Sprite.loadByName("cutscenes/train")
-      })
-    ];
+        sprite: "intro",
+        nextState: MapState
+      },
+      hiss: {
+        text: "What do you like BEST about the Serpentmen?\n\nThey BIT me! WooOo!",
+        sprite: "tailgate_serpentmen"
+      },
+      smiley: {
+        text: "Here's a fan now! Hello sir, why are YOU smiling?\n\nHow the HELL should I know?",
+        sprite: "smiley_arena"
+      },
+      spike: {
+        text: "",
+        sprite: "spike_fans"
+      },
+      mutant: {
+        text: "MUTANT FEVER! The fans are out in record numbers. Please be advised to stay indoors--\nThere is no cure.",
+        sprite: "mutant_fever"
+      },
+      monster: {
+        text: "Ok... show me how it's done.",
+        sprite: "monster_graveyard"
+      }
+    };
+    _ref = Cutscene.scenes;
+    _results = [];
+    for (name in _ref) {
+      data = _ref[name];
+      data.sprite = Sprite.loadByName("cutscenes/" + data.sprite);
+      _results.push(Cutscene.scenes[name] = Cutscene(data));
+    }
+    return _results;
   });
   return AssetLoader.load("cutscenes");
 });
@@ -13960,10 +14015,14 @@ Map = function(I) {
     return I.sprite = Map.sprites.map;
   });
   self.bind("create", function() {
+    var choose;
+    choose = !(I.lastTeam != null);
     engine.add({
       "class": "Airplane",
-      start: Map.positions[I.lastTeam],
-      destination: Map.positions[I.nextTeam]
+      start: Map.positions[I.lastTeam] || Map.positions.smiley,
+      destination: Map.positions[I.nextTeam],
+      destinationTeam: I.nextTeam,
+      choose: choose
     });
     return TEAMS.each(function(team) {
       var data;
@@ -14016,8 +14075,8 @@ MapState = function(I) {
     I = {};
   }
   self = GameState(I);
-  playerTeam = "smiley";
-  defeatedTeams = [];
+  playerTeam = config.playerTeam;
+  defeatedTeams = config.defeatedTeams;
   remainingTeams = TEAMS.without([playerTeam].concat(defeatedTeams));
   lastTeam = [playerTeam].concat(defeatedTeams).last();
   nextTeam = remainingTeams.first();
@@ -14217,7 +14276,7 @@ Menu = function(I) {
     menus: [
       [
         item("Story", function() {
-          return engine.setState(Cutscene.scenes.first());
+          return engine.setState(Cutscene.scenes.intro);
         }), gamestate("Versus", MatchSetupState), submenu("Mini-Games", minigame("PushOut"), minigame("Paint")), submenu("Options", item("Config", function() {}))
       ]
     ]
@@ -17689,6 +17748,8 @@ teamChoices = [];
 })();
 
 window.config = {
+  playerTeam: null,
+  defeatedTeams: [],
   teams: teamChoices.wrap(0, 2),
   players: [],
   particleEffects: true,

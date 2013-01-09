@@ -15,11 +15,14 @@ Map = (I={}) ->
     I.sprite = Map.sprites.map
 
   self.bind "create", ->
+    choose = !I.lastTeam?
 
     engine.add
       class: "Airplane"
-      start: Map.positions[I.lastTeam]
+      start: Map.positions[I.lastTeam] || Map.positions.smiley
       destination: Map.positions[I.nextTeam]
+      destinationTeam: I.nextTeam
+      choose: choose
 
     TEAMS.each (team) ->
       data = Map.positions[team]

@@ -1,8 +1,9 @@
 MapState = (I={}) ->
   self = GameState(I)
 
-  playerTeam = "smiley"
-  defeatedTeams = []
+  playerTeam = config.playerTeam
+  defeatedTeams = config.defeatedTeams
+
   remainingTeams = TEAMS.without([playerTeam].concat(defeatedTeams))
   lastTeam = [playerTeam].concat(defeatedTeams).last()
   nextTeam = remainingTeams.first()

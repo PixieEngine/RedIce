@@ -6,6 +6,8 @@ do ->
   teamChoices = teamChoices.concat(TEAMS.without(teamChoices))
 
 window.config =
+  playerTeam: null
+  defeatedTeams: []
   teams: teamChoices.wrap(0, 2)
   players: []
   particleEffects: true
