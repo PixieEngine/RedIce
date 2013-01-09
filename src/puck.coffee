@@ -93,10 +93,6 @@ Puck = (I) ->
         self.destroy()
         goal.score()
 
-        engine.delay 30, ->
-          engine.add
-            class: "Puck"
-
   self.bind "update", setSprite
 
   self.bind "wallCollision", (type) ->

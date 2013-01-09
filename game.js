@@ -13835,7 +13835,13 @@ Goal = function(I) {
     score: function() {
       self.trigger("score");
       Fan.cheer(6);
+      Sound.play("Buzzer");
       Sound.play("Crowd Cheers " + (rand(4) + 1));
+      engine.delay(70, function() {
+        return engine.add({
+          "class": "Puck"
+        });
+      });
       if (I.suddenDeath) {
         return self.destroy();
       }
@@ -16623,12 +16629,7 @@ Puck = function(I) {
     return engine.find("Goal").each(function(goal) {
       if (goal.withinGoal(circle)) {
         self.destroy();
-        goal.score();
-        return engine.delay(30, function() {
-          return engine.add({
-            "class": "Puck"
-          });
-        });
+        return goal.score();
       }
     });
   });

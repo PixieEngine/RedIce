@@ -72,7 +72,12 @@ Goal = (I) ->
       self.trigger "score"
       Fan.cheer(6)
 
+      Sound.play "Buzzer"
       Sound.play("Crowd Cheers #{rand(4) + 1}")
+
+      engine.delay 70, ->
+        engine.add
+          class: "Puck"
 
       if I.suddenDeath
         self.destroy()
