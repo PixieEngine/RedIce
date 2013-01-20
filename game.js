@@ -11713,7 +11713,7 @@ AI = function(I, self) {
 };
 
 Airplane = function(I) {
-  var easingX, easingY, next, self;
+  var next, positions, self, startIndex;
   if (I == null) {
     I = {};
   }
@@ -11724,13 +11724,16 @@ Airplane = function(I) {
     destination: Point(App.width, App.height / 2 - 100),
     zIndex: 10
   });
+  positions = Object.keys(Map.positions);
+  positions.pop();
+  startIndex = 0;
   next = function() {
     var position, team, _ref;
     if (I.choose) {
       _ref = Map.positions;
       for (team in _ref) {
         position = _ref[team];
-        if (I.x === position.x && I.y === position.y) {
+        if (I.destination.x === position.x && I.destination.y === position.y) {
           config.playerTeam = team;
         }
       }
@@ -11740,40 +11743,54 @@ Airplane = function(I) {
     }
   };
   self = GameObject(I);
-  easingX = Easing.quadraticInOut(I.start.x, I.destination.x);
-  easingY = Easing.quadraticInOut(I.start.y, I.destination.y);
-  if (I.start.x > I.destination.x) {
-    I.hflip = true;
-  }
   self.bind("update", function() {
-    var camera, t;
+    var camera, duration, easingX, easingY, index, t;
     I.sprite = Map.sprites.plane;
-    if (I.choose) {
-      I.x = I.start.x;
-      I.y = I.start.y;
-    } else {
-      t = I.age / 90;
-      if (t < 0) {
-        I.x = I.start.x;
-        I.y = I.start.y;
-      } else if (t > 1) {
-        I.x = I.destination.x;
-        I.y = I.destination.y;
-      } else {
-        I.x = easingX(t);
-        I.y = easingY(t);
-      }
-      if (I.moon) {
-        camera = engine.camera();
-        camera.I.cameraBounds.y = -App.height;
-        camera.follow(self);
-      }
-    }
-    return engine.controllers().each(function(controller) {
+    index = 0;
+    engine.controllers().each(function(controller) {
+      var tap;
+      tap = controller.tap();
+      index -= tap.x + tap.y;
       if (controller.buttonPressed("A", "START")) {
         return next();
       }
     });
+    if (I.choose) {
+      if (index !== 0) {
+        startIndex += index;
+        I.start = {
+          x: I.x,
+          y: I.y
+        };
+        I.destination = Map.positions[positions.wrap(startIndex)];
+        I.age = 0;
+      }
+    }
+    I.hflip = I.start.x > I.destination.x;
+    easingX = Easing.quadraticInOut(I.start.x, I.destination.x);
+    easingY = Easing.quadraticInOut(I.start.y, I.destination.y);
+    if (I.choose) {
+      duration = 15;
+    } else {
+      duration = 30;
+    }
+    t = I.age / duration;
+    if (t < 0) {
+      I.x = I.start.x;
+      I.y = I.start.y;
+    } else if (t > 1) {
+      I.x = I.destination.x;
+      I.y = I.destination.y;
+    } else {
+      I.x = easingX(t);
+      I.y = easingY(t);
+    }
+    if (I.moon) {
+      camera = engine.camera();
+      camera.I.cameraBounds.y = -App.height;
+      camera.I.cameraBounds.height = App.height * 2;
+      return camera.follow(self);
+    }
   });
   return self;
 };
@@ -11990,7 +12007,7 @@ Configurator = function(I) {
   lineHeight = 11;
   verticalPadding = 24;
   horizontalPadding = 0;
-  teamStyles = config.teams;
+  teamStyles = config.teams.slice(0, 2);
   join = function(id) {
     var player;
     player = I.config.players[id];
@@ -12283,6 +12300,10 @@ $(function() {
       monster: {
         text: "Ok... show me how it's done.",
         sprite: "monster_graveyard"
+      },
+      robo: {
+        text: "This is what it's all about.",
+        sprite: "on_da_moon"
       }
     };
     _ref = Cutscene.scenes;
@@ -14022,7 +14043,8 @@ Map = function(I) {
       start: Map.positions[I.lastTeam] || Map.positions.smiley,
       destination: Map.positions[I.nextTeam],
       destinationTeam: I.nextTeam,
-      choose: choose
+      choose: choose,
+      moon: I.nextTeam === "robo"
     });
     return TEAMS.each(function(team) {
       var data;
@@ -14070,7 +14092,7 @@ Map.positions = {
 };
 
 MapState = function(I) {
-  var defeatedTeams, lastTeam, nextTeam, playerTeam, remainingTeams, self, setOpponentData;
+  var defeatedTeams, initTeamData, lastTeam, nextTeam, playerTeam, remainingTeams, self, setOpponentData;
   if (I == null) {
     I = {};
   }
@@ -14079,7 +14101,46 @@ MapState = function(I) {
   defeatedTeams = config.defeatedTeams;
   remainingTeams = TEAMS.without([playerTeam].concat(defeatedTeams));
   lastTeam = [playerTeam].concat(defeatedTeams).last();
-  nextTeam = remainingTeams.first();
+  nextTeam = config.opponentTeam = remainingTeams.first();
+  initTeamData = function() {
+    var away, home, teamStyles, _ref;
+    MAX_PLAYERS.times(function(i) {
+      var _base;
+      Object.reverseMerge((_base = config.players)[i] || (_base[i] = {}), {
+        "class": "Player",
+        color: Player.COLORS[i],
+        id: i,
+        name: "",
+        teamIndex: Math.floor(2 * i / MAX_PLAYERS),
+        cpu: true,
+        bodyIndex: rand(TeamSheet.bodyStyles.length),
+        headIndex: rand(TeamSheet.headStyles.length)
+      });
+      return Object.extend(config.players[i], {
+        ready: false,
+        cpu: true
+      });
+    });
+    _ref = config.players.partition(function(playerData) {
+      return playerData.teamIndex;
+    }), away = _ref[0], home = _ref[1];
+    teamStyles = [config.playerTeam, nextTeam];
+    away.each(function(red, i) {
+      red.slot = i;
+      red.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (away.length + 1);
+      red.x = WALL_LEFT + ARENA_WIDTH / 2 + ARENA_WIDTH / 6;
+      red.heading = 0.5.rotations;
+      return red.teamStyle = teamStyles[1];
+    });
+    home.each(function(blue, i) {
+      blue.slot = i;
+      blue.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (home.length + 1);
+      blue.x = WALL_LEFT + ARENA_WIDTH / 2 - ARENA_WIDTH / 6;
+      return blue.teamStyle = teamStyles[0];
+    });
+    return config;
+  };
+  initTeamData();
   setOpponentData = function() {
     return [2, 3].each(function(i) {
       return Object.extend(config.players[i], {
@@ -14161,7 +14222,12 @@ MatchState = function(I) {
       team: homeTeam
     });
     scoreboard.bind("restart", function() {
-      return engine.setState(MatchSetupState());
+      if (config.storyMode) {
+        config.defeatedTeams.push(config.opponentTeam);
+        return engine.setState(MapState());
+      } else {
+        return engine.setState(MatchSetupState());
+      }
     });
     config.players.each(function(playerData) {
       return engine.add(Object.extend({}, playerData));
@@ -14276,6 +14342,7 @@ Menu = function(I) {
     menus: [
       [
         item("Story", function() {
+          config.storyMode = true;
           return engine.setState(Cutscene.scenes.intro);
         }), gamestate("Versus", MatchSetupState), submenu("Mini-Games", minigame("PushOut"), minigame("Paint")), submenu("Options", item("Config", function() {}))
       ]
@@ -17750,7 +17817,7 @@ teamChoices = [];
 window.config = {
   playerTeam: null,
   defeatedTeams: [],
-  teams: teamChoices.wrap(0, 2),
+  teams: teamChoices,
   players: [],
   particleEffects: true,
   musicVolume: 0.5,

@@ -33,7 +33,9 @@ Menu = (I={}) ->
     shadowColor: "#113"
     font: "48px 'Orbitron'"
     menus: [[
-      item "Story", -> engine.setState Cutscene.scenes.intro
+      item "Story", ->
+        config.storyMode = true
+        engine.setState Cutscene.scenes.intro
       gamestate "Versus", MatchSetupState
       submenu "Mini-Games",
         # minigame "Zamboni Defense"

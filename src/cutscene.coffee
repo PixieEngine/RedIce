@@ -74,6 +74,11 @@ $ ->
           Ok... show me how it's done.
         """
         sprite: "monster_graveyard"
+      robo:
+        text: """
+          This is what it's all about.
+        """
+        sprite: "on_da_moon"
 
     for name, data of Cutscene.scenes
       data.sprite = Sprite.loadByName "cutscenes/#{data.sprite}"

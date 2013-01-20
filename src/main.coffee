@@ -8,7 +8,7 @@ do ->
 window.config =
   playerTeam: null
   defeatedTeams: []
-  teams: teamChoices.wrap(0, 2)
+  teams: teamChoices
   players: []
   particleEffects: true
   musicVolume: 0.5

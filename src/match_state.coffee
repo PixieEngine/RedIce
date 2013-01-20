@@ -22,7 +22,11 @@ MatchState = (I={}) ->
       # period: 3
 
     scoreboard.bind "restart", ->
-      engine.setState(MatchSetupState())
+      if config.storyMode # TODO: Reduce globals!
+        config.defeatedTeams.push config.opponentTeam
+        engine.setState(MapState())
+      else
+        engine.setState(MatchSetupState())
 
     # Add each player to game based on config data
     config.players.each (playerData) ->

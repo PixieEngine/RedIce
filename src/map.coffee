@@ -23,6 +23,7 @@ Map = (I={}) ->
       destination: Map.positions[I.nextTeam]
       destinationTeam: I.nextTeam
       choose: choose
+      moon: I.nextTeam is "robo"
 
     TEAMS.each (team) ->
       data = Map.positions[team]
