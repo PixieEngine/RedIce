@@ -5,9 +5,6 @@ Configurator = (I) ->
     activePlayers: 0
     font: "bold 32px 'Monaco', 'Inconsolata', 'consolas', 'Courier New', 'andale mono', 'lucida console', 'monospace'"
     maxPlayers: MAX_PLAYERS
-    teamColors:
-      "0": Color("#0246E3")
-      "1": Color("#EB070E")
     width: App.width
     height: App.height
     x: (App.width - slotWidth * config.players.length) / 2
@@ -106,13 +103,13 @@ Configurator = (I) ->
       red.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (away.length + 1)
       red.x = WALL_LEFT + ARENA_WIDTH/2 + ARENA_WIDTH / 6
       red.heading = 0.5.rotations
-      red.teamStyle = teamStyles[1]
+      red.teamStyle = teamStyles.last()
 
     home.each (blue, i) ->
       blue.slot = i
       blue.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (home.length + 1)
       blue.x = WALL_LEFT + ARENA_WIDTH/2 - ARENA_WIDTH / 6
-      blue.teamStyle = teamStyles[0]
+      blue.teamStyle = teamStyles.first()
 
     return config
 
@@ -137,7 +134,7 @@ Configurator = (I) ->
 
           player.headStyle = TeamSheet.headStyles.wrap(player.headIndex) || "stubs"
           player.bodyStyle = TeamSheet.bodyStyles.wrap(player.bodyIndex) || "thick"
-          player.teamStyle ||= teamStyles.wrap(player.teamIndex) || 0
+          player.teamStyle ||= teamStyles.wrap(player.teamIndex)
 
           Configurator.images[player.teamStyle].background.draw(canvas, x, 0)
           if player.optionIndex? and !player.ready

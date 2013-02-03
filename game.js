@@ -11995,10 +11995,6 @@ Configurator = function(I) {
     activePlayers: 0,
     font: "bold 32px 'Monaco', 'Inconsolata', 'consolas', 'Courier New', 'andale mono', 'lucida console', 'monospace'",
     maxPlayers: MAX_PLAYERS,
-    teamColors: {
-      "0": Color("#0246E3"),
-      "1": Color("#EB070E")
-    },
     width: App.width,
     height: App.height,
     x: (App.width - slotWidth * config.players.length) / 2,
@@ -12095,13 +12091,13 @@ Configurator = function(I) {
       red.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (away.length + 1);
       red.x = WALL_LEFT + ARENA_WIDTH / 2 + ARENA_WIDTH / 6;
       red.heading = 0.5.rotations;
-      return red.teamStyle = teamStyles[1];
+      return red.teamStyle = teamStyles.last();
     });
     home.each(function(blue, i) {
       blue.slot = i;
       blue.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (home.length + 1);
       blue.x = WALL_LEFT + ARENA_WIDTH / 2 - ARENA_WIDTH / 6;
-      return blue.teamStyle = teamStyles[0];
+      return blue.teamStyle = teamStyles.first();
     });
     return config;
   };
@@ -12123,7 +12119,7 @@ Configurator = function(I) {
           nameWidth = canvas.measureText(name);
           player.headStyle = TeamSheet.headStyles.wrap(player.headIndex) || "stubs";
           player.bodyStyle = TeamSheet.bodyStyles.wrap(player.bodyIndex) || "thick";
-          player.teamStyle || (player.teamStyle = teamStyles.wrap(player.teamIndex) || 0);
+          player.teamStyle || (player.teamStyle = teamStyles.wrap(player.teamIndex));
           Configurator.images[player.teamStyle].background.draw(canvas, x, 0);
           if ((player.optionIndex != null) && !player.ready) {
             Configurator.active.draw(canvas, x, Configurator.options[player.optionIndex].y);
@@ -14201,7 +14197,7 @@ MapState = function(I) {
     var away, home, teamStyles, _ref;
     MAX_PLAYERS.times(function(i) {
       var _base;
-      Object.reverseMerge((_base = config.players)[i] || (_base[i] = {}), {
+      return Object.reverseMerge((_base = config.players)[i] || (_base[i] = {}), {
         "class": "Player",
         color: Player.COLORS[i],
         id: i,
@@ -14210,10 +14206,6 @@ MapState = function(I) {
         cpu: true,
         bodyIndex: rand(TeamSheet.bodyStyles.length),
         headIndex: rand(TeamSheet.headStyles.length)
-      });
-      return Object.extend(config.players[i], {
-        ready: false,
-        cpu: true
       });
     });
     _ref = config.players.partition(function(playerData) {
