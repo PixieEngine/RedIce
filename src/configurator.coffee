@@ -134,7 +134,7 @@ Configurator = (I) ->
 
           player.headStyle = TeamSheet.headStyles.wrap(player.headIndex) || "stubs"
           player.bodyStyle = TeamSheet.bodyStyles.wrap(player.bodyIndex) || "thick"
-          player.teamStyle ||= teamStyles.wrap(player.teamIndex)
+          player.teamStyle = teamStyles.wrap(player.teamIndex)
 
           Configurator.images[player.teamStyle].background.draw(canvas, x, 0)
           if player.optionIndex? and !player.ready
