@@ -17528,7 +17528,20 @@ StoryConfigState = function(I) {
       config: initPlayerData()
     });
     return configurator.bind("done", function(config) {
+      var cpus, players, _ref;
       configurator.destroy();
+      _ref = config.players.partition(function(data) {
+        return data.cpu;
+      }), cpus = _ref[0], players = _ref[1];
+      if (players.length === 1) {
+        players.push(cpus.pop());
+      }
+      players.each(function(data) {
+        return data.teamIndex = 0;
+      });
+      cpus.each(function(data) {
+        return data.teamIndex = 1;
+      });
       return engine.setState(MapState());
     });
   });

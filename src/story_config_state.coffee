@@ -32,6 +32,18 @@ StoryConfigState = (I={}) ->
     configurator.bind "done", (config) ->
       configurator.destroy()
 
+      [cpus, players] = config.players.partition (data) ->
+        data.cpu
+
+      if players.length is 1
+        players.push cpus.pop()
+
+      players.each (data) ->
+        data.teamIndex = 0
+
+      cpus.each (data) ->
+        data.teamIndex = 1
+
       #TODO We should use strings to set game states
       engine.setState(MapState())
 
