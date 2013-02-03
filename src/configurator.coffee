@@ -17,7 +17,10 @@ Configurator = (I) ->
   verticalPadding = 24
   horizontalPadding = 0
 
-  teamStyles = config.teams[0..1]
+  if config.playerTeam
+    teamStyles = [config.playerTeam]
+  else
+    teamStyles = config.teams[0..1]
 
   join = (id) ->
     player = I.config.players[id]
@@ -134,7 +137,7 @@ Configurator = (I) ->
 
           player.headStyle = TeamSheet.headStyles.wrap(player.headIndex) || "stubs"
           player.bodyStyle = TeamSheet.bodyStyles.wrap(player.bodyIndex) || "thick"
-          player.teamStyle = teamStyles.wrap(player.teamIndex) || 0
+          player.teamStyle ||= teamStyles.wrap(player.teamIndex) || 0
 
           Configurator.images[player.teamStyle].background.draw(canvas, x, 0)
           if player.optionIndex? and !player.ready

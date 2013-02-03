@@ -7,7 +7,10 @@ Cutscene = (I={}) ->
 
   next = ->
     if !dialog or dialog.complete()
-      engine.setState I.nextState()
+      if I.team is config.playerTeam
+        engine.setState StoryConfigState()
+      else
+        engine.setState I.nextState()
     else
       dialog.flush()
 
@@ -40,7 +43,7 @@ $ ->
         text: """
           Look out the window. And doesn't this remind you of when you were in the boat?
           And then later that night you were lying, looking up at the ceiling,
-          and the static in your mind was not dissimilar from the sky, and you think to yourself,
+          and the stars in your mind were not dissimilar from the sky, and you think to yourself,
           "Why is it that the sky is moving, but the ice is still?"
           And also-- Where is it that you're from?
         """
@@ -82,6 +85,7 @@ $ ->
 
     for name, data of Cutscene.scenes
       data.sprite = Sprite.loadByName "cutscenes/#{data.sprite}"
+      data.team ||= name
       Cutscene.scenes[name] = Cutscene data
 
   AssetLoader.load "cutscenes"

@@ -16,7 +16,7 @@ DialogBox = (I={}) ->
     x: 0
     y: 0
 
-  I.textWidth = I.width - 2 * (I.paddingX)
+  I.textWidth = I.width - 2 * (I.paddingX) - 170 # HACK: Webfonts doesn't compute length correctly
   I.textHeight = I.height - 2 * (I.paddingY)
 
   computedLines = null

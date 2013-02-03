@@ -17,7 +17,7 @@ Airplane = (I={}) ->
         if I.destination.x is position.x and I.destination.y is position.y
           config.playerTeam = team
 
-      engine.setState MapState()
+      engine.setState Cutscene.scenes[config.playerTeam]
     else
       engine.setState Cutscene.scenes[I.destinationTeam]
 
@@ -29,7 +29,7 @@ Airplane = (I={}) ->
     index = 0
     engine.controllers().each (controller) ->
       tap = controller.tap()
-      index -= tap.x + tap.y
+      index -= tap.x - 2 * tap.y
 
       if controller.buttonPressed "A", "START"
         next()
