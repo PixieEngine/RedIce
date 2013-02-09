@@ -9,8 +9,8 @@ Puck = (I) ->
     radius: 8
     width: 24
     height: 24
-    x: 512 - 8
-    y: (WALL_BOTTOM + WALL_TOP)/2 - 4
+    x: ARENA_CENTER.x
+    y: ARENA_CENTER.y
     friction: DEFAULT_FRICTION
     mass: 0.5
     superMassive: false

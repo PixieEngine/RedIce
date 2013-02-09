@@ -22,8 +22,7 @@ config.teams.each (name) ->
   teamSprites[name] = TeamSheet
     team: name
 
-window.bloodCanvas = $("<canvas width=#{App.width} height=#{App.height} />")
-  .appendTo("body")
+window.bloodCanvas = $("<canvas width=#{2 * App.width} height=#{App.height} />")
   .css
     position: "absolute"
     top: 0

@@ -83,6 +83,15 @@ MatchState = (I={}) ->
 
     physics.process(objects)
 
+    if puck = pucks.first()
+      camera = engine.camera()
+      camera.I.cameraBounds.width = ARENA_WIDTH + 40
+      #camera.I.cameraBounds.height = ARENA_HEIGHT + 40
+      camera.follow(puck)
+      # TODO: Multipuck?
+    else
+      # TODO: Return camera to center
+
     playersAndPucks.each (player) ->
       # Blood Collisions
       splats = engine.find("Blood")

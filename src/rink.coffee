@@ -21,8 +21,9 @@ Rink = (I={}) ->
 
   sideWallWidth = 20
   wallBottomBuffer = I.spriteSize / 4
+  bufferCanvasWidth = App.width * 2
 
-  iceCanvas = $("<canvas width=#{App.width} height=#{App.height} />")
+  iceCanvas = $("<canvas width=#{bufferCanvasWidth} height=#{App.height} />")
     .css
       position: "absolute"
       top: 0
@@ -35,7 +36,7 @@ Rink = (I={}) ->
   red = "red"
   blue = "blue"
   faceOffSpotRadius = 5
-  faceOffCircleRadius = 38
+  faceOffCircleRadius = I.spriteSize
   rinkCornerRadius = I.cornerRadius = I.spriteSize
 
   # Draw Arena
@@ -80,7 +81,7 @@ Rink = (I={}) ->
       radius: faceOffCircleRadius
       stroke:
         color: blue
-        width: 2
+        width: 4
 
   # Goal Lines
   x = I.wallLeft + arenaWidth()/10
@@ -133,11 +134,11 @@ Rink = (I={}) ->
             radius: faceOffCircleRadius
             stroke:
               color: red
-              width: 2
+              width: 4
 
   spriteScale = 0.25
 
-  backBoardsCanvas = $("<canvas width=#{App.width} height=#{App.height} />")
+  backBoardsCanvas = $("<canvas width=#{bufferCanvasWidth} height=#{App.height} />")
     .css
       position: "absolute"
       top: 0
@@ -160,7 +161,7 @@ Rink = (I={}) ->
       backBoardsCanvas.withTransform Matrix.scale(-1, 1), ->
         sprite.draw(backBoardsCanvas, 0, 0)
 
-  frontBoardsCanvas = $("<canvas width=#{App.width} height=#{App.height} />")
+  frontBoardsCanvas = $("<canvas width=#{bufferCanvasWidth} height=#{App.height} />")
     .css
       position: "absolute"
       top: 0
@@ -213,11 +214,12 @@ Rink = (I={}) ->
 
   self.bind "beforeDraw", (canvas) ->
     # A little hacky, but what isn't?
-    {x, y} = engine.camera().scroll()
+    cameraTransform = engine.camera().transform()
 
-    Fan.crowd.invoke("draw", canvas)
-    canvas.context().drawImage(iceCanvas.element(), -x, -y)
-    canvas.context().drawImage(bloodCanvas.element(), -x, -y)
+    canvas.withTransform cameraTransform, (canvas) ->
+      Fan.crowd.invoke("draw", canvas)
+      canvas.context().drawImage(iceCanvas.element(), 0, 0)
+      canvas.context().drawImage(bloodCanvas.element(), 0, 0)
 
   self.bind "create", ->
     # Draw the front Rink Boards at the correct zIndex
