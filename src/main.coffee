@@ -12,7 +12,7 @@ window.config =
   players: []
   particleEffects: true
   musicVolume: 0 #0.5
-  sfxVolume: 0.5
+  sfxVolume: 0 #0.5
 
 Music.volume config.musicVolume
 Sound.globalVolume config.sfxVolume
@@ -30,8 +30,6 @@ window.bloodCanvas = $("<canvas width=#{App.width} height=#{App.height} />")
     left: 0
     zIndex: "-5"
   .pixieCanvas()
-
-# Sound.globalVolume(0)
 
 bloodCanvas.strokeColor(BLOOD_COLOR)
 # bloodCanvas.fill(BLOOD_COLOR) # For zamboni testing

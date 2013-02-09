@@ -11271,13 +11271,13 @@ var AI, ALL_MUSIC, ARENA_HEIGHT, ARENA_WIDTH, Airplane, BLOOD_COLOR, Base, Blood
 
 ZAMBONI_SCALE = 0.375;
 
-WALL_LEFT = 0;
+WALL_LEFT = 20;
 
-WALL_RIGHT = App.width - WALL_LEFT;
+WALL_RIGHT = 1 * App.width - WALL_LEFT;
 
 WALL_TOP = 192;
 
-WALL_BOTTOM = App.height - (WALL_TOP - 128);
+WALL_BOTTOM = App.height - 32;
 
 ARENA_WIDTH = WALL_RIGHT - WALL_LEFT;
 
@@ -11647,7 +11647,7 @@ draw anything to the screen until the image has been loaded.
 AI = function(I, self) {
   var arenaCenter, directionAI, roles;
   arenaCenter = Point(WALL_LEFT + WALL_RIGHT, WALL_TOP + WALL_BOTTOM).scale(0.5);
-  roles = ["none", "none", "youth"];
+  roles = ["youth", "goalie", "youth", "youth"];
   directionAI = {
     none: function() {},
     goalie: function() {
@@ -16880,13 +16880,13 @@ Puck.sprites = ["norm", "charge"].map(function(type) {
 });
 
 Rink = function(I) {
-  var arenaHeight, arenaWidth, backBoardsCanvas, blue, faceOffCircleRadius, faceOffSpotRadius, frontBoardsCanvas, iceCanvas, paintCanvas, perspective, perspectiveRatio, red, rinkCornerRadius, self, spriteScale, x, _i, _len, _ref;
+  var arenaHeight, arenaWidth, backBoardsCanvas, blue, faceOffCircleRadius, faceOffSpotRadius, frontBoardsCanvas, iceCanvas, paintCanvas, perspective, perspectiveRatio, red, rinkCornerRadius, self, sideWallWidth, spriteScale, wallBottomBuffer, x, _i, _len, _ref;
   if (I == null) {
     I = {};
   }
   Object.reverseMerge(I, {
     team: config.teams[0],
-    spriteSize: 64,
+    spriteSize: 128,
     x: 0,
     y: 0,
     width: 0,
@@ -16903,6 +16903,8 @@ Rink = function(I) {
   arenaHeight = function() {
     return I.wallBottom - I.wallTop;
   };
+  sideWallWidth = 20;
+  wallBottomBuffer = I.spriteSize / 4;
   iceCanvas = $("<canvas width=" + App.width + " height=" + App.height + " />").css({
     position: "absolute",
     top: 0,
@@ -16914,7 +16916,7 @@ Rink = function(I) {
   blue = "blue";
   faceOffSpotRadius = 5;
   faceOffCircleRadius = 38;
-  rinkCornerRadius = Rink.CORNER_RADIUS;
+  rinkCornerRadius = I.cornerRadius = I.spriteSize;
   iceCanvas.drawRoundRect({
     color: "white",
     x: I.wallLeft,
@@ -17019,7 +17021,7 @@ Rink = function(I) {
       });
     });
   });
-  spriteScale = 0.125;
+  spriteScale = 0.25;
   backBoardsCanvas = $("<canvas width=" + App.width + " height=" + App.height + " />").css({
     position: "absolute",
     top: 0,
@@ -17028,21 +17030,21 @@ Rink = function(I) {
   Sprite.loadSheet("" + I.team + "/wall_n", 512, 512, spriteScale, function(sprites) {
     var sprite;
     sprite = sprites[0];
-    return backBoardsCanvas.withTransform(Matrix.translation(I.wallLeft + 2 * I.spriteSize, I.wallTop - I.spriteSize), function() {
-      return sprite.fill(backBoardsCanvas, 0, 0, I.spriteSize * 12, I.spriteSize);
+    return backBoardsCanvas.withTransform(Matrix.translation(I.wallLeft + 2 * I.spriteSize - sideWallWidth, I.wallTop - I.spriteSize), function() {
+      return sprite.fill(backBoardsCanvas, 0, 0, arenaWidth() - I.spriteSize * 4 + 2 * sideWallWidth, I.spriteSize);
     });
   });
   Sprite.loadSheet("" + I.team + "/wall_nw", 1024, 1024, spriteScale, function(sprites) {
     var sprite;
     sprite = sprites[0];
-    return backBoardsCanvas.withTransform(Matrix.translation(I.wallLeft, I.wallTop - I.spriteSize), function() {
+    return backBoardsCanvas.withTransform(Matrix.translation(I.wallLeft - sideWallWidth, I.wallTop - I.spriteSize), function() {
       return sprite.draw(backBoardsCanvas, 0, 0);
     });
   });
   Sprite.loadSheet("" + I.team + "/wall_nw", 1024, 1024, spriteScale, function(sprites) {
     var sprite;
     sprite = sprites[0];
-    return backBoardsCanvas.withTransform(Matrix.translation(I.wallRight, I.wallTop - I.spriteSize), function() {
+    return backBoardsCanvas.withTransform(Matrix.translation(I.wallRight + sideWallWidth, I.wallTop - I.spriteSize), function() {
       return backBoardsCanvas.withTransform(Matrix.scale(-1, 1), function() {
         return sprite.draw(backBoardsCanvas, 0, 0);
       });
@@ -17056,14 +17058,14 @@ Rink = function(I) {
   Sprite.loadSheet("" + I.team + "/wall_sw", 1024, 1024, spriteScale, function(sprites) {
     var sprite;
     sprite = sprites[0];
-    return frontBoardsCanvas.withTransform(Matrix.translation(I.wallLeft, I.wallBottom - 112), function() {
+    return frontBoardsCanvas.withTransform(Matrix.translation(I.wallLeft - sideWallWidth, I.wallBottom - 2 * I.spriteSize + wallBottomBuffer), function() {
       return sprite.draw(frontBoardsCanvas, 0, 0);
     });
   });
   Sprite.loadSheet("" + I.team + "/wall_sw", 1024, 1024, spriteScale, function(sprites) {
     var sprite;
     sprite = sprites[0];
-    return frontBoardsCanvas.withTransform(Matrix.translation(I.wallRight, I.wallBottom - 112), function() {
+    return frontBoardsCanvas.withTransform(Matrix.translation(I.wallRight + sideWallWidth, I.wallBottom - 2 * I.spriteSize + wallBottomBuffer), function() {
       return frontBoardsCanvas.withTransform(Matrix.scale(-1, 1), function() {
         return sprite.draw(frontBoardsCanvas, 0, 0);
       });
@@ -17072,19 +17074,19 @@ Rink = function(I) {
   Sprite.loadSheet("" + I.team + "/wall_s", 512, 512, spriteScale, function(sprites) {
     var sprite;
     sprite = sprites[0];
-    return frontBoardsCanvas.withTransform(Matrix.translation(I.wallLeft + I.spriteSize * 2, I.wallBottom - 48), function() {
-      return sprite.fill(frontBoardsCanvas, 0, 0, I.spriteSize * 12, I.spriteSize);
+    return frontBoardsCanvas.withTransform(Matrix.translation(I.wallLeft + I.spriteSize * 2 - sideWallWidth, I.wallBottom - I.spriteSize + wallBottomBuffer), function() {
+      return sprite.fill(frontBoardsCanvas, 0, 0, arenaWidth() - I.spriteSize * 4 + 2 * sideWallWidth, I.spriteSize);
     });
   });
   Sprite.loadSheet("" + I.team + "/wall_w", 512, 512, spriteScale, function(sprites) {
     var sprite;
     sprite = sprites[0];
-    frontBoardsCanvas.withTransform(Matrix.translation(I.wallLeft, I.wallTop + 96), function(canvas) {
-      return sprite.fill(canvas, -I.spriteSize / 2, -I.spriteSize / 2, I.spriteSize, I.spriteSize * 6);
+    frontBoardsCanvas.withTransform(Matrix.translation(I.wallLeft - sideWallWidth, I.wallTop + I.spriteSize * 1.5), function(canvas) {
+      return sprite.fill(canvas, -I.spriteSize / 2, -I.spriteSize / 2, I.spriteSize, arenaHeight() - I.spriteSize * 2);
     });
-    return frontBoardsCanvas.withTransform(Matrix.translation(I.wallRight, I.wallTop + 96), function(canvas) {
+    return frontBoardsCanvas.withTransform(Matrix.translation(I.wallRight + sideWallWidth, I.wallTop + I.spriteSize * 1.5), function(canvas) {
       return canvas.withTransform(Matrix.scale(-1, 1), function() {
-        return sprite.fill(canvas, -I.spriteSize / 2, -I.spriteSize / 2, I.spriteSize, I.spriteSize * 6);
+        return sprite.fill(canvas, -I.spriteSize / 2, -I.spriteSize / 2, I.spriteSize, arenaHeight() - I.spriteSize * 2);
       });
     });
   });
@@ -17114,9 +17116,11 @@ Rink = function(I) {
     }
   });
   self.bind("beforeDraw", function(canvas) {
+    var y, _ref1;
+    _ref1 = engine.camera().scroll(), x = _ref1.x, y = _ref1.y;
     Fan.crowd.invoke("draw", canvas);
-    canvas.context().drawImage(iceCanvas.element(), 0, 0);
-    return canvas.context().drawImage(bloodCanvas.element(), 0, 0);
+    canvas.context().drawImage(iceCanvas.element(), -x, -y);
+    return canvas.context().drawImage(bloodCanvas.element(), -x, -y);
   });
   self.bind("create", function() {
     return engine.add({
@@ -17129,16 +17133,11 @@ Rink = function(I) {
   return self;
 };
 
-Rink.CORNER_RADIUS = 96;
-
 Rink.Physics = function(I, self) {
   var corners, walls;
   if (I == null) {
     I = {};
   }
-  Object.reverseMerge(I, {
-    cornerRadius: Rink.CORNER_RADIUS
-  });
   walls = [
     {
       normal: Point(1, 0),
@@ -17877,7 +17876,7 @@ window.config = {
   players: [],
   particleEffects: true,
   musicVolume: 0,
-  sfxVolume: 0.5
+  sfxVolume: 0
 };
 
 Music.volume(config.musicVolume);

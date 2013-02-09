@@ -1,7 +1,7 @@
 Rink = (I={}) ->
   Object.reverseMerge I,
     team: config.teams[0]
-    spriteSize: 64
+    spriteSize: 128
     x: 0
     y: 0
     width: 0
@@ -19,6 +19,9 @@ Rink = (I={}) ->
   arenaHeight = ->
     I.wallBottom - I.wallTop
 
+  sideWallWidth = 20
+  wallBottomBuffer = I.spriteSize / 4
+
   iceCanvas = $("<canvas width=#{App.width} height=#{App.height} />")
     .css
       position: "absolute"
@@ -33,7 +36,7 @@ Rink = (I={}) ->
   blue = "blue"
   faceOffSpotRadius = 5
   faceOffCircleRadius = 38
-  rinkCornerRadius = Rink.CORNER_RADIUS
+  rinkCornerRadius = I.cornerRadius = I.spriteSize
 
   # Draw Arena
   iceCanvas.drawRoundRect
@@ -132,7 +135,7 @@ Rink = (I={}) ->
               color: red
               width: 2
 
-  spriteScale = 0.125
+  spriteScale = 0.25
 
   backBoardsCanvas = $("<canvas width=#{App.width} height=#{App.height} />")
     .css
@@ -143,17 +146,17 @@ Rink = (I={}) ->
 
   Sprite.loadSheet "#{I.team}/wall_n", 512, 512, spriteScale, (sprites) ->
     sprite = sprites[0]
-    backBoardsCanvas.withTransform Matrix.translation(I.wallLeft + 2 * I.spriteSize, I.wallTop - I.spriteSize), ->
-      sprite.fill(backBoardsCanvas, 0, 0, I.spriteSize * 12, I.spriteSize)
+    backBoardsCanvas.withTransform Matrix.translation(I.wallLeft + 2 * I.spriteSize - sideWallWidth, I.wallTop - I.spriteSize), ->
+      sprite.fill(backBoardsCanvas, 0, 0, arenaWidth() - I.spriteSize * 4 + 2 * sideWallWidth, I.spriteSize)
 
   Sprite.loadSheet "#{I.team}/wall_nw", 1024, 1024, spriteScale, (sprites) ->
     sprite = sprites[0]
-    backBoardsCanvas.withTransform Matrix.translation(I.wallLeft, I.wallTop - I.spriteSize), ->
+    backBoardsCanvas.withTransform Matrix.translation(I.wallLeft - sideWallWidth, I.wallTop - I.spriteSize), ->
       sprite.draw(backBoardsCanvas, 0, 0)
 
   Sprite.loadSheet "#{I.team}/wall_nw", 1024, 1024, spriteScale, (sprites) ->
     sprite = sprites[0]
-    backBoardsCanvas.withTransform Matrix.translation(I.wallRight, I.wallTop - I.spriteSize), ->
+    backBoardsCanvas.withTransform Matrix.translation(I.wallRight + sideWallWidth, I.wallTop - I.spriteSize), ->
       backBoardsCanvas.withTransform Matrix.scale(-1, 1), ->
         sprite.draw(backBoardsCanvas, 0, 0)
 
@@ -166,28 +169,28 @@ Rink = (I={}) ->
 
   Sprite.loadSheet "#{I.team}/wall_sw", 1024, 1024, spriteScale, (sprites) ->
     sprite = sprites[0]
-    frontBoardsCanvas.withTransform Matrix.translation(I.wallLeft, I.wallBottom - 112), ->
+    frontBoardsCanvas.withTransform Matrix.translation(I.wallLeft - sideWallWidth, I.wallBottom - 2 * I.spriteSize + wallBottomBuffer), ->
       sprite.draw(frontBoardsCanvas, 0, 0)
 
   Sprite.loadSheet "#{I.team}/wall_sw", 1024, 1024, spriteScale, (sprites) ->
     sprite = sprites[0]
-    frontBoardsCanvas.withTransform Matrix.translation(I.wallRight, I.wallBottom - 112), ->
+    frontBoardsCanvas.withTransform Matrix.translation(I.wallRight + sideWallWidth, I.wallBottom - 2 * I.spriteSize + wallBottomBuffer), ->
       frontBoardsCanvas.withTransform Matrix.scale(-1, 1), ->
         sprite.draw(frontBoardsCanvas, 0, 0)
 
   Sprite.loadSheet "#{I.team}/wall_s", 512, 512, spriteScale, (sprites) ->
     sprite = sprites[0]
-    frontBoardsCanvas.withTransform Matrix.translation(I.wallLeft + I.spriteSize * 2, I.wallBottom - 48), ->
-      sprite.fill(frontBoardsCanvas, 0, 0, I.spriteSize * 12, I.spriteSize)
+    frontBoardsCanvas.withTransform Matrix.translation(I.wallLeft + I.spriteSize * 2 - sideWallWidth, I.wallBottom - I.spriteSize + wallBottomBuffer), ->
+      sprite.fill(frontBoardsCanvas, 0, 0, arenaWidth() - I.spriteSize * 4 + 2 * sideWallWidth, I.spriteSize)
 
   Sprite.loadSheet "#{I.team}/wall_w", 512, 512, spriteScale, (sprites) ->
     sprite = sprites[0]
-    frontBoardsCanvas.withTransform Matrix.translation(I.wallLeft, I.wallTop + 96), (canvas) ->
-      sprite.fill(canvas, -I.spriteSize/2, -I.spriteSize/2, I.spriteSize, I.spriteSize * 6)
+    frontBoardsCanvas.withTransform Matrix.translation(I.wallLeft - sideWallWidth, I.wallTop + I.spriteSize * 1.5), (canvas) ->
+      sprite.fill(canvas, -I.spriteSize/2, -I.spriteSize/2, I.spriteSize, arenaHeight() - I.spriteSize * 2)
 
-    frontBoardsCanvas.withTransform Matrix.translation(I.wallRight, I.wallTop + 96), (canvas) ->
+    frontBoardsCanvas.withTransform Matrix.translation(I.wallRight + sideWallWidth, I.wallTop + I.spriteSize * 1.5), (canvas) ->
       canvas.withTransform Matrix.scale(-1, 1), ->
-        sprite.fill(canvas, -I.spriteSize/2, -I.spriteSize/2, I.spriteSize, I.spriteSize * 6)
+        sprite.fill(canvas, -I.spriteSize/2, -I.spriteSize/2, I.spriteSize, arenaHeight() - I.spriteSize * 2)
 
   paintCanvas = (sprite, canvas, x, y) ->
     if sprite
@@ -209,9 +212,12 @@ Rink = (I={}) ->
       canvas.context().drawImage(frontBoardsCanvas.element(), 0, 0)
 
   self.bind "beforeDraw", (canvas) ->
+    # A little hacky, but what isn't?
+    {x, y} = engine.camera().scroll()
+
     Fan.crowd.invoke("draw", canvas)
-    canvas.context().drawImage(iceCanvas.element(), 0, 0)
-    canvas.context().drawImage(bloodCanvas.element(), 0, 0)
+    canvas.context().drawImage(iceCanvas.element(), -x, -y)
+    canvas.context().drawImage(bloodCanvas.element(), -x, -y)
 
   self.bind "create", ->
     # Draw the front Rink Boards at the correct zIndex
@@ -223,5 +229,3 @@ Rink = (I={}) ->
   self.include Rink.Physics
 
   return self
-
-Rink.CORNER_RADIUS = 96
