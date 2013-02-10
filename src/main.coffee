@@ -36,9 +36,11 @@ bloodCanvas.strokeColor(BLOOD_COLOR)
 canvas = $("canvas").pixieCanvas()
 # canvas.context().webkitImageSmoothingEnabled = false
 
+["Gamepads", "Timing"].each (module) ->
+  Engine.defaultModules.push module
+
 window.engine = Engine
   canvas: canvas
-  includedModules: ["Gamepads", "Timing"]#, "Stats"]
   showFPS: true
   zSort: true
   FPS: 30

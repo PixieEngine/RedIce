@@ -171,7 +171,7 @@ Configurator = (I) ->
             if headSprite = teamSprites[player.teamStyle][player.headStyle].normal[0]
               headSprite?.draw(canvas, -headSprite.width/2 + 10, -headSprite.height/2 - 40)
 
-  self.bind "step", ->
+  self.on "update", ->
     I.maxPlayers.times (i) ->
       controller = engine.controller(i)
 

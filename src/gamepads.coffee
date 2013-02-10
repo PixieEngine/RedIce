@@ -33,5 +33,5 @@ Gamepads = (I={}) ->
     controllers.each (controller) ->
       controller?.update()
 
-window.addEventListener "MozGamepadConnected", (event) ->
-  console.log event
+# window.addEventListener "MozGamepadConnected", (event) ->
+#   console.log event
