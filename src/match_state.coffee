@@ -11,6 +11,8 @@ MatchState = (I={}) ->
   self.on "enter", ->
     engine.clear(true)
 
+    engine.camera().position(ARENA_CENTER)
+
     rink = engine.add
       class: "Rink"
       team: config.teams.first()

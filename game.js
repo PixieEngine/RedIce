@@ -15553,6 +15553,7 @@ MatchState = function(I) {
   self.on("enter", function() {
     var leftGoal, rightGoal, rink, scoreboard;
     engine.clear(true);
+    engine.camera().position(ARENA_CENTER);
     rink = engine.add({
       "class": "Rink",
       team: config.teams.first()
