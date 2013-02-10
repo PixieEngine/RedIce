@@ -61,7 +61,7 @@ MapState = (I={}) ->
   # Preload Next Team
   AssetLoader.load(nextTeam)
 
-  self.bind "enter", ->
+  self.on "enter", ->
     engine.add
       class: "Map"
       nextTeam: nextTeam

@@ -11,10 +11,10 @@ Map = (I={}) ->
 
   self = GameObject(I)
 
-  self.bind "update", ->
+  self.on "update", ->
     I.sprite = Map.sprites.map
 
-  self.bind "create", ->
+  self.on "create", ->
     choose = !I.lastTeam?
 
     engine.add

@@ -10,7 +10,7 @@ Player.Drawing = (I, self) ->
 
   self.unbind 'draw'
 
-  self.bind 'draw', (canvas) ->
+  self.on 'draw', (canvas) ->
     if frameData = self.frameData()
       headOffset = Point(frameData.head.x, frameData.head.y)
       headRotation = frameData.head.rotation
@@ -43,7 +43,7 @@ Player.Drawing = (I, self) ->
       canvas.withTransform t, drawBody
       drawHead(canvas) if I.facing == "front"
 
-  self.bind 'drawDebug', (canvas) ->
+  self.on 'drawDebug', (canvas) ->
     if I.AI_TARGET
       {x, y} = I.AI_TARGET
       canvas.drawCircle {
@@ -55,7 +55,7 @@ Player.Drawing = (I, self) ->
 
     self.drawControlCircles(canvas)
 
-  self.bind 'afterTransform', (canvas) ->
+  self.on 'afterTransform', (canvas) ->
     self.drawPowerMeters(canvas)
     self.drawFloatingNameTag(canvas)
 

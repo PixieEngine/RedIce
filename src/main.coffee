@@ -66,11 +66,7 @@ $(document).bind "keydown", "1", ->
   engine.add
     class: "Zamboni"
 
-# TODO: Move this into default engine behavior
-engine.bind "beforeDraw", (canvas) ->
-  engine.objects().invoke "trigger", "beforeDraw", canvas
-
-engine.bind "draw", (canvas) ->
+engine.on "draw", (canvas) ->
   if DEBUG_DRAW
     engine.find("Player, Puck, Goal, Bottle, Zamboni, Blood, Gib").each (object) ->
       object.trigger("drawDebug", canvas)

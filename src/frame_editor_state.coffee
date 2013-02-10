@@ -188,7 +188,7 @@ FrameEditorState = (I={}) ->
 
   activeTool = tools.move
 
-  self.bind "enter", ->
+  self.on "enter", ->
     engine.cameras().first().I.scroll = Point(0, 0).subtract(screenCenter)
 
     selectedComponent = headDataObject = engine.add
@@ -200,7 +200,7 @@ FrameEditorState = (I={}) ->
       scale: 0.75
       type: "head"
 
-    headDataObject.bind "draw", (canvas) ->
+    headDataObject.on "draw", (canvas) ->
       teamSprites[currentTeam()][currentHead()].normal.wrap(I.headPositionIndex)?.draw(canvas, -256, -256)
 
     p = engine.add
@@ -287,7 +287,7 @@ FrameEditorState = (I={}) ->
     for key, fn of hotkeys
       $(document).bind "keydown#{namespace}", key, fn
 
-  self.bind "exit", ->
+  self.on "exit", ->
     $(document).unbind(namespace)
 
   drawBodySprite = (canvas) ->
@@ -295,10 +295,10 @@ FrameEditorState = (I={}) ->
       if sprite = currentAnimation()?.wrap(I.frameIndex)
         sprite.draw(canvas, -sprite.width/2, -sprite.height/2)
 
-  self.bind "beforeDraw", (canvas) ->
+  self.on "beforeDraw", (canvas) ->
     drawBodySprite(canvas) if currentFacing() == "front"
 
-  self.bind "draw", (canvas) ->
+  self.on "draw", (canvas) ->
     drawBodySprite(canvas) if currentFacing() == "back"
 
   lineHeight = 30
@@ -325,7 +325,7 @@ FrameEditorState = (I={}) ->
           color: "white"
           text: value
 
-  self.bind "overlay", (canvas) ->
+  self.on "overlay", (canvas) ->
     canvas.drawText
       position: Point(60, 20)
       color: "white"

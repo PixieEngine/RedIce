@@ -6,7 +6,7 @@ TestState = (I={}) ->
   controller = Gamepads.KeyboardController
     debugColor: "#FFF"
 
-  self.bind "enter", ->
+  self.on "enter", ->
     engine.clear(true)
 
     engine.add
@@ -22,11 +22,11 @@ TestState = (I={}) ->
       right: true
       x: WALL_LEFT + ARENA_WIDTH*9/10
 
-  self.bind "overlay", (canvas) ->
+  self.on "overlay", (canvas) ->
     canvas.withTransform Matrix.translation(50, 50), (canvas) ->
       controller.drawDebug(canvas)
 
-  self.bind "update", ->
+  self.on "update", ->
     pucks = engine.find("Puck")
     players = engine.find("Player").shuffle()
     zambonis = engine.find("Zamboni")

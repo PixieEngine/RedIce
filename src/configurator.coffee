@@ -47,10 +47,10 @@ Configurator = (I) ->
       x: I.x + id * slotWidth + 4
       y: I.y + 40
 
-    nameEntry.bind "change", (name) ->
+    nameEntry.on "change", (name) ->
       player.name = name
 
-    nameEntry.bind "done", (name) ->
+    nameEntry.on "done", (name) ->
       nameEntry.destroy()
 
       player.name = name

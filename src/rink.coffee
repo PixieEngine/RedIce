@@ -212,7 +212,7 @@ Rink = (I={}) ->
     drawFront: (canvas) ->
       canvas.context().drawImage(frontBoardsCanvas.element(), 0, 0)
 
-  self.bind "beforeDraw", (canvas) ->
+  self.on "beforeDraw", (canvas) ->
     # A little hacky, but what isn't?
     cameraTransform = engine.camera().transform()
 
@@ -221,7 +221,7 @@ Rink = (I={}) ->
       canvas.context().drawImage(iceCanvas.element(), 0, 0)
       canvas.context().drawImage(bloodCanvas.element(), 0, 0)
 
-  self.bind "create", ->
+  self.on "create", ->
     # Draw the front Rink Boards at the correct zIndex
     engine.add
       class: "RinkBoardsProxy"

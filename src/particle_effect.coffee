@@ -44,7 +44,7 @@ Particle = (I={}) ->
 
   I.rotation = I.velocity.direction()
 
-  self.bind "update", ->
+  self.on "update", ->
     I.x += I.velocity.x
     I.y += I.velocity.y
 

@@ -22,14 +22,14 @@ StoryConfigState = (I={}) ->
 
     return config
 
-  self.bind "enter", ->
+  self.on "enter", ->
     engine.clear(false)
 
     configurator = engine.add
       class: "Configurator"
       config: initPlayerData()
 
-    configurator.bind "done", (config) ->
+    configurator.on "done", (config) ->
       configurator.destroy()
 
       [cpus, players] = config.players.partition (data) ->

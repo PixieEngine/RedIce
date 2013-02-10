@@ -13,7 +13,7 @@ Blood = (I={}) ->
 
       return c
 
-  self.bind "create", ->
+  self.on "create", ->
     if sprite = Blood.sprites.rand()[0]
       sprite.draw(bloodCanvas, I.x - sprite.width/2, I.y - sprite.height/2)
 

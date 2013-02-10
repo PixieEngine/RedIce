@@ -17,7 +17,7 @@ Cutscene = (I={}) ->
   # Inherit from game object
   self = GameState(I)
 
-  self.bind "enter", ->
+  self.on "enter", ->
     img = engine.add
       sprite: I.sprite
       x: App.width/2
@@ -28,7 +28,7 @@ Cutscene = (I={}) ->
       text: I.text
       y: 2/3*App.height
 
-  self.bind "update", ->
+  self.on "update", ->
     engine.controllers().each (controller) ->
       if controller.buttonPressed "A", "START"
         next()

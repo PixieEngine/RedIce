@@ -136,11 +136,11 @@ Player = (I={}) ->
 
     I.shootPower = 0
 
-  self.bind "update", ->
+  self.on "update", ->
     for key, value of I.cooldown
       I.cooldown[key] = value.approach(0, 1)
 
-  self.bind "update", ->
+  self.on "update", ->
     I.boost = I.boost.approach(0, 1)
     I.wipeout = I.wipeout.approach(0, 1)
 

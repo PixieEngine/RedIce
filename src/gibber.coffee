@@ -55,7 +55,7 @@ Gib = (I={}) ->
       canvas.withTransform transform, ->
         I.sprite.draw(canvas, -I.sprite.width/2, -I.sprite.height/2)
 
-  self.bind "update", ->
+  self.on "update", ->
     I.rotation += I.rotationalVelocity
     I.z += I.zVelocity
     I.zVelocity += I.gravity

@@ -9,7 +9,7 @@ Player.Paint = (I, self) ->
   lastPosition = null
   painting = false
 
-  self.bind "update", ->
+  self.on "update", ->
     p = self.position()
     if actionDown "A", "Y"
       if lastPosition
@@ -22,10 +22,10 @@ Player.Paint = (I, self) ->
 
     lastPosition = p
 
-  self.bind "paint", (color) ->
+  self.on "paint", (color) ->
     I.paintColor = color
 
-  self.bind "shoot", ({power, direction}) ->
+  self.on "shoot", ({power, direction}) ->
     bloodCanvas.drawLine
       lineCap: "round"
       start: self.position()

@@ -8,7 +8,7 @@ MatchState = (I={}) ->
 
   [homeTeam, awayTeam] = config.teams
 
-  self.bind "enter", ->
+  self.on "enter", ->
     engine.clear(true)
 
     rink = engine.add
@@ -21,7 +21,7 @@ MatchState = (I={}) ->
       # periodTime: 120
       # period: 3
 
-    scoreboard.bind "restart", ->
+    scoreboard.on "restart", ->
       if config.storyMode # TODO: Reduce globals!
         config.defeatedTeams.push config.opponentTeam
         engine.setState(MapState())
@@ -41,7 +41,7 @@ MatchState = (I={}) ->
       team: homeTeam
       x: WALL_LEFT + ARENA_WIDTH/10 - 32
 
-    leftGoal.bind "score", ->
+    leftGoal.on "score", ->
       scoreboard.score "home"
 
     rightGoal = engine.add
@@ -50,14 +50,14 @@ MatchState = (I={}) ->
       team: awayTeam
       x: WALL_LEFT + ARENA_WIDTH*9/10
 
-    rightGoal.bind "score", ->
+    rightGoal.on "score", ->
       scoreboard.score "away"
 
     Music.volume config.musicVolume
     Music.play TEAM_MUSIC[homeTeam].rand()
 
   # Add events and methods here
-  self.bind "update", ->
+  self.on "update", ->
     Fan.crowd.invoke("update")
 
     pucks = engine.find("Puck")

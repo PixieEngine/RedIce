@@ -8,14 +8,14 @@ Paint = (I={}) ->
 
   self.unbind "draw"
 
-  self.bind "draw", (canvas) ->
+  self.on "draw", (canvas) ->
     canvas.drawCircle
       x: 0
       y: 0
       color: I.color
       radius: I.radius
 
-  self.bind "update", ->
+  self.on "update", ->
     engine.find("Player").each (player) ->
       if Collision.circular(self.circle(), player.circle())
         player.trigger("paint", I.color)

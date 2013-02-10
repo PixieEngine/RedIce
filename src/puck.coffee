@@ -77,7 +77,7 @@ Puck = (I) ->
 
       start = position
 
-  self.bind "positionUpdated", ->
+  self.on "positionUpdated", ->
     return unless I.active
 
     circle = self.circle()
@@ -93,9 +93,9 @@ Puck = (I) ->
         self.destroy()
         goal.score()
 
-  self.bind "update", setSprite
+  self.on "update", setSprite
 
-  self.bind "wallCollision", (type) ->
+  self.on "wallCollision", (type) ->
     I.superMassive = false
     I.friction = DEFAULT_FRICTION
 
@@ -105,11 +105,11 @@ Puck = (I) ->
       else
         Sound.play "Puck Wall #{rand(4) + 1}"
 
-  self.bind "superCharge", ->
+  self.on "superCharge", ->
     I.superMassive = true
     I.friction = 0
 
-  self.bind "struck", ->
+  self.on "struck", ->
     Sound.play "Puck Hit #{rand(4) + 1}"
 
   self.mass = ->

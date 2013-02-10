@@ -4,7 +4,7 @@ Minigames.Paint = (I={}) ->
 
   window.physics = Physics()
 
-  self.bind "enter", ->
+  self.on "enter", ->
     engine.clear(true)
 
     engine.add
@@ -59,7 +59,7 @@ Minigames.Paint = (I={}) ->
       Music.play "music1"
 
   # Add events and methods here
-  self.bind "update", ->
+  self.on "update", ->
     players = engine.find("Player").shuffle()
     zambonis = engine.find("Zamboni")
 

@@ -30,7 +30,7 @@ The <code>Gamepads</code> module gives the engine access to gamepads.
 Engine.Gamepads = (I, self) ->
   gamepads = Gamepads()
 
-  self.bind "beforeUpdate", ->
+  self.on "beforeUpdate", ->
     # Update the gamepads
     gamepads.update()
 

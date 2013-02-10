@@ -8,11 +8,11 @@ Spotlight = (I={}) ->
 
   self = GameObject(I)
 
-  self.bind "update", ->
+  self.on "update", ->
     I.sprite = Spotlight.sprites.on
 
   # Draw logo
-  self.bind "draw", (canvas) ->
+  self.on "draw", (canvas) ->
     if logo = Configurator.images[I.team].logo
       canvas.withTransform Matrix.scale(0.75, 0.75), ->
         logo.draw(canvas, -logo.width/2, -logo.height/2 - 64)

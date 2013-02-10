@@ -68,7 +68,7 @@ Menu = (I={}) ->
     selectedOption().action()
 
   # Add events and methods here
-  self.bind "update", ->
+  self.on "update", ->
     # Joystick Input
     MAX_PLAYERS.times (i) ->
       joystick = engine.controller(i)
@@ -80,7 +80,7 @@ Menu = (I={}) ->
 
   self.unbind "draw"
 
-  self.bind "draw", (canvas) ->
+  self.on "draw", (canvas) ->
     spriteWidth = 512
     xOffset = 15
     x = -spriteWidth/2 + xOffset

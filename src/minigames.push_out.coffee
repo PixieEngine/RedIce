@@ -7,7 +7,7 @@ Minigames.PushOut = (I={}) ->
   arena = Point(App.width/2, App.height/2)
   arena.radius = 300
 
-  self.bind "enter", ->
+  self.on "enter", ->
     engine.clear(true)
 
     # TODO: TEst only
@@ -27,13 +27,13 @@ Minigames.PushOut = (I={}) ->
     if config.music
       Music.play "music1"
 
-  self.bind "beforeDraw", (canvas) ->
+  self.on "beforeDraw", (canvas) ->
     canvas.drawCircle
       circle: arena
       color: "white"
 
   # Add events and methods here
-  self.bind "update", ->
+  self.on "update", ->
     players = engine.find("Player").shuffle()
     zambonis = engine.find("Zamboni")
 

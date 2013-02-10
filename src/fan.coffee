@@ -17,7 +17,7 @@ Fan = (I) ->
   # Default to looking straight
   I.sprite = I.sprites[1][0]
 
-  self.bind "update", ->
+  self.on "update", ->
     I.cheer = I.cheer.approach(0, 1)
 
     # bob back and forth

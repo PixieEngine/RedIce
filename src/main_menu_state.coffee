@@ -2,7 +2,7 @@ MainMenuState = (I={}) ->
   # Inherit from game object
   self = GameState(I)
 
-  self.bind "enter", ->
+  self.on "enter", ->
     engine.add
       class: "Menu"
 

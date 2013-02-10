@@ -5,10 +5,10 @@ Engine.Timing = (I={}, self) ->
   updateDuration = null
   updateStartTime = null
 
-  self.bind "beforeDraw", ->
+  self.on "beforeDraw", ->
     drawStartTime = +new Date
 
-  self.bind "overlay", (canvas) ->
+  self.on "overlay", (canvas) ->
     drawDuration = (+new Date) - drawStartTime
 
     if DEBUG_DRAW
@@ -24,10 +24,10 @@ Engine.Timing = (I={}, self) ->
         x: 10
         y: 50
 
-  self.bind "beforeUpdate", ->
+  self.on "beforeUpdate", ->
     updateStartTime = +new Date
 
-  self.bind "afterUpdate", (canvas) ->
+  self.on "afterUpdate", (canvas) ->
     updateDuration = (+new Date) - updateStartTime
 
   return {}

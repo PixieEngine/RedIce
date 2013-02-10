@@ -48,13 +48,13 @@ DialogBox = (I={}) ->
 
       computedLines.push line
 
-  self.bind 'update', ->
+  self.on 'update', ->
     precomputeLines()
 
     I.displayChars += 1
 
   self.unbind 'draw'
-  self.bind 'draw', (canvas) ->
+  self.on 'draw', (canvas) ->
     precomputeLines()
 
     canvas.font I.font

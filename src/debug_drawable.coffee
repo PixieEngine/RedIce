@@ -2,7 +2,7 @@ DebugDrawable = (I={}, self) ->
   Object.reverseMerge I,
     debugColor: "rgba(255, 0, 255, 0.5)"
 
-  self.bind "drawDebug", (canvas) ->
+  self.on "drawDebug", (canvas) ->
     if I.radius
       center = self.center()
 

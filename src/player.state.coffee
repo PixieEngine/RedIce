@@ -22,7 +22,7 @@ Player.State = (I={}, self) ->
         I.cooldown.flip = jitterSoak
         I.hflip = newFlip
 
-  self.bind "update", ->
+  self.on "update", ->
     # Merge in team_body specific frame/character data
     Object.extend I, teamSprites[I.teamStyle][I.bodyStyle].characterData
 
@@ -94,7 +94,7 @@ Player.State = (I={}, self) ->
     I.headSprite = teamSprites[I.teamStyle][I.headStyle][I.headAction][headPosition]
 
   # Set the sprite
-  self.bind "update", ->
+  self.on "update", ->
     I.sprite = self.spriteSheet()[I.action][I.facing].wrap(I.frame)
 
   spriteSheet: ->

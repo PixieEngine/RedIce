@@ -114,7 +114,7 @@ Scoreboard = (I) ->
 
       endGameChecks()
 
-  self.bind "update", ->
+  self.on "update", ->
     if I.time % I.zamboniInterval == 0
       # No Zamboni very second
       unless I.time == I.periodTime && I.period == 1

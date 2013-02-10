@@ -13454,7 +13454,7 @@ Blood = function(I) {
       return c;
     }
   });
-  self.bind("create", function() {
+  self.on("create", function() {
     var sprite;
     if (sprite = Blood.sprites.rand()[0]) {
       return sprite.draw(bloodCanvas, I.x - sprite.width / 2, I.y - sprite.height / 2);
@@ -13591,10 +13591,10 @@ Configurator = function(I) {
       x: I.x + id * slotWidth + 4,
       y: I.y + 40
     });
-    nameEntry.bind("change", function(name) {
+    nameEntry.on("change", function(name) {
       return player.name = name;
     });
-    return nameEntry.bind("done", function(name) {
+    return nameEntry.on("done", function(name) {
       nameEntry.destroy();
       player.name = name;
       player.optionIndex = 0;
@@ -13810,7 +13810,7 @@ Cutscene = function(I) {
     }
   };
   self = GameState(I);
-  self.bind("enter", function() {
+  self.on("enter", function() {
     var img;
     img = engine.add({
       sprite: I.sprite,
@@ -13823,7 +13823,7 @@ Cutscene = function(I) {
       y: 2 / 3 * App.height
     });
   });
-  self.bind("update", function() {
+  self.on("update", function() {
     return engine.controllers().each(function(controller) {
       if (controller.buttonPressed("A", "START")) {
         return next();
@@ -13887,7 +13887,7 @@ DebugDrawable = function(I, self) {
   Object.reverseMerge(I, {
     debugColor: "rgba(255, 0, 255, 0.5)"
   });
-  self.bind("drawDebug", function(canvas) {
+  self.on("drawDebug", function(canvas) {
     var center;
     if (I.radius) {
       center = self.center();
@@ -13955,12 +13955,12 @@ DialogBox = function(I) {
       return computedLines.push(line);
     }
   };
-  self.bind('update', function() {
+  self.on('update', function() {
     precomputeLines();
     return I.displayChars += 1;
   });
   self.unbind('draw');
-  self.bind('draw', function(canvas) {
+  self.on('draw', function(canvas) {
     var charsRemaining, textStart;
     precomputeLines();
     canvas.font(I.font);
@@ -14114,7 +14114,7 @@ The <code>Gamepads</code> module gives the engine access to gamepads.
 Engine.Gamepads = function(I, self) {
   var gamepads;
   gamepads = Gamepads();
-  self.bind("beforeUpdate", function() {
+  self.on("beforeUpdate", function() {
     return gamepads.update();
   });
   return {
@@ -14146,10 +14146,10 @@ Engine.Timing = function(I, self) {
   drawStartTime = null;
   updateDuration = null;
   updateStartTime = null;
-  self.bind("beforeDraw", function() {
+  self.on("beforeDraw", function() {
     return drawStartTime = +(new Date);
   });
-  self.bind("overlay", function(canvas) {
+  self.on("overlay", function(canvas) {
     var drawDuration;
     drawDuration = (+(new Date)) - drawStartTime;
     if (DEBUG_DRAW) {
@@ -14167,10 +14167,10 @@ Engine.Timing = function(I, self) {
       });
     }
   });
-  self.bind("beforeUpdate", function() {
+  self.on("beforeUpdate", function() {
     return updateStartTime = +(new Date);
   });
-  self.bind("afterUpdate", function(canvas) {
+  self.on("afterUpdate", function(canvas) {
     return updateDuration = (+(new Date)) - updateStartTime;
   });
   return {};
@@ -14204,7 +14204,7 @@ Fan = function(I) {
   I.zIndex = I.y;
   fov = (1 / 4).rotations;
   I.sprite = I.sprites[1][0];
-  self.bind("update", function() {
+  self.on("update", function() {
     var lookDirection, puck, xOffset;
     I.cheer = I.cheer.approach(0, 1);
     xOffset = (I.age / 12).floor() % 5 - 1;
@@ -14456,7 +14456,7 @@ FrameEditorState = function(I) {
     };
   })();
   activeTool = tools.move;
-  self.bind("enter", function() {
+  self.on("enter", function() {
     var addCycle, adjustIndexVariable, fn, hotkeys, key, shiftFactor, _results;
     engine.cameras().first().I.scroll = Point(0, 0).subtract(screenCenter);
     selectedComponent = headDataObject = engine.add({
@@ -14468,7 +14468,7 @@ FrameEditorState = function(I) {
       scale: 0.75,
       type: "head"
     });
-    headDataObject.bind("draw", function(canvas) {
+    headDataObject.on("draw", function(canvas) {
       var _ref;
       return (_ref = teamSprites[currentTeam()][currentHead()].normal.wrap(I.headPositionIndex)) != null ? _ref.draw(canvas, -256, -256) : void 0;
     });
@@ -14577,7 +14577,7 @@ FrameEditorState = function(I) {
     }
     return _results;
   });
-  self.bind("exit", function() {
+  self.on("exit", function() {
     return $(document).unbind(namespace);
   });
   drawBodySprite = function(canvas) {
@@ -14588,12 +14588,12 @@ FrameEditorState = function(I) {
       }
     });
   };
-  self.bind("beforeDraw", function(canvas) {
+  self.on("beforeDraw", function(canvas) {
     if (currentFacing() === "front") {
       return drawBodySprite(canvas);
     }
   });
-  self.bind("draw", function(canvas) {
+  self.on("draw", function(canvas) {
     if (currentFacing() === "back") {
       return drawBodySprite(canvas);
     }
@@ -14625,7 +14625,7 @@ FrameEditorState = function(I) {
       return _results;
     }
   };
-  self.bind("overlay", function(canvas) {
+  self.on("overlay", function(canvas) {
     var description, key, y, _results;
     canvas.drawText({
       position: Point(60, 20),
@@ -15069,7 +15069,7 @@ Gib = function(I) {
       });
     }
   });
-  self.bind("update", function() {
+  self.on("update", function() {
     I.rotation += I.rotationalVelocity;
     I.z += I.zVelocity;
     I.zVelocity += I.gravity;
@@ -15198,7 +15198,9 @@ Goal = function(I) {
     suddenDeath: false,
     team: "smiley"
   });
-  I.hflip = I.right;
+  if (I.right) {
+    I.scaleX = -1;
+  }
   walls = [];
   if (I.right) {
     walls.push({
@@ -15344,7 +15346,7 @@ MainMenuState = function(I) {
     I = {};
   }
   self = GameState(I);
-  self.bind("enter", function() {
+  self.on("enter", function() {
     engine.add({
       "class": "Menu"
     });
@@ -15374,10 +15376,10 @@ Map = function(I) {
     lastTeam: "smiley"
   });
   self = GameObject(I);
-  self.bind("update", function() {
+  self.on("update", function() {
     return I.sprite = Map.sprites.map;
   });
-  self.bind("create", function() {
+  self.on("create", function() {
     var choose;
     choose = !(I.lastTeam != null);
     engine.add({
@@ -15488,7 +15490,7 @@ MapState = function(I) {
     });
   };
   AssetLoader.load(nextTeam);
-  self.bind("enter", function() {
+  self.on("enter", function() {
     return engine.add({
       "class": "Map",
       nextTeam: nextTeam,
@@ -15524,14 +15526,14 @@ MatchSetupState = function(I) {
     });
     return config;
   };
-  self.bind("enter", function() {
+  self.on("enter", function() {
     var configurator;
     engine.clear(false);
     configurator = engine.add({
       "class": "Configurator",
       config: initPlayerData()
     });
-    return configurator.bind("done", function(config) {
+    return configurator.on("done", function(config) {
       configurator.destroy();
       return engine.setState(MatchState());
     });
@@ -15548,7 +15550,7 @@ MatchState = function(I) {
   window.physics = Physics();
   Fan.crowd = Fan.generateCrowd();
   _ref = config.teams, homeTeam = _ref[0], awayTeam = _ref[1];
-  self.bind("enter", function() {
+  self.on("enter", function() {
     var leftGoal, rightGoal, rink, scoreboard;
     engine.clear(true);
     rink = engine.add({
@@ -15559,7 +15561,7 @@ MatchState = function(I) {
       "class": "Scoreboard",
       team: homeTeam
     });
-    scoreboard.bind("restart", function() {
+    scoreboard.on("restart", function() {
       if (config.storyMode) {
         config.defeatedTeams.push(config.opponentTeam);
         return engine.setState(MapState());
@@ -15579,7 +15581,7 @@ MatchState = function(I) {
       team: homeTeam,
       x: WALL_LEFT + ARENA_WIDTH / 10 - 32
     });
-    leftGoal.bind("score", function() {
+    leftGoal.on("score", function() {
       return scoreboard.score("home");
     });
     rightGoal = engine.add({
@@ -15588,13 +15590,13 @@ MatchState = function(I) {
       team: awayTeam,
       x: WALL_LEFT + ARENA_WIDTH * 9 / 10
     });
-    rightGoal.bind("score", function() {
+    rightGoal.on("score", function() {
       return scoreboard.score("away");
     });
     Music.volume(config.musicVolume);
     return Music.play(TEAM_MUSIC[homeTeam].rand());
   });
-  self.bind("update", function() {
+  self.on("update", function() {
     var camera, gibs, objects, players, playersAndPucks, puck, pucks, zambonis;
     Fan.crowd.invoke("update");
     pucks = engine.find("Puck");
@@ -15712,7 +15714,7 @@ Menu = function(I) {
     Sound.play("Menu Select 1");
     return selectedOption().action();
   };
-  self.bind("update", function() {
+  self.on("update", function() {
     return MAX_PLAYERS.times(function(i) {
       var joystick;
       joystick = engine.controller(i);
@@ -15723,7 +15725,7 @@ Menu = function(I) {
     });
   });
   self.unbind("draw");
-  self.bind("draw", function(canvas) {
+  self.on("draw", function(canvas) {
     var sprite, spriteWidth, textOffsetY, x, xOffset;
     spriteWidth = 512;
     xOffset = 15;
@@ -15779,7 +15781,7 @@ Minigames.Paint = function(I) {
   }
   self = GameState(I);
   window.physics = Physics();
-  self.bind("enter", function() {
+  self.on("enter", function() {
     var colors, i, n;
     engine.clear(true);
     engine.add({
@@ -15820,7 +15822,7 @@ Minigames.Paint = function(I) {
       return Music.play("music1");
     }
   });
-  self.bind("update", function() {
+  self.on("update", function() {
     var objects, players, zambonis;
     players = engine.find("Player").shuffle();
     zambonis = engine.find("Zamboni");
@@ -15839,7 +15841,7 @@ Minigames.PushOut = function(I) {
   physics = Physics();
   arena = Point(App.width / 2, App.height / 2);
   arena.radius = 300;
-  self.bind("enter", function() {
+  self.on("enter", function() {
     var n;
     engine.clear(true);
     n = 4;
@@ -15860,13 +15862,13 @@ Minigames.PushOut = function(I) {
       return Music.play("music1");
     }
   });
-  self.bind("beforeDraw", function(canvas) {
+  self.on("beforeDraw", function(canvas) {
     return canvas.drawCircle({
       circle: arena,
       color: "white"
     });
   });
-  self.bind("update", function() {
+  self.on("update", function() {
     var objects, players, zambonis;
     players = engine.find("Player").shuffle();
     zambonis = engine.find("Zamboni");
@@ -16109,7 +16111,7 @@ Paint = function(I) {
   });
   self = GameObject(I);
   self.unbind("draw");
-  self.bind("draw", function(canvas) {
+  self.on("draw", function(canvas) {
     return canvas.drawCircle({
       x: 0,
       y: 0,
@@ -16117,7 +16119,7 @@ Paint = function(I) {
       radius: I.radius
     });
   });
-  self.bind("update", function() {
+  self.on("update", function() {
     return engine.find("Player").each(function(player) {
       if (Collision.circular(self.circle(), player.circle())) {
         return player.trigger("paint", I.color);
@@ -16186,7 +16188,7 @@ Particle = function(I) {
   });
   self = GameObject(I);
   I.rotation = I.velocity.direction();
-  self.bind("update", function() {
+  self.on("update", function() {
     var rink, _ref;
     I.x += I.velocity.x;
     I.y += I.velocity.y;
@@ -17331,7 +17333,7 @@ Player = function(I) {
     }
     return I.shootPower = 0;
   };
-  self.bind("update", function() {
+  self.on("update", function() {
     var key, value, _ref, _results;
     _ref = I.cooldown;
     _results = [];
@@ -17341,7 +17343,7 @@ Player = function(I) {
     }
     return _results;
   });
-  self.bind("update", function() {
+  self.on("update", function() {
     var bonus, movement, movementLength, movementScale, velocityLength, velocityNorm;
     I.boost = I.boost.approach(0, 1);
     I.wipeout = I.wipeout.approach(0, 1);
@@ -17509,7 +17511,7 @@ Player.Drawing = function(I, self) {
     }
   };
   self.unbind('draw');
-  self.bind('draw', function(canvas) {
+  self.on('draw', function(canvas) {
     var currentHeadOffset, drawHead, frameData, headOffset, headRotation, headScale, t;
     if (frameData = self.frameData()) {
       headOffset = Point(frameData.head.x, frameData.head.y);
@@ -17552,7 +17554,7 @@ Player.Drawing = function(I, self) {
       }
     });
   });
-  self.bind('drawDebug', function(canvas) {
+  self.on('drawDebug', function(canvas) {
     var x, y, _ref;
     if (I.AI_TARGET) {
       _ref = I.AI_TARGET, x = _ref.x, y = _ref.y;
@@ -17565,7 +17567,7 @@ Player.Drawing = function(I, self) {
     }
     return self.drawControlCircles(canvas);
   });
-  self.bind('afterTransform', function(canvas) {
+  self.on('afterTransform', function(canvas) {
     self.drawPowerMeters(canvas);
     return self.drawFloatingNameTag(canvas);
   });
@@ -17728,7 +17730,7 @@ Player.Paint = function(I, self) {
   actionDown = controller.actionDown;
   lastPosition = null;
   painting = false;
-  self.bind("update", function() {
+  self.on("update", function() {
     var p;
     p = self.position();
     if (actionDown("A", "Y")) {
@@ -17744,10 +17746,10 @@ Player.Paint = function(I, self) {
     }
     return lastPosition = p;
   });
-  self.bind("paint", function(color) {
+  self.on("paint", function(color) {
     return I.paintColor = color;
   });
-  self.bind("shoot", function(_arg) {
+  self.on("shoot", function(_arg) {
     var direction, power;
     power = _arg.power, direction = _arg.direction;
     return bloodCanvas.drawLine({
@@ -17773,7 +17775,7 @@ Player.Sounds = function(I, self) {
     }
     return Sound.play("" + name + " " + (rand(n) + 1) + m);
   };
-  self.bind("wipeout", function() {
+  self.on("wipeout", function() {
     sfx("Body Hit", 4, "v");
     if (rand(5)) {
       sfx("Crowd Cheers", 4);
@@ -17784,13 +17786,13 @@ Player.Sounds = function(I, self) {
       return sfx("Torso Slide", 2, "v");
     });
   });
-  self.bind("shoot", function() {
+  self.on("shoot", function() {
     return sfx("Swing Release", 4);
   });
-  self.bind("slide_stop", function() {
+  self.on("slide_stop", function() {
     return sfx("Slide Stop", 3);
   });
-  self.bind("shot_start", function() {});
+  self.on("shot_start", function() {});
   return {};
 };
 
@@ -17823,7 +17825,7 @@ Player.State = function(I, self) {
       }
     }
   };
-  self.bind("update", function() {
+  self.on("update", function() {
     var angleSprites, cycleDelay, headDirection, headIndexOffset, headPosition, power, speed, spriteSheet, _ref;
     Object.extend(I, teamSprites[I.teamStyle][I.bodyStyle].characterData);
     I.headAction = "normal";
@@ -17887,7 +17889,7 @@ Player.State = function(I, self) {
     }
     return I.headSprite = teamSprites[I.teamStyle][I.headStyle][I.headAction][headPosition];
   });
-  self.bind("update", function() {
+  self.on("update", function() {
     return I.sprite = self.spriteSheet()[I.action][I.facing].wrap(I.frame);
   });
   return {
@@ -18085,7 +18087,7 @@ Puck = function(I) {
       return start = position;
     });
   });
-  self.bind("positionUpdated", function() {
+  self.on("positionUpdated", function() {
     var circle;
     if (!I.active) {
       return;
@@ -18104,8 +18106,8 @@ Puck = function(I) {
       }
     });
   });
-  self.bind("update", setSprite);
-  self.bind("wallCollision", function(type) {
+  self.on("update", setSprite);
+  self.on("wallCollision", function(type) {
     I.superMassive = false;
     I.friction = DEFAULT_FRICTION;
     if (I.velocity.length() > 10) {
@@ -18116,11 +18118,11 @@ Puck = function(I) {
       }
     }
   });
-  self.bind("superCharge", function() {
+  self.on("superCharge", function() {
     I.superMassive = true;
     return I.friction = 0;
   });
-  self.bind("struck", function() {
+  self.on("struck", function() {
     return Sound.play("Puck Hit " + (rand(4) + 1));
   });
   self.mass = function() {
@@ -18374,7 +18376,7 @@ Rink = function(I) {
       return canvas.context().drawImage(frontBoardsCanvas.element(), 0, 0);
     }
   });
-  self.bind("beforeDraw", function(canvas) {
+  self.on("beforeDraw", function(canvas) {
     var cameraTransform;
     cameraTransform = engine.camera().transform();
     return canvas.withTransform(cameraTransform, function(canvas) {
@@ -18383,7 +18385,7 @@ Rink = function(I) {
       return canvas.context().drawImage(bloodCanvas.element(), 0, 0);
     });
   });
-  self.bind("create", function() {
+  self.on("create", function() {
     return engine.add({
       "class": "RinkBoardsProxy",
       rink: self,
@@ -18576,7 +18578,7 @@ Scoreboard = function(I) {
       return endGameChecks();
     }
   });
-  self.bind("update", function() {
+  self.on("update", function() {
     if (I.time % I.zamboniInterval === 0) {
       if (!(I.time === I.periodTime && I.period === 1)) {
         I.reverse = !I.reverse;
@@ -18735,10 +18737,10 @@ Spotlight = function(I) {
     zIndex: 5
   });
   self = GameObject(I);
-  self.bind("update", function() {
+  self.on("update", function() {
     return I.sprite = Spotlight.sprites.on;
   });
-  self.bind("draw", function(canvas) {
+  self.on("draw", function(canvas) {
     var logo;
     if (logo = Configurator.images[I.team].logo) {
       return canvas.withTransform(Matrix.scale(0.75, 0.75), function() {
@@ -18781,14 +18783,14 @@ StoryConfigState = function(I) {
     });
     return config;
   };
-  self.bind("enter", function() {
+  self.on("enter", function() {
     var configurator;
     engine.clear(false);
     configurator = engine.add({
       "class": "Configurator",
       config: initPlayerData()
     });
-    return configurator.bind("done", function(config) {
+    return configurator.on("done", function(config) {
       var cpus, players, _ref;
       configurator.destroy();
       _ref = config.players.partition(function(data) {
@@ -18869,7 +18871,7 @@ TestState = function(I) {
   controller = Gamepads.KeyboardController({
     debugColor: "#FFF"
   });
-  self.bind("enter", function() {
+  self.on("enter", function() {
     var leftGoal, rightGoal;
     engine.clear(true);
     engine.add({
@@ -18886,12 +18888,12 @@ TestState = function(I) {
       x: WALL_LEFT + ARENA_WIDTH * 9 / 10
     });
   });
-  self.bind("overlay", function(canvas) {
+  self.on("overlay", function(canvas) {
     return canvas.withTransform(Matrix.translation(50, 50), function(canvas) {
       return controller.drawDebug(canvas);
     });
   });
-  self.bind("update", function() {
+  self.on("update", function() {
     var objects, players, playersAndPucks, pucks, zambonis;
     pucks = engine.find("Puck");
     players = engine.find("Player").shuffle();
@@ -18948,14 +18950,14 @@ TournamentSetupState = function(I) {
     });
     return config;
   };
-  self.bind("enter", function() {
+  self.on("enter", function() {
     var configurator;
     engine.clear(false);
     configurator = engine.add({
       "class": "Configurator",
       config: initPlayerData()
     });
-    return configurator.bind("done", function(config) {
+    return configurator.on("done", function(config) {
       configurator.destroy();
       return engine.setState(MapState());
     });
@@ -19201,11 +19203,7 @@ $(document).bind("keydown", "1", function() {
   });
 });
 
-engine.bind("beforeDraw", function(canvas) {
-  return engine.objects().invoke("trigger", "beforeDraw", canvas);
-});
-
-engine.bind("draw", function(canvas) {
+engine.on("draw", function(canvas) {
   if (DEBUG_DRAW) {
     return engine.find("Player, Puck, Goal, Bottle, Zamboni, Blood, Gib").each(function(object) {
       return object.trigger("drawDebug", canvas);

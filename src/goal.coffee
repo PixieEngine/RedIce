@@ -17,7 +17,8 @@ Goal = (I) ->
     suddenDeath: false
     team: "smiley"
 
-  I.hflip = I.right
+  if I.right
+    I.scaleX = -1
 
   walls = []
 
