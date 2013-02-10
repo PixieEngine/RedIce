@@ -34,7 +34,7 @@ Puck = (I) ->
   heading = 0
   lastPosition = null
 
-  self.bind "drawDebug", (canvas) ->
+  self.on "drawDebug", (canvas) ->
     center = self.center()
     x = center.x
     y = center.y
@@ -47,11 +47,11 @@ Puck = (I) ->
       start: Point(x, y)
       end: Point(x + scaledVelocity.x, y + scaledVelocity.y)
 
-  self.bind "step", ->
+  self.on "update", ->
     I.previousPositions.unshift self.center().copy()
     I.previousPositions.length = 10
 
-  self.bind "beforeTransform", (canvas) ->
+  self.on "beforeTransform", (canvas) ->
     positions = I.previousPositions.compact()
     n = positions.length
     start = self.center()

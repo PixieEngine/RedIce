@@ -69,8 +69,6 @@ Base = (I={}) ->
   if I.velocity? && I.velocity.x? && I.velocity.y?
     I.velocity = Point(I.velocity.x, I.velocity.y)
 
-  self.on = self.bind # Alias bind as on
-
   self.on "update", ->
     I.zIndex = I.y
 

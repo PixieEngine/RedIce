@@ -82,14 +82,14 @@ Goal = (I) ->
       if I.suddenDeath
         self.destroy()
 
-  self.bind "destroy", ->
+  self.on "destroy", ->
     engine.add
       class: "Shockwave"
       x: I.x
       y: I.y
       velocity: Point(0, 1)
 
-  self.bind "drawDebug", (canvas) ->
+  self.on "drawDebug", (canvas) ->
     # Draw goal area
     canvas.drawRect
       bounds: I
@@ -99,14 +99,14 @@ Goal = (I) ->
     walls.each (wall) ->
       drawWall(wall, canvas)
 
-  self.bind "step", ->
+  self.on "update", ->
     I.sprite = teamSprites[I.team].goal.back[0]
 
     I.zIndex = I.y + I.height/2
 
   self.unbind "draw"
 
-  self.bind "draw", (canvas) ->
+  self.on "draw", (canvas) ->
     if sprite = teamSprites[I.team].goal.back[0]
       sprite.draw(canvas, -sprite.width/2, -sprite.height/2)
 

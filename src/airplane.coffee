@@ -23,7 +23,7 @@ Airplane = (I={}) ->
 
   self = GameObject(I)
 
-  self.bind "update", ->
+  self.on "update", ->
     I.sprite = Map.sprites.plane
 
     index = 0

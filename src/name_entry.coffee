@@ -177,7 +177,7 @@ NameEntry = (I) ->
         textArea.draw(canvas)
         menuArea.draw(canvas)
 
-  self.bind "step", ->
+  self.on "update", ->
     if controller?.buttonPressed "A"
       addCharacter()
 

@@ -116,7 +116,7 @@ Zamboni = (I) ->
 
     I.sprite = teamSprites[I.team].zamboni[facing][(I.age/4).floor().mod(2)]
 
-  self.bind "step", ->
+  self.on "update", ->
     if I.x < -bounds || I.x > App.width + bounds
       I.active = false
 
@@ -135,7 +135,7 @@ Zamboni = (I) ->
 
       setSprite()
 
-  self.bind "destroy", ->
+  self.on "destroy", ->
     engine.add
       class: "Shockwave"
       x: I.x

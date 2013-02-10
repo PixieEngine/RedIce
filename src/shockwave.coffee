@@ -14,11 +14,11 @@ Shockwave = (I={}) ->
       sprite = Shockwave.sprites.explosion[(I.age).clamp(0, 6)]
       sprite?.draw(canvas, I.x - sprite.width / 2, I.y - sprite.height / 2)
 
-  self.bind "create", ->
+  self.on "create", ->
     Sound.play "Zamboni #{rand(5)} N"
     drawScorch()
 
-  self.bind "step", ->
+  self.on "update", ->
     maxCircle = I
     minCircle =
       x: I.x

@@ -13180,12 +13180,12 @@ draw anything to the screen until the image has been loaded.
     assetGroup = assetGroups[I.assetGroup];
     assetGroup.loadAll();
     self = GameState(I);
-    self.bind("update", function() {
+    self.on("update", function() {
       if (assetGroup.loadingComplete()) {
         return engine.setState(typeof I.nextState === "function" ? I.nextState() : void 0);
       }
     });
-    self.bind("overlay", function(canvas) {
+    self.on("overlay", function(canvas) {
       canvas.font("bold 48px consolas, 'Courier New', 'andale mono', 'lucida console', monospace");
       canvas.centerText({
         text: "Loading",
@@ -13301,7 +13301,7 @@ Airplane = function(I) {
     }
   };
   self = GameObject(I);
-  self.bind("update", function() {
+  self.on("update", function() {
     var camera, duration, easingX, easingY, index, t;
     I.sprite = Map.sprites.plane;
     index = 0;
@@ -13422,7 +13422,6 @@ Base = function(I) {
   if ((I.velocity != null) && (I.velocity.x != null) && (I.velocity.y != null)) {
     I.velocity = Point(I.velocity.x, I.velocity.y);
   }
-  self.on = self.bind;
   self.on("update", function() {
     I.zIndex = I.y;
     if (I.velocity.length() > I.maxSpeed) {
@@ -15266,7 +15265,7 @@ Goal = function(I) {
       }
     }
   });
-  self.bind("destroy", function() {
+  self.on("destroy", function() {
     return engine.add({
       "class": "Shockwave",
       x: I.x,
@@ -15274,7 +15273,7 @@ Goal = function(I) {
       velocity: Point(0, 1)
     });
   });
-  self.bind("drawDebug", function(canvas) {
+  self.on("drawDebug", function(canvas) {
     canvas.drawRect({
       bounds: I,
       color: "rgba(255, 0, 255, 0.5)"
@@ -15283,12 +15282,12 @@ Goal = function(I) {
       return drawWall(wall, canvas);
     });
   });
-  self.bind("step", function() {
+  self.on("update", function() {
     I.sprite = teamSprites[I.team].goal.back[0];
     return I.zIndex = I.y + I.height / 2;
   });
   self.unbind("draw");
-  self.bind("draw", function(canvas) {
+  self.on("draw", function(canvas) {
     var netSprite, sprite;
     if (sprite = teamSprites[I.team].goal.back[0]) {
       sprite.draw(canvas, -sprite.width / 2, -sprite.height / 2);
@@ -16083,7 +16082,7 @@ NameEntry = function(I) {
       });
     }
   });
-  self.bind("step", function() {
+  self.on("update", function() {
     if (controller != null ? controller.buttonPressed("A") : void 0) {
       addCharacter();
     }
@@ -17915,10 +17914,10 @@ Player.Streaks = function(I, self) {
       rightSkate: 0
     }
   });
-  self.bind("wipeout", function() {
+  self.on("wipeout", function() {
     return I.blood.face += rand(20) + rand(20) + rand(20) + I.falls;
   });
-  self.bind("step", function() {
+  self.on("update", function() {
     return self.drawBloodStreaks();
   });
   return {
@@ -18043,7 +18042,7 @@ Puck = function(I) {
   });
   heading = 0;
   lastPosition = null;
-  self.bind("drawDebug", function(canvas) {
+  self.on("drawDebug", function(canvas) {
     var center, scaledVelocity, x, y;
     center = self.center();
     x = center.x;
@@ -18055,11 +18054,11 @@ Puck = function(I) {
       end: Point(x + scaledVelocity.x, y + scaledVelocity.y)
     });
   });
-  self.bind("step", function() {
+  self.on("update", function() {
     I.previousPositions.unshift(self.center().copy());
     return I.previousPositions.length = 10;
   });
-  self.bind("beforeTransform", function(canvas) {
+  self.on("beforeTransform", function(canvas) {
     var color, n, positions, start, streakWidth;
     positions = I.previousPositions.compact();
     n = positions.length;
@@ -18661,11 +18660,11 @@ Shockwave = function(I) {
       return sprite != null ? sprite.draw(canvas, I.x - sprite.width / 2, I.y - sprite.height / 2) : void 0;
     }
   });
-  self.bind("create", function() {
+  self.on("create", function() {
     Sound.play("Zamboni " + (rand(5)) + " N");
     return drawScorch();
   });
-  self.bind("step", function() {
+  self.on("update", function() {
     var maxCircle, minCircle;
     maxCircle = I;
     minCircle = {
@@ -19076,7 +19075,7 @@ Zamboni = function(I) {
     }
     return I.sprite = teamSprites[I.team].zamboni[facing][(I.age / 4).floor().mod(2)];
   };
-  self.bind("step", function() {
+  self.on("update", function() {
     if (I.x < -bounds || I.x > App.width + bounds) {
       I.active = false;
     }
@@ -19095,7 +19094,7 @@ Zamboni = function(I) {
       return setSprite();
     }
   });
-  self.bind("destroy", function() {
+  self.on("destroy", function() {
     engine.add({
       "class": "Shockwave",
       x: I.x,

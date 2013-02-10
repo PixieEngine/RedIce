@@ -7,10 +7,10 @@ Player.Streaks = (I={}, self) ->
       leftSkate: 0
       rightSkate: 0
 
-  self.bind "wipeout", ->
+  self.on "wipeout", ->
     I.blood.face += rand(20) + rand(20) + rand(20) + I.falls
 
-  self.bind "step", ->
+  self.on "update", ->
     self.drawBloodStreaks()
 
   bloody: ->

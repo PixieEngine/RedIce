@@ -91,12 +91,12 @@ do ->
     self = GameState(I)
 
     # Add events and methods here
-    self.bind "update", ->
+    self.on "update", ->
       # Add update method behavior
       if assetGroup.loadingComplete()
         engine.setState(I.nextState?())
 
-    self.bind "overlay", (canvas) ->
+    self.on "overlay", (canvas) ->
       canvas.font("bold 48px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
 
       canvas.centerText
