@@ -48,71 +48,74 @@ Scoreboard = (I) ->
 
   self = GameObject(I).extend
     draw: (canvas) ->
-      xPosition = App.width/2
-      #TODO canvas.withTransform
-
-      I.sprite?.draw(canvas, xPosition - (I.sprite.width / 2) + I.imageOffset.x, I.imageOffset.y)
-
-      time = Math.max(I.time, 0)
-
-      minutes = (time / 30 / 60).floor()
-      seconds = ((time / 30).floor() % 60).toString()
-
-      if seconds.length == 1
-        seconds = "0" + seconds
-
-      canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
-
-      canvas.drawText
-        color: I.textColor
-        text: "#{minutes}:#{seconds}"
-        x: xPosition - 27
-        y: I.timeY
-
-      I.period.clamp(1, 3).times (i) ->
-        canvas.drawCircle
-          color: "#0F0"
-          radius: 2.5 + I.periodRadiusDelta * i
-          x: xPosition + (i - 1) * I.periodX
-          y: I.periodY + I.periodYDelta * i
-
-      canvas.centerText
-        color: I.textColor
-        text: I.score.away
-        x: xPosition - I.scoreX
-        y: I.scoreY
-      canvas.centerText
-        color: I.textColor
-        text: I.score.home
-        x: xPosition + I.scoreX
-        y: I.scoreY
-
-      if I.gameOver
-        canvas.centerText
-          color: "#000"
-          text: "GAME OVER"
-          y: 384
-
-        if I.winner == "HOME"
-          color = "#F00"
-        else
-          color = "#00F"
-
-        canvas.centerText
-          color: color
-          text: "#{I.winner} WINS"
-          y: 416
-
-      else if I.period >= 4
-        canvas.centerText
-          color: "#0F0"
-          text: "SUDDEN DEATH"
-          y: 120
+      # Nothing, draw on overlay
 
     score: (team) ->
       I.score[team] += 1 unless I.gameOver
 
       endGameChecks()
+
+  self.on "overlay", (canvas) ->
+    xPosition = App.width/2
+    #TODO canvas.withTransform
+
+    I.sprite?.draw(canvas, xPosition - (I.sprite.width / 2) + I.imageOffset.x, I.imageOffset.y)
+
+    time = Math.max(I.time, 0)
+
+    minutes = (time / 30 / 60).floor()
+    seconds = ((time / 30).floor() % 60).toString()
+
+    if seconds.length == 1
+      seconds = "0" + seconds
+
+    canvas.font("bold 24px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
+
+    canvas.drawText
+      color: I.textColor
+      text: "#{minutes}:#{seconds}"
+      x: xPosition - 27
+      y: I.timeY
+
+    I.period.clamp(1, 3).times (i) ->
+      canvas.drawCircle
+        color: "#0F0"
+        radius: 2.5 + I.periodRadiusDelta * i
+        x: xPosition + (i - 1) * I.periodX
+        y: I.periodY + I.periodYDelta * i
+
+    canvas.centerText
+      color: I.textColor
+      text: I.score.away
+      x: xPosition - I.scoreX
+      y: I.scoreY
+    canvas.centerText
+      color: I.textColor
+      text: I.score.home
+      x: xPosition + I.scoreX
+      y: I.scoreY
+
+    if I.gameOver
+      canvas.centerText
+        color: "#000"
+        text: "GAME OVER"
+        y: 384
+
+      if I.winner == "HOME"
+        color = "#F00"
+      else
+        color = "#00F"
+
+      canvas.centerText
+        color: color
+        text: "#{I.winner} WINS"
+        y: 416
+
+    else if I.period >= 4
+      canvas.centerText
+        color: "#0F0"
+        text: "SUDDEN DEATH"
+        y: 120
 
   self.on "update", ->
     if I.time % I.zamboniInterval == 0
