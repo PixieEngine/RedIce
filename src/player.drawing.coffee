@@ -10,6 +10,34 @@ Player.Drawing = (I, self) ->
 
   self.unbind 'draw'
 
+  offscreen = ->
+    camera = engine.camera()
+    delta = I.x - camera.I.x
+
+    if delta.abs() > App.width / 2
+      delta.sign()
+    else
+      0
+
+  drawOffscreenToken = (canvas, sign) ->
+    radius = 24
+    x = (1 + sign) * (App.width / 2) - (sign * radius)
+    y = I.y
+
+    color = self.color()
+    color.a = 0.5
+
+    canvas.drawCircle
+      x: x
+      y: y
+      color: color
+      radius: radius
+
+  self.on 'overlay', (canvas) ->
+    # Check if off screen
+    if sign = offscreen()
+      drawOffscreenToken(canvas, sign)
+
   self.on 'draw', (canvas) ->
     if frameData = self.frameData()
       headOffset = Point(frameData.head.x, frameData.head.y)

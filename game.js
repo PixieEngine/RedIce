@@ -17499,7 +17499,7 @@ Player.teamData = {
 };
 
 Player.Drawing = function(I, self) {
-  var assetScale, drawBody;
+  var assetScale, drawBody, drawOffscreenToken, offscreen;
   Object.reverseMerge(I, {
     scale: 1
   });
@@ -17511,6 +17511,36 @@ Player.Drawing = function(I, self) {
     }
   };
   self.unbind('draw');
+  offscreen = function() {
+    var camera, delta;
+    camera = engine.camera();
+    delta = I.x - camera.I.x;
+    if (delta.abs() > App.width / 2) {
+      return delta.sign();
+    } else {
+      return 0;
+    }
+  };
+  drawOffscreenToken = function(canvas, sign) {
+    var color, radius, x, y;
+    radius = 24;
+    x = (1 + sign) * (App.width / 2) - (sign * radius);
+    y = I.y;
+    color = self.color();
+    color.a = 0.5;
+    return canvas.drawCircle({
+      x: x,
+      y: y,
+      color: color,
+      radius: radius
+    });
+  };
+  self.on('overlay', function(canvas) {
+    var sign;
+    if (sign = offscreen()) {
+      return drawOffscreenToken(canvas, sign);
+    }
+  });
   self.on('draw', function(canvas) {
     var currentHeadOffset, drawHead, frameData, headOffset, headRotation, headScale, t;
     if (frameData = self.frameData()) {
