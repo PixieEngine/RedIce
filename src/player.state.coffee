@@ -33,7 +33,7 @@ Player.State = (I={}, self) ->
     spriteSheet = self.spriteSheet()
 
     speed = I.velocity.magnitude()
-    cycleDelay = 16
+    cycleDelay = 16 / 30
 
     # Determine character facing
     if 0 <= I.heading <= Math.TAU/2
@@ -45,10 +45,10 @@ Player.State = (I={}, self) ->
       I.action = "idle"
     else if speed < 6
       I.action = "slow"
-      cycleDelay = 4
+      cycleDelay = 4 / 30
     else
       I.action = "fast"
-      cycleDelay = 3
+      cycleDelay = 3 / 30
 
     if I.wipeout
       forceFacing "front"

@@ -76,7 +76,7 @@ Goal = (I) ->
       Sound.play "Buzzer"
       Sound.play("Crowd Cheers #{rand(4) + 1}")
 
-      engine.delay 70, ->
+      engine.delay 70 / 30, ->
         engine.add
           class: "Puck"
 

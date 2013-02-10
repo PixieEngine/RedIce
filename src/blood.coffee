@@ -1,7 +1,7 @@
 Blood = (I={}) ->
   Object.reverseMerge I,
     blood: 1
-    duration: 300
+    duration: 10
     radius: 5
     sprite: Sprite.NONE
     debugColor: "rgba(0, 255, 0, 0.5)"

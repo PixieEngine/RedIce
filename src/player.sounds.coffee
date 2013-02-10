@@ -11,7 +11,7 @@ Player.Sounds = (I, self) ->
     else
       sfx "Crowd Jeers", 3
 
-    engine.delay 8, ->
+    engine.delay 8 / 30, ->
       sfx "Torso Slide", 2, "v"
 
   self.on "shoot", ->

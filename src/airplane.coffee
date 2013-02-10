@@ -47,11 +47,11 @@ Airplane = (I={}) ->
     easingY = Easing.quadraticInOut(I.start.y, I.destination.y)
 
     if I.choose
-      duration = 15
+      duration = 0.5
     else
-      duration = 30
+      duration = 1
 
-    t = I.age / duration # Take three seconds to get there
+    t = I.age / duration
 
     if t < 0
       I.x = I.start.x

@@ -13328,9 +13328,9 @@ Airplane = function(I) {
     easingX = Easing.quadraticInOut(I.start.x, I.destination.x);
     easingY = Easing.quadraticInOut(I.start.y, I.destination.y);
     if (I.choose) {
-      duration = 15;
+      duration = 0.5;
     } else {
-      duration = 30;
+      duration = 1;
     }
     t = I.age / duration;
     if (t < 0) {
@@ -13441,7 +13441,7 @@ Blood = function(I) {
   }
   Object.reverseMerge(I, {
     blood: 1,
-    duration: 300,
+    duration: 10,
     radius: 5,
     sprite: Sprite.NONE,
     debugColor: "rgba(0, 255, 0, 0.5)"
@@ -15257,7 +15257,7 @@ Goal = function(I) {
       Fan.cheer(6);
       Sound.play("Buzzer");
       Sound.play("Crowd Cheers " + (rand(4) + 1));
-      engine.delay(70, function() {
+      engine.delay(70 / 30, function() {
         return engine.add({
           "class": "Puck"
         });
@@ -16140,7 +16140,7 @@ ParticleEffect = {
         return engine.add({
           "class": "Particle",
           blood: true,
-          duration: 12,
+          duration: 12 / 30,
           x: x,
           y: y,
           velocity: velocity,
@@ -16158,7 +16158,7 @@ ParticleEffect = {
         velocity = Point.fromAngle(Random.angle()).scale(rand(5) + 1).add(push).scale(1);
         return engine.add({
           "class": "Particle",
-          duration: 12,
+          duration: 12 / 30,
           x: x,
           y: y,
           velocity: velocity,
@@ -17782,7 +17782,7 @@ Player.Sounds = function(I, self) {
     } else {
       sfx("Crowd Jeers", 3);
     }
-    return engine.delay(8, function() {
+    return engine.delay(8 / 30, function() {
       return sfx("Torso Slide", 2, "v");
     });
   });
@@ -17832,7 +17832,7 @@ Player.State = function(I, self) {
     setFlip(I.heading > 2 * Math.TAU / 8 || I.heading < -2 * Math.TAU / 8);
     spriteSheet = self.spriteSheet();
     speed = I.velocity.magnitude();
-    cycleDelay = 16;
+    cycleDelay = 16 / 30;
     if ((0 <= (_ref = I.heading) && _ref <= Math.TAU / 2)) {
       setFacing("front");
     } else {
@@ -17842,10 +17842,10 @@ Player.State = function(I, self) {
       I.action = "idle";
     } else if (speed < 6) {
       I.action = "slow";
-      cycleDelay = 4;
+      cycleDelay = 4 / 30;
     } else {
       I.action = "fast";
-      cycleDelay = 3;
+      cycleDelay = 3 / 30;
     }
     if (I.wipeout) {
       forceFacing("front");

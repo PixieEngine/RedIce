@@ -9,7 +9,7 @@ ParticleEffect =
         engine.add
           class: "Particle"
           blood: true
-          duration: 12
+          duration: 12 / 30
           x: x
           y: y
           velocity: velocity
@@ -24,7 +24,7 @@ ParticleEffect =
 
         engine.add
           class: "Particle"
-          duration: 12
+          duration: 12 / 30
           x: x
           y: y
           velocity: velocity
