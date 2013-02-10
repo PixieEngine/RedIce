@@ -19212,8 +19212,10 @@ engine.on("beforeDraw", function(canvas) {
 
 engine.on("draw", function(canvas) {
   if (DEBUG_DRAW) {
-    return engine.find("Player, Puck, Goal, Bottle, Zamboni, Blood, Gib").each(function(object) {
-      return object.trigger("drawDebug", canvas);
+    return canvas.withTransform(engine.camera().transform().translate(App.width / 2, App.height / 2), function() {
+      return engine.find("Player, Puck, Goal, Bottle, Zamboni, Blood, Gib").each(function(object) {
+        return object.trigger("drawDebug", canvas);
+      });
     });
   }
 });

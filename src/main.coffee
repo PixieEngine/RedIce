@@ -72,8 +72,9 @@ engine.on "beforeDraw", (canvas) ->
 
 engine.on "draw", (canvas) ->
   if DEBUG_DRAW
-    engine.find("Player, Puck, Goal, Bottle, Zamboni, Blood, Gib").each (object) ->
-      object.trigger("drawDebug", canvas)
+    canvas.withTransform engine.camera().transform().translate(App.width/2, App.height/2), ->
+      engine.find("Player, Puck, Goal, Bottle, Zamboni, Blood, Gib").each (object) ->
+        object.trigger("drawDebug", canvas)
 
 engine.setState(LoaderState(
   nextState: MainMenuState
