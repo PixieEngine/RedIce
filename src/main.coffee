@@ -66,6 +66,10 @@ $(document).bind "keydown", "1", ->
   engine.add
     class: "Zamboni"
 
+# Special rink before draw
+engine.on "beforeDraw", (canvas) ->
+  engine.find("Rink").invoke "trigger", "beforeDraw", canvas
+
 engine.on "draw", (canvas) ->
   if DEBUG_DRAW
     engine.find("Player, Puck, Goal, Bottle, Zamboni, Blood, Gib").each (object) ->

@@ -212,14 +212,17 @@ Rink = (I={}) ->
     drawFront: (canvas) ->
       canvas.context().drawImage(frontBoardsCanvas.element(), 0, 0)
 
+  # TODO: Get rid of this whole before draw thing
+  # move into individual z-indexed elements or proxies
   self.on "beforeDraw", (canvas) ->
     # A little hacky, but what isn't?
     cameraTransform = engine.camera().transform()
 
     canvas.withTransform cameraTransform, (canvas) ->
-      Fan.crowd.invoke("draw", canvas)
-      canvas.context().drawImage(iceCanvas.element(), 0, 0)
-      canvas.context().drawImage(bloodCanvas.element(), 0, 0)
+      canvas.withTransform Matrix.translation(App.width/2, App.height/2), ->
+        Fan.crowd.invoke("draw", canvas)
+        canvas.context().drawImage(iceCanvas.element(), 0, 0)
+        canvas.context().drawImage(bloodCanvas.element(), 0, 0)
 
   self.on "create", ->
     # Draw the front Rink Boards at the correct zIndex

@@ -18380,9 +18380,11 @@ Rink = function(I) {
     var cameraTransform;
     cameraTransform = engine.camera().transform();
     return canvas.withTransform(cameraTransform, function(canvas) {
-      Fan.crowd.invoke("draw", canvas);
-      canvas.context().drawImage(iceCanvas.element(), 0, 0);
-      return canvas.context().drawImage(bloodCanvas.element(), 0, 0);
+      return canvas.withTransform(Matrix.translation(App.width / 2, App.height / 2), function() {
+        Fan.crowd.invoke("draw", canvas);
+        canvas.context().drawImage(iceCanvas.element(), 0, 0);
+        return canvas.context().drawImage(bloodCanvas.element(), 0, 0);
+      });
     });
   });
   self.on("create", function() {
@@ -19201,6 +19203,10 @@ $(document).bind("keydown", "1", function() {
   return engine.add({
     "class": "Zamboni"
   });
+});
+
+engine.on("beforeDraw", function(canvas) {
+  return engine.find("Rink").invoke("trigger", "beforeDraw", canvas);
 });
 
 engine.on("draw", function(canvas) {
