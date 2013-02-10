@@ -11,7 +11,7 @@ Shockwave = (I={}) ->
 
   self = GameObject(I).extend
     draw: (canvas) ->
-      sprite = Shockwave.sprites.explosion[(I.age).clamp(0, 6)]
+      sprite = Shockwave.sprites.explosion[(I.age * 30).clamp(0, 6).floor()]
       sprite?.draw(canvas, I.x - sprite.width / 2, I.y - sprite.height / 2)
 
   self.on "create", ->

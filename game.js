@@ -12825,7 +12825,7 @@ window.requestAnimationFrame || (window.requestAnimationFrame = window.webkitReq
 var AI, ALL_MUSIC, ARENA_CENTER, ARENA_HEIGHT, ARENA_WIDTH, Airplane, BLOOD_COLOR, Base, Blood, Boards, CharacterSheet, Configurator, Cutscene, DEBUG_DRAW, DebugDrawable, DialogBox, Fan, FrameEditorState, Gamepads, Gib, Gibber, Goal, HeadSheet, ICE_COLOR, MAX_PLAYERS, MainMenuState, Map, MapState, MatchSetupState, MatchState, Menu, Minigames, NameEntry, PERSPECTIVE_RATIO, Paint, Particle, ParticleEffect, Physics, Player, Puck, Rink, RinkBoardsProxy, Scoreboard, Shockwave, SideBoards, Spotlight, StoryConfigState, TEAMS, TEAM_MUSIC, TeamSheet, TestState, TournamentSetupState, WALL_BOTTOM, WALL_LEFT, WALL_RIGHT, WALL_TOP, ZAMBONI_SCALE, Zamboni, canvas, teamChoices,
   __slice = [].slice;
 
-ZAMBONI_SCALE = 0.375;
+ZAMBONI_SCALE = 0.5;
 
 WALL_LEFT = 20;
 
@@ -18691,7 +18691,7 @@ Shockwave = function(I) {
   self = GameObject(I).extend({
     draw: function(canvas) {
       var sprite;
-      sprite = Shockwave.sprites.explosion[I.age.clamp(0, 6)];
+      sprite = Shockwave.sprites.explosion[(I.age * 30).clamp(0, 6).floor()];
       return sprite != null ? sprite.draw(canvas, I.x - sprite.width / 2, I.y - sprite.height / 2) : void 0;
     }
   });
@@ -19000,12 +19000,12 @@ TournamentSetupState = function(I) {
 
 Zamboni = function(I) {
   var SWEEPER_SIZE, bounds, cleanIce, generatePath, path, pathIndex, pathfind, self, setSprite;
-  $.reverseMerge(I, {
+  Object.reverseMerge(I, {
     blood: 0,
     careening: false,
     fuse: 30,
     strength: 4,
-    radius: 50,
+    radius: 64,
     rotation: 0,
     heading: 0,
     speed: 8,
@@ -19019,7 +19019,7 @@ Zamboni = function(I) {
   SWEEPER_SIZE = 48;
   bounds = 256;
   if (I.reverse) {
-    I.x = App.width;
+    I.x = WALL_RIGHT + bounds / 2;
   }
   path = [];
   if (I.team === "monster") {
@@ -19101,7 +19101,11 @@ Zamboni = function(I) {
   };
   setSprite = function() {
     var facing, _ref, _ref1;
-    I.hflip = I.heading > 2 * Math.TAU / 8 || I.heading < -2 * Math.TAU / 8;
+    if (I.heading > 2 * Math.TAU / 8 || I.heading < -2 * Math.TAU / 8) {
+      I.scaleX = -1;
+    } else {
+      I.scaleX = 1;
+    }
     facing = "e";
     if ((Math.TAU / 8 < (_ref = I.heading) && _ref < 3 * Math.TAU / 8)) {
       facing = "s";
@@ -19111,7 +19115,7 @@ Zamboni = function(I) {
     return I.sprite = teamSprites[I.team].zamboni[facing][(I.age / 4).floor().mod(2)];
   };
   self.on("update", function() {
-    if (I.x < -bounds || I.x > App.width + bounds) {
+    if (I.x < -bounds || I.x > WALL_RIGHT + bounds) {
       I.active = false;
     }
     if (I.careening) {
@@ -19172,8 +19176,8 @@ window.config = {
   teams: teamChoices,
   players: [],
   particleEffects: true,
-  musicVolume: 0,
-  sfxVolume: 0
+  musicVolume: 0.5,
+  sfxVolume: 0.5
 };
 
 Music.volume(config.musicVolume);

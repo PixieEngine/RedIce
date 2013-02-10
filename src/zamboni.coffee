@@ -1,10 +1,10 @@
 Zamboni = (I) ->
-  $.reverseMerge I,
+  Object.reverseMerge I,
     blood: 0
     careening: false
     fuse: 30
     strength: 4
-    radius: 50
+    radius: 64
     rotation: 0
     heading: 0
     speed: 8
@@ -19,7 +19,7 @@ Zamboni = (I) ->
   bounds = 256
 
   if I.reverse
-    I.x = App.width
+    I.x = WALL_RIGHT + bounds/2
 
   path = []
 
@@ -106,7 +106,10 @@ Zamboni = (I) ->
       I.velocity = nextTarget.subtract(center).norm().scale(I.speed)
 
   setSprite = ->
-    I.hflip = (I.heading > 2*Math.TAU/8 || I.heading < -2*Math.TAU/8)
+    if (I.heading > 2*Math.TAU/8 || I.heading < -2*Math.TAU/8)
+      I.scaleX = -1
+    else
+      I.scaleX = 1
 
     facing = "e"
     if Math.TAU/8 < I.heading < 3*Math.TAU/8
@@ -117,7 +120,7 @@ Zamboni = (I) ->
     I.sprite = teamSprites[I.team].zamboni[facing][(I.age/4).floor().mod(2)]
 
   self.on "update", ->
-    if I.x < -bounds || I.x > App.width + bounds
+    if I.x < -bounds || I.x > WALL_RIGHT + bounds
       I.active = false
 
     if I.careening

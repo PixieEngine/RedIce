@@ -11,8 +11,8 @@ window.config =
   teams: teamChoices
   players: []
   particleEffects: true
-  musicVolume: 0 #0.5
-  sfxVolume: 0 #0.5
+  musicVolume: 0.5
+  sfxVolume: 0.5
 
 Music.volume config.musicVolume
 Sound.globalVolume config.sfxVolume
