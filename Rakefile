@@ -34,7 +34,7 @@ task :dist => [:build_data, :build] do
   sh "mkdir -p #{dist_dir}"
   sh "cp run.html #{dist_dir}/index.html"
 
-  %w[images stylesheets sounds].each do |dir|
+  %w[images music stylesheets sounds].each do |dir|
     sh "cp -R #{dir} #{dist_dir}/#{dir}"
   end
 
