@@ -13,6 +13,9 @@ MatchState = (I={}) ->
 
     engine.camera().position(ARENA_CENTER)
 
+    engine.add
+      class: "PuckLeader"
+
     rink = engine.add
       class: "Rink"
       team: config.teams.first()
@@ -85,14 +88,14 @@ MatchState = (I={}) ->
 
     physics.process(objects)
 
-    if puck = pucks.first()
+    if puckLeader = engine.first("PuckLeader")
       camera = engine.camera()
+
+      camera.I.maxSpeed = 125
       camera.I.cameraBounds.width = ARENA_WIDTH + 40
       #camera.I.cameraBounds.height = ARENA_HEIGHT + 40
-      camera.follow(puck)
-      # TODO: Multipuck?
-    else
-      # TODO: Return camera to center
+
+      camera.follow(puckLeader)
 
     playersAndPucks.each (player) ->
       # Blood Collisions

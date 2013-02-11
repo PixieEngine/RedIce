@@ -77,7 +77,7 @@ Base = (I={}) ->
 
   self.include DebugDrawable
 
-  self.attrReader "mass", "toughness"
+  self.attrReader "mass", "toughness", "velocity"
 
   I.center = Point(I.x + I.width/2, I.y + I.height/2)
 
