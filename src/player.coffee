@@ -2,6 +2,8 @@ Player = (I={}) ->
   Object.reverseMerge I,
     boost: 0
     boostMeter: 64
+    boostMultiplier: 2
+    boostRecovery: 1
     cooldown:
       boost: 0
       facing: 0
@@ -139,7 +141,12 @@ Player = (I={}) ->
 
   self.on "update", ->
     for key, value of I.cooldown
-      I.cooldown[key] = value.approach(0, 1)
+      # Boost Recovery is Special
+      if key is "boost"
+        I.cooldown[key] = value.approach(0, I.boostRecovery)
+      else
+        I.cooldown[key] = value.approach(0, 1)
+
 
   self.on "update", ->
     I.boost = I.boost.approach(0, 1)
@@ -148,8 +155,7 @@ Player = (I={}) ->
     unless I.velocity.magnitude() == 0
       I.heading = Point.direction(Point(0, 0), I.velocity)
 
-    movementScale = I.movementSpeed
-
+    movementScale = 1
     movement = Point(0, 0)
 
     if I.cpu
@@ -177,7 +183,7 @@ Player = (I={}) ->
         else
           I.shootPower += 2
 
-        movementScale = 0.1
+        movementScale = 0.25
       else if I.cooldown.shoot
         if (I.cooldown.shoot / I.shootCooldownFrameDelay).floor() == I.shootCooldownFrameCount - 2 # Shoot on second frame
           shootPuck(I.movementDirection)
@@ -185,13 +191,13 @@ Player = (I={}) ->
         I.cooldown.shoot = I.shootCooldownFrameCount * I.shootCooldownFrameDelay
       else if I.cooldown.boost < I.boostMeter && (actionDown("A", "L", "R") || (axisPosition(4) > 0) || (axisPosition(5) > 0))
         if I.cooldown.boost == 0
-          bonus = 10
+          # Sprint boost for when your bar is full
+          movementScale = 10
+          I.cooldown.boost += 8
         else
-          bonus = 2
-
-        I.cooldown.boost += 4
-
-        movement = movement.scale(bonus)
+          # Normal boostin
+          movementScale = I.boostMultiplier
+          I.cooldown.boost += 4
 
       # Check cutback
       velocityNorm = I.velocity.norm()
@@ -208,7 +214,7 @@ Player = (I={}) ->
         I.velocity.x = 0
         I.velocity.y = 0
       else
-        movement = movement.scale(movementScale)
+        movement = movement.scale(movementScale * I.movementSpeed)
         I.velocity = I.velocity.add(movement)
 
       I.hasPuck = false

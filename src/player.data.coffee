@@ -9,42 +9,52 @@ Player.Data = (I, self) ->
 
   return {}
 
+Player.defaultData =
+  boostMeter: 64
+  boostMultiplier: 2
+  boostRecovery: 1
+  strength: 1
+
 Player.bodyData =
   skinny:
-    controlRadius: 50
     friction: 0.075
     mass: 15
     movementSpeed: 1.25
     powerMultiplier: 2
     radius: 18
-    strength: 1
     toughness: 12
   thick:
-    controlRadius: 50
-    friction: 0.09
+    friction: 0.085
     mass: 20
     movementSpeed: 1.1
     powerMultiplier: 3
-    strength: 1
     toughness: 15
   tubs:
-    controlRadius: 50
-    friction: 0.1
+    friction: 0.09
     mass: 40
     movementSpeed: 1.2
     powerMultiplier: 2.5
-    radius: 22
-    strength: 1
+    radius: 24
     toughness: 20
 
-# Team ability deltas
+for key, value of Player.bodyData
+  Player.bodyData[key] = Object.reverseMerge value, Player.defaultData
+
+# Team ability deltas(+/-)
 Player.teamData =
   smiley:
-    mass: -1
+    # Extra Turbo Meter
+    boostMeter: 32
+    boostRecovery: 0.25
+    # Lightweights
+    mass: -5
   spike:
     strength: 0.5
-    controlRadius: -10
   hiss:
+    # Less Turbo Meter
+    boostMeter: -32
+    # Fast 'n Sticky
+    boostMultiplier: 2
     movementSpeed: 2
     friction: 0.125
   moster:
