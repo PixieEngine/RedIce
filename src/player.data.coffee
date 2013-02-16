@@ -18,7 +18,7 @@ Player.bodyData =
     powerMultiplier: 2
     radius: 18
     strength: 1
-    toughness: 20
+    toughness: 12
   thick:
     controlRadius: 50
     friction: 0.09
@@ -26,7 +26,7 @@ Player.bodyData =
     movementSpeed: 1.1
     powerMultiplier: 3
     strength: 1
-    toughness: 25
+    toughness: 15
   tubs:
     controlRadius: 50
     friction: 0.1
@@ -35,21 +35,21 @@ Player.bodyData =
     powerMultiplier: 2.5
     radius: 22
     strength: 1
-    toughness: 40
+    toughness: 20
 
 # Team ability deltas
 Player.teamData =
   smiley:
     mass: -1
   spike:
-    strength: 2
+    strength: 0.5
     controlRadius: -10
   hiss:
     movementSpeed: 2
     friction: 0.125
   moster:
     mass: -2
-    strength: 1
+    strength: 0.25
     movementSpeed: -0.1
   mutant:
     movementSpeed: -0.1
@@ -57,6 +57,6 @@ Player.teamData =
     friction: 0.01
   robo:
     movementSpeed: 0.3
-    friction: 0.01
+    friction: 0.02
     mass: 3
     powerMultiplier: 2

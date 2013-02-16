@@ -3,13 +3,14 @@ Zamboni = (I) ->
     blood: 0
     careening: false
     fuse: 30
-    strength: 4
+    strength: 10
+    toughness: 25
     radius: 64
     rotation: 0
     heading: 0
-    speed: 8
+    speed: 10
     x: 0
-    y: ARENA_HEIGHT/2 + WALL_TOP
+    y: ARENA_CENTER.y
     velocity: Point(1, 0)
     mass: 60
     team: config.teams.rand()

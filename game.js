@@ -16227,7 +16227,7 @@ Particle.wallSplats = [1, 2, 3, 4].map(function(n) {
 });
 
 Physics = function(I) {
-  var goalWallCollisions, overlapX, overlapY, puckControlCheck, rectangularOverlap, resolveCollision, resolveCollisions, rinkCornerCollisions, rinkWallCollisions, threshold, wallCollisions;
+  var goalWallCollisions, overlapX, overlapY, puckControlCheck, rectangularOverlap, resolveCollision, resolveCollisions, rinkCornerCollisions, rinkWallCollisions, wallCollisions;
   if (I == null) {
     I = {};
   }
@@ -16240,21 +16240,19 @@ Physics = function(I) {
   rectangularOverlap = function(wall, circle) {
     return overlapX(wall, circle) && overlapY(wall, circle);
   };
-  threshold = 12;
   resolveCollision = function(A, B) {
     var massA, massB, max, normal, powA, powB, pushA, pushB, relativeVelocity, totalMass;
     normal = B.center().subtract(A.center()).norm();
     powA = A.collisionPower(normal);
     powB = -B.collisionPower(normal);
     max = Math.max(powA, powB);
-    if (max > threshold) {
-      if (powA === max) {
-        A.crush(B);
-        B.wipeout(normal);
-      } else {
-        B.crush(A);
-        A.wipeout(normal.scale(-1));
-      }
+    if (powB > A.toughness()) {
+      B.crush(A);
+      A.wipeout(normal.scale(-1));
+    }
+    if (powA > B.toughness()) {
+      A.crush(B);
+      B.wipeout(normal);
     }
     relativeVelocity = A.I.velocity.subtract(B.I.velocity);
     massA = A.mass();
@@ -17321,7 +17319,7 @@ Player = function(I) {
             mass = mass / 10;
           }
           p = Point.fromAngle(direction).scale(power / mass);
-          if (power >= entity.toughness()) {
+          if (power >= entity.toughness() * 2) {
             entity.wipeout(p);
           }
           entity.I.velocity = entity.I.velocity.add(p);
@@ -17447,7 +17445,7 @@ Player.bodyData = {
     powerMultiplier: 2,
     radius: 18,
     strength: 1,
-    toughness: 20
+    toughness: 12
   },
   thick: {
     controlRadius: 50,
@@ -17456,7 +17454,7 @@ Player.bodyData = {
     movementSpeed: 1.1,
     powerMultiplier: 3,
     strength: 1,
-    toughness: 25
+    toughness: 15
   },
   tubs: {
     controlRadius: 50,
@@ -17466,7 +17464,7 @@ Player.bodyData = {
     powerMultiplier: 2.5,
     radius: 22,
     strength: 1,
-    toughness: 40
+    toughness: 20
   }
 };
 
@@ -17475,7 +17473,7 @@ Player.teamData = {
     mass: -1
   },
   spike: {
-    strength: 2,
+    strength: 0.5,
     controlRadius: -10
   },
   hiss: {
@@ -17484,7 +17482,7 @@ Player.teamData = {
   },
   moster: {
     mass: -2,
-    strength: 1,
+    strength: 0.25,
     movementSpeed: -0.1
   },
   mutant: {
@@ -17494,7 +17492,7 @@ Player.teamData = {
   },
   robo: {
     movementSpeed: 0.3,
-    friction: 0.01,
+    friction: 0.02,
     mass: 3,
     powerMultiplier: 2
   }
@@ -19027,13 +19025,14 @@ Zamboni = function(I) {
     blood: 0,
     careening: false,
     fuse: 30,
-    strength: 4,
+    strength: 10,
+    toughness: 25,
     radius: 64,
     rotation: 0,
     heading: 0,
-    speed: 8,
+    speed: 10,
     x: 0,
-    y: ARENA_HEIGHT / 2 + WALL_TOP,
+    y: ARENA_CENTER.y,
     velocity: Point(1, 0),
     mass: 60,
     team: config.teams.rand(),
@@ -19199,8 +19198,8 @@ window.config = {
   teams: teamChoices,
   players: [],
   particleEffects: true,
-  musicVolume: 0.5,
-  sfxVolume: 0.5
+  musicVolume: 0,
+  sfxVolume: 0
 };
 
 Music.volume(config.musicVolume);

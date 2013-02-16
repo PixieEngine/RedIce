@@ -8,8 +8,6 @@ Physics = (I={}) ->
   rectangularOverlap = (wall, circle) ->
     return overlapX(wall, circle) && overlapY(wall, circle)
 
-  threshold = 12
-
   resolveCollision = (A, B) ->
     normal = B.center().subtract(A.center()).norm()
 
@@ -19,13 +17,13 @@ Physics = (I={}) ->
 
     max = Math.max(powA, powB)
 
-    if max > threshold
-      if powA == max
-        A.crush(B)
-        B.wipeout(normal)
-      else
-        B.crush(A)
-        A.wipeout(normal.scale(-1))
+    if powB > A.toughness()
+      B.crush(A)
+      A.wipeout(normal.scale(-1))
+
+    if powA > B.toughness()
+      A.crush(B)
+      B.wipeout(normal)
 
     # Elastic collisions
     relativeVelocity = A.I.velocity.subtract(B.I.velocity)

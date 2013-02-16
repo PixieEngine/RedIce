@@ -125,7 +125,8 @@ Player = (I={}) ->
 
           p = Point.fromAngle(direction).scale(power / mass)
 
-          if power >= entity.toughness()
+           # Toughness is doubled for swings, normal for checks
+          if power >= entity.toughness() * 2
             entity.wipeout(p)
 
           entity.I.velocity = entity.I.velocity.add(p)
