@@ -13203,9 +13203,13 @@ draw anything to the screen until the image has been loaded.
 })();
 
 AI = function(I, self) {
-  var arenaCenter, directionAI, roles;
+  var arenaCenter, directionAI, resetActions, roles;
   arenaCenter = Point(WALL_LEFT + WALL_RIGHT, WALL_TOP + WALL_BOTTOM).scale(0.5);
   roles = ["youth", "goalie", "youth", "youth"];
+  resetActions = function() {
+    I.AIturbo = false;
+    return I.AIshoot = false;
+  };
   directionAI = {
     none: function() {},
     goalie: function() {
@@ -13239,6 +13243,7 @@ AI = function(I, self) {
     },
     youth: function() {
       var opposingGoal, targetPosition, _ref;
+      I.AIturbo = rand() < (1 / 30);
       if (I.hasPuck) {
         opposingGoal = engine.find("Goal").select(function(goal) {
           return goal.team() !== I.teamStyle;
@@ -13256,6 +13261,7 @@ AI = function(I, self) {
   return {
     computeDirection: function() {
       var deltaPosition, targetPosition;
+      resetActions();
       if (I.AI_TARGET = targetPosition = directionAI[I.role]()) {
         deltaPosition = targetPosition.subtract(self.center());
         if (deltaPosition.length() > 1) {
@@ -15012,7 +15018,7 @@ Gamepads.KeyboardController = function(I) {
 };
 
 Gib = function(I) {
-  var buffer, outOfArena, self, wallHeight;
+  var buffer, explode, outOfArena, self, wallHeight;
   if (I == null) {
     I = {};
   }
@@ -15020,6 +15026,7 @@ Gib = function(I) {
   Object.reverseMerge(I, {
     rotation: 0,
     rotationalVelocity: rand() * 0.2 - 0.1,
+    explosionProbability: 0.25,
     width: 0,
     height: 0,
     x: App.width / 2,
@@ -15030,6 +15037,14 @@ Gib = function(I) {
     gravity: -0.8,
     radius: 16
   });
+  explode = function() {
+    engine.add({
+      "class": "Shockwave",
+      x: I.x,
+      y: I.y
+    });
+    return self.destroy();
+  };
   buffer = 10;
   outOfArena = function() {
     return I.y < WALL_TOP - buffer || I.y > WALL_BOTTOM + buffer || I.x < WALL_LEFT - buffer || I.x > WALL_RIGHT + buffer;
@@ -15042,11 +15057,11 @@ Gib = function(I) {
       return I.z <= wallHeight;
     },
     crush: function() {
-      return I.zVelocity += rand(12);
+      return explode();
     },
     wipeout: function(push) {
       if (I.z === 0) {
-        I.zVelocity = 3 + rand(12);
+        I.zVelocity = 6 + rand(3);
       }
       return I.rotationalVelocity += rand() * 0.2 - 0.1;
     },
@@ -15069,15 +15084,21 @@ Gib = function(I) {
     }
   });
   self.on("update", function() {
+    var speed;
     I.rotation += I.rotationalVelocity;
     I.z += I.zVelocity;
     I.zVelocity += I.gravity;
+    speed = I.zVelocity.abs();
     if (I.z <= 0) {
       I.z = 0;
-      if (I.zVelocity <= 0.5) {
+      if (I.zVelocity.abs() <= 4) {
         I.zVelocity = 0;
       } else {
-        I.zVelocity = -I.zVelocity * 0.8;
+        if (rand() < I.explosionProbability) {
+          explode();
+        } else {
+          I.zVelocity = -I.zVelocity * 0.4;
+        }
       }
       I.friction = 0.1;
       I.rotationalVelocity *= 0.8;
@@ -17253,6 +17274,9 @@ Player = function(I) {
   actionDown = controller.actionDown;
   axisPosition = controller.axis || function() {};
   self = Base(I).extend({
+    aiAction: function(name) {
+      return I["AI" + name];
+    },
     player: function() {
       return true;
     },
@@ -17373,7 +17397,7 @@ Player = function(I) {
       I.lastLeftSkatePos = null;
       return I.lastRightSkatePos = null;
     } else {
-      if (!I.cooldown.shoot && actionDown("B", "X")) {
+      if (!I.cooldown.shoot && (actionDown("B", "X") || self.aiAction("shoot"))) {
         if (I.shootPower < I.maxShotPower) {
           if (I.shootPower === 0) {
             self.trigger("shot_start");
@@ -17389,7 +17413,7 @@ Player = function(I) {
         }
       } else if (I.shootPower) {
         I.cooldown.shoot = I.shootCooldownFrameCount * I.shootCooldownFrameDelay;
-      } else if (I.cooldown.boost < I.boostMeter && (actionDown("A", "L", "R") || (axisPosition(4) > 0) || (axisPosition(5) > 0))) {
+      } else if (I.cooldown.boost < I.boostMeter && (actionDown("A", "L", "R") || (axisPosition(4) > 0) || (axisPosition(5) > 0) || self.aiAction("turbo"))) {
         if (I.cooldown.boost === 0) {
           movementScale = 10;
           I.cooldown.boost += 8;
@@ -18733,8 +18757,7 @@ Shockwave = function(I) {
     }
   });
   self.on("create", function() {
-    Sound.play("Zamboni " + (rand(5)) + " N");
-    return drawScorch();
+    return Sound.play("Zamboni " + (rand(5)) + " N");
   });
   self.on("update", function() {
     var maxCircle, minCircle;
@@ -19214,8 +19237,8 @@ window.config = {
   teams: teamChoices,
   players: [],
   particleEffects: true,
-  musicVolume: 0.5,
-  sfxVolume: 0.5
+  musicVolume: 0,
+  sfxVolume: 0
 };
 
 Music.volume(config.musicVolume);

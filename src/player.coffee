@@ -42,6 +42,9 @@ Player = (I={}) ->
   axisPosition = controller.axis or ->
 
   self = Base(I).extend
+    aiAction: (name) ->
+      I["AI#{name}"]
+
     player: ->
       true
 
@@ -174,7 +177,7 @@ Player = (I={}) ->
       I.lastLeftSkatePos = null
       I.lastRightSkatePos = null
     else
-      if !I.cooldown.shoot && actionDown "B", "X"
+      if !I.cooldown.shoot && (actionDown("B", "X") or self.aiAction("shoot"))
         if I.shootPower < I.maxShotPower
           if I.shootPower is 0
             self.trigger "shot_start"
@@ -189,7 +192,7 @@ Player = (I={}) ->
           shootPuck(I.movementDirection)
       else if I.shootPower
         I.cooldown.shoot = I.shootCooldownFrameCount * I.shootCooldownFrameDelay
-      else if I.cooldown.boost < I.boostMeter && (actionDown("A", "L", "R") || (axisPosition(4) > 0) || (axisPosition(5) > 0))
+      else if I.cooldown.boost < I.boostMeter && (actionDown("A", "L", "R") || (axisPosition(4) > 0) || (axisPosition(5) > 0) || self.aiAction("turbo"))
         if I.cooldown.boost == 0
           # Sprint boost for when your bar is full
           movementScale = 10

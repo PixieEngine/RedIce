@@ -8,6 +8,10 @@ AI = (I, self) ->
     "youth"
   ]
 
+  resetActions = ->
+    I.AIturbo = false
+    I.AIshoot = false
+
   directionAI =
     none: ->
 
@@ -40,6 +44,8 @@ AI = (I, self) ->
         targetPosition
 
     youth: ->
+      I.AIturbo = rand() < (1 / 30)
+
       if I.hasPuck
         opposingGoal = engine.find("Goal").select (goal) ->
           goal.team() != I.teamStyle
@@ -56,6 +62,8 @@ AI = (I, self) ->
   I.role = roles[I.slot]
 
   computeDirection: ->
+    resetActions()
+
     if I.AI_TARGET = targetPosition = directionAI[I.role]()
 
       deltaPosition = targetPosition.subtract(self.center())

@@ -16,7 +16,7 @@ Shockwave = (I={}) ->
 
   self.on "create", ->
     Sound.play "Zamboni #{rand(5)} N"
-    drawScorch()
+    # drawScorch()
 
   self.on "update", ->
     maxCircle = I

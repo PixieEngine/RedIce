@@ -4,6 +4,7 @@ Gib = (I={}) ->
   Object.reverseMerge I,
     rotation: 0
     rotationalVelocity: rand() * 0.2 - 0.1
+    explosionProbability: 0.25
     width: 0
     height: 0
     x: App.width/2
@@ -13,6 +14,14 @@ Gib = (I={}) ->
     zVelocity: rand(20)
     gravity: -0.8
     radius: 16
+
+  explode = ->
+    engine.add
+      class: "Shockwave"
+      x: I.x
+      y: I.y
+
+    self.destroy()
 
   buffer = 10
   outOfArena = ->
@@ -29,12 +38,12 @@ Gib = (I={}) ->
       I.z <= wallHeight
 
     crush: ->
-      # Bounce up into the air when hitting things
-      I.zVelocity += rand(12)
+      # Explode when hitting things
+      explode()
 
     wipeout: (push) ->
       if I.z is 0
-        I.zVelocity = 3 + rand(12)
+        I.zVelocity = 6 + rand(3)
 
       I.rotationalVelocity += rand() * 0.2 - 0.1
 
@@ -60,13 +69,19 @@ Gib = (I={}) ->
     I.z += I.zVelocity
     I.zVelocity += I.gravity
 
+    speed = I.zVelocity.abs()
+
     if I.z <= 0
       I.z = 0
 
-      if I.zVelocity <= 0.5
+      if I.zVelocity.abs() <= 4
         I.zVelocity = 0
       else
-        I.zVelocity = -I.zVelocity * 0.8
+        # Bounce or explode
+        if rand() < I.explosionProbability
+          explode()
+        else
+          I.zVelocity = -I.zVelocity * 0.4
 
       I.friction = 0.1
 
