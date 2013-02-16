@@ -14237,7 +14237,7 @@ Fan.generateCrowd = function() {
   fans = [];
   fanSize = 100;
   addFanSection = function(xOffset) {
-    return 4..times(function(x) {
+    return (ARENA_WIDTH / fanSize).floor().times(function(x) {
       return 2..times(function(y) {
         return fans.push(Fan({
           x: (x + 0.5) * fanSize + xOffset,
@@ -14248,7 +14248,6 @@ Fan.generateCrowd = function() {
     });
   };
   addFanSection(12);
-  addFanSection(12 + App.width - 400);
   fans.sort(function(a, b) {
     return a.I.y - b.I.y;
   });
