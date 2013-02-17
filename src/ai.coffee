@@ -1,4 +1,6 @@
 AI = (I, self) ->
+  I.AIshooting = 0 # How much to charge a shot
+
   arenaCenter = Point(WALL_LEFT + WALL_RIGHT, WALL_TOP + WALL_BOTTOM).scale(0.5)
 
   roles = [
@@ -25,14 +27,22 @@ AI = (I, self) ->
         towardsCenter = arenaCenter.subtract(targetPosition).norm(48)
 
         if puck = engine.find("Puck").first()
-          puckPosition = puck.position()
+          if I.hasPuck
+            targetPosition = towardsCenter # TODO: Better aiming
 
-          towardsPuck = puckPosition.subtract(targetPosition)
-
-          if towardsPuck.dot(towardsCenter) > 0
-            targetPosition = targetPosition.add(towardsPuck.norm(48))
+            if I.shootPower > 0
+              # Nothing, maybe charge longer?
+            else
+              I.AIshoot = true
           else
-          targetPosition = targetPosition.add(towardsCenter)
+            puckPosition = puck.position()
+
+            towardsPuck = puckPosition.subtract(targetPosition)
+
+            if towardsPuck.dot(towardsCenter) > 0
+              targetPosition = targetPosition.add(towardsPuck.norm(48))
+            else
+              targetPosition = targetPosition.add(towardsCenter)
         else
           targetPosition = targetPosition.add(towardsCenter)
       else
@@ -53,6 +63,14 @@ AI = (I, self) ->
 
         if opposingGoal
           targetPosition = opposingGoal.center()
+
+          if I.AIshooting
+            I.AIshooting -= 1
+          else
+            if rand() < (1 / 60)
+              I.AIshooting = rand(10) + 3
+
+          I.AIshoot = I.AIshooting
 
       else
         targetPosition = engine.find("Puck").first()?.center()

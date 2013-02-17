@@ -5,7 +5,7 @@ Zamboni = (I) ->
     fuse: 30
     strength: 10
     toughness: 25
-    radius: 64
+    radius: 45
     rotation: 0
     heading: 0
     speed: 10
@@ -16,7 +16,7 @@ Zamboni = (I) ->
     team: config.teams.rand()
     cleanColor: "#000"
 
-  SWEEPER_SIZE = 48
+  SWEEPER_SIZE = I.radius + 35
   bounds = 256
 
   if I.reverse

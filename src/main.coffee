@@ -62,9 +62,13 @@ DEBUG_DRAW = false
 $(document).bind "keydown", "0", ->
   DEBUG_DRAW = !DEBUG_DRAW
 
+reverse = false
 $(document).bind "keydown", "1", ->
   engine.add
     class: "Zamboni"
+    reverse: reverse
+
+  reverse = !reverse
 
 # Special rink before draw
 engine.on "beforeDraw", (canvas) ->
