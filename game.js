@@ -15552,23 +15552,31 @@ MatchSetupState = function(I) {
         id: i,
         name: "",
         teamIndex: Math.floor(2 * i / MAX_PLAYERS),
-        cpu: true,
         bodyIndex: rand(TeamSheet.bodyStyles.length),
         headIndex: rand(TeamSheet.headStyles.length)
       });
       return Object.extend(config.players[i], {
-        ready: false,
-        cpu: true
+        cpu: true,
+        optionIndex: void 0,
+        ready: false
       });
     });
     return config;
   };
   self.on("enter", function() {
-    var configurator;
+    var activePlayers, configurator;
     engine.clear(false);
+    activePlayers = config.players.inject(0, function(total, data) {
+      if (data.cpu) {
+        return total;
+      } else {
+        return total + 1;
+      }
+    });
     configurator = engine.add({
       "class": "Configurator",
-      config: initPlayerData()
+      config: initPlayerData(),
+      activePlayers: 0
     });
     return configurator.on("done", function(config) {
       configurator.destroy();
