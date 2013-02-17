@@ -19,7 +19,7 @@ Rink = (I={}) ->
   arenaHeight = ->
     I.wallBottom - I.wallTop
 
-  sideWallWidth = 20
+  sideWallWidth = 12
   wallBottomBuffer = I.spriteSize / 4
   bufferCanvasWidth = App.width * 2
 

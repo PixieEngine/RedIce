@@ -12827,7 +12827,7 @@ var AI, ALL_MUSIC, ARENA_CENTER, ARENA_HEIGHT, ARENA_WIDTH, Airplane, BLOOD_COLO
 
 ZAMBONI_SCALE = 0.5;
 
-WALL_LEFT = 20;
+WALL_LEFT = 12;
 
 WALL_RIGHT = 2 * App.width - WALL_LEFT;
 
@@ -18286,7 +18286,7 @@ Rink = function(I) {
   arenaHeight = function() {
     return I.wallBottom - I.wallTop;
   };
-  sideWallWidth = 20;
+  sideWallWidth = 12;
   wallBottomBuffer = I.spriteSize / 4;
   bufferCanvasWidth = App.width * 2;
   iceCanvas = $("<canvas width=" + bufferCanvasWidth + " height=" + App.height + " />").css({
