@@ -8,6 +8,12 @@ MatchState = (I={}) ->
 
   [homeTeam, awayTeam] = config.teams
 
+  if config.homeTeam
+    homeTeam = config.homeTeam
+
+  if config.awayTeam
+    awayTeam = config.awayTeam
+
   self.on "enter", ->
     engine.clear(true)
 
@@ -18,7 +24,7 @@ MatchState = (I={}) ->
 
     rink = engine.add
       class: "Rink"
-      team: config.teams.first()
+      team: homeTeam
 
     scoreboard = engine.add
       class: "Scoreboard"
@@ -43,7 +49,7 @@ MatchState = (I={}) ->
     leftGoal = engine.add
       class: "Goal"
       right: false
-      team: homeTeam
+      team: awayTeam
       x: WALL_LEFT + ARENA_WIDTH/10 - 32
 
     leftGoal.on "score", ->
@@ -52,7 +58,7 @@ MatchState = (I={}) ->
     rightGoal = engine.add
       class: "Goal"
       right: true
-      team: awayTeam
+      team: homeTeam
       x: WALL_LEFT + ARENA_WIDTH*9/10
 
     rightGoal.on "score", ->

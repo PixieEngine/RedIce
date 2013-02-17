@@ -21,26 +21,25 @@ MapState = (I={}) ->
         bodyIndex: rand(TeamSheet.bodyStyles.length)
         headIndex: rand(TeamSheet.headStyles.length)
 
-    [away, home] = config.players.partition (playerData) ->
+    [home, away] = config.players.partition (playerData) ->
       playerData.teamIndex
 
     # TODO: Load Assets here instead of all upfront
-    teamStyles = [config.playerTeam, nextTeam]
+    config.homeTeam = nextTeam
+    config.awayTeam = config.playerTeam
 
-    # TODO: Set Arena
-
-    away.each (red, i) ->
+    home.each (red, i) ->
       red.slot = i
       red.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (away.length + 1)
       red.x = WALL_LEFT + ARENA_WIDTH/2 + ARENA_WIDTH / 6
       red.heading = 0.5.rotations
-      red.teamStyle = teamStyles[1]
+      red.teamStyle = config.homeTeam
 
-    home.each (blue, i) ->
+    away.each (blue, i) ->
       blue.slot = i
       blue.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (home.length + 1)
       blue.x = WALL_LEFT + ARENA_WIDTH/2 - ARENA_WIDTH / 6
-      blue.teamStyle = teamStyles[0]
+      blue.teamStyle = config.awayTeam
 
     # TODO: Preload teams
     # TODO: Merge in p1/p2 data

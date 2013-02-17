@@ -17,7 +17,7 @@ Configurator = (I) ->
   if config.playerTeam
     teamStyles = [config.playerTeam]
   else
-    teamStyles = config.teams[0..1]
+    teamStyles = [config.awayTeam, config.homeTeam]
 
   join = (id) ->
     player = I.config.players[id]

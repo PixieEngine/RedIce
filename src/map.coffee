@@ -28,6 +28,7 @@ Map = (I={}) ->
     TEAMS.each (team) ->
       data = Map.positions[team]
 
+      # TODO: Dimmed spotlights
       engine.add Object.extend({}, data, class: "Spotlight", team: team)
 
   self

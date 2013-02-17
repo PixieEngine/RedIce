@@ -10,6 +10,8 @@ window.config =
   defeatedTeams: []
   teams: teamChoices
   players: []
+  homeTeam: teamChoices[1]
+  awayTeam: teamChoices[0]
   particleEffects: true
   musicVolume: 0#.5
   sfxVolume: 0#.5

@@ -122,10 +122,11 @@ Scoreboard = (I) ->
       # No Zamboni very second
       unless I.time == I.periodTime && I.period == 1
         I.reverse = !I.reverse
+
         engine.add
           class: "Zamboni"
           reverse: I.reverse
-          team: config.teams[0|I.reverse]
+          team: [config.awayTeam, config.homeTeam][0|I.reverse]
 
     I.time -= 1
 

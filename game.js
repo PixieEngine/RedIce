@@ -13586,7 +13586,7 @@ Configurator = function(I) {
   if (config.playerTeam) {
     teamStyles = [config.playerTeam];
   } else {
-    teamStyles = config.teams.slice(0, 2);
+    teamStyles = [config.awayTeam, config.homeTeam];
   }
   join = function(id) {
     var player;
@@ -15484,7 +15484,7 @@ MapState = function(I) {
   lastTeam = [playerTeam].concat(defeatedTeams).last();
   nextTeam = config.opponentTeam = remainingTeams.first();
   initTeamData = function() {
-    var away, home, teamStyles, _ref;
+    var away, home, _ref;
     MAX_PLAYERS.times(function(i) {
       var _base;
       return Object.reverseMerge((_base = config.players)[i] || (_base[i] = {}), {
@@ -15500,20 +15500,21 @@ MapState = function(I) {
     });
     _ref = config.players.partition(function(playerData) {
       return playerData.teamIndex;
-    }), away = _ref[0], home = _ref[1];
-    teamStyles = [config.playerTeam, nextTeam];
-    away.each(function(red, i) {
+    }), home = _ref[0], away = _ref[1];
+    config.homeTeam = nextTeam;
+    config.awayTeam = config.playerTeam;
+    home.each(function(red, i) {
       red.slot = i;
       red.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (away.length + 1);
       red.x = WALL_LEFT + ARENA_WIDTH / 2 + ARENA_WIDTH / 6;
       red.heading = 0.5.rotations;
-      return red.teamStyle = teamStyles[1];
+      return red.teamStyle = config.homeTeam;
     });
-    home.each(function(blue, i) {
+    away.each(function(blue, i) {
       blue.slot = i;
       blue.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (home.length + 1);
       blue.x = WALL_LEFT + ARENA_WIDTH / 2 - ARENA_WIDTH / 6;
-      return blue.teamStyle = teamStyles[0];
+      return blue.teamStyle = config.awayTeam;
     });
     return config;
   };
@@ -15595,6 +15596,12 @@ MatchState = function(I) {
   window.physics = Physics();
   Fan.crowd = Fan.generateCrowd();
   _ref = config.teams, homeTeam = _ref[0], awayTeam = _ref[1];
+  if (config.homeTeam) {
+    homeTeam = config.homeTeam;
+  }
+  if (config.awayTeam) {
+    awayTeam = config.awayTeam;
+  }
   self.on("enter", function() {
     var leftGoal, rightGoal, rink, scoreboard;
     engine.clear(true);
@@ -15604,7 +15611,7 @@ MatchState = function(I) {
     });
     rink = engine.add({
       "class": "Rink",
-      team: config.teams.first()
+      team: homeTeam
     });
     scoreboard = engine.add({
       "class": "Scoreboard",
@@ -15627,7 +15634,7 @@ MatchState = function(I) {
     leftGoal = engine.add({
       "class": "Goal",
       right: false,
-      team: homeTeam,
+      team: awayTeam,
       x: WALL_LEFT + ARENA_WIDTH / 10 - 32
     });
     leftGoal.on("score", function() {
@@ -15636,7 +15643,7 @@ MatchState = function(I) {
     rightGoal = engine.add({
       "class": "Goal",
       right: true,
-      team: awayTeam,
+      team: homeTeam,
       x: WALL_LEFT + ARENA_WIDTH * 9 / 10
     });
     rightGoal.on("score", function() {
@@ -18261,7 +18268,7 @@ Rink = function(I) {
     I = {};
   }
   Object.reverseMerge(I, {
-    team: config.teams[0],
+    team: config.teams.first(),
     spriteSize: 128,
     x: 0,
     y: 0,
@@ -18704,7 +18711,7 @@ Scoreboard = function(I) {
         engine.add({
           "class": "Zamboni",
           reverse: I.reverse,
-          team: config.teams[0 | I.reverse]
+          team: [config.awayTeam, config.homeTeam][0 | I.reverse]
         });
       }
     }
@@ -19261,6 +19268,8 @@ window.config = {
   defeatedTeams: [],
   teams: teamChoices,
   players: [],
+  homeTeam: teamChoices[1],
+  awayTeam: teamChoices[0],
   particleEffects: true,
   musicVolume: 0,
   sfxVolume: 0
