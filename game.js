@@ -13516,8 +13516,8 @@ CharacterSheet = function(I) {
   Object.reverseMerge(I, {
     character: "tubs",
     team: "spike",
-    size: 512,
-    scale: 0.5
+    size: 256,
+    scale: 1
   });
   loadStrip = function(action, facing, cells) {
     return Sprite.loadSheet("" + I.team + "/" + I.character + "_" + action + "_" + facing + "_" + cells, I.size, I.size, I.scale);
@@ -15358,8 +15358,8 @@ HeadSheet = function(I) {
   Object.reverseMerge(I, {
     character: "bigeyes",
     team: "spike",
-    size: 512,
-    scale: 0.5
+    size: 256,
+    scale: 1
   });
   loadStrip = function(action, cells) {
     if (action) {
@@ -18263,7 +18263,7 @@ PuckLeader = function(I) {
 };
 
 Rink = function(I) {
-  var arenaHeight, arenaWidth, backBoardsCanvas, blue, bufferCanvasWidth, faceOffCircleRadius, faceOffSpotRadius, frontBoardsCanvas, iceCanvas, paintCanvas, perspective, perspectiveRatio, red, rinkCornerRadius, self, sideWallWidth, spriteScale, wallBottomBuffer, x, _i, _len, _ref1;
+  var arenaHeight, arenaWidth, backBoardsCanvas, blue, bufferCanvasWidth, faceOffCircleRadius, faceOffSpotRadius, frontBoardsCanvas, iceCanvas, paintCanvas, perspective, perspectiveRatio, red, rinkCornerRadius, self, sideWallWidth, spriteScale, spriteSize, wallBottomBuffer, x, _i, _len, _ref1;
   if (I == null) {
     I = {};
   }
@@ -18405,27 +18405,28 @@ Rink = function(I) {
       });
     });
   });
-  spriteScale = 0.25;
+  spriteScale = 0.5;
+  spriteSize = 256;
   backBoardsCanvas = $("<canvas width=" + bufferCanvasWidth + " height=" + App.height + " />").css({
     position: "absolute",
     top: 0,
     left: 0
   }).pixieCanvas();
-  Sprite.loadSheet("" + I.team + "/wall_n", 512, 512, spriteScale, function(sprites) {
+  Sprite.loadSheet("" + I.team + "/wall_n", spriteSize, spriteSize, spriteScale, function(sprites) {
     var sprite;
     sprite = sprites[0];
     return backBoardsCanvas.withTransform(Matrix.translation(I.wallLeft + 2 * I.spriteSize - sideWallWidth, I.wallTop - I.spriteSize), function() {
       return sprite.fill(backBoardsCanvas, 0, 0, arenaWidth() - I.spriteSize * 4 + 2 * sideWallWidth, I.spriteSize);
     });
   });
-  Sprite.loadSheet("" + I.team + "/wall_nw", 1024, 1024, spriteScale, function(sprites) {
+  Sprite.loadSheet("" + I.team + "/wall_nw", 2 * spriteSize, 2 * spriteSize, spriteScale, function(sprites) {
     var sprite;
     sprite = sprites[0];
     return backBoardsCanvas.withTransform(Matrix.translation(I.wallLeft - sideWallWidth, I.wallTop - I.spriteSize), function() {
       return sprite.draw(backBoardsCanvas, 0, 0);
     });
   });
-  Sprite.loadSheet("" + I.team + "/wall_nw", 1024, 1024, spriteScale, function(sprites) {
+  Sprite.loadSheet("" + I.team + "/wall_nw", 2 * spriteSize, 2 * spriteSize, spriteScale, function(sprites) {
     var sprite;
     sprite = sprites[0];
     return backBoardsCanvas.withTransform(Matrix.translation(I.wallRight + sideWallWidth, I.wallTop - I.spriteSize), function() {
@@ -18439,14 +18440,14 @@ Rink = function(I) {
     top: 0,
     left: 0
   }).pixieCanvas();
-  Sprite.loadSheet("" + I.team + "/wall_sw", 1024, 1024, spriteScale, function(sprites) {
+  Sprite.loadSheet("" + I.team + "/wall_sw", 2 * spriteSize, 2 * spriteSize, spriteScale, function(sprites) {
     var sprite;
     sprite = sprites[0];
     return frontBoardsCanvas.withTransform(Matrix.translation(I.wallLeft - sideWallWidth, I.wallBottom - 2 * I.spriteSize + wallBottomBuffer), function() {
       return sprite.draw(frontBoardsCanvas, 0, 0);
     });
   });
-  Sprite.loadSheet("" + I.team + "/wall_sw", 1024, 1024, spriteScale, function(sprites) {
+  Sprite.loadSheet("" + I.team + "/wall_sw", 2 * spriteSize, 2 * spriteSize, spriteScale, function(sprites) {
     var sprite;
     sprite = sprites[0];
     return frontBoardsCanvas.withTransform(Matrix.translation(I.wallRight + sideWallWidth, I.wallBottom - 2 * I.spriteSize + wallBottomBuffer), function() {
@@ -18455,14 +18456,14 @@ Rink = function(I) {
       });
     });
   });
-  Sprite.loadSheet("" + I.team + "/wall_s", 512, 512, spriteScale, function(sprites) {
+  Sprite.loadSheet("" + I.team + "/wall_s", 2 * spriteSize, 2 * spriteSize, spriteScale, function(sprites) {
     var sprite;
     sprite = sprites[0];
     return frontBoardsCanvas.withTransform(Matrix.translation(I.wallLeft + I.spriteSize * 2 - sideWallWidth, I.wallBottom - I.spriteSize + wallBottomBuffer), function() {
       return sprite.fill(frontBoardsCanvas, 0, 0, arenaWidth() - I.spriteSize * 4 + 2 * sideWallWidth, I.spriteSize);
     });
   });
-  Sprite.loadSheet("" + I.team + "/wall_w", 512, 512, spriteScale, function(sprites) {
+  Sprite.loadSheet("" + I.team + "/wall_w", spriteSize, spriteSize, spriteScale, function(sprites) {
     var sprite;
     sprite = sprites[0];
     frontBoardsCanvas.withTransform(Matrix.translation(I.wallLeft - sideWallWidth, I.wallTop + I.spriteSize * 1.5), function(canvas) {
@@ -18943,30 +18944,34 @@ TeamSheet = function(I) {
   }
   Object.reverseMerge(I, {
     team: "spike",
-    size: 512,
-    scale: 0.5
+    size: 256,
+    scale: 1
   });
   self = {
     goal: {
-      back: Sprite.loadSheet("" + I.team + "/goal_back", 640, 640, 0.25),
-      front: Sprite.loadSheet("" + I.team + "/goal_front", 640, 640, 0.25)
+      back: Sprite.loadSheet("" + I.team + "/goal_back", 320, 320, 0.5),
+      front: Sprite.loadSheet("" + I.team + "/goal_front", 320, 320, 0.5)
     },
     scoreboard: Sprite.loadSheet("" + I.team + "/scoreboard", I.size, I.size, I.scale),
     zamboni: {}
   };
   ["n", "s", "e"].each(function(direction) {
-    return self.zamboni[direction] = Sprite.loadSheet("" + I.team + "/zamboni_drive_" + direction + "_2", I.size, I.size, ZAMBONI_SCALE);
+    return self.zamboni[direction] = Sprite.loadSheet("" + I.team + "/zamboni_drive_" + direction + "_2", I.size, I.size, I.scale);
   });
   TeamSheet.bodyStyles.each(function(style) {
     return self[style] = CharacterSheet({
       team: I.team,
-      character: style
+      character: style,
+      scale: I.scale,
+      size: I.size
     });
   });
   TeamSheet.headStyles.each(function(style) {
     return self[style] = HeadSheet({
       team: I.team,
-      character: style
+      character: style,
+      scale: I.scale,
+      size: I.size
     });
   });
   return self;

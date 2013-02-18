@@ -136,7 +136,8 @@ Rink = (I={}) ->
               color: red
               width: 4
 
-  spriteScale = 0.25
+  spriteScale = 0.5
+  spriteSize = 256
 
   backBoardsCanvas = $("<canvas width=#{bufferCanvasWidth} height=#{App.height} />")
     .css
@@ -145,17 +146,17 @@ Rink = (I={}) ->
       left: 0
     .pixieCanvas()
 
-  Sprite.loadSheet "#{I.team}/wall_n", 512, 512, spriteScale, (sprites) ->
+  Sprite.loadSheet "#{I.team}/wall_n", spriteSize, spriteSize, spriteScale, (sprites) ->
     sprite = sprites[0]
     backBoardsCanvas.withTransform Matrix.translation(I.wallLeft + 2 * I.spriteSize - sideWallWidth, I.wallTop - I.spriteSize), ->
       sprite.fill(backBoardsCanvas, 0, 0, arenaWidth() - I.spriteSize * 4 + 2 * sideWallWidth, I.spriteSize)
 
-  Sprite.loadSheet "#{I.team}/wall_nw", 1024, 1024, spriteScale, (sprites) ->
+  Sprite.loadSheet "#{I.team}/wall_nw", 2 * spriteSize, 2 * spriteSize, spriteScale, (sprites) ->
     sprite = sprites[0]
     backBoardsCanvas.withTransform Matrix.translation(I.wallLeft - sideWallWidth, I.wallTop - I.spriteSize), ->
       sprite.draw(backBoardsCanvas, 0, 0)
 
-  Sprite.loadSheet "#{I.team}/wall_nw", 1024, 1024, spriteScale, (sprites) ->
+  Sprite.loadSheet "#{I.team}/wall_nw", 2 * spriteSize, 2 * spriteSize, spriteScale, (sprites) ->
     sprite = sprites[0]
     backBoardsCanvas.withTransform Matrix.translation(I.wallRight + sideWallWidth, I.wallTop - I.spriteSize), ->
       backBoardsCanvas.withTransform Matrix.scale(-1, 1), ->
@@ -168,23 +169,23 @@ Rink = (I={}) ->
       left: 0
     .pixieCanvas()
 
-  Sprite.loadSheet "#{I.team}/wall_sw", 1024, 1024, spriteScale, (sprites) ->
+  Sprite.loadSheet "#{I.team}/wall_sw", 2 * spriteSize, 2 * spriteSize, spriteScale, (sprites) ->
     sprite = sprites[0]
     frontBoardsCanvas.withTransform Matrix.translation(I.wallLeft - sideWallWidth, I.wallBottom - 2 * I.spriteSize + wallBottomBuffer), ->
       sprite.draw(frontBoardsCanvas, 0, 0)
 
-  Sprite.loadSheet "#{I.team}/wall_sw", 1024, 1024, spriteScale, (sprites) ->
+  Sprite.loadSheet "#{I.team}/wall_sw", 2 * spriteSize, 2 * spriteSize, spriteScale, (sprites) ->
     sprite = sprites[0]
     frontBoardsCanvas.withTransform Matrix.translation(I.wallRight + sideWallWidth, I.wallBottom - 2 * I.spriteSize + wallBottomBuffer), ->
       frontBoardsCanvas.withTransform Matrix.scale(-1, 1), ->
         sprite.draw(frontBoardsCanvas, 0, 0)
 
-  Sprite.loadSheet "#{I.team}/wall_s", 512, 512, spriteScale, (sprites) ->
+  Sprite.loadSheet "#{I.team}/wall_s", 2 * spriteSize, 2 * spriteSize, spriteScale, (sprites) ->
     sprite = sprites[0]
     frontBoardsCanvas.withTransform Matrix.translation(I.wallLeft + I.spriteSize * 2 - sideWallWidth, I.wallBottom - I.spriteSize + wallBottomBuffer), ->
       sprite.fill(frontBoardsCanvas, 0, 0, arenaWidth() - I.spriteSize * 4 + 2 * sideWallWidth, I.spriteSize)
 
-  Sprite.loadSheet "#{I.team}/wall_w", 512, 512, spriteScale, (sprites) ->
+  Sprite.loadSheet "#{I.team}/wall_w", spriteSize, spriteSize, spriteScale, (sprites) ->
     sprite = sprites[0]
     frontBoardsCanvas.withTransform Matrix.translation(I.wallLeft - sideWallWidth, I.wallTop + I.spriteSize * 1.5), (canvas) ->
       sprite.fill(canvas, -I.spriteSize/2, -I.spriteSize/2, I.spriteSize, arenaHeight() - I.spriteSize * 2)

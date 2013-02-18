@@ -59,9 +59,19 @@ task :package do
   # TODO Package for direct download
 end
 
+teams = %w[spike smiley mutant monster hiss robo]
+
 task :team_image_rename do
-  %w[spike smiley mutant monster hiss robo].each do |team|
+  teams.each do |team|
     `cd images && mkdir -p #{team}; for f in #{team}_*; do mv -f $f #{team}/${f/#{team}_}; done`
+  end
+end
+
+task :team_image_resize do
+  teams.each do |team|
+    # Rename images to @2x
+    sh "for f in images/#{team}/*.png; do mv -f $f ${f/.png}@2x.png; done"
+    sh "for f in images/#{team}/*.png; do convert -resize 50% $f ${f/@2x.png}.png; done"
   end
 end
 
