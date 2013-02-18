@@ -1,0 +1,7 @@
+#!/bin/sh
+
+for png in `find $1 -name '*.png'`;
+do
+  # INSTAIN!
+  echo "crushing $png" && pngcrush -brute -rem gAMA -rem cHRM -rem iCCP -rem sRGB "$png" "${png%.png}-crushed.png" && mv -f "${png%.png}-crushed.png" "$png" &
+done;
