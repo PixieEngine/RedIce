@@ -1,3 +1,5 @@
+teams = %w[spike smiley mutant monster hiss robo]
+
 task :default => [:build]
 
 task :build do
@@ -38,6 +40,11 @@ task :dist => [:build_data, :build] do
     sh "cp -R #{dir} #{dist_dir}/#{dir}"
   end
 
+  # Remove @2x images
+  teams.each do |team|
+    sh "rm -r #{dist_dir}/images/#{team}/*@2x.png"
+  end
+
   %w[jquery.min.js game.js].each do |file|
     sh "cp #{file} #{dist_dir}/#{file}"
   end
@@ -58,8 +65,6 @@ task :package do
 
   # TODO Package for direct download
 end
-
-teams = %w[spike smiley mutant monster hiss robo]
 
 task :team_image_rename do
   teams.each do |team|
