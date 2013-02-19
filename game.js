@@ -15225,7 +15225,6 @@ Goal = function(I) {
   WALL_RADIUS = 2;
   WIDTH = 32;
   HEIGHT = 60;
-  Goal.netSprites || (Goal.netSprites = Sprite.loadSheet("goal_lasnet", 640, 640, 0.25));
   Object.reverseMerge(I, {
     height: HEIGHT,
     width: WIDTH,
@@ -15334,7 +15333,7 @@ Goal = function(I) {
     if (sprite = teamSprites[I.team].goal.front[0]) {
       sprite.draw(canvas, -sprite.width / 2, -sprite.height / 2);
     }
-    if (netSprite = Goal.netSprites[0]) {
+    if (netSprite = teamSprites[I.team].goal.net[0]) {
       return netSprite.draw(canvas, -netSprite.width / 2, -netSprite.height / 2);
     }
   });
@@ -18938,7 +18937,7 @@ StoryConfigState = function(I) {
 };
 
 TeamSheet = function(I) {
-  var self;
+  var goalScale, goalSize, self;
   if (I == null) {
     I = {};
   }
@@ -18947,10 +18946,13 @@ TeamSheet = function(I) {
     size: 256,
     scale: 1
   });
+  goalSize = 320;
+  goalScale = 0.5;
   self = {
     goal: {
-      back: Sprite.loadSheet("" + I.team + "/goal_back", 320, 320, 0.5),
-      front: Sprite.loadSheet("" + I.team + "/goal_front", 320, 320, 0.5)
+      back: Sprite.loadSheet("" + I.team + "/goal_back", goalSize, goalSize, goalScale),
+      front: Sprite.loadSheet("" + I.team + "/goal_front", goalSize, goalSize, goalScale),
+      net: Sprite.loadSheet("goal_lasnet", goalSize, goalSize, goalScale)
     },
     scoreboard: Sprite.loadSheet("" + I.team + "/scoreboard", I.size, I.size, I.scale),
     zamboni: {}

@@ -6,8 +6,6 @@ Goal = (I) ->
   WIDTH = 32
   HEIGHT = 60
 
-  Goal.netSprites ||= Sprite.loadSheet("goal_lasnet", 640, 640, 0.25)
-
   Object.reverseMerge I,
     height: HEIGHT
     width: WIDTH
@@ -114,7 +112,7 @@ Goal = (I) ->
     if sprite = teamSprites[I.team].goal.front[0]
       sprite.draw(canvas, -sprite.width/2, -sprite.height/2)
 
-    if netSprite = Goal.netSprites[0]
+    if netSprite = teamSprites[I.team].goal.net[0]
       netSprite.draw(canvas, -netSprite.width/2, -netSprite.height/2)
 
   self.attrReader "team"

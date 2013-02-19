@@ -4,10 +4,14 @@ TeamSheet = (I={}) ->
     size: 256
     scale: 1
 
+  goalSize = 320
+  goalScale = 0.5
+
   self =
     goal:
-      back: Sprite.loadSheet("#{I.team}/goal_back", 320, 320, 0.5)
-      front: Sprite.loadSheet("#{I.team}/goal_front", 320, 320, 0.5)
+      back: Sprite.loadSheet("#{I.team}/goal_back", goalSize, goalSize, goalScale)
+      front: Sprite.loadSheet("#{I.team}/goal_front", goalSize, goalSize, goalScale)
+      net: Sprite.loadSheet("goal_lasnet", goalSize, goalSize, goalScale)
     scoreboard: Sprite.loadSheet("#{I.team}/scoreboard", I.size, I.size, I.scale)
     zamboni: {}
 
