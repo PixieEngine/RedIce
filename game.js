@@ -16281,16 +16281,20 @@ Particle = function(I) {
     I = {};
   }
   Object.reverseMerge(I, {
-    spriteOffset: Point(-32, 0)
+    spriteOffset: Point(-32, 0),
+    teamStyle: "spike"
   });
   self = GameObject(I);
   I.rotation = I.velocity.direction();
   self.on("update", function() {
-    var rink, _ref;
+    var rink, sprite, _ref;
     I.x += I.velocity.x;
     I.y += I.velocity.y;
     I.zIndex = I.y;
     if (!(rink = engine.find("Rink").first())) {
+      return;
+    }
+    if (!(sprite = Particle.wallSplats[I.teamStyle].rand()[0])) {
       return;
     }
     if (I.blood) {
@@ -16299,7 +16303,7 @@ Particle = function(I) {
           rink.paintBackWall({
             x: I.x,
             y: WALL_TOP - 16 - rand(96),
-            sprite: Particle.wallSplats.rand()[0]
+            sprite: sprite
           });
           self.destroy();
         }
@@ -16307,7 +16311,7 @@ Particle = function(I) {
           rink.paintFrontWall({
             x: I.x,
             y: WALL_BOTTOM - 16 - rand(80),
-            sprite: Particle.wallSplats.rand()[0]
+            sprite: sprite
           });
           return self.destroy();
         }
@@ -16317,9 +16321,28 @@ Particle = function(I) {
   return self;
 };
 
-Particle.wallSplats = [1, 2, 3, 4].map(function(n) {
-  return Sprite.loadSheet("gibs/wall_decals/" + n, 512, 512, 0.125);
-});
+(function() {
+  var mutantBlood, normalBlood, robotBlood, scale, size;
+  size = 512;
+  scale = 0.125;
+  normalBlood = [1, 2, 3, 4].map(function(n) {
+    return Sprite.loadSheet("gibs/wall_decals/" + n, size, size, scale);
+  });
+  mutantBlood = [9, 10, 11, 12].map(function(n) {
+    return Sprite.loadSheet("gibs/wall_decals/" + n, size, size, scale);
+  });
+  robotBlood = [13, 14, 15, 16].map(function(n) {
+    return Sprite.loadSheet("gibs/wall_decals/" + n, size, size, scale);
+  });
+  return Particle.wallSplats = {
+    spike: normalBlood,
+    smiley: normalBlood,
+    hiss: normalBlood,
+    monster: normalBlood,
+    mutant: mutantBlood,
+    robo: robotBlood
+  };
+})();
 
 Physics = function(I) {
   var goalWallCollisions, overlapX, overlapY, puckControlCheck, rectangularOverlap, resolveCollision, resolveCollisions, rinkCornerCollisions, rinkWallCollisions, wallCollisions;

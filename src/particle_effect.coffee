@@ -63,6 +63,7 @@ do ->
 Particle = (I={}) ->
   Object.reverseMerge I,
     spriteOffset: Point(-32, 0)
+    teamStyle: "spike"
 
   self = GameObject(I)
 
@@ -76,13 +77,15 @@ Particle = (I={}) ->
 
     return unless rink = engine.find("Rink").first()
 
+    return unless sprite = Particle.wallSplats[I.teamStyle].rand()[0]
+
     if I.blood
       if WALL_LEFT + 128 < I.x < WALL_RIGHT - 128
         if I.y < WALL_TOP
           rink.paintBackWall
             x: I.x
             y: WALL_TOP - 16 - rand(96)
-            sprite: Particle.wallSplats.rand()[0]
+            sprite: sprite
 
           self.destroy()
 
@@ -90,11 +93,29 @@ Particle = (I={}) ->
           rink.paintFrontWall
             x: I.x
             y: WALL_BOTTOM - 16 - rand(80)
-            sprite: Particle.wallSplats.rand()[0]
+            sprite: sprite
 
           self.destroy()
 
   return self
 
-Particle.wallSplats = [1..4].map (n) ->
-  Sprite.loadSheet "gibs/wall_decals/#{n}", 512, 512, 0.125
+do ->
+  size = 512
+  scale = 0.125
+
+  normalBlood = [1..4].map (n) ->
+    Sprite.loadSheet "gibs/wall_decals/#{n}", size, size, scale
+
+  mutantBlood = [9..12].map (n) ->
+    Sprite.loadSheet "gibs/wall_decals/#{n}", size, size, scale
+
+  robotBlood = [13..16].map (n) ->
+    Sprite.loadSheet "gibs/wall_decals/#{n}", size, size, scale
+
+  Particle.wallSplats =
+    spike: normalBlood
+    smiley: normalBlood
+    hiss: normalBlood
+    monster: normalBlood
+    mutant: mutantBlood
+    robo: robotBlood
