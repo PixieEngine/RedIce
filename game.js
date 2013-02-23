@@ -15169,7 +15169,9 @@ Gibber = function(name, options) {
 (function() {
   var fromPart;
   fromPart = function(i) {
-    return Sprite.loadSheet("gibs/zamboni_parts/" + i, 512, 512, 0.5);
+    var size;
+    size = 256;
+    return Sprite.loadSheet("gibs/zamboni_parts/" + i, size, size);
   };
   return Gib.data = {
     zamboni: [
@@ -16246,8 +16248,8 @@ ParticleEffect = {
 
 (function() {
   var monsterBlood, mutantBlood, normalBlood, robotBlood, scale, size;
-  size = 512;
-  scale = 0.25;
+  size = 128;
+  scale = 1;
   ParticleEffect.sprites = {
     ice: [2, 4, 5, 6].map(function(n) {
       return Sprite.loadSheet("gibs/ice_particles/" + n, size, size, scale);
@@ -16323,8 +16325,8 @@ Particle = function(I) {
 
 (function() {
   var mutantBlood, normalBlood, robotBlood, scale, size;
-  size = 512;
-  scale = 0.125;
+  size = 64;
+  scale = 1;
   normalBlood = [1, 2, 3, 4].map(function(n) {
     return Sprite.loadSheet("gibs/wall_decals/" + n, size, size, scale);
   });

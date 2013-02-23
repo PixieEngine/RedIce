@@ -40,10 +40,8 @@ task :dist => [:build_data, :build] do
     sh "cp -R #{dir} #{dist_dir}/#{dir}"
   end
 
-  # Remove @2x images
-  teams.each do |team|
-    sh "rm -r #{dist_dir}/images/#{team}/*@2x.png"
-  end
+  # Remove larger source images
+  sh "find #{dist_dir}/images -name '*@[248]x.png' -delete"
 
   %w[jquery.min.js game.js].each do |file|
     sh "cp #{file} #{dist_dir}/#{file}"

@@ -32,8 +32,8 @@ ParticleEffect =
           sprite: sprite
 
 do ->
-  size = 512
-  scale = 0.25
+  size = 128
+  scale = 1
 
   ParticleEffect.sprites =
     ice: [2, 4, 5, 6].map (n) ->
@@ -101,8 +101,8 @@ Particle = (I={}) ->
   return self
 
 do ->
-  size = 512
-  scale = 0.125
+  size = 64
+  scale = 1
 
   normalBlood = [1..4].map (n) ->
     Sprite.loadSheet "gibs/wall_decals/#{n}", size, size, scale
