@@ -5,6 +5,8 @@ Player.Streaks = (I={}, self) ->
       body: 0
       leftSkate: 0
       rightSkate: 0
+      leftSkateColor: BLOOD_COLOR
+      rightSkateColor: BLOOD_COLOR
 
   I.bloodColor ||= BLOOD_COLOR
 
@@ -14,12 +16,12 @@ Player.Streaks = (I={}, self) ->
   self.on "update", ->
     self.drawBloodStreaks()
 
-  bloody: ->
-    if I.wipeout
-      I.blood.body += rand(5)
-    else
-      I.blood.leftSkate = (I.blood.leftSkate + rand(10)).clamp(0, 60)
-      I.blood.rightSkate = (I.blood.rightSkate + rand(10)).clamp(0, 60)
+  bloody: (color) ->
+    # TODO: Color blending
+    I.blood.rightSkateColor = I.blood.leftSkateColor = color
+
+    I.blood.leftSkate = (I.blood.leftSkate + rand(10)).clamp(0, 60)
+    I.blood.rightSkate = (I.blood.rightSkate + rand(10)).clamp(0, 60)
 
   leftSkatePos: ->
     p = Point.fromAngle(I.heading - Math.TAU/4).scale(5)
@@ -52,7 +54,7 @@ Player.Streaks = (I={}, self) ->
       currentRightSkatePos = self.rightSkatePos()
 
       # Skip certain feet
-      cycle = I.age % 30
+      cycle = (30 * I.age).floor() % 30
       if 1 < cycle < 14
         I.lastLeftSkatePos = null
       if 15 < cycle < 29
@@ -62,7 +64,7 @@ Player.Streaks = (I={}, self) ->
         if skateBlood = I.blood.leftSkate
           I.blood.leftSkate -= 1
 
-          color = I.bloodColor
+          color = I.blood.leftSkateColor
           thickness = (skateBlood/30).clamp(0, 1.5)
         else
           color = ICE_COLOR
@@ -78,7 +80,7 @@ Player.Streaks = (I={}, self) ->
         if skateBlood = I.blood.rightSkate
           I.blood.rightSkate -= 1
 
-          color = I.bloodColor
+          color = I.blood.rightSkateColor
           thickness = (skateBlood/30).clamp(0, 1.5)
         else
           color = ICE_COLOR

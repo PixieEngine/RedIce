@@ -8,7 +8,7 @@ Blood = (I={}) ->
     debugColor: "rgba(0, 255, 0, 0.5)"
 
   self = GameObject(I).extend
-    circle: () ->
+    circle: ->
       c = self.center()
       c.radius = I.radius
 
@@ -17,6 +17,8 @@ Blood = (I={}) ->
   self.on "create", ->
     if sprite = Blood.sprites[I.teamStyle].rand()[0]
       sprite.draw(bloodCanvas, I.x - sprite.width/2, I.y - sprite.height/2)
+
+  self.attrReader "color"
 
   self.include DebugDrawable
 

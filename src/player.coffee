@@ -99,11 +99,13 @@ Player = (I={}) ->
 
       ParticleEffect.bloodSpray
         push: push
+        teamStyle: I.teamStyle
         x: I.center.x + push.x
         y: I.center.y + push.y
 
       engine.add
         class: "Blood"
+        color: I.bloodColor
         teamStyle: I.teamStyle
         x: I.center.x + push.x
         y: I.center.y + push.y

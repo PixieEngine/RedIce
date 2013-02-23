@@ -108,7 +108,7 @@ MatchState = (I={}) ->
 
       splats.each (splat) ->
         if Collision.circular(player.circle(), splat.circle())
-          player.bloody()
+          player.bloody(splat.color())
 
   # We must always return self as the last line
   return self

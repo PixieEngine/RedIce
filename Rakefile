@@ -80,6 +80,26 @@ task :team_image_resize do
   end
 end
 
+task :gib_image_resize do
+  %w[floor_decals blood_particles ice_particles].each do |type|
+    # Rename images to @4x
+    sh "for f in images/gibs/#{type}/*.png; do mv -f $f ${f/.png}@4x.png; done"
+    sh "for f in images/gibs/#{type}/*.png; do convert -resize 25% $f ${f/@4x.png}.png; done"
+  end
+
+  %w[zamboni_parts].each do |type|
+    # Rename images to @2x
+    sh "for f in images/gibs/#{type}/*.png; do mv -f $f ${f/.png}@2x.png; done"
+    sh "for f in images/gibs/#{type}/*.png; do convert -resize 50% $f ${f/@2x.png}.png; done"
+  end
+
+  %w[wall_decals].each do |type|
+    # Rename images to @8x
+    sh "for f in images/gibs/#{type}/*.png; do mv -f $f ${f/.png}@8x.png; done"
+    sh "for f in images/gibs/#{type}/*.png; do convert -resize 12.5% $f ${f/@8x.png}.png; done"
+  end
+end
+
 def dist_name
   "Red-Ice"
 end

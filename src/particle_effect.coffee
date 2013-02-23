@@ -1,15 +1,16 @@
 ParticleEffect =
   bloodSpray: (options) ->
-    {x, y, push} = options
+    {x, y, push, teamStyle} = options
 
     [2..4].rand().times ->
-      if sprite = ParticleEffect.sprites.blood.rand()[0]
+      if sprite = ParticleEffect.sprites.blood[teamStyle].rand()[0]
         velocity = Point.fromAngle(Random.angle()).scale((rand(5) + 1) * 2).add(push).scale(0.5)
 
         engine.add
           class: "Particle"
           blood: true
           duration: 12 / 30
+          teamStyle: teamStyle
           x: x
           y: y
           velocity: velocity
@@ -30,11 +31,34 @@ ParticleEffect =
           velocity: velocity
           sprite: sprite
 
-ParticleEffect.sprites =
-  blood: [1..5].map (n) ->
-    Sprite.loadSheet "gibs/blood_particles/#{n}", 512, 512, 0.25
-  ice: [2, 4, 5, 6].map (n) ->
-    Sprite.loadSheet "gibs/ice_particles/#{n}", 512, 512, 0.25
+do ->
+  size = 512
+  scale = 0.25
+
+  ParticleEffect.sprites =
+    ice: [2, 4, 5, 6].map (n) ->
+      Sprite.loadSheet "gibs/ice_particles/#{n}", size, size, scale
+
+  normalBlood = [1..5].map (n) ->
+    Sprite.loadSheet "gibs/blood_particles/#{n}", size, size, scale
+
+  mutantBlood = [6..10].map (n) ->
+    Sprite.loadSheet "gibs/blood_particles/#{n}", size, size, scale
+
+  robotBlood = [11..15].map (n) ->
+    Sprite.loadSheet "gibs/blood_particles/#{n}", size, size, scale
+
+  monsterBlood = [1..4].map (n) ->
+    Sprite.loadSheet "gibs/body_parts/#{n}", size, size, scale
+
+  ParticleEffect.sprites.blood =
+    spike: normalBlood
+    smiley: normalBlood
+    hiss: normalBlood
+    monster: monsterBlood
+    mutant: mutantBlood
+    robo: robotBlood
+
 
 Particle = (I={}) ->
   Object.reverseMerge I,
