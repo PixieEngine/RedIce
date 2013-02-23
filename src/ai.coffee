@@ -4,10 +4,10 @@ AI = (I, self) ->
   arenaCenter = Point(WALL_LEFT + WALL_RIGHT, WALL_TOP + WALL_BOTTOM).scale(0.5)
 
   roles = [
-    "none"#"youth"
-    "none"#"goalie"
     "youth"
-    "youth"
+    "goalie"
+    "none"
+    "none"
   ]
 
   resetActions = ->

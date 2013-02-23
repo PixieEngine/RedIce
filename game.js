@@ -13204,7 +13204,7 @@ AI = function(I, self) {
   var arenaCenter, directionAI, resetActions, roles;
   I.AIshooting = 0;
   arenaCenter = Point(WALL_LEFT + WALL_RIGHT, WALL_TOP + WALL_BOTTOM).scale(0.5);
-  roles = ["none", "none", "youth", "youth"];
+  roles = ["youth", "goalie", "none", "none"];
   resetActions = function() {
     I.AIturbo = false;
     return I.AIshoot = false;
@@ -19366,8 +19366,8 @@ window.config = {
   homeTeam: teamChoices[1],
   awayTeam: teamChoices[0],
   particleEffects: true,
-  musicVolume: 0,
-  sfxVolume: 0
+  musicVolume: 0.5,
+  sfxVolume: 0.5
 };
 
 Music.volume(config.musicVolume);
