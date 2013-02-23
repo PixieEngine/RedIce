@@ -26,8 +26,9 @@ Puck = (I) ->
   setSprite()
 
   self = Base(I).extend
-    puckControl: ->
-      I.velocity.length() < 40
+    puckControl: (other) ->
+      # True if relative velocity is less than some amount
+      I.velocity.subtract(other.velocity()).length() < 40
 
     wipeout: $.noop
 

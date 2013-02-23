@@ -81,7 +81,7 @@ Player = (I={}) ->
 
       puck.I.velocity = puck.I.velocity.add(positionDelta)
 
-    puckControl: ->
+    puckControl: (other) ->
       I.hasPuck
 
     wipeout: (push) ->

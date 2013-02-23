@@ -48,8 +48,11 @@ Physics = (I={}) ->
       if Collision.circular(a.circle(), b.circle())
         resolveCollision(a, b)
 
+  # Return true to cancel puck collisions
   puckControlCheck = (a, b) ->
-    a.puckControl() && b.puckControl() && !(a.player() && b.player())
+    return if a.player() && b.player() # Both are players, collide normally
+
+    a.puckControl(b) && b.puckControl(a)
 
   wallCollisions = (objects, dt) ->
     goalWallCollisions(objects, dt)

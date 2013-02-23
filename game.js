@@ -13206,7 +13206,7 @@ AI = function(I, self) {
   var arenaCenter, directionAI, resetActions, roles;
   I.AIshooting = 0;
   arenaCenter = Point(WALL_LEFT + WALL_RIGHT, WALL_TOP + WALL_BOTTOM).scale(0.5);
-  roles = ["youth", "goalie", "youth", "youth"];
+  roles = ["none", "none", "youth", "youth"];
   resetActions = function() {
     I.AIturbo = false;
     return I.AIshoot = false;
@@ -15667,11 +15667,11 @@ MatchState = function(I) {
       }
       controlCircles = player.controlCircles();
       return pucks.each(function(puck) {
-        if (!puck.puckControl()) {
-          return;
-        }
         return controlCircles.each(function(circle) {
           if (Collision.circular(circle, puck.circle())) {
+            if (!puck.puckControl(player)) {
+              return;
+            }
             return player.controlPuck(puck);
           }
         });
@@ -16329,7 +16329,10 @@ Physics = function(I) {
     });
   };
   puckControlCheck = function(a, b) {
-    return a.puckControl() && b.puckControl() && !(a.player() && b.player());
+    if (a.player() && b.player()) {
+      return;
+    }
+    return a.puckControl(b) && b.puckControl(a);
   };
   wallCollisions = function(objects, dt) {
     goalWallCollisions(objects, dt);
@@ -17337,7 +17340,7 @@ Player = function(I) {
       I.hasPuck = true;
       return puck.I.velocity = puck.I.velocity.add(positionDelta);
     },
-    puckControl: function() {
+    puckControl: function(other) {
       return I.hasPuck;
     },
     wipeout: function(push) {
@@ -18140,8 +18143,8 @@ Puck = function(I) {
   };
   setSprite();
   self = Base(I).extend({
-    puckControl: function() {
-      return I.velocity.length() < 40;
+    puckControl: function(other) {
+      return I.velocity.subtract(other.velocity()).length() < 40;
     },
     wipeout: $.noop
   });
