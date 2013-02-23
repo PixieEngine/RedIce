@@ -19403,11 +19403,13 @@ window.engine = Engine({
 });
 
 $(window).focus(function() {
-  return Music.play();
+  Music.play();
+  return engine.pause(false);
 });
 
 $(window).blur(function() {
-  return Music.pause();
+  Music.pause();
+  return engine.pause(true);
 });
 
 $(document).bind("keydown", "f2", function() {

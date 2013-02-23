@@ -49,10 +49,13 @@ window.engine = Engine
 
 $(window).focus ->
   Music.play()
+  engine.pause(false)
+  # TODO Hide Paused overlay
 
 $(window).blur ->
-  # TODO Pause game
   Music.pause()
+  engine.pause(true)
+  # TODO Show Paused overlay
 
 $(document).bind "keydown", "f2", ->
   engine.setState(FrameEditorState())
