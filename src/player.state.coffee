@@ -55,11 +55,11 @@ Player.State = (I={}, self) ->
       I.action = "fall"
       I.headAction = "pain"
       I.frame = ((25 - I.wipeout) / 3).floor().clamp(0, 5)
-    else if power = I.shootPower
+    else if ratio = self.shotChargeRatio()
       forceFacing "front"
       I.action = "shoot"
-      if power < I.maxShotPower
-        I.frame = ((power * I.shootHoldFrame + 1) / I.maxShotPower).floor()
+      if ratio < 1
+        I.frame = (ratio * I.shootHoldFrame).floor()
       else
         I.headAction = "charged"
         I.frame = I.shootHoldFrame + (I.age / 6).floor() % 2

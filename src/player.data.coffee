@@ -21,20 +21,17 @@ Player.bodyData =
     friction: 0.075
     mass: 15
     movementSpeed: 1.25
-    powerMultiplier: 2
     radius: 18
     toughness: 12
   thick:
     friction: 0.085
     mass: 20
     movementSpeed: 1.1
-    powerMultiplier: 3
     toughness: 15
   tubs:
     friction: 0.09
     mass: 40
     movementSpeed: 1.2
-    powerMultiplier: 2.5
     radius: 24
     toughness: 20
 
@@ -72,4 +69,3 @@ Player.teamData =
     movementSpeed: 0.3
     friction: 0.02
     mass: 3
-    powerMultiplier: 2

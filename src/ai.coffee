@@ -30,7 +30,7 @@ AI = (I, self) ->
           if I.hasPuck
             targetPosition = towardsCenter # TODO: Better aiming
 
-            if I.shootPower > 0
+            if I.shotCharge > 0
               # Nothing, maybe charge longer?
             else
               I.AIshoot = true

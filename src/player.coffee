@@ -14,20 +14,20 @@ Player = (I={}) ->
     falls: 0
     friction: 0.075
     heading: 0
-    powerMultiplier: 1
     mass: 10
-    maxShotPower: 20
-    minShotPower: 20
+    baseShotPower: 20
+    chargeShotPower: 50
     movementDirection: 0
     movementSpeed: 1.25
     puckControl: 2
     radius: 20
+    shotCharge: 0
+    maxShotCharge: 1.5
     width: 32
     height: 32
     x: App.width/2
     y: App.height/2
     slot: 0
-    shootPower: 0
     shootHoldFrame: 5
     team: 0
     headStyle: "stubs"
@@ -48,6 +48,9 @@ Player = (I={}) ->
 
     player: ->
       true
+
+    shotChargeRatio: ->
+      (I.shotCharge / I.maxShotCharge).clamp(0, 1)
 
     controlCircles: ->
       p = Point.fromAngle(I.heading).scale((I.controlRadius + I.puckLead)/2)
@@ -88,7 +91,7 @@ Player = (I={}) ->
       I.falls += 1
       I.wipeout = 25
 
-      I.shootPower = 0
+      I.shotCharge = 0
 
       push = push.norm().scale(30)
 
@@ -109,38 +112,37 @@ Player = (I={}) ->
   self.include Player.Data
 
   shootPuck = (direction) ->
+    return if I.shotCharge <= 0
+
     puck = engine.find("Puck").first()
 
-    # TODO Redo power computation to basePower + charge * chargeRate, cap max
-    power = Math.min(I.shootPower, I.maxShotPower) * I.powerMultiplier
-    power = Math.max(power, I.minShotPower)
+    power = I.baseShotPower + self.shotChargeRatio() * (I.chargeShotPower - I.baseShotPower)
 
     # TODO: Shot/hit circle
     circle = self.controlCircles().first()
     circle.radius *= 2 # Shot hit radius is twice control circle radius
 
-    if I.shootPower > 0
-      # Hit everyting in your way!
-      # TODO Maybe distribute power evenly
-      engine.find("Player, Gib, Zamboni, Puck").without([self]).each (entity) ->
-        if Collision.circular(circle, entity.circle())
-          mass = entity.mass()
-          if entity.player()
-            mass = mass / 10 # Hits should launch players
+    # Hit everyting in your way!
+    # TODO Maybe distribute power evenly
+    engine.find("Player, Gib, Zamboni, Puck").without([self]).each (entity) ->
+      if Collision.circular(circle, entity.circle())
+        mass = entity.mass()
+        if entity.player()
+          mass = mass / 10 # Hits should launch players
 
-          p = Point.fromAngle(direction).scale(power / mass)
+        p = Point.fromAngle(direction).scale(power / mass)
 
-           # Toughness is doubled for swings, normal for checks
-          if power >= entity.toughness() * 2
-            entity.wipeout(p)
+         # Toughness is doubled for swings, normal for checks
+        if power >= entity.toughness() * 2
+          entity.wipeout(p)
 
-          entity.I.velocity = entity.I.velocity.add(p)
+        entity.I.velocity = entity.I.velocity.add(p)
 
-          entity.trigger "struck"
+        entity.trigger "struck"
 
-      self.trigger "shoot", {power, direction}
+    self.trigger "shoot", {power, direction}
 
-    I.shootPower = 0
+    I.shotCharge = 0
 
   self.on "update", ->
     for key, value of I.cooldown
@@ -151,7 +153,7 @@ Player = (I={}) ->
         I.cooldown[key] = value.approach(0, 1)
 
 
-  self.on "update", ->
+  self.on "update", (dt) ->
     I.boost = I.boost.approach(0, 1)
     I.wipeout = I.wipeout.approach(0, 1)
 
@@ -178,19 +180,18 @@ Player = (I={}) ->
       I.lastRightSkatePos = null
     else
       if !I.cooldown.shoot && (actionDown("B", "X") or self.aiAction("shoot"))
-        if I.shootPower < I.maxShotPower
-          if I.shootPower is 0
-            self.trigger "shot_start"
+        # Start charging shot
+        if I.shotCharge is 0
+          self.trigger "shot_start"
 
-          I.shootPower += 1
-        else
-          I.shootPower += 2
+        I.shotCharge += dt
 
         movementScale = 0.25
       else if I.cooldown.shoot
         if (I.cooldown.shoot / I.shootCooldownFrameDelay).floor() == I.shootCooldownFrameCount - 2 # Shoot on second frame
           shootPuck(I.movementDirection)
-      else if I.shootPower
+      else if I.shotCharge
+        # Shot Released
         I.cooldown.shoot = I.shootCooldownFrameCount * I.shootCooldownFrameDelay
       else if I.cooldown.boost < I.boostMeter && (actionDown("A", "L", "R") || (axisPosition(4) > 0) || (axisPosition(5) > 0) || self.aiAction("turbo"))
         if I.cooldown.boost == 0

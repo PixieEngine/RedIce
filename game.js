@@ -13224,7 +13224,7 @@ AI = function(I, self) {
         if (puck = engine.find("Puck").first()) {
           if (I.hasPuck) {
             targetPosition = towardsCenter;
-            if (I.shootPower > 0) {
+            if (I.shotCharge > 0) {
 
             } else {
               I.AIshoot = true;
@@ -17281,20 +17281,20 @@ Player = function(I) {
     falls: 0,
     friction: 0.075,
     heading: 0,
-    powerMultiplier: 1,
     mass: 10,
-    maxShotPower: 20,
-    minShotPower: 20,
+    baseShotPower: 20,
+    chargeShotPower: 50,
     movementDirection: 0,
     movementSpeed: 1.25,
     puckControl: 2,
     radius: 20,
+    shotCharge: 0,
+    maxShotCharge: 1.5,
     width: 32,
     height: 32,
     x: App.width / 2,
     y: App.height / 2,
     slot: 0,
-    shootPower: 0,
     shootHoldFrame: 5,
     team: 0,
     headStyle: "stubs",
@@ -17314,6 +17314,9 @@ Player = function(I) {
     },
     player: function() {
       return true;
+    },
+    shotChargeRatio: function() {
+      return (I.shotCharge / I.maxShotCharge).clamp(0, 1);
     },
     controlCircles: function() {
       var c1, c2, p;
@@ -17346,7 +17349,7 @@ Player = function(I) {
     wipeout: function(push) {
       I.falls += 1;
       I.wipeout = 25;
-      I.shootPower = 0;
+      I.shotCharge = 0;
       push = push.norm().scale(30);
       Fan.cheer(1);
       ParticleEffect.bloodSpray({
@@ -17365,33 +17368,33 @@ Player = function(I) {
   self.include(Player.Data);
   shootPuck = function(direction) {
     var circle, power, puck;
+    if (I.shotCharge <= 0) {
+      return;
+    }
     puck = engine.find("Puck").first();
-    power = Math.min(I.shootPower, I.maxShotPower) * I.powerMultiplier;
-    power = Math.max(power, I.minShotPower);
+    power = I.baseShotPower + self.shotChargeRatio() * (I.chargeShotPower - I.baseShotPower);
     circle = self.controlCircles().first();
     circle.radius *= 2;
-    if (I.shootPower > 0) {
-      engine.find("Player, Gib, Zamboni, Puck").without([self]).each(function(entity) {
-        var mass, p;
-        if (Collision.circular(circle, entity.circle())) {
-          mass = entity.mass();
-          if (entity.player()) {
-            mass = mass / 10;
-          }
-          p = Point.fromAngle(direction).scale(power / mass);
-          if (power >= entity.toughness() * 2) {
-            entity.wipeout(p);
-          }
-          entity.I.velocity = entity.I.velocity.add(p);
-          return entity.trigger("struck");
+    engine.find("Player, Gib, Zamboni, Puck").without([self]).each(function(entity) {
+      var mass, p;
+      if (Collision.circular(circle, entity.circle())) {
+        mass = entity.mass();
+        if (entity.player()) {
+          mass = mass / 10;
         }
-      });
-      self.trigger("shoot", {
-        power: power,
-        direction: direction
-      });
-    }
-    return I.shootPower = 0;
+        p = Point.fromAngle(direction).scale(power / mass);
+        if (power >= entity.toughness() * 2) {
+          entity.wipeout(p);
+        }
+        entity.I.velocity = entity.I.velocity.add(p);
+        return entity.trigger("struck");
+      }
+    });
+    self.trigger("shoot", {
+      power: power,
+      direction: direction
+    });
+    return I.shotCharge = 0;
   };
   self.on("update", function() {
     var key, value, _ref, _results;
@@ -17407,7 +17410,7 @@ Player = function(I) {
     }
     return _results;
   });
-  self.on("update", function() {
+  self.on("update", function(dt) {
     var movement, movementLength, movementScale, velocityLength, velocityNorm;
     I.boost = I.boost.approach(0, 1);
     I.wipeout = I.wipeout.approach(0, 1);
@@ -17432,20 +17435,16 @@ Player = function(I) {
       return I.lastRightSkatePos = null;
     } else {
       if (!I.cooldown.shoot && (actionDown("B", "X") || self.aiAction("shoot"))) {
-        if (I.shootPower < I.maxShotPower) {
-          if (I.shootPower === 0) {
-            self.trigger("shot_start");
-          }
-          I.shootPower += 1;
-        } else {
-          I.shootPower += 2;
+        if (I.shotCharge === 0) {
+          self.trigger("shot_start");
         }
+        I.shotCharge += dt;
         movementScale = 0.25;
       } else if (I.cooldown.shoot) {
         if ((I.cooldown.shoot / I.shootCooldownFrameDelay).floor() === I.shootCooldownFrameCount - 2) {
           shootPuck(I.movementDirection);
         }
-      } else if (I.shootPower) {
+      } else if (I.shotCharge) {
         I.cooldown.shoot = I.shootCooldownFrameCount * I.shootCooldownFrameDelay;
       } else if (I.cooldown.boost < I.boostMeter && (actionDown("A", "L", "R") || (axisPosition(4) > 0) || (axisPosition(5) > 0) || self.aiAction("turbo"))) {
         if (I.cooldown.boost === 0) {
@@ -17513,7 +17512,6 @@ Player.bodyData = {
     friction: 0.075,
     mass: 15,
     movementSpeed: 1.25,
-    powerMultiplier: 2,
     radius: 18,
     toughness: 12
   },
@@ -17521,14 +17519,12 @@ Player.bodyData = {
     friction: 0.085,
     mass: 20,
     movementSpeed: 1.1,
-    powerMultiplier: 3,
     toughness: 15
   },
   tubs: {
     friction: 0.09,
     mass: 40,
     movementSpeed: 1.2,
-    powerMultiplier: 2.5,
     radius: 24,
     toughness: 20
   }
@@ -17569,8 +17565,7 @@ Player.teamData = {
   robo: {
     movementSpeed: 0.3,
     friction: 0.02,
-    mass: 3,
-    powerMultiplier: 2
+    mass: 3
   }
 };
 
@@ -17767,13 +17762,12 @@ Player.Drawing = function(I, self) {
       });
     },
     drawShootMeter: function(canvas) {
-      var arrowAnimation, center, ratio, superChargeRatio;
-      if (I.shootPower) {
-        ratio = Math.min(I.shootPower / I.maxShotPower, 1);
-        superChargeRatio = ((I.shootPower - I.maxShotPower) / I.maxShotPower).clamp(0, 1);
+      var arrowAnimation, center, ratio;
+      if (I.shotCharge) {
+        ratio = self.shotChargeRatio();
         center = self.center().floor();
         arrowAnimation = Player.Drawing.shootArrow;
-        if (superChargeRatio === 1) {
+        if (ratio === 1) {
           arrowAnimation = Player.Drawing.chargedArrow;
           canvas.withTransform(Matrix.translation(center.x - 5, center.y - 40).scale(0.5), function(canvas) {
             var _ref1;
@@ -17932,7 +17926,7 @@ Player.State = function(I, self) {
     }
   };
   self.on("update", function() {
-    var angleSprites, cycleDelay, headDirection, headIndexOffset, headPosition, power, speed, spriteSheet, _ref1;
+    var angleSprites, cycleDelay, headDirection, headIndexOffset, headPosition, ratio, speed, spriteSheet, _ref1;
     Object.extend(I, teamSprites[I.teamStyle][I.bodyStyle].characterData);
     I.headAction = "normal";
     setFlip(I.heading > 2 * Math.TAU / 8 || I.heading < -2 * Math.TAU / 8);
@@ -17958,11 +17952,11 @@ Player.State = function(I, self) {
       I.action = "fall";
       I.headAction = "pain";
       I.frame = ((25 - I.wipeout) / 3).floor().clamp(0, 5);
-    } else if (power = I.shootPower) {
+    } else if (ratio = self.shotChargeRatio()) {
       forceFacing("front");
       I.action = "shoot";
-      if (power < I.maxShotPower) {
-        I.frame = ((power * I.shootHoldFrame + 1) / I.maxShotPower).floor();
+      if (ratio < 1) {
+        I.frame = (ratio * I.shootHoldFrame).floor();
       } else {
         I.headAction = "charged";
         I.frame = I.shootHoldFrame + (I.age / 6).floor() % 2;

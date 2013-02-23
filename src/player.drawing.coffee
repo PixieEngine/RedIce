@@ -174,14 +174,14 @@ Player.Drawing = (I, self) ->
     }
 
   drawShootMeter: (canvas) ->
-    if I.shootPower
-      ratio = Math.min(I.shootPower / I.maxShotPower, 1)
-      superChargeRatio = ((I.shootPower - I.maxShotPower) / I.maxShotPower).clamp(0, 1)
+    if I.shotCharge
+      ratio = self.shotChargeRatio()
+
       center = self.center().floor()
 
       arrowAnimation = Player.Drawing.shootArrow
 
-      if superChargeRatio is 1
+      if ratio is 1 # Fully Charged
         arrowAnimation = Player.Drawing.chargedArrow
         canvas.withTransform Matrix.translation(center.x - 5, center.y - 40).scale(0.5), (canvas) ->
           Player.Drawing.chargeAura.rand()?.draw(canvas, -256, -256)
