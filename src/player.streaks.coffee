@@ -1,11 +1,12 @@
 Player.Streaks = (I={}, self) ->
   Object.reverseMerge I,
-    bloodColor: BLOOD_COLOR
     blood:
       face: 0
       body: 0
       leftSkate: 0
       rightSkate: 0
+
+  I.bloodColor ||= BLOOD_COLOR
 
   self.on "wipeout", ->
     I.blood.face += rand(20) + rand(20) + rand(20) + I.falls

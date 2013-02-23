@@ -1,10 +1,13 @@
 Player.Data = (I, self) ->
 
+  # Load team specific overrides
+  Object.extend I, Player.teamData[I.teamStyle]
+
   self.on "update", ->
     Object.extend I, Player.bodyData[I.bodyStyle]
 
     # Add in team specific mods
-    for key, value of Player.teamData[I.teamStyle]
+    for key, value of Player.teamDeltas[I.teamStyle]
       I[key] += value
 
   return {}
@@ -38,8 +41,18 @@ Player.bodyData =
 for key, value of Player.bodyData
   Player.bodyData[key] = Object.reverseMerge value, Player.defaultData
 
-# Team ability deltas(+/-)
 Player.teamData =
+  smiley: {}
+  spike: {}
+  hiss: {}
+  robo:
+    bloodColor: "#00eadc"
+  mutant:
+    bloodColor: "#5800ea"
+  monster: {}
+
+# Team ability deltas(+/-)
+Player.teamDeltas =
   smiley:
     # Extra Turbo Meter
     boostMeter: 32

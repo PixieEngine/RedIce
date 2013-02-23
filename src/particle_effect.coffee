@@ -57,7 +57,7 @@ Particle = (I={}) ->
         if I.y < WALL_TOP
           rink.paintBackWall
             x: I.x
-            y: WALL_TOP - 16 - rand(32)
+            y: WALL_TOP - 16 - rand(96)
             sprite: Particle.wallSplats.rand()[0]
 
           self.destroy()
@@ -65,7 +65,7 @@ Particle = (I={}) ->
         if I.y > WALL_BOTTOM
           rink.paintFrontWall
             x: I.x
-            y: WALL_BOTTOM - 16 - rand(32)
+            y: WALL_BOTTOM - 16 - rand(80)
             sprite: Particle.wallSplats.rand()[0]
 
           self.destroy()
@@ -73,4 +73,4 @@ Particle = (I={}) ->
   return self
 
 Particle.wallSplats = [1..4].map (n) ->
-  Sprite.loadSheet "gibs/wall_decals/#{n}", 512, 512, 0.0625
+  Sprite.loadSheet "gibs/wall_decals/#{n}", 512, 512, 0.125

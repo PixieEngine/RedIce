@@ -104,6 +104,7 @@ Player = (I={}) ->
 
       engine.add
         class: "Blood"
+        teamStyle: I.teamStyle
         x: I.center.x + push.x
         y: I.center.y + push.y
 
