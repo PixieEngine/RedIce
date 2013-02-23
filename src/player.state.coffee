@@ -62,7 +62,7 @@ Player.State = (I={}, self) ->
         I.frame = (ratio * I.shootHoldFrame).floor()
       else
         I.headAction = "charged"
-        I.frame = I.shootHoldFrame + (I.age / 6).floor() % 2
+        I.frame = I.shootHoldFrame + (I.age / 0.3).floor() % 2
     else if I.cooldown.shoot
       I.action = "shoot"
       forceFacing "front"
