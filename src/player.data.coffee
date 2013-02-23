@@ -14,6 +14,7 @@ Player.defaultData =
   boostMultiplier: 2
   boostRecovery: 1
   strength: 1
+  puckControl: 2
 
 Player.bodyData =
   skinny:
@@ -54,9 +55,11 @@ Player.teamData =
     # Less Turbo Meter
     boostMeter: -32
     # Fast 'n Sticky
-    boostMultiplier: 2
-    movementSpeed: 2
-    friction: 0.125
+    boostMultiplier: +2
+    movementSpeed: +2
+    friction: +0.125
+    # Strong Puck Control
+    puckControl: +2.5
   moster:
     mass: -2
     strength: 0.25

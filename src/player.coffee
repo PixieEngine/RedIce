@@ -20,6 +20,7 @@ Player = (I={}) ->
     minShotPower: 20
     movementDirection: 0
     movementSpeed: 1.25
+    puckControl: 2
     radius: 20
     width: 32
     height: 32
@@ -64,8 +65,7 @@ Player = (I={}) ->
     controlPuck: (puck) ->
       return if I.cooldown.shoot
 
-      puckControl = 2
-      maxPuckForce = puckControl / puck.mass()
+      maxPuckForce = I.puckControl / puck.mass()
 
       p = Point.fromAngle(I.heading).scale(I.puckLead)
       targetPuckPosition = self.center().add(p)

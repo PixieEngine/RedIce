@@ -17284,6 +17284,7 @@ Player = function(I) {
     minShotPower: 20,
     movementDirection: 0,
     movementSpeed: 1.25,
+    puckControl: 2,
     radius: 20,
     width: 32,
     height: 32,
@@ -17321,12 +17322,11 @@ Player = function(I) {
       return [c1, c2];
     },
     controlPuck: function(puck) {
-      var maxPuckForce, p, positionDelta, puckControl, puckVelocity, targetPuckPosition;
+      var maxPuckForce, p, positionDelta, puckVelocity, targetPuckPosition;
       if (I.cooldown.shoot) {
         return;
       }
-      puckControl = 2;
-      maxPuckForce = puckControl / puck.mass();
+      maxPuckForce = I.puckControl / puck.mass();
       p = Point.fromAngle(I.heading).scale(I.puckLead);
       targetPuckPosition = self.center().add(p);
       puckVelocity = puck.I.velocity;
@@ -17501,7 +17501,8 @@ Player.defaultData = {
   boostMeter: 64,
   boostMultiplier: 2,
   boostRecovery: 1,
-  strength: 1
+  strength: 1,
+  puckControl: 2
 };
 
 Player.bodyData = {
@@ -17547,9 +17548,10 @@ Player.teamData = {
   },
   hiss: {
     boostMeter: -32,
-    boostMultiplier: 2,
-    movementSpeed: 2,
-    friction: 0.125
+    boostMultiplier: +2,
+    movementSpeed: +2,
+    friction: +0.125,
+    puckControl: +2.5
   },
   moster: {
     mass: -2,
