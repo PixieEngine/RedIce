@@ -184,7 +184,13 @@ Player = (I={}) ->
         if I.shotCharge is 0
           self.trigger "shot_start"
 
-        I.shotCharge += dt
+        # First half charges at 2x speed
+        if I.shotCharge < 0.5
+          gain = 2 * dt
+        else
+          gain = dt
+
+        I.shotCharge += gain
 
         movementScale = 0.25
       else if I.cooldown.shoot

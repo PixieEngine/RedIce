@@ -17411,7 +17411,7 @@ Player = function(I) {
     return _results;
   });
   self.on("update", function(dt) {
-    var movement, movementLength, movementScale, velocityLength, velocityNorm;
+    var gain, movement, movementLength, movementScale, velocityLength, velocityNorm;
     I.boost = I.boost.approach(0, 1);
     I.wipeout = I.wipeout.approach(0, 1);
     if (I.velocity.magnitude() !== 0) {
@@ -17438,7 +17438,12 @@ Player = function(I) {
         if (I.shotCharge === 0) {
           self.trigger("shot_start");
         }
-        I.shotCharge += dt;
+        if (I.shotCharge < 0.5) {
+          gain = 2 * dt;
+        } else {
+          gain = dt;
+        }
+        I.shotCharge += gain;
         movementScale = 0.25;
       } else if (I.cooldown.shoot) {
         if ((I.cooldown.shoot / I.shootCooldownFrameDelay).floor() === I.shootCooldownFrameCount - 2) {
