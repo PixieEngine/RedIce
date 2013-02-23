@@ -16310,7 +16310,7 @@ Particle = function(I) {
         if (I.y > WALL_BOTTOM) {
           rink.paintFrontWall({
             x: I.x,
-            y: WALL_BOTTOM - 16 - rand(80),
+            y: WALL_BOTTOM - 16 - rand(64),
             sprite: sprite
           });
           return self.destroy();
