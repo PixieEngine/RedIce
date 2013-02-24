@@ -25,8 +25,8 @@ Blood = (I={}) ->
   self
 
 do ->
-  size = 512
-  scale = 0.25
+  size = 128
+  scale = 1
 
   normalBlood = [1..12].map (n) ->
     Sprite.loadSheet "gibs/floor_decals/#{n}", size, size, scale

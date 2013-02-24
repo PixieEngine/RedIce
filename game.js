@@ -13489,8 +13489,8 @@ Blood = function(I) {
 
 (function() {
   var monsterBlood, mutantBlood, normalBlood, robotBlood, scale, size;
-  size = 512;
-  scale = 0.25;
+  size = 128;
+  scale = 1;
   normalBlood = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(function(n) {
     return Sprite.loadSheet("gibs/floor_decals/" + n, size, size, scale);
   });
