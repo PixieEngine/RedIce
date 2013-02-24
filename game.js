@@ -17618,22 +17618,30 @@ Player.teamData = {
   spike: {},
   hiss: {},
   robo: {
-    bloodColor: "#00eadc"
+    bloodColor: "#00eadc",
+    baseShotPower: 50,
+    chargeShotPower: 100
   },
   mutant: {
-    bloodColor: "#5800ea"
+    bloodColor: "#5800ea",
+    baseShotPower: 40,
+    chargeShotPower: 70,
+    maxShotCharge: 0.75
   },
-  monster: {}
+  monster: {
+    baseShotPower: 30,
+    chargeShotPower: 90
+  }
 };
 
 Player.teamDeltas = {
   smiley: {
-    boostMeter: 32,
-    boostRecovery: 0.25,
+    boostMeter: +32,
+    boostRecovery: +0.25,
     mass: -5
   },
   spike: {
-    strength: 0.5
+    strength: +0.5
   },
   hiss: {
     boostMeter: -32,
@@ -17643,19 +17651,18 @@ Player.teamDeltas = {
     puckControl: +2.5
   },
   moster: {
-    mass: -2,
-    strength: 0.25,
-    movementSpeed: -0.1
+    friction: -0.005,
+    mass: +5,
+    movementSpeed: -0.1,
+    strength: +0.25,
+    toughness: +8
   },
   mutant: {
-    movementSpeed: -0.1,
-    mass: 1,
-    friction: 0.01
+    friction: -0.025
   },
   robo: {
-    movementSpeed: 0.3,
-    friction: 0.02,
-    mass: 3
+    movementSpeed: +0.2,
+    puckControl: +1
   }
 };
 

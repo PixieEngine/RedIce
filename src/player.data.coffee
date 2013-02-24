@@ -47,20 +47,33 @@ Player.teamData =
   hiss: {}
   robo:
     bloodColor: "#00eadc"
+    # Stronger Shots
+    baseShotPower: 50
+    chargeShotPower: 100
   mutant:
+    # Mutant Blood
     bloodColor: "#5800ea"
-  monster: {}
+    # Stronger Shots
+    baseShotPower: 40
+    chargeShotPower: 70
+    # Faster Shot Charge
+    maxShotCharge: 0.75
+  monster:
+    # Stronger Shots
+    baseShotPower: 30
+    chargeShotPower: 90
 
 # Team ability deltas(+/-)
 Player.teamDeltas =
   smiley:
     # Extra Turbo Meter
-    boostMeter: 32
-    boostRecovery: 0.25
+    boostMeter: +32
+    boostRecovery: +0.25
     # Lightweights
     mass: -5
   spike:
-    strength: 0.5
+    # Spikey
+    strength: +0.5
   hiss:
     # Less Turbo Meter
     boostMeter: -32
@@ -71,14 +84,18 @@ Player.teamDeltas =
     # Strong Puck Control
     puckControl: +2.5
   moster:
-    mass: -2
-    strength: 0.25
+    friction: -0.005
+    # Heavyweights
+    mass: +5
     movementSpeed: -0.1
+    strength: +0.25
+    # Extremely Tough
+    toughness: +8
   mutant:
-    movementSpeed: -0.1
-    mass: 1
-    friction: 0.01
+    # Slippery Bastards
+    friction: -0.025
   robo:
-    movementSpeed: 0.3
-    friction: 0.02
-    mass: 3
+    # Faster
+    movementSpeed: +0.2
+    # Better Puck Control
+    puckControl: +1
