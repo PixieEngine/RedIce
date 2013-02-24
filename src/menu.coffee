@@ -104,9 +104,6 @@ Menu = (I={}) ->
 
       if option is selectedOption()
         textColor = I.highlightTextColor
-        sprite = Menu.highlightSprite
-
-        sprite.draw(canvas, 0 - sprite.width / 2, y - sprite.height / 2 - 24)
 
       canvas.centerText
         text: option.text
@@ -126,5 +123,3 @@ Menu = (I={}) ->
 Menu.topSprite = Sprite.loadByName "menu_border_1"
 Menu.middleSprite = Sprite.loadByName "menu_border_2"
 Menu.bottomSprite = Sprite.loadByName "menu_border_3"
-
-Menu.highlightSprite = Sprite.loadByName "gibs/wall_decals/4"
