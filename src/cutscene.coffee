@@ -29,6 +29,13 @@ Cutscene = (I={}) ->
     I.props.each (prop) ->
       engine.add Object.extend {x, y}, prop
 
+    engine.add
+      color: engine.backgroundColor()
+      width: App.width
+      height: App.height/3
+      x: App.width/2
+      y: 5 / 6 * App.height
+
     dialog = engine.add
       class: "DialogBox"
       text: I.text
@@ -48,7 +55,10 @@ Prop = (I) ->
 
   self.on "update", (dt) ->
     [
+      "x"
+      "y"
       "alpha"
+      "rotation"
     ].each (property) ->
       if fn = I["#{property}Fn"]
         I[property] = fn(I.age)
@@ -65,9 +75,29 @@ AssetLoader.group "cutscenes", ->
         "Why is it that the sky is moving, but the ice is still?"
         And also-- Where is it that you're from?
       """
-      background: "intro"
       props: [
-        "train"
+        tunnel:
+          alphaFn: (t) ->
+            Math.sin((t / 6) * Math.TAU) * 0.3 + 0.7
+          yFn: (t) ->
+            App.width / 3 +
+            Math.sin((t / 0.5 - 0.25) * Math.TAU) * 7 +
+            Math.sin((t / 0.2 + 0.25) * Math.TAU) * 3
+          xFn: (t) ->
+            t = t % 2
+            App.width / 2 + (t/2 * App.width)
+          zIndex: -1
+        tunnel2:
+          alphaFn: (t) ->
+            Math.sin((t / 6) * Math.TAU) * 0.3 + 0.7
+          yFn: (t) ->
+            App.width / 3 +
+            Math.sin((t / 0.9 + 0.25) * Math.TAU) * 7 +
+            Math.sin((t / 0.2 - 0.25) * Math.TAU) * 3
+          xFn: (t) ->
+            t = t % 2
+            -App.width / 2 + (t/2 * App.width)
+          zIndex: -1
         blink:
           alphaFn: (t) ->
             t = t % 10
@@ -81,11 +111,22 @@ AssetLoader.group "cutscenes", ->
             ].inject(false, (blinking, blinkTime) ->
               blinking or (blinkTime <= t <= (blinkTime + blinkDuration))
             ) | 0
-        body:
-          rotationPoint: Point()
-        "head"
-        "mic_hand"
-        "paw"
+        "body"
+        head:
+          registrationPoint: Point(-50, 80)
+          rotationFn: (t) ->
+            Math.sin((t / 5) * Math.TAU) * Math.TAU / 64 +
+            Math.sin((t / 3 - 0.25) * Math.TAU) * Math.TAU / 128
+        mic_hand:
+          registrationPoint: Point(-80, 200)
+          rotationFn: (t) ->
+            Math.sin((t / 5) * Math.TAU) * Math.TAU / 64 +
+            Math.sin((t / 3 - 0.25) * Math.TAU) * Math.TAU / 128
+        paw:
+          registrationPoint: Point(-0, 180)
+          rotationFn: (t) ->
+            Math.sin((t / 5) * Math.TAU) * Math.TAU / 64 +
+            Math.sin((t / 3 - 0.25) * Math.TAU) * Math.TAU / 128
       ]
       nextState: MapState
     hiss:
@@ -135,7 +176,7 @@ AssetLoader.group "cutscenes", ->
           , prop[propName]
 
     .flatten().map (datum, i) ->
-      Object.extend datum,
+      Object.reverseMerge datum,
         class: "Prop"
         zIndex: i
 
