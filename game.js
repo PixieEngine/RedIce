@@ -16829,7 +16829,7 @@ Physics = function(I) {
     process: function(objects) {
       var dt, steps;
       steps = 5;
-      dt = 1 / steps;
+      dt = 1 / (2 * steps);
       return steps.times(function() {
         objects.invoke("updatePosition", dt);
         resolveCollisions(objects, dt);
@@ -17833,7 +17833,7 @@ Player = function(I) {
         I.velocity.x = 0;
         I.velocity.y = 0;
       } else {
-        movement = movement.scale(movementScale * I.movementSpeed);
+        movement = movement.scale(movementScale * I.movementSpeed * (30 * dt));
         I.velocity = I.velocity.add(movement);
       }
       return I.hasPuck = false;
@@ -18980,7 +18980,7 @@ Scoreboard = function(I) {
       away: 0
     },
     period: 0,
-    periodTime: 1 * 60 * 30,
+    periodTime: 60,
     reverse: false,
     time: 0,
     zamboniInterval: 30 * 30,
@@ -19037,8 +19037,8 @@ Scoreboard = function(I) {
       _ref1.draw(canvas, xPosition - (I.sprite.width / 2) + I.imageOffset.x, I.imageOffset.y);
     }
     time = Math.max(I.time, 0);
-    minutes = (time / 30 / 60).floor();
-    seconds = ((time / 30).floor() % 60).toString();
+    minutes = (time / 60).floor();
+    seconds = time.floor().mod(60).toString();
     if (seconds.length === 1) {
       seconds = "0" + seconds;
     }
@@ -19093,7 +19093,7 @@ Scoreboard = function(I) {
       });
     }
   });
-  self.on("update", function() {
+  self.on("update", function(dt) {
     if (I.time % I.zamboniInterval === 0) {
       if (!(I.time === I.periodTime && I.period === 1)) {
         I.reverse = !I.reverse;
@@ -19104,7 +19104,7 @@ Scoreboard = function(I) {
         });
       }
     }
-    I.time -= 1;
+    I.time -= dt;
     if (I.gameOver) {
       return MAX_PLAYERS.times(function(i) {
         var controller;
@@ -19114,7 +19114,7 @@ Scoreboard = function(I) {
         }
       });
     } else {
-      if (I.time === 0) {
+      if (I.time <= 0) {
         return nextPeriod();
       }
     }
@@ -19700,7 +19700,7 @@ window.engine = Engine({
   canvas: canvas,
   showFPS: true,
   zSort: true,
-  FPS: 30
+  FPS: 60
 });
 
 $(window).focus(function() {

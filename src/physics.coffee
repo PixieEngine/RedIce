@@ -191,7 +191,7 @@ Physics = (I={}) ->
   process: (objects) ->
     steps = 5
 
-    dt = 1/steps
+    dt = 1 / (2 * steps) # 2x for 60FPS
 
     steps.times ->
       objects.invoke "updatePosition", dt

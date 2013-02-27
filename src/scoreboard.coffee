@@ -5,7 +5,7 @@ Scoreboard = (I) ->
       home: 0
       away: 0
     period: 0
-    periodTime: 1 * 60 * 30
+    periodTime: 60 # seconds
     reverse: false
     time: 0
     zamboniInterval: 30 * 30
@@ -63,8 +63,8 @@ Scoreboard = (I) ->
 
     time = Math.max(I.time, 0)
 
-    minutes = (time / 30 / 60).floor()
-    seconds = ((time / 30).floor() % 60).toString()
+    minutes = (time / 60).floor()
+    seconds = time.floor().mod(60).toString()
 
     if seconds.length == 1
       seconds = "0" + seconds
@@ -117,7 +117,7 @@ Scoreboard = (I) ->
         text: "SUDDEN DEATH"
         y: 120
 
-  self.on "update", ->
+  self.on "update", (dt) ->
     if I.time % I.zamboniInterval == 0
       # No Zamboni very second
       unless I.time == I.periodTime && I.period == 1
@@ -128,7 +128,7 @@ Scoreboard = (I) ->
           reverse: I.reverse
           team: [config.awayTeam, config.homeTeam][0|I.reverse]
 
-    I.time -= 1
+    I.time -= dt
 
     if I.gameOver
       # Check for restart
@@ -139,7 +139,7 @@ Scoreboard = (I) ->
           self.trigger("restart")
 
     else # Regular play
-      if I.time == 0
+      if I.time <= 0
         nextPeriod()
 
   self.attrReader "gameOver"

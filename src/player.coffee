@@ -227,7 +227,7 @@ Player = (I={}) ->
         I.velocity.x = 0
         I.velocity.y = 0
       else
-        movement = movement.scale(movementScale * I.movementSpeed)
+        movement = movement.scale(movementScale * I.movementSpeed * (30 * dt))
         I.velocity = I.velocity.add(movement)
 
       I.hasPuck = false

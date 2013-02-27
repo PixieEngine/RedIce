@@ -45,7 +45,7 @@ window.engine = Engine
   canvas: canvas
   showFPS: true
   zSort: true
-  FPS: 30
+  FPS: 60
 
 $(window).focus ->
   Music.play()
