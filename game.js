@@ -17905,7 +17905,10 @@ for (key in _ref) {
 Player.teamData = {
   smiley: {},
   spike: {},
-  hiss: {},
+  hiss: {
+    baseShotPower: 10,
+    chargeShotPower: 35
+  },
   robo: {
     bloodColor: "#00eadc",
     baseShotPower: 50,
@@ -17933,9 +17936,11 @@ Player.teamDeltas = {
     strength: +0.5
   },
   hiss: {
+    mass: -5,
+    strength: -0.25,
     boostMeter: -32,
     boostMultiplier: +2,
-    movementSpeed: +2,
+    movementSpeed: +1.5,
     friction: +0.125,
     puckControl: +2.5
   },
@@ -17950,7 +17955,7 @@ Player.teamDeltas = {
     friction: -0.025
   },
   robo: {
-    movementSpeed: +0.2,
+    movementSpeed: +0.3,
     puckControl: +1
   }
 };
@@ -19746,6 +19751,8 @@ engine.on("draw", function(canvas) {
   }
 });
 
-engine.setState(Cutscene.scenes.intro);
+engine.setState(LoaderState({
+  nextState: MainMenuState
+}));
 
 engine.start();

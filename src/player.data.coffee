@@ -44,7 +44,10 @@ for key, value of Player.bodyData
 Player.teamData =
   smiley: {}
   spike: {}
-  hiss: {}
+  hiss:
+    # Weaker Shots
+    baseShotPower: 10
+    chargeShotPower: 35
   robo:
     bloodColor: "#00eadc"
     # Stronger Shots
@@ -75,11 +78,14 @@ Player.teamDeltas =
     # Spikey
     strength: +0.5
   hiss:
+    # Lightweights
+    mass: -5
+    strength: -0.25
     # Less Turbo Meter
     boostMeter: -32
     # Fast 'n Sticky
     boostMultiplier: +2
-    movementSpeed: +2
+    movementSpeed: +1.5
     friction: +0.125
     # Strong Puck Control
     puckControl: +2.5
@@ -96,6 +102,6 @@ Player.teamDeltas =
     friction: -0.025
   robo:
     # Faster
-    movementSpeed: +0.2
+    movementSpeed: +0.3
     # Better Puck Control
     puckControl: +1

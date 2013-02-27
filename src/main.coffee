@@ -85,10 +85,10 @@ engine.on "draw", (canvas) ->
       engine.find("Player, Puck, Goal, Bottle, Zamboni, Blood, Gib").each (object) ->
         object.trigger("drawDebug", canvas)
 
-# engine.setState(LoaderState(
-#   nextState: MainMenuState
-# ))
+engine.setState(LoaderState(
+  nextState: MainMenuState
+))
 
-engine.setState Cutscene.scenes.intro
+# engine.setState Cutscene.scenes.intro
 
 engine.start()
