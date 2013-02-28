@@ -3,7 +3,6 @@ Player = (I={}) ->
     boost: 0
     boostMeter: 64
     boostMultiplier: 2
-    boostRecovery: 1
     cooldown:
       boost: 0
       facing: 0
@@ -152,13 +151,16 @@ Player = (I={}) ->
     for key, value of I.cooldown
       # Boost Recovery is Special
       if key is "boost"
-        I.cooldown[key] = value.approach(0, dt * I.boostRecovery)
+        unless I.boosting
+          I.cooldown[key] = value.approach(0, dt * I.boostRecoveryRate)
       else
         I.cooldown[key] = value.approach(0, dt)
 
     I.wipeout = I.wipeout.approach(0, dt)
 
   self.on "update", (dt) ->
+    I.boosting = false
+
     unless I.velocity.magnitude() == 0
       I.heading = Point.direction(Point(0, 0), I.velocity)
 
@@ -202,14 +204,14 @@ Player = (I={}) ->
         # Shot Released
         I.cooldown.shoot = I.shootCooldownFrameCount * I.shootCooldownFrameDelay
       else if I.cooldown.boost < I.boostMeter && (actionDown("A", "L", "R") || (axisPosition(4) > 0) || (axisPosition(5) > 0) || self.aiAction("turbo"))
-        if I.cooldown.boost == 0
-          # Sprint boost for when your bar is full
-          movementScale = 10
-          I.cooldown.boost += 8
-        else
-          # Normal boostin
-          movementScale = I.boostMultiplier
-          I.cooldown.boost += 4
+        # TODO: Fix scale for framerate independence
+        # TODO: Re-enable sprint boostin?
+
+        I.boosting = true
+
+        # Normal boostin
+        movementScale = I.boostMultiplier
+        I.cooldown.boost += dt
 
       # Check cutback
       velocityNorm = I.velocity.norm()

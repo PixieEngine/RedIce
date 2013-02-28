@@ -17627,7 +17627,6 @@ Player = function(I) {
     boost: 0,
     boostMeter: 64,
     boostMultiplier: 2,
-    boostRecovery: 1,
     cooldown: {
       boost: 0,
       facing: 0,
@@ -17764,7 +17763,9 @@ Player = function(I) {
     for (key in _ref) {
       value = _ref[key];
       if (key === "boost") {
-        I.cooldown[key] = value.approach(0, dt * I.boostRecovery);
+        if (!I.boosting) {
+          I.cooldown[key] = value.approach(0, dt * I.boostRecoveryRate);
+        }
       } else {
         I.cooldown[key] = value.approach(0, dt);
       }
@@ -17773,6 +17774,7 @@ Player = function(I) {
   });
   self.on("update", function(dt) {
     var gain, movement, movementLength, movementScale, velocityLength, velocityNorm;
+    I.boosting = false;
     if (I.velocity.magnitude() !== 0) {
       I.heading = Point.direction(Point(0, 0), I.velocity);
     }
@@ -17811,13 +17813,9 @@ Player = function(I) {
       } else if (I.shotCharge) {
         I.cooldown.shoot = I.shootCooldownFrameCount * I.shootCooldownFrameDelay;
       } else if (I.cooldown.boost < I.boostMeter && (actionDown("A", "L", "R") || (axisPosition(4) > 0) || (axisPosition(5) > 0) || self.aiAction("turbo"))) {
-        if (I.cooldown.boost === 0) {
-          movementScale = 10;
-          I.cooldown.boost += 8;
-        } else {
-          movementScale = I.boostMultiplier;
-          I.cooldown.boost += 4;
-        }
+        I.boosting = true;
+        movementScale = I.boostMultiplier;
+        I.cooldown.boost += dt;
       }
       velocityNorm = I.velocity.norm();
       velocityLength = I.velocity.length();
@@ -17866,9 +17864,9 @@ Player.Data = function(I, self) {
 };
 
 Player.defaultData = {
-  boostMeter: 64,
+  boostMeter: 2,
   boostMultiplier: 2,
-  boostRecovery: 30,
+  boostRecoveryRate: 0.25,
   strength: 1,
   puckControl: 2
 };
@@ -17928,8 +17926,8 @@ Player.teamData = {
 
 Player.teamDeltas = {
   smiley: {
-    boostMeter: +32,
-    boostRecovery: +8,
+    boostMeter: +1,
+    boostRecoveryRate: +0.125,
     mass: -5
   },
   spike: {
