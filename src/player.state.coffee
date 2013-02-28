@@ -5,7 +5,7 @@ Player.State = (I={}, self) ->
     action: "idle"
     facing: "front"
 
-  jitterSoak = 10
+  jitterSoak = 0.33
 
   setFacing = (newFacing) ->
     unless I.cooldown.facing
@@ -54,7 +54,7 @@ Player.State = (I={}, self) ->
       forceFacing "front"
       I.action = "fall"
       I.headAction = "pain"
-      I.frame = ((25 - I.wipeout) / 3).floor().clamp(0, 5)
+      I.frame = ((I.fallDuration - I.wipeout) * 6 / I.fallDuration).floor().clamp(0, 5)
     else if ratio = self.shotChargeRatio()
       forceFacing "front"
       I.action = "shoot"

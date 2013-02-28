@@ -15,7 +15,7 @@ Player.Data = (I, self) ->
 Player.defaultData =
   boostMeter: 64
   boostMultiplier: 2
-  boostRecovery: 1
+  boostRecovery: 30 # Boost points per second
   strength: 1
   puckControl: 2
 
@@ -71,7 +71,7 @@ Player.teamDeltas =
   smiley:
     # Extra Turbo Meter
     boostMeter: +32
-    boostRecovery: +0.25
+    boostRecovery: +8
     # Lightweights
     mass: -5
   spike:

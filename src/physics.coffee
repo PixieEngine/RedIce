@@ -191,7 +191,9 @@ Physics = (I={}) ->
   process: (objects) ->
     steps = 5
 
-    dt = 1 / (2 * steps) # 2x for 60FPS
+    fpsRatio = engine.I.FPS / 30 # 2x for 60FPS
+
+    dt = 1 / (fpsRatio * steps)
 
     steps.times ->
       objects.invoke "updatePosition", dt

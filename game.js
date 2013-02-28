@@ -16827,9 +16827,10 @@ Physics = function(I) {
   };
   return {
     process: function(objects) {
-      var dt, steps;
+      var dt, fpsRatio, steps;
       steps = 5;
-      dt = 1 / (2 * steps);
+      fpsRatio = engine.I.FPS / 30;
+      dt = 1 / (fpsRatio * steps);
       return steps.times(function() {
         objects.invoke("updatePosition", dt);
         resolveCollisions(objects, dt);
@@ -17636,6 +17637,7 @@ Player = function(I) {
     collisionMargin: Point(2, 2),
     controlRadius: 50,
     falls: 0,
+    fallDuration: 0.85,
     friction: 0.075,
     heading: 0,
     mass: 10,
@@ -17658,7 +17660,7 @@ Player = function(I) {
     teamStyle: "spike",
     bodyStyle: "tubs",
     wipeout: 0,
-    shootCooldownFrameDelay: 3,
+    shootCooldownFrameDelay: 0.1,
     puckLead: 75,
     velocity: Point()
   });
@@ -17705,7 +17707,7 @@ Player = function(I) {
     },
     wipeout: function(push) {
       I.falls += 1;
-      I.wipeout = 25;
+      I.wipeout = I.fallDuration;
       I.shotCharge = 0;
       push = push.norm().scale(30);
       Fan.cheer(1);
@@ -17756,24 +17758,21 @@ Player = function(I) {
     });
     return I.shotCharge = 0;
   };
-  self.on("update", function() {
-    var key, value, _ref, _results;
+  self.on("update", function(dt) {
+    var key, value, _ref;
     _ref = I.cooldown;
-    _results = [];
     for (key in _ref) {
       value = _ref[key];
       if (key === "boost") {
-        _results.push(I.cooldown[key] = value.approach(0, I.boostRecovery));
+        I.cooldown[key] = value.approach(0, dt * I.boostRecovery);
       } else {
-        _results.push(I.cooldown[key] = value.approach(0, 1));
+        I.cooldown[key] = value.approach(0, dt);
       }
     }
-    return _results;
+    return I.wipeout = I.wipeout.approach(0, dt);
   });
   self.on("update", function(dt) {
     var gain, movement, movementLength, movementScale, velocityLength, velocityNorm;
-    I.boost = I.boost.approach(0, 1);
-    I.wipeout = I.wipeout.approach(0, 1);
     if (I.velocity.magnitude() !== 0) {
       I.heading = Point.direction(Point(0, 0), I.velocity);
     }
@@ -17824,6 +17823,7 @@ Player = function(I) {
       velocityLength = I.velocity.length();
       movementLength = movement.length();
       if ((velocityLength > 4) && (movement.dot(velocityNorm) < (-0.95) * movementLength)) {
+        I.cooldown.facing = 0;
         self.trigger("slide_stop");
         ParticleEffect.iceSpray({
           push: I.velocity,
@@ -17868,7 +17868,7 @@ Player.Data = function(I, self) {
 Player.defaultData = {
   boostMeter: 64,
   boostMultiplier: 2,
-  boostRecovery: 1,
+  boostRecovery: 30,
   strength: 1,
   puckControl: 2
 };
@@ -17929,7 +17929,7 @@ Player.teamData = {
 Player.teamDeltas = {
   smiley: {
     boostMeter: +32,
-    boostRecovery: +0.25,
+    boostRecovery: +8,
     mass: -5
   },
   spike: {
@@ -18297,7 +18297,7 @@ Player.State = function(I, self) {
     action: "idle",
     facing: "front"
   });
-  jitterSoak = 10;
+  jitterSoak = 0.33;
   setFacing = function(newFacing) {
     if (!I.cooldown.facing) {
       I.cooldown.facing = jitterSoak;
@@ -18342,7 +18342,7 @@ Player.State = function(I, self) {
       forceFacing("front");
       I.action = "fall";
       I.headAction = "pain";
-      I.frame = ((25 - I.wipeout) / 3).floor().clamp(0, 5);
+      I.frame = ((I.fallDuration - I.wipeout) * 6 / I.fallDuration).floor().clamp(0, 5);
     } else if (ratio = self.shotChargeRatio()) {
       forceFacing("front");
       I.action = "shoot";

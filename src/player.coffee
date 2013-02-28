@@ -12,6 +12,7 @@ Player = (I={}) ->
     collisionMargin: Point(2, 2)
     controlRadius: 50
     falls: 0
+    fallDuration: 0.85 # seconds
     friction: 0.075
     heading: 0
     mass: 10
@@ -34,7 +35,7 @@ Player = (I={}) ->
     teamStyle: "spike"
     bodyStyle: "tubs"
     wipeout: 0
-    shootCooldownFrameDelay: 3
+    shootCooldownFrameDelay: 0.1 # seconds / animation frame
     puckLead: 75
     velocity: Point()
 
@@ -89,7 +90,7 @@ Player = (I={}) ->
 
     wipeout: (push) ->
       I.falls += 1
-      I.wipeout = 25
+      I.wipeout = I.fallDuration
 
       I.shotCharge = 0
 
@@ -147,19 +148,17 @@ Player = (I={}) ->
 
     I.shotCharge = 0
 
-  self.on "update", ->
+  self.on "update", (dt) ->
     for key, value of I.cooldown
       # Boost Recovery is Special
       if key is "boost"
-        I.cooldown[key] = value.approach(0, I.boostRecovery)
+        I.cooldown[key] = value.approach(0, dt * I.boostRecovery)
       else
-        I.cooldown[key] = value.approach(0, 1)
+        I.cooldown[key] = value.approach(0, dt)
 
+    I.wipeout = I.wipeout.approach(0, dt)
 
   self.on "update", (dt) ->
-    I.boost = I.boost.approach(0, 1)
-    I.wipeout = I.wipeout.approach(0, 1)
-
     unless I.velocity.magnitude() == 0
       I.heading = Point.direction(Point(0, 0), I.velocity)
 
@@ -218,6 +217,7 @@ Player = (I={}) ->
       movementLength = movement.length()
 
       if (velocityLength > 4) && (movement.dot(velocityNorm) < (-0.95) * movementLength)
+        I.cooldown.facing = 0
         self.trigger "slide_stop"
         ParticleEffect.iceSpray
           push: I.velocity
