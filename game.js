@@ -15966,7 +15966,7 @@ MatchState = function(I) {
     Music.volume(config.musicVolume);
     return Music.play(TEAM_MUSIC[homeTeam].rand());
   });
-  self.on("update", function() {
+  self.on("update", function(dt) {
     var camera, gibs, objects, players, playersAndPucks, puckLeader, pucks, zambonis;
     Fan.crowd.invoke("update");
     pucks = engine.find("Puck");
@@ -15987,7 +15987,7 @@ MatchState = function(I) {
             if (!puck.puckControl(player)) {
               return;
             }
-            return player.controlPuck(puck);
+            return player.controlPuck(puck, dt);
           }
         });
       });
@@ -17626,7 +17626,7 @@ Player = function(I) {
   Object.reverseMerge(I, {
     boost: 0,
     boostMeter: 64,
-    boostMultiplier: 2,
+    boostMultiplier: 1,
     cooldown: {
       boost: 0,
       facing: 0,
@@ -17673,6 +17673,9 @@ Player = function(I) {
     player: function() {
       return true;
     },
+    boostRatio: function() {
+      return ((I.boostMeter - I.cooldown.boost) / I.boostMeter).clamp(0, 1);
+    },
     shotChargeRatio: function() {
       return (I.shotCharge / I.maxShotCharge).clamp(0, 1);
     },
@@ -17685,7 +17688,7 @@ Player = function(I) {
       c2.radius = I.controlRadius * 2;
       return [c1, c2];
     },
-    controlPuck: function(puck) {
+    controlPuck: function(puck, dt) {
       var maxPuckForce, p, positionDelta, puckVelocity, targetPuckPosition;
       if (I.cooldown.shoot) {
         return;
@@ -17696,7 +17699,7 @@ Player = function(I) {
       puckVelocity = puck.I.velocity;
       positionDelta = targetPuckPosition.subtract(puck.center().add(puckVelocity));
       if (positionDelta.magnitude() > maxPuckForce) {
-        positionDelta = positionDelta.norm().scale(maxPuckForce);
+        positionDelta = positionDelta.norm(maxPuckForce * dt * 30);
       }
       I.hasPuck = true;
       return puck.I.velocity = puck.I.velocity.add(positionDelta);
@@ -17814,7 +17817,7 @@ Player = function(I) {
         I.cooldown.shoot = I.shootCooldownFrameCount * I.shootCooldownFrameDelay;
       } else if (I.cooldown.boost < I.boostMeter && (actionDown("A", "L", "R") || (axisPosition(4) > 0) || (axisPosition(5) > 0) || self.aiAction("turbo"))) {
         I.boosting = true;
-        movementScale = I.boostMultiplier;
+        movementScale = I.boostMultiplier * (self.boostRatio() + 1);
         I.cooldown.boost += dt;
       }
       velocityNorm = I.velocity.norm();
@@ -17865,7 +17868,7 @@ Player.Data = function(I, self) {
 
 Player.defaultData = {
   boostMeter: 2,
-  boostMultiplier: 2,
+  boostMultiplier: 1,
   boostRecoveryRate: 0.25,
   strength: 1,
   puckControl: 2
@@ -17937,7 +17940,7 @@ Player.teamDeltas = {
     mass: -5,
     strength: -0.25,
     boostMeter: -32,
-    boostMultiplier: +2,
+    boostMultiplier: +1,
     movementSpeed: +1.5,
     friction: +0.125,
     puckControl: +2.5
@@ -19412,7 +19415,7 @@ TestState = function(I) {
       return controller.drawDebug(canvas);
     });
   });
-  self.on("update", function() {
+  self.on("update", function(dt) {
     var objects, players, playersAndPucks, pucks, zambonis;
     pucks = engine.find("Puck");
     players = engine.find("Player").shuffle();
@@ -19425,7 +19428,7 @@ TestState = function(I) {
       }
       return pucks.each(function(puck) {
         if (Collision.circular(player.controlCircle(), puck.circle())) {
-          return player.controlPuck(puck);
+          return player.controlPuck(puck, dt);
         }
       });
     });

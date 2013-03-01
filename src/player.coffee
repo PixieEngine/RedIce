@@ -2,7 +2,7 @@ Player = (I={}) ->
   Object.reverseMerge I,
     boost: 0
     boostMeter: 64
-    boostMultiplier: 2
+    boostMultiplier: 1
     cooldown:
       boost: 0
       facing: 0
@@ -49,6 +49,9 @@ Player = (I={}) ->
     player: ->
       true
 
+    boostRatio: ->
+      ((I.boostMeter - I.cooldown.boost) / I.boostMeter).clamp(0, 1)
+
     shotChargeRatio: ->
       (I.shotCharge / I.maxShotCharge).clamp(0, 1)
 
@@ -65,7 +68,7 @@ Player = (I={}) ->
 
       return [c1, c2]
 
-    controlPuck: (puck) ->
+    controlPuck: (puck, dt) ->
       return if I.cooldown.shoot
 
       maxPuckForce = I.puckControl / puck.mass()
@@ -78,7 +81,7 @@ Player = (I={}) ->
       positionDelta = targetPuckPosition.subtract(puck.center().add(puckVelocity))
 
       if positionDelta.magnitude() > maxPuckForce
-        positionDelta = positionDelta.norm().scale(maxPuckForce)
+        positionDelta = positionDelta.norm(maxPuckForce * dt * 30)
 
       I.hasPuck = true
 
@@ -205,12 +208,12 @@ Player = (I={}) ->
         I.cooldown.shoot = I.shootCooldownFrameCount * I.shootCooldownFrameDelay
       else if I.cooldown.boost < I.boostMeter && (actionDown("A", "L", "R") || (axisPosition(4) > 0) || (axisPosition(5) > 0) || self.aiAction("turbo"))
         # TODO: Fix scale for framerate independence
-        # TODO: Re-enable sprint boostin?
 
         I.boosting = true
 
-        # Normal boostin
-        movementScale = I.boostMultiplier
+        # Normal boostin, less boost the less your boost meter
+        # Doubled at beginning, down to 1x at the end
+        movementScale = I.boostMultiplier * (self.boostRatio() + 1)
         I.cooldown.boost += dt
 
       # Check cutback

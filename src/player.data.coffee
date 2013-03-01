@@ -14,7 +14,7 @@ Player.Data = (I, self) ->
 
 Player.defaultData =
   boostMeter: 2 # seconds of boost (assuming no recovery)
-  boostMultiplier: 2
+  boostMultiplier: 1
   boostRecoveryRate: 0.25 # Multiplier for boost recovery, 1 is 100% recovery of boost used per frame
   strength: 1
   puckControl: 2
@@ -84,7 +84,7 @@ Player.teamDeltas =
     # Less Turbo Meter
     boostMeter: -32
     # Fast 'n Sticky
-    boostMultiplier: +2
+    boostMultiplier: +1
     movementSpeed: +1.5
     friction: +0.125
     # Strong Puck Control

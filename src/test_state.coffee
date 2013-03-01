@@ -26,7 +26,7 @@ TestState = (I={}) ->
     canvas.withTransform Matrix.translation(50, 50), (canvas) ->
       controller.drawDebug(canvas)
 
-  self.on "update", ->
+  self.on "update", (dt) ->
     pucks = engine.find("Puck")
     players = engine.find("Player").shuffle()
     zambonis = engine.find("Zamboni")
@@ -40,7 +40,7 @@ TestState = (I={}) ->
 
       pucks.each (puck) ->
         if Collision.circular(player.controlCircle(), puck.circle())
-          player.controlPuck(puck)
+          player.controlPuck(puck, dt)
 
     physics.process(objects)
 

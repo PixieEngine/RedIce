@@ -68,7 +68,7 @@ MatchState = (I={}) ->
     Music.play TEAM_MUSIC[homeTeam].rand()
 
   # Add events and methods here
-  self.on "update", ->
+  self.on "update", (dt) ->
     Fan.crowd.invoke("update")
 
     pucks = engine.find("Puck")
@@ -89,7 +89,7 @@ MatchState = (I={}) ->
         controlCircles.each (circle) ->
           if Collision.circular(circle, puck.circle())
             return unless puck.puckControl(player) # This puck is out of control!
-            player.controlPuck(puck)
+            player.controlPuck(puck, dt)
 
     physics.process(objects)
 
