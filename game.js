@@ -17939,7 +17939,7 @@ Player.teamDeltas = {
   hiss: {
     mass: -5,
     strength: -0.25,
-    boostMeter: -32,
+    boostMeter: -1,
     boostMultiplier: +1,
     movementSpeed: +1.5,
     friction: +0.125,

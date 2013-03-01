@@ -82,7 +82,7 @@ Player.teamDeltas =
     mass: -5
     strength: -0.25
     # Less Turbo Meter
-    boostMeter: -32
+    boostMeter: -1
     # Fast 'n Sticky
     boostMultiplier: +1
     movementSpeed: +1.5
