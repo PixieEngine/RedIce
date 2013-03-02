@@ -23,6 +23,10 @@ Airplane = (I={}) ->
 
   self = GameObject(I)
 
+  self.on "create", ->
+    engine.add
+      class: "AirplaneLeader"
+
   self.on "update", ->
     I.sprite = Map.sprites.plane
 
@@ -48,6 +52,8 @@ Airplane = (I={}) ->
 
     if I.choose
       duration = 0.5
+    else if I.moon
+      duration = 4
     else
       duration = 1
 
@@ -67,6 +73,25 @@ Airplane = (I={}) ->
       camera = engine.camera()
       camera.I.cameraBounds.y = -App.height
       camera.I.cameraBounds.height = App.height*2
-      camera.follow(self)
+      camera.follow(engine.first("AirplaneLeader"))
 
   self
+
+AirplaneLeader = (I) ->
+
+  self = GameObject(I).extend
+    draw: (canvas) ->
+      # Do nothing
+
+  self.on "update", (canvas) ->
+    if target = engine.first("Airplane")
+      position = target.position()
+      destination = target.I.destination
+
+      # Midpoint to destination
+      position = Point.centroid(position, destination)
+
+      I.x = position.x
+      I.y = position.y
+
+  return self
