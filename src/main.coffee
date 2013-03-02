@@ -16,6 +16,7 @@ window.config =
   particleEffects: true
   musicVolume: 0#.5
   sfxVolume: 0#.5
+  FPS: 60
 
 Music.volume config.musicVolume
 Sound.globalVolume config.sfxVolume
@@ -46,7 +47,7 @@ window.engine = Engine
   canvas: canvas
   showFPS: true
   zSort: true
-  FPS: 60
+  FPS: config.FPS
 
 $(window).focus ->
   Music.play()

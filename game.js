@@ -19670,7 +19670,8 @@ window.config = {
   awayTeam: teamChoices[0],
   particleEffects: true,
   musicVolume: 0,
-  sfxVolume: 0
+  sfxVolume: 0,
+  FPS: 60
 };
 
 Music.volume(config.musicVolume);
@@ -19702,7 +19703,7 @@ window.engine = Engine({
   canvas: canvas,
   showFPS: true,
   zSort: true,
-  FPS: 60
+  FPS: config.FPS
 });
 
 $(window).focus(function() {
