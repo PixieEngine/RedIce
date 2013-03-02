@@ -26,13 +26,7 @@ config.teams.each (name) ->
   teamSprites[name] = TeamSheet
     team: name
 
-window.bloodCanvas = $("<canvas width=#{2 * App.width} height=#{App.height} />")
-  .css
-    position: "absolute"
-    top: 0
-    left: 0
-    zIndex: "-5"
-  .pixieCanvas()
+window.bloodCanvas = $("<canvas width=#{2 * App.width} height=#{App.height} />").pixieCanvas()
 
 bloodCanvas.strokeColor(BLOOD_COLOR)
 # bloodCanvas.fill(BLOOD_COLOR) # For zamboni testing

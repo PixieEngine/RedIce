@@ -13488,17 +13488,16 @@ Blood = function(I) {
 };
 
 (function() {
-  var monsterBlood, mutantBlood, normalBlood, robotBlood, scale, size;
-  size = 512;
-  scale = 0.25;
+  var monsterBlood, mutantBlood, normalBlood, robotBlood, size;
+  size = 128;
   normalBlood = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(function(n) {
-    return Sprite.loadSheet("gibs/floor_decals/" + n, size, size, scale);
+    return Sprite.loadSheet("gibs/floor_decals/" + n, size, size);
   });
   mutantBlood = [25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36].map(function(n) {
-    return Sprite.loadSheet("gibs/floor_decals/" + n, size, size, scale);
+    return Sprite.loadSheet("gibs/floor_decals/" + n, size, size);
   });
   robotBlood = [37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48].map(function(n) {
-    return Sprite.loadSheet("gibs/floor_decals/" + n, size, size, scale);
+    return Sprite.loadSheet("gibs/floor_decals/" + n, size, size);
   });
   monsterBlood = [].concat(normalBlood, mutantBlood, robotBlood);
   return Blood.sprites = {
@@ -19684,12 +19683,7 @@ config.teams.each(function(name) {
   });
 });
 
-window.bloodCanvas = $("<canvas width=" + (2 * App.width) + " height=" + App.height + " />").css({
-  position: "absolute",
-  top: 0,
-  left: 0,
-  zIndex: "-5"
-}).pixieCanvas();
+window.bloodCanvas = $("<canvas width=" + (2 * App.width) + " height=" + App.height + " />").pixieCanvas();
 
 bloodCanvas.strokeColor(BLOOD_COLOR);
 

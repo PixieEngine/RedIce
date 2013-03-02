@@ -25,17 +25,16 @@ Blood = (I={}) ->
   self
 
 do ->
-  size = 512
-  scale = 0.25
+  size = 128
 
   normalBlood = [1..12].map (n) ->
-    Sprite.loadSheet "gibs/floor_decals/#{n}", size, size, scale
+    Sprite.loadSheet "gibs/floor_decals/#{n}", size, size
 
   mutantBlood = [25..36].map (n) ->
-    Sprite.loadSheet "gibs/floor_decals/#{n}", size, size, scale
+    Sprite.loadSheet "gibs/floor_decals/#{n}", size, size
 
   robotBlood = [37..48].map (n) ->
-    Sprite.loadSheet "gibs/floor_decals/#{n}", size, size, scale
+    Sprite.loadSheet "gibs/floor_decals/#{n}", size, size
 
   monsterBlood = [].concat(normalBlood, mutantBlood, robotBlood)
 
