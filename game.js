@@ -18984,7 +18984,8 @@ Scoreboard = function(I) {
     periodTime: 60,
     reverse: false,
     time: 0,
-    zamboniInterval: 30 * 30,
+    timeSinceLastZamboni: 0,
+    zamboniInterval: 30,
     zIndex: App.height / 2,
     timeY: 106,
     scoreY: 134,
@@ -19095,15 +19096,15 @@ Scoreboard = function(I) {
     }
   });
   self.on("update", function(dt) {
-    if (I.time % I.zamboniInterval === 0) {
-      if (!(I.time === I.periodTime && I.period === 1)) {
-        I.reverse = !I.reverse;
-        engine.add({
-          "class": "Zamboni",
-          reverse: I.reverse,
-          team: [config.awayTeam, config.homeTeam][0 | I.reverse]
-        });
-      }
+    I.timeSinceLastZamboni += dt;
+    if (I.timeSinceLastZamboni >= I.zamboniInterval) {
+      I.timeSinceLastZamboni = 0;
+      I.reverse = !I.reverse;
+      engine.add({
+        "class": "Zamboni",
+        reverse: I.reverse,
+        team: [config.awayTeam, config.homeTeam][0 | I.reverse]
+      });
     }
     I.time -= dt;
     if (I.gameOver) {
@@ -19668,8 +19669,8 @@ window.config = {
   homeTeam: teamChoices[1],
   awayTeam: teamChoices[0],
   particleEffects: true,
-  musicVolume: 0.5,
-  sfxVolume: 0.5
+  musicVolume: 0,
+  sfxVolume: 0
 };
 
 Music.volume(config.musicVolume);

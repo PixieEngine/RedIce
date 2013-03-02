@@ -5,6 +5,7 @@ do ->
   teamChoices = [params.team1, params.team2].compact()
   teamChoices = teamChoices.concat(TEAMS.without(teamChoices))
 
+# TODO Persistent and adjustable config
 window.config =
   playerTeam: null
   defeatedTeams: []
@@ -13,8 +14,8 @@ window.config =
   homeTeam: teamChoices[1]
   awayTeam: teamChoices[0]
   particleEffects: true
-  musicVolume: 0.5
-  sfxVolume: 0.5
+  musicVolume: 0#.5
+  sfxVolume: 0#.5
 
 Music.volume config.musicVolume
 Sound.globalVolume config.sfxVolume

@@ -8,7 +8,8 @@ Scoreboard = (I) ->
     periodTime: 60 # seconds
     reverse: false
     time: 0
-    zamboniInterval: 30 * 30
+    timeSinceLastZamboni: 0 # seconds
+    zamboniInterval: 30 # seconds
     zIndex: App.height / 2
     timeY: 106
     scoreY: 134
@@ -118,15 +119,18 @@ Scoreboard = (I) ->
         y: 120
 
   self.on "update", (dt) ->
-    if I.time % I.zamboniInterval == 0
-      # No Zamboni very second
-      unless I.time == I.periodTime && I.period == 1
-        I.reverse = !I.reverse
+    I.timeSinceLastZamboni += dt
 
-        engine.add
-          class: "Zamboni"
-          reverse: I.reverse
-          team: [config.awayTeam, config.homeTeam][0|I.reverse]
+    if I.timeSinceLastZamboni >= I.zamboniInterval
+      I.timeSinceLastZamboni = 0
+
+      # Alternate between home and away team zambonis
+      I.reverse = !I.reverse
+
+      engine.add
+        class: "Zamboni"
+        reverse: I.reverse
+        team: [config.awayTeam, config.homeTeam][0|I.reverse] # Choose team based on reverse state
 
     I.time -= dt
 
