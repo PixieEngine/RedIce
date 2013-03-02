@@ -98,6 +98,11 @@ task :gib_image_resize do
   end
 end
 
+task :fan_image_resize do
+  sh "for f in images/crowd/*.png; do mv -f $f ${f/.png}@4x.png; done"
+  sh "for f in images/crowd/*.png; do convert -resize 25% $f ${f/@4x.png}.png; done"
+end
+
 def dist_name
   "Red-Ice"
 end
