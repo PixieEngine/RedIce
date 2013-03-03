@@ -13897,12 +13897,14 @@ Cutscene = function(I) {
       width: App.width,
       height: App.height / 3,
       x: App.width / 2,
-      y: 5 / 6 * App.height
+      y: 5 / 6 * App.height,
+      zIndex: 9000
     });
     return dialog = engine.add({
       "class": "DialogBox",
       text: I.text,
-      y: 2 / 3 * App.height
+      y: 2 / 3 * App.height,
+      zIndex: 9001
     });
   });
   self.on("update", function() {
@@ -13997,28 +13999,48 @@ $(function() {
         nextState: MapState
       },
       hiss: {
-        text: "What do you like BEST about the Serpentmen?\n\nThey BIT me! WooOo!",
-        background: "tailgate_serpentmen"
+        text: "What do you like BEST about the Serpentmen?\n\nThey BIT me! WooOo!"
       },
       smiley: {
-        text: "Here's a fan now! Hello sir, why are YOU smiling?\n\nHow the HELL should I know?",
-        background: "smiley_arena"
+        text: "Here's a fan now! Hello sir, why are YOU smiling?\n\nHow the HELL should I know?"
       },
       spike: {
-        text: "",
-        background: "spike_fans"
+        text: ""
       },
       mutant: {
         text: "MUTANT FEVER! The fans are out in record numbers. Please be advised to stay indoors--\nThere is no cure.",
-        background: "mutant_fever"
+        props: [
+          {
+            head: {
+              x: 370,
+              y: 175,
+              registrationPoint: Point(-80, 150),
+              rotationFn: function(t) {
+                return Math.sin((t / 15) * Math.TAU) * Math.TAU / 256 + Math.sin((t / 4 - 0.5) * Math.TAU) * Math.TAU / 128;
+              }
+            },
+            arm: {
+              registrationPoint: Point(-320, 78),
+              rotationFn: function(t) {
+                return Math.sin((t / 15) * Math.TAU) * Math.TAU / 90 + Math.sin((t / 5 - 0.25) * Math.TAU) * Math.TAU / 20;
+              }
+            },
+            boom: {
+              x: 750,
+              y: 20,
+              registrationPoint: Point(512, 256),
+              rotationFn: function(t) {
+                return Math.sin((t / 15) * Math.TAU) * Math.TAU / 256 + Math.sin((t / 4 - 0.25) * Math.TAU) * Math.TAU / 1024;
+              }
+            }
+          }, "tv"
+        ]
       },
       monster: {
-        text: "Ok... show me how it's done.",
-        background: "monster_graveyard"
+        text: "Ok... show me how it's done."
       },
       robo: {
-        text: "This is what it's all about.",
-        background: "on_da_moon"
+        text: "This is what it's all about."
       }
     };
     _ref = Cutscene.scenes;

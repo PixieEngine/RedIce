@@ -74,6 +74,7 @@ engine.setState(LoaderState(
   nextState: MainMenuState
 ))
 
-# engine.setState Cutscene.scenes.intro
+# $ ->
+#   engine.setState Cutscene.scenes.mutant
 
 engine.start()

@@ -35,11 +35,13 @@ Cutscene = (I={}) ->
       height: App.height/3
       x: App.width/2
       y: 5 / 6 * App.height
+      zIndex: 9000
 
     dialog = engine.add
       class: "DialogBox"
       text: I.text
       y: 2/3*App.height
+      zIndex: 9001
 
   self.on "update", ->
     engine.controllers().each (controller) ->
@@ -136,33 +138,49 @@ $ ->
 
           They BIT me! WooOo!
         """
-        background: "tailgate_serpentmen"
       smiley:
         text: """
           Here's a fan now! Hello sir, why are YOU smiling?
 
           How the HELL should I know?
         """
-        background: "smiley_arena"
       spike:
         text: ""
-        background: "spike_fans"
       mutant:
         text: """
           MUTANT FEVER! The fans are out in record numbers. Please be advised to stay indoors--
           There is no cure.
         """
-        background: "mutant_fever"
+        props: [
+          head:
+            x: 370
+            y: 175
+            registrationPoint: Point(-80, 150)
+            rotationFn: (t) ->
+              Math.sin((t / 15) * Math.TAU) * Math.TAU / 256 +
+              Math.sin((t / 4 - 0.5) * Math.TAU) * Math.TAU / 128
+          arm:
+            registrationPoint: Point(-320, 78)
+            rotationFn: (t) ->
+              Math.sin((t / 15) * Math.TAU) * Math.TAU / 90 +
+              Math.sin((t / 5 - 0.25) * Math.TAU) * Math.TAU / 20
+          boom:
+            x: 750
+            y: 20
+            registrationPoint: Point(512, 256)
+            rotationFn: (t) ->
+              Math.sin((t / 15) * Math.TAU) * Math.TAU / 256 +
+              Math.sin((t / 4 - 0.25) * Math.TAU) * Math.TAU / 1024
+          "tv"
+        ]
       monster:
         text: """
           Ok... show me how it's done.
         """
-        background: "monster_graveyard"
       robo:
         text: """
           This is what it's all about.
         """
-        background: "on_da_moon"
 
     for name, data of Cutscene.scenes
       data.background = Sprite.loadByName "cutscenes/#{name}/background"
