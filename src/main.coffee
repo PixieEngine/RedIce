@@ -1,18 +1,9 @@
-teamChoices = []
-
-do ->
-  params = queryString()
-  teamChoices = [params.team1, params.team2].compact()
-  teamChoices = teamChoices.concat(TEAMS.without(teamChoices))
 
 # TODO Persistent and adjustable config
 window.config =
   playerTeam: null
   defeatedTeams: []
-  teams: teamChoices
   players: []
-  homeTeam: teamChoices[1]
-  awayTeam: teamChoices[0]
   particleEffects: true
   musicVolume: 0#.5
   sfxVolume: 0#.5
@@ -20,11 +11,6 @@ window.config =
 
 Music.volume config.musicVolume
 Sound.globalVolume config.sfxVolume
-
-# TODO move to preload just prior to usage
-config.teams.each (name) ->
-  teamSprites[name] = TeamSheet
-    team: name
 
 window.bloodCanvas = $("<canvas width=#{2 * App.width} height=#{App.height} />").pixieCanvas()
 
@@ -80,6 +66,9 @@ engine.on "draw", (canvas) ->
     canvas.withTransform engine.camera().transform().translate(App.width/2, App.height/2), ->
       engine.find("Player, Puck, Goal, Bottle, Zamboni, Blood, Gib").each (object) ->
         object.trigger("drawDebug", canvas)
+
+    if gamepad = engine.controllers()[2]
+      gamepad.drawDebug(canvas)
 
 engine.setState(LoaderState(
   nextState: MainMenuState

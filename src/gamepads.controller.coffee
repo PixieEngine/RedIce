@@ -1,15 +1,16 @@
 Gamepads.Controller = (I={}) ->
   Object.reverseMerge I,
     debugColor: "#000"
-  
+
   MAX_BUFFER = 0.03
   AXIS_MAX = 1 - MAX_BUFFER
   DEAD_ZONE = AXIS_MAX * 0.2
   TRIP_HIGH = AXIS_MAX * 0.75
   TRIP_LOW = AXIS_MAX * 0.5
-  
+
   BUTTON_THRESHOLD = 0.5
 
+  # TODO: Verify for other platforms
   buttonMapping =
     "A": 0
     "B": 1
@@ -28,17 +29,17 @@ Gamepads.Controller = (I={}) ->
     "RB": 5
     "R1": 5
 
-    "SELECT": 6
-    "BACK": 6
+    "SELECT": 8
+    "BACK": 8
 
-    "START": 7
+    "START": 9
 
-    "HOME": 8
-    "GUIDE": 8
+    "HOME": 16
+    "GUIDE": 16
 
-    "TL": 9
-    "TR": 10
-  
+    "TL": 6
+    "TR": 7
+
   currentState = ->
     I.state.current?[I.index]
 
@@ -120,7 +121,7 @@ Gamepads.Controller = (I={}) ->
       processTaps()
 
     drawDebug: (canvas) ->
-      lineHeight = 18
+      lineHeight = 24
 
       self.axes().each (axis, i) ->
         canvas.drawText
@@ -132,7 +133,6 @@ Gamepads.Controller = (I={}) ->
       self.buttons().each (button, i) ->
         canvas.drawText
           color: I.debugColor
-          text: button
+          text: "#{i}: #{button}"
           x: 250
           y: i * lineHeight
-

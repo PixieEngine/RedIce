@@ -13,7 +13,7 @@ Zamboni = (I) ->
     y: ARENA_CENTER.y
     velocity: Point(1, 0)
     mass: 60
-    team: config.teams.rand()
+    team: config.homeTeam
     cleanColor: "#000"
 
   SWEEPER_SIZE = I.radius + 35

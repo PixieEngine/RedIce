@@ -1,6 +1,6 @@
 Rink = (I={}) ->
   Object.reverseMerge I,
-    team: config.teams.first() # Default team
+    team: config.homeTeam # Default team
     spriteSize: 128
     x: 0
     y: 0

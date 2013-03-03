@@ -55,6 +55,7 @@ Base = (I={}) ->
       # Optimize to not use any point methods because they create
       # new points and this is a hotspot in the code
       frictionFactor = (1 - friction * dt)
+
       I.velocity.x *= frictionFactor
       I.velocity.y *= frictionFactor
 

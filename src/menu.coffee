@@ -48,6 +48,22 @@ Menu = (I={}) ->
   # Inherit from game object
   self = GameObject(I)
 
+  # TODO Expose DSL to eliminate this stupid if statement
+  if I.matchPause
+    if config.storyMode
+      I.menus = [[
+        item "Resume", ->
+          self.destroy()
+        gamestate "Main Menu", MainMenuState
+      ]]
+    else
+      I.menus = [[
+        item "Resume", ->
+          self.destroy()
+        gamestate "Match Setup", MatchSetupState
+        gamestate "Main Menu", MainMenuState
+      ]]
+
   options = ->
     I.menus.last()
 
@@ -80,42 +96,43 @@ Menu = (I={}) ->
 
   self.unbind "draw"
 
-  self.on "draw", (canvas) ->
-    spriteWidth = 512
-    xOffset = 15
-    x = -spriteWidth/2 + xOffset
+  self.on "overlay", (canvas) ->
+    canvas.withTransform Matrix.translation(I.x, I.y), ->
+      spriteWidth = 512
+      xOffset = 15
+      x = -spriteWidth/2 + xOffset
 
-    sprite = Menu.topSprite
-    sprite.draw canvas, x, -sprite.height
+      sprite = Menu.topSprite
+      sprite.draw canvas, x, -sprite.height
 
-    sprite = Menu.middleSprite
-    sprite.draw canvas, x, 0
+      sprite = Menu.middleSprite
+      sprite.draw canvas, x, 0
 
-    sprite = Menu.bottomSprite
-    sprite.draw canvas, x, 128
+      sprite = Menu.bottomSprite
+      sprite.draw canvas, x, 128
 
-    canvas.font(I.font)
+      canvas.font(I.font)
 
-    textOffsetY = 10
+      textOffsetY = 10
 
-    options().each (option, i) ->
-      textColor = I.textColor
-      y = i * 64 + textOffsetY
+      options().each (option, i) ->
+        textColor = I.textColor
+        y = i * 64 + textOffsetY
 
-      if option is selectedOption()
-        textColor = I.highlightTextColor
+        if option is selectedOption()
+          textColor = I.highlightTextColor
 
-      canvas.centerText
-        text: option.text
-        x: 2
-        y: y + 2
-        color: I.shadowColor
+        canvas.centerText
+          text: option.text
+          x: 2
+          y: y + 2
+          color: I.shadowColor
 
-      canvas.centerText
-        text: option.text
-        x: 0
-        y: y
-        color: textColor
+        canvas.centerText
+          text: option.text
+          x: 0
+          y: y
+          color: textColor
 
   # We must always return self as the last line
   return self
