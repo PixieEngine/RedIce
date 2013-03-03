@@ -25,7 +25,7 @@ Player.Drawing = (I, self) ->
 
     center = self.center()
     camera = engine.camera()
-    scale = (App.width / 2) / (I.x - camera.I.x).abs()
+    scale = (((App.width / 2) / (I.x - camera.I.x).abs()) / 2) + 0.5
 
     canvas.withTransform Matrix.translation(x, y), ->
       canvas.withTransform Matrix.scale(scale), ->

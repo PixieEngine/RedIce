@@ -18097,7 +18097,7 @@ Player.Drawing = function(I, self) {
     y = I.y;
     center = self.center();
     camera = engine.camera();
-    scale = (App.width / 2) / (I.x - camera.I.x).abs();
+    scale = (((App.width / 2) / (I.x - camera.I.x).abs()) / 2) + 0.5;
     return canvas.withTransform(Matrix.translation(x, y), function() {
       return canvas.withTransform(Matrix.scale(scale), function() {
         return canvas.withTransform(Matrix.translation(-center.x, -center.y), function() {
