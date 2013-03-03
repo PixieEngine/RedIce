@@ -15,6 +15,8 @@ Zamboni = (I) ->
     mass: 60
     team: config.homeTeam
     cleanColor: "#000"
+    cleanRate: 1 / 60
+    lastCleaned: 0
 
   SWEEPER_SIZE = I.radius + 35
   bounds = 256
@@ -68,24 +70,16 @@ Zamboni = (I) ->
   cleanIce = ->
     currentPos = self.center()
 
-    boxPoints = [
-      Point(SWEEPER_SIZE/2, 0)
-      Point(SWEEPER_SIZE, 0)
-      Point(SWEEPER_SIZE, SWEEPER_SIZE)
-      Point(SWEEPER_SIZE/2, SWEEPER_SIZE)
-    ].map (p) ->
-      self.transform().transformPoint(p)
-
     bloodCanvas.globalCompositeOperation "destination-out" unless I.team is "monster"
-    bloodCanvas.globalAlpha 0.25
+    bloodCanvas.globalAlpha 0.05
 
-    bloodCanvas.drawCircle
-      position: currentPos
-      radius: SWEEPER_SIZE/2
-      color: I.cleanColor
-    bloodCanvas.drawPoly
-      points: boxPoints
-      color: I.cleanColor
+    5.times ->
+      offset = Point.fromAngle(Random.angle()).scale(SWEEPER_SIZE/4)
+
+      bloodCanvas.drawCircle
+        position: currentPos.add(offset)
+        radius: rand(SWEEPER_SIZE/4) + SWEEPER_SIZE/4
+        color: I.cleanColor
 
     bloodCanvas.globalAlpha 1
     bloodCanvas.globalCompositeOperation "source-over"
@@ -118,9 +112,9 @@ Zamboni = (I) ->
     else if -Math.TAU/8 > I.heading > -3*Math.TAU/8
       facing = "n"
 
-    I.sprite = teamSprites[I.team].zamboni[facing][(I.age/4).floor().mod(2)]
+    I.sprite = teamSprites[I.team].zamboni[facing].wrap((I.age / 0.4).floor())
 
-  self.on "update", ->
+  self.on "update", (dt) ->
     if I.x < -bounds || I.x > WALL_RIGHT + bounds
       I.active = false
 
@@ -135,7 +129,11 @@ Zamboni = (I) ->
 
       I.heading = Point.direction(Point(0, 0), I.velocity)
 
-      cleanIce() unless I.age < 1
+      I.lastCleaned += dt
+
+      while I.lastCleaned >= I.cleanRate
+        I.lastCleaned -= I.cleanRate
+        cleanIce()
 
       setSprite()
 

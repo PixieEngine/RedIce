@@ -142,6 +142,14 @@ Player.Drawing = (I, self) ->
       height: rectHeight
       radius: 4
 
+    backgroundColor.a = 0.10
+    canvas.drawRoundRect
+      color: backgroundColor
+      position: topLeft
+      width: rectWidth
+      height: rectHeight
+      radius: 4
+
     canvas.drawText
       text: name
       color: "#000"

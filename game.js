@@ -18231,6 +18231,14 @@ Player.Drawing = function(I, self) {
         height: rectHeight,
         radius: 4
       });
+      backgroundColor.a = 0.10;
+      canvas.drawRoundRect({
+        color: backgroundColor,
+        position: topLeft,
+        width: rectWidth,
+        height: rectHeight,
+        radius: 4
+      });
       return canvas.drawText({
         text: name,
         color: "#000",
@@ -19619,7 +19627,9 @@ Zamboni = function(I) {
     velocity: Point(1, 0),
     mass: 60,
     team: config.homeTeam,
-    cleanColor: "#000"
+    cleanColor: "#000",
+    cleanRate: 1 / 60,
+    lastCleaned: 0
   });
   SWEEPER_SIZE = I.radius + 35;
   bounds = 256;
@@ -19667,23 +19677,20 @@ Zamboni = function(I) {
   });
   pathIndex = 0;
   cleanIce = function() {
-    var boxPoints, currentPos;
+    var currentPos;
     currentPos = self.center();
-    boxPoints = [Point(SWEEPER_SIZE / 2, 0), Point(SWEEPER_SIZE, 0), Point(SWEEPER_SIZE, SWEEPER_SIZE), Point(SWEEPER_SIZE / 2, SWEEPER_SIZE)].map(function(p) {
-      return self.transform().transformPoint(p);
-    });
     if (I.team !== "monster") {
       bloodCanvas.globalCompositeOperation("destination-out");
     }
-    bloodCanvas.globalAlpha(0.25);
-    bloodCanvas.drawCircle({
-      position: currentPos,
-      radius: SWEEPER_SIZE / 2,
-      color: I.cleanColor
-    });
-    bloodCanvas.drawPoly({
-      points: boxPoints,
-      color: I.cleanColor
+    bloodCanvas.globalAlpha(0.05);
+    5..times(function() {
+      var offset;
+      offset = Point.fromAngle(Random.angle()).scale(SWEEPER_SIZE / 4);
+      return bloodCanvas.drawCircle({
+        position: currentPos.add(offset),
+        radius: rand(SWEEPER_SIZE / 4) + SWEEPER_SIZE / 4,
+        color: I.cleanColor
+      });
     });
     bloodCanvas.globalAlpha(1);
     return bloodCanvas.globalCompositeOperation("source-over");
@@ -19717,9 +19724,9 @@ Zamboni = function(I) {
     } else if ((-Math.TAU / 8 > (_ref2 = I.heading) && _ref2 > -3 * Math.TAU / 8)) {
       facing = "n";
     }
-    return I.sprite = teamSprites[I.team].zamboni[facing][(I.age / 4).floor().mod(2)];
+    return I.sprite = teamSprites[I.team].zamboni[facing].wrap((I.age / 0.4).floor());
   };
-  self.on("update", function() {
+  self.on("update", function(dt) {
     if (I.x < -bounds || I.x > WALL_RIGHT + bounds) {
       I.active = false;
     }
@@ -19732,7 +19739,9 @@ Zamboni = function(I) {
     } else {
       pathfind();
       I.heading = Point.direction(Point(0, 0), I.velocity);
-      if (!(I.age < 1)) {
+      I.lastCleaned += dt;
+      while (I.lastCleaned >= I.cleanRate) {
+        I.lastCleaned -= I.cleanRate;
         cleanIce();
       }
       return setSprite();
