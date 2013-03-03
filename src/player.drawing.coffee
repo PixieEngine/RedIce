@@ -20,18 +20,17 @@ Player.Drawing = (I, self) ->
       0
 
   drawOffscreenToken = (canvas, sign) ->
-    radius = 24
-    x = (1 + sign) * (App.width / 2) - (sign * radius)
+    x = (1 + sign) * (App.width / 2) - (sign * 16)
     y = I.y
 
-    color = self.color()
-    color.a = 0.5
+    center = self.center()
+    camera = engine.camera()
+    scale = (App.width / 2) / (I.x - camera.I.x).abs()
 
-    canvas.drawCircle
-      x: x
-      y: y
-      color: color
-      radius: radius
+    canvas.withTransform Matrix.translation(x, y), ->
+      canvas.withTransform Matrix.scale(scale), ->
+        canvas.withTransform Matrix.translation(-center.x, -center.y), ->
+          self.drawFloatingNameTag(canvas)
 
   self.on 'overlay', (canvas) ->
     # Check if off screen
@@ -120,7 +119,6 @@ Player.Drawing = (I, self) ->
     textWidth = canvas.measureText(name)
 
     backgroundColor = self.color()
-    backgroundColor.a = 0.5
 
     yOffset = -32
 
@@ -132,6 +130,13 @@ Player.Drawing = (I, self) ->
 
     canvas.drawRoundRect
       color: backgroundColor
+      position: topLeft.subtract(Point(2, 2))
+      width: rectWidth + 4
+      height: rectHeight + 4
+      radius: 4
+
+    canvas.drawRoundRect
+      color: "#FFF"
       position: topLeft
       width: rectWidth
       height: rectHeight
@@ -139,7 +144,7 @@ Player.Drawing = (I, self) ->
 
     canvas.drawText
       text: name
-      color: "#FFF"
+      color: "#000"
       x: topLeft.x + padding
       y: topLeft.y + lineHeight + padding/2
 

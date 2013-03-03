@@ -18092,17 +18092,18 @@ Player.Drawing = function(I, self) {
     }
   };
   drawOffscreenToken = function(canvas, sign) {
-    var color, radius, x, y;
-    radius = 24;
-    x = (1 + sign) * (App.width / 2) - (sign * radius);
+    var camera, center, scale, x, y;
+    x = (1 + sign) * (App.width / 2) - (sign * 16);
     y = I.y;
-    color = self.color();
-    color.a = 0.5;
-    return canvas.drawCircle({
-      x: x,
-      y: y,
-      color: color,
-      radius: radius
+    center = self.center();
+    camera = engine.camera();
+    scale = (App.width / 2) / (I.x - camera.I.x).abs();
+    return canvas.withTransform(Matrix.translation(x, y), function() {
+      return canvas.withTransform(Matrix.scale(scale), function() {
+        return canvas.withTransform(Matrix.translation(-center.x, -center.y), function() {
+          return self.drawFloatingNameTag(canvas);
+        });
+      });
     });
   };
   self.on('overlay', function(canvas) {
@@ -18211,7 +18212,6 @@ Player.Drawing = function(I, self) {
       lineHeight = 16;
       textWidth = canvas.measureText(name);
       backgroundColor = self.color();
-      backgroundColor.a = 0.5;
       yOffset = -32;
       center = self.center();
       topLeft = center.subtract(Point(textWidth / 2 + padding, lineHeight / 2 + padding + yOffset));
@@ -18219,6 +18219,13 @@ Player.Drawing = function(I, self) {
       rectHeight = lineHeight + 2 * padding;
       canvas.drawRoundRect({
         color: backgroundColor,
+        position: topLeft.subtract(Point(2, 2)),
+        width: rectWidth + 4,
+        height: rectHeight + 4,
+        radius: 4
+      });
+      canvas.drawRoundRect({
+        color: "#FFF",
         position: topLeft,
         width: rectWidth,
         height: rectHeight,
@@ -18226,7 +18233,7 @@ Player.Drawing = function(I, self) {
       });
       return canvas.drawText({
         text: name,
-        color: "#FFF",
+        color: "#000",
         x: topLeft.x + padding,
         y: topLeft.y + lineHeight + padding / 2
       });
@@ -19764,8 +19771,8 @@ window.config = {
   defeatedTeams: [],
   players: [],
   particleEffects: true,
-  musicVolume: 0,
-  sfxVolume: 0,
+  musicVolume: 0.5,
+  sfxVolume: 0.5,
   FPS: 60
 };
 
