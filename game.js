@@ -16131,10 +16131,14 @@ MatchState = function(I) {
       return startPressed || controller.buttonPressed("START");
     });
     if (startPressed) {
-      menu = engine.add({
-        "class": "Menu",
-        matchPause: true
-      });
+      if (menu) {
+        menu.destroy();
+      } else {
+        menu = engine.add({
+          "class": "Menu",
+          matchPause: true
+        });
+      }
     }
     if (menu) {
       return;
@@ -19315,13 +19319,7 @@ Scoreboard = function(I) {
     }
     I.time -= dt;
     if (I.gameOver) {
-      return MAX_PLAYERS.times(function(i) {
-        var controller;
-        controller = engine.controller(i);
-        if (controller.actionDown("START")) {
-          return self.trigger("restart");
-        }
-      });
+
     } else {
       if (I.time <= 0) {
         return nextPeriod();
@@ -19816,7 +19814,7 @@ Zamboni = function(I) {
       I.active = false;
     }
     if (I.careening) {
-      I.rotation += Math.TAU / 10;
+      I.rotation += 3 * Math.TAU * dt;
       I.fuse -= 1;
       if (I.fuse <= 0) {
         return self.destroy();

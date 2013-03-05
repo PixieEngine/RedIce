@@ -122,9 +122,12 @@ MatchState = (I={}) ->
       startPressed or controller.buttonPressed "START"
 
     if startPressed
-      menu = engine.add
-        class: "Menu"
-        matchPause: true
+      if menu
+        menu.destroy()
+      else
+        menu = engine.add
+          class: "Menu"
+          matchPause: true
 
     return if menu
 

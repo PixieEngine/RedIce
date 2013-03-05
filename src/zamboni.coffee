@@ -119,7 +119,7 @@ Zamboni = (I) ->
       I.active = false
 
     if I.careening
-      I.rotation += Math.TAU/10
+      I.rotation += 3 * Math.TAU * dt
       I.fuse -= 1
 
       if I.fuse <= 0
