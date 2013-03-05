@@ -64,10 +64,13 @@ Gib = (I={}) ->
       canvas.withTransform transform, ->
         I.sprite.draw(canvas, -I.sprite.width/2, -I.sprite.height/2)
 
-  self.on "update", ->
-    I.rotation += I.rotationalVelocity
-    I.z += I.zVelocity
-    I.zVelocity += I.gravity
+  self.on "update", (dt) ->
+    # TODO Convert velocities to seconds and remove 30s
+    t = (30 * dt)
+
+    I.rotation += I.rotationalVelocity * t
+    I.z += I.zVelocity * t
+    I.zVelocity += I.gravity * t
 
     speed = I.zVelocity.abs()
 

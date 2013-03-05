@@ -75,6 +75,6 @@ engine.setState(LoaderState(
 ))
 
 # $ ->
-#   engine.setState Cutscene.scenes.mutant
+#   engine.setState Cutscene.scenes.monster2
 
 engine.start()

@@ -177,6 +177,55 @@ $ ->
         text: """
           Ok... show me how it's done.
         """
+        props: [
+          dog:
+            x: 750
+            y: 250
+            registrationPoint: Point(0, 256)
+            rotationFn: (t) ->
+              Math.sin((t / 15 - 0.25) * Math.TAU) * Math.TAU / 1024 +
+              Math.sin((t / 4 - 0.5) * Math.TAU) * Math.TAU / 1024
+          mummy:
+            x: 200
+            y: 300
+            registrationPoint: Point(0, 256)
+            rotationFn: (t) ->
+              Math.sin((t / 15) * Math.TAU) * Math.TAU / 1024 +
+              Math.sin((t / 4 - 0.5) * Math.TAU) * Math.TAU / 1024
+
+        ]
+        nextState: ->
+          Cutscene.scenes.monster2
+      monster2:
+        text: """
+
+        """
+        props: [
+          bugman_shad:
+            x: 90
+            y: 530
+          bugman:
+            x: 200
+            y: 250
+          vampire_shad:
+            x: 375
+            y: 550
+          vampire:
+            x: 400
+            y: 260
+          mummy_shad:
+            x: 630
+            y: 550
+          mummy:
+            x: 600
+            y: 275
+          dog_shad:
+            x: 1005
+            y: 600
+          dog:
+            x: 850
+            y: 250
+        ]
       robo:
         text: """
           This is what it's all about.

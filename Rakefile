@@ -64,6 +64,11 @@ task :package do
   # TODO Package for direct download
 end
 
+# Compiles all sources separately to tmp so we can see good line numbers for errors
+task :compile_for_errors do
+  sh "coffee -o tmp -c src/*.coffee"
+end
+
 task :team_image_rename do
   teams.each do |team|
     `cd images && mkdir -p #{team}; for f in #{team}_*; do mv -f $f #{team}/${f/#{team}_}; done`
