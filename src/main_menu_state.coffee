@@ -17,6 +17,8 @@ MainMenuState = (I={}) ->
       storyMode: false
       homeTeam: teamChoices[1]
       awayTeam: teamChoices[0]
+      playerTeam: null
+      defeatedTeams: []
 
     engine.add
       class: "Menu"
