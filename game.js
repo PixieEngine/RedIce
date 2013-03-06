@@ -13879,6 +13879,7 @@ Cutscene = function(I) {
   self = GameState(I);
   self.on("enter", function() {
     var img, x, y;
+    engine.objects().invoke("destroy");
     x = App.width / 2;
     y = App.height / 3;
     img = engine.add({

@@ -18,6 +18,8 @@ Cutscene = (I={}) ->
   self = GameState(I)
 
   self.on "enter", ->
+    engine.objects().invoke("destroy")
+
     x = App.width/2
     y = App.height/3
 
