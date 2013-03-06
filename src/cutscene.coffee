@@ -63,11 +63,20 @@ Prop = (I) ->
       "y"
       "alpha"
       "rotation"
+      "scaleX"
     ].each (property) ->
       if fn = I["#{property}Fn"]
         I[property] = fn(I.age)
 
   return self
+
+danceScaleXFn = (t) ->
+  Math.sin((t / 2) * Math.TAU).sign() or 1
+danceYFnGen = (y, s=-1) ->
+  (t) ->
+    height = 100
+    t = ((t % 6) - 2) * 2
+    y + s * Math.max(-height * (t*t) + height, 0)
 
 $ ->
   AssetLoader.group "cutscenes", ->
@@ -206,27 +215,43 @@ $ ->
           bugman_shad:
             x: 90
             y: 530
+            yFn: danceYFnGen(530, 1)
+            scaleXFn: danceScaleXFn
           bugman:
             x: 200
             y: 250
+            yFn: danceYFnGen(250)
+            scaleXFn: danceScaleXFn
           vampire_shad:
             x: 375
             y: 550
+            yFn: danceYFnGen(550, 1)
+            scaleXFn: danceScaleXFn
           vampire:
             x: 400
             y: 260
+            yFn: danceYFnGen(260)
+            scaleXFn: danceScaleXFn
           mummy_shad:
             x: 630
             y: 550
+            yFn: danceYFnGen(550, 1)
+            scaleXFn: danceScaleXFn
           mummy:
             x: 600
             y: 275
+            yFn: danceYFnGen(275)
+            scaleXFn: danceScaleXFn
           dog_shad:
             x: 1005
             y: 600
+            yFn: danceYFnGen(600, 1)
+            scaleXFn: danceScaleXFn
           dog:
             x: 850
             y: 250
+            yFn: danceYFnGen(250)
+            scaleXFn: danceScaleXFn
         ]
       robo:
         text: """
