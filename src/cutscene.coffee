@@ -185,6 +185,7 @@ $ ->
           "tv"
         ]
       monster:
+        team: "none" # Go to second cutscene
         text: """
           Ok... show me how it's done.
         """
@@ -208,6 +209,7 @@ $ ->
         nextState: ->
           Cutscene.scenes.monster2
       monster2:
+        team: "monster"
         text: """
 
         """

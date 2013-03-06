@@ -14054,6 +14054,7 @@ $(function() {
         ]
       },
       monster: {
+        team: "none",
         text: "Ok... show me how it's done.",
         props: [
           {
@@ -14080,6 +14081,7 @@ $(function() {
         }
       },
       monster2: {
+        team: "monster",
         text: "",
         props: [
           {
