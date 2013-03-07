@@ -68,6 +68,13 @@ Prop = (I) ->
       if fn = I["#{property}Fn"]
         I[property] = fn(I.age)
 
+  self.bind "drawDebug", (canvas) ->
+    canvas.drawCircle
+      x: I.registrationPoint.x
+      y: I.registrationPoint.y
+      radius: 5
+      color: "#F0F"
+
   return self
 
 danceScaleXFn = (t) ->
@@ -157,6 +164,20 @@ $ ->
         """
       spike:
         text: ""
+        props: [
+          chick:
+            x: App.width/2
+            y: App.height/3
+            rotationFn: (t) ->
+              Math.sin((t / 0.9 + 0.05) * Math.TAU) * Math.TAU / 600
+            registrationPoint: Point(-240, 100)
+
+          reporter:
+            xFn: (t) ->
+              App.width / 2 + Math.sin((t / 0.9) * Math.TAU) * 10 + Math.sin((t / 0.1) * Math.TAU) * 2
+            yFn: (t) ->
+              App.height / 3
+        ]
       mutant:
         text: """
           MUTANT FEVER! The fans are out in record numbers. Please be advised to stay indoors--

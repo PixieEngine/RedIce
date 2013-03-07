@@ -13929,6 +13929,14 @@ Prop = function(I) {
       }
     });
   });
+  self.bind("drawDebug", function(canvas) {
+    return canvas.drawCircle({
+      x: I.registrationPoint.x,
+      y: I.registrationPoint.y,
+      radius: 5,
+      color: "#F0F"
+    });
+  });
   return self;
 };
 
@@ -14022,7 +14030,27 @@ $(function() {
         text: "Here's a fan now! Hello sir, why are YOU smiling?\n\nHow the HELL should I know?"
       },
       spike: {
-        text: ""
+        text: "",
+        props: [
+          {
+            chick: {
+              x: App.width / 2,
+              y: App.height / 3,
+              rotationFn: function(t) {
+                return Math.sin((t / 0.9 + 0.05) * Math.TAU) * Math.TAU / 600;
+              },
+              registrationPoint: Point(-240, 100)
+            },
+            reporter: {
+              xFn: function(t) {
+                return App.width / 2 + Math.sin((t / 0.9) * Math.TAU) * 10 + Math.sin((t / 0.1) * Math.TAU) * 2;
+              },
+              yFn: function(t) {
+                return App.height / 3;
+              }
+            }
+          }
+        ]
       },
       mutant: {
         text: "MUTANT FEVER! The fans are out in record numbers. Please be advised to stay indoors--\nThere is no cure.",
@@ -19983,5 +20011,9 @@ engine.on("draw", function(canvas) {
 engine.setState(LoaderState({
   nextState: MainMenuState
 }));
+
+$(function() {
+  return engine.setState(Cutscene.scenes.spike);
+});
 
 engine.start();
