@@ -162,6 +162,27 @@ $ ->
 
           How the HELL should I know?
         """
+        props: [
+          arm:
+            y: App.height / 3 + 10
+            rotationFn: (t) ->
+              Math.sin((t / 2) * Math.TAU) * Math.TAU / 600 +
+              Math.sin((t / 3 + 0.5) * Math.TAU) * Math.TAU / 980
+
+            registrationPoint: Point(0, 256)
+          reporter:
+            y: App.height / 3 + 10
+            rotationFn: (t) ->
+              Math.sin((t / 2) * Math.TAU) * Math.TAU / 600
+
+            registrationPoint: Point(0, 256)
+          fan:
+            xFn: (t) ->
+              App.width / 2 + Math.sin((t / 0.15) * Math.TAU) * 2 + Math.sin((t / 0.04) * Math.TAU) * 1
+            yFn: (t) ->
+              App.height / 3
+
+        ]
       spike:
         text: ""
         props: [

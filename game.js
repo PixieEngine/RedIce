@@ -14027,7 +14027,33 @@ $(function() {
         text: "What do you like BEST about the Serpentmen?\n\nThey BIT me! WooOo!"
       },
       smiley: {
-        text: "Here's a fan now! Hello sir, why are YOU smiling?\n\nHow the HELL should I know?"
+        text: "Here's a fan now! Hello sir, why are YOU smiling?\n\nHow the HELL should I know?",
+        props: [
+          {
+            arm: {
+              y: App.height / 3 + 10,
+              rotationFn: function(t) {
+                return Math.sin((t / 2) * Math.TAU) * Math.TAU / 600 + Math.sin((t / 3 + 0.5) * Math.TAU) * Math.TAU / 980;
+              },
+              registrationPoint: Point(0, 256)
+            },
+            reporter: {
+              y: App.height / 3 + 10,
+              rotationFn: function(t) {
+                return Math.sin((t / 2) * Math.TAU) * Math.TAU / 600;
+              },
+              registrationPoint: Point(0, 256)
+            },
+            fan: {
+              xFn: function(t) {
+                return App.width / 2 + Math.sin((t / 0.15) * Math.TAU) * 2 + Math.sin((t / 0.04) * Math.TAU) * 1;
+              },
+              yFn: function(t) {
+                return App.height / 3;
+              }
+            }
+          }
+        ]
       },
       spike: {
         text: "",
@@ -20013,7 +20039,7 @@ engine.setState(LoaderState({
 }));
 
 $(function() {
-  return engine.setState(Cutscene.scenes.spike);
+  return engine.setState(Cutscene.scenes.smiley);
 });
 
 engine.start();
