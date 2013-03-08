@@ -20085,8 +20085,4 @@ engine.setState(LoaderState({
   nextState: MainMenuState
 }));
 
-$(function() {
-  return engine.setState(Cutscene.scenes.spike);
-});
-
 engine.start();

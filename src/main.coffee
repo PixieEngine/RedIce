@@ -74,7 +74,7 @@ engine.setState(LoaderState(
   nextState: MainMenuState
 ))
 
-$ ->
-  engine.setState Cutscene.scenes.spike
+# $ ->
+#   engine.setState Cutscene.scenes.spike
 
 engine.start()
