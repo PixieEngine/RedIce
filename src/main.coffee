@@ -75,6 +75,6 @@ engine.setState(LoaderState(
 ))
 
 $ ->
-  engine.setState Cutscene.scenes.smiley
+  engine.setState Cutscene.scenes.spike
 
 engine.start()

@@ -14024,7 +14024,54 @@ $(function() {
         nextState: MapState
       },
       hiss: {
-        text: "What do you like BEST about the Serpentmen?\n\nThey BIT me! WooOo!"
+        text: "What do you like BEST about the Serpentmen?\n\nThey BIT me! WooOo!",
+        props: [
+          {
+            plane: {
+              xFn: function(t) {
+                return App.width - 120 + 15 * t;
+              },
+              yFn: function(t) {
+                return 20 - 1 * t;
+              }
+            },
+            balloons: {
+              x: 95,
+              yFn: function(t) {
+                return 80 - t * 20;
+              }
+            },
+            tail: {
+              registrationPoint: Point(-370, 170),
+              rotationFn: function(t) {
+                return Math.sin((t / 5) * Math.TAU) * Math.TAU / 64 + Math.sin((t / 3 - 0.25) * Math.TAU) * Math.TAU / 128;
+              }
+            }
+          }, "body", {
+            head: {
+              registrationPoint: Point(-250, 0),
+              rotationFn: function(t) {
+                return Math.sin((t / 5) * Math.TAU) * Math.TAU / 64 + Math.sin((t / 3 - 0.25) * Math.TAU) * Math.TAU / 128;
+              }
+            },
+            arm: {
+              registrationPoint: Point(-245, 45),
+              rotationFn: function(t) {
+                return Math.TAU / 64 + Math.sin((t / 5) * Math.TAU) * Math.TAU / 64 + Math.sin((t / 3 - 0.25) * Math.TAU) * Math.TAU / 128;
+              },
+              y: App.height / 3 + 20,
+              x: App.width / 2 - 20
+            },
+            skeeroy: {
+              x: 600,
+              y: 350
+            },
+            jerls: {
+              y: 300,
+              x: App.width * 3 / 4
+            }
+          }
+        ]
       },
       smiley: {
         text: "Here's a fan now! Hello sir, why are YOU smiling?\n\nHow the HELL should I know?",
@@ -20039,7 +20086,7 @@ engine.setState(LoaderState({
 }));
 
 $(function() {
-  return engine.setState(Cutscene.scenes.smiley);
+  return engine.setState(Cutscene.scenes.spike);
 });
 
 engine.start();
