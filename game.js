@@ -13877,6 +13877,11 @@ Cutscene = function(I) {
     }
   };
   self = GameState(I);
+  self.on("overlay", function(canvas) {
+    if (DEBUG_DRAW) {
+      return engine.objects().invoke("trigger", "drawDebug", canvas);
+    }
+  });
   self.on("enter", function() {
     var img, x, y;
     engine.objects().invoke("destroy");
@@ -13929,12 +13934,19 @@ Prop = function(I) {
       }
     });
   });
+  self.on("beforeUpdate", function() {
+    if (I.frames) {
+      return I.sprite = I.spriteSheet.wrap((I.age / I.frameDuration).floor());
+    }
+  });
   self.bind("drawDebug", function(canvas) {
-    return canvas.drawCircle({
-      x: I.registrationPoint.x,
-      y: I.registrationPoint.y,
-      radius: 5,
-      color: "#F0F"
+    return canvas.withTransform(self.transform(), function(canvas) {
+      return canvas.drawCircle({
+        x: I.registrationPoint.x,
+        y: I.registrationPoint.y,
+        radius: 5,
+        color: "#F0F"
+      });
     });
   });
   return self;
@@ -14041,6 +14053,18 @@ $(function() {
                 return 80 - t * 20;
               }
             },
+            snake: {
+              frames: 3,
+              frameDuration: 0.4,
+              x: 50,
+              y: 65,
+              width: 39,
+              height: 98,
+              registrationPoint: Point(0, 49),
+              rotationFn: function(t) {
+                return Math.sin((t / 1.3 + 0.25) * Math.TAU) * Math.TAU / 64 + Math.sin((t / 2.5) * Math.TAU) * Math.TAU / 128;
+              }
+            },
             tail: {
               registrationPoint: Point(-370, 170),
               rotationFn: function(t) {
@@ -14063,12 +14087,44 @@ $(function() {
               x: App.width / 2 - 20
             },
             skeeroy: {
+              rotationFn: function(t) {
+                return Math.sin((t / 11) * Math.TAU) * Math.TAU / 128 + Math.sin((t / 1 - 0.5) * Math.TAU) * Math.TAU / 128;
+              },
               x: 600,
-              y: 350
+              y: 350,
+              registrationPoint: Point(0, 200)
             },
             jerls: {
+              rotationFn: function(t) {
+                return Math.sin((t / 4) * Math.TAU) * Math.TAU / 64 + Math.sin((t / 7 - 0.5) * Math.TAU) * Math.TAU / 128;
+              },
               y: 300,
-              x: App.width * 3 / 4
+              x: 770,
+              registrationPoint: Point(0, 200)
+            },
+            fan1_blood: {
+              rotationFn: function(t) {
+                return Math.sin((t / 11) * Math.TAU) * Math.TAU / 128 + Math.sin((t / 1 - 0.5) * Math.TAU) * Math.TAU / 128;
+              },
+              frames: 3,
+              frameDuration: 0.2,
+              width: 135,
+              height: 81,
+              x: 517,
+              y: 232,
+              registrationPoint: Point(83, 318)
+            },
+            fan2_blood: {
+              rotationFn: function(t) {
+                return Math.sin((t / 4) * Math.TAU) * Math.TAU / 64 + Math.sin((t / 7 - 0.5) * Math.TAU) * Math.TAU / 128;
+              },
+              frameDuration: 0.2,
+              frames: 3,
+              width: 105,
+              height: 101,
+              x: 725,
+              y: 112,
+              registrationPoint: Point(45, 388)
             }
           }
         ]
@@ -14254,9 +14310,16 @@ $(function() {
           };
         } else {
           return Object.keys(prop).map(function(propName) {
+            var frames, propData, sprite;
+            propData = prop[propName];
+            if (frames = propData.frames) {
+              propData.spriteSheet = Sprite.loadSheet("cutscenes/" + name + "/" + propName + "_" + frames, propData.width, propData.height);
+            } else {
+              sprite = Sprite.loadByName("cutscenes/" + name + "/" + propName);
+            }
             return Object.extend({}, {
-              sprite: Sprite.loadByName("cutscenes/" + name + "/" + propName)
-            }, prop[propName]);
+              sprite: sprite
+            }, propData);
           });
         }
       }).flatten().map(function(datum, i) {
@@ -20084,5 +20147,9 @@ engine.on("draw", function(canvas) {
 engine.setState(LoaderState({
   nextState: MainMenuState
 }));
+
+$(function() {
+  return engine.setState(Cutscene.scenes.hiss);
+});
 
 engine.start();

@@ -1,4 +1,6 @@
 
+Demo Mode
+
 Match Over Menu
 Pause Menu for all Match States
 
@@ -10,14 +12,17 @@ Story Animations
 
 Whack-a-mole Mini Game
 
+
+
 Monster Vampirism Bonus
 
 Resize Shoot Arrow
 
 Test Gamepad Start Button (Win, Linux)
 
-Demo Mode
 
 
 Compression: https://code.google.com/p/zopfli/
 https://developers.google.com/speed/webp/
+
+SSL Static Site: http://blog.superfeedr.com/asset-hosting-ssl-domain/

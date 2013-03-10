@@ -17,6 +17,10 @@ Cutscene = (I={}) ->
   # Inherit from game object
   self = GameState(I)
 
+  self.on "overlay", (canvas) ->
+    if DEBUG_DRAW
+      engine.objects().invoke "trigger", "drawDebug", canvas
+
   self.on "enter", ->
     engine.objects().invoke("destroy")
 
@@ -68,12 +72,17 @@ Prop = (I) ->
       if fn = I["#{property}Fn"]
         I[property] = fn(I.age)
 
+  self.on "beforeUpdate", ->
+    if I.frames
+      I.sprite = I.spriteSheet.wrap((I.age / I.frameDuration).floor())
+
   self.bind "drawDebug", (canvas) ->
-    canvas.drawCircle
-      x: I.registrationPoint.x
-      y: I.registrationPoint.y
-      radius: 5
-      color: "#F0F"
+    canvas.withTransform self.transform(), (canvas) ->
+      canvas.drawCircle
+        x: I.registrationPoint.x
+        y: I.registrationPoint.y
+        radius: 5
+        color: "#F0F"
 
   return self
 
@@ -166,6 +175,17 @@ $ ->
             x: 95
             yFn: (t) ->
               80 - t * 20
+          snake:
+            frames: 3
+            frameDuration: 0.4
+            x: 50
+            y: 65
+            width: 39
+            height: 98
+            registrationPoint: Point(0, 49)
+            rotationFn: (t) ->
+              Math.sin((t / 1.3 + 0.25) * Math.TAU) * Math.TAU / 64 +
+              Math.sin((t / 2.5) * Math.TAU) * Math.TAU / 128
           tail:
             registrationPoint: Point(-370, 170)
             rotationFn: (t) ->
@@ -187,11 +207,47 @@ $ ->
             y: App.height / 3 + 20
             x: App.width / 2 - 20
           skeeroy:
+            rotationFn: (t) ->
+              Math.sin((t / 11) * Math.TAU) * Math.TAU / 128 +
+              Math.sin((t / 1 - 0.5) * Math.TAU) * Math.TAU / 128
+
             x: 600
             y: 350
+            registrationPoint: Point(0, 200)
+
           jerls:
+            rotationFn: (t) ->
+              Math.sin((t / 4) * Math.TAU) * Math.TAU / 64 +
+              Math.sin((t / 7 - 0.5) * Math.TAU) * Math.TAU / 128
             y: 300
-            x: App.width * 3/4
+            x: 770
+            registrationPoint: Point(0, 200)
+
+          fan1_blood:
+            rotationFn: (t) ->
+              Math.sin((t / 11) * Math.TAU) * Math.TAU / 128 +
+              Math.sin((t / 1 - 0.5) * Math.TAU) * Math.TAU / 128
+
+            frames: 3
+            frameDuration: 0.2
+            width: 135
+            height: 81
+            x: 517
+            y: 232
+            registrationPoint: Point(83, 318)
+
+          fan2_blood:
+            rotationFn: (t) ->
+              Math.sin((t / 4) * Math.TAU) * Math.TAU / 64 +
+              Math.sin((t / 7 - 0.5) * Math.TAU) * Math.TAU / 128
+
+            frameDuration: 0.2
+            frames: 3
+            width: 105
+            height: 101
+            x: 725
+            y: 112
+            registrationPoint: Point(45, 388)
         ]
       smiley:
         text: """
@@ -347,9 +403,16 @@ $ ->
           sprite: Sprite.loadByName "cutscenes/#{name}/#{prop}"
         else
           Object.keys(prop).map (propName) ->
+            propData = prop[propName]
+
+            if frames = propData.frames
+              propData.spriteSheet = Sprite.loadSheet "cutscenes/#{name}/#{propName}_#{frames}", propData.width, propData.height
+            else
+              sprite = Sprite.loadByName "cutscenes/#{name}/#{propName}"
+
             Object.extend {},
-              sprite: Sprite.loadByName "cutscenes/#{name}/#{propName}"
-            , prop[propName]
+              sprite: sprite
+            , propData
 
       .flatten().map (datum, i) ->
         Object.reverseMerge datum,
