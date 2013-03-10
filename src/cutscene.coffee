@@ -186,6 +186,13 @@ $ ->
             rotationFn: (t) ->
               Math.sin((t / 1.3 + 0.25) * Math.TAU) * Math.TAU / 64 +
               Math.sin((t / 2.5) * Math.TAU) * Math.TAU / 128
+          drunk:
+            frames: 2
+            frameDuration: 2
+            x: 442
+            y: 126
+            width: 72
+            height: 106
           tail:
             registrationPoint: Point(-370, 170)
             rotationFn: (t) ->
@@ -209,7 +216,7 @@ $ ->
           skeeroy:
             rotationFn: (t) ->
               Math.sin((t / 11) * Math.TAU) * Math.TAU / 128 +
-              Math.sin((t / 1 - 0.5) * Math.TAU) * Math.TAU / 128
+              Math.sin((t / 1.1 - 0.5) * Math.TAU) * Math.TAU / 128
 
             x: 600
             y: 350
@@ -226,7 +233,7 @@ $ ->
           fan1_blood:
             rotationFn: (t) ->
               Math.sin((t / 11) * Math.TAU) * Math.TAU / 128 +
-              Math.sin((t / 1 - 0.5) * Math.TAU) * Math.TAU / 128
+              Math.sin((t / 1.1 - 0.5) * Math.TAU) * Math.TAU / 128
 
             frames: 3
             frameDuration: 0.2
