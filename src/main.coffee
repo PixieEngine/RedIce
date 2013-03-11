@@ -75,6 +75,6 @@ engine.setState(LoaderState(
 ))
 
 $ ->
-  engine.setState Cutscene.scenes.hiss
+  engine.setState Cutscene.scenes.end
 
 engine.start()

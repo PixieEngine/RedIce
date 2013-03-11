@@ -68,6 +68,7 @@ Prop = (I) ->
       "alpha"
       "rotation"
       "scaleX"
+      "scale"
     ].each (property) ->
       if fn = I["#{property}Fn"]
         I[property] = fn(I.age)
@@ -85,6 +86,37 @@ Prop = (I) ->
         color: "#F0F"
 
   return self
+
+osc = ({period, amplitude, offset, min, max}) ->
+  offset ?= 0
+  period ?= 1
+
+  if min? and max?
+    amplitude = (max - min) / 2
+    min += amplitude
+  else
+    min = 0
+
+  amplitude ?= 1
+
+  return (t) ->
+    Math.sin((t / period) * Math.TAU + offset) * amplitude + min
+
+motionOfTheOcean = ->
+  min = 256
+  max = 280
+
+  osc1 = osc
+    min: 256 + 2
+    max: 280 - 2
+    period: 10
+
+  osc2 = osc
+    period: 3
+    amplitude: 2
+
+  (t) ->
+    (osc1(t) + osc2(t)).clamp(min, max)
 
 danceScaleXFn = (t) ->
   Math.sin((t / 2) * Math.TAU).sign() or 1
@@ -401,6 +433,92 @@ $ ->
         text: """
           This is what it's all about.
         """
+        props: [
+          boat:
+            yFn: motionOfTheOcean()
+          hotdogman:
+            frames: 2
+            frameDuration: 0.8
+            width: 336 / 2
+            height: 134
+            yFn: do ->
+              fn = motionOfTheOcean()
+
+              (t) ->
+                fn(t) + 35
+
+            x: 360
+
+          arm:
+            yFn: motionOfTheOcean()
+            registrationPoint: Point(-20, 128)
+            rotationFn: osc
+              amplitude: Math.TAU / 64
+              period: 4
+          body:
+            yFn: motionOfTheOcean()
+          duder_arm:
+            yFn: motionOfTheOcean()
+            xFn: do ->
+              x = App.width/2
+              fn = osc
+                amplitude: 4
+                period: 5
+              fn2 = osc
+                amplitude: 2
+                period: 3
+
+              (t) ->
+                x + fn(t) + fn2(t)
+          duder_body:
+            yFn: motionOfTheOcean()
+        ]
+      end:
+        text: """
+        """
+        props: [
+          moonhalf:
+            scaleFn: (t) ->
+              1 + t * 1/300
+          rock:
+            scaleFn: (t) ->
+              1 + t * 1/100
+          hunks:
+            scaleFn: (t) ->
+              1 + t * 1/95
+          boatfront:
+            xFn: (t) ->
+              512 + 5 * t
+            yFn: (t) ->
+              256 - 1 * t
+            scaleFn: (t) ->
+              1 - t * 1/250
+            rotationFn: (t) ->
+              Math.TAU * -t / 200
+            registrationPoint: Point(326, -140)
+          water:
+            scaleFn: (t) ->
+              1 + t * 1/90
+          boat_debris:
+            scaleFn: (t) ->
+              1 + t * 1/130
+          people:
+            scaleFn: (t) ->
+              1 + t * 1/120
+          people2:
+            scaleFn: (t) ->
+              1 + t * 1/110
+          boatrear:
+            xFn: (t) ->
+              512 - 2 * t
+            yFn: (t) ->
+              256 + 2 * t
+            rotationFn: (t) ->
+              Math.TAU * t / 1000
+            scaleFn: (t) ->
+              1 + t * 1/150
+            registrationPoint: Point(0, 256)
+        ]
 
     for name, data of Cutscene.scenes
       data.background = Sprite.loadByName "cutscenes/#{name}/background"
