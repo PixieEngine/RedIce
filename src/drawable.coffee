@@ -156,7 +156,7 @@ Drawable = (I={}, self) ->
   transform: ->
     center = self.center()
 
-    transform = Matrix.translation(center.x.floor(), center.y.floor())
+    transform = Matrix.translation(center.x, center.y)
 
     transform = transform.concat(Matrix.scale(I.scale * I.scaleX, I.scale * I.scaleY))
     transform = transform.concat(Matrix.rotation(I.rotation, I.registrationPoint)) if I.rotation
