@@ -26,7 +26,7 @@ Menu = (I={}) ->
   # Set some default properties
   Object.reverseMerge I,
     x: App.width/2
-    y: 2*App.height/3 + 32
+    y: 4*App.height/3 + 32
     sprite: "menu_border_1" # Use the name of a sprite in the images folder
     textColor: "#CCA"
     highlightTextColor: "#FF8"
@@ -83,8 +83,12 @@ Menu = (I={}) ->
 
     selectedOption().action()
 
+  yPositionFn = Easing.quadraticInOut(4*App.height/3 + 32, 2*App.height/3 + 32)
+
   # Add events and methods here
   self.on "update", ->
+    I.y = yPositionFn(I.age.clamp(0, 1.5) / 1.5)
+
     # Joystick Input
     MAX_PLAYERS.times (i) ->
       joystick = engine.controller(i)

@@ -14399,7 +14399,7 @@ $(function() {
         ]
       },
       end: {
-        text: "",
+        text: "Congratulations!",
         props: [
           {
             moonhalf: {
@@ -16197,13 +16197,24 @@ MainMenuState = function(I) {
       playerTeam: null,
       defeatedTeams: []
     });
-    engine.add({
-      "class": "Menu"
-    });
-    engine.add({
-      sprite: MainMenuState.titleSprite,
-      x: App.width / 2,
-      y: App.height / 3 - 50
+    engine.delay(0.25, function() {
+      var title;
+      engine.delay(0.5, function() {
+        return engine.add({
+          "class": "Menu"
+        });
+      });
+      title = engine.add({
+        sprite: MainMenuState.titleSprite,
+        x: App.width / 2,
+        y: App.height / 3 - 50,
+        alpha: 0,
+        scale: 0
+      });
+      return title.on("update", function() {
+        title.I.scale = title.I.age.clamp(0, 1);
+        return title.I.alpha = title.I.age.clamp(0, 1);
+      });
     });
     return Music.play("Theme to Red Ice");
   });
@@ -16565,7 +16576,7 @@ MatchState = function(I) {
 };
 
 Menu = function(I) {
-  var back, choose, gamestate, item, minigame, moveSelection, options, popSubMenu, selectedOption, self, submenu;
+  var back, choose, gamestate, item, minigame, moveSelection, options, popSubMenu, selectedOption, self, submenu, yPositionFn;
   if (I == null) {
     I = {};
   }
@@ -16601,7 +16612,7 @@ Menu = function(I) {
   };
   Object.reverseMerge(I, {
     x: App.width / 2,
-    y: 2 * App.height / 3 + 32,
+    y: 4 * App.height / 3 + 32,
     sprite: "menu_border_1",
     textColor: "#CCA",
     highlightTextColor: "#FF8",
@@ -16654,7 +16665,9 @@ Menu = function(I) {
     Sound.play("Menu Select 1");
     return selectedOption().action();
   };
+  yPositionFn = Easing.quadraticInOut(4 * App.height / 3 + 32, 2 * App.height / 3 + 32);
   self.on("update", function() {
+    I.y = yPositionFn(I.age.clamp(0, 1.5) / 1.5);
     return MAX_PLAYERS.times(function(i) {
       var joystick;
       joystick = engine.controller(i);
@@ -20300,6 +20313,10 @@ $(document).bind("keydown", "1", function() {
   return reverse = !reverse;
 });
 
+engine.on("draw", function() {
+  debugger;
+});
+
 engine.on("beforeDraw", function(canvas) {
   return engine.find("Rink").invoke("trigger", "beforeDraw", canvas);
 });
@@ -20323,7 +20340,5 @@ engine.setState(LoaderState({
 }));
 
 $(function() {
-  return engine.setState(Cutscene.scenes.end);
+  return engine.start();
 });
-
-engine.start();

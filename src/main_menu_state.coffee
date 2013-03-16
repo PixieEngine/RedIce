@@ -20,13 +20,21 @@ MainMenuState = (I={}) ->
       playerTeam: null
       defeatedTeams: []
 
-    engine.add
-      class: "Menu"
+    engine.delay 0.25, ->
+      engine.delay 0.5, ->
+        engine.add
+          class: "Menu"
 
-    engine.add
-      sprite: MainMenuState.titleSprite
-      x: App.width/2
-      y: App.height/3 - 50
+      title = engine.add
+        sprite: MainMenuState.titleSprite
+        x: App.width/2
+        y: App.height/3 - 50
+        alpha: 0
+        scale: 0
+
+      title.on "update", ->
+        title.I.scale = title.I.age.clamp(0, 1)
+        title.I.alpha = title.I.age.clamp(0, 1)
 
     Music.play "Theme to Red Ice"
 

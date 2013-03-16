@@ -475,6 +475,7 @@ $ ->
         ]
       end:
         text: """
+        Congratulations!
         """
         props: [
           moonhalf:
