@@ -15543,6 +15543,43 @@ Gamepads = function(I) {
   };
 };
 
+$(function() {
+  var anyGamepads;
+  anyGamepads = true;
+  return setTimeout(function() {
+    var img, notice, text;
+    if (anyGamepads) {
+      return;
+    }
+    img = $("<img>", {
+      src: "images/gamepad.png"
+    });
+    text = $("<span>", {
+      text: "Plug in your gamepads!",
+      css: {
+        display: "inline-block",
+        verticalAlign: "top",
+        fontSize: "24px"
+      }
+    });
+    10..times(function() {
+      return text.fadeTo('slow', 0.25).fadeTo('fast', 1.0);
+    });
+    notice = $("<div>", {
+      css: {
+        color: "#000",
+        backgroundColor: "white",
+        width: "100%",
+        position: "absolute",
+        bottom: 0,
+        height: 336,
+        top: "auto"
+      }
+    }).appendTo("body").append(img).append(text);
+    return notice.delay(5000).fadeOut();
+  }, 1000);
+});
+
 Gamepads.CombinedController = function() {
   var self, sources;
   sources = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
