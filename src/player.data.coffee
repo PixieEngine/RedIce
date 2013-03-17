@@ -49,11 +49,17 @@ Player.teamData =
     baseShotPower: 10
     chargeShotPower: 35
   robo:
+    bodySoundType: "Robo"
+    bodySoundCount: 3
+    torsoSlideSoundType: "Robot"
     bloodColor: "#00eadc"
     # Stronger Shots
     baseShotPower: 50
     chargeShotPower: 100
   mutant:
+    bodySoundType: "Mutant"
+    bodySoundCount: 3
+    torsoSlideSoundType: "Mutant"
     # Mutant Blood
     bloodColor: "#5800ea"
     # Stronger Shots
@@ -62,6 +68,7 @@ Player.teamData =
     # Faster Shot Charge
     maxShotCharge: 0.75
   monster:
+    bodySoundType: "Monster"
     # Stronger Shots
     baseShotPower: 30
     chargeShotPower: 90

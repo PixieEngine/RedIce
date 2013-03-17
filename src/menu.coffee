@@ -87,7 +87,10 @@ Menu = (I={}) ->
 
   # Add events and methods here
   self.on "update", ->
-    I.y = yPositionFn(I.age.clamp(0, 1.5) / 1.5)
+    slideDuration = 1.5
+    I.y = yPositionFn(I.age.clamp(0, slideDuration) / slideDuration)
+
+    return if I.age < slideDuration
 
     # Joystick Input
     MAX_PLAYERS.times (i) ->

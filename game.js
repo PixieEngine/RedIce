@@ -16848,7 +16848,12 @@ Menu = function(I) {
   };
   yPositionFn = Easing.quadraticInOut(4 * App.height / 3 + 32, 2 * App.height / 3 + 32);
   self.on("update", function() {
-    I.y = yPositionFn(I.age.clamp(0, 1.5) / 1.5);
+    var slideDuration;
+    slideDuration = 1.5;
+    I.y = yPositionFn(I.age.clamp(0, slideDuration) / slideDuration);
+    if (I.age < slideDuration) {
+      return;
+    }
     return MAX_PLAYERS.times(function(i) {
       var joystick;
       joystick = engine.controller(i);
@@ -18678,17 +18683,24 @@ Player.teamData = {
     chargeShotPower: 35
   },
   robo: {
+    bodySoundType: "Robo",
+    bodySoundCount: 3,
+    torsoSlideSoundType: "Robot",
     bloodColor: "#00eadc",
     baseShotPower: 50,
     chargeShotPower: 100
   },
   mutant: {
+    bodySoundType: "Mutant",
+    bodySoundCount: 3,
+    torsoSlideSoundType: "Mutant",
     bloodColor: "#5800ea",
     baseShotPower: 40,
     chargeShotPower: 70,
     maxShotCharge: 0.75
   },
   monster: {
+    bodySoundType: "Monster",
     baseShotPower: 30,
     chargeShotPower: 90
   }
@@ -19043,6 +19055,11 @@ Player.Paint = function(I, self) {
 
 Player.Sounds = function(I, self) {
   var sfx;
+  Object.reverseMerge(I, {
+    bodySoundType: "Body",
+    bodySoundCount: 4,
+    torsoSlideSoundType: "Torso"
+  });
   sfx = function(name, n, m) {
     if (m == null) {
       m = "";
@@ -19050,14 +19067,14 @@ Player.Sounds = function(I, self) {
     return Sound.play("" + name + " " + (rand(n) + 1) + m);
   };
   self.on("wipeout", function() {
-    sfx("Body Hit", 4, "v");
+    sfx("" + I.bodySoundType + " Hit", I.bodySoundCount, "v");
     if (rand(5)) {
       sfx("Crowd Cheers", 4);
     } else {
       sfx("Crowd Jeers", 3);
     }
-    return engine.delay(8 / 30, function() {
-      return sfx("Torso Slide", 2, "v");
+    return engine.delay(0.25, function() {
+      return sfx("" + I.torsoSlideSoundType + " Slide", 2, "v");
     });
   });
   self.on("shoot", function() {
