@@ -39,6 +39,18 @@ Rink = (I={}) ->
   faceOffCircleRadius = I.spriteSize
   rinkCornerRadius = I.cornerRadius = I.spriteSize
 
+  drawDecals = ->
+    style = I.team
+    {x, y} = ARENA_CENTER
+
+    iceCanvas.context().globalAlpha = 0.9
+
+    iceCanvas.withTransform perspective, ->
+      sprite = Configurator.images[style].logo
+      sprite.draw(iceCanvas, x - sprite.width/2, (y * PERSPECTIVE_RATIO) - sprite.width/2)
+
+    iceCanvas.context().globalAlpha = 1
+
   # Draw Arena
   iceCanvas.drawRoundRect
     color: "white"
@@ -47,6 +59,8 @@ Rink = (I={}) ->
     width: arenaWidth()
     height: arenaHeight()
     radius: rinkCornerRadius
+
+  drawDecals()
 
   # Blue Lines
   for x in [arenaWidth()/3, arenaWidth()*2/3]

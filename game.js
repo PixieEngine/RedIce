@@ -16645,6 +16645,7 @@ MatchState = function(I) {
   };
   self.on("enter", function() {
     var leftGoal, rightGoal, rink, scoreboard;
+    bloodCanvas.clear();
     engine.clear(true);
     engine.camera().position(ARENA_CENTER);
     engine.add({
@@ -19451,7 +19452,7 @@ PuckLeader = function(I) {
 };
 
 Rink = function(I) {
-  var arenaHeight, arenaWidth, backBoardsCanvas, blue, bufferCanvasWidth, faceOffCircleRadius, faceOffSpotRadius, frontBoardsCanvas, iceCanvas, paintCanvas, perspective, perspectiveRatio, red, rinkCornerRadius, self, sideWallWidth, spriteScale, spriteSize, wallBottomBuffer, x, _i, _len, _ref1;
+  var arenaHeight, arenaWidth, backBoardsCanvas, blue, bufferCanvasWidth, drawDecals, faceOffCircleRadius, faceOffSpotRadius, frontBoardsCanvas, iceCanvas, paintCanvas, perspective, perspectiveRatio, red, rinkCornerRadius, self, sideWallWidth, spriteScale, spriteSize, wallBottomBuffer, x, _i, _len, _ref1;
   if (I == null) {
     I = {};
   }
@@ -19489,6 +19490,18 @@ Rink = function(I) {
   faceOffSpotRadius = 5;
   faceOffCircleRadius = I.spriteSize;
   rinkCornerRadius = I.cornerRadius = I.spriteSize;
+  drawDecals = function() {
+    var style, x, y;
+    style = I.team;
+    x = ARENA_CENTER.x, y = ARENA_CENTER.y;
+    iceCanvas.context().globalAlpha = 0.9;
+    iceCanvas.withTransform(perspective, function() {
+      var sprite;
+      sprite = Configurator.images[style].logo;
+      return sprite.draw(iceCanvas, x - sprite.width / 2, (y * PERSPECTIVE_RATIO) - sprite.width / 2);
+    });
+    return iceCanvas.context().globalAlpha = 1;
+  };
   iceCanvas.drawRoundRect({
     color: "white",
     x: I.wallLeft,
@@ -19497,6 +19510,7 @@ Rink = function(I) {
     height: arenaHeight(),
     radius: rinkCornerRadius
   });
+  drawDecals();
   _ref1 = [arenaWidth() / 3, arenaWidth() * 2 / 3];
   for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
     x = _ref1[_i];
@@ -20461,8 +20475,6 @@ Music.volume(config.musicVolume);
 Sound.globalVolume(config.sfxVolume);
 
 window.bloodCanvas = $("<canvas width=" + (2 * App.width) + " height=" + App.height + " />").pixieCanvas();
-
-bloodCanvas.strokeColor(BLOOD_COLOR);
 
 canvas = $("canvas").pixieCanvas();
 

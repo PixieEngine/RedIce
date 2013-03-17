@@ -14,9 +14,6 @@ Sound.globalVolume config.sfxVolume
 
 window.bloodCanvas = $("<canvas width=#{2 * App.width} height=#{App.height} />").pixieCanvas()
 
-bloodCanvas.strokeColor(BLOOD_COLOR)
-# bloodCanvas.fill(BLOOD_COLOR) # For zamboni testing
-
 canvas = $("canvas").pixieCanvas()
 # canvas.context().webkitImageSmoothingEnabled = false
 
