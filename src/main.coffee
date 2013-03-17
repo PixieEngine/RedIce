@@ -57,9 +57,6 @@ $(document).bind "keydown", "1", ->
 
   reverse = !reverse
 
-engine.on "draw", ->
-  debugger
-
 # Special rink before draw
 engine.on "beforeDraw", (canvas) ->
   engine.find("Rink").invoke "trigger", "beforeDraw", canvas

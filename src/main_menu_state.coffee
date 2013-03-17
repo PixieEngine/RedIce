@@ -38,6 +38,17 @@ MainMenuState = (I={}) ->
 
     Music.play "Theme to Red Ice"
 
+  idleSince = 0
+  self.on "update", (dt) ->
+    idleSince += dt
+    active = engine.controllers().inject false, (memo, controller) ->
+      memo || (controller.actionDown("ANY") || (!controller.tap().equal(Point.ZERO)))
+
+    if active
+      idleSince = 0
+    else if idleSince >= 25
+      engine.setState(AttractMode())
+
   # We must always return self as the last line
   return self
 
