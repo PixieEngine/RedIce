@@ -5,7 +5,7 @@ Scoreboard = (I) ->
       home: 0
       away: 0
     period: 0
-    periodTime: 60 # seconds
+    periodTime: 1 # seconds
     reverse: false
     time: 0
     timeSinceLastZamboni: 0 # seconds
@@ -25,15 +25,43 @@ Scoreboard = (I) ->
   Object.extend I, Scoreboard[I.team]
   I.sprite = teamSprites[I.team].scoreboard[0]
 
+  displayWinnerOverlay = (canvas) ->
+    canvas.fill "rgba(0, 0, 0, 0.25)"
+    canvas.font "30px 'Iceland'"
+
+    canvas.centerText
+      y: 256 + 96 + 1
+      color: "#000"
+      text: "WIN!"
+    canvas.centerText
+      y: 256 + 96
+      color: "#FFF"
+      text: "WIN!"
+
+    style = I.winner
+    sprite = Configurator.images[style].logo
+
+    x = App.width/2
+    y = 256
+    sprite.draw(canvas, x - sprite.width/2, y - sprite.height/2)
+
+  displayMenu = ->
+    unless menu = engine.first("Menu")
+      engine.I.currentState.addPauseMenu()
+
   endGameChecks = ->
     if I.period >= 4
       if I.score.home > I.score.away
-        I.winner = "HOME"
+        I.winner = config.homeTeam
       else if I.score.away > I.score.home
-        I.winner = "AWAY"
+        I.winner = config.awayTeam
 
       if I.winner
-        I.gameOver = true
+        unless I.gameOver
+          I.gameOver = true
+          engine.delay 1, ->
+            displayMenu()
+
         I.time = 0
       else if I.period == 4
         engine.find("Goal").each (goal) ->
@@ -97,20 +125,7 @@ Scoreboard = (I) ->
       y: I.scoreY
 
     if I.gameOver
-      canvas.centerText
-        color: "#000"
-        text: "GAME OVER"
-        y: 384
-
-      if I.winner == "HOME"
-        color = "#F00"
-      else
-        color = "#00F"
-
-      canvas.centerText
-        color: color
-        text: "#{I.winner} WINS"
-        y: 416
+      displayWinnerOverlay(canvas)
 
     else if I.period >= 4
       canvas.centerText

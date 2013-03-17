@@ -16643,6 +16643,12 @@ MatchState = function(I) {
     }
     return object;
   };
+  self.addPauseMenu = function() {
+    return engine.add({
+      "class": "Menu",
+      matchPause: true
+    });
+  };
   self.on("enter", function() {
     var leftGoal, rightGoal, rink, scoreboard;
     bloodCanvas.clear();
@@ -16704,10 +16710,7 @@ MatchState = function(I) {
       if (menu) {
         menu.destroy();
       } else {
-        menu = engine.add({
-          "class": "Menu",
-          matchPause: true
-        });
+        menu = self.addPauseMenu();
       }
     }
     if (menu) {
@@ -16762,6 +16765,9 @@ Menu = function(I) {
   if (I == null) {
     I = {};
   }
+  Object.reverseMerge(I, {
+    zIndex: App.height
+  });
   item = function(text, fn) {
     return {
       text: text.toUpperCase(),
@@ -19786,7 +19792,7 @@ RinkBoardsProxy = function(I) {
 };
 
 Scoreboard = function(I) {
-  var endGameChecks, nextPeriod, self;
+  var displayMenu, displayWinnerOverlay, endGameChecks, nextPeriod, self;
   Object.reverseMerge(I, {
     gameOver: false,
     score: {
@@ -19794,7 +19800,7 @@ Scoreboard = function(I) {
       away: 0
     },
     period: 0,
-    periodTime: 60,
+    periodTime: 1,
     reverse: false,
     time: 0,
     timeSinceLastZamboni: 0,
@@ -19813,15 +19819,46 @@ Scoreboard = function(I) {
   });
   Object.extend(I, Scoreboard[I.team]);
   I.sprite = teamSprites[I.team].scoreboard[0];
+  displayWinnerOverlay = function(canvas) {
+    var sprite, style, x, y;
+    canvas.fill("rgba(0, 0, 0, 0.25)");
+    canvas.font("30px 'Iceland'");
+    canvas.centerText({
+      y: 256 + 96 + 1,
+      color: "#000",
+      text: "WIN!"
+    });
+    canvas.centerText({
+      y: 256 + 96,
+      color: "#FFF",
+      text: "WIN!"
+    });
+    style = I.winner;
+    sprite = Configurator.images[style].logo;
+    x = App.width / 2;
+    y = 256;
+    return sprite.draw(canvas, x - sprite.width / 2, y - sprite.height / 2);
+  };
+  displayMenu = function() {
+    var menu;
+    if (!(menu = engine.first("Menu"))) {
+      return engine.I.currentState.addPauseMenu();
+    }
+  };
   endGameChecks = function() {
     if (I.period >= 4) {
       if (I.score.home > I.score.away) {
-        I.winner = "HOME";
+        I.winner = config.homeTeam;
       } else if (I.score.away > I.score.home) {
-        I.winner = "AWAY";
+        I.winner = config.awayTeam;
       }
       if (I.winner) {
-        I.gameOver = true;
+        if (!I.gameOver) {
+          I.gameOver = true;
+          engine.delay(1, function() {
+            return displayMenu();
+          });
+        }
         return I.time = 0;
       } else if (I.period === 4) {
         return engine.find("Goal").each(function(goal) {
@@ -19846,7 +19883,7 @@ Scoreboard = function(I) {
     }
   });
   self.on("overlay", function(canvas) {
-    var color, minutes, seconds, time, xPosition, _ref1;
+    var minutes, seconds, time, xPosition, _ref1;
     xPosition = App.width / 2;
     if ((_ref1 = I.sprite) != null) {
       _ref1.draw(canvas, xPosition - (I.sprite.width / 2) + I.imageOffset.x, I.imageOffset.y);
@@ -19885,21 +19922,7 @@ Scoreboard = function(I) {
       y: I.scoreY
     });
     if (I.gameOver) {
-      canvas.centerText({
-        color: "#000",
-        text: "GAME OVER",
-        y: 384
-      });
-      if (I.winner === "HOME") {
-        color = "#F00";
-      } else {
-        color = "#00F";
-      }
-      return canvas.centerText({
-        color: color,
-        text: "" + I.winner + " WINS",
-        y: 416
-      });
+      return displayWinnerOverlay(canvas);
     } else if (I.period >= 4) {
       return canvas.centerText({
         color: "#0F0",

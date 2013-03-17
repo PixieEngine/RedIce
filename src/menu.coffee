@@ -1,4 +1,7 @@
 Menu = (I={}) ->
+  Object.reverseMerge I,
+    zIndex: App.height
+
   # DSLs4Life
   item = (text, fn) ->
     text: text.toUpperCase()

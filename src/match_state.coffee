@@ -61,6 +61,12 @@ MatchState = (I={}) ->
 
     return object
 
+  self.addPauseMenu = ->
+    engine.add
+      class: "Menu"
+      matchPause: true
+
+
   self.on "enter", ->
     bloodCanvas.clear()
 
@@ -127,9 +133,7 @@ MatchState = (I={}) ->
       if menu
         menu.destroy()
       else
-        menu = engine.add
-          class: "Menu"
-          matchPause: true
+        menu = self.addPauseMenu()
 
     return if menu
 
