@@ -88,7 +88,7 @@ AttractMode = (I={}) ->
     age += dt
 
     keyPressed = engine.controllers().inject false, (keyPressed, controller) ->
-      keyPressed or controller.buttonPressed "ANY"
+      keyPressed or controller.actionDown("ANY")
 
     if keyPressed or (age >= 40)
       engine.setState MainMenuState()

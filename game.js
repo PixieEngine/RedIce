@@ -13481,7 +13481,7 @@ AttractMode = function(I) {
     var camera, gibs, keyPressed, objects, players, playersAndPucks, puckLeader, pucks, zambonis;
     age += dt;
     keyPressed = engine.controllers().inject(false, function(keyPressed, controller) {
-      return keyPressed || controller.buttonPressed("ANY");
+      return keyPressed || controller.actionDown("ANY");
     });
     if (keyPressed || (age >= 40)) {
       engine.setState(MainMenuState());
