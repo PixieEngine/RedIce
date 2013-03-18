@@ -25,15 +25,16 @@ Continue Option
 
 Whack-a-mole Mini Game
 
-Monster Vampirism Bonus
+Gameplay
+  - Spike Walls Knock Players Down
+  - Monster Vampirism Mechanic
 
 Resize Shoot Arrow
 
 Test Gamepad Start Button (Win, Linux)
 
+Distribution
+  Compression: https://code.google.com/p/zopfli/
+  https://developers.google.com/speed/webp/
 
-
-Compression: https://code.google.com/p/zopfli/
-https://developers.google.com/speed/webp/
-
-SSL Static Site: http://blog.superfeedr.com/asset-hosting-ssl-domain/
+  SSL Static Site: http://blog.superfeedr.com/asset-hosting-ssl-domain/
