@@ -37,7 +37,7 @@ $(window).blur ->
   # TODO Show Paused overlay
 
 $(document).bind "keydown", "f2", ->
-  engine.setState(FrameEditorState())
+  engine.setState(MapState())
 
 $(document).bind "keydown", "f3", ->
   engine.setState(MatchSetupState())

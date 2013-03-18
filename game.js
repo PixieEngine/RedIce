@@ -16553,11 +16553,17 @@ MapState = function(I) {
   };
   AssetLoader.load(nextTeam);
   self.on("enter", function() {
-    return engine.add({
-      "class": "Map",
-      nextTeam: nextTeam,
-      lastTeam: lastTeam
-    });
+    if (nextTeam) {
+      return engine.add({
+        "class": "Map",
+        nextTeam: nextTeam,
+        lastTeam: lastTeam
+      });
+    } else {
+      return engine.delay(1, function() {
+        return engine.setState(Cutscene.scenes.end);
+      });
+    }
   });
   return self;
 };
@@ -20542,7 +20548,7 @@ $(window).blur(function() {
 });
 
 $(document).bind("keydown", "f2", function() {
-  return engine.setState(FrameEditorState());
+  return engine.setState(MapState());
 });
 
 $(document).bind("keydown", "f3", function() {

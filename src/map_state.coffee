@@ -61,9 +61,13 @@ MapState = (I={}) ->
   AssetLoader.load(nextTeam)
 
   self.on "enter", ->
-    engine.add
-      class: "Map"
-      nextTeam: nextTeam
-      lastTeam: lastTeam
+    if nextTeam
+      engine.add
+        class: "Map"
+        nextTeam: nextTeam
+        lastTeam: lastTeam
+    else
+      engine.delay 1, ->
+        engine.setState Cutscene.scenes.end
 
   return self
