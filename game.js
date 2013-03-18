@@ -14424,9 +14424,9 @@ $(function() {
         props: [
           {
             bugman_shad: {
-              x: 90,
+              x: 200,
               y: 530,
-              yFn: danceYFnGen(530, 1),
+              yFn: danceYFnGen(570, 1),
               scaleXFn: danceScaleXFn
             },
             bugman: {
@@ -14436,9 +14436,9 @@ $(function() {
               scaleXFn: danceScaleXFn
             },
             vampire_shad: {
-              x: 375,
+              x: 400,
               y: 550,
-              yFn: danceYFnGen(550, 1),
+              yFn: danceYFnGen(570, 1),
               scaleXFn: danceScaleXFn
             },
             vampire: {
@@ -14448,9 +14448,9 @@ $(function() {
               scaleXFn: danceScaleXFn
             },
             mummy_shad: {
-              x: 630,
+              x: 600,
               y: 550,
-              yFn: danceYFnGen(550, 1),
+              yFn: danceYFnGen(560, 1),
               scaleXFn: danceScaleXFn
             },
             mummy: {
@@ -14460,9 +14460,9 @@ $(function() {
               scaleXFn: danceScaleXFn
             },
             dog_shad: {
-              x: 1005,
+              x: 850,
               y: 600,
-              yFn: danceYFnGen(600, 1),
+              yFn: danceYFnGen(590, 1),
               scaleXFn: danceScaleXFn
             },
             dog: {

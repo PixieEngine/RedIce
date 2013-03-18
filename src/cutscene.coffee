@@ -390,9 +390,9 @@ $ ->
         """
         props: [
           bugman_shad:
-            x: 90
+            x: 200
             y: 530
-            yFn: danceYFnGen(530, 1)
+            yFn: danceYFnGen(570, 1)
             scaleXFn: danceScaleXFn
           bugman:
             x: 200
@@ -400,9 +400,9 @@ $ ->
             yFn: danceYFnGen(250)
             scaleXFn: danceScaleXFn
           vampire_shad:
-            x: 375
+            x: 400
             y: 550
-            yFn: danceYFnGen(550, 1)
+            yFn: danceYFnGen(570, 1)
             scaleXFn: danceScaleXFn
           vampire:
             x: 400
@@ -410,9 +410,9 @@ $ ->
             yFn: danceYFnGen(260)
             scaleXFn: danceScaleXFn
           mummy_shad:
-            x: 630
+            x: 600
             y: 550
-            yFn: danceYFnGen(550, 1)
+            yFn: danceYFnGen(560, 1)
             scaleXFn: danceScaleXFn
           mummy:
             x: 600
@@ -420,9 +420,9 @@ $ ->
             yFn: danceYFnGen(275)
             scaleXFn: danceScaleXFn
           dog_shad:
-            x: 1005
+            x: 850
             y: 600
-            yFn: danceYFnGen(600, 1)
+            yFn: danceYFnGen(590, 1)
             scaleXFn: danceScaleXFn
           dog:
             x: 850
