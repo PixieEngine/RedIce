@@ -87,13 +87,6 @@ MatchState = (I={}) ->
       # periodTime: 120
       # period: 3
 
-    scoreboard.on "restart", ->
-      if config.storyMode # TODO: Reduce globals!
-        config.defeatedTeams.push config.opponentTeam
-        engine.setState(MapState())
-      else
-        engine.setState(MatchSetupState())
-
     # Add each player to game based on config data
     config.players.each (playerData) ->
       engine.add Object.extend({}, playerData)
@@ -134,6 +127,17 @@ MatchState = (I={}) ->
         menu.destroy()
       else
         menu = self.addPauseMenu()
+
+    # Go back to the map in Story Mode
+    if menu and config.storyMode # TODO: Reduce globals!
+      # TODO: if demo display buy now screen
+      if winner = engine.first("Scoreboard").I.winner
+        if winner is config.playerTeam
+          config.defeatedTeams.push config.opponentTeam
+          engine.setState(MapState())
+        else
+          # Game over screen
+          engine.setState(Cutscene.gameOver[winner])
 
     return if menu
 

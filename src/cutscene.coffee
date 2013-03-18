@@ -2,6 +2,7 @@ Cutscene = (I={}) ->
   Object.reverseMerge I,
     text: "Go home and be a family man."
     nextState: MatchState
+    props: []
 
   dialog = null
 
@@ -546,5 +547,11 @@ $ ->
           zIndex: i
 
       Cutscene.scenes[name] = Cutscene data
+
+    Cutscene.gameOver = {}
+    TEAMS.each (team) ->
+      Cutscene.gameOver[team] = Cutscene
+        background: Sprite.loadByName "cutscenes/game_over/#{team}"
+        nextState: MainMenuState
 
   AssetLoader.load "cutscenes"

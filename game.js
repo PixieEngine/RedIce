@@ -13993,7 +13993,8 @@ Cutscene = function(I) {
   }
   Object.reverseMerge(I, {
     text: "Go home and be a family man.",
-    nextState: MatchState
+    nextState: MatchState,
+    props: []
   });
   dialog = null;
   next = function() {
@@ -14142,7 +14143,7 @@ danceYFnGen = function(y, s) {
 
 $(function() {
   AssetLoader.group("cutscenes", function() {
-    var data, name, _ref, _results;
+    var data, name, _ref;
     Cutscene.scenes = {
       intro: {
         text: "Look out the window. And doesn't this remind you of when you were in the boat?\nAnd then later that night you were lying, looking up at the ceiling,\nand the stars in your mind were not dissimilar from the sky, and you think to yourself,\n\"Why is it that the sky is moving, but the ice is still?\"\nAnd also-- Where is it that you're from?",
@@ -14603,7 +14604,6 @@ $(function() {
       }
     };
     _ref = Cutscene.scenes;
-    _results = [];
     for (name in _ref) {
       data = _ref[name];
       data.background = Sprite.loadByName("cutscenes/" + name + "/background");
@@ -14633,9 +14633,15 @@ $(function() {
           zIndex: i
         });
       });
-      _results.push(Cutscene.scenes[name] = Cutscene(data));
+      Cutscene.scenes[name] = Cutscene(data);
     }
-    return _results;
+    Cutscene.gameOver = {};
+    return TEAMS.each(function(team) {
+      return Cutscene.gameOver[team] = Cutscene({
+        background: Sprite.loadByName("cutscenes/game_over/" + team),
+        nextState: MainMenuState
+      });
+    });
   });
   return AssetLoader.load("cutscenes");
 });
@@ -16676,14 +16682,6 @@ MatchState = function(I) {
       "class": "Scoreboard",
       team: homeTeam
     });
-    scoreboard.on("restart", function() {
-      if (config.storyMode) {
-        config.defeatedTeams.push(config.opponentTeam);
-        return engine.setState(MapState());
-      } else {
-        return engine.setState(MatchSetupState());
-      }
-    });
     config.players.each(function(playerData) {
       return engine.add(Object.extend({}, playerData));
     });
@@ -16712,7 +16710,7 @@ MatchState = function(I) {
     return Music.play(TEAM_MUSIC[homeTeam].rand());
   });
   self.on("update", function(dt) {
-    var camera, gibs, menu, objects, players, playersAndPucks, puckLeader, pucks, startPressed, zambonis;
+    var camera, gibs, menu, objects, players, playersAndPucks, puckLeader, pucks, startPressed, winner, zambonis;
     menu = engine.first("Menu");
     startPressed = engine.controllers().inject(false, function(startPressed, controller) {
       return startPressed || controller.buttonPressed("START");
@@ -16722,6 +16720,16 @@ MatchState = function(I) {
         menu.destroy();
       } else {
         menu = self.addPauseMenu();
+      }
+    }
+    if (menu && config.storyMode) {
+      if (winner = engine.first("Scoreboard").I.winner) {
+        if (winner === config.playerTeam) {
+          config.defeatedTeams.push(config.opponentTeam);
+          engine.setState(MapState());
+        } else {
+          engine.setState(Cutscene.gameOver[winner]);
+        }
       }
     }
     if (menu) {

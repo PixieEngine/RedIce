@@ -4,11 +4,13 @@ Demo Mode
   - Distribution for Kongregate, Newgrounds
 
 Match Over Menu
-  - Advance to next stage in Story
   - Display menu in Minigames
 
-Story Lose Programming
-Story Lose Screen
+Music
+  - Cutscenes
+  - Map
+  - Game Over
+
 Story Animations
 
 Sudden Death Text
@@ -16,6 +18,8 @@ Sudden Death Text
 Pause Menu for all Match States
 
 Display player Stats
+
+Continue Option
 
 Whack-a-mole Mini Game
 
