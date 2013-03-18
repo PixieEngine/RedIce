@@ -15088,35 +15088,46 @@ Engine.Gamepads = function(I, self) {
 };
 
 Engine.Timing = function(I, self) {
-  var drawStartTime, updateDuration, updateStartTime;
+  var drawStartTime, lastUpdateStartTime, updateDuration, updateStartTime;
   if (I == null) {
     I = {};
   }
   drawStartTime = null;
   updateDuration = null;
   updateStartTime = null;
+  lastUpdateStartTime = null;
   self.on("beforeDraw", function() {
     return drawStartTime = +(new Date);
   });
   self.on("overlay", function(canvas) {
-    var drawDuration;
+    var drawDuration, lineHeight;
     drawDuration = (+(new Date)) - drawStartTime;
+    lineHeight = 30;
     if (DEBUG_DRAW) {
       canvas.drawText({
         color: "white",
         text: "ms/draw: " + drawDuration,
         x: 10,
-        y: 30
+        y: 10 + 1 * lineHeight
       });
-      return canvas.drawText({
+      canvas.drawText({
         color: "white",
         text: "ms/update: " + updateDuration,
         x: 10,
-        y: 50
+        y: 10 + 2 * lineHeight
       });
+      if (lastUpdateStartTime) {
+        return canvas.drawText({
+          color: "white",
+          text: "ms/cycle: " + (updateStartTime - lastUpdateStartTime),
+          x: 10,
+          y: 10 + 3 * lineHeight
+        });
+      }
     }
   });
   self.on("beforeUpdate", function() {
+    lastUpdateStartTime = updateStartTime;
     return updateStartTime = +(new Date);
   });
   self.on("afterUpdate", function(canvas) {
