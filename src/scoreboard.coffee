@@ -5,7 +5,7 @@ Scoreboard = (I) ->
       home: 0
       away: 0
     period: 0
-    periodTime: 1 # seconds
+    periodTime: 60 # seconds
     reverse: false
     time: 0
     timeSinceLastZamboni: 0 # seconds

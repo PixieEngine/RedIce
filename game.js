@@ -19825,7 +19825,7 @@ Scoreboard = function(I) {
       away: 0
     },
     period: 0,
-    periodTime: 1,
+    periodTime: 60,
     reverse: false,
     time: 0,
     timeSinceLastZamboni: 0,
