@@ -55,6 +55,21 @@ task :dist => [:build_data, :build] do
 end
 
 task :package do
+  require "shellwords"
+
+  # Delete some files for demo
+  files = [
+    "Paint",
+    "Snake Or Die",
+    "Carpe Mutante",
+    "Monsters Don't Get Cold",
+    "Pure Robot Love Connection",
+    "Slightly Sumo",
+    "Substantially Sumo",
+  ].each do |music|
+    `cd #{dist_dir}/music && rm #{music.shellescape}.ogg`
+  end
+
   # Package for newgrounds
   `rm build/#{dist_name}.zip`
   sh "cd #{dist_dir} && zip -r #{dist_name}.zip . && mv #{dist_name}.zip .."

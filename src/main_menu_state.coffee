@@ -4,15 +4,6 @@ MainMenuState = (I={}) ->
 
   self.on "enter", ->
     # Reset config modes
-    params = queryString()
-    teamChoices = [params.team1, params.team2].compact()
-    teamChoices = teamChoices.concat(TEAMS.without(teamChoices))
-
-    # TODO move preloading to just prior to usage
-    teamChoices.each (name) ->
-      teamSprites[name] = TeamSheet
-        team: name
-
     Object.extend config,
       storyMode: false
       homeTeam: teamChoices[1]

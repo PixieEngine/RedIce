@@ -25,6 +25,8 @@ do ->
         assetList.invoke "load"
         loading = true
 
+        return self
+
       status: ->
         loadedAssetCount = assetList.pluck("loaded").sum()
 

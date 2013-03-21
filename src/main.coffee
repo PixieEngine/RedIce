@@ -1,4 +1,17 @@
 
+
+do ->
+  params = queryString()
+  queryStringTeams = [params.team1, params.team2].compact()
+  window.teamChoices = queryStringTeams.concat(TEAMS.without(queryStringTeams))
+
+  # TODO Limit to two teams for demo mode
+
+  # TODO move preloading to just prior to usage
+  teamChoices.each (name) ->
+    teamSprites[name] = TeamSheet
+      team: name
+
 # TODO Persistent and adjustable config
 window.config =
   playerTeam: null

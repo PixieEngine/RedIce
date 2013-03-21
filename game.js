@@ -13097,7 +13097,8 @@ draw anything to the screen until the image has been loaded.
       },
       loadAll: function() {
         assetList.invoke("load");
-        return loading = true;
+        loading = true;
+        return self;
       },
       status: function() {
         var loadedAssetCount;
@@ -16366,15 +16367,6 @@ MainMenuState = function(I) {
   }
   self = GameState(I);
   self.on("enter", function() {
-    var params, teamChoices;
-    params = queryString();
-    teamChoices = [params.team1, params.team2].compact();
-    teamChoices = teamChoices.concat(TEAMS.without(teamChoices));
-    teamChoices.each(function(name) {
-      return teamSprites[name] = TeamSheet({
-        team: name
-      });
-    });
     Object.extend(config, {
       storyMode: false,
       homeTeam: teamChoices[1],
@@ -20507,6 +20499,18 @@ Zamboni = function(I) {
   setSprite();
   return self;
 };
+
+(function() {
+  var params, queryStringTeams;
+  params = queryString();
+  queryStringTeams = [params.team1, params.team2].compact();
+  window.teamChoices = queryStringTeams.concat(TEAMS.without(queryStringTeams));
+  return teamChoices.each(function(name) {
+    return teamSprites[name] = TeamSheet({
+      team: name
+    });
+  });
+})();
 
 window.config = {
   playerTeam: null,
