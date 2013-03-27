@@ -2,7 +2,7 @@
 
 do ->
   params = queryString()
-  queryStringTeams = [params.team1, params.team2].compact()
+  queryStringTeams = [params.home, params.away].compact()
   window.teamChoices = queryStringTeams.concat(TEAMS.without(queryStringTeams))
 
   # TODO Limit to two teams for demo mode
@@ -12,18 +12,8 @@ do ->
     teamSprites[name] = TeamSheet
       team: name
 
-# TODO Persistent and adjustable config
-window.config =
-  playerTeam: null
-  defeatedTeams: []
-  players: []
-  particleEffects: true
-  musicVolume: 0.5
-  sfxVolume: 0.5
-  FPS: 60
-
 Music.volume config.musicVolume
-Sound.globalVolume config.sfxVolume
+Sound.volume config.sfxVolume
 
 window.bloodCanvas = $("<canvas width=#{2 * App.width} height=#{App.height} />").pixieCanvas()
 

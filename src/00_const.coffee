@@ -36,3 +36,5 @@ TEAM_MUSIC =
   robo: ["Pure Robot Love Connection"]
 
 PERSPECTIVE_RATIO = 4/3
+
+PERSISTENT_CONFIG = "config"

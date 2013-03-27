@@ -7,6 +7,44 @@ Menu = (I={}) ->
     text: text.toUpperCase()
     action: fn
 
+  volumeChooser = ({option, source}, self=undefined) ->
+    text = option.toUpperCase()
+    steps = 10
+    options = [0..steps].map (n) ->
+      n / steps
+
+    # Load persisted value
+    persistedValue = persistentConfig["#{option}Volume"]
+    optionIndex = options.indexOf(persistedValue)
+
+    # Default
+    if optionIndex is -1
+      optionIndex = (steps / 2).floor()
+
+    currentOption = ->
+      options.wrap(optionIndex)
+
+    setText = ->
+      self.text = "#{text} #{currentOption()}"
+
+    persist = ->
+      persistentConfig["#{option}Volume"] = currentOption()
+      persistConfig()
+
+    adjust = (delta) ->
+      optionIndex += delta
+      source.volume currentOption()
+      persist()
+      setText()
+
+    self =
+      action: ->
+        adjust(1)
+
+    setText()
+
+    return self
+
   popSubMenu = ->
     # Don't pop the top menu
     unless I.menus.length is 1
@@ -44,8 +82,16 @@ Menu = (I={}) ->
         # minigame "Zamboni Defense"
         # minigame "PushOut"
         # minigame "Paint"
-      # submenu "Options",
-      #  item "Config", ->
+      submenu "Options",
+        submenu "VS Teams"
+        volumeChooser(
+          option: "music"
+          source: Music
+        ),
+        volumeChooser(
+          option: "sfx"
+          source: Sound
+        )
     ]]
 
   # Inherit from game object
