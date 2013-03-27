@@ -25,26 +25,6 @@ Scoreboard = (I) ->
   Object.extend I, Scoreboard[I.team]
   I.sprite = teamSprites[I.team].scoreboard[0]
 
-  displayWinnerOverlay = (canvas) ->
-    canvas.fill "rgba(0, 0, 0, 0.25)"
-    canvas.font "30px 'Iceland'"
-
-    canvas.centerText
-      y: 256 + 96 + 1
-      color: "#000"
-      text: "WIN!"
-    canvas.centerText
-      y: 256 + 96
-      color: "#FFF"
-      text: "WIN!"
-
-    style = I.winner
-    sprite = Configurator.images[style].logo
-
-    x = App.width/2
-    y = 256
-    sprite.draw(canvas, x - sprite.width/2, y - sprite.height/2)
-
   displayMenu = ->
     unless menu = engine.first("Menu")
       engine.I.currentState.addPauseMenu()
@@ -125,7 +105,7 @@ Scoreboard = (I) ->
       y: I.scoreY
 
     if I.gameOver
-      displayWinnerOverlay(canvas)
+      self.displayWinnerOverlay(canvas)
 
     else if I.period >= 4
       scaleFactor = 1 + Math.sin(Math.TAU * I.age / 1.5).abs() * 0.25
@@ -165,6 +145,8 @@ Scoreboard = (I) ->
     else # Regular play
       if I.time <= 0
         nextPeriod()
+
+  self.include WinnerOverlay
 
   self.attrReader "gameOver"
 

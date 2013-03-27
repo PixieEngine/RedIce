@@ -1,4 +1,8 @@
 Minigames["Sumo Push"] = (I={}) ->
+  Object.reverseMerge I,
+    music: "Substantially Sumo"
+    winner: false
+
   self = Minigame(I)
 
   physics = Physics()
@@ -11,12 +15,28 @@ Minigames["Sumo Push"] = (I={}) ->
       circle: arena
       color: "white"
 
+  self.on "overlay", (canvas) ->
+    if I.winner
+      self.displayWinnerOverlay(canvas)
+
   # Add events and methods here
   self.on "update", ->
+    return if I.paused
+
     # TODO: Detect Winner
 
     players = engine.find("Player").shuffle()
     zambonis = engine.find("Zamboni")
+
+    if players.length is 1
+      unless I.winner
+        I.winner = players.first().I.teamStyle
+
+        engine.delay 1.5, ->
+          setupState = MinigameSetupState
+            nextState: Minigames["Sumo Push"]
+
+          engine.setState(setupState)
 
     objects = players.concat zambonis
 

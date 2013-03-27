@@ -2,7 +2,7 @@ MatchState = (I={}) ->
   # Inherit from game object
   self = GameState(I)
 
-  window.physics = Physics()
+  physics = Physics()
 
   Fan.crowd = Fan.generateCrowd()
 

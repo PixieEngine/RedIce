@@ -41,19 +41,6 @@ Minigames.Paint = (I={}) ->
         color: color
 
   self.on "update", ->
-    menu = engine.first("Menu")
-
-    startPressed = engine.controllers().inject false, (startPressed, controller) ->
-      startPressed or controller.buttonPressed "START"
-
-    if startPressed
-      if menu
-        menu.destroy()
-      else
-        menu = self.addPauseMenu()
-
-    return if menu
-
     players = engine.find("Player").shuffle()
     zambonis = engine.find("Zamboni")
 

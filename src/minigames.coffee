@@ -4,11 +4,13 @@ Minigame = (I={})->
   Object.reverseMerge I,
     music: "Paint"
     playerIncludes: []
+    paused: false
 
   # Inherit from game object
   self = GameState(I)
 
-  self.include PauseHack
+  self.include "WinnerOverlay"
+  self.include "PauseHack"
 
   self.addPauseMenu = ->
     engine.add
@@ -31,5 +33,19 @@ Minigame = (I={})->
         player.include Player[name]
 
     Music.play I.music
+
+  self.on "update", ->
+    menu = engine.first("Menu")
+
+    startPressed = engine.controllers().inject false, (startPressed, controller) ->
+      startPressed or controller.buttonPressed "START"
+
+    if startPressed
+      if menu
+        menu.destroy()
+      else
+        menu = self.addPauseMenu()
+
+    I.paused = menu?
 
   return self
