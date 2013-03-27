@@ -20595,8 +20595,8 @@ window.config = {
   defeatedTeams: [],
   players: [],
   particleEffects: true,
-  musicVolume: 0,
-  sfxVolume: 0,
+  musicVolume: 0.5,
+  sfxVolume: 0.5,
   FPS: 60
 };
 
