@@ -11,6 +11,15 @@ MainMenuState = (I={}) ->
       playerTeam: null
       defeatedTeams: []
 
+    bg = engine.add
+      sprite: MainMenuState.titleBackground
+      x: App.width/2
+      y: App.height * 2/3
+      alpha: 0
+
+    bg.on "update", ->
+      bg.I.alpha = bg.I.age.clamp(0, 1)
+
     engine.delay 0.25, ->
       engine.delay 0.5, ->
         engine.add
@@ -44,3 +53,4 @@ MainMenuState = (I={}) ->
   return self
 
 MainMenuState.titleSprite = Sprite.loadByName "title_text"
+MainMenuState.titleBackground = Sprite.loadByName "title_background"

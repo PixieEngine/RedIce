@@ -16367,12 +16367,22 @@ MainMenuState = function(I) {
   }
   self = GameState(I);
   self.on("enter", function() {
+    var bg;
     Object.extend(config, {
       storyMode: false,
       homeTeam: teamChoices[1],
       awayTeam: teamChoices[0],
       playerTeam: null,
       defeatedTeams: []
+    });
+    bg = engine.add({
+      sprite: MainMenuState.titleBackground,
+      x: App.width / 2,
+      y: App.height * 2 / 3,
+      alpha: 0
+    });
+    bg.on("update", function() {
+      return bg.I.alpha = bg.I.age.clamp(0, 1);
     });
     engine.delay(0.25, function() {
       var title;
@@ -16412,6 +16422,8 @@ MainMenuState = function(I) {
 };
 
 MainMenuState.titleSprite = Sprite.loadByName("title_text");
+
+MainMenuState.titleBackground = Sprite.loadByName("title_background");
 
 Map = function(I) {
   var self;
@@ -19900,7 +19912,7 @@ Scoreboard = function(I) {
     }
   });
   self.on("overlay", function(canvas) {
-    var minutes, seconds, time, xPosition, _ref1;
+    var minutes, p, scaleFactor, seconds, time, xPosition, _ref1;
     xPosition = App.width / 2;
     if ((_ref1 = I.sprite) != null) {
       _ref1.draw(canvas, xPosition - (I.sprite.width / 2) + I.imageOffset.x, I.imageOffset.y);
@@ -19941,10 +19953,22 @@ Scoreboard = function(I) {
     if (I.gameOver) {
       return displayWinnerOverlay(canvas);
     } else if (I.period >= 4) {
-      return canvas.centerText({
-        color: "#0F0",
-        text: "SUDDEN DEATH",
-        y: 120
+      scaleFactor = 1 + Math.sin(Math.TAU * I.age / 1.5).abs() * 0.25;
+      p = Point(App.width / 2, App.height / 2);
+      return canvas.withTransform(Matrix.scale(scaleFactor, scaleFactor, p), function(canvas) {
+        canvas.font("40px 'Iceland'");
+        canvas.withTransform(Matrix.scale(1.01, 1.01, p), function(canvas) {
+          return canvas.centerText({
+            color: "#000",
+            text: "SUDDEN DEATH",
+            y: App.height / 2 + 2
+          });
+        });
+        return canvas.centerText({
+          color: "#0F0",
+          text: "SUDDEN DEATH",
+          y: App.height / 2
+        });
       });
     }
   });
@@ -20517,8 +20541,8 @@ window.config = {
   defeatedTeams: [],
   players: [],
   particleEffects: true,
-  musicVolume: 0.5,
-  sfxVolume: 0.5,
+  musicVolume: 0,
+  sfxVolume: 0,
   FPS: 60
 };
 

@@ -1,13 +1,17 @@
 
 Robots Blowing Up scene
 
-Fix Preloading for Newgrounds
-
-Scale Goal Images
+Marketing
+  - Press Release
+  - Email HTM5 peeps (goog, etc.)
+  - Email Indie Game Peeps
+  - Mailing List Blast
+    - Get Emails From Heroku
+    - Email Them
 
 Demo Mode
   - Limit Gameplay to just two teams
-  - Distribution for Kongregate, Newgrounds
+  - Distribution for Kongregate, Newgrounds, Chrome Web Store, Windows 8?
 
 Match Over Menu
   - Display menu in Minigames
@@ -19,21 +23,33 @@ Music
 
 Story Animations
 
+Title Background
+  - Resized
+
 Sudden Death Text
 
 Pause Menu for all Match States
 
 Display player Stats
 
+Game Over Screens
 Continue Option
 
+Options Menu
+  - Music
+  - SFX
+  - VS Team Config
+
 Whack-a-mole Mini Game
+
+---------------------------
 
 Gameplay
   - Spike Walls Knock Players Down
   - Monster Vampirism Mechanic
 
 Resize Shoot Arrow
+Resize Goal Images
 
 Test Gamepad Start Button (Win, Linux)
 

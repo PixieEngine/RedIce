@@ -128,10 +128,21 @@ Scoreboard = (I) ->
       displayWinnerOverlay(canvas)
 
     else if I.period >= 4
-      canvas.centerText
-        color: "#0F0"
-        text: "SUDDEN DEATH"
-        y: 120
+      scaleFactor = 1 + Math.sin(Math.TAU * I.age / 1.5).abs() * 0.25
+      p = Point(App.width/2, App.height/2)
+      canvas.withTransform Matrix.scale(scaleFactor, scaleFactor, p), (canvas) ->
+        canvas.font "40px 'Iceland'"
+
+        canvas.withTransform Matrix.scale(1.01, 1.01, p), (canvas) ->
+          canvas.centerText
+            color: "#000"
+            text: "SUDDEN DEATH"
+            y: App.height/2 + 2
+
+        canvas.centerText
+          color: "#0F0"
+          text: "SUDDEN DEATH"
+          y: App.height/2
 
   self.on "update", (dt) ->
     I.timeSinceLastZamboni += dt
