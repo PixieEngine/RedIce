@@ -14532,7 +14532,41 @@ $(function() {
         ]
       },
       end: {
-        text: "Congratulations!",
+        text: "This is not possible.... We were programmed to NEVER LOSE!",
+        props: [
+          {
+            flash: {
+              noSprite: true,
+              alphaFn: (function() {
+                var fn, fn2, fn3;
+                fn = osc({
+                  amplitude: 1,
+                  period: 1.5
+                });
+                fn2 = osc({
+                  amplitude: 0.5,
+                  period: 0.4
+                });
+                fn3 = osc({
+                  amplitude: 0.25,
+                  period: 0.17
+                });
+                return function(t) {
+                  return (fn(t) + fn2(t) + fn3(t)).clamp(0, 1);
+                };
+              })(),
+              color: "#FFF",
+              width: App.width,
+              height: App.height
+            }
+          }
+        ],
+        nextState: function() {
+          return Cutscene.scenes.end2;
+        }
+      },
+      end2: {
+        text: "And so it ends...",
         props: [
           {
             moonhalf: {
@@ -14599,6 +14633,15 @@ $(function() {
                 return 1 + t * 1 / 150;
               },
               registrationPoint: Point(0, 256)
+            },
+            flash: {
+              noSprite: true,
+              alphaFn: function(t) {
+                return (1 - t / 2).clamp(0, 1);
+              },
+              color: "#FFF",
+              width: App.width,
+              height: App.height
             }
           }
         ]
@@ -14618,7 +14661,9 @@ $(function() {
           return Object.keys(prop).map(function(propName) {
             var frames, propData, sprite;
             propData = prop[propName];
-            if (frames = propData.frames) {
+            if (propData.noSprite) {
+
+            } else if (frames = propData.frames) {
               propData.spriteSheet = Sprite.loadSheet("cutscenes/" + name + "/" + propName + "_" + frames, propData.width, propData.height);
             } else {
               sprite = Sprite.loadByName("cutscenes/" + name + "/" + propName);
@@ -20622,5 +20667,6 @@ engine.setState(LoaderState({
 }));
 
 $(function() {
+  engine.setState(Cutscene.scenes.end);
   return engine.start();
 });

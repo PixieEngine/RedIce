@@ -1,5 +1,17 @@
+Title Background
+  - Resized
 
-Robots Blowing Up scene
+Game Over Screens
+
+Clean Up Main Menu
+
+Demo Mode
+  - Limit Gameplay to just two teams
+  - Distribution for Kongregate, Newgrounds, Chrome Web Store, Windows 8?
+
+Chrome Web Store Distribution
+
+---------------------------
 
 Marketing
   - Press Release
@@ -9,40 +21,28 @@ Marketing
     - Get Emails From Heroku
     - Email Them
 
-Demo Mode
-  - Limit Gameplay to just two teams
-  - Distribution for Kongregate, Newgrounds, Chrome Web Store, Windows 8?
-
-Match Over Menu
-  - Display menu in Minigames
-
 Music
   - Cutscenes
   - Map
   - Game Over
 
-Story Animations
-
-Title Background
-  - Resized
-
-Sudden Death Text
-
-Pause Menu for all Match States
-
 Display player Stats
 
-Game Over Screens
+Options Menu
+  - Music Volume
+  - SFX Volume
+  - VS Team Config
+
 Continue Option
 
-Options Menu
-  - Music
-  - SFX
-  - VS Team Config
+============================
 
 Whack-a-mole Mini Game
 
----------------------------
+Match Over Menu
+  - Display menu in Minigames
+
+Pause Menu for all Match States
 
 Gameplay
   - Spike Walls Knock Players Down
