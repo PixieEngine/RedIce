@@ -1,3 +1,5 @@
+window.DEMO_MODE ?= false
+
 WALL_LEFT = 12
 WALL_RIGHT = 2 * App.width - WALL_LEFT
 WALL_TOP = 192

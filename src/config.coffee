@@ -5,6 +5,8 @@ do ->
     persistentConfig =
       musicVolume: 0.5
       sfxVolume: 0.5
+      homeTeam: "spike"
+      awayTeam: "smiley"
 
   window.persistentConfig = persistentConfig
 
@@ -12,6 +14,18 @@ do ->
     Local.set(PERSISTENT_CONFIG, persistentConfig)
 
   persistConfig()
+
+  if DEMO_MODE
+    teamChoices = TEAMS[0..1]
+  else
+    persistedTeams = [persistentConfig.homeTeam, persistentConfig.awayTeam].compact()
+    teamChoices = persistedTeams.concat(TEAMS.without(persistedTeams))
+
+  $ ->
+    # TODO move preloading to just prior to usage
+    teamChoices.each (name) ->
+      teamSprites[name] = TeamSheet
+        team: name
 
   window.config =
     playerTeam: null

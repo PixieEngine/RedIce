@@ -1,6 +1,18 @@
-Options Menu
+
+Whack-a-mole Mini Game
+
+Paint Mini Game
 
 Chrome Web Store Distribution
+
+Match Over Menu
+  - Display menu in Minigames
+
+Music
+  - Cutscenes
+  - Map
+  - Game Over
+  - Mini Games
 
 ---------------------------
 
@@ -16,11 +28,6 @@ Marketing
     - Get Emails From Heroku
     - Email Them
 
-Music
-  - Cutscenes
-  - Map
-  - Game Over
-
 Display player Stats
 
 Options Menu
@@ -31,11 +38,6 @@ Options Menu
 Continue Option
 
 ============================
-
-Whack-a-mole Mini Game
-
-Match Over Menu
-  - Display menu in Minigames
 
 Pause Menu for all Match States
 

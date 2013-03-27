@@ -1,17 +1,3 @@
-
-
-do ->
-  params = queryString()
-  queryStringTeams = [params.home, params.away].compact()
-  window.teamChoices = queryStringTeams.concat(TEAMS.without(queryStringTeams))
-
-  # TODO Limit to two teams for demo mode
-
-  # TODO move preloading to just prior to usage
-  teamChoices.each (name) ->
-    teamSprites[name] = TeamSheet
-      team: name
-
 Music.volume config.musicVolume
 Sound.volume config.sfxVolume
 

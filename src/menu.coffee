@@ -7,6 +7,38 @@ Menu = (I={}) ->
     text: text.toUpperCase()
     action: fn
 
+  teamChooser = (option, self=undefined) ->
+    text = option.toUpperCase()
+    options = TEAMS
+
+    # Load persisted value
+    persistedValue = persistentConfig["#{option}Team"]
+    optionIndex = options.indexOf(persistedValue)
+
+    currentOption = ->
+      options.wrap(optionIndex)
+
+    setText = ->
+      self.text = "#{text}: #{currentOption()}"
+
+    persist = ->
+      config["#{option}Team"] = currentOption()
+      persistentConfig["#{option}Team"] = currentOption()
+      persistConfig()
+
+    adjust = (delta) ->
+      optionIndex += delta
+      persist()
+      setText()
+
+    self =
+      action: ->
+        adjust(1)
+
+    setText()
+
+    return self
+
   volumeChooser = ({option, source}, self=undefined) ->
     text = option.toUpperCase()
     steps = 10
@@ -78,12 +110,14 @@ Menu = (I={}) ->
         config.storyMode = true
         engine.setState Cutscene.scenes.intro
       gamestate "Versus", MatchSetupState
-      # submenu "Mini-Games",
-        # minigame "Zamboni Defense"
-        # minigame "PushOut"
-        # minigame "Paint"
+      submenu "Mini-Games",
+        minigame "Whack-A-Mole"
+        minigame "Sumo Push"
+        minigame "Paint"
       submenu "Options",
-        submenu "VS Teams"
+        submenu "VS Teams",
+          teamChooser "home"
+          teamChooser "away"
         volumeChooser(
           option: "music"
           source: Music
@@ -112,6 +146,12 @@ Menu = (I={}) ->
         gamestate "Match Setup", MatchSetupState
         gamestate "Main Menu", MainMenuState
       ]]
+  else if I.minigamePause
+    I.menus = [[
+      item "Resume", ->
+        self.destroy()
+      gamestate "Main Menu", MainMenuState
+    ]]
 
   options = ->
     I.menus.last()

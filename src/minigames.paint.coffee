@@ -1,12 +1,14 @@
 Minigames.Paint = (I={}) ->
-  # Inherit from game object
-  self = GameState(I)
+  Object.reverseMerge I,
+    playerIncludes: [
+      "Paint"
+    ]
+
+  self = Minigame(I)
 
   window.physics = Physics()
 
   self.on "enter", ->
-    engine.clear(true)
-
     engine.add
       class: "Rink"
       wallTop: 0
@@ -14,7 +16,6 @@ Minigames.Paint = (I={}) ->
       wallLeft: 0
       wallRight: App.width
 
-    i = 0
     colors = [
       "#000000"
       "#FFFFFF"
@@ -39,27 +40,20 @@ Minigames.Paint = (I={}) ->
         x: (i + 0.5) * App.width / colors.length
         color: color
 
-    # TODO: TEst only, get real data for configurator
-    config.players = []
-    n = 4
-    n.times (i) ->
-      p = Point.fromAngle(i * Math.TAU/4).scale(100).add(Point(App.width/2, App.height/2))
-      config.players.push
-        class: "Player"
-        id: i
-        x: p.x
-        y: p.y
-
-    # Add each player to game based on config data
-    config.players.each (playerData) ->
-      player = engine.add Object.extend({}, playerData)
-      player.include Player.Paint
-
-    if config.music
-      Music.play "music1"
-
-  # Add events and methods here
   self.on "update", ->
+    menu = engine.first("Menu")
+
+    startPressed = engine.controllers().inject false, (startPressed, controller) ->
+      startPressed or controller.buttonPressed "START"
+
+    if startPressed
+      if menu
+        menu.destroy()
+      else
+        menu = self.addPauseMenu()
+
+    return if menu
+
     players = engine.find("Player").shuffle()
     zambonis = engine.find("Zamboni")
 
@@ -67,6 +61,4 @@ Minigames.Paint = (I={}) ->
 
     physics.process(objects)
 
-  # We must always return self as the last line
   return self
-

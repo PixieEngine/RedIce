@@ -1,20 +1,25 @@
-Minigames["Sumo Push"] = (I={}) ->
+Minigames["Whack-A-Mole"] = (I={}) ->
   # Inherit from game object
   self = GameState(I)
 
-  physics = Physics()
-
-  arena = Point(App.width/2, App.height/2)
-  arena.radius = 300
+  window.physics = Physics()
 
   self.on "enter", ->
     engine.clear(true)
 
-    # TODO: TEst only
+    engine.add
+      class: "Rink"
+      wallTop: 0
+      wallBottom: App.height
+      wallLeft: 0
+      wallRight: App.width
+
+    # TODO: TEst only, get real data for configurator
+    config.players = []
     n = 4
     n.times (i) ->
-      p = Point.fromAngle(i * Math.TAU/4).scale(100).add(arena)
-      engine.add
+      p = Point.fromAngle(i * Math.TAU/4).scale(100).add(Point(App.width/2, App.height/2))
+      config.players.push
         class: "Player"
         id: i
         x: p.x
@@ -22,14 +27,11 @@ Minigames["Sumo Push"] = (I={}) ->
 
     # Add each player to game based on config data
     config.players.each (playerData) ->
-      engine.add Object.extend({}, playerData)
+      player = engine.add Object.extend({}, playerData)
+      player.include Player.Paint
 
-    Music.play "Substantially Sumo"
-
-  self.on "beforeDraw", (canvas) ->
-    canvas.drawCircle
-      circle: arena
-      color: "white"
+    if config.music
+      Music.play "music1"
 
   # Add events and methods here
   self.on "update", ->
@@ -40,9 +42,5 @@ Minigames["Sumo Push"] = (I={}) ->
 
     physics.process(objects)
 
-    players.each (player) ->
-      player.destroy() unless Collision.circular(player.circle(), arena)
-
   # We must always return self as the last line
   return self
-

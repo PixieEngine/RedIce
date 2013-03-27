@@ -19,6 +19,9 @@ Rink = (I={}) ->
   arenaHeight = ->
     I.wallBottom - I.wallTop
 
+  arenaCenter = ->
+    Point(arenaWidth(), arenaHeight()).scale(0.5).add(Point(I.wallLeft, I.wallTop))
+
   sideWallWidth = 12
   wallBottomBuffer = I.spriteSize / 4
   bufferCanvasWidth = App.width * 2
@@ -41,7 +44,7 @@ Rink = (I={}) ->
 
   drawDecals = ->
     style = I.team
-    {x, y} = ARENA_CENTER
+    {x, y} = arenaCenter()
 
     iceCanvas.context().globalAlpha = 0.9
 

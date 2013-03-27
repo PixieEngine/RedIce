@@ -6,8 +6,8 @@ MainMenuState = (I={}) ->
     # Reset config modes
     Object.extend config,
       storyMode: false
-      homeTeam: teamChoices[1]
-      awayTeam: teamChoices[0]
+      homeTeam: persistentConfig.homeTeam
+      awayTeam: persistentConfig.awayTeam
       playerTeam: null
       defeatedTeams: []
 
