@@ -40,12 +40,12 @@ Menu = (I={}) ->
         config.storyMode = true
         engine.setState Cutscene.scenes.intro
       gamestate "Versus", MatchSetupState
-      submenu "Mini-Games",
+      # submenu "Mini-Games",
         # minigame "Zamboni Defense"
-        minigame "PushOut"
-        minigame "Paint"
-      submenu "Options",
-        item "Config", ->
+        # minigame "PushOut"
+        # minigame "Paint"
+      # submenu "Options",
+      #  item "Config", ->
     ]]
 
   # Inherit from game object

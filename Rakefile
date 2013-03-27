@@ -2,6 +2,10 @@ teams = %w[spike smiley mutant monster hiss robo]
 
 task :default => [:build]
 
+task :clean do
+  `rm -r build`
+end
+
 task :build do
   main_file = "src/main.coffee"
   src_files = (Dir["src/*.coffee"] - [main_file]) + [main_file]
@@ -52,6 +56,16 @@ task :dist => [:build_data, :build] do
   # File.open "#{dist_dir}/game.js", "w" do |f|
   #   f << Uglifier.compile(File.read("game.js"))
   # end
+end
+
+task :chrome_webstore => :dist do
+  sh "mkdir -p #{dist_dir}/webstore && cp -r webstore/* #{dist_dir}/webstore"
+  sh "cp manifest.json #{dist_dir}"
+
+  # Remove old zip
+  `rm build/#{dist_name}.zip`
+  # Zip
+  sh "cd #{dist_dir} && zip -r #{dist_name}.zip . && mv #{dist_name}.zip ../chrome-webstore.zip"
 end
 
 task :package do

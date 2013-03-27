@@ -16894,7 +16894,7 @@ Menu = function(I) {
         item("Story", function() {
           config.storyMode = true;
           return engine.setState(Cutscene.scenes.intro);
-        }), gamestate("Versus", MatchSetupState), submenu("Mini-Games", minigame("PushOut"), minigame("Paint")), submenu("Options", item("Config", function() {}))
+        }), gamestate("Versus", MatchSetupState)
       ]
     ]
   });
