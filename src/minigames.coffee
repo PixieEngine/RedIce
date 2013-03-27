@@ -16,27 +16,19 @@ Minigame = (I={})->
       minigamePause: true
 
   self.on "enter", ->
-    engine.clear(true)
-
     center = Point(App.width, App.height).scale(0.5)
 
-    # TODO: Test only, get real data from configurator
-    n = 4
-    n.times (i) ->
+    config.players.each (playerData, i) ->
       {x, y} = Point.fromAngle(i * Math.TAU/4).scale(100).add(center)
 
-      player = engine.add
-        class: "Player"
-        id: i
+      data = Object.extend {}, playerData,
         x: x
         y: y
 
+      player = engine.add data
+
       I.playerIncludes.each (name) ->
         player.include Player[name]
-
-    # Add each player to game based on config data
-    config.players.each (playerData) ->
-      engine.add Object.extend({}, playerData)
 
     Music.play I.music
 

@@ -1,30 +1,10 @@
 Minigames["Sumo Push"] = (I={}) ->
-  # Inherit from game object
-  self = GameState(I)
+  self = Minigame(I)
 
   physics = Physics()
 
   arena = Point(App.width/2, App.height/2)
   arena.radius = 300
-
-  self.on "enter", ->
-    engine.clear(true)
-
-    # TODO: TEst only
-    n = 4
-    n.times (i) ->
-      p = Point.fromAngle(i * Math.TAU/4).scale(100).add(arena)
-      engine.add
-        class: "Player"
-        id: i
-        x: p.x
-        y: p.y
-
-    # Add each player to game based on config data
-    config.players.each (playerData) ->
-      engine.add Object.extend({}, playerData)
-
-    Music.play "Substantially Sumo"
 
   self.on "beforeDraw", (canvas) ->
     canvas.drawCircle
@@ -33,6 +13,8 @@ Minigames["Sumo Push"] = (I={}) ->
 
   # Add events and methods here
   self.on "update", ->
+    # TODO: Detect Winner
+
     players = engine.find("Player").shuffle()
     zambonis = engine.find("Zamboni")
 
@@ -43,6 +25,4 @@ Minigames["Sumo Push"] = (I={}) ->
     players.each (player) ->
       player.destroy() unless Collision.circular(player.circle(), arena)
 
-  # We must always return self as the last line
   return self
-

@@ -88,7 +88,10 @@ Menu = (I={}) ->
 
   minigame = (name) ->
     item name, ->
-      engine.setState(Minigames[name]())
+      setupState = MinigameSetupState
+        nextState: Minigames[name]
+
+      engine.setState(setupState)
 
   back = item "Back", popSubMenu
 

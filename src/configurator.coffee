@@ -14,10 +14,13 @@ Configurator = (I) ->
   verticalPadding = 24
   horizontalPadding = 0
 
-  if config.playerTeam
-    teamStyles = [config.playerTeam]
+  if I.minigame
+    teamStyles = TEAMS
   else
-    teamStyles = [config.awayTeam, config.homeTeam]
+    if config.playerTeam
+      teamStyles = [config.playerTeam]
+    else
+      teamStyles = [config.awayTeam, config.homeTeam]
 
   join = (id) ->
     player = I.config.players[id]
@@ -73,43 +76,44 @@ Configurator = (I) ->
       player.tapListener = null
 
   finalizeConfig = (config) ->
-    [cpus, humans] = config.players.partition (playerData) ->
-      playerData.cpu
+    unless I.minigame
+      [cpus, humans] = config.players.partition (playerData) ->
+        playerData.cpu
 
-    [away, home] = humans.partition (playerData) ->
-      playerData.team = playerData.teamIndex.mod(teamStyles.length)
+      [away, home] = humans.partition (playerData) ->
+        playerData.team = playerData.teamIndex.mod(teamStyles.length)
 
-    # Rebalance CPU players as needed
-    while (home.length < I.maxPlayers / 2) && cpus.length
-      cpu = cpus.pop()
-      cpu.team = 0
+      # Rebalance CPU players as needed
+      while (home.length < I.maxPlayers / 2) && cpus.length
+        cpu = cpus.pop()
+        cpu.team = 0
 
-      home.push cpu
+        home.push cpu
 
-    while (away.length < I.maxPlayers / 2) && cpus.length
-      cpu = cpus.pop()
-      cpu.team = 1
+      while (away.length < I.maxPlayers / 2) && cpus.length
+        cpu = cpus.pop()
+        cpu.team = 1
 
-      away.push cpu
+        away.push cpu
 
-    # Repartition now that we've balanced
-    [away, home] = config.players.partition (playerData) ->
-      playerData.team
+      # Repartition now that we've balanced
+      [away, home] = config.players.partition (playerData) ->
+        playerData.team
 
-    #TODO Add in team style data
+      #TODO Add in team style data
 
-    away.each (red, i) ->
-      red.slot = i
-      red.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (away.length + 1)
-      red.x = WALL_LEFT + ARENA_WIDTH/2 + ARENA_WIDTH / 6
-      red.heading = 0.5.rotations
-      red.teamStyle = teamStyles.last()
+      away.each (red, i) ->
+        red.slot = i
+        red.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (away.length + 1)
+        red.x = WALL_LEFT + ARENA_WIDTH/2 + ARENA_WIDTH / 6
+        red.heading = 0.5.rotations
+        red.teamStyle = teamStyles.last()
 
-    home.each (blue, i) ->
-      blue.slot = i
-      blue.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (home.length + 1)
-      blue.x = WALL_LEFT + ARENA_WIDTH/2 - ARENA_WIDTH / 6
-      blue.teamStyle = teamStyles.first()
+      home.each (blue, i) ->
+        blue.slot = i
+        blue.y = WALL_TOP + ARENA_HEIGHT * (i + 1) / (home.length + 1)
+        blue.x = WALL_LEFT + ARENA_WIDTH/2 - ARENA_WIDTH / 6
+        blue.teamStyle = teamStyles.first()
 
     return config
 
