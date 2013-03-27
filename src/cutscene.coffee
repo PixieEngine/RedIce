@@ -1,6 +1,6 @@
 Cutscene = (I={}) ->
   Object.reverseMerge I,
-    text: "Go home and be a family man."
+    text: ""
     nextState: MatchState
     props: []
 
@@ -584,10 +584,19 @@ $ ->
 
       Cutscene.scenes[name] = Cutscene data
 
+    gameOverTexts =
+      hiss: "Snake? Snake?! SNAAAAAAAKKKKEEE!!!"
+      spike: "Go home and be a family man!"
+      mutant: "Call yourselves the ultimate team? Don't make me laugh!"
+      robo: "But... the future refused to change."
+      monster: "You've met with a terrible fate, haven't you?"
+      smiley: "Oh... wow..."
+
     Cutscene.gameOver = {}
     TEAMS.each (team) ->
       Cutscene.gameOver[team] = Cutscene
         background: Sprite.loadByName "cutscenes/game_over/#{team}"
         nextState: MainMenuState
+        text: gameOverTexts[team]
 
   AssetLoader.load "cutscenes"

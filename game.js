@@ -13993,7 +13993,7 @@ Cutscene = function(I) {
     I = {};
   }
   Object.reverseMerge(I, {
-    text: "Go home and be a family man.",
+    text: "",
     nextState: MatchState,
     props: []
   });
@@ -14144,7 +14144,7 @@ danceYFnGen = function(y, s) {
 
 $(function() {
   AssetLoader.group("cutscenes", function() {
-    var data, name, _ref;
+    var data, gameOverTexts, name, _ref;
     Cutscene.scenes = {
       intro: {
         text: "Look out the window. And doesn't this remind you of when you were in the boat?\nAnd then later that night you were lying, looking up at the ceiling,\nand the stars in your mind were not dissimilar from the sky, and you think to yourself,\n\"Why is it that the sky is moving, but the ice is still?\"\nAnd also-- Where is it that you're from?",
@@ -14681,11 +14681,20 @@ $(function() {
       });
       Cutscene.scenes[name] = Cutscene(data);
     }
+    gameOverTexts = {
+      hiss: "Snake? Snake?! SNAAAAAAAKKKKEEE!!!",
+      spike: "Go home and be a family man!",
+      mutant: "Call yourselves the ultimate team? Don't make me laugh!",
+      robo: "But... the future refused to change.",
+      monster: "You've met with a terrible fate, haven't you?",
+      smiley: "Oh... wow..."
+    };
     Cutscene.gameOver = {};
     return TEAMS.each(function(team) {
       return Cutscene.gameOver[team] = Cutscene({
         background: Sprite.loadByName("cutscenes/game_over/" + team),
-        nextState: MainMenuState
+        nextState: MainMenuState,
+        text: gameOverTexts[team]
       });
     });
   });
@@ -16423,7 +16432,7 @@ MainMenuState = function(I) {
     bg = engine.add({
       sprite: MainMenuState.titleBackground,
       x: App.width / 2,
-      y: App.height * 2 / 3,
+      y: App.height / 2,
       alpha: 0
     });
     bg.on("update", function() {
@@ -20667,6 +20676,5 @@ engine.setState(LoaderState({
 }));
 
 $(function() {
-  engine.setState(Cutscene.scenes.end);
   return engine.start();
 });

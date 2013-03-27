@@ -14,7 +14,7 @@ MainMenuState = (I={}) ->
     bg = engine.add
       sprite: MainMenuState.titleBackground
       x: App.width/2
-      y: App.height * 2/3
+      y: App.height/2
       alpha: 0
 
     bg.on "update", ->
