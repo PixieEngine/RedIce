@@ -55,6 +55,6 @@ engine.setState(LoaderState(
 ))
 
 $ ->
-  # engine.setState Cutscene.gameOver.robo
+  # engine.setState Cutscene.scenes.robo
 
   engine.start()

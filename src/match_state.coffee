@@ -24,8 +24,6 @@ MatchState = (I={}) ->
   self.on "enter", ->
     bloodCanvas.clear()
 
-    engine.clear(true)
-
     engine.camera().position(ARENA_CENTER)
 
     engine.add

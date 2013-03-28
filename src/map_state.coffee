@@ -61,6 +61,8 @@ MapState = (I={}) ->
   AssetLoader.load(nextTeam)
 
   self.on "enter", ->
+    Music.play "Pause"
+
     if nextTeam
       engine.add
         class: "Map"

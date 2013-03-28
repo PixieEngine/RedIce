@@ -21,8 +21,6 @@ TournamentSetupState = (I={}) ->
     return config
 
   self.on "enter", ->
-    engine.clear(false)
-
     configurator = engine.add
       class: "Configurator"
       config: initPlayerData()

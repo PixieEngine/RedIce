@@ -4,6 +4,7 @@ Minigames["Whack-A-Mole"] = (I={}) ->
     playerIncludes: [
       "WhackAMole"
     ]
+    music: "Zamboni"
 
   self = Minigame(I)
 

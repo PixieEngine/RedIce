@@ -256,4 +256,6 @@ Rink = (I={}) ->
 
   self.include Rink.Physics
 
+  self.attrReader "wallLeft", "wallRight", "wallTop", "wallBottom"
+
   return self

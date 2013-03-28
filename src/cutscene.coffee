@@ -36,6 +36,9 @@ Cutscene = (I={}) ->
     I.props.each (prop) ->
       engine.add Object.extend {x, y}, prop
 
+    Music.pause() if I.silence
+    Music.play I.music if I.music
+
     engine.add
       color: engine.backgroundColor()
       width: App.width
@@ -138,6 +141,7 @@ $ ->
           "Why is it that the sky is moving, but the ice is still?"
           And also-- Where is it that you're from?
         """
+        music: "Pause"
         props: [
           tunnel:
             alphaFn: (t) ->
@@ -198,6 +202,7 @@ $ ->
 
           They BIT me! WooOo!
         """
+        music: "Snake Or Die"
         props: [
           plane:
             xFn: (t) ->
@@ -295,6 +300,7 @@ $ ->
 
           How the HELL should I know?
         """
+        music: "Smiley Smile"
         props: [
           arm:
             y: App.height / 3 + 10
@@ -318,6 +324,7 @@ $ ->
         ]
       spike:
         text: ""
+        music: "Spiked Punch"
         props: [
           chick:
             x: App.width/2
@@ -337,6 +344,7 @@ $ ->
           MUTANT FEVER! The fans are out in record numbers. Please be advised to stay indoors--
           There is no cure.
         """
+        music: "Substantially Sumo"
         props: [
           head:
             x: 370
@@ -364,6 +372,7 @@ $ ->
         text: """
           Ok... show me how it's done.
         """
+        music: "Monsters Don't Get Cold"
         props: [
           dog:
             x: 750
@@ -434,6 +443,7 @@ $ ->
         text: """
           This is what it's all about.
         """
+        music: "Credits"
         props: [
           boat:
             yFn: motionOfTheOcean()
@@ -505,6 +515,7 @@ $ ->
         text: """
         And so it ends...
         """
+        music: "Credits"
         props: [
           moonhalf:
             scaleFn: (t) ->

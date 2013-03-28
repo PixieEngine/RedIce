@@ -37,8 +37,6 @@ AttractMode = (I={}) ->
   # END COPYPASTO
 
   self.on "enter", ->
-    engine.clear(true)
-
     engine.camera().position(ARENA_CENTER)
 
     engine.add

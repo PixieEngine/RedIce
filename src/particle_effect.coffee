@@ -79,21 +79,26 @@ Particle = (I={}) ->
 
     return unless sprite = Particle.wallSplats[I.teamStyle].rand()[0]
 
+    left = rink.wallLeft()
+    right = rink.wallRight()
+    top = rink.wallTop()
+    bottom = rink.wallBottom()
+
     if I.blood
       # TODO: Corner splats
-      if WALL_LEFT + 128 < I.x < WALL_RIGHT - 128
-        if I.y < WALL_TOP
+      if left + 128 < I.x < right - 128
+        if I.y < top
           rink.paintBackWall
             x: I.x
-            y: WALL_TOP - 16 - rand(96)
+            y: top - 16 - rand(96)
             sprite: sprite
 
           self.destroy()
 
-        if I.y > WALL_BOTTOM
+        if I.y > bottom
           rink.paintFrontWall
             x: I.x
-            y: WALL_BOTTOM - 16 - rand(64)
+            y: bottom - 16 - rand(64)
             sprite: sprite
 
           self.destroy()

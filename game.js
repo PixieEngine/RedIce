@@ -13460,7 +13460,6 @@ AttractMode = function(I) {
   });
   self.on("enter", function() {
     var leftGoal, rightGoal, rink, scoreboard;
-    engine.clear(true);
     engine.camera().position(ARENA_CENTER);
     engine.add({
       "class": "PuckLeader"
@@ -14102,6 +14101,12 @@ Cutscene = function(I) {
         y: y
       }, prop));
     });
+    if (I.silence) {
+      Music.pause();
+    }
+    if (I.music) {
+      Music.play(I.music);
+    }
     engine.add({
       color: engine.backgroundColor(),
       width: App.width,
@@ -14219,6 +14224,7 @@ $(function() {
     Cutscene.scenes = {
       intro: {
         text: "Look out the window. And doesn't this remind you of when you were in the boat?\nAnd then later that night you were lying, looking up at the ceiling,\nand the stars in your mind were not dissimilar from the sky, and you think to yourself,\n\"Why is it that the sky is moving, but the ice is still?\"\nAnd also-- Where is it that you're from?",
+        music: "Pause",
         props: [
           {
             tunnel: {
@@ -14282,6 +14288,7 @@ $(function() {
       },
       hiss: {
         text: "What do you like BEST about the Serpentmen?\n\nThey BIT me! WooOo!",
+        music: "Snake Or Die",
         props: [
           {
             plane: {
@@ -14384,6 +14391,7 @@ $(function() {
       },
       smiley: {
         text: "Here's a fan now! Hello sir, why are YOU smiling?\n\nHow the HELL should I know?",
+        music: "Smiley Smile",
         props: [
           {
             arm: {
@@ -14413,6 +14421,7 @@ $(function() {
       },
       spike: {
         text: "",
+        music: "Spiked Punch",
         props: [
           {
             chick: {
@@ -14436,6 +14445,7 @@ $(function() {
       },
       mutant: {
         text: "MUTANT FEVER! The fans are out in record numbers. Please be advised to stay indoors--\nThere is no cure.",
+        music: "Substantially Sumo",
         props: [
           {
             head: {
@@ -14466,6 +14476,7 @@ $(function() {
       monster: {
         team: "none",
         text: "Ok... show me how it's done.",
+        music: "Monsters Don't Get Cold",
         props: [
           {
             dog: {
@@ -14548,6 +14559,7 @@ $(function() {
       },
       robo: {
         text: "This is what it's all about.",
+        music: "Credits",
         props: [
           {
             boat: {
@@ -14638,6 +14650,7 @@ $(function() {
       },
       end2: {
         text: "And so it ends...",
+        music: "Credits",
         props: [
           {
             moonhalf: {
@@ -16682,6 +16695,7 @@ MapState = function(I) {
   };
   AssetLoader.load(nextTeam);
   self.on("enter", function() {
+    Music.play("Pause");
     if (nextTeam) {
       return engine.add({
         "class": "Map",
@@ -16771,7 +16785,6 @@ MatchState = function(I) {
   self.on("enter", function() {
     var leftGoal, rightGoal, rink, scoreboard;
     bloodCanvas.clear();
-    engine.clear(true);
     engine.camera().position(ARENA_CENTER);
     engine.add({
       "class": "PuckLeader"
@@ -17341,7 +17354,8 @@ Minigames["Whack-A-Mole"] = function(I) {
   }
   Object.reverseMerge(I, {
     time: 30,
-    playerIncludes: ["WhackAMole"]
+    playerIncludes: ["WhackAMole"],
+    music: "Zamboni"
   });
   self = Minigame(I);
   physics = Physics();
@@ -17866,7 +17880,7 @@ Particle = function(I) {
   self = GameObject(I);
   I.rotation = I.velocity.direction();
   self.on("update", function() {
-    var rink, sprite, _ref1;
+    var bottom, left, right, rink, sprite, top, _ref1;
     I.x += I.velocity.x;
     I.y += I.velocity.y;
     I.zIndex = I.y;
@@ -17876,20 +17890,24 @@ Particle = function(I) {
     if (!(sprite = Particle.wallSplats[I.teamStyle].rand()[0])) {
       return;
     }
+    left = rink.wallLeft();
+    right = rink.wallRight();
+    top = rink.wallTop();
+    bottom = rink.wallBottom();
     if (I.blood) {
-      if ((WALL_LEFT + 128 < (_ref1 = I.x) && _ref1 < WALL_RIGHT - 128)) {
-        if (I.y < WALL_TOP) {
+      if ((left + 128 < (_ref1 = I.x) && _ref1 < right - 128)) {
+        if (I.y < top) {
           rink.paintBackWall({
             x: I.x,
-            y: WALL_TOP - 16 - rand(96),
+            y: top - 16 - rand(96),
             sprite: sprite
           });
           self.destroy();
         }
-        if (I.y > WALL_BOTTOM) {
+        if (I.y > bottom) {
           rink.paintFrontWall({
             x: I.x,
-            y: WALL_BOTTOM - 16 - rand(64),
+            y: bottom - 16 - rand(64),
             sprite: sprite
           });
           return self.destroy();
@@ -20346,6 +20364,7 @@ Rink = function(I) {
     });
   });
   self.include(Rink.Physics);
+  self.attrReader("wallLeft", "wallRight", "wallTop", "wallBottom");
   return self;
 };
 
@@ -20743,7 +20762,6 @@ StoryConfigState = function(I) {
   };
   self.on("enter", function() {
     var configurator;
-    engine.clear(false);
     configurator = engine.add({
       "class": "Configurator",
       config: initPlayerData()
@@ -20838,7 +20856,6 @@ TestState = function(I) {
   });
   self.on("enter", function() {
     var leftGoal, rightGoal;
-    engine.clear(true);
     engine.add({
       "class": "Puck"
     });
@@ -20917,7 +20934,6 @@ TournamentSetupState = function(I) {
   };
   self.on("enter", function() {
     var configurator;
-    engine.clear(false);
     configurator = engine.add({
       "class": "Configurator",
       config: initPlayerData()

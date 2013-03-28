@@ -7,8 +7,6 @@ TestState = (I={}) ->
     debugColor: "#FFF"
 
   self.on "enter", ->
-    engine.clear(true)
-
     engine.add
       class: "Puck"
 
