@@ -106,17 +106,18 @@ Player.Drawing = (I, self) ->
           radius: 16
           color: shadowColor
 
+  name: ->
+    if I.cpu
+      "CPU"
+    else
+      I.name || "P#{(I.id + 1)}"
+
   drawFloatingNameTag: (canvas) ->
     canvas.font("bold 16px consolas, 'Courier New', 'andale mono', 'lucida console', monospace")
 
-    if I.cpu
-      name = "CPU"
-    else
-      name = I.name || "P#{(I.id + 1)}"
-
     padding = 6
     lineHeight = 16
-    textWidth = canvas.measureText(name)
+    textWidth = canvas.measureText(self.name())
 
     backgroundColor = self.color()
 
@@ -151,7 +152,7 @@ Player.Drawing = (I, self) ->
       radius: 4
 
     canvas.drawText
-      text: name
+      text: self.name()
       color: "#000"
       x: topLeft.x + padding
       y: topLeft.y + lineHeight + padding/2

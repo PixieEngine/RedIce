@@ -1,5 +1,7 @@
 Rink = (I={}) ->
   Object.reverseMerge I,
+    decals: true
+    lines: true
     team: config.homeTeam # Default team
     spriteSize: 128
     x: 0
@@ -63,95 +65,98 @@ Rink = (I={}) ->
     height: arenaHeight()
     radius: rinkCornerRadius
 
-  drawDecals()
+  drawDecals() if I.decals
 
-  # Blue Lines
-  for x in [arenaWidth()/3, arenaWidth()*2/3]
-    x += I.wallLeft
-    iceCanvas.drawLine
-      color: blue
-      start: Point(x, I.wallTop)
-      end: Point(x, I.wallBottom)
-      width: 4
-
-  # Center Line
-  x = I.wallLeft + arenaWidth()/2
-  iceCanvas.drawLine
-    color: red
-    start: Point(x, I.wallTop)
-    end: Point(x, I.wallBottom)
-    width: 2
-
-  iceCanvas.withTransform perspective, ->
-    # Center Circle
-    x = I.wallLeft + arenaWidth()/2
-    y = I.wallTop + arenaHeight()/2
-    iceCanvas.drawCircle
-      x: x
-      y: y * perspectiveRatio
-      radius: faceOffSpotRadius
-      color: blue
-
-    iceCanvas.drawCircle
-      x: x
-      y: y * perspectiveRatio
-      radius: faceOffCircleRadius
-      stroke:
+  drawLines = ->
+    # Blue Lines
+    for x in [arenaWidth()/3, arenaWidth()*2/3]
+      x += I.wallLeft
+      iceCanvas.drawLine
         color: blue
+        start: Point(x, I.wallTop)
+        end: Point(x, I.wallBottom)
         width: 4
 
-  # Goal Lines
-  x = I.wallLeft + arenaWidth()/10
-  iceCanvas.drawLine
-    start: Point(x, I.wallTop)
-    end: Point(x, I.wallBottom)
-    width: 1
-    color: red
+    # Center Line
+    x = I.wallLeft + arenaWidth()/2
+    iceCanvas.drawLine
+      color: red
+      start: Point(x, I.wallTop)
+      end: Point(x, I.wallBottom)
+      width: 2
 
-  iceCanvas.drawRect
-    x: x
-    y: I.wallTop + arenaHeight()/2 - 16
-    width: 16
-    height: 32
-    stroke:
+    iceCanvas.withTransform perspective, ->
+      # Center Circle
+      x = I.wallLeft + arenaWidth()/2
+      y = I.wallTop + arenaHeight()/2
+      iceCanvas.drawCircle
+        x: x
+        y: y * perspectiveRatio
+        radius: faceOffSpotRadius
+        color: blue
+
+      iceCanvas.drawCircle
+        x: x
+        y: y * perspectiveRatio
+        radius: faceOffCircleRadius
+        stroke:
+          color: blue
+          width: 4
+
+    # Goal Lines
+    x = I.wallLeft + arenaWidth()/10
+    iceCanvas.drawLine
+      start: Point(x, I.wallTop)
+      end: Point(x, I.wallBottom)
+      width: 1
       color: red
 
-  x = I.wallLeft + arenaWidth()*9/10
-  iceCanvas.drawLine
-    start: Point(x, I.wallTop)
-    end: Point(x, I.wallBottom)
-    width: 1
-    color: red
+    iceCanvas.drawRect
+      x: x
+      y: I.wallTop + arenaHeight()/2 - 16
+      width: 16
+      height: 32
+      stroke:
+        color: red
 
-  iceCanvas.drawRect
-    x: x - 16
-    y: I.wallTop + arenaHeight()/2 - 16
-    width: 16
-    height: 32
-    stroke:
+    x = I.wallLeft + arenaWidth()*9/10
+    iceCanvas.drawLine
+      start: Point(x, I.wallTop)
+      end: Point(x, I.wallBottom)
+      width: 1
       color: red
 
-  iceCanvas.withTransform perspective, ->
-    [1, 3].each (verticalQuarter) ->
-      y = I.wallTop + verticalQuarter/4 * arenaHeight()
+    iceCanvas.drawRect
+      x: x - 16
+      y: I.wallTop + arenaHeight()/2 - 16
+      width: 16
+      height: 32
+      stroke:
+        color: red
 
-      [1/5, 1/3 + 1/40, 2/3 - 1/40, 4/5].each (faceOffX, i) ->
-        x = I.wallLeft + faceOffX * arenaWidth()
+    iceCanvas.withTransform perspective, ->
+      [1, 3].each (verticalQuarter) ->
+        y = I.wallTop + verticalQuarter/4 * arenaHeight()
 
-        iceCanvas.drawCircle
-          x: x
-          y: y * perspectiveRatio
-          radius: faceOffSpotRadius
-          color: red
+        [1/5, 1/3 + 1/40, 2/3 - 1/40, 4/5].each (faceOffX, i) ->
+          x = I.wallLeft + faceOffX * arenaWidth()
 
-        if i == 0 || i == 3
           iceCanvas.drawCircle
             x: x
             y: y * perspectiveRatio
-            radius: faceOffCircleRadius
-            stroke:
-              color: red
-              width: 4
+            radius: faceOffSpotRadius
+            color: red
+
+          if i == 0 || i == 3
+            iceCanvas.drawCircle
+              x: x
+              y: y * perspectiveRatio
+              radius: faceOffCircleRadius
+              stroke:
+                color: red
+                width: 4
+
+  drawLines() if I.lines
 
   spriteScale = 0.5
   spriteSize = 256

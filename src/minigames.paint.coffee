@@ -15,6 +15,7 @@ Minigames.Paint = (I={}) ->
       wallBottom: App.height
       wallLeft: 0
       wallRight: App.width
+      lines: false
 
     colors = [
       "#000000"
@@ -41,6 +42,8 @@ Minigames.Paint = (I={}) ->
         color: color
 
   self.on "update", ->
+    return if I.paused
+
     players = engine.find("Player").shuffle()
     zambonis = engine.find("Zamboni")
 
