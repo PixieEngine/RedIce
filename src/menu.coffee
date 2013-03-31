@@ -134,6 +134,14 @@ Menu = (I={}) ->
   # Inherit from game object
   self = GameObject(I)
 
+  if DEMO_MODE
+    I.menus = [[
+      gamestate "Versus", MatchSetupState
+      minigame "Paint"
+      item "Purchase", ->
+        window.open("https://chrome.google.com/webstore/detail/red-ice/booheljepkdmiiennlkkbghacgnimbdn")
+    ]]
+
   # TODO Expose DSL to eliminate this stupid if statement
   if I.matchPause
     if config.storyMode

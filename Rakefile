@@ -68,29 +68,34 @@ task :chrome_webstore => :dist do
   sh "cd #{dist_dir} && zip -r #{dist_name}.zip . && mv #{dist_name}.zip ../chrome-webstore.zip"
 end
 
-task :package do
-  require "shellwords"
-
-  # Delete some files for demo
-  files = [
-    "Paint",
-    "Snake Or Die",
-    "Carpe Mutante",
-    "Monsters Don't Get Cold",
-    "Pure Robot Love Connection",
-    "Slightly Sumo",
-    "Substantially Sumo",
-  ].each do |music|
-    `cd #{dist_dir}/music && rm #{music.shellescape}.ogg`
+namespace :package do
+  task :download do
+    `rm build/#{dist_name}.zip`
+    sh "cd #{dist_dir} && zip -r #{dist_name}.zip . && mv #{dist_name}.zip .."
   end
 
-  # Package for newgrounds
-  `rm build/#{dist_name}.zip`
-  sh "cd #{dist_dir} && zip -r #{dist_name}.zip . && mv #{dist_name}.zip .."
+  task :newgrounds do
+    require "shellwords"
+    # TODO Limit to two team demo mode
 
-  # TODO Package for Chrome webstore
+    # Delete some files for demo
+    # TODO: Copy directory before deleting so it doesn't affect other distributions
+    files = [
+      "Paint",
+      "Snake Or Die",
+      "Carpe Mutante",
+      "Monsters Don't Get Cold",
+      "Pure Robot Love Connection",
+      "Slightly Sumo",
+      "Substantially Sumo",
+    ].each do |music|
+      `cd #{dist_dir}/music && rm #{music.shellescape}.ogg`
+    end
 
-  # TODO Package for direct download
+    # Package for newgrounds
+    `rm build/#{dist_name}.zip`
+    sh "cd #{dist_dir} && zip -r #{dist_name}.zip . && mv #{dist_name}.zip ../newgrounds.zip"
+  end
 end
 
 # Compiles all sources separately to tmp so we can see good line numbers for errors

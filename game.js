@@ -12826,7 +12826,7 @@ var AI, ALL_MUSIC, ARENA_CENTER, ARENA_HEIGHT, ARENA_WIDTH, Airplane, AirplaneLe
   __slice = [].slice;
 
 if ((_ref = window.DEMO_MODE) == null) {
-  window.DEMO_MODE = false;
+  window.DEMO_MODE = true;
 }
 
 WALL_BUFFER_HORIZONTAL = 12;
@@ -13779,6 +13779,10 @@ CharacterSheet = function(I) {
     };
   }
   window.persistentConfig = persistentConfig;
+  if (DEMO_MODE) {
+    persistentConfig.homeTeam = "smiley";
+    persistentConfig.awayTeam = "spike";
+  }
   window.persistConfig = function() {
     return Local.set(PERSISTENT_CONFIG, persistentConfig);
   };
@@ -13789,13 +13793,6 @@ CharacterSheet = function(I) {
     persistedTeams = [persistentConfig.homeTeam, persistentConfig.awayTeam].compact();
     teamChoices = persistedTeams.concat(TEAMS.without(persistedTeams));
   }
-  $(function() {
-    return teamChoices.each(function(name) {
-      return teamSprites[name] = TeamSheet({
-        team: name
-      });
-    });
-  });
   window.config = {
     playerTeam: null,
     defeatedTeams: [],
@@ -13805,7 +13802,19 @@ CharacterSheet = function(I) {
     sfxVolume: 0.5,
     FPS: 60
   };
-  return Object.extend(config, persistentConfig);
+  Object.extend(config, persistentConfig);
+  return $(function() {
+    return AssetLoader.group("default", function() {
+      return teamChoices.each(function(name) {
+        teamSprites[name] = TeamSheet({
+          team: name
+        });
+        return Rink({
+          team: name
+        });
+      });
+    });
+  });
 })();
 
 Configurator = function(I) {
@@ -17037,6 +17046,15 @@ Menu = function(I) {
     ]
   });
   self = GameObject(I);
+  if (DEMO_MODE) {
+    I.menus = [
+      [
+        gamestate("Versus", MatchSetupState), minigame("Paint"), item("Purchase", function() {
+          return window.open("https://chrome.google.com/webstore/detail/red-ice/booheljepkdmiiennlkkbghacgnimbdn");
+        })
+      ]
+    ];
+  }
   if (I.matchPause) {
     if (config.storyMode) {
       I.menus = [

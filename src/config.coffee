@@ -10,6 +10,10 @@ do ->
 
   window.persistentConfig = persistentConfig
 
+  if DEMO_MODE
+    persistentConfig.homeTeam = "smiley"
+    persistentConfig.awayTeam = "spike"
+
   window.persistConfig = ->
     Local.set(PERSISTENT_CONFIG, persistentConfig)
 
@@ -20,12 +24,6 @@ do ->
   else
     persistedTeams = [persistentConfig.homeTeam, persistentConfig.awayTeam].compact()
     teamChoices = persistedTeams.concat(TEAMS.without(persistedTeams))
-
-  $ ->
-    # TODO move preloading to just prior to usage
-    teamChoices.each (name) ->
-      teamSprites[name] = TeamSheet
-        team: name
 
   window.config =
     playerTeam: null
@@ -39,3 +37,13 @@ do ->
   # Merge in persistent config
   Object.extend config,
     persistentConfig
+
+  $ ->
+    AssetLoader.group "default", ->
+      teamChoices.each (name) ->
+        teamSprites[name] = TeamSheet
+          team: name
+
+        # Preload Rink assets also
+        Rink
+          team: name

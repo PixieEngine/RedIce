@@ -1,4 +1,4 @@
-window.DEMO_MODE ?= false
+window.DEMO_MODE ?= true
 
 WALL_BUFFER_HORIZONTAL = 12
 
